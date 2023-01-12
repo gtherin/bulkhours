@@ -13,14 +13,28 @@ from .ffiles import *  # noqa
 from . import rl
 
 
-def load_extra_magics(ip, verbose=True):
+def load_extra_magics(ipp, verbose=True):
     from .compiler import CCPPlugin
 
-    ip.register_magics(CCPPlugin(ip))
-    ip.register_magics(Evaluation(ip))
+    ipp.register_magics(CCPPlugin(ipp))
+    ipp.register_magics(Evaluation(ipp))
 
     if verbose:
-        print(f"Load hpccourse (version={__version__})")
+        print(f"Load bulkhours (version={__version__})")
+
+
+def init_env(student_name=None, ip=None, pass_code=None, env=None):
+    student_login = set_up_student(student_name, pass_code=pass_code)
+    if ip is None:
+        set_up_student(None)
+
+    if ip is not None:
+        load_extra_magics(ip.get_ipython(), verbose=False)
+
+    if env in ["rl", "reinforcement learning"]:
+        rl.init_env(ip)
+
+    print(f'Load BULK Helper cOURSe (version={__version__}, connected as "{student_login}")')
 
 
 def ipsa_login(student_name=None, ip=None, pass_code=None):
@@ -30,4 +44,4 @@ def ipsa_login(student_name=None, ip=None, pass_code=None):
         set_up_student(None)
 
     load_extra_magics(ip, verbose=False)
-    print(f'Load hpccourse (version={__version__}, connected as "{student_login}")')
+    print(f'Load bulkhours (version={__version__}, connected as "{student_login}")')

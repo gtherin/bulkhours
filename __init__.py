@@ -1,1 +1,1 @@
-from .hpccourse import *
+from .bulkhours import *

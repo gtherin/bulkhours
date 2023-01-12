@@ -18,13 +18,13 @@ def get_cred(k="pi.pyc", d=None, pass_code=None):
     return d + k
 
 
-def set_up_student(student_name, d="hpccourse/hpccourse/", pass_code=None):
+def set_up_student(student_name, d="bulkhours/bulkhours/", pass_code=None):
     # TODO: Fix that thing in the future
     # Ok till I have less-restrictive rules on the server side
     if student_name is None or pass_code is None or pass_code == "PASS_COURSE":
         raise Exception.DefaultCredentialsError(
             f"""# Register yourself (Password "PASS" should be given in class). Example for John Doe, type:
-hpccourse.ipsa_login("jdoe", IPython.get_ipython(), pass_code="PASS")
+bulkhours.ipsa_login("jdoe", IPython.get_ipython(), pass_code="PASS")
 """
         )
 
@@ -104,7 +104,7 @@ def dump_corrections(argv=sys.argv):
 
     from google.cloud import firestore
 
-    set_up_student("correction", d="hpccourse/", pass_code=args.pass_code)
+    set_up_student("correction", d="bulkhours/", pass_code=args.pass_code)
 
     if args.delete_solution:
         docs = firestore.Client().collection(args.evaluation_id).document("solution").delete()
