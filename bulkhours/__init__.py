@@ -39,19 +39,10 @@ def init_env(login=None, ip=None, pass_code=None, env=None):
     if env in ["rl", "reinforcement learning"]:
         rl.init_env(ip)
         env_info = f", in env=rl"
-    elif env is not None:
+    elif env in ["econometry"]:
         rl.runrealcmd("pip install yfinance", verbose=True)
+        env_info = f", in env=econometry"
     elif env is not None:
         print(f"Unknown env={env}")
 
     print(f'Load BULK Helper cOURSe (version={__version__}, connected as "{student_login}{env_info}")')
-
-
-def student_login(login=None, ip=None, pass_code=None):
-
-    student_login = set_up_student(login, pass_code=pass_code)
-    if ip is None:
-        set_up_student(None)
-
-    load_extra_magics(ip, verbose=False)
-    print(f'Load bulkhours (version={__version__}, connected as "{student_login}")')
