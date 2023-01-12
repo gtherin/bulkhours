@@ -3,7 +3,7 @@ Here is the table of contents:
 
 1. [Plan of econometry course](#planeco)
 2. [Plan of High Performance Programming on GPU course](#planhpc)
-3. [Generic methods](#methods)
+3. [Methods](#methods)
 4. [Data](#data)
 
 
@@ -69,7 +69,7 @@ Might be added one day
 09 Languages performances (notebook)
 10 Parallel architecture (slides)
 
-Ideas
+Might be added one day
    11 Multiprocessing (notebook)
    12 Multithreading (notebook)
    13 Cryptocurrencies (notebook)
@@ -83,7 +83,7 @@ Ideas
    Dask cuda
 ```
 
-## Generic methods <a name="methods"></a>
+## Methods <a name="methods"></a>
 
 ##### Cuda executions
 
@@ -92,7 +92,7 @@ Ideas
 import IPython
 bulkhours.load_extra_magics(IPython)
 # or 
-bulkhours.init_env(login="jdoe", ip=IPython, pass_code="PASS_COURSE")
+bulkhours.init_env(login="jdoe", ip=IPython, pass_code="PASS_COURSE", env="econometry")
 ```
 
 - Cuda basic extension: it compiles C/C++ code and exec it
