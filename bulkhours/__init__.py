@@ -46,3 +46,25 @@ def init_env(login=None, ip=None, pass_code=None, env=None):
         print(f"Unknown env={env}")
 
     print(f'Load BULK Helper cOURSe (version={__version__}, connected as "{student_login}{env_info}")')
+
+
+def get_data(label):
+
+    import glob
+
+    filename = None
+    for directory in [f"bulkhours/data", f"./data", f"../data"]:
+        if len((files := glob.glob(f"{directory}/{label}*"))):
+            filename = files[0]
+    if not filename:
+        print(f"No data available for {label}")
+        return None
+
+    ext = filename.split(".")[-1]
+    if ext == "tsv":
+        df = pd.read_csv(filename, sep="\t")
+    else:
+        df = pd.read_csv(filename)
+    df = df.set_index(df.columns[0])
+
+    return df
