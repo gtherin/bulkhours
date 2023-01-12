@@ -1,6 +1,6 @@
-This package is a support library for different courses
+This package is a support library for different courses. 
+Here is the table of contents:
 
-# Table of Contents
 1. [Plan of econometry course](#planeco)
 2. [Plan of High Performance Programming on GPU course](#planhpc)
 3. [Generic methods](#methods)
