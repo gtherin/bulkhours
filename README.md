@@ -1,5 +1,3 @@
-## High Performance Computing
-
 This package is a support library for different courses
 
 
@@ -84,38 +82,25 @@ Ideas
 - Load Extension
 ```python:
 import IPython
-hpccourse.load_extra_magics(IPython.get_ipython())
+bulkhours.load_extra_magics(IPython)
 # or 
-hpccourse.ipsa_login("jdoe", IPython.get_ipython(), pass_code="PASS_COURSE")
+bulkhours.init_env(login="jdoe", ip=IPython, pass_code="PASS_COURSE")
 ```
 
 - Cuda basic extension: it compiles C/C++ code and exec it
 ```c:
-%%ipsa_nvcudac_and_exec
+%%compile_and_exec
 #include <iostream>
 int main() {
     for (int i = 0; i <= 10; ++i) {
         std::cout << i << std::endl;
     }
 }
-```
-
-- Cuda most sophisticated method
-> `%%ipsa_nvcudac --name example.cu --compile false`
->> NOTE: The cell must contain either code or comments to be run successfully. 
->> It accepts 2 arguments. `-n` | `--name`  - which is the name of either CUDA source or Header
->> The name parameter must have extension `.cu` or `.h`
->> Second argument `-c` | `--compile`; default value is `false`. The argument is a flag to specify
->> if the cell will be compiled and run right away or not. It might be usefull if you're playing in
->> the `main` function
-
-- To compile and run all CUDA files you need to run
-```python
-%%cuda_run
-# This line just to bypass an exeption and can contain any text
-```
 
 ## Data
+
+#### `data/supercomputer-power-flops.csv`
+The file has been downloaded from the page https://ourworldindata.org/grapher/supercomputer-power-flops
 
 #### `data/supercomputer-power-flops.csv`
 The file has been downloaded from the page https://ourworldindata.org/grapher/supercomputer-power-flops
