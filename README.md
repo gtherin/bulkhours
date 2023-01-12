@@ -1,5 +1,10 @@
 This package is a support library for different courses
 
+# Table of Contents
+1. [Plan of econometry course](#example)
+2. [Plan of High Performance Programming on GPU course](#example2)
+3. [Third Example](#third-example)
+4. [Fourth Example](#fourth-examplehttpwwwfourthexamplecom)
 
 ## Plan of econometry course
 
@@ -77,7 +82,9 @@ Ideas
    Dask cuda
 ```
 
-##### Cuda extensions
+## Generic methods
+
+##### Cuda executions
 
 - Load Extension
 ```python:
