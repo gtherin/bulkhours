@@ -1,9 +1,47 @@
 ## High Performance Computing
 
-This package is a support library for the course on High Performance Programming on GPU at IPSA.
+This package is a support library for different courses
 
 
-## Plan of this module (as of today)
+## Plan of econometry course
+
+```
+# 1/4 (4h): Feb-09/08:30
+01 Probability and statistics
+- Grandeurs caracteristiques (moyenne, mediane, vol, skew, kurtosis)
+- Gaussienne
+- Mouvement brownien
+- Lemme d'Ito
+
+# 2/4 (4h): Feb-10/08:30
+03 Time Series statistics
+- Distribution des returns
+- Autocorrelations
+- Les queues de distribution
+
+# 3/4 (4h): Feb-17/08:30
+12 Filter time series
+
+# 4/4 (4h): Feb-01/08:30
+08 Predict time series
+
+Might be added one day
+    02 Financial products
+    04 Correlations
+    05 Risk estimations
+    05 Price anomalies
+    05 Macroeconomic quantities
+
+    08 Optimal portfolio construction
+    09 Historic of financial crises
+    10 Systematic trading
+    11 Yield curve
+    11 Cryptocurrencies
+
+```
+
+
+## Plan of High Performance Programming on GPU course
 
 ```
 # 1/5 (2h): Nov-09/13:30
