@@ -24,7 +24,7 @@ def set_up_student(student_name, d="bulkhours/bulkhours/", pass_code=None):
     if student_name is None or pass_code is None or pass_code == "PASS_COURSE":
         raise Exception.DefaultCredentialsError(
             f"""# Register yourself (Password "PASS" should be given in class). Example for John Doe, type:
-bulkhours.ipsa_login("jdoe", IPython.get_ipython(), pass_code="PASS")
+bulkhours.set_up_student("jdoe", IPython, pass_code="PASS")
 """
         )
 
@@ -54,7 +54,7 @@ class Evaluation(Magics):
 
     @cell_magic
     @needs_local_scope
-    def ipsa_send_answer(self, line, cell, local_ns=None):
+    def send_answer_to_corrector(self, line, cell, local_ns=None):
 
         get_document(line, os.environ["STUDENT"]).set(
             {"answer": cell, "update_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
@@ -65,7 +65,7 @@ class Evaluation(Magics):
 
     @line_cell_magic
     @needs_local_scope
-    def ipsa_get_solution(self, line, cell="", local_ns=None):
+    def get_solution_from_corrector(self, line, cell="", local_ns=None):
 
         output = get_document(line, "solution").get().to_dict()
 

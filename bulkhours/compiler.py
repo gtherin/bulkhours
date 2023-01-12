@@ -11,7 +11,7 @@ from IPython.core.magic import Magics, line_cell_magic, magics_class
 class CCPPlugin(Magics):
     def __init__(self, shell):
         super(CCPPlugin, self).__init__(shell)
-        self.argparser = argparse.ArgumentParser(description="ipsa_compile_and_exec params")
+        self.argparser = argparse.ArgumentParser(description="compile_and_exec params")
         self.argparser.add_argument(
             "-t", "--timeit", action="store_true", help="flag to return timeit result instead of stdout"
         )
@@ -29,7 +29,7 @@ class CCPPlugin(Magics):
             print(l)
 
     @line_cell_magic
-    def ipsa_compile_and_exec(self, line, cell="", local_ns=None):
+    def compile_and_exec(self, line, cell="", local_ns=None):
         try:
             args = self.argparser.parse_args(line.split())
         except SystemExit as e:
@@ -62,9 +62,3 @@ class CCPPlugin(Magics):
                 self.argparser.print_help()
                 for l in e.output.decode("utf8").split("\n"):
                     print(l)
-
-    @line_cell_magic
-    def ipsa_nvcudac_and_exec(self, line, cell="", local_ns=None):
-        print(
-            "'%%ipsa_nvcudac_and_exec' magic function is now deprecated.\nPlease use '%%ipsa_compile_and_exec' instead."
-        )

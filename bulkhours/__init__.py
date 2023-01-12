@@ -1,4 +1,4 @@
-__version__ = "1.8.3"
+__version__ = "1.8.4"
 
 from .block import Block, BlockCoin, BlockMsg  # noqa
 from .blockchain import BlockChain  # noqa
@@ -10,11 +10,13 @@ from .git_graph import *  # noqa
 from .git_graphviz import *  # noqa
 from .timeit import timeit  # noqa
 from .ffiles import *  # noqa
-from . import rl
+from . import rl  # noqa
 
 
-def load_extra_magics(ipp, verbose=True):
+def load_extra_magics(ip, verbose=True):
     from .compiler import CCPPlugin
+
+    ipp = ip.get_ipython()
 
     ipp.register_magics(CCPPlugin(ipp))
     ipp.register_magics(Evaluation(ipp))
@@ -23,23 +25,25 @@ def load_extra_magics(ipp, verbose=True):
         print(f"Load bulkhours (version={__version__})")
 
 
-def init_env(student_name=None, ip=None, pass_code=None, env=None):
-    student_login = set_up_student(student_name, pass_code=pass_code)
+def init_env(login=None, ip=None, pass_code=None, env=None):
+    student_login = set_up_student(login, pass_code=pass_code)
     if ip is None:
         set_up_student(None)
 
     if ip is not None:
-        load_extra_magics(ip.get_ipython(), verbose=False)
+        load_extra_magics(ip, verbose=False)
 
     if env in ["rl", "reinforcement learning"]:
         rl.init_env(ip)
+    elif env is not None:
+        print(f"Unknown env={env}")
 
     print(f'Load BULK Helper cOURSe (version={__version__}, connected as "{student_login}")')
 
 
-def ipsa_login(student_name=None, ip=None, pass_code=None):
+def student_login(login=None, ip=None, pass_code=None):
 
-    student_login = set_up_student(student_name, pass_code=pass_code)
+    student_login = set_up_student(login, pass_code=pass_code)
     if ip is None:
         set_up_student(None)
 
