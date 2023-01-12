@@ -1,0 +1,44 @@
+# Pycharm
+.idea/
+**__pycache__/
+
+# Sphinx
+docs/_build
+
+# Virtual env
+*env
+
+.ipynb_checkpoints/*
+
+*.py[cod]
+.cookiecutter
+#*.ipynb
+notebooks/.ipynb_checkpoints/*
+.vscode/*
+data/main/*
+tests/*
+
+**.pyc*
+requirements-dev.txt
+requirements.txt
+Makefile
+config.mk
+
+# Packages
+*.egg
+*.egg-info
+.eggs
+dist
+build
+eggs
+parts
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+
+setup.py
+safe.py
+abc.py
