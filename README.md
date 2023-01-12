@@ -1,12 +1,13 @@
 This package is a support library for different courses
 
 # Table of Contents
-1. [Plan of econometry course](#plan1)
-2. [Plan of High Performance Programming on GPU course](#plan2)
-3. [Third Example](#third-example)
-4. [Fourth Example](#fourth-examplehttpwwwfourthexamplecom)
+1. [Plan of econometry course](#planeco)
+2. [Plan of High Performance Programming on GPU course](#planhpc)
+3. [Generic methods](#methods)
+4. [Data](#data)
 
-## Plan of econometry course <a name="plan1"></a>
+
+## Plan of econometry course <a name="planeco"></a>
 
 ```
 # 1/4 (4h): Feb-09/08:30
@@ -44,7 +45,7 @@ Might be added one day
 ```
 
 
-## Plan of High Performance Programming on GPU course <a name="plan2"></a>
+## Plan of High Performance Programming on GPU course <a name="planhpc"></a>
 
 ```
 # 1/5 (2h): Nov-09/13:30
@@ -82,7 +83,7 @@ Ideas
    Dask cuda
 ```
 
-## Generic methods
+## Generic methods <a name="methods"></a>
 
 ##### Cuda executions
 
@@ -105,7 +106,7 @@ int main() {
 }
 ```
 
-## Data
+## Data <a name="data"></a>
 
 #### `data/supercomputer-power-flops.csv`
 The file has been downloaded from the page https://ourworldindata.org/grapher/supercomputer-power-flops
