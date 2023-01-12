@@ -1,12 +1,12 @@
 This package is a support library for different courses
 
 # Table of Contents
-1. [Plan of econometry course](#example)
-2. [Plan of High Performance Programming on GPU course](#example2)
+1. [Plan of econometry course](#plan1)
+2. [Plan of High Performance Programming on GPU course](#plan2)
 3. [Third Example](#third-example)
 4. [Fourth Example](#fourth-examplehttpwwwfourthexamplecom)
 
-## Plan of econometry course
+## Plan of econometry course <a name="plan1"></a>
 
 ```
 # 1/4 (4h): Feb-09/08:30
@@ -44,7 +44,7 @@ Might be added one day
 ```
 
 
-## Plan of High Performance Programming on GPU course
+## Plan of High Performance Programming on GPU course <a name="plan2"></a>
 
 ```
 # 1/5 (2h): Nov-09/13:30
