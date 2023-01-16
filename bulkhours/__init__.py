@@ -1,4 +1,4 @@
-__version__ = "2.0.5"
+__version__ = "2.0.0"
 
 from .block import Block, BlockCoin, BlockMsg  # noqa
 from .blockchain import BlockChain  # noqa
@@ -46,6 +46,7 @@ def init_env(login=None, ip=None, pass_code=None, env=None):
     elif env is not None:
         print(f"Unknown env={env}")
 
+    set_style()
     print(f'Load BULK Helper cOURSe (version={__version__}, connected as "{student_login}{env_info}")')
 
 
@@ -69,3 +70,54 @@ def get_data(label):
     df = df.set_index(df.columns[0])
 
     return df
+
+
+def get_color(discipline):
+    colors = {
+        "swimming": "#581845",
+        "cycling": "#C70039",
+        "running": "#FF5733",
+        "axis": "#4F77AA",
+    }
+    return colors[discipline] if discipline in colors else "black"
+
+
+def set_style():
+    import matplotlib.pyplot as plt
+
+    background_color = "#F0FDFA11"  # cdcdcd
+
+    def get_color(discipline):
+        colors = {
+            "swimming": "#581845",
+            "cycling": "#C70039",
+            "running": "#FF5733",
+            "axis": "#4F77AA",
+        }
+        return colors[discipline] if discipline in colors else "black"
+
+    plt.rcParams["axes.grid"] = True
+    plt.rcParams["axes.edgecolor"] = get_color("axis")
+    plt.rcParams["axes.labelcolor"] = get_color("axis")
+    plt.rcParams["axes.titlecolor"] = get_color("axis")
+    plt.rcParams["axes.facecolor"] = background_color
+    plt.rcParams["figure.edgecolor"] = get_color("axis")
+    plt.rcParams["figure.facecolor"] = background_color
+    plt.rcParams["grid.color"] = "white"
+    plt.rcParams["legend.facecolor"] = background_color
+    plt.rcParams["legend.edgecolor"] = background_color
+    plt.rcParams["xtick.color"] = get_color("axis")
+    plt.rcParams["ytick.color"] = get_color("axis")
+
+    plt.rcParams["font.size"] = 14
+    plt.rcParams["lines.linewidth"] = 4
+
+    # ax.grid(True, axis="y", color="white")
+
+    from cycler import cycler
+
+    # mpl.rcParams['axes.prop_cycle'] = cycler(color='bgrcmyk')
+    # mpl.rcParams['axes.prop_cycle'] = cycler(color='bgrcmyk')
+    plt.rcParams["axes.prop_cycle"] = cycler(
+        color=[get_color(c) for c in ["swimming", "cycling", "running", "The end"]]
+    )

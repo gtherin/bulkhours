@@ -19,6 +19,9 @@ def get_cred(k="pi.pyc", d=None, pass_code=None):
 
 
 def set_up_student(student_name, d="bulkhours/bulkhours/", pass_code=None):
+    if student_name == "noraise":
+        return
+
     # TODO: Fix that thing in the future
     # Ok till I have less-restrictive rules on the server side
     if student_name is None or pass_code is None or pass_code == "PASS_COURSE":
