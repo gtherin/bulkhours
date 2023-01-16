@@ -11,6 +11,7 @@ from .git_graphviz import *  # noqa
 from .timeit import timeit  # noqa
 from .ffiles import *  # noqa
 from . import rl  # noqa
+from . import econometry  # noqa
 
 
 def load_extra_magics(ip, verbose=True):
