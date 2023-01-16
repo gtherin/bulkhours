@@ -29,15 +29,30 @@ def plot_brownian_sample(seed=None, sample=5000, csample=30):
     cmap = plt.cm.get_cmap("jet")
     ax.scatter(x2, y2, c=range(sample * k), linewidths=0, marker="o", s=3, cmap=cmap)
 
-    ax.add_patch(plt.Circle((x2[0], y2[0]), 3, color=cmap(0.01), fill=True, alpha=0.5, zorder=100))
-    ax.annotate(
-        "Start", (x2[0], y2[0]), color=cmap(0.99), weight="bold", fontsize=20, ha="center", va="center", zorder=2000
-    )
+    if sample > 3 * csample:
+        # ax.add_patch(plt.Circle((x2[0], y2[0]), 3, color=cmap(0.01), fill=True, alpha=0.5, zorder=100))
+        ax.annotate(
+            "Start",
+            (x2[0], y2[0]),
+            color=cmap(0.99),
+            weight="bold",
+            fontsize=20,
+            ha="center",
+            va="center",
+            zorder=2000,
+        )
 
-    ax.add_patch(plt.Circle((x2[-1], y2[-1]), 3, color=cmap(0.99), fill=True, alpha=0.5, zorder=100))
-    ax.annotate(
-        "End", (x2[-1], y2[-1]), color=cmap(0.01), weight="bold", fontsize=20, ha="center", va="center", zorder=2000
-    )
+        # ax.add_patch(plt.Circle((x2[-1], y2[-1]), 3, color=cmap(0.99), fill=True, alpha=0.5, zorder=100))
+        ax.annotate(
+            "End",
+            (x2[-1], y2[-1]),
+            color=cmap(0.01),
+            weight="bold",
+            fontsize=20,
+            ha="center",
+            va="center",
+            zorder=2000,
+        )
     ylim = ax.get_ylim()
 
     # ax.axis('equal')
@@ -46,10 +61,13 @@ def plot_brownian_sample(seed=None, sample=5000, csample=30):
 
     xs = pd.Series(y)
     d = 0
-    for i in np.linspace(0, 1, csample):
-        u = int(i * sample)
-        xs[d:u].plot(ax=axes[1], c=cmap(i))
-        d = u
+    if sample > 10 * csample:
+        for i in np.linspace(0, 1, csample):
+            u = int(i * sample)
+            xs[d:u].plot(ax=axes[1], c=cmap(i))
+            d = u
+    else:
+        xs.plot(ax=axes[1], c="grey")
     axes[1].set_axis_off()
     axes[1].set_title("Y position time series (Y_pos x time)")
     axes[1].set_ylim(ylim)
