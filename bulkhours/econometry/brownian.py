@@ -23,7 +23,7 @@ def plot_brownian_sample(seed=None, sample=5000, csample=30):
     x2 = np.interp(np.arange(sample * k), np.arange(sample) * k, x)
     y2 = np.interp(np.arange(sample * k), np.arange(sample) * k, y)
 
-    _, axes = plt.subplots(1, 2, figsize=(12, 4))
+    _, axes = plt.subplots(1, 3, figsize=(12, 4))
 
     ax = axes[0]
     cmap = plt.cm.get_cmap("jet")
@@ -57,7 +57,7 @@ def plot_brownian_sample(seed=None, sample=5000, csample=30):
 
     # ax.axis('equal')
     axes[0].set_axis_off()
-    axes[0].set_title("Trajectory of the particle (X_pos x Y_pos)")
+    axes[0].set_title("Trajectory of the particle\n(X_pos versus Y_pos)")
 
     xs = pd.Series(y)
     d = 0
@@ -69,5 +69,10 @@ def plot_brownian_sample(seed=None, sample=5000, csample=30):
     else:
         xs.plot(ax=axes[1], c="grey")
     axes[1].set_axis_off()
-    axes[1].set_title("Y position time series (Y_pos x time)")
+    axes[1].set_title("Y position time-series\n(Y_pos versus time)")
     axes[1].set_ylim(ylim)
+
+    xs = pd.concat([pd.Series(y).diff(), pd.Series(x).diff()])
+    axes[2].hist(xs, bins=50)
+    axes[2].set_axis_off()
+    axes[2].set_title("X,Y move histogram\n(Y_pos_diff)")
