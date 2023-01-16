@@ -23,7 +23,7 @@ def plot_brownian_sample(seed=None, sample=5000, csample=30):
     x2 = np.interp(np.arange(sample * k), np.arange(sample) * k, x)
     y2 = np.interp(np.arange(sample * k), np.arange(sample) * k, y)
 
-    _, axes = plt.subplots(1, 3, figsize=(12, 4))
+    _, axes = plt.subplots(1, 3, figsize=(15, 4))
 
     ax = axes[0]
     cmap = plt.cm.get_cmap("jet")
