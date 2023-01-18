@@ -5,7 +5,6 @@ from .blockchain import BlockChain  # noqa
 from .evaluation import Evaluation, set_up_student  # noqa
 from .flops import *  # noqa
 from .languages import get_languages_perf  # noqa
-from .pycker import *  # noqa
 from .git_graph import *  # noqa
 from .git_graphviz import *  # noqa
 from .timeit import timeit  # noqa
