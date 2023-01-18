@@ -55,7 +55,7 @@ def get_data(label):
     import glob
 
     filename = None
-    for directory in [f"bulkhours/data", f"./data", f"../data"]:
+    for directory in ["bulkhours/data", "./data", "../data", "../../bulkhours/data"]:
         if len((files := glob.glob(f"{directory}/{label}*"))):
             filename = files[0]
     if not filename:
