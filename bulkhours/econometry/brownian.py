@@ -72,7 +72,9 @@ def plot_brownian_sample(seed=None, sample=5000, csample=30):
     axes[1].set_title("Y position time-series\n(Y_pos versus time)")
     axes[1].set_ylim(ylim)
 
+    import matplotlib
+
     xs = pd.concat([pd.Series(y).diff(), pd.Series(x).diff()])
-    axes[2].hist(xs, bins=50)
+    axes[2].hist(xs, bins=50, color=matplotlib.colors.rgb2hex(cmap(0.38)))
     axes[2].set_axis_off()
     axes[2].set_title("X,Y move histogram\n(Y_pos_diff)")
