@@ -53,11 +53,10 @@ def plot1(ax):
     # ax.set_title("X,Y move histogram\n(Y_pos_diff)")
 
 
-def plot2(ax):
+def plot2(ax, a=4):
 
     # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.skewnorm.html
-    a = 4
-    mean, var, skew, kurt = sp.stats.skewnorm.stats(a, moments="mvsk")
+    # mean, var, skew, kurt = sp.stats.skewnorm.stats(a, moments="mvsk")
     # print(mean, var, skew, kurt)
 
     x = np.linspace(sp.stats.skewnorm.ppf(0.01, a), sp.stats.skewnorm.ppf(0.99, a), 100)
@@ -96,6 +95,15 @@ def get_x(pdf, q=0.01):
     return np.linspace(pdf.ppf(q), pdf.ppf(1 - q), 100)
 
 
+def plot_mean_median(ax, pdf, fac=1.2):
+    # Accentuate diff between mean and median
+    cartoon_median = pdf.median() + fac * (pdf.median() - pdf.mean())
+    ax.vlines(x=pdf.mean(), ymin=0, ymax=pdf.pdf(pdf.mean()), color="#C70039", ls="dashed", label=" $\mu$: mean")
+    ax.vlines(
+        x=cartoon_median, ymin=0, ymax=pdf.pdf(cartoon_median), color="#581845", ls="dotted", label=r"$\nu$: median"
+    )
+
+
 def plot_skew(ax, a, label, legend=True):
     # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.skewnorm.html
 
@@ -103,12 +111,7 @@ def plot_skew(ax, a, label, legend=True):
 
     ax.plot(get_x(pdf), pdf.pdf(get_x(pdf)), "r", lw=5, alpha=0.6)
 
-    # Accentuate diff between mean and median
-    cartoon_median = pdf.median() + 1.2 * (pdf.median() - pdf.mean())
-    ax.vlines(x=pdf.mean(), ymin=0, ymax=pdf.pdf(pdf.mean()), color="#C70039", ls="dashed", label=" $\mu$: mean")
-    ax.vlines(
-        x=cartoon_median, ymin=0, ymax=pdf.pdf(cartoon_median), color="#581845", ls="dotted", label=r"$\nu$: median"
-    )
+    plot_mean_median(ax, pdf, fac=1.2)
 
     if legend:
         ax.legend()
@@ -142,7 +145,7 @@ def plot_gallery():
     # pdf1 = sp.stats.skewnorm(a=4)
     # ax.plot(get_x(pdf1), pdf1.pdf(get_x(pdf1)), "r", lw=5, alpha=0.6)
     plot_sigma(ax, dx=0.75, x=0.75, y=0.2, width=0.0147, head_width=0.03, head_length=0.1)
-    ax.legend(loc=2)
+    ax.legend(loc=1)
     set_title(ax, "Unimodal distrib")
 
     ax = axes[0][1]
@@ -154,7 +157,6 @@ def plot_gallery():
     ax.plot(x, 0.004 * x + 0.025, "#581845", lw=2, alpha=0.4, ls="dotted", label=r"$\propto \zeta:$ skew")
     ax.plot(x, 0.5 * pdf1.pdf(x), lw=2, alpha=0.6, c="grey", ls="dashed")
     ax.fill_between(x, 0.5 * pdf1.pdf(x), data, label=r"$\propto \kappa:$ kurtosis", alpha=0.4)
-
     plot_sigma(ax, dx=0.59)
 
     ax.legend(loc=2)
@@ -172,18 +174,46 @@ def plot_gallery():
     plot_skew(axes[1][1], 0, "No skew\nmean = median", legend=False)
     plot_skew(axes[1][2], 4, "Positive skew\nmean > median", legend=False)
 
+    ax = axes[2][0]
+    x = np.linspace(-0.9, 3.5, 100)
+    pdf = sp.stats.skewnorm(a=4)
+    ax.plot(x, pdf.pdf(x), "r", lw=5, alpha=0.6)
+    plot_mean_median(ax, pdf, fac=1.0)
+
+    x = np.linspace(-0.9, pdf.median(), 100)
+    ax.fill_between(x, 0.0 * x, pdf.pdf(x), label="", alpha=0.2)
+
+    x = np.linspace(pdf.median(), 3.5, 100)
+    ax.fill_between(x, 0.0 * x, pdf.pdf(x), label="", alpha=0.2, color="r")
+
+    ax.annotate(
+        "50%",
+        (0.35, 0.2),
+        color="#C70039",
+        weight="bold",
+        fontsize=20,
+        ha="center",
+        va="center",
+        rotation=90,
+    )
+    ax.annotate(
+        "50%",
+        (1.08, 0.18),
+        color="#581845",
+        weight="bold",
+        fontsize=20,
+        ha="center",
+        va="center",
+        rotation=-90,
+    )
+
+    ax.legend(loc=1)
+    set_title(ax, "Vizualizing the median")
+
 
 def plot_celestine():
 
     fig, axes = plt.subplots(3, 3, figsize=(15, 10))
-
-    plot1(axes[0][0])
-    plot2(axes[0][1])
-    plot3(axes[0][2])
-
-    plot_skew(axes[1][0], -4, "Negative skew\nMean > Median")
-    plot_skew(axes[1][1], 0, "No skew\nMean = Median")
-    plot_skew(axes[1][2], 4, "Positive skew\nMean < Median")
 
     def plot6(ax, col, palette="jet"):
         xs = np.random.randn(1000)
