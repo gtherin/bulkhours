@@ -111,7 +111,9 @@ Plus de 9 000	183 314
         .str.replace("Plus de 9 000", "9000 à 9100")
     )
     df["xvalue"] = df["xvalue"].str.replace(" ", "").str.split("à")
-    df["xvalue"] = df["xvalue"].apply(lambda x: (int(x[0]) + int(x[1])) / 2)
+    df["xmin"] = df["xvalue"].apply(lambda x: float(x[0]))
+    df["xmax"] = df["xvalue"].apply(lambda x: float(x[1]))
+    df["xvalue"] = 0.5 * (df["xmin"] + df["xmax"])
     df["is_valid"] = ~df.index.isin([0, len(df) - 1])
 
     return df.set_index("xvalue")
