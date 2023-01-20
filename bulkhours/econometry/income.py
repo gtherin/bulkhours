@@ -112,6 +112,6 @@ Plus de 9 000	183 314
     )
     df["xvalue"] = df["xvalue"].str.replace(" ", "").str.split("à")
     df["xvalue"] = df["xvalue"].apply(lambda x: (int(x[0]) + int(x[1])) / 2)
-    df["is_valid"] = df.index.isin([0, len(df) - 1])
+    df["is_valid"] = ~df.index.isin([0, len(df) - 1])
 
     return df.set_index("xvalue")
