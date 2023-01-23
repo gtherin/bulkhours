@@ -174,16 +174,16 @@ def plot_gallery():
     plot_skew(axes[1][1], 0, "No skew\nmean = median", legend=False)
     plot_skew(axes[1][2], 4, "Positive skew\nmean > median", legend=False)
 
-    ax = axes[2][0]
-    x = np.linspace(-0.9, 3.5, 100)
+    ax, nob = axes[2][0], 100
+    x = np.linspace(-0.9, 3.5, nob)
     pdf = sp.stats.skewnorm(a=4)
     ax.plot(x, pdf.pdf(x), "r", lw=5, alpha=0.6)
-    plot_mean_median(ax, pdf, fac=1.0)
+    plot_mean_median(ax, pdf, fac=0.0)
 
-    x = np.linspace(-0.9, pdf.median(), 100)
+    x = np.linspace(-0.9, pdf.median(), nob)
     ax.fill_between(x, 0.0 * x, pdf.pdf(x), label="", alpha=0.2)
 
-    x = np.linspace(pdf.median(), 3.5, 100)
+    x = np.linspace(pdf.median(), 3.5, nob)
     ax.fill_between(x, 0.0 * x, pdf.pdf(x), label="", alpha=0.2, color="r")
 
     ax.annotate(
