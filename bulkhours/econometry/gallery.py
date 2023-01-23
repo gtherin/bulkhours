@@ -225,3 +225,60 @@ def plot_celestine():
     plot6(axes[2][0], 0.2, palette="cool")
     plot6(axes[2][1], 0.6, palette="cool")
     plot6(axes[2][2], 0.0, palette="cool")
+
+
+def plot_stationary():
+
+    # "swimming": "#581845",
+    # "cycling": "#C70039",
+    # "running": "#FF5733",
+    # "axis": "#4F77AA",
+
+    fig, axes = plt.subplots(1, 3, figsize=(15, 3))
+
+    ax, nob = axes[0], 50
+
+    np.random.seed(42)
+    data = pd.Series(np.random.randn(nob), index=np.linspace(0, 1, nob))
+
+    ax.plot(data.index, data, lw=1, alpha=0.9, label=r"$x(t)$")
+    ax.plot(data.index, np.zeros(nob), lw=1, alpha=0.9, label=r"$\mu$")
+    ax.fill_between(data.index, -2, 2, alpha=0.2, label=r"$\sigma$")
+
+    ax.set_ylim([-10, 10])
+
+    ax.legend(ncol=3)
+    set_title(ax, r"Stationary mean")
+
+    ax, nob = axes[1], 50
+
+    np.random.seed(42)
+    data = pd.Series(
+        np.concatenate([np.ones(int(0.6 * nob)), -0.4 * np.ones(int(0.4 * nob))], axis=0), index=np.linspace(0, 1, nob)
+    )
+    data = data.cumsum().ewm(3).mean() + 200 * np.cumsum(np.random.randn(nob))
+
+    datas = data.rolling(8).mean().shift(-3).fillna(data.ewm(4).mean())
+    datap = datas + 1.9 * data.std() / np.sqrt(nob)
+    datam = datas - 1.9 * data.std() / np.sqrt(nob)
+
+    ax.plot(data.index, data, lw=1, alpha=0.9, label=r"$x(t)$")
+    ax.plot(data.index, datas, lw=1, alpha=0.9, label=r"$\mu(t)$")
+    ax.fill_between(data.index, datam, datap, alpha=0.2, label=r"$\sigma$")
+
+    ax.legend()
+    set_title(ax, r"Non stationary mean")
+    ax, nob = axes[2], 50
+
+    np.random.seed(42)
+    fac = np.linspace(10, 1, nob)
+    data = pd.Series(fac * np.random.randn(nob), index=np.linspace(0, 1, nob))
+
+    ax.plot(data.index, data, lw=1, alpha=0.9, label=r"$x(t)$")
+    ax.plot(data.index, np.zeros(nob), lw=1, alpha=0.9, label=r"$\mu$")
+    ax.fill_between(data.index, -1.5 * fac, 1.5 * fac, alpha=0.2, label=r"$\sigma(t)$")
+
+    ax.set_ylim([-30, 30])
+
+    ax.legend(ncol=3)
+    set_title(ax, r"Stationary mean")
