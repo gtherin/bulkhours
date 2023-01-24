@@ -18,7 +18,7 @@ def get_fr_income(credit=True):
         print("Data source INSEE: salaires mensuels nets en équivalent temps plein (EQTP) en 2020")
     data = StringIO(
         """Income	eqt
-Moins de 1 200	583943
+Moins de 1_200	583943
 De 1_200 à 1_300	613_321
 De 1_300 à 1_400	835_135
 De 1_400 à 1_500	969_172
@@ -107,8 +107,8 @@ Plus de 9_000	183_314
     df["xvalue"] = (
         df["Income"]
         .str.replace("De ", "")
-        .str.replace("Moins de", "1100 à")
-        .str.replace("Plus de 9 000", "9000 à 9100")
+        .str.replace("Moins de", "1_100 à")
+        .str.replace("Plus de 9_000", "9_000 à 9_100")
     )
     df["xvalue"] = df["xvalue"].str.replace(" ", "").str.split("à")
     df["xmin"] = df["xvalue"].apply(lambda x: float(x[0]))

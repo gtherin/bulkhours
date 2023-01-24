@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import scipy as sp
 import statsmodels.api as sm
 import matplotlib
+from .brownian import Brown
 
 
 def plot1(ax):
@@ -211,16 +212,27 @@ def plot_gallery():
     set_title(ax, "Vizualizing the median")
 
 
-def plot_celestine():
+def plot_celestine(seed=42, sample=1000):
 
     fig, axes = plt.subplots(3, 3, figsize=(15, 10))
 
     def plot6(ax, col, palette="jet"):
-        xs = np.random.randn(1000)
+        xs = np.random.randn(sample)
         cmap = plt.cm.get_cmap(palette)
         ax.hist(xs, bins=50, color=matplotlib.colors.rgb2hex(cmap(col)))
         ax.set_axis_off()
         ax.set_title("X,Y move histogram\n(Y_pos_diff)")
+
+    brown = Brown(seed=seed, sample=sample)
+
+    brown.get_1d_plot(axes[0][0], cmap="twilight")
+    brown.get_1d_plot(axes[0][1], cmap="gnuplot2")
+    brown.get_1d_plot(axes[0][2], cmap="cool")
+
+    brown.get_2d_plot(axes[1][0], cmap="prism")
+    brown.get_2d_plot(axes[1][1], cmap="jet")
+
+    brown.get_2d_plot(axes[1][2], cmap="magma")
 
     plot6(axes[2][0], 0.2, palette="cool")
     plot6(axes[2][1], 0.6, palette="cool")
@@ -228,11 +240,6 @@ def plot_celestine():
 
 
 def plot_stationary():
-
-    # "swimming": "#581845",
-    # "cycling": "#C70039",
-    # "running": "#FF5733",
-    # "axis": "#4F77AA",
 
     fig, axes = plt.subplots(1, 3, figsize=(15, 3))
 
@@ -242,13 +249,13 @@ def plot_stationary():
     data = pd.Series(np.random.randn(nob), index=np.linspace(0, 1, nob))
 
     ax.plot(data.index, data, lw=1, alpha=0.9, label=r"$x(t)$")
-    ax.plot(data.index, np.zeros(nob), lw=1, alpha=0.9, label=r"$\mu$")
-    ax.fill_between(data.index, -2, 2, alpha=0.2, label=r"$\sigma$")
+    ax.plot(data.index, np.zeros(nob), lw=1, alpha=0.9, label=r"$\mu(t)=\mu$")
+    ax.fill_between(data.index, -2, 2, alpha=0.2, label=r"$\sigma(t)=\sigma$")
 
-    ax.set_ylim([-10, 10])
+    ax.set_ylim([-5, 15])
 
-    ax.legend(ncol=3)
-    set_title(ax, r"Stationary mean")
+    ax.legend()
+    set_title(ax, "Stationary mean\nStationary variance")
 
     ax, nob = axes[1], 50
 
@@ -264,10 +271,10 @@ def plot_stationary():
 
     ax.plot(data.index, data, lw=1, alpha=0.9, label=r"$x(t)$")
     ax.plot(data.index, datas, lw=1, alpha=0.9, label=r"$\mu(t)$")
-    ax.fill_between(data.index, datam, datap, alpha=0.2, label=r"$\sigma$")
+    ax.fill_between(data.index, datam, datap, alpha=0.2, label=r"$\sigma(t)=\sigma$")
 
     ax.legend()
-    set_title(ax, r"Non stationary mean")
+    set_title(ax, "Non-stationary mean\nStationary variance")
     ax, nob = axes[2], 50
 
     np.random.seed(42)
@@ -275,10 +282,10 @@ def plot_stationary():
     data = pd.Series(fac * np.random.randn(nob), index=np.linspace(0, 1, nob))
 
     ax.plot(data.index, data, lw=1, alpha=0.9, label=r"$x(t)$")
-    ax.plot(data.index, np.zeros(nob), lw=1, alpha=0.9, label=r"$\mu$")
+    ax.plot(data.index, np.zeros(nob), lw=1, alpha=0.9, label=r"$\mu(t)=\mu$")
     ax.fill_between(data.index, -1.5 * fac, 1.5 * fac, alpha=0.2, label=r"$\sigma(t)$")
 
     ax.set_ylim([-30, 30])
 
     ax.legend(ncol=3)
-    set_title(ax, r"Stationary mean")
+    set_title(ax, "Stationary mean\nNon-stationary variance")
