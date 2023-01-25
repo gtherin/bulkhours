@@ -43,19 +43,10 @@ class Boid:
         width = upper_limits - lower_limits
         return lower_limits[:, np.newaxis] + np.random.rand(2, count) * width[:, np.newaxis]
 
-    @staticmethod
-    def animate(frame):
-        boid.update_boids()
-        scatter.set_offsets(boid.positions.transpose())
 
-
-def animate_boid(boid):
+def animate_boid(boid, figure, scatter):
     import matplotlib.pyplot as plt
     from matplotlib import animation
-
-    figure, axes = plt.subplots()
-    axes.set_visible(False)
-    scatter = axes.scatter([0, 2000], [0, 2000], marker="d", edgecolor="k", lw=0.5)
 
     def animate(frame):
         boid.update_boids()
