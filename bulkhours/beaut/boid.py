@@ -4,11 +4,13 @@ import math
 
 
 class Boid:
-    def __init__(self, label):
+    def __init__(self, label="", move_to_middle_strength=None):
+        self.label = label
+        self.move_to_middle_strength = move_to_middle_strength
+
         self.x = random.randrange(100, 900)
         self.y = random.randrange(100, 900)
         self.angle = random.uniform(0.0, 2.0 * math.pi)
-        self.label = label
         self.color = "black"
         self.positions = Boid.new_flock(100, np.array([100, 900]), np.array([200, 1100]))
         self.velocities = Boid.new_flock(100, np.array([0, -20]), np.array([10, 20]))
@@ -55,6 +57,8 @@ def animate_boid(boid, figure, scatter, frames=50, interval=50):
 
     def animate(frame):
         boid.update_boids()
+        if boid.move_to_middle_strength:
+            boid.add_mean_reversion_velocity(move_to_middle_strength=boid.move_to_middle_strength)
         scatter.set_offsets(boid.positions.transpose())
 
     anim = animation.FuncAnimation(figure, animate, frames=frames, interval=interval)
