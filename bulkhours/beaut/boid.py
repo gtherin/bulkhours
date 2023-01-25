@@ -99,7 +99,6 @@ class Boid:
 
 
 def animate_boid(boid, figure, scatter, frames=50, interval=50):
-    import matplotlib.pyplot as plt
     from matplotlib import animation
 
     def animate(frame):

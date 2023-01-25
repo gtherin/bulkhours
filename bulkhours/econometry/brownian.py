@@ -100,10 +100,10 @@ def plot_brownian_sample(seed=None, sample=5000, csample=30):
 
     """
 
-    brown = Brown(seed=seed, sample=sample, csample=csample)
+    brown = Brown(seed=seed, sample=sample)
 
     _, axes = plt.subplots(1, 3, figsize=(15, 4))
 
     brown.get_2d_plot(axes[0], csample=csample)
     brown.get_1d_plot(axes[1], csample=csample)
-    brown.get_hist(axes[2])
+    brown.get_hist(axes[2], cval=0.38)
