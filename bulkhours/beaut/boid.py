@@ -43,8 +43,13 @@ class Boid:
         width = upper_limits - lower_limits
         return lower_limits[:, np.newaxis] + np.random.rand(2, count) * width[:, np.newaxis]
 
+    def add_mean_reversion_velocity(self, move_to_middle_strength=0.01):
+        middle = np.mean(self.positions, 1)
+        direction_to_middle = self.positions - middle[:, np.newaxis]
+        self.velocities -= direction_to_middle * move_to_middle_strength
 
-def animate_boid(boid, figure, scatter):
+
+def animate_boid(boid, figure, scatter, frames=50, interval=50):
     import matplotlib.pyplot as plt
     from matplotlib import animation
 
@@ -52,5 +57,5 @@ def animate_boid(boid, figure, scatter):
         boid.update_boids()
         scatter.set_offsets(boid.positions.transpose())
 
-    anim = animation.FuncAnimation(figure, animate, frames=50, interval=50)
+    anim = animation.FuncAnimation(figure, animate, frames=frames, interval=interval)
     return anim.to_jshtml()
