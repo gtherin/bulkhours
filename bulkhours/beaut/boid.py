@@ -54,6 +54,7 @@ def animate_boid(boid):
     from matplotlib import animation
 
     figure, axes = plt.subplots()
+    axes.set_visible(False)
     scatter = axes.scatter([0, 2000], [0, 2000], marker="d", edgecolor="k", lw=0.5)
 
     def animate(frame):
