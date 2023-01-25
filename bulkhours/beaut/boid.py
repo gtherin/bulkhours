@@ -47,3 +47,18 @@ class Boid:
     def animate(frame):
         boid.update_boids()
         scatter.set_offsets(boid.positions.transpose())
+
+
+def animate_boid(boid):
+    import matplotlib.pyplot as plt
+    from matplotlib import animation
+
+    figure, axes = plt.subplots()
+    scatter = axes.scatter([0, 2000], [0, 2000], marker="d", edgecolor="k", lw=0.5)
+
+    def animate(frame):
+        boid.update_boids()
+        scatter.set_offsets(boid.positions.transpose())
+
+    anim = animation.FuncAnimation(figure, animate, frames=50, interval=50)
+    return anim.to_jshtml()
