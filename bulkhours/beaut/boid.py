@@ -2,6 +2,8 @@ import numpy as np
 import random
 import math
 
+# http://rits.github-pages.ucl.ac.uk/intro-research-prog/morea/lesson17/reading2.html
+
 
 class Boid:
     def __init__(
