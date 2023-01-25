@@ -4,9 +4,10 @@ import math
 
 
 class Boid:
-    def __init__(self, label="", move_to_middle_strength=None):
+    def __init__(self, label="", move_to_middle_strength=None, alert_distance=None):
         self.label = label
         self.move_to_middle_strength = move_to_middle_strength
+        self.alert_distance = alert_distance
 
         self.x = random.randrange(100, 900)
         self.y = random.randrange(100, 900)
@@ -45,10 +46,29 @@ class Boid:
         width = upper_limits - lower_limits
         return lower_limits[:, np.newaxis] + np.random.rand(2, count) * width[:, np.newaxis]
 
-    def add_mean_reversion_velocity(self, move_to_middle_strength=0.01):
+    def add_mean_reversion_velocity(self):
+        if not self.move_to_middle_strength:
+            return
         middle = np.mean(self.positions, 1)
         direction_to_middle = self.positions - middle[:, np.newaxis]
-        self.velocities -= direction_to_middle * move_to_middle_strength
+        self.velocities -= direction_to_middle * self.move_to_middle_strength
+
+    def forbid_collision(self):
+        if not self.alert_distance:
+            return
+
+        separations = self.positions[:, np.newaxis, :] - self.positions[:, :, np.newaxis]
+        squared_displacements = separations * separations
+        square_distances = np.sum(squared_displacements, 0)
+        far_away = square_distances > self.alert_distance
+        separations_if_close = np.copy(separations)
+        separations_if_close[0, :, :][far_away] = 0
+        separations_if_close[1, :, :][far_away] = 0
+        self.velocities += np.sum(separations_if_close, 1)
+
+        middle = np.mean(self.positions, 1)
+        direction_to_middle = self.positions - middle[:, np.newaxis]
+        self.velocities -= direction_to_middle * self.move_to_middle_strength
 
     def update_boids(self):
         self.positions += self.velocities
@@ -60,8 +80,8 @@ def animate_boid(boid, figure, scatter, frames=50, interval=50):
 
     def animate(frame):
         boid.update_boids()
-        if boid.move_to_middle_strength:
-            boid.add_mean_reversion_velocity(move_to_middle_strength=boid.move_to_middle_strength)
+        boid.add_mean_reversion_velocity()
+        boid.forbid_collision()
         scatter.set_offsets(boid.positions.transpose())
 
     anim = animation.FuncAnimation(figure, animate, frames=frames, interval=interval)
