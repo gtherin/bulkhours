@@ -117,3 +117,6 @@ Plus de 9_000	183_314
     df["is_valid"] = ~df.index.isin([0, len(df) - 1])
 
     return df.set_index("xvalue")
+
+
+#OECD (2023), Adult education level (indicator). doi: 10.1787/36bce3fe-en (Accessed on 24 January 2023)

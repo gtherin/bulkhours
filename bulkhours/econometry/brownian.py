@@ -19,20 +19,26 @@ class Brown:
         # We add 10 intermediary points between two successive points. We interpolate x and y.
         return np.interp(np.arange(self.sample * self.k), np.arange(self.sample) * self.k, self.x)
 
-    def get_int_y(self):
-        return np.interp(np.arange(self.sample * self.k), np.arange(self.sample) * self.k, self.y)
+    def get_int_y(self, factor=1.0):
+        return np.interp(np.arange(self.sample * self.k), np.arange(self.sample) * self.k, self.y + factor)
 
-    def get_2d_plot(self, ax, csample=30, cmap=None):
+    def get_2d_plot(self, ax, csample=30, cmap=None, factor=1.0):
         cmap = plt.cm.get_cmap(cmap if cmap else self.cmap)
         ax.scatter(
-            self.get_int_x(), self.get_int_y(), c=range(self.sample * self.k), linewidths=0, marker="o", s=3, cmap=cmap
+            self.get_int_x(),
+            self.get_int_y(factor),
+            c=range(self.sample * self.k),
+            linewidths=0,
+            marker="o",
+            s=3,
+            cmap=cmap,
         )
 
         if self.sample > 3 * csample:
             # ax.add_patch(plt.Circle((x2[0], y2[0]), 3, color=cmap(0.01), fill=True, alpha=0.5, zorder=100))
             ax.annotate(
                 "Start",
-                (self.get_int_x()[0], self.get_int_y()[0]),
+                (self.get_int_x()[0], self.get_int_y(factor)[0]),
                 color=cmap(0.99),
                 weight="bold",
                 fontsize=20,
@@ -44,7 +50,7 @@ class Brown:
             # ax.add_patch(plt.Circle((x2[-1], y2[-1]), 3, color=cmap(0.99), fill=True, alpha=0.5, zorder=100))
             ax.annotate(
                 "End",
-                (self.get_int_x()[-1], self.get_int_y()[-1]),
+                (self.get_int_x()[-1], self.get_int_y(factor)[-1]),
                 color=cmap(0.01),
                 weight="bold",
                 fontsize=20,
@@ -60,9 +66,9 @@ class Brown:
 
         return ax
 
-    def get_1d_plot(self, ax, csample=30, cmap=None):
+    def get_1d_plot(self, ax, csample=30, cmap=None, factor=1.0):
         cmap = plt.cm.get_cmap(cmap if cmap else self.cmap)
-        xs = pd.Series(self.y)
+        xs = pd.Series(self.y) + factor
         d = 0
         if self.sample > 10 * csample:
             for i in np.linspace(0, 1, csample):

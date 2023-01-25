@@ -140,6 +140,7 @@ def plot_gallery():
     # "axis": "#4F77AA",
 
     fig, axes = plt.subplots(3, 3, figsize=(15, 10))
+    fig.subplots_adjust(wspace=0.01, hspace=0.3)
 
     ax = axes[0][0]
     plot_skew(ax, 4, "Positive skew\nmean < median", legend=True)
@@ -215,6 +216,7 @@ def plot_gallery():
 def plot_celestine(seed=42, sample=1000):
 
     fig, axes = plt.subplots(3, 3, figsize=(15, 10))
+    fig.subplots_adjust(wspace=0.01, hspace=0.3)
 
     def plot6(ax, col, palette="jet"):
         xs = np.random.randn(sample)
@@ -225,16 +227,19 @@ def plot_celestine(seed=42, sample=1000):
 
     brown = Brown(seed=seed, sample=sample)
 
-    brown.get_1d_plot(axes[0][0], cmap="twilight")
+    brown.get_1d_plot(axes[0][0], cmap="gnuplot2", factor=60)
+    brown.get_1d_plot(axes[0][0], cmap="twilight", factor=90)
+    brown.get_1d_plot(axes[0][0], cmap="cool", factor=80)
+    brown.get_1d_plot(axes[0][0], cmap="magma", factor=70)
+
     brown.get_1d_plot(axes[0][1], cmap="gnuplot2")
     brown.get_1d_plot(axes[0][2], cmap="cool")
 
-    brown.get_2d_plot(axes[1][0], cmap="prism")
-    brown.get_2d_plot(axes[1][1], cmap="jet")
+    brown.get_2d_plot(axes[1][0], cmap="gist_rainbow")
+    brown.get_2d_plot(axes[1][1], cmap="plasma")
+    brown.get_2d_plot(axes[1][2], cmap="jet")
 
-    brown.get_2d_plot(axes[1][2], cmap="magma")
-
-    plot6(axes[2][0], 0.2, palette="cool")
+    plot6(axes[2][0], 0.2, palette="plasma")
     plot6(axes[2][1], 0.6, palette="cool")
     plot6(axes[2][2], 0.0, palette="cool")
 
@@ -242,6 +247,7 @@ def plot_celestine(seed=42, sample=1000):
 def plot_stationary():
 
     fig, axes = plt.subplots(1, 3, figsize=(15, 3))
+    fig.subplots_adjust(wspace=0.01, hspace=0.01)
 
     ax, nob = axes[0], 50
 

@@ -11,6 +11,7 @@ from .timeit import timeit  # noqa
 from .ffiles import *  # noqa
 from . import rl  # noqa
 from . import econometry  # noqa
+from . import beaut  # noqa
 
 
 def load_extra_magics(ip, verbose=True):
