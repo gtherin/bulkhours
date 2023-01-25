@@ -109,9 +109,7 @@ def plot_skew(ax, a, label, legend=True):
     # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.skewnorm.html
 
     pdf = sp.stats.skewnorm(a := a)
-
     ax.plot(get_x(pdf), pdf.pdf(get_x(pdf)), "r", lw=5, alpha=0.6)
-
     plot_mean_median(ax, pdf, fac=1.2)
 
     if legend:
@@ -143,26 +141,31 @@ def plot_gallery():
     fig.subplots_adjust(wspace=0.01, hspace=0.3)
 
     ax = axes[0][0]
+
+    pdf = sp.stats.skewnorm(a=1)
+    x_c = get_x(pdf, q=0.001)
+    x_d = np.linspace(-2, 2, 6)
+
+    print(pdf.pdf(x_d))
+    print(pdf.cdf(x_d))
+
+    y_d = pdf.cdf(x_d)
+    y_d = y_d - np.array([0] + list(y_d[:-1]))
+
+    ax.plot(x_c, pdf.pdf(x_c), "r", lw=5, alpha=0.6, label="Continuous pdf")
+    ax.bar(x_d, y_d * 1.2, lw=5, alpha=0.6, width=0.1, label="Discrete pdf")
+    ax.plot(x_c, pdf.cdf(x_c), "#C70039", lw=5, alpha=0.6, label="Continuous cdf")
+    ax.legend(loc=2)
+    ax.set_ylim([0.0, 1.0])
+    set_title(ax, "Density functions")
+
+    ax = axes[0][1]
     plot_skew(ax, 4, "Positive skew\nmean < median", legend=True)
     # pdf1 = sp.stats.skewnorm(a=4)
     # ax.plot(get_x(pdf1), pdf1.pdf(get_x(pdf1)), "r", lw=5, alpha=0.6)
     plot_sigma(ax, dx=0.75, x=0.75, y=0.2, width=0.0147, head_width=0.03, head_length=0.1)
     ax.legend(loc=1)
     set_title(ax, "Unimodal distrib")
-
-    ax = axes[0][1]
-    pdf1, pdf2 = sp.stats.norm(0, 0.6), sp.stats.norm(0, 4)
-    x = np.linspace(-3, 3, 100)
-    data = 0.5 * pdf1.pdf(x) + 0.004 * x + 0.025
-
-    ax.plot(x, data, lw=5, alpha=0.6, c="r")
-    ax.plot(x, 0.004 * x + 0.025, "#581845", lw=2, alpha=0.4, ls="dotted", label=r"$\propto \zeta:$ skew")
-    ax.plot(x, 0.5 * pdf1.pdf(x), lw=2, alpha=0.6, c="grey", ls="dashed")
-    ax.fill_between(x, 0.5 * pdf1.pdf(x), data, label=r"$\propto \kappa:$ kurtosis", alpha=0.4)
-    plot_sigma(ax, dx=0.59)
-
-    ax.legend(loc=2)
-    set_title(ax, "Skew, Kurtosis")
 
     ax = axes[0][2]
     pdf1 = sp.stats.skewnorm(a=4)
@@ -211,6 +214,20 @@ def plot_gallery():
 
     ax.legend(loc=1)
     set_title(ax, "Vizualizing the median")
+
+    ax = axes[2][1]
+    pdf1, pdf2 = sp.stats.norm(0, 0.6), sp.stats.norm(0, 4)
+    x = np.linspace(-3, 3, 100)
+    data = 0.5 * pdf1.pdf(x) + 0.004 * x + 0.025
+
+    ax.plot(x, data, lw=5, alpha=0.6, c="r")
+    ax.plot(x, 0.004 * x + 0.025, "#581845", lw=2, alpha=0.4, ls="dotted", label=r"$\propto \zeta:$ skew")
+    ax.plot(x, 0.5 * pdf1.pdf(x), lw=2, alpha=0.6, c="grey", ls="dashed")
+    ax.fill_between(x, 0.5 * pdf1.pdf(x), data, label=r"$\propto \kappa:$ kurtosis", alpha=0.4)
+    plot_sigma(ax, dx=0.59)
+
+    ax.legend(loc=2)
+    set_title(ax, "Skew, Kurtosis")
 
 
 def plot_celestine(seed=42, sample=1000):
