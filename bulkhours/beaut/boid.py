@@ -50,6 +50,9 @@ class Boid:
         direction_to_middle = self.positions - middle[:, np.newaxis]
         self.velocities -= direction_to_middle * move_to_middle_strength
 
+    def update_boids(self):
+        self.positions += self.velocities
+
 
 def animate_boid(boid, figure, scatter, frames=50, interval=50):
     import matplotlib.pyplot as plt
