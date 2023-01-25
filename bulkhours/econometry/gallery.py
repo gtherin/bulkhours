@@ -130,24 +130,16 @@ def plot_sigma(ax, x=0, y=0.09, dx=0.55, width=0.007, head_width=0.03, head_leng
     ax.arrow(dx=-dx, **opts)
 
 
-def plot_gallery():
+def plot_gallery_r1(axes=None):
 
-    # "swimming": "#581845",
-    # "cycling": "#C70039",
-    # "running": "#FF5733",
-    # "axis": "#4F77AA",
+    if axes is None:
+        fig, axes = plt.subplots(1, 3, figsize=(15, 3))
+        fig.subplots_adjust(wspace=0.01, hspace=0.3)
 
-    fig, axes = plt.subplots(3, 3, figsize=(15, 10))
-    fig.subplots_adjust(wspace=0.01, hspace=0.3)
-
-    ax = axes[0][0]
-
+    ax = axes[0]
     pdf = sp.stats.skewnorm(a=1)
     x_c = get_x(pdf, q=0.001)
     x_d = np.linspace(-2, 2, 6)
-
-    print(pdf.pdf(x_d))
-    print(pdf.cdf(x_d))
 
     y_d = pdf.cdf(x_d)
     y_d = y_d - np.array([0] + list(y_d[:-1]))
@@ -159,7 +151,7 @@ def plot_gallery():
     ax.set_ylim([0.0, 1.0])
     set_title(ax, "Density functions")
 
-    ax = axes[0][1]
+    ax = axes[1]
     plot_skew(ax, 4, "Positive skew\nmean < median", legend=True)
     # pdf1 = sp.stats.skewnorm(a=4)
     # ax.plot(get_x(pdf1), pdf1.pdf(get_x(pdf1)), "r", lw=5, alpha=0.6)
@@ -167,7 +159,7 @@ def plot_gallery():
     ax.legend(loc=1)
     set_title(ax, "Unimodal distrib")
 
-    ax = axes[0][2]
+    ax = axes[2]
     pdf1 = sp.stats.skewnorm(a=4)
     pdf2 = sp.stats.norm(2, 0.3)
     ax.plot(get_x(pdf1), 0.5 * pdf1.pdf(get_x(pdf1)) + 0.5 * pdf2.pdf(get_x(pdf1)), "r", lw=5, alpha=0.6)
@@ -175,11 +167,24 @@ def plot_gallery():
     ax.plot(get_x(pdf1), 0.59 * sp.stats.norm(1.97, 0.33).pdf(get_x(pdf1)), "#C70039", lw=2, alpha=0.4, ls="dashed")
     set_title(ax, "Bimodal distrib")
 
-    plot_skew(axes[1][0], -4, "Negative skew\nmean < median")
-    plot_skew(axes[1][1], 0, "No skew\nmean = median", legend=False)
-    plot_skew(axes[1][2], 4, "Positive skew\nmean > median", legend=False)
 
-    ax, nob = axes[2][0], 100
+def plot_gallery_skews(axes=None):
+
+    if axes is None:
+        fig, axes = plt.subplots(1, 3, figsize=(15, 3))
+        fig.subplots_adjust(wspace=0.01, hspace=0.3)
+
+    plot_skew(axes[0], -4, "Negative skew\nmean < median")
+    plot_skew(axes[1], 0, "No skew\nmean = median", legend=False)
+    plot_skew(axes[2], 4, "Positive skew\nmean > median", legend=False)
+
+def plot_gallery_r3(axes=None):
+
+    if axes is None:
+        fig, axes = plt.subplots(1, 3, figsize=(15, 3))
+        fig.subplots_adjust(wspace=0.01, hspace=0.3)
+
+    ax, nob = axes[0], 100
     x = np.linspace(-0.9, 3.5, nob)
     pdf = sp.stats.skewnorm(a=4)
     ax.plot(x, pdf.pdf(x), "r", lw=5, alpha=0.6)
@@ -215,7 +220,7 @@ def plot_gallery():
     ax.legend(loc=1)
     set_title(ax, "Vizualizing the median")
 
-    ax = axes[2][1]
+    ax = axes[1]
     pdf1, pdf2 = sp.stats.norm(0, 0.6), sp.stats.norm(0, 4)
     x = np.linspace(-3, 3, 100)
     data = 0.5 * pdf1.pdf(x) + 0.004 * x + 0.025
@@ -228,6 +233,21 @@ def plot_gallery():
 
     ax.legend(loc=2)
     set_title(ax, "Skew, Kurtosis")
+
+
+def plot_gallery():
+
+    # "swimming": "#581845",
+    # "cycling": "#C70039",
+    # "running": "#FF5733",
+    # "axis": "#4F77AA",
+
+    fig, axes = plt.subplots(3, 3, figsize=(15, 10))
+    fig.subplots_adjust(wspace=0.01, hspace=0.3)
+
+    plot_gallery_r1(axes=axes[0])
+    plot_gallery_skews(axes=axes[1])
+    plot_gallery_r3(axes=axes[2])
 
 
 def plot_celestine(seed=42, sample=1000):
