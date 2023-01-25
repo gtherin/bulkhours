@@ -96,21 +96,22 @@ def get_x(pdf, q=0.01):
     return np.linspace(pdf.ppf(q), pdf.ppf(1 - q), 100)
 
 
-def plot_mean_median(ax, pdf, fac=1.2):
+def plot_mean_median(ax, pdf, fac=1.2, mean=True):
     # Accentuate diff between mean and median
     cartoon_median = pdf.median() + fac * (pdf.median() - pdf.mean())
-    ax.vlines(x=pdf.mean(), ymin=0, ymax=pdf.pdf(pdf.mean()), color="#C70039", ls="dashed", label=" $\mu$: mean")
+    if mean:
+        ax.vlines(x=pdf.mean(), ymin=0, ymax=pdf.pdf(pdf.mean()), color="#C70039", ls="dashed", label=" $\mu$: mean")
     ax.vlines(
         x=cartoon_median, ymin=0, ymax=pdf.pdf(cartoon_median), color="#581845", ls="dotted", label=r"$\nu$: median"
     )
 
 
-def plot_skew(ax, a, label, legend=True):
+def plot_skew(ax, a, label, legend=True, mean=True):
     # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.skewnorm.html
 
     pdf = sp.stats.skewnorm(a := a)
     ax.plot(get_x(pdf), pdf.pdf(get_x(pdf)), "r", lw=5, alpha=0.6)
-    plot_mean_median(ax, pdf, fac=1.2)
+    plot_mean_median(ax, pdf, fac=1.2, mean=mean)
 
     if legend:
         ax.legend()
@@ -126,14 +127,14 @@ def set_title(ax, label):
 def plot_sigma(ax, x=0, y=0.09, dx=0.55, width=0.007, head_width=0.03, head_length=0.3):
     opts = dict(color="#FF5733", alpha=0.9, x=x, dy=0, y=y)
     opts.update(dict(shape="full", width=width, head_width=head_width, head_length=head_length))
-    ax.arrow(dx=dx, label=r"$\propto \sigma:$ std", **opts)
+    ax.arrow(dx=dx, label=r"$\approx \sigma:$ std", **opts)
     ax.arrow(dx=-dx, **opts)
 
 
 def plot_gallery_r1(axes=None):
 
     if axes is None:
-        fig, axes = plt.subplots(1, 3, figsize=(15, 3))
+        fig, axes = plt.subplots(1, 3, figsize=(15, 4))
         fig.subplots_adjust(wspace=0.01, hspace=0.3)
 
     ax = axes[0]
@@ -171,24 +172,25 @@ def plot_gallery_r1(axes=None):
 def plot_gallery_skews(axes=None):
 
     if axes is None:
-        fig, axes = plt.subplots(1, 3, figsize=(15, 3))
+        fig, axes = plt.subplots(1, 3, figsize=(15, 4))
         fig.subplots_adjust(wspace=0.01, hspace=0.3)
 
     plot_skew(axes[0], -4, "Negative skew\nmean < median")
     plot_skew(axes[1], 0, "No skew\nmean = median", legend=False)
     plot_skew(axes[2], 4, "Positive skew\nmean > median", legend=False)
 
+
 def plot_gallery_r3(axes=None):
 
     if axes is None:
-        fig, axes = plt.subplots(1, 3, figsize=(15, 3))
+        fig, axes = plt.subplots(1, 3, figsize=(15, 4))
         fig.subplots_adjust(wspace=0.01, hspace=0.3)
 
     ax, nob = axes[0], 100
     x = np.linspace(-0.9, 3.5, nob)
     pdf = sp.stats.skewnorm(a=4)
     ax.plot(x, pdf.pdf(x), "r", lw=5, alpha=0.6)
-    plot_mean_median(ax, pdf, fac=0.0)
+    plot_mean_median(ax, pdf, fac=0.0, mean=False)
 
     x = np.linspace(-0.9, pdf.median(), nob)
     ax.fill_between(x, 0.0 * x, pdf.pdf(x), label="", alpha=0.2)
@@ -226,9 +228,9 @@ def plot_gallery_r3(axes=None):
     data = 0.5 * pdf1.pdf(x) + 0.004 * x + 0.025
 
     ax.plot(x, data, lw=5, alpha=0.6, c="r")
-    ax.plot(x, 0.004 * x + 0.025, "#581845", lw=2, alpha=0.4, ls="dotted", label=r"$\propto \zeta:$ skew")
+    ax.plot(x, 0.004 * x + 0.025, "#581845", lw=2, alpha=0.4, ls="dotted", label=r"$\approx \zeta:$ skew")
     ax.plot(x, 0.5 * pdf1.pdf(x), lw=2, alpha=0.6, c="grey", ls="dashed")
-    ax.fill_between(x, 0.5 * pdf1.pdf(x), data, label=r"$\propto \kappa:$ kurtosis", alpha=0.4)
+    ax.fill_between(x, 0.5 * pdf1.pdf(x), data, label=r"$\approx \kappa:$ kurtosis", alpha=0.4)
     plot_sigma(ax, dx=0.59)
 
     ax.legend(loc=2)
@@ -242,7 +244,7 @@ def plot_gallery():
     # "running": "#FF5733",
     # "axis": "#4F77AA",
 
-    fig, axes = plt.subplots(3, 3, figsize=(15, 10))
+    fig, axes = plt.subplots(3, 3, figsize=(15, 12))
     fig.subplots_adjust(wspace=0.01, hspace=0.3)
 
     plot_gallery_r1(axes=axes[0])
