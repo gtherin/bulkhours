@@ -32,8 +32,8 @@ class BoidO:
         self.y = random.randrange(100, 900)
         self.angle = random.uniform(0.0, 2.0 * math.pi)
         self.color = "black"
-        self.positions = Boid.new_flock(100, np.array([100, 900]), np.array([200, 1100]))
-        self.velocities = Boid.new_flock(100, np.array([0, -20]), np.array([10, 20]))
+        self.positions = BoidO.new_flock(100, np.array([100, 900]), np.array([200, 1100]))
+        self.velocities = BoidO.new_flock(100, np.array([0, -20]), np.array([10, 20]))
 
     def draw_boid(self, canvas):
         size = 18
