@@ -2,7 +2,15 @@ import numpy as np
 import random
 import math
 
-# http://rits.github-pages.ucl.ac.uk/intro-research-prog/morea/lesson17/reading2.html
+"""
+Craig W. Reynolds
+
+https://betterprogramming.pub/boids-simulating-birds-flock-behavior-in-python-9fff99375118
+http://rits.github-pages.ucl.ac.uk/intro-research-prog/morea/lesson17/reading2.html
+https://github.com/sowmya214/boids_implementation
+https://medium.com/@sowmyab/implementing-boids-in-python-ede6e2ad652d
+
+"""
 
 
 class Boid:

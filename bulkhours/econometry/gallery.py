@@ -119,8 +119,15 @@ def plot_skew(ax, a, label, legend=True, mean=True):
     set_title(ax, label)
 
 
-def set_title(ax, label):
-    ax.set_axis_off()
+def set_title(ax, label, yvisible=False):
+
+    if yvisible:
+        ax.get_yaxis().set_visible(False)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.spines["left"].set_visible(False)
+    else:
+        ax.set_axis_off()
     ax.set_title(label)
 
 
@@ -180,6 +187,11 @@ def plot_gallery_skews(axes=None):
     plot_skew(axes[2], 4, "Positive skew\nmean > median", legend=False)
 
 
+def annotate(ax, label, x, y, c="#C70039", r=0):
+    opts = dict(weight="bold", fontsize=20, ha="center", va="center")
+    ax.annotate(label, (x, y), color=c, rotation=r, **opts)
+
+
 def plot_gallery_r3(axes=None):
 
     if axes is None:
@@ -198,26 +210,8 @@ def plot_gallery_r3(axes=None):
     x = np.linspace(pdf.median(), 3.5, nob)
     ax.fill_between(x, 0.0 * x, pdf.pdf(x), label="", alpha=0.2, color="r")
 
-    ax.annotate(
-        "50%",
-        (0.35, 0.2),
-        color="#C70039",
-        weight="bold",
-        fontsize=20,
-        ha="center",
-        va="center",
-        rotation=90,
-    )
-    ax.annotate(
-        "50%",
-        (1.08, 0.18),
-        color="#581845",
-        weight="bold",
-        fontsize=20,
-        ha="center",
-        va="center",
-        rotation=-90,
-    )
+    annotate(ax, "50%", 0.35, 0.2, c="#C70039", r=90)
+    annotate(ax, "50%", 1.08, 0.18, c="#581845", r=90)
 
     ax.legend(loc=1)
     set_title(ax, "Vizualizing the median")
@@ -235,6 +229,33 @@ def plot_gallery_r3(axes=None):
 
     ax.legend(loc=2)
     set_title(ax, "Skew, Kurtosis")
+
+    ax, nob = axes[2], 100
+    x = np.linspace(-4, 4, nob)
+    pdf = sp.stats.norm()
+    ax.plot(x, pdf.pdf(x), "r", lw=5, alpha=0.6)
+    # plot_mean_median(ax, pdf, fac=0.0, mean=False)
+
+    x = np.linspace(-1, 1, nob)
+    ax.fill_between(x, 0.0 * x, pdf.pdf(x), label="", alpha=0.2)
+
+    x = np.linspace(-2, 2, nob)
+    ax.fill_between(x, 0.0 * x, pdf.pdf(x), label="", alpha=0.2)
+
+    x = np.linspace(-3, 3, nob)
+    ax.fill_between(x, 0.0 * x, pdf.pdf(x), label="", alpha=0.2)
+
+    annotate(ax, "$1\sigma=68.27\%$", -2.8, 0.40, c="#C70039")
+    annotate(ax, "$2\sigma=95.45\%$", -2.8, 0.35, c="#581845")
+    annotate(ax, "$3\sigma=99.73\%$", -2.8, 0.3, c="#FF5733")
+
+    annotate(ax, "$1.96\sigma=95\%$", 2.8, 0.35, c="#581845")
+    annotate(ax, "$2.58\sigma=99\%$", 2.8, 0.3, c="#FF5733")
+
+    set_title(ax, "Norm: Confidence Intervals", yvisible=True)
+    ax.get_xaxis().set_ticks(
+        [-3, -2, -1, 1, 2, 3], ["-$3\sigma$", "$-2\sigma$", "$-1\sigma$", "$1\sigma$", "$2\sigma$", "$3\sigma$"]
+    )
 
 
 def plot_gallery():
