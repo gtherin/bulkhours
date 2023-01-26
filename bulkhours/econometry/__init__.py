@@ -19,10 +19,14 @@ def get_data(label):
 
     from ..core import data
 
-    if label == "countries":
-        return pd.concat(
-            [data.get_data(f"{f}.csv") for f in ["corruption", "cost_of_living", "richest_countries", "unemployment"]],
-            axis=1,
-        )
+    if label in ["countries", "tourism"]:
+        files_list = ["corruption.csv", "cost_of_living.csv", "richest_countries.csv", "unemployment.csv"]
+        if label == "tourism":
+            files_list += ["tourism.csv"]
     else:
-        return data.get_data(label)
+        files_list = [label]
+
+    df = pd.concat([data.get_data(f) for f in files_list], axis=1)
+    if "monthly_income" in df.columns:
+        del df["monthly_income"]
+    return df
