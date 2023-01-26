@@ -1,8 +1,9 @@
-__version__ = "2.0.2"
+__version__ = "2.1.0"
 
 from .block import Block, BlockCoin, BlockMsg  # noqa
 from .blockchain import BlockChain  # noqa
-from .evaluation import Evaluation, set_up_student  # noqa
+from .core.evaluation import Evaluation, set_up_student  # noqa
+from .core.data import get_data  # noqa
 from .flops import *  # noqa
 from .languages import get_languages_perf  # noqa
 from .git_graph import *  # noqa
@@ -48,28 +49,6 @@ def init_env(login=None, ip=None, pass_code=None, env=None):
 
     set_style()
     print(f'Load BULK Helper cOURSe (version={__version__}, connected as "{student_login}{env_info}")')
-
-
-def get_data(label):
-
-    import glob
-
-    filename = None
-    for directory in ["bulkhours/data", "./data", "../data", "../../bulkhours/data"]:
-        if len((files := glob.glob(f"{directory}/{label}*"))):
-            filename = files[0]
-    if not filename:
-        print(f"No data available for {label}")
-        return None
-
-    ext = filename.split(".")[-1]
-    if ext == "tsv":
-        df = pd.read_csv(filename, sep="\t")
-    else:
-        df = pd.read_csv(filename)
-    df = df.set_index(df.columns[0])
-
-    return df
 
 
 def get_color(discipline):
