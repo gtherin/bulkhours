@@ -7,17 +7,6 @@ from matplotlib import animation, path
 
 radians = float
 
-boid_shape = path.Path(
-    # coordonnées du schéma ci-dessous, orienté vers la droite
-    vertices=np.array([[0, 0], [-100, 100], [200, 0], [-100, -100], [0, 0]]),
-    codes=np.array([1, 2, 2, 2, 79], dtype=np.uint8),
-)
-
-
-def rotate_marker(p: path.Path, angle: radians) -> path.Path:
-    cos, sin = np.cos(angle), np.sin(angle)
-    newpath = p.vertices @ (np.array([[cos, sin], [-sin, cos]]))
-    return path.Path(newpath, p.codes)
 
 
 class Boid:
