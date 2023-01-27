@@ -1,16 +1,7 @@
-from pyparsing import string
-from typing import Iterable
 
-import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib import animation, path
+from matplotlib import path
 
-
-
-
-
-available_shapes = dict(
-)
 
 radians = float
 
