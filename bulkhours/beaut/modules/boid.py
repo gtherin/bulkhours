@@ -1,18 +1,17 @@
-#!/usr/bin/env python
-# coding=utf-8
-from __future__ import division  # required in Python 2.7
-
 import math
-# import pygame
 import random
 from operator import itemgetter
 
-from modules.constants import *
+import pygame
 
 # Cohesion, separation, alignment, and update methods and basic boid class design initially based off of http://www.coderholic.com/boids/
 # Boid behavior algorithms and velocity normalization largely from http://www.vergenet.net/~conrad/boids/pseudocode.html
 
 class Boid(pygame.sprite.DirtySprite):
+
+    width = None
+    height = None
+
     def __init__(self, x, y, cohesion_weight, alignment_weight, separation_weight,
                  obstacle_avoidance_weight, goal_weight, field_of_view, max_speed, image):
         # super(Boid, self).__init__()
@@ -185,8 +184,8 @@ class Boid(pygame.sprite.DirtySprite):
     Update velocity to move boid towards middle of window.
     '''
     def go_to_middle(self):
-        self.velocityX += (SCREEN_WIDTH / 2 - self.rect.x) / 150
-        self.velocityY += (SCREEN_HEIGHT / 2 - self.rect.y) / 150
+        self.velocityX += (Boid.width / 2 - self.rect.x) / 150
+        self.velocityY += (Boid.height / 2 - self.rect.y) / 150
 
     '''
     Normalizes the velocity vector with respect to the maximum speed.
@@ -205,22 +204,22 @@ class Boid(pygame.sprite.DirtySprite):
         if wrap:
             # If we leave the screen we reappear on the other side.
             if self.rect.x < 0 and self.velocityX < 0:
-                self.rect.x = SCREEN_WIDTH
-            if self.rect.x > SCREEN_WIDTH and self.velocityX > 0:
+                self.rect.x = Boid.width
+            if self.rect.x > Boid.width and self.velocityX > 0:
                 self.rect.x = 0
             if self.rect.y < 0 and self.velocityY < 0:
-                self.rect.y = SCREEN_HEIGHT
-            if self.rect.y > SCREEN_HEIGHT and self.velocityY > 0:
+                self.rect.y = Boid.height
+            if self.rect.y > Boid.height and self.velocityY > 0:
                 self.rect.y = 0
         # Bounce off the walls to stay on screen. We lose a random amount of velocity along the axis we collided on.
         else:
             if self.rect.x < 0 and self.velocityX < 0:
                 self.velocityX = -self.velocityX * random.random()
-            if self.rect.x > SCREEN_WIDTH and self.velocityX > 0:
+            if self.rect.x > Boid.width and self.velocityX > 0:
                 self.velocityX = -self.velocityX * random.random()
             if self.rect.y < 0 and self.velocityY < 0:
                 self.velocityY = -self.velocityY * random.random()
-            if self.rect.y > SCREEN_HEIGHT and self.velocityY > 0:
+            if self.rect.y > Boid.height and self.velocityY > 0:
                 self.velocityY = -self.velocityY * random.random()
 
         # Go to middle if the boid is not moving much.
@@ -234,6 +233,9 @@ class Boid(pygame.sprite.DirtySprite):
 
         # Since the boids should always be moving, we don't have to worry about whether or not they have a dirty rect
         self.dirty = 1
+
+    # get Animal
+    #def create(self, wrap):
 
 '''
 Utility function to compute the center of mass of a list of boids.
@@ -250,3 +252,6 @@ def find_center_of_mass(boid_list):
     center[1] /= len(boid_list)
 
     return center
+
+
+#rendering.add_boids("boid_list", 70, obstacle_avoidance_weight=15, goal_weight=0, field_of_view=70)

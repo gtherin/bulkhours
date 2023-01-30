@@ -1,7 +1,4 @@
-#!/usr/bin/env python
-# coding=utf-8
-from modules.constants import *
-
+import pygame
 
 class Obstacle(pygame.sprite.DirtySprite):
     def __init__(self, x, y):
@@ -9,7 +6,7 @@ class Obstacle(pygame.sprite.DirtySprite):
 
         # Draw obstacles (squares)
         self.image = pygame.Surface([30, 30])
-        self.image.fill(RED)
+        self.image.fill((255, 0, 0)) # RED = (255, 0, 0)
 
         # Fetch the rectangle object that has the dimensions of the image
         self.rect = self.image.get_rect()
