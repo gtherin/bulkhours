@@ -1,8 +1,8 @@
 import pygame
 import random
 
-from pgboid import Boid
-from pgobstacle import Obstacle
+from boid import Boid
+from obstacle import Obstacle
 
 
 class PyGameRendering:
@@ -48,7 +48,6 @@ class PyGameRendering:
 
     def quit(self):
         pygame.quit()
-        sys.exit()
 
     def prepare(self):
         self.clock = pygame.time.Clock()

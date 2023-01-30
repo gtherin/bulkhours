@@ -1,19 +1,16 @@
 import pygame
-#import sys, os.path as path
-#sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
-#from bulkhours.bulkhours.beaut.pgboid import *
-
-from pgsimulation import PyGameRendering
+from simulation import PyGameRendering
+from button import Button
 
 
 def main():
 
     rendering = PyGameRendering()
-
-
     rendering.add_boids("boid_list", 70, obstacle_avoidance_weight=15, goal_weight=0, field_of_view=70)
     rendering.add_boids("predator_list", 5, obstacle_avoidance_weight=0, goal_weight=50, field_of_view=70, max_speed=8.5)
     rendering.add_obstacle(3)
+
+    but = Button('Yo man', rendering.screen)
 
     rendering.prepare()
 
@@ -80,6 +77,7 @@ def main():
             predator.update(True)
             collisions = pygame.sprite.spritecollide(predator, rendering.close_prey, True)
 
+        but.draw()
         rendering.update_rendering()
     rendering.quit()
 

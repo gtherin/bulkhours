@@ -1,3 +1,3 @@
-from .boido import BoidO, animate_boid  # noqa
-from .shape import Shape  # noqa
-from .boid import Boid  # noqa
+from .pltboido import BoidO, animate_boid  # noqa
+from .pltshape import Shape  # noqa
+from .pltboid import Boid  # noqa
