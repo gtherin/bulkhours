@@ -31,7 +31,7 @@ class PyGameRendering:
         return [random.randint(0, Boid.width), random.randint(0, Boid.height)] if not border else [random.randint(self.border, Boid.width - self.border), random.randint(self.border, Boid.height - self.border)]
 
     def add_boids(self, boids_list, nboids, cohesion_weight=100, alignment_weight=40, separation_weight=5, obstacle_avoidance_weight=10, goal_weight=100, field_of_view=200, max_speed=8):
-        img_file = "bulkhours/beaut/predator.png" if "predator" in boids_list else "bulkhours/beaut/boid.png"
+        img_file = "bulkhours/boids/predator.png" if "predator" in boids_list else "bulkhours/boids/boid.png"
         x, y = self.get_init_pos("predator" in boids_list)
 
         for _ in range(nboids):
