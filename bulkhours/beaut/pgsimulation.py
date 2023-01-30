@@ -1,7 +1,8 @@
-import sys, os.path as path
-sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
-from modules.boid import *
-from modules.obstacle import *
+import pygame
+import random
+
+from pgboid import Boid
+from pgobstacle import Obstacle
 
 
 class PyGameRendering:

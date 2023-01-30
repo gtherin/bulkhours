@@ -1,7 +1,6 @@
 import math
 import random
 from operator import itemgetter
-
 import pygame
 
 # Cohesion, separation, alignment, and update methods and basic boid class design initially based off of http://www.coderholic.com/boids/
@@ -14,7 +13,6 @@ class Boid(pygame.sprite.DirtySprite):
 
     def __init__(self, x, y, cohesion_weight, alignment_weight, separation_weight,
                  obstacle_avoidance_weight, goal_weight, field_of_view, max_speed, image):
-        # super(Boid, self).__init__()
         pygame.sprite.DirtySprite.__init__(self)
 
         # Load image as sprite
@@ -30,8 +28,6 @@ class Boid(pygame.sprite.DirtySprite):
         self.velocityX = random.randint(1, 10) / 10.0
         self.velocityY = random.randint(1, 10) / 10.0
 
-        # === Attributes ===
-
         # Weights
         self.cohesion_weight = cohesion_weight
         self.alignment_weight = alignment_weight
@@ -43,10 +39,8 @@ class Boid(pygame.sprite.DirtySprite):
         self.max_speed = max_speed
 
 
-    '''
-    Return the distance from another sprite.
-    '''
     def distance(self, other):
+        # Return the distance from another sprite.
         if not other:
             return -1
 

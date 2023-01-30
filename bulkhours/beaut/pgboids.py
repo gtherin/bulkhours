@@ -1,8 +1,9 @@
-import sys, os.path as path
-sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
-from modules.boid import *
+import pygame
+#import sys, os.path as path
+#sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+#from bulkhours.bulkhours.beaut.pgboid import *
 
-from boids import PyGameRendering
+from pgsimulation import PyGameRendering
 
 
 def main():
