@@ -113,6 +113,7 @@ int main() {
 }
 ```
 
+You can load the magic methods with (in case you don't need to login):
 ```python:
 import IPython
 bulkhours.load_extra_magics(IPython)
