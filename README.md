@@ -1,12 +1,12 @@
 This package is a support library for different courses. 
 
-1. [Plan of econometry course](#planeco)
+1. [Plan of econometrics course](#planeco)
 2. [Plan of High Performance Programming on GPU course](#planhpc)
 3. [Course methods](#methods)
 4. [Data information](#data)
 
 
-## Plan of econometry course <a name="planeco"></a>
+## Plan of econometrics course <a name="planeco"></a>
 
 ```
 # 1/4 (4h): Mar-01/14:00
@@ -96,7 +96,7 @@ Not presented
 You need to login to be properly evealuated:
 ```python:
 import IPython
-bulkhours.init_env(login="jdoe", ip=IPython, pass_code="PASS_COURSE", env="econometry")
+bulkhours.init_env(login="jdoe", ip=IPython, pass_code="PASS_COURSE", env="econometrics")
 bulkhours.init_env(login="jdoe", ip=IPython, pass_code="PASS_COURSE", env="hpcgpu")
 ```
 
