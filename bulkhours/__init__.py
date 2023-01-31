@@ -11,7 +11,7 @@ from .git_graphviz import *  # noqa
 from .timeit import timeit  # noqa
 from .ffiles import *  # noqa
 from . import rl  # noqa
-from . import econometry  # noqa
+from . import econometrics  # noqa
 from . import beaut  # noqa
 from . import boids  # noqa
 
@@ -42,9 +42,9 @@ def init_env(login=None, ip=None, pass_code=None, env=None):
     if env in ["rl", "reinforcement learning"]:
         rl.init_env(ip)
         env_info = f", in env=rl"
-    elif env in ["econometry"]:
+    elif env in ["econometrics"]:
         rl.runrealcmd("pip install yfinance", verbose=True)
-        env_info = f", in env=econometry"
+        env_info = f", in env=econometrics"
     elif env is not None:
         print(f"Unknown env={env}")
 
