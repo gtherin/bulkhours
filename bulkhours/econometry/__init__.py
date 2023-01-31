@@ -13,7 +13,7 @@ def get_list_of_distribs():
 
 def clean_columns(df, rename=None, drop=None):
     if rename:
-        df.columns = ['Code', 'Year', 'Life expectancy', 'GDP', 'annotations', 'Population', 'Continent']
+        df.columns = rename
     if drop:
         for c in drop:
             del df[c]
@@ -42,7 +42,9 @@ def get_data(label):
         del df["monthly_income"]
 
     if label == "life_expectancy_vs_gdp_2018":
-        df = clean_columns(df, rename=['Code', 'Year', 'Life expectancy', 'GDP per capita', 'annotations', 'Population', 'Continent'], drop=["annotations", "Continent"])
+        print("GDP per capita is measured in 2011 international dollars, which corrects for inflation and cross-country price differences.")
+        df = clean_columns(df, rename=['Code', 'Year', 'Life expectancy (years)', 'GDP per capita ($)', 'annotations', 'Population', 'Continent'], drop=["annotations", "Continent"])
         df = df.dropna().query("Year == 2018 and Population > 1e7")
+        df["GDP per capita ($, log)"] = np.log(df["GDP per capita ($)"])
 
     return df

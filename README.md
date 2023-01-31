@@ -1,5 +1,4 @@
 This package is a support library for different courses. 
-Here is the table of contents:
 
 1. [Plan of econometry course](#planeco)
 2. [Plan of High Performance Programming on GPU course](#planhpc)
@@ -34,7 +33,7 @@ Here is the table of contents:
 04 Econometrics models
 - ARMA model
 - ARIMA model
-- Principal component analysis
+- Principal Component Analysis
 
 Not presented
     02 Financial instruments
@@ -74,18 +73,15 @@ Not presented
 09 Languages performances (notebook)
 10 Parallel architecture (slides)
 
-Might be added one day
+Not presented
    11 Multiprocessing (notebook)
    12 Multithreading (notebook)
    13 Cryptocurrencies (notebook)
    14 Mandelbrot (notebook)
    Matrix multiplication
-   Convergence time
-   Build a search algo
-   https://fractalytics.io/moore-penrose-matrix-optimization-cuda-c
-   https://github.com/ishanthilina/CUDA-Calculation-Experiements/tree/master/q1
-   https://en.wikipedia.org/wiki/N-body_simulation
-   Dask cuda
+   Matrix inversion: https://fractalytics.io/moore-penrose-matrix-optimization-cuda-c
+   N-body simulation: https://en.wikipedia.org/wiki/N-body_simulation
+   A bit of Dash
 ```
 
 ## Methods <a name="methods"></a>

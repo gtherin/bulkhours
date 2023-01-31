@@ -3,6 +3,37 @@ import numpy as np
 import pandas as pd
 
 
+def get_demo_work(credit=True):
+    """
+        Source https://www.insee.fr/fr/statistiques/2415121#tableau-figure1
+
+        Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020
+
+    Note : certains salaires en EQTP sont inférieurs au Smic ; ceci est en effet permis par certains statuts. Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d’incohérences entre salaires et durées travaillées dans les déclarations administratives, qui ne peuvent être toutes redressées.
+    Lecture : en 2020, en EQTP, 50 % des salariés gagnent plus de 2 005 euros.
+    Champ : France hors Mayotte, salariés du privé et des entreprises publiques, y compris bénéficiaires de contrats aidés et de contrats de professionnalisation ; hors apprentis, stagiaires, salariés agricoles et salariés des particuliers employeurs.
+
+    """
+    if credit:
+        print("Data source INSEE: salaires mensuels nets en équivalent temps plein (EQTP) en 2020")
+    data = StringIO("""
+Année	Cotisants	Retraités	Rapport démographique
+2020	28,2	16,9	1,67
+2019	28,5	16,7	1,71
+2018	28,2	16,5	1,71
+2017	27,9	16,3	1,72
+2016	27,6	16,1	1,71
+2015	27,4	16,0	1,71
+2014	27,3	15,8	1,73
+2013	27,2	15,6	1,74
+2012	27,1	15,3	1,77
+2011	27,0	15,3	1,77
+2010	26,8	15,1	1,78
+2009	26,8	14,7	1,82
+""")
+    df = pd.read_csv(data, sep="\t").reset_index()
+    return df                    
+
 def get_fr_income(credit=True):
     """
         Source https://www.insee.fr/fr/statistiques/6436313#tableau-figure2
