@@ -91,17 +91,18 @@ Not presented
 
 ## Methods <a name="methods"></a>
 
-##### Cuda executions
+##### evaluation methods
 
-- Load Extension
+You need to login to be properly evealuated:
 ```python:
 import IPython
-bulkhours.load_extra_magics(IPython)
-# or 
 bulkhours.init_env(login="jdoe", ip=IPython, pass_code="PASS_COURSE", env="econometry")
+bulkhours.init_env(login="jdoe", ip=IPython, pass_code="PASS_COURSE", env="hpcgpu")
 ```
 
-- Cuda basic extension: it compiles C/C++ code and exec it
+##### Cuda methods
+
+Cuda basic extension compiles C/C++/CUDA code and exec it
 ```c:
 %%compile_and_exec
 #include <iostream>
@@ -112,7 +113,13 @@ int main() {
 }
 ```
 
-## Data <a name="data"></a>
+```python:
+import IPython
+bulkhours.load_extra_magics(IPython)
+```
+
+
+## Data information<a name="data"></a>
 
 #### `data/supercomputer-power-flops.csv`
 The file has been downloaded from the page https://ourworldindata.org/grapher/supercomputer-power-flops
