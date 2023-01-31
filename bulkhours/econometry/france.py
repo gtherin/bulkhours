@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 
-def get_demo_work(credit=True):
+def get_retraites(credit=True):
     """
         Source https://www.insee.fr/fr/statistiques/2415121#tableau-figure1
 
@@ -34,7 +34,7 @@ Année	Cotisants	Retraités	Rapport démographique
     df = pd.read_csv(data, sep="\t").reset_index()
     return df                    
 
-def get_fr_income(credit=True):
+def get_income(credit=True):
     """
         Source https://www.insee.fr/fr/statistiques/6436313#tableau-figure2
 

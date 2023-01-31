@@ -16,6 +16,7 @@ This package is a support library for different courses.
 - Cross sectional data
 - Descriptive statistics
 
+
 # 2/4 (4h): Mar-03/14:00
 02 Time Series inference
 - Characteristics of time series
@@ -34,6 +35,10 @@ This package is a support library for different courses.
 - ARMA model
 - ARIMA model
 - Principal Component Analysis
+
+Exercices: 
+- investigating the French retraites system, calculate the French Gini coefficient, predict APPLE revenues
+- fit the volatility smile, regress life expenctency per country
 
 Not presented
     02 Financial instruments
@@ -114,5 +119,11 @@ The file has been downloaded from the page https://ourworldindata.org/grapher/su
 
 #### `data/life-expectancy-vs-gdp-per-capita.csv`
 The file has been downloaded from the page https://ourworldindata.org/grapher/life-expectancy-vs-gdp-per-capita
+Source: Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)
 
+#### `bulkhours.econometry.get_data("france.retraites")`
+The file has been downloaded from the page https://www.insee.fr/fr/statistiques/2415121#tableau-figure1
 
+#### `bulkhours.econometry.get_data("france.income")`
+Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020
+The file has been downloaded from the page https://www.insee.fr/fr/statistiques/6436313#tableau-figure2

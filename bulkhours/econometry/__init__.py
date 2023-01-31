@@ -1,7 +1,7 @@
 from .statsdata import *  # noqa
 from .brownian import plot_brownian_sample  # noqa
 from .gallery import *  # noqa
-from .income import get_fr_income  # noqa
+from . import france  # noqa
 
 
 def get_list_of_distribs():
@@ -34,6 +34,10 @@ def get_data(label):
             files_list += ["tourism.csv"]
     elif label == "life_expectancy_vs_gdp_2018":
         files_list = ["life-expectancy-vs-gdp-per-capita.csv"]
+    elif label == "france.income":
+        return france.get_income()
+    elif label == "france.retraites":
+        return france.get_retraites()
     else:
         files_list = [label]
 
