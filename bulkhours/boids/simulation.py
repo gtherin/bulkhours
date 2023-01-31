@@ -1,9 +1,9 @@
 import pygame
 import random
 
-from boid import Boid
-from obstacle import Obstacle
-from button import Button
+from .boid import Boid
+from .obstacle import Obstacle
+from .button import Button
 
 
 
@@ -199,7 +199,3 @@ def main():
         but.draw()
         rendering.update_rendering()
     rendering.quit()
-
-
-if __name__ == "__main__":
-    main()
