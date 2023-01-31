@@ -116,3 +116,7 @@ int main() {
 #### `data/supercomputer-power-flops.csv`
 The file has been downloaded from the page https://ourworldindata.org/grapher/supercomputer-power-flops
 
+#### `data/life-expectancy-vs-gdp-per-capita.csv`
+The file has been downloaded from the page https://ourworldindata.org/grapher/life-expectancy-vs-gdp-per-capita
+
+
