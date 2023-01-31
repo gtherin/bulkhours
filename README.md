@@ -2,8 +2,8 @@ This package is a support library for different courses.
 
 1. [Plan of econometry course](#planeco)
 2. [Plan of High Performance Programming on GPU course](#planhpc)
-3. [Methods](#methods)
-4. [Data](#data)
+3. [Course methods](#methods)
+4. [Data information](#data)
 
 
 ## Plan of econometry course <a name="planeco"></a>
