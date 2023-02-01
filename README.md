@@ -16,12 +16,11 @@ This package is a support library for different courses.
 - Cross sectional data
 - Descriptive statistics
 
-
 # 2/4 (4h): Mar-03/14:00
 02 Time Series inference
 - Characteristics of time series
-- Linear regression
-- regressions estimation methods
+- Linear regression and Generalized linear model
+- Regressions estimation methods
 - Goodness of fit
 
 # 3/4 (4h): Mar-08/14:00
@@ -34,11 +33,11 @@ This package is a support library for different courses.
 04 Econometrics models
 - ARMA model
 - ARIMA model
-- Principal Component Analysis
+- Principal Component Regression
 
 Exercices: 
 - investigating the French retraites system, calculate the French Gini coefficient, predict APPLE revenues
-- fit the volatility smile, regress life expenctency per country
+- fit the volatility smile, regress life expenctency per country, investigate French inequalities in salaries
 
 Not presented
     02 Financial instruments
@@ -135,3 +134,7 @@ The file has been downloaded from the page https://www.insee.fr/fr/statistiques/
 #### `bulkhours.econometry.get_data("france.income")`
 Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020
 The file has been downloaded from the page https://www.insee.fr/fr/statistiques/6436313#tableau-figure2
+
+#### `data/world_gdp_hist.csv`
+"Data Source","World Development Indicators", "Last Updated Date","2022-12-22",
+

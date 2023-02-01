@@ -151,3 +151,100 @@ Plus de 9_000	183_314
 
 
 #OECD (2023), Adult education level (indicator). doi: 10.1787/36bce3fe-en (Accessed on 24 January 2023)
+
+
+def get_salaires(credit=True):
+    """
+Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
+En 2019, le revenu salarial annuel moyen dans le secteur privé et la fonction publique s’élève à 18_970 euros 
+pour les femmes, soit un niveau inférieur de 22 % à celui des hommes (figure 1). 
+Le revenu salarial médian des femmes est inférieur de 16 % à celui des hommes (figure 2). 
+Cet écart s’amplifie à la fois dans les bas revenus (écart de 25 % pour le premier décile du revenu salarial) et 
+dans les hauts revenus (écart de 21 % pour le neuvième décile).
+colonne 1: Revenu annuel Femmes moyen
+colonne 2: Revenu annuel Hommes moyen
+colonne 3: Revenu annuel Femmes moyen Écart relatif (en %)
+colonne 4: Salaire annuel Femmes moyen EQTP
+colonne 4: Salaire annuel Hommes moyen EQTP
+colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
+    """
+    if credit:
+        print("Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019")
+    data = StringIO("""
+categorie	revenu_femme	revenu_homme	revenu_diff	salaire_ajusté_femme	salaire_ajusté_homme	salaire_ajusté_diff
+Age: Moins de 25 ans	7 360	9 110	19,2	17 930	19 210	6,7
+Age: 25-39 ans	18 220	22 610	19,4	24 460	27 660	11,6
+Age: 40-49 ans	22 830	29 710	23,1	28 190	34 270	17,7
+Age: 50-54 ans	23 070	31 340	26,4	28 280	35 740	20,9
+Age: 55 ans ou plus	21 410	29 430	27,2	29 520	38 740	23,8
+Diplôme: Pas de diplôme	12 450	17 400	28,5	19 590	23 260	15,8
+Diplôme: inférieur au baccalauréat	15 180	20 510	26,0	21 460	25 650	16,3
+Diplôme: Baccalauréat à bac+2	20 480	26 560	22,9	25 570	31 000	17,5
+Diplôme: Bac+3 ou plus	30 790	44 410	30,7	36 190	50 140	27,8
+SocioPro: Cadres	36 040	45 370	20,6	42 820	52 950	19,1
+SocioPro: Professions intermédiaires	21 770	26 040	16,4	27 230	30 690	11,3
+SocioPro: Employés	13 900	15 310	9,2	20 860	22 850	8,7
+SocioPro: Ouvriers	11 960	17 200	30,5	19 580	22 930	14,6
+Secteur: privé et entreprises publiques	18 010	24 260	25,7	26 330	31 580	16,6
+Secteur: Fonction publique	21 330	25 290	15,7	26 640	31 090	14,3
+Secteur: Ensemble	18 970	24 420	22,3	26 430	31 510	16,1
+""")
+    df = pd.read_csv(data, sep="\t").set_index("categorie")
+    for c in df.columns:
+        df[c] = df[c].str.replace(" ", "").str.replace(",", ".").astype(float)
+
+    #del df["revenu_diff"]
+    #del df["salaire_ajusté_diff"]
+
+    #Revenu salarial annuel moyen	Salaire annuel moyen en EQTP
+    #Âge, DiplômeCatégorie socioprofessionnelle
+
+    return df
+
+def get_histsalaires(credit=True):
+    """
+Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
+
+colonne 1: Revenu annuel Femmes moyen
+colonne 2: Revenu annuel Hommes moyen
+colonne 3: Revenu annuel Femmes moyen Écart relatif (en %)
+colonne 4: Salaire annuel Femmes moyen EQTP
+colonne 4: Salaire annuel Hommes moyen EQTP
+colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
+    """
+    if credit:
+        print("Inégalités salariales entre femmes et hommes de 1995 à 2019")
+    data = StringIO("""
+Année	écart relatif du revenu salarial moyen	écart relatif du revenu salarial moyen	écart relatif du salaire moyen en EQTP	écart relatif du salaire moyen en EQTP	écart relatif du volume de travail en EQTP moyen
+1995	27,4		18,5		10,9
+1996	27,8		18,8		11,1
+1997	27,6		18,5		11,2
+1998	27,8		18,3		11,4
+1999	27,9		17,9		11,9
+2000	28,2		18,6		11,6
+2001	28,2		18,8		11,3
+2002	27,8		18,5		11,3
+2003	27,6		18,5		11,1
+2004	27,3		18,4		10,9
+2005	27,1		18,3		10,8
+2006	26,9		18,2		10,6
+2007	26,8		18,5		10,2
+2008	27,1		18,7		10,3
+2009	26,1		18,3		9,6
+2010	25,5		18,2		9,0
+2011	25,6		18,2		9,2
+2012	25,3	25,5	18,2	18,5	8,8
+2013		24,8		18,2	8,2
+2014		24,1		17,9	7,8
+2015		23,7		17,8	7,2
+2016		23,3		17,0	7,7
+2017		22,9		16,7	7,7
+2018		22,8		16,6	7,6
+2019		22,3		16,1	7,6
+""")
+    df = pd.read_csv(data, sep="\t").set_index("Année")
+    for c in df.columns:
+        df[c] = df[c].str.replace(" ", "").str.replace(",", ".").astype(float)
+
+    return df                    
+
