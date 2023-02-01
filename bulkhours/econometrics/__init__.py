@@ -2,6 +2,7 @@ from .statsdata import *  # noqa
 from .brownian import plot_brownian_sample  # noqa
 from .gallery import *  # noqa
 from . import france  # noqa
+from . import regression  # noqa
 
 
 def get_list_of_distribs():

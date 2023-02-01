@@ -114,7 +114,7 @@ def dump_corrections(argv=sys.argv):
 
     docs = firestore.Client().collection(args.evaluation_id).stream()
 
-    directory = os.path.realpath(f"../course_admin/data/{promo}/")
+    directory = os.path.realpath(f"../bulkhours_admin/data/{promo}/")
 
     with open(f"{directory}/{args.evaluation_id}.txt", "w") as f:
         for answer in docs:
