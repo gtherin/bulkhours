@@ -4,6 +4,7 @@ from .gallery import *  # noqa
 from . import france  # noqa
 from . import regression  # noqa
 from . import gradient  # noqa
+from . import statsdata  # noqa
 
 
 def get_list_of_distribs():
@@ -22,13 +23,21 @@ def clean_columns(df, rename=None, drop=None):
     return df
 
 
-def get_data(label):
+def clean_data(label, df):
+    return df
+
+
+def get_data(label, credit=True):
     """
     countries: World Economic Data from kaggle
 
     """
 
     from ..core import data
+
+    # if "label" in sdata:
+    #    df = get_data_from_file(label)
+    #    return clean_data(df, query=query, index=index)
 
     if label in ["countries", "tourism"]:
         files_list = ["corruption.csv", "cost_of_living.csv", "richest_countries.csv", "unemployment.csv"]
@@ -39,6 +48,11 @@ def get_data(label):
     elif "france." in label:
         func = label.replace("france.", "get_")
         return getattr(france, func)()
+    elif "statsdata." in label:
+        if credit:
+            print("statsdata")
+        func = label.replace("statsdata.", "get_")
+        return getattr(statsdata, func)()
     else:
         files_list = [label]
 

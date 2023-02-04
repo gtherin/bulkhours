@@ -15,8 +15,9 @@ def get_retraites(credit=True):
 
     """
     if credit:
-        print("Data source INSEE: salaires mensuels nets en équivalent temps plein (EQTP) en 2020")
-    data = StringIO("""
+        print("Salaires mensuels nets en équivalent temps plein (EQTP) en 2020 (https://www.insee.fr/fr/)")
+    data = StringIO(
+        """
 Année	Cotisants	Retraités	Rapport démographique
 2020	28,2	16,9	1,67
 2019	28,5	16,7	1,71
@@ -30,9 +31,11 @@ Année	Cotisants	Retraités	Rapport démographique
 2011	27,0	15,3	1,77
 2010	26,8	15,1	1,78
 2009	26,8	14,7	1,82
-""")
+"""
+    )
     df = pd.read_csv(data, sep="\t").reset_index()
-    return df                    
+    return df
+
 
 def get_income(credit=True):
     """
@@ -46,7 +49,7 @@ def get_income(credit=True):
 
     """
     if credit:
-        print("Data source INSEE: salaires mensuels nets en équivalent temps plein (EQTP) en 2020")
+        print("Salaires mensuels nets en équivalent temps plein (EQTP) en 2020 (https://www.insee.fr/fr/)")
     data = StringIO(
         """Income	eqt
 Moins de 1_200	583943
@@ -150,27 +153,28 @@ Plus de 9_000	183_314
     return df.set_index("xvalue")
 
 
-#OECD (2023), Adult education level (indicator). doi: 10.1787/36bce3fe-en (Accessed on 24 January 2023)
+# OECD (2023), Adult education level (indicator). doi: 10.1787/36bce3fe-en (Accessed on 24 January 2023)
 
 
 def get_salaires(credit=True):
     """
-Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
-En 2019, le revenu salarial annuel moyen dans le secteur privé et la fonction publique s’élève à 18_970 euros 
-pour les femmes, soit un niveau inférieur de 22 % à celui des hommes (figure 1). 
-Le revenu salarial médian des femmes est inférieur de 16 % à celui des hommes (figure 2). 
-Cet écart s’amplifie à la fois dans les bas revenus (écart de 25 % pour le premier décile du revenu salarial) et 
-dans les hauts revenus (écart de 21 % pour le neuvième décile).
-colonne 1: Revenu annuel Femmes moyen
-colonne 2: Revenu annuel Hommes moyen
-colonne 3: Revenu annuel Femmes moyen Écart relatif (en %)
-colonne 4: Salaire annuel Femmes moyen EQTP
-colonne 4: Salaire annuel Hommes moyen EQTP
-colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
+    Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
+    En 2019, le revenu salarial annuel moyen dans le secteur privé et la fonction publique s’élève à 18_970 euros
+    pour les femmes, soit un niveau inférieur de 22 % à celui des hommes (figure 1).
+    Le revenu salarial médian des femmes est inférieur de 16 % à celui des hommes (figure 2).
+    Cet écart s’amplifie à la fois dans les bas revenus (écart de 25 % pour le premier décile du revenu salarial) et
+    dans les hauts revenus (écart de 21 % pour le neuvième décile).
+    colonne 1: Revenu annuel Femmes moyen
+    colonne 2: Revenu annuel Hommes moyen
+    colonne 3: Revenu annuel Femmes moyen Écart relatif (en %)
+    colonne 4: Salaire annuel Femmes moyen EQTP
+    colonne 4: Salaire annuel Hommes moyen EQTP
+    colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
     """
     if credit:
-        print("Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019")
-    data = StringIO("""
+        print("Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019 (https://www.insee.fr/fr/)")
+    data = StringIO(
+        """
 categorie	revenu_femme	revenu_homme	revenu_diff	salaire_ajusté_femme	salaire_ajusté_homme	salaire_ajusté_diff
 Age: Moins de 25 ans	7 360	9 110	19,2	17 930	19 210	6,7
 Age: 25-39 ans	18 220	22 610	19,4	24 460	27 660	11,6
@@ -188,33 +192,36 @@ SocioPro: Ouvriers	11 960	17 200	30,5	19 580	22 930	14,6
 Secteur: privé et entreprises publiques	18 010	24 260	25,7	26 330	31 580	16,6
 Secteur: Fonction publique	21 330	25 290	15,7	26 640	31 090	14,3
 Secteur: Ensemble	18 970	24 420	22,3	26 430	31 510	16,1
-""")
+"""
+    )
     df = pd.read_csv(data, sep="\t").set_index("categorie")
     for c in df.columns:
         df[c] = df[c].str.replace(" ", "").str.replace(",", ".").astype(float)
 
-    #del df["revenu_diff"]
-    #del df["salaire_ajusté_diff"]
+    # del df["revenu_diff"]
+    # del df["salaire_ajusté_diff"]
 
-    #Revenu salarial annuel moyen	Salaire annuel moyen en EQTP
-    #Âge, DiplômeCatégorie socioprofessionnelle
+    # Revenu salarial annuel moyen	Salaire annuel moyen en EQTP
+    # Âge, DiplômeCatégorie socioprofessionnelle
 
     return df
 
+
 def get_histsalaires(credit=True):
     """
-Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
+    Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
 
-colonne 1: Revenu annuel Femmes moyen
-colonne 2: Revenu annuel Hommes moyen
-colonne 3: Revenu annuel Femmes moyen Écart relatif (en %)
-colonne 4: Salaire annuel Femmes moyen EQTP
-colonne 4: Salaire annuel Hommes moyen EQTP
-colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
+    colonne 1: Revenu annuel Femmes moyen
+    colonne 2: Revenu annuel Hommes moyen
+    colonne 3: Revenu annuel Femmes moyen Écart relatif (en %)
+    colonne 4: Salaire annuel Femmes moyen EQTP
+    colonne 4: Salaire annuel Hommes moyen EQTP
+    colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
     """
     if credit:
-        print("Inégalités salariales entre femmes et hommes de 1995 à 2019")
-    data = StringIO("""
+        print("Inégalités salariales entre femmes et hommes de 1995 à 2019 (https://www.insee.fr/fr/)")
+    data = StringIO(
+        """
 Année	écart relatif du revenu salarial moyen	écart relatif du revenu salarial moyen	écart relatif du salaire moyen en EQTP	écart relatif du salaire moyen en EQTP	écart relatif du volume de travail en EQTP moyen
 1995	27,4		18,5		10,9
 1996	27,8		18,8		11,1
@@ -241,10 +248,10 @@ Année	écart relatif du revenu salarial moyen	écart relatif du revenu salarial
 2017		22,9		16,7	7,7
 2018		22,8		16,6	7,6
 2019		22,3		16,1	7,6
-""")
+"""
+    )
     df = pd.read_csv(data, sep="\t").set_index("Année")
     for c in df.columns:
         df[c] = df[c].str.replace(" ", "").str.replace(",", ".").astype(float)
 
-    return df                    
-
+    return df

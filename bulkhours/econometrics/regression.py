@@ -9,93 +9,59 @@ from ..core import data
 random.seed(10)
 
 
-# Get predictions from a matrix of observations and a given weight matrix
-def getPred(x, W):
-    return np.matmul(x, W)
-
-
-# Compute square loss
-def Loss(y, ypred):
-    l = (y - ypred) ** 2
-    return l.sum()
-
-
-# Compute mean Square Error
 def MSE(X, Y, W):
     return (1 / X.shape[0]) * sum((Y - np.matmul(X, W)) ** 2)
 
 
-def GradDesc(X, Y, learnRate=0.01, epochs=2000, reg=0):
-    global cacheLoss
-    cacheLoss = [None] * epochs
+def gradient_descent(X, Y, learnRate=0.01, epochs=2000, reg=0):
 
-    Weights = np.random.rand(X.shape[1])
-
-    Weights = np.array(Weights)
-    Weights = Weights.reshape(-1, 1)
-    m = X.shape[0]
+    weights = np.random.rand(X.shape[1]).reshape(-1, 1)
+    alpha = learnRate / X.shape[0]
 
     for i in range(epochs):
-        predictions = getPred(X, Weights)
-        cacheLoss[i] = Loss(Y, predictions)
+        ydiff = np.matmul(X, weights) - Y
 
-        Weights[0] = Weights[0] - (1 / m) * learnRate * (np.matmul(X[:, 0].transpose(), predictions - Y))
+        for j in range(len(weights)):
+            weights[j] -= alpha * np.matmul(X[:, j].transpose(), ydiff)
+        for j in range(1, len(weights)):
+            weights[j] -= alpha * sum(np.dot(weights[j], reg))
 
-        for j in range(1, len(Weights)):
-            Weights[j] = Weights[j] - (1 / m) * learnRate * (
-                np.matmul(X[:, j].transpose(), predictions - Y) + sum(np.dot(Weights[j], reg))
-            )
-
-    return Weights
+    return weights
 
 
 def main1():
-    cancerData = data.get_data("prostate.tsv").reset_index()
+    cancerdf = data.get_data("prostate.tsv").reset_index()
 
-    trainCancer = cancerData[cancerData.loc[:, "train"] == "T"]
-
-    testCancer = cancerData[cancerData.loc[:, "train"] == "F"]
-
-    x_train = trainCancer.drop(columns=["id", "lpsa", "train"])
-    y_train = trainCancer.loc[:, "lpsa"]
-
-    x_test = testCancer.drop(columns=["id", "lpsa", "train"])
-    y_test = testCancer.loc[:, "lpsa"]
-
-    x_train_scaled = sklearn.preprocessing.scale(x_train, axis=0, with_mean=True, with_std=True, copy=True)
-
-    x_test_scaled = sklearn.preprocessing.scale(x_test, axis=0, with_mean=True, with_std=True, copy=True)
+    trainCancer, testCancer = cancerdf[cancerdf.loc[:, "train"] == "T"], cancerdf[cancerdf.loc[:, "train"] == "F"]
+    x_train, y_train = trainCancer.drop(columns=["id", "lpsa", "train"]), trainCancer.loc[:, "lpsa"]
+    x_test, y_test = testCancer.drop(columns=["id", "lpsa", "train"]), testCancer.loc[:, "lpsa"]
 
     # Turn into numpy arrays with appropriate shape
+    x_train_scaled = sklearn.preprocessing.scale(x_train, axis=0, with_mean=True, with_std=True, copy=True)
     x_train_scaled = np.array(x_train_scaled)
-    y_train = np.array(y_train)
-    y_train = y_train.reshape(-1, 1)
+    y_train = np.array(y_train).reshape(-1, 1)
 
-    y_test = np.array(y_test)
-    y_test = y_test.reshape(-1, 1)
+    y_test = np.array(y_test).reshape(-1, 1)
 
     # Add a column of ones to represent the bias terms
     addBias = np.ones([x_train_scaled.shape[0], 1])
-
     x_train_scaled = np.append(addBias, x_train_scaled, axis=1)
 
+    x_test_scaled = sklearn.preprocessing.scale(x_test, axis=0, with_mean=True, with_std=True, copy=True)
     addBias = np.ones([x_test_scaled.shape[0], 1])
     x_test_scaled = np.append(addBias, x_test_scaled, axis=1)
 
     # LEAST SQUARES
-
-    Wlinear = GradDesc(x_train_scaled, y_train)
-
+    Wlinear = gradient_descent(x_train_scaled, y_train)
     LinearMSE = MSE(x_test_scaled, y_test, Wlinear)
 
     # Form validation data for training hyperparameters
-
     X_train, X_Validate, Y_train, Y_Validate = sklearn.model_selection.train_test_split(
         x_train_scaled, y_train, test_size=0.33, random_state=42
     )
 
 
-def getRidgeLambda(x, y):
+def getRidgeLambda(x, y, X_Validate, Y_Validate):
     bestMSE = 10e100
 
     lamList = [l * 0.05 for l in range(0, 300)]
@@ -103,10 +69,9 @@ def getRidgeLambda(x, y):
     global ridgeLambda
 
     for l in lamList:
-        Wr = GradDesc(x, y, reg=l)
+        Wr = gradient_descent(x, y, reg=l)
         if MSE(X_Validate, Y_Validate, Wr) < bestMSE:
-            bestMSE = MSE(X_Validate, Y_Validate, Wr)
-            ridgeLambda = l
+            bestMSE, ridgeLambda = MSE(X_Validate, Y_Validate, Wr), l
 
     return ridgeLambda
 
@@ -116,7 +81,7 @@ def main2():
 
     print(f"The ideal lambda for ridge, according to CV is {ridgeLambda}")
 
-    Wridge = GradDesc(x_train_scaled, y_train, reg=ridgeLambda)
+    Wridge = gradient_descent(x_train_scaled, y_train, reg=ridgeLambda)
     RidgeMSE = MSE(x_test_scaled, y_test, Wridge)
 
 
@@ -170,10 +135,7 @@ def getParametersElasticNet(x, y):
 
             MSE = sum((Y_Validate - getPred) ** 2)
             if MSE < bestMSE:
-                bestMSE = MSE
-                bestAlpha = l1
-                bestRatio = r
-                bestElasticWeights = elasticModel.coef_
+                bestMSE, bestAlpha, bestRatio, bestElasticWeights = MSE, l1, r, elasticModel.coef_
 
     return bestElasticWeights
 

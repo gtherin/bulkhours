@@ -18,38 +18,39 @@ This package is a support library for different courses.
 
 # 2/4 (4h): Mar-03/14:00
 02 Time Series inference
-- Characteristics of time series
-- Linear regression and Generalized linear model
+- Linear regressions
 - Regressions estimation methods
 - Goodness of fit
 
 # 3/4 (4h): Mar-08/14:00
 03 Statistical inference
-- Incremental variables
-- Moving average model (Holt-Winters)
-- Autoregressive model
+- Time series characteristics
+- Exponential smoothing
+- Trends and Seasonal components
+- Holt models
 
 # 4/4 (4h): Mar-10/14:00
 04 Econometrics models
+- Moving Average model
+- AutoRegressive model
 - ARMA model
 - ARIMA model
-- Principal Component Regression
 
 Exercices: 
-- investigating the French retraites system, calculate the French Gini coefficient, predict APPLE revenues
-- fit the volatility smile, regress life expenctency per country, investigate French inequalities in salaries
+- investigating the French retraites system, predict APPLE revenues
+- fit the volatility smile, regress life expectency per country, Inequalities in salaries investigations (Gini coefficients)
 
 Not presented
-    02 Financial instruments
-    05 Risk estimations
-    05 Price anomalies
-    05 Macroeconomic quantities
-    08 Optimal portfolio construction
-    09 Historic of financial crises
-    10 Frequentist versus Bayesian statistics
-    10 Systematic trading
-    11 Yield curve
-    11 Cryptocurrencies
+    Financial instruments
+    Risk estimations
+    Price anomalies
+    Macroeconomic quantities
+    Optimal portfolio construction
+    Historic of financial crises
+    Frequentist versus Bayesian statistics
+    Systematic trading
+    Yield curve
+    Cryptocurrencies
 ```
 
 
