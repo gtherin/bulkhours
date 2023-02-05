@@ -1,10 +1,14 @@
 from .statsdata import *  # noqa
 from .brownian import plot_brownian_sample  # noqa
 from .gallery import *  # noqa
-from . import france  # noqa
 from . import regression  # noqa
 from . import gradient  # noqa
+from . import france  # noqa
+from . import fhgdpq  # noqa
 from . import statsdata  # noqa
+from . import mincer  # noqa
+
+modules = {"france": france, "mincer": mincer, "statsdata": statsdata, "fhgdpq": fhgdpq}
 
 
 def get_list_of_distribs():
@@ -27,7 +31,7 @@ def clean_data(label, df):
     return df
 
 
-def get_data(label, credit=True):
+def get_data(label, credit=True, **kwargs):
     """
     countries: World Economic Data from kaggle
 
@@ -38,6 +42,7 @@ def get_data(label, credit=True):
     # if "label" in sdata:
     #    df = get_data_from_file(label)
     #    return clean_data(df, query=query, index=index)
+    data_info = label.split(".")
 
     if label in ["countries", "tourism"]:
         files_list = ["corruption.csv", "cost_of_living.csv", "richest_countries.csv", "unemployment.csv"]
@@ -45,14 +50,9 @@ def get_data(label, credit=True):
             files_list += ["tourism.csv"]
     elif label == "life_expectancy_vs_gdp_2018":
         files_list = ["life-expectancy-vs-gdp-per-capita.csv"]
-    elif "france." in label:
-        func = label.replace("france.", "get_")
-        return getattr(france, func)()
-    elif "statsdata." in label:
-        if credit:
-            print("statsdata")
-        func = label.replace("statsdata.", "get_")
-        return getattr(statsdata, func)()
+    elif data_info[0] in modules:
+        func = label.replace(data_info[0] + ".", "get_")
+        return getattr(modules[data_info[0]], func)(credit=credit, **kwargs)
     else:
         files_list = [label]
 

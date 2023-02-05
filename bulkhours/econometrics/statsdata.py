@@ -17,7 +17,8 @@ def get_oil(credit=True):
         514.2689,
         494.211,
     ]
-    # Oil production in Saudi Arabia from 1996 to 2007.
+    if credit:
+        print("Oil production in Saudi Arabia from 1996 to 2007")
     return pd.Series(data, pd.date_range(start="1996", end="2008", freq="A")).to_frame("oil")
 
 
