@@ -34,7 +34,7 @@ datasets = {
     ),
     "life_expectancy_vs_gdp_2018": dict(
         files_list=["life-expectancy-vs-gdp-per-capita.csv"],
-        info="GDP per capita is measured in 2011 international dollars, which corrects for inflation and cross-country price differences."
+        info="GDP per capita is measured in 2011 international dollars, which corrects for inflation and cross-country price differences.",
         filter=clean_life_expectancy_vs_gdp_2018,
         rename=[
             "Country",
