@@ -3,7 +3,7 @@ __version__ = "2.1.0"
 from .block import Block, BlockCoin, BlockMsg  # noqa
 from .blockchain import BlockChain  # noqa
 from .core.evaluation import Evaluation, set_up_student  # noqa
-from .core.data import get_data, get_image  # noqa
+from .core.data import get_core_data, get_image  # noqa
 from .languages import get_languages_perf  # noqa
 from .git_graph import *  # noqa
 from .git_graphviz import *  # noqa
@@ -100,3 +100,7 @@ def set_style():
     plt.rcParams["axes.prop_cycle"] = cycler(
         color=[get_color(c) for c in ["swimming", "cycling", "running", "The end"]]
     )
+
+
+def get_data(label, **kwargs):
+    return get_core_data(label, datasets=econometrics.datasets, modules=econometrics.modules, **kwargs)

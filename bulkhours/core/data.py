@@ -1,25 +1,32 @@
 import glob
 import pandas as pd
 
-owid_aliases = {
-    "vaccinations": "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv",
-    "covid": "https://covid.ourworldindata.org/data/owid-covid-data.csv",
-    "poverty": "https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
+
+core_datasets = {
+    "vaccinations": dict(
+        httplink="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv",
+        source="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv",
+    ),
+    "covid": dict(
+        httplink="https://covid.ourworldindata.org/data/owid-covid-data.csv",
+        source="https://covid.ourworldindata.org/data/owid-covid-data.csv",
+    ),
+    "poverty": dict(
+        httplink="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
+        source="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
+    ),
+    "supercomputers": dict(
+        httplink="https://raw.githubusercontent.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv",
+        source="https://ourworldindata.org/grapher/supercomputer-power-flops",
+    ),
 }
 
 
-def get_owid_data(label, credit=True):
-    if credit and label in owid_aliases:
-        print("Data come from https://github.com/owid/")
-
-    return pd.read_csv(owid_aliases[label] if label in owid_aliases else label)
-
-
-def clean_columns(df, rename=None, drop=None):
-    if rename:
-        df.columns = rename
-    if drop:
-        for c in drop:
+def clean_columns(df, data_info):
+    if "rename" in data_info:
+        df.columns = data_info["rename"]
+    if "drop" in data_info:
+        for c in data_info["drop"]:
             del df[c]
 
     return df
@@ -60,11 +67,26 @@ def clean_data(df, query=None, index=None):
     return df
 
 
-def get_data(label, credit=False, query=None, index=None):
-    if "http" in label or label in owid_aliases:
-        df = get_owid_data(label, credit=credit)
+def get_core_data(label, datasets={}, modules={}, credit=False, query=None, index=None, **kwargs):
+    datasets.update(core_datasets)
+    data_info = (
+        datasets[label] if label in datasets else ({"httplink": label} if "http" in label else {"files_list": label})
+    )
+    print(data_info)
+    if credit and "source" in data_info:
+        print(data_info["source"])
+
+    if (di := label.split(".")[0]) in modules:
+        func = label.replace(di + ".", "get_")
+        df = getattr(modules[di], func)(credit=credit, **kwargs)
+    elif "httplink" in data_info:
+        df = pd.read_csv(data_info["httplink"])
     else:
-        df = get_data_from_file(label)
+        df = get_data_from_file(data_info["files_list"])
+    df = clean_columns(df, data_info)
+
+    if "filter" in data_info:
+        df = data_info["filter"](df)
 
     return clean_data(df, query=query, index=index)
 
@@ -72,7 +94,7 @@ def get_data(label, credit=False, query=None, index=None):
 def get_image(label, ax=None):
     from PIL import Image
 
-    filename = get_data(label)
+    filename = get_core_data(label)
     img = Image.open(filename)
     if not ax:
         return img
