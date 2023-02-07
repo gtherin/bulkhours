@@ -248,11 +248,10 @@ def plot_gallery_r3(axes=None):
 
     set_title(ax, "Norm: Confidence Intervals", yvisible=True)
     ax.set_xticks(
-        [-3, -2, -1, 1, 2, 3], labels=["-$3\sigma$", "$-2\sigma$", "$-1\sigma$", "$1\sigma$", "$2\sigma$", "$3\sigma$"]
+        [-3, -2, -1, 1, 2, 3],
+        ["-$3\sigma$", "$-2\sigma$", "$-1\sigma$", "$1\sigma$", "$2\sigma$", "$3\sigma$"],
+        minor=False,
     )
-    # ax.get_xaxis().set_ticks(
-    #    [-3, -2, -1, 1, 2, 3], ["-$3\sigma$", "$-2\sigma$", "$-1\sigma$", "$1\sigma$", "$2\sigma$", "$3\sigma$"]
-    # )
 
 
 def plot_gallery():
