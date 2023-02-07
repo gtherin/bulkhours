@@ -3,6 +3,25 @@ import numpy as np
 import pandas as pd
 
 
+def get_pyramide(credit=True):
+    """
+    Lecture : au 1er janvier 2023, la France compte 805 914 personnes de 65 ans dont 425 143 femmes et 380 771 hommes.
+    Champ : France.
+    Source : https://www.insee.fr/fr/statistiques/2381472#tableau-figure1
+    """
+    if credit:
+        print(
+            "Age de la population au 1er janvier ; données provisoires arrêtées à fin novembre 2022 (https://www.insee.fr/fr/)"
+        )
+    from ..core import data
+
+    df = data.get_data_from_file("pyramide")
+    # df = pd.read_csv(data, sep="\t").set_index("year").astype(float).sort_index()
+    # df["rapport"].drop()
+    print(df)
+    return df
+
+
 def get_retraites(credit=True):
     """
         Source https://www.insee.fr/fr/statistiques/2415121#tableau-figure1
@@ -18,7 +37,7 @@ def get_retraites(credit=True):
         print("Salaires mensuels nets en équivalent temps plein (EQTP) en 2020 (https://www.insee.fr/fr/)")
     data = StringIO(
         """
-Année	Cotisants	Retraités	Rapport démographique
+year	active	retired	rapport
 2020	28,2	16,9	1,67
 2019	28,5	16,7	1,71
 2018	28,2	16,5	1,71
@@ -31,27 +50,31 @@ Année	Cotisants	Retraités	Rapport démographique
 2011	27,0	15,3	1,77
 2010	26,8	15,1	1,78
 2009	26,8	14,7	1,82
-"""
+""".replace(
+            ",", "."
+        )
     )
-    df = pd.read_csv(data, sep="\t").reset_index()
+    df = pd.read_csv(data, sep="\t").set_index("year").astype(float).sort_index()
+    # df["rapport"].drop()
+    print(df)
     return df
 
 
 def get_income(credit=True):
-    """
-        Source https://www.insee.fr/fr/statistiques/6436313#tableau-figure2
-
-        Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020
-
-    Note : certains salaires en EQTP sont inférieurs au Smic ; ceci est en effet permis par certains statuts. Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d’incohérences entre salaires et durées travaillées dans les déclarations administratives, qui ne peuvent être toutes redressées.
-    Lecture : en 2020, en EQTP, 50 % des salariés gagnent plus de 2 005 euros.
-    Champ : France hors Mayotte, salariés du privé et des entreprises publiques, y compris bénéficiaires de contrats aidés et de contrats de professionnalisation ; hors apprentis, stagiaires, salariés agricoles et salariés des particuliers employeurs.
-
+    """Source https://www.insee.fr/fr/statistiques/6436313#tableau-figure2
+      - Note : certains salaires en EQTP sont inférieurs au Smic ; ceci est en effet permis par certains statuts.
+    Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d’incohérences entre salaires et durées travaillées dans
+    les déclarations administratives, qui ne peuvent être toutes redressées.
+      - Lecture : en 2020, en EQTP, 50 % des salariés gagnent plus de 2 005 euros.
+    Champ : France hors Mayotte, salariés du privé et des entreprises publiques, y compris bénéficiaires de contrats aidés et
+    de contrats de professionnalisation ; hors apprentis, stagiaires, salariés agricoles et salariés des particuliers employeurs.
     """
     if credit:
-        print("Salaires mensuels nets en équivalent temps plein (EQTP) en 2020 (https://www.insee.fr/fr/)")
+        print(
+            "Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020 (https://www.insee.fr/fr/)"
+        )
     data = StringIO(
-        """Income	eqt
+        """income	population
 Moins de 1_200	583943
 De 1_200 à 1_300	613_321
 De 1_300 à 1_400	835_135
@@ -137,9 +160,9 @@ Plus de 9_000	183_314
 
     df = pd.read_csv(data, sep="\t").reset_index()
 
-    df["eqt"] = df["eqt"].str.replace(" ", "").astype(float)
+    df["population"] = df["population"].str.replace(" ", "").astype(float)
     df["xvalue"] = (
-        df["Income"]
+        df["income"]
         .str.replace("De ", "")
         .str.replace("Moins de", "1_100 à")
         .str.replace("Plus de 9_000", "9_000 à 9_100")

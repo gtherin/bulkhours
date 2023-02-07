@@ -5,15 +5,15 @@ import pandas as pd
 core_datasets = {
     "vaccinations": dict(
         httplink="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv",
-        source="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv",
+        source="https://ourworldindata.org/coronavirus",
     ),
     "covid": dict(
         httplink="https://covid.ourworldindata.org/data/owid-covid-data.csv",
-        source="https://covid.ourworldindata.org/data/owid-covid-data.csv",
+        source="https://ourworldindata.org/coronavirus",
     ),
     "poverty": dict(
         httplink="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
-        source="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
+        source="World Bank Poverty and Inequality Platform\nhttps://ourworldindata.org/poverty\nhttps://pip.worldbank.org/",
     ),
     "supercomputers": dict(
         httplink="https://raw.githubusercontent.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv",
@@ -32,7 +32,7 @@ def clean_columns(df, data_info):
     return df
 
 
-def get_data_from_file(label):
+def get_data_from_file(label, **kwargs):
     if type(label) == list:
         return pd.concat([get_data_from_file(f) for f in label], axis=1)
 
@@ -45,8 +45,10 @@ def get_data_from_file(label):
         return None
 
     ext = filename.split(".")[-1]
-    if ext in ["png", "jpg", "gif"]:
+    if ext in ["png", "jpg", "gif", "xlsx"]:
         return filename
+    elif ext == "xlsx":
+        return pd.read_excel(filename, **kwargs)
     elif ext == "tsv":
         return pd.read_csv(filename, sep="\t")
     else:
@@ -72,7 +74,6 @@ def get_core_data(label, datasets={}, modules={}, credit=False, query=None, inde
     data_info = (
         datasets[label] if label in datasets else ({"httplink": label} if "http" in label else {"files_list": label})
     )
-    print(data_info)
     if credit and "source" in data_info:
         print(data_info["source"])
 
@@ -82,7 +83,7 @@ def get_core_data(label, datasets={}, modules={}, credit=False, query=None, inde
     elif "httplink" in data_info:
         df = pd.read_csv(data_info["httplink"])
     else:
-        df = get_data_from_file(data_info["files_list"])
+        df = get_data_from_file(data_info["files_list"], **kwargs)
     df = clean_columns(df, data_info)
 
     if "filter" in data_info:
