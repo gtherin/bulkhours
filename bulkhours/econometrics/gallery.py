@@ -250,7 +250,6 @@ def plot_gallery_r3(axes=None):
     ax.set_xticks(
         [-3, -2, -1, 1, 2, 3],
         ["-$3\sigma$", "$-2\sigma$", "$-1\sigma$", "$1\sigma$", "$2\sigma$", "$3\sigma$"],
-        minor=False,
     )
 
 
