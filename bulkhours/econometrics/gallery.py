@@ -8,7 +8,6 @@ from .brownian import Brown
 
 
 def plot1(ax):
-
     pdf = sp.stats.skewnorm(a := 4, 0, 1.0)
     mean, var, skew, kurt = pdf.stats(moments="mvsk")
     pearson_skew = 3 * (pdf.mean() - pdf.median()) / pdf.std()
@@ -55,7 +54,6 @@ def plot1(ax):
 
 
 def plot2(ax, a=4):
-
     # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.skewnorm.html
     # mean, var, skew, kurt = sp.stats.skewnorm.stats(a, moments="mvsk")
     # print(mean, var, skew, kurt)
@@ -120,7 +118,6 @@ def plot_skew(ax, a, label, legend=True, mean=True):
 
 
 def set_title(ax, label, yvisible=False):
-
     if yvisible:
         ax.get_yaxis().set_visible(False)
         ax.spines["top"].set_visible(False)
@@ -139,7 +136,6 @@ def plot_sigma(ax, x=0, y=0.09, dx=0.55, width=0.007, head_width=0.03, head_leng
 
 
 def plot_gallery_r1(axes=None):
-
     if axes is None:
         fig, axes = plt.subplots(1, 3, figsize=(15, 4))
         fig.subplots_adjust(wspace=0.01, hspace=0.3)
@@ -177,7 +173,6 @@ def plot_gallery_r1(axes=None):
 
 
 def plot_gallery_skews(axes=None):
-
     if axes is None:
         fig, axes = plt.subplots(1, 3, figsize=(15, 4))
         fig.subplots_adjust(wspace=0.01, hspace=0.3)
@@ -193,7 +188,6 @@ def annotate(ax, label, x, y, c="#C70039", r=0):
 
 
 def plot_gallery_r3(axes=None):
-
     if axes is None:
         fig, axes = plt.subplots(1, 3, figsize=(15, 4))
         fig.subplots_adjust(wspace=0.01, hspace=0.3)
@@ -253,13 +247,15 @@ def plot_gallery_r3(axes=None):
     annotate(ax, "$2.58\sigma=99\%$", 2.8, 0.3, c="#FF5733")
 
     set_title(ax, "Norm: Confidence Intervals", yvisible=True)
-    ax.get_xaxis().set_ticks(
+    ax.set_xticks(
         [-3, -2, -1, 1, 2, 3], ["-$3\sigma$", "$-2\sigma$", "$-1\sigma$", "$1\sigma$", "$2\sigma$", "$3\sigma$"]
     )
+    # ax.get_xaxis().set_ticks(
+    #    [-3, -2, -1, 1, 2, 3], ["-$3\sigma$", "$-2\sigma$", "$-1\sigma$", "$1\sigma$", "$2\sigma$", "$3\sigma$"]
+    # )
 
 
 def plot_gallery():
-
     # "swimming": "#581845",
     # "cycling": "#C70039",
     # "running": "#FF5733",
@@ -274,7 +270,6 @@ def plot_gallery():
 
 
 def plot_celestine(seed=42, sample=1000):
-
     fig, axes = plt.subplots(3, 3, figsize=(15, 10))
     fig.subplots_adjust(wspace=0.01, hspace=0.3)
 
@@ -305,7 +300,6 @@ def plot_celestine(seed=42, sample=1000):
 
 
 def plot_stationary():
-
     fig, axes = plt.subplots(1, 3, figsize=(15, 3))
     fig.subplots_adjust(wspace=0.01, hspace=0.01)
 

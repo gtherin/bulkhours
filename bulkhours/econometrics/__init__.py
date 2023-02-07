@@ -11,10 +11,10 @@ from . import mincer  # noqa
 modules = {"france": france, "mincer": mincer, "statsdata": statsdata, "fhgdpq": fhgdpq}
 
 
-def get_list_of_distribs():
+def get_scipy_distributions_list():
     import scipy as sp
 
-    return [d for d in sp.stats._continuous_distns if not d in ["levy_stable", "studentized_range"]]
+    return [d for d in dir(sp.stats._continuous_distns) if not d in ["levy_stable", "studentized_range"]]
 
 
 def clean_life_expectancy_vs_gdp_2018(df):
@@ -27,6 +27,9 @@ datasets = {
     "countries": dict(
         files_list=["corruption.csv", "cost_of_living.csv", "richest_countries.csv", "unemployment.csv"],
         drop=["monthly_income"],
+    ),
+    "scipy_distributions_list": dict(
+        drop=get_scipy_distributions_list,
     ),
     "tourism": dict(
         files_list=["corruption.csv", "cost_of_living.csv", "richest_countries.csv", "unemployment.csv", "tourism"],
