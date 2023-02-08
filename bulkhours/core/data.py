@@ -95,7 +95,7 @@ def get_core_data(label, datasets={}, modules={}, credit=False, query=None, inde
 def get_image(label, ax=None):
     from PIL import Image
 
-    filename = get_core_data(label)
+    filename = get_data_from_file(label)
     img = Image.open(filename)
     if not ax:
         return img
