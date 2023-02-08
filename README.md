@@ -14,12 +14,13 @@ This package is a support library for different courses.
 - Characteristics of random variables
 - Standard distributions
 - Cross sectional data
-- Descriptive statistics
+- Technical onboarding
 
 # 2/4 (4h): Mar-03/14:00
-02 Time Series inference
-- Linear regressions
-- Regressions estimation methods
+02 Regressions
+- Fit a distribution
+- Regressions techniques
+- Linear regression
 - Goodness of fit
 
 # 3/4 (4h): Mar-08/14:00
