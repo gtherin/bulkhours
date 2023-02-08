@@ -13,7 +13,11 @@ core_datasets = {
     ),
     "poverty": dict(
         httplink="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
-        source="World Bank Poverty and Inequality Platform\nhttps://ourworldindata.org/poverty\nhttps://pip.worldbank.org/",
+        source="""World Bank Poverty and Inequality Platform
+- Direct source: https://ourworldindata.org/poverty
+- Info on the columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
+- Data source: https://pip.worldbank.org/
+        """,
     ),
     "supercomputers": dict(
         httplink="https://raw.githubusercontent.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv",

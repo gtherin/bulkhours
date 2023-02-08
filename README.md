@@ -4,6 +4,7 @@ This package is a support library for different courses.
 2. [Plan of High Performance Programming on GPU course](#planhpc)
 3. [Course methods](#methods)
 4. [Data information](#data)
+5. [Other stuffs](#stuffs)
 
 
 ## Plan of econometrics course <a name="planeco"></a>
@@ -14,21 +15,33 @@ This package is a support library for different courses.
 - Characteristics of random variables
 - Standard distributions
 - Cross sectional data
-- Technical onboarding
+- Exercices: 
+  - A bit of stats (technical onboarding),
+  - log-normal prices, 
+  - Income inequalities (Gini coefficient)
 
 # 2/4 (4h): Mar-03/14:00
 02 Regressions
-- Fit a distribution
+- Fitting a model to a dataset
 - Regressions techniques
 - Linear regression
 - Goodness of fit
+- Exercices: 
+  - Regress life expectancy per country
+  - Wages regression (Mincer equation),
+  - GDP vs Unemployement (Okun's law), 
+  - Options volatility smile
 
 # 3/4 (4h): Mar-08/14:00
-03 Statistical inference
-- Time series characteristics
+03 Time-series predictions
+- Time-series characteristics
 - Exponential smoothing
 - Trends and Seasonal components
 - Holt models
+- Exercices:
+  - Livestocks predictions, 
+  - Covid cases predictions, 
+  - A bit of investigation of the French "systeme des retraites"
 
 # 4/4 (4h): Mar-10/14:00
 04 Econometrics models
@@ -36,6 +49,9 @@ This package is a support library for different courses.
 - AutoRegressive model
 - ARMA model
 - ARIMA model
+- Exercices:
+  - Predict company revenues
+  - Predict natural gaz prices
 
 Exercices: 
 - investigating the French retraites system, predict APPLE revenues
@@ -140,3 +156,5 @@ The file has been downloaded from the page https://www.insee.fr/fr/statistiques/
 #### `data/world_gdp_hist.csv`
 "Data Source","World Development Indicators", "Last Updated Date","2022-12-22",
 
+
+## Other stuffs<a name="stuffs"></a>
