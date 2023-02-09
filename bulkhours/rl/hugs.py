@@ -3,10 +3,11 @@ import os
 
 class LunarLander:
     def login(self, pass_code=None) -> None:
-        from huggingface_hub import notebook_login
+        import huggingface_hub
 
-        notebook_login(pass_code)
-        os.system("git config --global credential.helper store")
+        # huggingface_hub.notebook_login()
+        # os.system("git config --global credential.helper store")
+        huggingface_hub.login(pass_code, add_to_git_credential=True)
 
     def make(self) -> None:
         import gym
@@ -22,7 +23,7 @@ class LunarLander:
         # Create the environment
         self.env_id = "LunarLander-v2"
         self.model_name = "ppo-LunarLander-v2"
-        self.model_architecture = "PPO"  # TODO: Define the model architecture we used
+        self.model_architecture = "PPO"  # Define the model architecture we used
         self.repo_id = f"guydegnol/{self.model_name}"  # Change with your repo id, you can't push with mine 😄
 
         self.login(pass_code=pass_code)

@@ -23,9 +23,10 @@ def init_env(ip):
         # runrealcmd("sudo apt-get update", verbose=True)
         runrealcmd("sudo apt install swig cmake", verbose=True)
         runrealcmd("sudo apt-get install -y xvfb python-opengl, ffmpeg", verbose=True)
-        # runrealcmd("pip install gymnasium pyvirtualdisplay array2gif", verbose=True)
+        runrealcmd("pip install gym", verbose=True)
+        # runrealcmd("pip install gymnasium ", verbose=True)
+        runrealcmd("pip install stable-baselines3[extra] box2d box2d-kengzpyvirtualdisplay array2gif", verbose=True)
         # runrealcmd("pip install gymnasium[atari,toy_text,box2d,classic_control,accept-rom-license]", verbose=True)
-        runrealcmd("pip install gym stable-baselines3[extra] box2d box2d-kengz", verbose=True)
         runrealcmd("pip install huggingface_sb3 pyglet==1.5.1", verbose=True)
 
     if not tf.config.list_physical_devices("GPU"):
