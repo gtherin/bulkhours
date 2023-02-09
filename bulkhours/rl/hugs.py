@@ -43,7 +43,7 @@ class PPOHugs:
         # We added some parameters to accelerate the training
         self.model = stable_baselines3.PPO(
             policy="MlpPolicy",
-            env=self.make,
+            env=self.make(),
             n_steps=1024,
             batch_size=64,
             n_epochs=4,
