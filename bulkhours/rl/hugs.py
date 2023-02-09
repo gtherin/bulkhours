@@ -26,7 +26,7 @@ class PPOHugs:
     def __init__(self, pass_code=None, env_id="LunarLander-v2", model_architecture="PPO") -> None:
         # Create the environment
         self.env_id = env_id
-        self.model_name = f"ppo-{self.model_name}"
+        self.model_name = f"ppo-{self.env_id}"
         self.model_architecture = model_architecture  # Define the model architecture we used
         self.repo_id = f"guydegnol/{self.model_name}"  # Change with your repo id, you can't push with mine 😄
 
