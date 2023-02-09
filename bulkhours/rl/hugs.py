@@ -32,10 +32,10 @@ class PPOHugs:
 
         self.login(pass_code=pass_code)
         # self.env = self.make_vec_env()
-        if init == "from_scratch":
-            self.create_from_scratch()
-        elif init:
+        if type(init) == str:
             self.pull(init)
+        elif init:
+            self.create_from_scratch()
 
     def create_from_scratch(self) -> None:
         import stable_baselines3
