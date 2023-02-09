@@ -1,3 +1,4 @@
+import sys
 import matplotlib.pyplot as plt
 
 
@@ -16,9 +17,15 @@ def init_env(ip):
     """Use pip from the current kernel"""
     import tensorflow as tf
 
-    runrealcmd("apt-get install -y xvfb python-opengl", verbose=True)
-    runrealcmd("pip install gymnasium pyvirtualdisplay array2gif", verbose=True)
-    runrealcmd("pip install gymnasium[atari,toy_text,box2d,classic_control,accept-rom-license]", verbose=True)
+    print("AAAAAAAA", sys.modules)
+    if "google.colab" in sys.modules:
+        # runrealcmd("sudo apt-get update", verbose=True)
+        runrealcmd("sudo apt install swig cmake", verbose=True)
+        runrealcmd("sudo apt-get install -y xvfb python-opengl, ffmpeg", verbose=True)
+        # runrealcmd("pip install gymnasium pyvirtualdisplay array2gif", verbose=True)
+        # runrealcmd("pip install gymnasium[atari,toy_text,box2d,classic_control,accept-rom-license]", verbose=True)
+        runrealcmd("pip install gym stable-baselines3[extra] box2d box2d-kengz", verbose=True)
+        runrealcmd("pip install huggingface_sb3 pyglet==1.5.1", verbose=True)
 
     if not tf.config.list_physical_devices("GPU"):
         print("No GPU was detected. Neural nets can be very slow without a GPU.")
