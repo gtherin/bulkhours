@@ -23,7 +23,7 @@ class PPOHugs:
         # Create n_envs different environment like a single one
         return make_vec_env(self.env_id, n_envs=n_envs)
 
-    def __init__(self, pass_code=None, env_id="LunarLander-v2", model_architecture="PPO") -> None:
+    def __init__(self, pass_code=None, env_id="LunarLander-v2", model_architecture="PPO", init=None) -> None:
         # Create the environment
         self.env_id = env_id
         self.model_name = f"ppo-{self.env_id}"
@@ -31,7 +31,11 @@ class PPOHugs:
         self.repo_id = f"guydegnol/{self.model_name}"  # Change with your repo id, you can't push with mine 😄
 
         self.login(pass_code=pass_code)
-        self.env = self.make_vec_env()
+        # self.env = self.make_vec_env()
+        if init == "from_scratch":
+            self.create_from_scratch()
+        elif init:
+            self.pull(init)
 
     def create_from_scratch(self) -> None:
         import stable_baselines3
@@ -39,7 +43,7 @@ class PPOHugs:
         # We added some parameters to accelerate the training
         self.model = stable_baselines3.PPO(
             policy="MlpPolicy",
-            env=self.env,
+            env=self.make,
             n_steps=1024,
             batch_size=64,
             n_epochs=4,
