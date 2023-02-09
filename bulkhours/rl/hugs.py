@@ -49,10 +49,12 @@ class PPOHugs:
             verbose=1,
         )
 
-    def push(self) -> None:
+    def push(self, repo_id=None) -> None:
         import huggingface_sb3
 
         from stable_baselines3.common.vec_env import DummyVecEnv
+
+        repo_id = repo_id if repo_id else self.repo_id
 
         # PLACE the package_to_hub function you've just filled here
         huggingface_sb3.package_to_hub(
@@ -65,11 +67,12 @@ class PPOHugs:
             commit_message=f"Upload {self.model_architecture} {self.env_id} trained agent",
         )
 
-    def pull(self, repo_id="guydegnol/ppo-LunarLander-v2") -> None:
+    def pull(self, repo_id=None) -> None:
         # repo_id = "Classroom-workshop/assignment2-omar" # The repo_id
         import huggingface_sb3
         import stable_baselines3
 
+        repo_id = repo_id if repo_id else self.repo_id
         self.model = stable_baselines3.PPO.load(
             huggingface_sb3.load_from_hub(repo_id, f"{self.model_name}.zip"),  # The model filename.zip,
             # When the model was trained on Python 3.8 the pickle protocol is 5, But Python 3.6, 3.7 use protocol 4
