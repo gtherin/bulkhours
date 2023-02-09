@@ -99,7 +99,4 @@ class PPOHugs:
 
     @staticmethod
     def get_instance(label, pass_code=None):
-        if label == "1":
-            return PPOHugs(env_id="LunarLander-v2", pass_code=pass_code)
-        else:
-            return PPOHugs(env_id=label, pass_code=pass_code)
+        return PPOHugs(env_id=label, pass_code=pass_code)
