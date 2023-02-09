@@ -5,6 +5,7 @@ class LunarLander:
     def login(self, pass_code=None) -> None:
         import huggingface_hub
 
+        # If you don't want to use a Google Colab or a Jupyter Notebook, you need to use this command instead: huggingface-cli login
         # huggingface_hub.notebook_login()
         # os.system("git config --global credential.helper store")
         huggingface_hub.login(pass_code, add_to_git_credential=True)
@@ -12,11 +13,14 @@ class LunarLander:
     def make(self) -> None:
         import gym
 
-        return gym.make(self.env_id)
+        env = gym.make(self.env_id)
+        env.reset()
+        return env
 
     def make_vec_env(self, n_envs=16) -> None:
         from stable_baselines3.common.env_util import make_vec_env
 
+        # Create n_envs different environment like a single one
         return make_vec_env(self.env_id, n_envs=n_envs)
 
     def __init__(self, pass_code=None) -> None:
@@ -30,10 +34,10 @@ class LunarLander:
         self.env = self.make_vec_env()
 
     def create_from_scratch(self) -> None:
-        from stable_baselines3 import PPO
+        import stable_baselines3
 
         # We added some parameters to accelerate the training
-        self.model = PPO(
+        self.model = stable_baselines3.PPO(
             policy="MlpPolicy",
             env=self.env,
             n_steps=1024,
@@ -46,11 +50,12 @@ class LunarLander:
         )
 
     def push(self) -> None:
-        from huggingface_sb3 import package_to_hub
+        import huggingface_sb3
+
         from stable_baselines3.common.vec_env import DummyVecEnv
 
         # PLACE the package_to_hub function you've just filled here
-        package_to_hub(
+        huggingface_sb3.package_to_hub(
             model=self.model,  # Our trained model
             model_name=self.model_name,  # The name of our trained model
             model_architecture=self.model_architecture,  # The model architecture we used: in our case PPO
@@ -61,15 +66,16 @@ class LunarLander:
         )
 
     def pull(self, repo_id="guydegnol/ppo-LunarLander-v2") -> None:
-        from huggingface_sb3 import load_from_hub
-        from stable_baselines3 import PPO
-
         # repo_id = "Classroom-workshop/assignment2-omar" # The repo_id
-        self.model = PPO.load(
-            load_from_hub(repo_id, f"{self.model_name}.zip"),  # The model filename.zip,
+        import huggingface_sb3
+        import stable_baselines3
+
+        self.model = stable_baselines3.PPO.load(
+            huggingface_sb3.load_from_hub(repo_id, f"{self.model_name}.zip"),  # The model filename.zip,
             # When the model was trained on Python 3.8 the pickle protocol is 5, But Python 3.6, 3.7 use protocol 4
             custom_objects={"learning_rate": 0.0, "lr_schedule": lambda _: 0.0, "clip_range": lambda _: 0.0},
             print_system_info=True,
+            env=self.make(),
         )
         return self.model
 
