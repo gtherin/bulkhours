@@ -1,7 +1,7 @@
 import os
 
 
-class LunarLander:
+class PPOHugs:
     def login(self, pass_code=None) -> None:
         import huggingface_hub
 
@@ -23,11 +23,11 @@ class LunarLander:
         # Create n_envs different environment like a single one
         return make_vec_env(self.env_id, n_envs=n_envs)
 
-    def __init__(self, pass_code=None) -> None:
+    def __init__(self, pass_code=None, env_id="LunarLander-v2", model_architecture="PPO") -> None:
         # Create the environment
-        self.env_id = "LunarLander-v2"
-        self.model_name = "ppo-LunarLander-v2"
-        self.model_architecture = "PPO"  # Define the model architecture we used
+        self.env_id = env_id
+        self.model_name = f"ppo-{self.model_name}"
+        self.model_architecture = model_architecture  # Define the model architecture we used
         self.repo_id = f"guydegnol/{self.model_name}"  # Change with your repo id, you can't push with mine 😄
 
         self.login(pass_code=pass_code)
@@ -93,3 +93,10 @@ class LunarLander:
         eval_env = self.make()
         mean_reward, std_reward = evaluate_policy(self.model, eval_env, n_eval_episodes=10, deterministic=True)
         print(f"mean_reward={mean_reward:.2f} +/- {std_reward}")
+
+    @staticmethod
+    def get_instance(label, pass_code=None):
+        if label == "1":
+            return PPOHugs(env_id="LunarLander-v2", pass_code=pass_code)
+        else:
+            return PPOHugs(env_id=label, pass_code=pass_code)
