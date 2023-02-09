@@ -1,5 +1,6 @@
 import sys
 import matplotlib.pyplot as plt
+from .hugs import LunarLander  # noqa
 
 
 def runrealcmd(command, verbose=True):
