@@ -45,6 +45,14 @@ def get_document(sid, user):
     return firestore.Client().collection(sid).document(user)
 
 
+def send_answer_to_corrector(question, answer):
+    print(answer)
+    return
+    get_document(question, os.environ["STUDENT"]).set(
+        {"answer": answer, "update_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+    )
+
+
 @magics_class
 class Evaluation(Magics):
     def __init__(self, shell):
