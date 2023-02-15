@@ -1,18 +1,19 @@
-import matplotlib.pyplot as plt  # directive d'importation standard de Matplotlib
-import numpy as np  # directive d'importation standard de numpy
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 def V(r):  # potentiel de Morse
     return 10 * (1.0 - np.exp(-(r - 1))) ** 2.0
 
 
-def get_potential():
+def get_potential(exp=True, theo=True):
     with plt.xkcd():
         fig, ax = plt.subplots(figsize=(10, 4))
 
         r = np.linspace(0.2, 7, 200)
         u = V(r)
         plt.plot(r, u, color="salmon", linewidth=2, linestyle="-")
+
         ax.spines["top"].set_visible(False)
         ax.spines["bottom"].set_visible(False)
         ax.spines["right"].set_visible(False)
@@ -20,9 +21,8 @@ def get_potential():
         ax.set_xticks([])
         ax.set_yticks([])
 
-        # description du puit de potentiel
         ax.plot((-0.3, 7.56), (10.5, 10.5), color="black", linewidth=2)
-        ax.text(7.3, 9.5, "x", fontname="Comic Sans")
+        ax.text(7.3, 9.5, "x", fontname="default")
         ax.plot([0.02, 0.02], (-0.35, 16), color="black", linewidth=2)
         ax.plot([0.09, 0.09], (-0.3, 14), color="xkcd:sky blue", linewidth=1.5)
         ax.plot([0.09, 5], (-0.3, -0.3), color="xkcd:sky blue", linewidth=1.5)
@@ -37,9 +37,10 @@ def get_potential():
         ax.text(5, 11, "a", fontname="Comic Sans")
 
         plt.show()
+        return fig
 
 
-def get_potential():
+def get_pdf(modes=[0, 1]):
     with plt.xkcd():
         fig, ax = plt.subplots(figsize=(8, 5))
 
@@ -54,8 +55,8 @@ def get_potential():
 
         x = np.linspace(0, 1)
 
-        for i in [0, 1]:
-            ax.plot(x, np.sin(np.pi * x * (i + 1)) ** 2, c="blue")
+        for i in modes:
+            ax.plot(x, np.sin(np.pi * x * (i + 1)) ** 2, c=colors[i])
             ax.text(*args[i], f"n={i+1}", color=colors[i], fontname="Comic Sans")
         # ax.plot(x, np.sin(np.pi*2*x)**2, c="red")
         # ax.text(0.9, 0.5, 'n=2', color="red", fontname="Comic Sans")
@@ -67,3 +68,4 @@ def get_potential():
         ax.set_ylim([-0.0, 1.1])
         ax.set_xlabel("x", fontname="Comic Sans")
         ax.set_ylabel("P(x)", fontname="Comic Sans")
+        return fig

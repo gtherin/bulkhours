@@ -1,4 +1,4 @@
-__version__ = "2.1.0"
+__version__ = "2.1.1"
 
 from .block import Block, BlockCoin, BlockMsg  # noqa
 from .blockchain import BlockChain  # noqa
@@ -7,7 +7,7 @@ from .core.data import get_core_data, get_image  # noqa
 from .languages import get_languages_perf  # noqa
 from .git_graph import *  # noqa
 from .git_graphviz import *  # noqa
-from .timeit import timeit  # noqa
+from .core.timeit import timeit  # noqa
 from .ffiles import *  # noqa
 from . import rl  # noqa
 from . import econometrics  # noqa
