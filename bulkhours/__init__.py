@@ -1,16 +1,12 @@
-__version__ = "2.1.1"
+__version__ = "2.2.1"
 
-from .block import Block, BlockCoin, BlockMsg  # noqa
-from .blockchain import BlockChain  # noqa
 from .core.evaluation import Evaluation, set_up_student  # noqa
 from .core.data import get_core_data, get_image  # noqa
-from .hpc.languages import get_languages_perf  # noqa
-from .git_graph import *  # noqa
-from .git_graphviz import *  # noqa
 from .core.timeit import timeit  # noqa
-from .ffiles import *  # noqa
 from . import rl  # noqa
-from . import econometrics  # noqa
+from . import hpc  # noqa
+from . import ecox  # noqa
+from . import ecox as econometrics  # noqa
 from . import beaut  # noqa
 from . import boids  # noqa
 from . import physu  # noqa
@@ -94,7 +90,6 @@ def set_style():
 
     from cycler import cycler
 
-    # mpl.rcParams['axes.prop_cycle'] = cycler(color='bgrcmyk')
     # mpl.rcParams['axes.prop_cycle'] = cycler(color='bgrcmyk')
     plt.rcParams["axes.prop_cycle"] = cycler(
         color=[get_color(c) for c in ["swimming", "cycling", "running", "The end"]]

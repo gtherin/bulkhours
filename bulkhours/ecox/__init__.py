@@ -7,6 +7,9 @@ from . import france  # noqa
 from . import fhgdpq  # noqa
 from . import statsdata  # noqa
 from . import mincer  # noqa
+from .block import Block, BlockCoin, BlockMsg  # noqa
+from .blockchain import BlockChain  # noqa
+
 
 modules = {"france": france, "mincer": mincer, "statsdata": statsdata, "fhgdpq": fhgdpq}
 
