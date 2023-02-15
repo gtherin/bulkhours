@@ -1,6 +1,6 @@
 __version__ = "2.2.1"
 
-from .core.evaluation import Evaluation, set_up_student, send_answer_to_corrector  # noqa
+from .core.evaluation import Evaluation, set_up_student, send_answer_to_corrector, get_solution_from_corrector  # noqa
 from .core.data import get_core_data, get_image  # noqa
 from .core.timeit import timeit  # noqa
 from . import rl  # noqa
