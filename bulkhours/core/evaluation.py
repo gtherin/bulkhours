@@ -45,11 +45,21 @@ def get_document(sid, user):
     return firestore.Client().collection(sid).document(user)
 
 
-def send_answer_to_corrector(question, answer):
+def send_answer_to_corrector(question, answer, atype="code"):
     get_document(question, os.environ["STUDENT"]).set(
-        {"answer": answer, "update_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+        {"answer": answer, "update_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "atype": atype}
     )
     print(f'Answer has been submited for: {question}/{os.environ["STUDENT"]}. You can resubmit it several times')
+
+
+def get_solution_from_corrector(question, corrector="solution", raw=False):
+    output = get_document(question, corrector).get().to_dict()
+    if raw:
+        return output
+
+    if output is None or "answer" not in output:
+        return f"Solution (for question {question}) is not available (yet)"
+    return output["answer"]
 
 
 @magics_class
@@ -65,13 +75,13 @@ class Evaluation(Magics):
     @cell_magic
     @needs_local_scope
     def send_answer_to_corrector(self, line, cell, local_ns=None):
-        send_answer_to_corrector(line, cell)
+        send_answer_to_corrector(line, cell, atype="code")
         self.shell.run_cell(cell)
 
     @line_cell_magic
     @needs_local_scope
     def get_solution_from_corrector(self, line, cell="", local_ns=None):
-        output = get_document(line, "solution").get().to_dict()
+        output = get_solution_from_corrector(line, corrector="solution", raw=True)
 
         if output is None:
             print(f"Solution (for question {line}) is not available (yet)")
