@@ -4,7 +4,7 @@ from .block import Block, BlockCoin, BlockMsg  # noqa
 from .blockchain import BlockChain  # noqa
 from .core.evaluation import Evaluation, set_up_student  # noqa
 from .core.data import get_core_data, get_image  # noqa
-from .languages import get_languages_perf  # noqa
+from .hpc.languages import get_languages_perf  # noqa
 from .git_graph import *  # noqa
 from .git_graphviz import *  # noqa
 from .core.timeit import timeit  # noqa
@@ -17,7 +17,7 @@ from . import physu  # noqa
 
 
 def load_extra_magics(ip, verbose=True):
-    from .compiler import CCPPlugin
+    from .hpc.compiler import CCPPlugin
 
     ipp = ip.get_ipython()
 
@@ -29,8 +29,6 @@ def load_extra_magics(ip, verbose=True):
 
 
 def init_env(login=None, ip=None, pass_code=None, env=None):
-    import importlib
-
     student_login = set_up_student(login, pass_code=pass_code)
     if ip is None:
         set_up_student(None)
