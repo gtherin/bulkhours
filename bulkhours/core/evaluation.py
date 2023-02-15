@@ -46,11 +46,10 @@ def get_document(sid, user):
 
 
 def send_answer_to_corrector(question, answer):
-    print(answer)
-    return
     get_document(question, os.environ["STUDENT"]).set(
         {"answer": answer, "update_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
     )
+    print(f'Answer has been submited for: {answer}/{os.environ["STUDENT"]}. You can resubmit it several times')
 
 
 @magics_class
@@ -66,12 +65,8 @@ class Evaluation(Magics):
     @cell_magic
     @needs_local_scope
     def send_answer_to_corrector(self, line, cell, local_ns=None):
-        get_document(line, os.environ["STUDENT"]).set(
-            {"answer": cell, "update_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
-        )
-
+        send_answer_to_corrector(line, cell)
         self.shell.run_cell(cell)
-        print(f'Answer has been submited for: {line}/{os.environ["STUDENT"]}. You can resubmit it several times')
 
     @line_cell_magic
     @needs_local_scope
