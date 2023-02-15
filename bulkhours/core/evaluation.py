@@ -18,7 +18,7 @@ def get_cred(k="pi.pyc", d=None, pass_code=None):
     return d + k
 
 
-def set_up_student(student_name, d="bulkhours/bulkhours/", pass_code=None):
+def set_up_student(student_name, d="bulkhours/bulkhours/bunker/", pass_code=None):
     if student_name == "noraise":
         return
 
@@ -58,7 +58,6 @@ class Evaluation(Magics):
     @cell_magic
     @needs_local_scope
     def send_answer_to_corrector(self, line, cell, local_ns=None):
-
         get_document(line, os.environ["STUDENT"]).set(
             {"answer": cell, "update_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
         )
@@ -69,7 +68,6 @@ class Evaluation(Magics):
     @line_cell_magic
     @needs_local_scope
     def get_solution_from_corrector(self, line, cell="", local_ns=None):
-
         output = get_document(line, "solution").get().to_dict()
 
         if output is None:
@@ -101,13 +99,12 @@ def get_arg_parser(argv):
 
 
 def dump_corrections(argv=sys.argv):
-
     args = get_arg_parser(argv[1:])
     promo = "2022"
 
     from google.cloud import firestore
 
-    set_up_student("correction", d="bulkhours/", pass_code=args.pass_code)
+    set_up_student("correction", d="bulkhours/bunker/", pass_code=args.pass_code)
 
     if args.delete_solution:
         docs = firestore.Client().collection(args.evaluation_id).document("solution").delete()

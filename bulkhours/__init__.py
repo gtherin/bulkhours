@@ -13,6 +13,7 @@ from . import rl  # noqa
 from . import econometrics  # noqa
 from . import beaut  # noqa
 from . import boids  # noqa
+from . import physu  # noqa
 
 
 def load_extra_magics(ip, verbose=True):
