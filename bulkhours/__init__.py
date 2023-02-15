@@ -6,10 +6,11 @@ from .core.timeit import timeit  # noqa
 from . import rl  # noqa
 from . import hpc  # noqa
 from . import ecox  # noqa
-from . import ecox as econometrics  # noqa
 from . import beaut  # noqa
 from . import boids  # noqa
-from . import physu  # noqa
+from . import phyu  # noqa
+
+econometrics = ecox  # noqa
 
 
 def load_extra_magics(ip, verbose=True):
@@ -36,7 +37,7 @@ def init_env(login=None, ip=None, pass_code=None, env=None):
     if env in ["rl", "reinforcement learning"]:
         rl.init_env(ip)
         env_info = f", in env=rl"
-    elif env in ["econometrics"]:
+    elif env in ["econometrics", "ecox"]:
         rl.runrealcmd("pip install yfinance", verbose=True)
         env_info = f", in env=econometrics"
     elif env is not None:
@@ -97,4 +98,4 @@ def set_style():
 
 
 def get_data(label, **kwargs):
-    return get_core_data(label, datasets=econometrics.datasets, modules=econometrics.modules, **kwargs)
+    return get_core_data(label, datasets=ecox.datasets, modules=ecox.modules, **kwargs)
