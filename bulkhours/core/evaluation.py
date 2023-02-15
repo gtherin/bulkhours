@@ -58,7 +58,7 @@ def get_solution_from_corrector(question, corrector="solution", raw=False):
         return output
 
     if output is None or "answer" not in output:
-        return f"Solution (for question {question}) is not available (yet)"
+        return f"Solution ('{question}') is not available (yet)"
     return output["answer"]
 
 
@@ -84,12 +84,12 @@ class Evaluation(Magics):
         output = get_solution_from_corrector(line, corrector="solution", raw=True)
 
         if output is None:
-            print(f"Solution (for question {line}) is not available (yet)")
+            print(f"Solution ('{line}') is not available (yet)")
         else:
             print(
                 f"""########## Correction (for {line}) is:          ########## 
 {output["answer"]}
-########## Let's execute the code (for {line}) now: ########## 
+########## Let's execute the code ('{line}') now: ########## 
     """
             )
             self.shell.run_cell(output["answer"])
