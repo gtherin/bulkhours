@@ -49,7 +49,7 @@ def send_answer_to_corrector(question, answer):
     get_document(question, os.environ["STUDENT"]).set(
         {"answer": answer, "update_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
     )
-    print(f'Answer has been submited for: {answer}/{os.environ["STUDENT"]}. You can resubmit it several times')
+    print(f'Answer has been submited for: {question}/{os.environ["STUDENT"]}. You can resubmit it several times')
 
 
 @magics_class
