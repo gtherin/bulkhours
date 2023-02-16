@@ -33,7 +33,7 @@ datasets = {
         on="country",
     ),
     "scipy_distributions_list": dict(
-        drop=get_scipy_distributions_list,
+        drop=get_scipy_distributions_list
     ),
     "tourism": dict(
         files_list=[
@@ -63,3 +63,14 @@ datasets = {
         drop=["annotations", "Continent"],
     ),
 }
+
+
+def sampler(samples_number, sample_size, mu=4, stype="bimodal", seed=42):
+    """return a dataframe of exp(-X/scale)/scale for random X"""
+    np.random.seed(seed)
+    if stype == "exp":
+        return pd.DataFrame(np.random.exponential(scale=mu, size=(sample_size, samples_number)))
+    u = np.random.choice([0, 1], size=(sample_size, samples_number))
+    d1 = sp.stats.skewnorm.rvs(loc=mu - 3.6, a=7, size=(sample_size, samples_number))
+    d2 = sp.stats.skewnorm.rvs(loc=mu, a=7, size=(sample_size, samples_number))
+    return pd.DataFrame(u * d1 + 0.5 * (1 - u) * d2)

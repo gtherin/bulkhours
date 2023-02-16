@@ -37,12 +37,12 @@ def init_env(login=None, pass_code=None, env=None, verbose=False):
         rl.init_env(verbose=verbose)
         env_info = f", env=rl"
     elif env in ["econometrics", "ecox"]:
-        runrealcmd("pip install yfinance", verbose=verbose)
+        runrealcmd("pip install yfinance  # Data loader for finance data", verbose=verbose)
         env_info = f", env=econometrics"
     elif env is not None:
         print(f"env={env} (Unknown)")
     set_style()
-    print(f'ENV BULK Helper cOURSe (version={__version__}, user"{student_login}{env_info}")')
+    print(f"ENV BULK Helper cOURSe (version={__version__}, user={student_login}{env_info})")
 
 
 def get_color(discipline):
