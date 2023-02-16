@@ -5,6 +5,8 @@ import os
 import json
 
 from IPython.core.magic import Magics, cell_magic, magics_class, line_cell_magic, needs_local_scope
+import IPython
+import ipywidgets
 
 
 def get_cred(k="pi.pyc", d=None, pass_code=None):
@@ -86,8 +88,29 @@ class Evaluation(Magics):
     @needs_local_scope
     def send_answer_to_corrector(self, line, cell, local_ns=None):
         send_answer_to_corrector(line, cell, atype="code")
-        self.get_solution_from_corrector(line)
+        # self.get_solution_from_corrector(line)
         self.shell.run_cell(cell)
+
+    @line_cell_magic
+    @needs_local_scope
+    def evaluation_cell_id(self, line, cell, local_ns=None):
+        self.shell.run_cell(cell)
+
+        button = ipywidgets.Button(description="Send answer", button_style="primary")
+        output = ipywidgets.Output()
+
+        def on_button_clicked(b):
+            with output:
+                output.clear_output()
+                self.show_answer = not self.show_answer
+                if self.show_answer:
+                    b.button_style, b.description = "danger", f"Answer sent"
+                    send_answer_to_corrector(line, cell, atype="code")
+                else:
+                    b.button_style, b.description = "primary", f"Send answer"
+
+        button.on_click(on_button_clicked)
+        IPython.display.display(button, output)
 
     @line_cell_magic
     @needs_local_scope
