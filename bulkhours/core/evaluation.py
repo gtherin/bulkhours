@@ -95,8 +95,11 @@ class Evaluation(Magics):
     @needs_local_scope
     def evaluation_cell_id(self, line, cell, local_ns=None):
         self.shell.run_cell(cell)
+        cell_info = line.split()
+        cell_id, cell_type = cell_info[0], cell_info[1] if len(cell_info) > 1 else "code"
 
         button = ipywidgets.Button(description="Send answer", button_style="primary")
+        buttonc = ipywidgets.Button(description="Get correction", button_style="primary")
         output = ipywidgets.Output()
 
         def on_button_clicked(b):
@@ -105,12 +108,35 @@ class Evaluation(Magics):
                 self.show_answer = not self.show_answer
                 if self.show_answer:
                     b.button_style, b.description = "danger", f"Answer sent"
-                    send_answer_to_corrector(line, cell, atype="code")
+                    send_answer_to_corrector(cell_id, cell, atype=cell_type)
                 else:
                     b.button_style, b.description = "primary", f"Send answer"
 
+        def on_buttonc_clicked(b):
+            with output:
+                output.clear_output()
+                self.show_answer = not self.show_answer
+                if self.show_answer:
+                    b.button_style, b.description = "danger", f"Hide correction"
+                    text = get_solution_from_corrector(cell_id, corrector="solution", raw=True)
+
+                    if text is None:
+                        print(f"Solution ('{cell_id}') is not available (yet)")
+                    else:
+                        print(
+                            f"""########## Correction (for {cell_id}) is:          ########## 
+{text["answer"]}
+########## Let's execute the code ('{cell_id}') now: ########## 
+                """
+                        )
+                        self.shell.run_cell(text["answer"])
+                else:
+                    b.button_style, b.description = "primary", "Get correction"
+
         button.on_click(on_button_clicked)
-        IPython.display.display(button, output)
+        buttonc.on_click(on_buttonc_clicked)
+
+        IPython.display.display(ipywidgets.HBox([button, buttonc]), output)
 
     @line_cell_magic
     @needs_local_scope

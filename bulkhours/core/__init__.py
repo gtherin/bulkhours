@@ -33,14 +33,5 @@ def git_push(argv=sys.argv[1:]):
         the_file.write(f"""__version__ = "{nversion}"\n""")
 
     print(version, nversion)
-
-    process = Popen(
-        f"""git add . && git commit -m "{args.message}" && git push""",
-        stdout=PIPE,
-        shell=True,
-        stderr=STDOUT,
-        bufsize=1,
-        close_fds=True,
-    )
-    process.stdout.close()
-    process.wait()
+    cmd = f"""git add . && git commit -m "{args.message}" && git push"""
+    Popen(cmd, stdout=PIPE, shell=True, stderr=STDOUT)
