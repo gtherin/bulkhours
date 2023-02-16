@@ -19,21 +19,13 @@ def runrealcmd(command, verbose=True):
 
 
 def git_push(argv=sys.argv[1:]):
-    import argcomplete
     from subprocess import Popen, PIPE, STDOUT
 
-    parser = argparse.ArgumentParser(
-        description="Git stuffs",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-    )
+    parser = argparse.ArgumentParser(description="Git helper")
     parser.add_argument("-m", "--message", help="Message", default="Some changes")
-
-    argcomplete.autocomplete(parser)
     args = parser.parse_args(argv)
 
     vfile = os.path.abspath(os.path.dirname(__file__)) + "/../__version__.py"
-
-    # with open(vfile) as the_file:
     version = open(vfile).readline().split('"')[1].split(".")
     nversion = f"{version[0]}.{version[1]}.{int(version[2])+1}"
 
