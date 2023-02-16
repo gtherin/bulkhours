@@ -1,35 +1,24 @@
 import sys
 import matplotlib.pyplot as plt
 from .hugs import PPOHugs  # noqa
+from ..core import runrealcmd
 
 
-def runrealcmd(command, verbose=True):
-    from subprocess import Popen, PIPE, STDOUT
-
-    process = Popen(command, stdout=PIPE, shell=True, stderr=STDOUT, bufsize=1, close_fds=True)
-    if verbose:
-        for line in iter(process.stdout.readline, b""):
-            print(line.rstrip().decode("utf-8"))
-    process.stdout.close()
-    process.wait()
-
-
-def init_env():
+def init_env(verbose=True):
     """Use pip from the current kernel"""
     import tensorflow as tf
     import IPython as ip
 
-
     if "google.colab" in sys.modules:
-        # runrealcmd("sudo apt-get update", verbose=True)
-        runrealcmd("sudo apt install swig cmake", verbose=True)
-        runrealcmd("sudo apt-get install -y python-opengl ffmpeg", verbose=True)
-        runrealcmd("pip install gym", verbose=True)
+        # runrealcmd("sudo apt-get update", verbose=verbose)
+        runrealcmd("sudo apt install swig cmake", verbose=verbose)
+        runrealcmd("sudo apt-get install -y python-opengl ffmpeg", verbose=verbose)
+        runrealcmd("pip install gym", verbose=verbose)
         runrealcmd("apt update && apt install xvfb && pip3 install pyvirtualdisplay && pip install pyvirtualdisplay")
         # runrealcmd("pip install gymnasium ", verbose=True)
-        runrealcmd("pip install stable-baselines3[extra] box2d box2d-kengz array2gif", verbose=True)
+        runrealcmd("pip install stable-baselines3[extra] box2d box2d-kengz array2gif", verbose=verbose)
         # runrealcmd("pip install gymnasium[atari,toy_text,box2d,classic_control,accept-rom-license]", verbose=True)
-        runrealcmd("pip install huggingface_sb3 pyglet==1.5.1", verbose=True)
+        runrealcmd("pip install huggingface_sb3 pyglet==1.5.1", verbose=verbose)
 
     if not tf.config.list_physical_devices("GPU"):
         print("No GPU was detected. Neural nets can be very slow without a GPU.")

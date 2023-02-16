@@ -36,9 +36,12 @@ def clean_columns(df, data_info):
     return df
 
 
-def get_data_from_file(label, **kwargs):
+def get_data_from_file(label, on=None, **kwargs):
     if type(label) == list:
-        return pd.concat([get_data_from_file(f) for f in label], axis=1)
+        if on:
+            return pd.concat([get_data_from_file(f).set_index(on) for f in label], axis=1)
+        else:
+            return pd.concat([get_data_from_file(f) for f in label], axis=1)
 
     filename = None
     for directory in ["bulkhours/data", "./data", "../data", "../../bulkhours/data"]:
@@ -87,7 +90,7 @@ def get_core_data(label, datasets={}, modules={}, credit=False, query=None, inde
     elif "httplink" in data_info:
         df = pd.read_csv(data_info["httplink"])
     else:
-        df = get_data_from_file(data_info["files_list"], **kwargs)
+        df = get_data_from_file(data_info["files_list"], **data_info, **kwargs)
     df = clean_columns(df, data_info)
 
     if "filter" in data_info:

@@ -3,6 +3,7 @@ __version__ = "2.2.1"
 from .core.evaluation import Evaluation, set_up_student, send_answer_to_corrector, get_solution_from_corrector  # noqa
 from .core.data import get_core_data, get_image  # noqa
 from .core.timeit import timeit  # noqa
+from .core import runrealcmd  # noqa
 from . import rl  # noqa
 from . import hpc  # noqa
 from . import ecox  # noqa
@@ -26,32 +27,26 @@ def load_extra_magics(verbose=True):
         print(f"Load bulkhours (version={__version__})")
 
 
-def init_env(login=None, pass_code=None, env=None, d="bulkhours/bulkhours/bunker/"):
+def init_env(login=None, pass_code=None, env=None, d="bulkhours/bulkhours/bunker/", verbose=False):
     student_login = set_up_student(login, pass_code=pass_code, d=d)
 
     load_extra_magics(verbose=False)
 
     env_info = ""
     if env in ["rl", "reinforcement learning"]:
-        rl.init_env()
+        rl.init_env(verbose=verbose)
         env_info = f", in env=rl"
     elif env in ["econometrics", "ecox"]:
-        rl.runrealcmd("pip install yfinance", verbose=True)
+        runrealcmd("pip install yfinance", verbose=verbose)
         env_info = f", in env=econometrics"
     elif env is not None:
         print(f"Unknown env={env}")
-
     set_style()
     print(f'Load BULK Helper cOURSe (version={__version__}, connected as "{student_login}{env_info}")')
 
 
 def get_color(discipline):
-    colors = {
-        "swimming": "#581845",
-        "cycling": "#C70039",
-        "running": "#FF5733",
-        "axis": "#4F77AA",
-    }
+    colors = {"swimming": "#581845", "cycling": "#C70039", "running": "#FF5733", "axis": "#4F77AA"}
     return colors[discipline] if discipline in colors else "black"
 
 
