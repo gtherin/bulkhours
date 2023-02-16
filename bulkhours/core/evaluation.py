@@ -71,6 +71,7 @@ class Evaluation(Magics):
         self.argparser.add_argument(
             "-t", "--timeit", action="store_true", help="flag to return timeit result instead of stdout"
         )
+        self.show_answer = False
 
     @cell_magic
     @needs_local_scope
@@ -80,7 +81,7 @@ class Evaluation(Magics):
 
     @line_cell_magic
     @needs_local_scope
-    def get_solution_from_corrector(self, line, cell="", local_ns=None):
+    def get_solution_from_corrector_old(self, line, cell="", local_ns=None):
         output = get_solution_from_corrector(line, corrector="solution", raw=True)
 
         if output is None:
@@ -93,6 +94,44 @@ class Evaluation(Magics):
     """
             )
             self.shell.run_cell(output["answer"])
+
+    @line_cell_magic
+    @needs_local_scope
+    def get_solution_from_corrector(self, line, cell="", local_ns=None):
+        import IPython
+        import ipywidgets
+
+        button = ipywidgets.Button(description="Reveal answer", button_style="primary")
+        output = ipywidgets.Output()
+
+        def on_button_clicked(b):
+            with output:
+                output.clear_output()
+                self.show_answer = not self.show_answer
+                if self.show_answer:
+                    b.button_style, b.description = "danger", f"Hide ({line}) answer"
+
+                    output = get_solution_from_corrector(line, corrector="solution", raw=True)
+
+                    if output is None:
+                        IPython.display.display(
+                            IPython.display.Markdown(f"Solution ('{line}') is not available (yet)")
+                        )
+                    else:
+                        IPython.display.display(
+                            IPython.display.Markdown(
+                                f"""########## Correction (for {line}) is:          ########## 
+            {output["answer"]}
+            ########## Let's execute the code ('{line}') now: ########## 
+                """
+                            )
+                        )
+                        self.shell.run_cell(output["answer"])
+                else:
+                    b.button_style, b.description = "primary", f"Reveal ({line}) answer"
+
+        button.on_click(on_button_clicked)
+        IPython.display.display(button, output)
 
 
 def get_arg_parser(argv):
@@ -111,9 +150,8 @@ def get_arg_parser(argv):
     return parser.parse_args(argv)
 
 
-def dump_corrections(argv=sys.argv):
+def dump_corrections(argv=sys.argv, promo="2023"):
     args = get_arg_parser(argv[1:])
-    promo = "2022"
 
     from google.cloud import firestore
 
