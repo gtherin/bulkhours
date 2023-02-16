@@ -14,9 +14,11 @@ def runrealcmd(command, verbose=True):
     process.wait()
 
 
-def init_env(ip):
+def init_env():
     """Use pip from the current kernel"""
     import tensorflow as tf
+    import IPython as ip
+
 
     if "google.colab" in sys.modules:
         # runrealcmd("sudo apt-get update", verbose=True)

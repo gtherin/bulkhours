@@ -13,8 +13,9 @@ from . import phyu  # noqa
 econometrics = ecox  # noqa
 
 
-def load_extra_magics(ip, verbose=True):
+def load_extra_magics(verbose=True):
     from .hpc.compiler import CCPPlugin
+    import IPython as ip
 
     ipp = ip.get_ipython()
 
@@ -25,19 +26,14 @@ def load_extra_magics(ip, verbose=True):
         print(f"Load bulkhours (version={__version__})")
 
 
-def init_env(login=None, ip=None, pass_code=None, env=None, d="bulkhours/bulkhours/bunker/"):
-    import IPython as ip
-
+def init_env(login=None, pass_code=None, env=None, d="bulkhours/bulkhours/bunker/"):
     student_login = set_up_student(login, pass_code=pass_code, d=d)
-    if ip is None:
-        set_up_student(None)
 
-    if ip is not None:
-        load_extra_magics(ip, verbose=False)
+    load_extra_magics(verbose=False)
 
     env_info = ""
     if env in ["rl", "reinforcement learning"]:
-        rl.init_env(ip)
+        rl.init_env()
         env_info = f", in env=rl"
     elif env in ["econometrics", "ecox"]:
         rl.runrealcmd("pip install yfinance", verbose=True)

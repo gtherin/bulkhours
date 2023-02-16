@@ -77,6 +77,7 @@ class Evaluation(Magics):
     @needs_local_scope
     def send_answer_to_corrector(self, line, cell, local_ns=None):
         send_answer_to_corrector(line, cell, atype="code")
+        self.get_solution_from_corrector(line)
         self.shell.run_cell(cell)
 
     @line_cell_magic
@@ -110,19 +111,18 @@ class Evaluation(Magics):
                 self.show_answer = not self.show_answer
                 if self.show_answer:
                     b.button_style, b.description = "danger", f"Hide (.{line[-4:]}) answer"
-
                     text = get_solution_from_corrector(line, corrector="solution", raw=True)
-                    print(text)
 
                     if output is None:
-                        IPython.display.display(
-                            IPython.display.Markdown(f"Solution ('{line}') is not available (yet)")
-                        )
+                        print(f"Solution ('{line}') is not available (yet)")
+                        # IPython.display.display(
+                        #    IPython.display.Markdown(f"Solution ('{line}') is not available (yet)")
+                        # )
                     else:
-                        IPython.display.display(
+                        print(
                             f"""########## Correction (for {line}) is:          ########## 
-            {text["answer"]}
-            ########## Let's execute the code ('{line}') now: ########## 
+{text["answer"]}
+########## Let's execute the code ('{line}') now: ########## 
                 """
                         )
                         self.shell.run_cell(text["answer"])
