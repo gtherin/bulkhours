@@ -25,8 +25,8 @@ def load_extra_magics(ip, verbose=True):
         print(f"Load bulkhours (version={__version__})")
 
 
-def init_env(login=None, ip=None, pass_code=None, env=None):
-    student_login = set_up_student(login, pass_code=pass_code)
+def init_env(login=None, ip=None, pass_code=None, env=None, d="bulkhours/bunker/"):
+    student_login = set_up_student(login, pass_code=pass_code, d=d)
     if ip is None:
         set_up_student(None)
 
