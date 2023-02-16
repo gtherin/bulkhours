@@ -26,6 +26,8 @@ def load_extra_magics(ip, verbose=True):
 
 
 def init_env(login=None, ip=None, pass_code=None, env=None, d="bulkhours/bulkhours/bunker/"):
+    import IPython as ip
+
     student_login = set_up_student(login, pass_code=pass_code, d=d)
     if ip is None:
         set_up_student(None)
