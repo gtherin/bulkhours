@@ -1,8 +1,5 @@
-import time
-from functools import wraps
-
-
 def timeit(**dkwargs):
+    import time
     def decorator(function):
         def wrapper(*args, **kwargs):
             start = time.perf_counter()

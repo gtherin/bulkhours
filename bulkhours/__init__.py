@@ -1,5 +1,3 @@
-__version__ = "2.2.1"
-
 from .core.evaluation import Evaluation, set_up_student, send_answer_to_corrector, get_solution_from_corrector  # noqa
 from .core.data import get_core_data, get_image  # noqa
 from .core.timeit import timeit  # noqa
@@ -17,6 +15,7 @@ econometrics = ecox  # noqa
 def load_extra_magics(verbose=True):
     from .hpc.compiler import CCPPlugin
     import IPython as ip
+    from .__version__ import __version__
 
     ipp = ip.get_ipython()
 

@@ -2,7 +2,6 @@ import matplotlib as mpl
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
-import collections
 import random
 import sys
 
@@ -74,13 +73,12 @@ def plot_animation(record, repeat=False, interval=40):
     plt.close()
     return anim
 
-
-# position, velocity, angle, angular velocity
-CPObs = collections.namedtuple("CartPole_obs", "x v theta omega")
-
-
-N_scenario = 1000
-MAX_ACTIONS = 500
+if 0:
+    import collections
+    # position, velocity, angle, angular velocity
+    CPObs = collections.namedtuple("CartPole_obs", "x v theta omega")
+    N_scenario = 1000
+    MAX_ACTIONS = 500
 
 
 def test_policy(env, policy_func, n_scenario=500, max_actions=200, verbose=False):

@@ -16,3 +16,39 @@ def runrealcmd(command, verbose=True):
     # process.stdout.close()
     print(f"RUN {command}")
     process.wait()
+
+
+def git_push(argv=sys.argv[1:]):
+    import argcomplete
+    from subprocess import Popen, PIPE, STDOUT
+
+    parser = argparse.ArgumentParser(
+        description="Git stuffs",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument("-m", "--message", help="Message", default="Some changes")
+
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args(argv)
+
+    vfile = os.path.abspath(os.path.dirname(__file__)) + "/../__version__.py"
+
+    # with open(vfile) as the_file:
+    version = open(vfile).readline().split('"')[1].split(".")
+    nversion = f"{version[0]}.{version[1]}.{int(version[2])+1}"
+
+    with open(vfile, "w") as the_file:
+        the_file.write(f"""__version__ = "{nversion}"\n""")
+
+    print(version, nversion)
+
+    process = Popen(
+        f"""git add . && git commit -m "{args.message}" && git push""",
+        stdout=PIPE,
+        shell=True,
+        stderr=STDOUT,
+        bufsize=1,
+        close_fds=True,
+    )
+    process.stdout.close()
+    process.wait()
