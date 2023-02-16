@@ -109,9 +109,10 @@ class Evaluation(Magics):
                 output.clear_output()
                 self.show_answer = not self.show_answer
                 if self.show_answer:
-                    b.button_style, b.description = "danger", f"Hide ({line}) answer"
+                    b.button_style, b.description = "danger", f"Hide (.{line[-4:]}) answer"
 
-                    output = get_solution_from_corrector(line, corrector="solution", raw=True)
+                    text = get_solution_from_corrector(line, corrector="solution", raw=True)
+                    print(text)
 
                     if output is None:
                         IPython.display.display(
@@ -119,16 +120,14 @@ class Evaluation(Magics):
                         )
                     else:
                         IPython.display.display(
-                            IPython.display.Markdown(
-                                f"""########## Correction (for {line}) is:          ########## 
-            {output["answer"]}
+                            f"""########## Correction (for {line}) is:          ########## 
+            {text["answer"]}
             ########## Let's execute the code ('{line}') now: ########## 
                 """
-                            )
                         )
-                        self.shell.run_cell(output["answer"])
+                        self.shell.run_cell(text["answer"])
                 else:
-                    b.button_style, b.description = "primary", f"Reveal ({line}) answer"
+                    b.button_style, b.description = "primary", f"Reveal (.{line[-4:]}) answer"
 
         button.on_click(on_button_clicked)
         IPython.display.display(button, output)
