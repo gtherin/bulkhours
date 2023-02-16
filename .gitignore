@@ -42,3 +42,4 @@ lib64
 setup.py
 safe.py
 abc.py
+.safe

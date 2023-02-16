@@ -2,6 +2,7 @@ import argparse
 import sys
 import datetime
 import os
+import json
 
 from IPython.core.magic import Magics, cell_magic, magics_class, line_cell_magic, needs_local_scope
 
@@ -18,7 +19,15 @@ def get_cred(k="pi.pyc", d=None, pass_code=None):
     return d + k
 
 
-def set_up_student(student_name, d="bulkhours/bulkhours/bunker/", pass_code=None):
+def set_up_student(student_name, pass_code=None):
+    directory = os.path.dirname(__file__) + "/../bunker/"
+
+    if pass_code is None:
+        jsonfile = os.path.dirname(__file__) + "/../../.safe"
+        if os.path.exists(jsonfile):
+            with open(jsonfile) as json_file:
+                data = json.load(json_file)
+                pass_code = data["pass_code"]
     if student_name == "noraise":
         return
 
@@ -27,12 +36,12 @@ def set_up_student(student_name, d="bulkhours/bulkhours/bunker/", pass_code=None
     if student_name is None or pass_code is None or pass_code == "PASS_COURSE":
         raise Exception.DefaultCredentialsError(
             f"""# Register yourself (Password "PASS" should be given in class). Example for John Doe, type:
-bulkhours.set_up_student("jdoe", IPython, pass_code="PASS")
+bulkhours.set_up_student("jdoe", pass_code="PASS")
 """
         )
 
     os.environ["STUDENT"] = student_name
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = get_cred(d=d, pass_code=pass_code)
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = get_cred(d=directory, pass_code=pass_code)
     return student_name
 
 
@@ -154,7 +163,7 @@ def dump_corrections(argv=sys.argv, promo="2023"):
 
     from google.cloud import firestore
 
-    set_up_student("correction", d="bulkhours/bunker/", pass_code=args.pass_code)
+    set_up_student("correction", pass_code=args.pass_code)
 
     if args.delete_solution:
         docs = firestore.Client().collection(args.evaluation_id).document("solution").delete()
