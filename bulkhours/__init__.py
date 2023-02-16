@@ -24,7 +24,7 @@ def load_extra_magics(verbose=True):
     ipp.register_magics(Evaluation(ipp))
 
     if verbose:
-        print(f"Load bulkhours (version={__version__})")
+        print(f"ENV BULK Helper cOURSe (version={__version__})")
 
 
 def init_env(login=None, pass_code=None, env=None, verbose=False):
@@ -35,14 +35,14 @@ def init_env(login=None, pass_code=None, env=None, verbose=False):
     env_info = ""
     if env in ["rl", "reinforcement learning"]:
         rl.init_env(verbose=verbose)
-        env_info = f", in env=rl"
+        env_info = f", env=rl"
     elif env in ["econometrics", "ecox"]:
         runrealcmd("pip install yfinance", verbose=verbose)
-        env_info = f", in env=econometrics"
+        env_info = f", env=econometrics"
     elif env is not None:
-        print(f"Unknown env={env}")
+        print(f"env={env} (Unknown)")
     set_style()
-    print(f'Load BULK Helper cOURSe (version={__version__}, connected as "{student_login}{env_info}")')
+    print(f'ENV BULK Helper cOURSe (version={__version__}, user"{student_login}{env_info}")')
 
 
 def get_color(discipline):
