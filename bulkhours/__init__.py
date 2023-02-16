@@ -1,3 +1,5 @@
+import os
+
 from .core.evaluation import Evaluation, set_up_student, send_answer_to_corrector, get_solution_from_corrector  # noqa
 from .core.data import get_core_data, get_image  # noqa
 from .core.timeit import timeit  # noqa
@@ -15,7 +17,7 @@ econometrics = ecox  # noqa
 def load_extra_magics(verbose=True):
     from .hpc.compiler import CCPPlugin
     import IPython as ip
-    from .__version__ import __version__
+    from . import __version__
 
     ipp = ip.get_ipython()
 
@@ -23,7 +25,7 @@ def load_extra_magics(verbose=True):
     ipp.register_magics(Evaluation(ipp))
 
     if verbose:
-        print(f"ENV BULK Helper cOURSe (version={__version__})")
+        print(f"ENV BULK Helper cOURSe (version={__version__.__version__})")
 
 
 def init_env(login=None, pass_code=None, env=None, verbose=False):
@@ -41,7 +43,10 @@ def init_env(login=None, pass_code=None, env=None, verbose=False):
     elif env is not None:
         print(f"env={env} (Unknown)")
     set_style()
-    print(f"ENV BULK Helper cOURSe (version={__version__}, user={student_login}{env_info})")
+    vfile = os.path.abspath(os.path.dirname(__file__)) + "/__version__.py"
+    version = open(vfile).readline().split('"')[1]
+
+    print(f"ENV BULK Helper cOURSe (version={version}, user={student_login}{env_info})")
 
 
 def get_color(discipline):

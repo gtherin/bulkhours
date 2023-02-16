@@ -21,11 +21,12 @@ def git_push(argv=sys.argv[1:]):
     args = parser.parse_args(argv)
 
     vfile = os.path.abspath(os.path.dirname(__file__)) + "/../__version__.py"
-    version = open(vfile).readline().split('"')[1].split(".")
+    version = (oversion := open(vfile).readline().split('"')[1]).split(".")
     nversion = f"{version[0]}.{version[1]}.{int(version[2])+1}"
 
     with open(vfile, "w") as the_file:
         the_file.write(f"""__version__ = "{nversion}"\n""")
 
+    print(f"Update {oversion} => {nversion}")
     cmd = f"""git add . && git commit -m "{args.message}" && git push"""
     Popen(cmd, stdout=PIPE, shell=True, stderr=STDOUT)
