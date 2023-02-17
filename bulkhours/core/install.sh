@@ -3,10 +3,10 @@
 if [ -d /content ];
 then
     echo "RUN git clone https://github.com/guydegnol/bulkhours.git"
-    rm -rf bulkhours 2> /dev/null && git clone https://github.com/guydegnol/bulkhours.git 2> /dev/null
+    rm -rf bulkhours 2> /dev/null && git clone https://github.com/guydegnol/bulkhours.git &> /dev/null
     if [ "$3" = "econometrics" ]; then
         echo "RUN pip install yfinance"
-        pip install yfinance 2> /dev/null
+        pip install yfinance &> /dev/null
     fi
 
     BULK_DIR="/content"
@@ -16,11 +16,8 @@ else
 fi
 
 
-VERSION2=`cat "bulkhours/bulkhours/__version__.py" | awk -F  '"' '{print $2}'`
-
-cat "$BULK_DIR/bulkhours/bulkhours/__version__.py"
-VERSION="None"
-echo "ENV BULK Helper cOURSe (version=$VERSION, login=$1 env=$3) $VERSION2"
+VERSION=`cat "bulkhours/bulkhours/__version__.py" | awk -F  '"' '{print $2}'`
+echo "ENV BULK Helper cOURSe (version=$VERSION, login=$1 env=$3)"
 
 JSON_FMT='{"login":"%s","pass_code":"%s","env":"%s"}\n'
 printf "$JSON_FMT" "$1" "$2" "$3" > "$BULK_DIR/bulkhours/.safe"
