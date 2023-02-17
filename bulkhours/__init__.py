@@ -96,3 +96,9 @@ def set_style():
 
 def get_data(label, **kwargs):
     return get_core_data(label, datasets=ecox.datasets, modules=ecox.modules, **kwargs)
+
+def init():
+    print("AAAAAAAAAAAAA")
+    #init_env(login=None, pass_code=None, env=None, verbose=False)
+
+init()
