@@ -126,7 +126,8 @@ class Evaluation(Magics):
                         )
 
                         if cell_type == "code":
-                            IPython.display.display(IPython.display.Code(text["answer"]))
+                            # IPython.display.display(IPython.display.Code(text["answer"]))
+                            IPython.display.Code(text["answer"])
                             IPython.display.display(
                                 IPython.display.Markdown(
                                     f"""---
