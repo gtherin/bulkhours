@@ -16,13 +16,13 @@ econometrics = ecox  # noqa
 
 def load_extra_magics(verbose=True):
     from .hpc.compiler import CCPPlugin
-    import IPython as ip
+    import IPython
     from . import __version__
 
-    ipp = ip.get_ipython()
-
-    ipp.register_magics(CCPPlugin(ipp))
-    ipp.register_magics(Evaluation(ipp))
+    ipp = IPython.get_ipython()
+    if ipp:
+        ipp.register_magics(CCPPlugin(ipp))
+        ipp.register_magics(Evaluation(ipp))
 
     if verbose:
         print(f"ENV BULK Helper cOURSe (version={__version__.__version__})")

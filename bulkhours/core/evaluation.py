@@ -63,14 +63,8 @@ def send_answer_to_corrector(question, answer, atype="code"):
     print(f'Answer has been submited for: {question}/{os.environ["STUDENT"]}. You can resubmit it several times')
 
 
-def get_solution_from_corrector(question, corrector="solution", raw=False):
-    output = get_document(question, corrector).get().to_dict()
-    if raw:
-        return output
-
-    if output is None or "answer" not in output:
-        return f"Solution ('{question}') is not available (yet)"
-    return output["answer"]
+def get_solution_from_corrector(question, corrector="solution"):
+    return get_document(question, corrector).get().to_dict()
 
 
 @magics_class
@@ -83,13 +77,6 @@ class Evaluation(Magics):
             "-t", "--timeit", action="store_true", help="flag to return timeit result instead of stdout"
         )
         self.show_answer = False
-
-    @cell_magic
-    @needs_local_scope
-    def send_answer_to_corrector(self, line, cell, local_ns=None):
-        send_answer_to_corrector(line, cell, atype="code")
-        # self.get_solution_from_corrector(line)
-        self.shell.run_cell(cell)
 
     @line_cell_magic
     @needs_local_scope
@@ -118,16 +105,19 @@ class Evaluation(Magics):
                 self.show_answer = not self.show_answer
                 if self.show_answer:
                     b.button_style, b.description = "danger", f"Hide correction"
-                    text = get_solution_from_corrector(cell_id, corrector="solution", raw=True)
+                    text = get_solution_from_corrector(cell_id, corrector="solution")
 
                     if text is None:
-                        print(f"Solution ('{cell_id}') is not available (yet)")
+                        IPython.display.display(
+                            IPython.display.Markdown(f"Solution ('{cell_id}') is not available (yet 😕)")
+                        )
                     else:
+                        IPython.display.display(
+                            IPython.display.Markdown(f"""\n---\n **Correction (for {cell_id})** 🤓\n---""")
+                        )
+
                         print(
-                            f"""########## Correction (for {cell_id}) is:          ########## 
-{text["answer"]}
-########## Let's execute the code ('{cell_id}') now: ########## 
-                """
+                            f"""{text["answer"]}\n########## Let's execute the code ('{cell_id}') now: ##########\n"""
                         )
                         self.shell.run_cell(text["answer"])
                 else:
@@ -137,58 +127,6 @@ class Evaluation(Magics):
         buttonc.on_click(on_buttonc_clicked)
 
         IPython.display.display(ipywidgets.HBox([button, buttonc]), output)
-
-    @line_cell_magic
-    @needs_local_scope
-    def get_solution_from_corrector_old(self, line, cell="", local_ns=None):
-        output = get_solution_from_corrector(line, corrector="solution", raw=True)
-
-        if output is None:
-            print(f"Solution ('{line}') is not available (yet)")
-        else:
-            print(
-                f"""########## Correction (for {line}) is:          ########## 
-{output["answer"]}
-########## Let's execute the code ('{line}') now: ########## 
-    """
-            )
-            self.shell.run_cell(output["answer"])
-
-    @line_cell_magic
-    @needs_local_scope
-    def get_solution_from_corrector(self, line, cell="", local_ns=None):
-        import IPython
-        import ipywidgets
-
-        button = ipywidgets.Button(description="Reveal answer", button_style="primary")
-        output = ipywidgets.Output()
-
-        def on_button_clicked(b):
-            with output:
-                output.clear_output()
-                self.show_answer = not self.show_answer
-                if self.show_answer:
-                    b.button_style, b.description = "danger", f"Hide (.{line[-4:]}) answer"
-                    text = get_solution_from_corrector(line, corrector="solution", raw=True)
-
-                    if output is None:
-                        print(f"Solution ('{line}') is not available (yet)")
-                        # IPython.display.display(
-                        #    IPython.display.Markdown(f"Solution ('{line}') is not available (yet)")
-                        # )
-                    else:
-                        print(
-                            f"""########## Correction (for {line}) is:          ########## 
-{text["answer"]}
-########## Let's execute the code ('{line}') now: ########## 
-                """
-                        )
-                        self.shell.run_cell(text["answer"])
-                else:
-                    b.button_style, b.description = "primary", f"Reveal (.{line[-4:]}) answer"
-
-        button.on_click(on_button_clicked)
-        IPython.display.display(button, output)
 
 
 def get_arg_parser(argv):
