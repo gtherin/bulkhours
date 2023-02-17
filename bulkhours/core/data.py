@@ -81,16 +81,17 @@ def get_core_data(label, datasets={}, modules={}, credit=False, query=None, inde
     data_info = (
         datasets[label] if label in datasets else ({"httplink": label} if "http" in label else {"files_list": label})
     )
+    data_info.update(kwargs)
     if credit and "source" in data_info:
         print(data_info["source"])
 
     if (di := label.split(".")[0]) in modules:
         func = label.replace(di + ".", "get_")
-        df = getattr(modules[di], func)(credit=credit, **kwargs)
+        df = getattr(modules[di], func)(credit=credit, **data_info)
     elif "httplink" in data_info:
         df = pd.read_csv(data_info["httplink"])
     else:
-        df = get_data_from_file(data_info["files_list"], **data_info, **kwargs)
+        df = get_data_from_file(data_info["files_list"], **data_info)
     df = clean_columns(df, data_info)
 
     if "filter" in data_info:

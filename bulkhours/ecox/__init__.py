@@ -7,13 +7,14 @@ from . import france  # noqa
 from . import fhgdpq  # noqa
 from . import statsdata  # noqa
 from . import mincer  # noqa
+from . import world  # noqa
 import scipy as sp
 
 from .block import Block, BlockCoin, BlockMsg  # noqa
 from .blockchain import BlockChain  # noqa
 
 
-modules = {"france": france, "mincer": mincer, "statsdata": statsdata, "fhgdpq": fhgdpq}
+modules = {"france": france, "mincer": mincer, "statsdata": statsdata, "fhgdpq": fhgdpq, "world": world}
 
 
 def get_scipy_distributions_list():
@@ -35,7 +36,7 @@ datasets = {
             "unemployment.csv",
             "continent.tsv",
         ],
-        drop=["monthly_income"],
+        drop=["monthly_income", "continent"],
         on="country",
     ),
     "scipy_distributions_list": dict(drop=get_scipy_distributions_list),
@@ -48,7 +49,7 @@ datasets = {
             "tourism.csv",
             "continent.tsv",
         ],
-        drop=["monthly_income"],
+        drop=["monthly_income", "continent"],
         on="country",
     ),
     "life_expectancy_vs_gdp_2018": dict(
