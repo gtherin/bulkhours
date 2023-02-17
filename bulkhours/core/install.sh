@@ -16,10 +16,11 @@ else
 fi
 
 
+VERSION2=`cat "bulkhours/bulkhours/__version__.py" | awk -F  '"' '{print $2}'`
+
 cat "$BULK_DIR/bulkhours/bulkhours/__version__.py"
 VERSION="None"
-echo "ENV BULK Helper cOURSe (version=$VERSION, login=$1 env=$3)"
+echo "ENV BULK Helper cOURSe (version=$VERSION, login=$1 env=$3) $VERSION2"
 
 JSON_FMT='{"login":"%s","pass_code":"%s","env":"%s"}\n'
 printf "$JSON_FMT" "$1" "$2" "$3" > "$BULK_DIR/bulkhours/.safe"
-
