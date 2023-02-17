@@ -3,10 +3,12 @@
 if [ -d /content ];
 then
     echo "RUN git clone https://github.com/guydegnol/bulkhours.git"
-    rm -rf bulkhours 2> /dev/null && git clone https://github.com/guydegnol/bulkhours.git &> /dev/null
+    rm -rf bulkhours 2> /dev/null && git clone https://github.com/guydegnol/bulkhours.git > /dev/null 2>&1
     if [ "$3" = "econometrics" ]; then
-        echo "RUN pip install yfinance"
-        pip install yfinance /dev/null 2>&1
+        echo "RUN pip install geopandas"
+        pip install yfinance > /dev/null 2>&1
+        echo "RUN pip install geopandas"
+        pip install geopandas > /dev/null 2>&1
     fi
 
     BULK_DIR="/content"

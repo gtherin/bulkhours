@@ -28,7 +28,13 @@ def clean_life_expectancy_vs_gdp_2018(df):
 
 datasets = {
     "countries": dict(
-        files_list=["corruption.csv", "cost_of_living.csv", "richest_countries.csv", "unemployment.csv"],
+        files_list=[
+            "corruption.csv",
+            "cost_of_living.csv",
+            "richest_countries.csv",
+            "unemployment.csv",
+            "continent.tsv",
+        ],
         drop=["monthly_income"],
         on="country",
     ),
@@ -40,6 +46,7 @@ datasets = {
             "richest_countries.csv",
             "unemployment.csv",
             "tourism.csv",
+            "continent.tsv",
         ],
         drop=["monthly_income"],
         on="country",
