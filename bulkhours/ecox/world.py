@@ -43,7 +43,7 @@ def get_mappoverty(**kwargs):
 
 
 def get_mapgdp(**kwargs):
-    return get_mapgeneric(get_gdp(**kwargs))
+    return get_mapgeneric(get_gdp(**kwargs).set_index("country"))
 
 
 def plotCountryPatch(world, axes, country_name, fcolor):
