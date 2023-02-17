@@ -97,8 +97,21 @@ def set_style():
 def get_data(label, **kwargs):
     return get_core_data(label, datasets=ecox.datasets, modules=ecox.modules, **kwargs)
 
+
+def get_config():
+    import json
+
+    jsonfile = os.path.dirname(__file__) + "/../../.safe"
+    return jsonfile
+    if os.path.exists(jsonfile):
+        with open(jsonfile) as json_file:
+            data = json.load(json_file)
+            pass_code = data["pass_code"]
+
+
 def init():
-    print("AAAAAAAAAAAAA")
-    #init_env(login=None, pass_code=None, env=None, verbose=False)
+    print("AAAAAAAAAAAAA", get_config())
+    # init_env(login=None, pass_code=None, env=None, verbose=False)
+
 
 init()
