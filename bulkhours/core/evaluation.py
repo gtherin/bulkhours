@@ -113,16 +113,14 @@ class Evaluation(Magics):
                     if text is None:
                         IPython.display.display(
                             IPython.display.Markdown(
-                                f"""---
-**Solution ('{cell_id}') is not available (yet)** 😕
----"""
+                                f"""*Solution ({cell_id}, {cell_type}) is not available (yet 😕)*"""
                             )
                         )
                     else:
                         IPython.display.display(
                             IPython.display.Markdown(
                                 f"""---
-**Correction ({cell_id})** 🤓
+**Correction ({cell_id}, {cell_type})** 🤓
 ---"""
                             )
                         )
