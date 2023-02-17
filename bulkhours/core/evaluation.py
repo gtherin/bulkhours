@@ -114,7 +114,8 @@ class Evaluation(Magics):
                         IPython.display.display(
                             IPython.display.Markdown(
                                 f"""---
-**Solution ('{cell_id}') is not available** (yet 😕)"""
+**Solution ('{cell_id}') is not available (yet)** 😕
+---"""
                             )
                         )
                     else:
