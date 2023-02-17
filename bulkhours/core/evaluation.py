@@ -81,9 +81,12 @@ class Evaluation(Magics):
     @line_cell_magic
     @needs_local_scope
     def evaluation_cell_id(self, line, cell, local_ns=None):
-        self.shell.run_cell(cell)
         cell_info = line.split()
         cell_id, cell_type = cell_info[0], cell_info[1] if len(cell_info) > 1 else "code"
+        if cell_type == "code":
+            self.shell.run_cell(cell)
+        elif cell_type == "markdown":
+            IPython.display.display(IPython.display.Markdown(cell))
 
         button = ipywidgets.Button(description="Send answer", button_style="primary")
         buttonc = ipywidgets.Button(description="Get correction", button_style="primary")
@@ -116,10 +119,13 @@ class Evaluation(Magics):
                             IPython.display.Markdown(f"""\n---\n **Correction (for {cell_id})** 🤓\n---""")
                         )
 
-                        print(
-                            f"""{text["answer"]}\n########## Let's execute the code ('{cell_id}') now: ##########\n"""
-                        )
-                        self.shell.run_cell(text["answer"])
+                        if cell_type == "code":
+                            print(
+                                f"""{text["answer"]}\n########## Let's execute the code ('{cell_id}') now: ##########\n"""
+                            )
+                            self.shell.run_cell(text["answer"])
+                        elif cell_type == "markdown":
+                            IPython.display.display(IPython.display.Markdown(text["answer"]))
                 else:
                     b.button_style, b.description = "primary", "Get correction"
 
