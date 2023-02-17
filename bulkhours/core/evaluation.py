@@ -116,15 +116,22 @@ class Evaluation(Magics):
                         )
                     else:
                         IPython.display.display(
-                            IPython.display.Markdown(f"""---\n **Correction (for {cell_id})** 🤓\n---""")
+                            IPython.display.Markdown(
+                                f"""---
+**Correction (for {cell_id})** 🤓
+---"""
+                            )
                         )
 
                         if cell_type == "code":
                             IPython.display.display(
                                 IPython.display.Markdown(
-                                    f"""---\n **Let's execute the code (for {cell_id})** 💻\n---"""
+                                    f"""---
+**Let's execute the code (for {cell_id})** 💻
+---"""
                                 )
                             )
+                            print(text["answer"])
                             self.shell.run_cell(text["answer"])
                         elif cell_type == "markdown":
                             IPython.display.display(IPython.display.Markdown(text["answer"]))
