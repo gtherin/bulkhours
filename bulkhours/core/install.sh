@@ -2,15 +2,19 @@
 
 if [ -d /content ];
 then
-    rm -rf bulkhours 2> /dev/null && git clone https://github.com/guydegnol/bulkhours.git 2> /dev/null
     echo "RUN git clone https://github.com/guydegnol/bulkhours.git"
-    echo "RUN pip install yfinance"
-    pip install yfinance
+    rm -rf bulkhours 2> /dev/null && git clone https://github.com/guydegnol/bulkhours.git 2> /dev/null
+    if [ "$3" = "econometrics" ]; then
+        echo "RUN pip install yfinance"
+        pip install yfinance 2> /dev/null
+    fi
+
     BULK_DIR="/content"
 else
     echo "RUN ln bulkhours"
     BULK_DIR="/home/guydegnol/projects"
 fi
+
 
 cat "$BULK_DIR/bulkhours/bulkhours/__version__.py"
 VERSION="None"
