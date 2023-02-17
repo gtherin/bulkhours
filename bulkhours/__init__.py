@@ -38,7 +38,7 @@ def init_env(login=None, pass_code=None, env=None, verbose=False):
         rl.init_env(verbose=verbose)
         env_info = f", env=rl"
     elif env in ["econometrics", "ecox"]:
-        runrealcmd("pip install yfinance  # Data loader for finance data", verbose=verbose)
+        # runrealcmd("pip install yfinance  # Data loader for finance data", verbose=verbose)
         env_info = f", env=econometrics"
     elif env is not None:
         print(f"env={env} (Unknown)")
@@ -106,12 +106,13 @@ def get_config():
         with open(jsonfile) as json_file:
             return json.load(json_file)
 
-    return jsonfile
+    return {}
 
 
-def init():
-    print("AAAAAAAAAAAAA", get_config())
-    # init_env(login=None, pass_code=None, env=None, verbose=False)
+def init(verbose=False):
+    kwargs = get_config()
+    if len(kwargs) > 1:
+        init_env(verbose=verbose, **kwargs)
 
 
 init()
