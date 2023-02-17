@@ -4,10 +4,10 @@ if [ -d /content ];
 then
     echo "RUN git clone https://github.com/guydegnol/bulkhours.git"
     rm -rf bulkhours 2> /dev/null && git clone https://github.com/guydegnol/bulkhours.git 2> /dev/null
-    if [ "$3" = "econometrics" ]; then
-        echo "RUN pip install yfinance"
-        pip install yfinance 2> /dev/null
-    fi
+    #if [ "$3" = "econometrics" ]; then
+    #    echo "RUN pip install yfinance"
+    #    pip install yfinance 2> /dev/null
+    #fi
 
     BULK_DIR="/content"
 else
