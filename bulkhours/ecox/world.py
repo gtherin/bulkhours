@@ -5,7 +5,10 @@ def get_mapgeneric(df):
     return world.merge(df, how="left", left_on="name", right_index=True)
 
 
-def apply_timeopt(df, timeopt):
+def geo_format(df, timeopt):
+    df["country"] = df["country"].str.replace("United States", "United States of America")
+    df["country"] = df["country"].str.replace("Democratic Republic of Congo", "Dem. Rep. Congo")
+
     if type(timeopt) == int:
         df = df[df["year"] <= timeopt]
     if timeopt == "last" or type(timeopt) == int:
@@ -20,10 +23,7 @@ def get_poverty(credit=True, timeopt=None, **kwargs):
     from ..core import data
 
     df = data.get_core_data("poverty", credit=credit)
-    df["country"] = df["country"].str.replace("United States", "United States of America")
-    df["country"] = df["country"].str.replace("Democratic Republic of Congo", "Dem. Rep. Congo")
-
-    return apply_timeopt(df, timeopt)
+    return geo_format(df, timeopt)
 
 
 def get_gdp(credit=True, timeopt=None, **kwargs):
@@ -35,7 +35,7 @@ def get_gdp(credit=True, timeopt=None, **kwargs):
     df = df.set_index("Country Name").stack().to_frame().reset_index()
     df.columns = ["country", "year", "gdp"]
 
-    return apply_timeopt(df, timeopt)
+    return geo_format(df, timeopt)
 
 
 def get_mappoverty(**kwargs):
