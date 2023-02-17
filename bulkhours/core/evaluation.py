@@ -112,18 +112,22 @@ class Evaluation(Magics):
 
                     if text is None:
                         IPython.display.display(
-                            IPython.display.Markdown(f"Solution ('{cell_id}') is not available (yet 😕)")
+                            IPython.display.Markdown(
+                                f"""---
+**Solution ('{cell_id}') is not available** (yet 😕)"""
+                            )
                         )
                     else:
                         IPython.display.display(
                             IPython.display.Markdown(
                                 f"""---
-**Correction (for {cell_id})** 🤓
+**Correction ({cell_id})** 🤓
 ---"""
                             )
                         )
 
                         if cell_type == "code":
+                            IPython.display.display(IPython.display.Code(text["answer"]))
                             IPython.display.display(
                                 IPython.display.Markdown(
                                     f"""---
@@ -131,7 +135,6 @@ class Evaluation(Magics):
 ---"""
                                 )
                             )
-                            print(text["answer"])
                             self.shell.run_cell(text["answer"])
                         elif cell_type == "markdown":
                             IPython.display.display(IPython.display.Markdown(text["answer"]))
