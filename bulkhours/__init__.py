@@ -101,12 +101,12 @@ def get_data(label, **kwargs):
 def get_config():
     import json
 
-    jsonfile = os.path.dirname(__file__) + "/../../.safe"
-    return jsonfile
+    jsonfile = os.path.dirname(__file__) + "/../.safe"
     if os.path.exists(jsonfile):
         with open(jsonfile) as json_file:
-            data = json.load(json_file)
-            pass_code = data["pass_code"]
+            return json.load(json_file)
+
+    return jsonfile
 
 
 def init():
