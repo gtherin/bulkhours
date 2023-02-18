@@ -109,23 +109,18 @@ def set_title(ax, label, yvisible=False):
     ax.set_title(label)
 
 
-def plot_sigma(ax, x=0, y=0.09, dx=0.55, width=0.007, head_width=0.03, head_length=0.3, legend=True):
+def plot_sigma(ax, x=0, y=0.09, dx=0.55, width=0.007, head_width=0.03, head_length=0.3):
+    from matplotlib.lines import Line2D
+
     opts = dict(color="#FF5733", alpha=0.9, x=x, dy=0, y=y)
     opts.update(dict(shape="full", width=width, head_width=head_width, head_length=head_length))
-    arrow = ax.arrow(dx=dx, label=r"$\approx \sigma:$ std", **opts)
+    ax.arrow(dx=dx, **opts)
     ax.arrow(dx=-dx, **opts)
 
-    if legend:
-        ax.legend(
-            [
-                arrow,
-            ],
-            [
-                r"$\approx \sigma:$ std",
-            ],
-        )
-
-    ax.legend(loc=2)
+    h, l = ax.get_legend_handles_labels()
+    h.append(Line2D([0], [0], color="#FF5733", lw=4, label="Line"))
+    l.append(r"$\approx \sigma:$ std")
+    ax.legend(h, l, loc=2)
     return ax
 
 
