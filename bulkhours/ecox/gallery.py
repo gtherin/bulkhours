@@ -109,11 +109,23 @@ def set_title(ax, label, yvisible=False):
     ax.set_title(label)
 
 
-def plot_sigma(ax, x=0, y=0.09, dx=0.55, width=0.007, head_width=0.03, head_length=0.3):
+def plot_sigma(ax, x=0, y=0.09, dx=0.55, width=0.007, head_width=0.03, head_length=0.3, legend=True):
     opts = dict(color="#FF5733", alpha=0.9, x=x, dy=0, y=y)
     opts.update(dict(shape="full", width=width, head_width=head_width, head_length=head_length))
-    ax.arrow(dx=dx, label=r"$\approx \sigma:$ std", **opts)
+    arrow = ax.arrow(dx=dx, label=r"$\approx \sigma:$ std", **opts)
     ax.arrow(dx=-dx, **opts)
+
+    if legend:
+        ax.legend(
+            [
+                arrow,
+            ],
+            [
+                r"$\approx \sigma:$ std",
+            ],
+        )
+
+    ax.legend(loc=2)
     return ax
 
 
@@ -198,14 +210,12 @@ def plot_gallery_r3(axes=None):
     ax.fill_between(x, 0.5 * pdf1.pdf(x), data, label=r"$\approx \kappa:$ kurtosis", alpha=0.4)
     ax = plot_sigma(ax, dx=0.59)
 
-    ax.legend(loc=2)
     set_title(ax, "Skew, Kurtosis")
 
     ax, nob = axes[2], 100
     x = np.linspace(-4, 4, nob)
     pdf = sp.stats.norm()
     ax.plot(x, pdf.pdf(x), "r", lw=5, alpha=0.6)
-    # plot_mean_median(ax, pdf, fac=0.0, mean=False)
 
     x = np.linspace(-1, 1, nob)
     ax.fill_between(x, 0.0 * x, pdf.pdf(x), label="", alpha=0.2)
@@ -228,20 +238,6 @@ def plot_gallery_r3(axes=None):
         [-3, -2, -1, 1, 2, 3],
         ["-$3\sigma$", "$-2\sigma$", "$-1\sigma$", "$1\sigma$", "$2\sigma$", "$3\sigma$"],
     )
-
-
-def plot_gallery():
-    # "swimming": "#581845",
-    # "cycling": "#C70039",
-    # "running": "#FF5733",
-    # "axis": "#4F77AA",
-
-    fig, axes = plt.subplots(3, 3, figsize=(15, 12))
-    fig.subplots_adjust(wspace=0.01, hspace=0.3)
-
-    plot_gallery_r1(axes=axes[0])
-    plot_gallery_skews(axes=axes[1])
-    plot_gallery_r3(axes=axes[2])
 
 
 def plot_celestine(seed=42, sample=1000):
