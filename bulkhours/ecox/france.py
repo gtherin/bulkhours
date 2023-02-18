@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 
-def get_pyramide(credit=True):
+def get_pyramide(credit=True, **kwargs):
     """
     Lecture : au 1er janvier 2023, la France compte 805 914 personnes de 65 ans dont 425 143 femmes et 380 771 hommes.
     Champ : France.
@@ -22,7 +22,7 @@ def get_pyramide(credit=True):
     return df
 
 
-def get_retraites(credit=True):
+def get_retraites(credit=True, **kwargs):
     """
         Source https://www.insee.fr/fr/statistiques/2415121#tableau-figure1
 
@@ -60,7 +60,7 @@ year	active	retired	rapport
     return df
 
 
-def get_income(credit=True):
+def get_income(credit=True, **kwargs):
     """Source https://www.insee.fr/fr/statistiques/6436313#tableau-figure2
       - Note : certains salaires en EQTP sont inférieurs au Smic ; ceci est en effet permis par certains statuts.
     Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d’incohérences entre salaires et durées travaillées dans
@@ -179,7 +179,7 @@ Plus de 9_000	183_314
 # OECD (2023), Adult education level (indicator). doi: 10.1787/36bce3fe-en (Accessed on 24 January 2023)
 
 
-def get_salaires(credit=True):
+def get_salaires(credit=True, **kwargs):
     """
     Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
     En 2019, le revenu salarial annuel moyen dans le secteur privé et la fonction publique s’élève à 18_970 euros
@@ -230,7 +230,7 @@ Secteur: Ensemble	18 970	24 420	22,3	26 430	31 510	16,1
     return df
 
 
-def get_histsalaires(credit=True):
+def get_histsalaires(credit=True, **kwargs):
     """
     Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
 

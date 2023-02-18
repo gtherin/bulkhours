@@ -1,6 +1,8 @@
 def get_mapgeneric(df):
     import geopandas as gpd
 
+    df = df.drop(columns=["continent"]).set_index("country")
+
     world = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
 
     world = world[(world.pop_est > 0) & (world.name != "Antarctica")]
@@ -35,7 +37,7 @@ def get_poverty(credit=True, timeopt=None, **kwargs):
 
 
 def get_mappoverty(**kwargs):
-    return get_mapgeneric(get_poverty(**kwargs).set_index("country"))
+    return get_mapgeneric(get_poverty(**kwargs))
 
 
 def get_gdp(credit=True, timeopt=None, **kwargs):
@@ -51,7 +53,7 @@ def get_gdp(credit=True, timeopt=None, **kwargs):
 
 
 def get_mapgdp(**kwargs):
-    return get_mapgeneric(get_gdp(**kwargs).set_index("country"))
+    return get_mapgeneric(get_gdp(**kwargs))
 
 
 def get_macro(credit=True, **kwargs):
@@ -62,4 +64,4 @@ def get_macro(credit=True, **kwargs):
 
 
 def get_mapmacro(**kwargs):
-    return get_mapgeneric(get_macro(**kwargs).set_index("country"))
+    return get_mapgeneric(get_macro(**kwargs))

@@ -43,7 +43,6 @@ datasets = {
             "tourism.csv",
             "continent.tsv",
         ],
-        drop=["monthly_income", "continent"],
         on="country",
     ),
     "life_expectancy_vs_gdp_2018": dict(
