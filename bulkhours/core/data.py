@@ -1,29 +1,6 @@
 import glob
 import pandas as pd
-
-
-core_datasets = {
-    "vaccinations": dict(
-        httplink="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv",
-        source="https://ourworldindata.org/coronavirus",
-    ),
-    "covid": dict(
-        httplink="https://covid.ourworldindata.org/data/owid-covid-data.csv",
-        source="https://ourworldindata.org/coronavirus",
-    ),
-    "poverty": dict(
-        httplink="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
-        source="""World Bank Poverty and Inequality Platform
-- Direct source: https://ourworldindata.org/poverty
-- Info on the columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
-- Data source: https://pip.worldbank.org/
-        """,
-    ),
-    "supercomputers": dict(
-        httplink="https://raw.githubusercontent.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv",
-        source="https://ourworldindata.org/grapher/supercomputer-power-flops",
-    ),
-}
+from .datasets import datasets
 
 
 def clean_columns(df, data_info):
@@ -76,8 +53,7 @@ def clean_data(df, query=None, index=None):
     return df
 
 
-def get_core_data(label, datasets={}, modules={}, credit=False, query=None, index=None, **kwargs):
-    datasets.update(core_datasets)
+def get_core_data(label, modules={}, credit=False, query=None, index=None, **kwargs):
     data_info = (
         datasets[label] if label in datasets else ({"httplink": label} if "http" in label else {"files_list": label})
     )

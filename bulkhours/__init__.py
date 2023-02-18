@@ -95,7 +95,7 @@ def set_style():
 
 
 def get_data(label, **kwargs):
-    return get_core_data(label, datasets=ecox.datasets, modules=ecox.modules, **kwargs)
+    return get_core_data(label, modules=ecox.modules, **kwargs)
 
 
 def get_config():
