@@ -71,25 +71,6 @@ def plot2(ax, a=4):
     ax.set_axis_off()
 
 
-def plot3(ax):
-    # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.skewnorm.html
-    a = 4
-    q = 0.00001
-    x = np.linspace(sp.stats.skewnorm.ppf(q, a), sp.stats.skewnorm.ppf(1 - q, a), 100)
-    ax.plot(x, sp.stats.skewnorm.pdf(x, a), "r", lw=5, alpha=0.6, label="Positive Skewness")
-
-    a = -4
-    x = np.linspace(sp.stats.skewnorm.ppf(q, a), sp.stats.skewnorm.ppf(1 - q, a), 100)
-    ax.plot(x, sp.stats.skewnorm.pdf(x, a), lw=5, alpha=0.6, label="Negative Skewness")
-
-    a = 0
-    x = np.linspace(sp.stats.skewnorm.ppf(q, a), sp.stats.skewnorm.ppf(1 - q, a), 100)
-    ax.plot(x, sp.stats.skewnorm.pdf(x, a), lw=5, alpha=0.6, label="Null Skewness")
-
-    ax.legend(loc=2, frameon=False)
-    ax.set_axis_off()
-
-
 def get_x(pdf, q=0.01):
     return np.linspace(pdf.ppf(q), pdf.ppf(1 - q), 100)
 
@@ -133,6 +114,7 @@ def plot_sigma(ax, x=0, y=0.09, dx=0.55, width=0.007, head_width=0.03, head_leng
     opts.update(dict(shape="full", width=width, head_width=head_width, head_length=head_length))
     ax.arrow(dx=dx, label=r"$\approx \sigma:$ std", **opts)
     ax.arrow(dx=-dx, **opts)
+    return ax
 
 
 def plot_gallery_r1(axes=None):
@@ -156,11 +138,7 @@ def plot_gallery_r1(axes=None):
     set_title(ax, "Density functions")
 
     ax = axes[1]
-    plot_skew(ax, 4, "Positive skew\nmean < median", legend=True)
-    # pdf1 = sp.stats.skewnorm(a=4)
-    # ax.plot(get_x(pdf1), pdf1.pdf(get_x(pdf1)), "r", lw=5, alpha=0.6)
-    plot_sigma(ax, dx=0.75, x=0.75, y=0.2, width=0.0147, head_width=0.03, head_length=0.1)
-    ax.legend(loc=1)
+    plot_skew(ax, 4, "Positive skew\nmean < median", legend=False)
     set_title(ax, "Unimodal distrib")
 
     ax = axes[2]
@@ -211,15 +189,14 @@ def plot_gallery_r3(axes=None):
     set_title(ax, "Vizualizing the median")
 
     ax = axes[1]
-    pdf1, pdf2 = sp.stats.norm(0, 0.6), sp.stats.norm(0, 4)
-    x = np.linspace(-3, 3, 100)
+    pdf1, x = sp.stats.norm(0, 0.6), np.linspace(-3, 3, 100)
     data = 0.5 * pdf1.pdf(x) + 0.004 * x + 0.025
 
     ax.plot(x, data, lw=5, alpha=0.6, c="r")
     ax.plot(x, 0.004 * x + 0.025, "#581845", lw=2, alpha=0.4, ls="dotted", label=r"$\approx \zeta:$ skew")
     ax.plot(x, 0.5 * pdf1.pdf(x), lw=2, alpha=0.6, c="grey", ls="dashed")
     ax.fill_between(x, 0.5 * pdf1.pdf(x), data, label=r"$\approx \kappa:$ kurtosis", alpha=0.4)
-    plot_sigma(ax, dx=0.59)
+    ax = plot_sigma(ax, dx=0.59)
 
     ax.legend(loc=2)
     set_title(ax, "Skew, Kurtosis")

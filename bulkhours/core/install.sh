@@ -23,7 +23,7 @@ else
 fi
 
 
-VERSION=`cat "bulkhours/bulkhours/__version__.py" | awk -F  '"' '{print $2}'`
+VERSION=`cat "$BULK_DIR/bulkhours/bulkhours/__version__.py" | awk -F  '"' '{print $2}'`
 TS=`date '+%H:%M:%S' -d "+1 hour"`
 echo "ENV login $1, env $3 [$TS $VERSION]"
 

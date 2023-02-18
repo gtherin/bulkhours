@@ -62,18 +62,4 @@ def get_macro(credit=True, **kwargs):
 
 
 def get_mapmacro(**kwargs):
-    return get_mapgeneric(get_macro(**kwargs))
-
-
-def plotCountryPatch(world, axes, country_name, fcolor):
-    # then plot some countries on top
-    # plotCountryPatch(world, ax2, 'Namibia', 'red')
-    # plotCountryPatch(world, ax2, 'Libya', 'green')
-
-    # plot a country on the provided axes
-    from descartes import PolygonPatch
-
-    nami = world[world.name == country_name]
-    namigm = nami.__geo_interface__["features"]  # geopandas's geo_interface
-    namig0 = {"type": namigm[0]["geometry"]["type"], "coordinates": namigm[0]["geometry"]["coordinates"]}
-    axes.add_patch(PolygonPatch(namig0, fc=fcolor, ec="black", alpha=0.85, zorder=2))
+    return get_mapgeneric(get_macro(**kwargs).set_index("country"))

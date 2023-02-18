@@ -3,6 +3,8 @@ import os
 from .core.evaluation import Evaluation, set_up_student, send_answer_to_corrector, get_solution_from_corrector  # noqa
 from .core.data import get_core_data, get_image  # noqa
 from .core.timeit import timeit  # noqa
+from .core import geo  # noqa
+from .core.geo import geo_plot_country  # noqa
 from .core import runrealcmd  # noqa
 from . import rl  # noqa
 from . import hpc  # noqa
@@ -33,20 +35,16 @@ def init_env(login=None, pass_code=None, env=None, verbose=False):
 
     load_extra_magics(verbose=False)
 
-    env_info = ""
     if env in ["rl", "reinforcement learning"]:
         rl.init_env(verbose=verbose)
-        env_info = f", env=rl"
     elif env in ["econometrics", "ecox"]:
         # runrealcmd("pip install yfinance  # Data loader for finance data", verbose=verbose)
-        env_info = f", env=econometrics"
-    elif env is not None:
-        print(f"env={env} (Unknown)")
+        pass
     set_style()
     vfile = os.path.abspath(os.path.dirname(__file__)) + "/__version__.py"
     version = open(vfile).readline().split('"')[1]
 
-    print(f"Import BULK Helper cOURSe (version={version}, user={student_login}{env_info})")
+    print(f"Import BULK Helper cOURSe (version={version}, user={student_login}, env={env})")
 
 
 def get_color(discipline):
@@ -96,6 +94,16 @@ def set_style():
 
 def get_data(label, **kwargs):
     return get_core_data(label, modules=ecox.modules, **kwargs)
+
+
+def geo_plot(data=None, timeopt="last", **kwargs):
+    """
+    data: geopandas dataframe (world.mappoverty)
+    timeopt: year the estimation (last by default)
+    """
+    if type(data) is str:
+        data = get_data(data, timeopt=timeopt)
+    return geo.geo_plot(data, timeopt=timeopt, **kwargs)
 
 
 def get_config():
