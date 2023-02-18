@@ -57,7 +57,7 @@ def get_mapgdp(**kwargs):
 def get_macro(credit=True, **kwargs):
     from ..core import data
 
-    return data.get_core_data("countries", credit=credit)
+    return data.get_core_data("macro", credit=credit)
 
 
 def get_mapmacro(**kwargs):
