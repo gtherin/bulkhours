@@ -1,19 +1,20 @@
 def get_mapgeneric(df):
     import geopandas as gpd
 
-    df = df.drop(columns=["continent"]).set_index("country")
+    if "continent" in df.columns:
+        del df["continent"]
 
     world = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
 
     world = world[(world.pop_est > 0) & (world.name != "Antarctica")]
     # world[world.continent == 'South America']
-    return world.merge(df, how="left", left_on="name", right_index=True)
+    return world.merge(df.set_index("country"), how="left", left_on="name", right_index=True)
 
 
 def geo_format(df, timeopt):
     from ..core import data
 
-    cont = data.get_core_data("continent.tsv").drop(columns=["continent"])
+    cont = data.get_core_data("continent.tsv")
     df = df.merge(cont, how="left", on="country")
 
     df["country"] = df["country"].str.replace("United States", "United States of America")
@@ -21,6 +22,8 @@ def geo_format(df, timeopt):
 
     if type(timeopt) == int:
         df = df[df["year"] <= timeopt]
+    if timeopt == "first":
+        df = df[df.groupby("country")["year"].rank(method="dense", ascending=True) == 1.0]
     if timeopt == "last" or type(timeopt) == int:
         df = df[df.groupby("country")["year"].rank(method="dense", ascending=False) == 1.0]
     if timeopt:
