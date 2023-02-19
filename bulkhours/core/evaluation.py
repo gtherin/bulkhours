@@ -1,5 +1,4 @@
 import argparse
-import sys
 import datetime
 import os
 import json
@@ -145,48 +144,3 @@ class Evaluation(Magics):
         buttonc.on_click(on_buttonc_clicked)
 
         IPython.display.display(ipywidgets.HBox([button, buttonc]), output)
-
-
-def get_arg_parser(argv):
-    import argcomplete
-
-    parser = argparse.ArgumentParser(
-        description="Students evaluation",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-    )
-    parser.add_argument("-e", "--evaluation-id", help=f"Select which correction to apply")
-    parser.add_argument("-s", "--show-solution", help="Show the solution", action="store_true")
-    parser.add_argument("-d", "--delete-solution", help="Delete the solution", action="store_true")
-    parser.add_argument("-p", "--pass-code", help="Pass code")
-
-    argcomplete.autocomplete(parser)
-    return parser.parse_args(argv)
-
-
-def dump_corrections(argv=sys.argv, promo="2023"):
-    args = get_arg_parser(argv[1:])
-
-    from google.cloud import firestore
-
-    set_up_student("correction", pass_code=args.pass_code)
-
-    if args.delete_solution:
-        docs = firestore.Client().collection(args.evaluation_id).document("solution").delete()
-
-    docs = firestore.Client().collection(args.evaluation_id).stream()
-
-    directory = os.path.realpath(f"../bulkhours_admin/data/{promo}/")
-
-    with open(f"{directory}/{args.evaluation_id}.txt", "w") as f:
-        for answer in docs:
-            student_name, student = answer.id, answer.to_dict()
-            if answer.id == "solution" and not args.show_solution:
-                continue
-            student_ts = student["update_time"]
-            student_answer = student["answer"]
-
-            title = f"Answer from {student_name} at {student_ts}"
-            sep = "#################################################"
-            f.write(f"{sep}\n{title}\n{sep}\n{student_answer}")
-
-    print(f"Data was dump here {directory}/{args.evaluation_id}.txt")
