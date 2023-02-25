@@ -174,7 +174,20 @@ class Evaluation(Magics):
             [self.show_cell, [cell_id, cell_type], dict()],
             [self.show_cell, [cell_id, cell_type], dict(private_msg=True)],
         ]
-        for i in [0, 1, 2]: 
-            buttons[i].on_click(lambda b: func(b, i, *kargs[i]))
+
+        def fun0(b):
+            return func(b, 0, *kargs[0])
+
+        buttons[0].on_click(fun0)
+
+        def fun1(b):
+            return func(b, 1, *kargs[1])
+
+        buttons[1].on_click(fun1)
+
+        def fun2(b):
+            return func(b, 2, *kargs[2])
+
+        buttons[2].on_click(fun2)
 
         IPython.display.display(ipywidgets.HBox(buttons), output)
