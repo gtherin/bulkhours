@@ -55,10 +55,9 @@ def get_document(sid, user):
     return firestore.Client().collection(sid).document(user)
 
 
-def send_answer_to_corrector(question, answer, atype="code"):
-    get_document(question, os.environ["STUDENT"]).set(
-        {"answer": answer, "update_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "atype": atype}
-    )
+def send_answer_to_corrector(question, **kwargs):
+    kwargs.update({"update_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
+    get_document(question, os.environ["STUDENT"]).update(kwargs)
     print(f'Answer has been submited for: {question}/{os.environ["STUDENT"]}. You can resubmit it several times')
 
 
@@ -70,11 +69,15 @@ def get_description(i, j, update=False):
     descriptions = [
         [
             dict(description="Send answer to corrector", button_style="primary"),
-            dict(description="Answer sent to corrector", button_style="danger"),
+            dict(description="Answer sent to corrector", button_style="success"),
         ],
         [
-            dict(description="Show comments from corrector", button_style="primary"),
-            dict(description="Hide comments from corrector", button_style="danger"),
+            dict(description="Show correction", button_style="primary"),
+            dict(description="Hide correction", button_style="danger"),
+        ],
+        [
+            dict(description="Message from corrector", button_style="primary"),
+            dict(description="Hide message from corrector", button_style="warning"),
         ],
     ]
     descriptions[i][j].update(
@@ -84,6 +87,24 @@ def get_description(i, j, update=False):
         return descriptions[i][j]["button_style"], descriptions[i][j]["description"]
 
     return ipywidgets.Button(**descriptions[i][j])
+
+
+def md(mdbody=None, header=None, rawbody=None, codebody=None):
+    if header:
+        IPython.display.display(
+            IPython.display.Markdown(
+                f"""---
+    **{header}** 🤓
+    ---"""
+            )
+        )
+
+    if mdbody:
+        IPython.display.display(IPython.display.Markdown(mdbody))
+    if rawbody:
+        print(rawbody)
+    if codebody:
+        IPython.display.display(IPython.display.Code(codebody))
 
 
 @magics_class
@@ -97,6 +118,34 @@ class Evaluation(Magics):
         )
         self.show_answer = False
 
+    def show_cell(self, cell_id, cell_type, corrector="solution", private_msg=False):
+        text = get_solution_from_corrector(cell_id, corrector=corrector)
+
+        if text is None and private_msg:
+            pass
+        elif text is None:
+            md(mdbody=f"""*Solution ({cell_id}, {cell_type}) is not available (yet 😕)*""")
+        elif private_msg:
+            if (user := os.environ["STUDENT"]) in text or (user := "all") in text:
+                md(header=f"Message ({cell_id}, {user}) from corrector", rawbody=text[user])
+        elif cell_type == "code":
+            md(header=f"Correction ({cell_id}, {cell_type})", rawbody=text["answer"])
+            md(
+                f"""---
+    **Let's execute the code (for {cell_id})** 💻
+    ---"""
+            )
+            self.shell.run_cell(text["answer"])
+        elif cell_type == "markdown":
+            md(header=f"Correction ({cell_id}, {cell_type})", mdbody=text["answer"])
+
+    @line_cell_magic
+    @needs_local_scope
+    def message_cell_id(self, line, cell, local_ns=None):
+        cell_info = line.split()
+        cell_id, cell_user = cell_info[0], cell_info[1] if len(cell_info) > 1 else "all"
+        send_answer_to_corrector(cell_id, **{cell_user: cell})
+
     @line_cell_magic
     @needs_local_scope
     def evaluation_cell_id(self, line, cell, local_ns=None):
@@ -107,60 +156,25 @@ class Evaluation(Magics):
         elif cell_type == "markdown":
             IPython.display.display(IPython.display.Markdown(cell))
 
-        button = get_description(0, 0)
-        buttonc = get_description(1, 0)
+        buttons = [get_description(i, 0) for i in [0, 1, 2]]
         output = ipywidgets.Output()
 
-        def on_button_clicked(b):
+        def func(b, i, func, args, kwargs):
             with output:
                 output.clear_output()
                 self.show_answer = not self.show_answer
                 if self.show_answer:
-                    b.button_style, b.description = get_description(0, 1, update=True)
-                    send_answer_to_corrector(cell_id, cell, atype=cell_type)
+                    b.button_style, b.description = get_description(i, 1, update=True)
+                    func(*args, **kwargs)
                 else:
-                    b.button_style, b.description = get_description(0, 0, update=True)
+                    b.button_style, b.description = get_description(i, 0, update=True)
 
-        def on_buttonc_clicked(b):
-            with output:
-                output.clear_output()
-                self.show_answer = not self.show_answer
-                if self.show_answer:
-                    b.button_style, b.description = get_description(1, 1, update=True)
-                    text = get_solution_from_corrector(cell_id, corrector="solution")
+        kargs = [
+            [send_answer_to_corrector, [cell_id], dict(answer=cell, atype=cell_type)],
+            [self.show_cell, [cell_id, cell_type], dict()],
+            [self.show_cell, [cell_id, cell_type], dict(private_msg=True)],
+        ]
+        for i in [0, 1, 2]: 
+            buttons[i].on_click(lambda b: func(b, i, *kargs[i]))
 
-                    if text is None:
-                        IPython.display.display(
-                            IPython.display.Markdown(
-                                f"""*Solution ({cell_id}, {cell_type}) is not available (yet 😕)*"""
-                            )
-                        )
-                    else:
-                        IPython.display.display(
-                            IPython.display.Markdown(
-                                f"""---
-**Correction ({cell_id}, {cell_type})** 🤓
----"""
-                            )
-                        )
-
-                        if cell_type == "code":
-                            # IPython.display.display(IPython.display.Code(text["answer"]))
-                            print(text["answer"])
-                            IPython.display.display(
-                                IPython.display.Markdown(
-                                    f"""---
-**Let's execute the code (for {cell_id})** 💻
----"""
-                                )
-                            )
-                            self.shell.run_cell(text["answer"])
-                        elif cell_type == "markdown":
-                            IPython.display.display(IPython.display.Markdown(text["answer"]))
-                else:
-                    b.button_style, b.description = get_description(1, 0, update=True)
-
-        button.on_click(on_button_clicked)
-        buttonc.on_click(on_buttonc_clicked)
-
-        IPython.display.display(ipywidgets.HBox([button, buttonc]), output)
+        IPython.display.display(ipywidgets.HBox(buttons), output)
