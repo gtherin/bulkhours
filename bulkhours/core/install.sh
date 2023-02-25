@@ -1,9 +1,7 @@
 
 
 
-if [ "$4" = "ARANCINI" ]; then
-    exit 0;
-else
+if [ "$4" != "ARANCINI" ]; then
     echo "Library bulkhours is no more available.";
     exit 0;
 fi
