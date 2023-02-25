@@ -30,7 +30,7 @@ def load_extra_magics(verbose=True):
         print(f"ENV BULK Helper cOURSe (version={__version__.__version__})")
 
 
-def init_env(login=None, pass_code=None, env=None, verbose=False):
+def init_env(login=None, pass_code=None, env=None, verbose=False, course_version=None):
     student_login = set_up_student(login, pass_code=pass_code)
 
     load_extra_magics(verbose=False)
