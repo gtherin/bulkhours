@@ -66,6 +66,26 @@ def get_solution_from_corrector(question, corrector="solution"):
     return get_document(question, corrector).get().to_dict()
 
 
+def get_description(i, j, update=False):
+    descriptions = [
+        [
+            dict(description="Send answer to corrector", button_style="primary"),
+            dict(description="Answer sent to corrector", button_style="danger"),
+        ],
+        [
+            dict(description="Show comments from corrector", button_style="primary"),
+            dict(description="Hide comments from corrector", button_style="danger"),
+        ],
+    ]
+    descriptions[i][j].update(
+        dict(display="flex", flex_flow="column", align_items="stretch", layout=ipywidgets.Layout(width="auto"))
+    )
+    if update:
+        return descriptions[i][j]["button_style"], descriptions[i][j]["description"]
+
+    return ipywidgets.Button(**descriptions[i][j])
+
+
 @magics_class
 class Evaluation(Magics):
     def __init__(self, shell):
@@ -87,8 +107,8 @@ class Evaluation(Magics):
         elif cell_type == "markdown":
             IPython.display.display(IPython.display.Markdown(cell))
 
-        button = ipywidgets.Button(description="Send answer", button_style="primary")
-        buttonc = ipywidgets.Button(description="Get correction", button_style="primary")
+        button = get_description(0, 0)
+        buttonc = get_description(1, 0)
         output = ipywidgets.Output()
 
         def on_button_clicked(b):
@@ -96,17 +116,17 @@ class Evaluation(Magics):
                 output.clear_output()
                 self.show_answer = not self.show_answer
                 if self.show_answer:
-                    b.button_style, b.description = "danger", f"Answer sent"
+                    b.button_style, b.description = get_description(0, 1, update=True)
                     send_answer_to_corrector(cell_id, cell, atype=cell_type)
                 else:
-                    b.button_style, b.description = "primary", f"Send answer"
+                    b.button_style, b.description = get_description(0, 0, update=True)
 
         def on_buttonc_clicked(b):
             with output:
                 output.clear_output()
                 self.show_answer = not self.show_answer
                 if self.show_answer:
-                    b.button_style, b.description = "danger", f"Hide correction"
+                    b.button_style, b.description = get_description(1, 1, update=True)
                     text = get_solution_from_corrector(cell_id, corrector="solution")
 
                     if text is None:
@@ -138,7 +158,7 @@ class Evaluation(Magics):
                         elif cell_type == "markdown":
                             IPython.display.display(IPython.display.Markdown(text["answer"]))
                 else:
-                    b.button_style, b.description = "primary", "Get correction"
+                    b.button_style, b.description = get_description(1, 0, update=True)
 
         button.on_click(on_button_clicked)
         buttonc.on_click(on_buttonc_clicked)
