@@ -55,9 +55,12 @@ def get_document(sid, user):
     return firestore.Client().collection(sid).document(user)
 
 
-def send_answer_to_corrector(question, **kwargs):
+def send_answer_to_corrector(question, update=False, **kwargs):
     kwargs.update({"update_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
-    get_document(question, os.environ["STUDENT"]).update(kwargs)
+    if update:
+        get_document(question, os.environ["STUDENT"]).update(kwargs)
+    else:
+        get_document(question, os.environ["STUDENT"]).set(kwargs)
     print(f'Answer has been submited for: {question}/{os.environ["STUDENT"]}. You can resubmit it several times')
 
 
@@ -72,11 +75,11 @@ def get_description(i, j, update=False):
             dict(description="Answer sent to corrector", button_style="success"),
         ],
         [
-            dict(description="Show correction", button_style="primary"),
+            dict(description="Show correction", button_style="info"),
             dict(description="Hide correction", button_style="danger"),
         ],
         [
-            dict(description="Message from corrector", button_style="primary"),
+            dict(description="Message from corrector", button_style="info"),
             dict(description="Hide message from corrector", button_style="warning"),
         ],
     ]
@@ -144,7 +147,7 @@ class Evaluation(Magics):
     def message_cell_id(self, line, cell, local_ns=None):
         cell_info = line.split()
         cell_id, cell_user = cell_info[0], cell_info[1] if len(cell_info) > 1 else "all"
-        send_answer_to_corrector(cell_id, **{cell_user: cell})
+        send_answer_to_corrector(cell_id, update=True, **{cell_user: cell})
 
     @line_cell_magic
     @needs_local_scope
