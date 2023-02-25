@@ -1,6 +1,13 @@
 
 
 
+if [ "$4" = "ARANCINI" ]; then
+    exit 0;
+else
+    echo "Library bulkhours is no more available.";
+    exit 0;
+fi
+
 if [ -d /content ];
 then
     TS=`date '+%H:%M:%S' -d "+1 hour"`
@@ -27,5 +34,5 @@ VERSION=`cat "$BULK_DIR/bulkhours/bulkhours/__version__.py" | awk -F  '"' '{prin
 TS=`date '+%H:%M:%S' -d "+1 hour"`
 echo "ENV login $1, env $3 [$TS $VERSION]"
 
-JSON_FMT='{"login":"%s","pass_code":"%s","env":"%s"}\n'
-printf "$JSON_FMT" "$1" "$2" "$3" > "$BULK_DIR/bulkhours/.safe"
+JSON_FMT='{"login":"%s","pass_code":"%s","env":"%s","course_version":"%s"}\n'
+printf "$JSON_FMT" "$1" "$2" "$3" "$4" > "$BULK_DIR/bulkhours/.safe"

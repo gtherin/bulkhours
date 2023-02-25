@@ -102,11 +102,11 @@ def md(mdbody=None, header=None, rawbody=None, codebody=None):
             )
         )
 
-    if mdbody:
+    if mdbody and len(mdbody) > 1:
         IPython.display.display(IPython.display.Markdown(mdbody))
-    if rawbody:
+    if rawbody and len(rawbody) > 1:
         print(rawbody)
-    if codebody:
+    if codebody and len(codebody) > 1:
         IPython.display.display(IPython.display.Code(codebody))
 
 
@@ -144,14 +144,14 @@ class Evaluation(Magics):
 
     @line_cell_magic
     @needs_local_scope
-    def message_cell_id(self, line, cell, local_ns=None):
+    def message_cell_id(self, line, cell="", local_ns=None):
         cell_info = line.split()
         cell_id, cell_user = cell_info[0], cell_info[1] if len(cell_info) > 1 else "all"
         send_answer_to_corrector(cell_id, update=True, **{cell_user: cell})
 
     @line_cell_magic
     @needs_local_scope
-    def evaluation_cell_id(self, line, cell, local_ns=None):
+    def evaluation_cell_id(self, line, cell="", local_ns=None):
         cell_info = line.split()
         cell_id, cell_type = cell_info[0], cell_info[1] if len(cell_info) > 1 else "code"
         if cell_type == "code":
