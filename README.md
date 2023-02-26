@@ -15,10 +15,6 @@ This package is a support library for different courses.
 - Characteristics of random variables
 - Standard distributions
 - Cross sectional data
-- Exercices: 
-  - A bit of stats (technical onboarding),
-  - log-normal prices, 
-  - Income inequalities (Gini coefficient)
 
 # 2/4 (4h): Mar-03/14:00
 02 Regressions
@@ -26,11 +22,6 @@ This package is a support library for different courses.
 - Regressions techniques
 - Linear regression
 - Goodness of fit
-- Exercices: 
-  - Regress life expectancy per country
-  - Wages regression (Mincer equation),
-  - GDP vs Unemployement (Okun's law), 
-  - Options volatility smile
 
 # 3/4 (4h): Mar-08/14:00
 03 Time-series predictions
@@ -38,10 +29,6 @@ This package is a support library for different courses.
 - Exponential smoothing
 - Trends and Seasonal components
 - Holt models
-- Exercices:
-  - Livestocks predictions, 
-  - Covid cases predictions, 
-  - A bit of investigation of the French "systeme des retraites"
 
 # 4/4 (4h): Mar-10/14:00
 04 Econometrics models
@@ -49,9 +36,6 @@ This package is a support library for different courses.
 - AutoRegressive model
 - ARMA model
 - ARIMA model
-- Exercices:
-  - Predict company revenues
-  - Predict natural gaz prices
 
 Exercices: 
 - investigating the French retraites system, predict APPLE revenues
