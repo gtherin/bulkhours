@@ -38,8 +38,7 @@ This package is a support library for different courses.
 - ARIMA model
 
 Exercices: 
-- investigating the French retraites system, predict APPLE revenues
-- fit the volatility smile, regress life expectency per country, Inequalities in salaries investigations (Gini coefficients)
+- investigating the French retraites system, predict APPLE revenues, fit the volatility smile, regress life expectency per country, Inequalities in salaries investigations, relationship between GDP and unemployement
 
 Not presented
     Financial instruments
