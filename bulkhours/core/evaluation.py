@@ -82,7 +82,7 @@ def get_description(i, j, update=False):
             dict(description="Answer sent to corrector", button_style="success"),
         ],
         [
-            dict(description="Show correction", button_style="info"),
+            dict(description="Show correction", button_style="primary"),
             dict(description="Hide correction", button_style="danger"),
         ],
         [
@@ -200,4 +200,4 @@ class Evaluation(Magics):
 
         buttons[2].on_click(fun2)
 
-        IPython.display.display(ipywidgets.HBox(buttons), output)
+        IPython.display.display(ipywidgets.HBox(buttons[:2]), output)
