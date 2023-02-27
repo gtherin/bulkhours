@@ -20,6 +20,13 @@ def get_cred(k="pi.pyc", d=None, pass_code=None):
     return d + k
 
 
+def clean_student_name(student_name):
+    import unicodedata
+
+    student_name = unicodedata.normalize("NFKD", student_name.replace("-", "").lower())
+    return str(student_name.encode("ASCII", "ignore"))
+
+
 def set_up_student(student_name, pass_code=None):
     directory = os.path.dirname(__file__) + "/../bunker/"
 
@@ -41,7 +48,7 @@ bulkhours.set_up_student("jdoe", pass_code="PASS")
 """
         )
 
-    os.environ["STUDENT"] = student_name
+    os.environ["STUDENT"] = clean_student_name(student_name)
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = get_cred(d=directory, pass_code=pass_code)
     return student_name
 
