@@ -23,7 +23,7 @@ def get_cred(k="pi.pyc", d=None, pass_code=None):
 def clean_student_name(student_name):
     import unicodedata
 
-    student_name = unicodedata.normalize("NFKD", student_name.replace("-", "").lower())
+    student_name = unicodedata.normalize("NFKD", student_name.replace("-", "").replace(" ", "").lower())
     return str(student_name.encode("ASCII", "ignore"))
 
 
@@ -41,10 +41,10 @@ def set_up_student(student_name, pass_code=None):
 
     # TODO: Fix that thing in the future
     # Ok till I have less-restrictive rules on the server side
-    if student_name is None or pass_code is None or pass_code == "PASS_COURSE":
+    if student_name is None or student_name in ["None", ""] or pass_code is None or pass_code == "PASS_COURSE":
         raise Exception.DefaultCredentialsError(
-            f"""# Register yourself (Password "PASS" should be given in class). Example for John Doe, type:
-bulkhours.set_up_student("jdoe", pass_code="PASS")
+            f"""# Register yourself (Password "PASS" should be given in class). Example for "John Doe", type:
+bulkhours.set_up_student("john.d", pass_code="PASS")
 """
         )
 
