@@ -24,7 +24,7 @@ def clean_student_name(student_name):
     import unicodedata
 
     student_name = unicodedata.normalize("NFKD", student_name.replace("-", "").replace(" ", "").lower())
-    return str(student_name.encode("ASCII", "ignore"))
+    return student_name.encode("ASCII", "ignore").decode("utf-8")
 
 
 def set_up_student(student_name, pass_code=None):
