@@ -81,7 +81,7 @@ def get_corruption(credit=True, show_truth=False, **kwargs):
     macro = df[["annual_income", "corruption_index", "gdp_per_capita", "unemployment_rate"]]
     macro = macro.dropna(subset=["annual_income", "gdp_per_capita", "unemployment_rate"])
 
-    return geo_format(df, None)
+    return geo_format(macro, None)
 
 
 def get_mapmacro(**kwargs):
