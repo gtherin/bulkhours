@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def get_mapgeneric(df):
     import geopandas as gpd
 
@@ -59,10 +62,16 @@ def get_mapgdp(**kwargs):
     return get_mapgeneric(get_gdp(**kwargs))
 
 
-def get_macro(credit=True, **kwargs):
+def get_macro(credit=True, show_truth=False, **kwargs):
     from ..core import data
 
     df = data.get_core_data("macro", credit=credit)
+
+    if not show_truth:
+        df["corruption_index"] = df["corruption_index"].where(
+            ~df.index.isin(["Spain", "Japan", "Sweden", "Romania"]), other=np.nan
+        )
+
     return geo_format(df, None)
 
 
