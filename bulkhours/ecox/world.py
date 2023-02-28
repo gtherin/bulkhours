@@ -62,7 +62,13 @@ def get_mapgdp(**kwargs):
     return get_mapgeneric(get_gdp(**kwargs))
 
 
-def get_macro(credit=True, show_truth=False, **kwargs):
+def get_macro(credit=True, **kwargs):
+    from ..core import data
+
+    df = data.get_core_data("macro", credit=credit)
+    return geo_format(df, None)
+
+def get_corruption(credit=True, show_truth=False, **kwargs):
     from ..core import data
 
     df = data.get_core_data("macro", credit=credit)
@@ -71,6 +77,8 @@ def get_macro(credit=True, show_truth=False, **kwargs):
         df["corruption_index"] = df["corruption_index"].where(
             ~df.index.isin(["Spain", "Japan", "Sweden", "Romania"]), other=np.nan
         )
+    macro = macro[['annual_income', 'corruption_index', 'gdp_per_capita', 'unemployment_rate']]
+    macro = macro.dropna(subset=['annual_income', 'gdp_per_capita', 'unemployment_rate'])
 
     return geo_format(df, None)
 
