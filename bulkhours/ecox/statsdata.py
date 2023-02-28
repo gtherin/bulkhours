@@ -2,7 +2,9 @@ import numpy as np
 import pandas as pd
 
 
-def get_oil(credit=True):
+def get_oil(credit=True, **kwargs):
+    if credit:
+        print("https://www.statsmodels.org/stable/index.html")
     data = [
         446.6565,
         454.4733,
@@ -22,7 +24,9 @@ def get_oil(credit=True):
     return pd.Series(data, pd.date_range(start="1996", end="2008", freq="A")).to_frame("oil")
 
 
-def get_air(credit=True):
+def get_air(credit=True, **kwargs):
+    if credit:
+        print("https://www.statsmodels.org/stable/index.html")
     data = [
         17.5534,
         21.86,
@@ -44,7 +48,9 @@ def get_air(credit=True):
     return air.to_frame("air")
 
 
-def get_livestock2(credit=True):
+def get_livestock2(credit=True, **kwargs):
+    if credit:
+        print("https://www.statsmodels.org/stable/index.html")
     # Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods.
     data = [
         263.9177,
@@ -83,12 +89,16 @@ def get_livestock2(credit=True):
     return pd.Series(data, index).to_frame("livestock2")
 
 
-def get_livestock3(credit=True):
+def get_livestock3(credit=True, **kwargs):
+    if credit:
+        print("https://www.statsmodels.org/stable/index.html")
     data = [407.9979, 403.4608, 413.8249, 428.105, 445.3387, 452.9942, 455.7402]
     return pd.Series(data, pd.date_range(start="2001", end="2008", freq="A")).to_frame("livestock3")
 
 
-def get_aust(credit=True):
+def get_aust(credit=True, **kwargs):
+    if credit:
+        print("https://www.statsmodels.org/stable/index.html")
     data = [
         41.7275,
         24.0418,

@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 
-def get_data(credit=True):
+def get_gdp(credit=True, **kwargs):
     """
     https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
     Evolution du PIB et de ses composantes par rapport au trimestre precedent en volume en %
@@ -325,7 +325,7 @@ def get_data(credit=True):
     return df.sort_values("date")
 
 
-def get_unemployement(credit=True):
+def get_unemployement(credit=True, **kwargs):
     if credit:
         print("https://www.insee.fr/fr/statistiques/2830547#tableau-figure1")
     data = StringIO(
