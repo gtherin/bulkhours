@@ -4,7 +4,7 @@ from .gallery import *  # noqa
 from . import regression  # noqa
 from . import gradient  # noqa
 from . import france  # noqa
-from . import fhgdpq  # noqa
+from . import gmacro  # noqa
 from . import statsdata  # noqa
 from . import mincer  # noqa
 from . import world  # noqa
@@ -14,8 +14,7 @@ from .block import Block, BlockCoin, BlockMsg  # noqa
 from .blockchain import BlockChain  # noqa
 
 
-modules = {"france": france, "mincer": mincer, "statsdata": statsdata, "fhgdpq": fhgdpq, "world": world}
-
+modules = {"france": france, "mincer": mincer, "statsdata": statsdata, "gmacro": gmacro, "world": world}
 
 
 datasets = {}
