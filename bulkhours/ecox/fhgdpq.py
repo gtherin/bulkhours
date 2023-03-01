@@ -3,9 +3,8 @@ import numpy as np
 import pandas as pd
 
 
-def get_gdp(credit=True, **kwargs):
+def get_fr_gdp(credit=True, **kwargs):
     """
-    https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
     Evolution du PIB et de ses composantes par rapport au trimestre precedent en volume en %
     nd : donnee non disponible.
     Note : donnees revistees ; les volumes sont mesures aux prix de l'annee precedente changés et corriges des variations saisonnieres et des effets des jours ouvrables.
@@ -325,7 +324,7 @@ def get_gdp(credit=True, **kwargs):
     return df.sort_values("date")
 
 
-def get_unemployement(credit=True, **kwargs):
+def get_fr_unemployement(credit=True, **kwargs):
     if credit:
         print("https://www.insee.fr/fr/statistiques/2830547#tableau-figure1")
     data = StringIO(
@@ -355,3 +354,12 @@ Longue_duree,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,n
         df[c] = df[c].astype(str).str.replace(",", ".").astype(float)
     df["date"] = pd.PeriodIndex(df.index, freq="Q").to_timestamp()
     return df.sort_values("date")
+
+
+def get_us_gdp(credit=True, **kwargs):
+    import statsmodels.api as sm  # Statistical models
+
+    if credit:
+        print("https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html")
+
+    return sm.datasets.macrodata.load_pandas().data
