@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 
-def get_fr_gdp(credit=True, **kwargs):
+def get_fr_qgdp(credit=True, **kwargs):
     """
     Evolution du PIB et de ses composantes par rapport au trimestre precedent en volume en %
     nd : donnee non disponible.
@@ -362,4 +362,22 @@ def get_us_gdp(credit=True, **kwargs):
     if credit:
         print("https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html")
 
-    return sm.datasets.macrodata.load_pandas().data
+    us_okun = sm.datasets.macrodata.load_pandas().data
+    us_okun["diff(gdp)"] = 100 * us_okun["realgdp"].diff() / us_okun["realgdp"]
+    us_okun["unempd"] = us_okun["unemp"].diff()
+    us_okun = us_okun.dropna()
+
+    return us_okun
+
+
+def get_fr_gdp(credit=True, **kwargs):
+    if credit:
+        print("https://www.insee.fr/")
+    gdp = get_fr_qgdp()
+    une = get_fr_unemployement()
+
+    fr_okun = gdp.merge(une, how="inner", on="date")
+    fr_okun = fr_okun[fr_okun["date"].dt.year < 2020]
+    fr_okun["diff(gdp)"] = fr_okun["gdp"]
+    fr_okun["unempd"] = fr_okun["Ensemble"].diff()
+    fr_okun = fr_okun.dropna()

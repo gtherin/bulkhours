@@ -8,7 +8,6 @@ def get_scipy_distributions_list():
 
 def clean_life_expectancy_vs_gdp_2018(df):
     df = df.dropna().query("Year == 2018 and Population > 1e7")
-    df["GDP per capita ($, log)"] = np.log(df["GDP per capita ($)"])
     return df
 
 
@@ -48,12 +47,11 @@ datasets = {
     "life_expectancy_vs_gdp_2018": dict(
         files_list=["life-expectancy-vs-gdp-per-capita.csv"],
         info="GDP per capita is measured in 2011 international dollars, which corrects for inflation and cross-country price differences",
-        source="""Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)
-        https://ourworldindata.org/grapher/life-expectancy-vs-gdp-per-capita
+        source="""Life expectancy versus GDP/capita per country
+- Direct source: https://ourworldindata.org/grapher/life-expectancy-vs-gdp-per-capita
+- Data source: Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)
+- GDP info: GDP per capita is measured in 2011 international dollars, which corrects for inflation and cross-country price differences
         """,
-
-
-
         filter=clean_life_expectancy_vs_gdp_2018,
         rename=[
             "Country",
