@@ -48,6 +48,12 @@ datasets = {
     "life_expectancy_vs_gdp_2018": dict(
         files_list=["life-expectancy-vs-gdp-per-capita.csv"],
         info="GDP per capita is measured in 2011 international dollars, which corrects for inflation and cross-country price differences",
+        source="""Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)
+        https://ourworldindata.org/grapher/life-expectancy-vs-gdp-per-capita
+        """,
+
+
+
         filter=clean_life_expectancy_vs_gdp_2018,
         rename=[
             "Country",
