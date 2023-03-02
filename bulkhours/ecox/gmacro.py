@@ -373,8 +373,8 @@ def get_us_gdp(credit=True, **kwargs):
 def get_fr_gdp(credit=True, **kwargs):
     if credit:
         print("https://www.insee.fr/")
-    gdp = get_fr_qgdp()
-    une = get_fr_unemployement()
+    gdp = get_fr_qgdp(credit=False)
+    une = get_fr_unemployement(credit=False)
 
     fr_okun = gdp.merge(une, how="inner", on="date")
     fr_okun = fr_okun[fr_okun["date"].dt.year < 2020]
