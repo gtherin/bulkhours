@@ -50,7 +50,15 @@ def get_params(credit=True):
     particular parameter (in square brackets)
     """
     if credit:
-        print("https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf")
+        print(
+            """n hourly_wage = alpha_0i + alpha_1i * edu + alpha_2i * age + alpha_3i * age**2
+
+# https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf
+Table 3. The results of estimation of parameters in Mincer equations in a set of countries. We
+put the point estimates, standard errors (in italics) and p-values for zero restriction test of a
+particular parameter (in square brackets)        
+        """
+        )
     data = StringIO(
         """Country alpha_0i alpha_1i alpha_2i alpha_3i alpha_0i_e alpha_1i_e alpha_2i_e alpha_3i_e
 Austria 0.804517 0.331677 0.426552 -0.03883 0.218682 0.021472 0.113136 0.01396
