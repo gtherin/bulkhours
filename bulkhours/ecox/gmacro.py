@@ -365,9 +365,9 @@ def get_us_gdp(credit=True, simplify=True, **kwargs):
     us_okun = sm.datasets.macrodata.load_pandas().data
     if simplify:
         us_okun["diff(gdp)"] = 100 * us_okun["realgdp"].diff() / us_okun["realgdp"]
-        us_okun["unempd"] = us_okun["unemp"].diff()
+        us_okun["diff(unemployement)"] = us_okun["unemp"].diff()
         us_okun["yquarter"] = us_okun["year"].astype(str).str[:4] + "-Q" + us_okun["quarter"].astype(str).str[0]
-        us_okun = us_okun[["yquarter", "diff(gdp)", "unempd"]]
+        us_okun = us_okun[["yquarter", "diff(gdp)", "diff(unemployement)"]]
         us_okun = us_okun.dropna()
         us_okun["quarter"] = pd.PeriodIndex(us_okun["yquarter"], freq="Q").to_timestamp()
 
@@ -383,8 +383,8 @@ def get_fr_gdp(credit=True, simplify=True, **kwargs):
     fr_okun = gdp.merge(une, how="inner", left_on="quarter", right_on="index")
     fr_okun = fr_okun[fr_okun["date_x"].dt.year < 2020]
     fr_okun = fr_okun.rename(columns={"gdp": "diff(gdp)", "quarter": "yquarter"})
-    fr_okun["unempd"] = fr_okun["Ensemble"].diff()
-    fr_okun = fr_okun[["yquarter", "diff(gdp)", "unempd"]]
+    fr_okun["diff(unemployement)"] = fr_okun["Ensemble"].diff()
+    fr_okun = fr_okun[["yquarter", "diff(gdp)", "diff(unemployement)"]]
     fr_okun = fr_okun.dropna()
     fr_okun["quarter"] = pd.PeriodIndex(fr_okun["yquarter"], freq="Q").to_timestamp()
 
