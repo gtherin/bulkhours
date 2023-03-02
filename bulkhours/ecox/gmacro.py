@@ -363,13 +363,15 @@ def get_us_gdp(credit=True, simplify=True, **kwargs):
         print("https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html")
 
     us_okun = sm.datasets.macrodata.load_pandas().data
-    if simplify:
-        us_okun["diff(gdp)"] = 100 * us_okun["realgdp"].diff() / us_okun["realgdp"]
-        us_okun["diff(unemployement)"] = us_okun["unemp"].diff()
-        us_okun["yquarter"] = us_okun["year"].astype(str).str[:4] + "-Q" + us_okun["quarter"].astype(str).str[0]
-        us_okun = us_okun[["yquarter", "diff(gdp)", "diff(unemployement)"]]
-        us_okun = us_okun.dropna()
-        us_okun["quarter"] = pd.PeriodIndex(us_okun["yquarter"], freq="Q").to_timestamp()
+    if not simplify:
+        return us_okun
+
+    us_okun["diff(gdp)"] = 100 * us_okun["realgdp"].diff() / us_okun["realgdp"]
+    us_okun["diff(unemployement)"] = us_okun["unemp"].diff()
+    us_okun["yquarter"] = us_okun["year"].astype(str).str[:4] + "-Q" + us_okun["quarter"].astype(str).str[0]
+    us_okun = us_okun[["yquarter", "diff(gdp)", "diff(unemployement)"]]
+    us_okun = us_okun.dropna()
+    us_okun["quarter"] = pd.PeriodIndex(us_okun["yquarter"], freq="Q").to_timestamp()
 
     return us_okun.set_index("quarter")
 
@@ -379,13 +381,16 @@ def get_fr_gdp(credit=True, simplify=True, **kwargs):
         print("https://www.insee.fr/")
     gdp = get_fr_qgdp(credit=False).reset_index()
     une = get_fr_unemployement(credit=False).reset_index()
-
     fr_okun = gdp.merge(une, how="inner", left_on="quarter", right_on="index")
-    fr_okun = fr_okun[fr_okun["date_x"].dt.year < 2020]
-    fr_okun = fr_okun.rename(columns={"gdp": "diff(gdp)", "quarter": "yquarter"})
-    fr_okun["diff(unemployement)"] = fr_okun["Ensemble"].diff()
-    fr_okun = fr_okun[["yquarter", "diff(gdp)", "diff(unemployement)"]]
-    fr_okun = fr_okun.dropna()
-    fr_okun["quarter"] = pd.PeriodIndex(fr_okun["yquarter"], freq="Q").to_timestamp()
+
+    if not simplify:
+        return fr_okun
+
+    if simplify:
+        fr_okun = fr_okun.rename(columns={"gdp": "diff(gdp)", "quarter": "yquarter"})
+        fr_okun["diff(unemployement)"] = fr_okun["Ensemble"].diff()
+        fr_okun = fr_okun[["yquarter", "diff(gdp)", "diff(unemployement)"]]
+        fr_okun = fr_okun.dropna()
+        fr_okun["quarter"] = pd.PeriodIndex(fr_okun["yquarter"], freq="Q").to_timestamp()
 
     return fr_okun.set_index("quarter")
