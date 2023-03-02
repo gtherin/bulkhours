@@ -381,3 +381,5 @@ def get_fr_gdp(credit=True, **kwargs):
     fr_okun["diff(gdp)"] = fr_okun["gdp"]
     fr_okun["unempd"] = fr_okun["Ensemble"].diff()
     fr_okun = fr_okun.dropna()
+
+    return fr_okun
