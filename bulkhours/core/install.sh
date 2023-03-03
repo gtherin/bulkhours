@@ -15,9 +15,12 @@ then
         TS=`date '+%H:%M:%S' -d "+1 hour"`
         echo "RUN pip install yfinance [$TS]"
         pip install yfinance > /dev/null 2>&1
+        pip install descartes > /dev/null 2>&1
         TS=`date '+%H:%M:%S' -d "+1 hour"`
         echo "RUN pip install geopandas [$TS]"
         pip install geopandas > /dev/null 2>&1
+        echo "RUN pip install descartes [$TS]"
+        pip install descartes > /dev/null 2>&1
     fi
 
     BULK_DIR="/content"
