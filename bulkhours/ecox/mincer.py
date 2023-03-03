@@ -4,11 +4,12 @@ import pandas as pd
 
 
 def get_stats(credit=True):
-    """
-    Table 2. Descriptive statistics of hourly wages in selected EU countries in 2010 (in PPS)
-    """
     if credit:
-        print("https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf")
+        print(
+            """Descriptive statistics of hourly wages in selected EU countries in 2010 (in PPS) 
+Table 2: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf
+    """
+        )
 
     data = StringIO(
         """Country Mean Minimum Maximum Variance Coefficient of variation
@@ -41,20 +42,11 @@ United Kingdom 16.368 7.590 36.390 53.933 0.4487
 
 
 def get_params(credit=True):
-    """
-    ln hourly_wage = alpha_0i + alpha_1i * edu + alpha_2i * age + alpha_3i * age**2
-
-    # https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf
-    Table 3. The results of estimation of parameters in Mincer equations in a set of countries. We
-    put the point estimates, standard errors (in italics) and p-values for zero restriction test of a
-    particular parameter (in square brackets)
-    """
     if credit:
         print(
-            """n hourly_wage = alpha_0i + alpha_1i * edu + alpha_2i * age + alpha_3i * age**2
-
-# https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf
-Table 3. The results of estimation of parameters in Mincer equations in a set of countries. We
+            """ln(hourly_wage) = alpha_0i + alpha_1i * edu + alpha_2i * age + alpha_3i * age**2
+Table 3. https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf
+The results of estimation of parameters in Mincer equations in a set of countries. We
 put the point estimates, standard errors (in italics) and p-values for zero restriction test of a
 particular parameter (in square brackets)        
         """
