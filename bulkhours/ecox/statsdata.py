@@ -126,3 +126,14 @@ def get_aust(credit=True, **kwargs):
         47.9137,
     ]
     return pd.Series(data, pd.date_range(start="2005", end="2010-Q4", freq="QS-OCT")).to_frame("aust")
+
+
+def get_air_passengers(credit=True, **kwargs):
+    from ..core import data
+
+    df = data.get_core_data("AirPassengers.csv", index="Month")
+    df.index = pd.to_datetime(df.index)
+    df.index.freq = "MS"
+    df["is_test"] = df.index >= df.index[120]
+
+    return df
