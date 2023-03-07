@@ -12,6 +12,7 @@ from .core.timeit import timeit  # noqa
 from .core import geo  # noqa
 from .core.geo import geo_plot_country  # noqa
 from .core import runrealcmd  # noqa
+from .core import colors as c  # noqa
 from . import rl  # noqa
 from . import hpc  # noqa
 from . import ecox  # noqa
@@ -63,6 +64,7 @@ def set_style():
     import matplotlib.pyplot as plt
 
     background_color = "#F0FDFA11"  # cdcdcd
+    axis_color = "#4F77AA"  # cdcdcd
 
     def get_color(discipline):
         colors = {
@@ -74,17 +76,17 @@ def set_style():
         return colors[discipline] if discipline in colors else "black"
 
     plt.rcParams["axes.grid"] = True
-    plt.rcParams["axes.edgecolor"] = get_color("axis")
-    plt.rcParams["axes.labelcolor"] = get_color("axis")
-    plt.rcParams["axes.titlecolor"] = get_color("axis")
+    plt.rcParams["axes.edgecolor"] = axis_color
+    plt.rcParams["axes.labelcolor"] = axis_color
+    plt.rcParams["axes.titlecolor"] = axis_color
     plt.rcParams["axes.facecolor"] = background_color
-    plt.rcParams["figure.edgecolor"] = get_color("axis")
+    plt.rcParams["figure.edgecolor"] = axis_color
     plt.rcParams["figure.facecolor"] = background_color
     plt.rcParams["grid.color"] = "white"
     plt.rcParams["legend.facecolor"] = background_color
     plt.rcParams["legend.edgecolor"] = background_color
-    plt.rcParams["xtick.color"] = get_color("axis")
-    plt.rcParams["ytick.color"] = get_color("axis")
+    plt.rcParams["xtick.color"] = axis_color
+    plt.rcParams["ytick.color"] = axis_color
 
     plt.rcParams["font.size"] = 14
     plt.rcParams["lines.linewidth"] = 4
