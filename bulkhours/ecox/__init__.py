@@ -3,6 +3,7 @@ from .brownian import plot_brownian_sample  # noqa
 from .gallery import *  # noqa
 from . import regression  # noqa
 from . import gradient  # noqa
+from . import trading  # noqa
 from . import france  # noqa
 from . import gmacro  # noqa
 from . import statsdata  # noqa
@@ -14,7 +15,14 @@ from .block import Block, BlockCoin, BlockMsg  # noqa
 from .blockchain import BlockChain  # noqa
 
 
-modules = {"france": france, "mincer": mincer, "statsdata": statsdata, "gmacro": gmacro, "world": world}
+modules = {
+    "france": france,
+    "mincer": mincer,
+    "statsdata": statsdata,
+    "gmacro": gmacro,
+    "world": world,
+    "trading": trading,
+}
 
 
 datasets = {}
