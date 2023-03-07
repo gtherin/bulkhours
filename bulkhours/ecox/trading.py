@@ -40,3 +40,17 @@ def check_outsample(my_trading_algo):
 
     pnls["pnl_all"] = pnls.mean(axis=1)
     print(np.sqrt(252) * pnls.mean() / pnls.std())
+
+
+def get_apple():
+    from ..core import data
+
+    apple = data.get_data_from_file("APPLE_DownloadFPrepStatementQuarter")["revenue"].iloc[-4 * 5 :]
+
+    apple.index = pd.to_datetime(apple.index)
+    apple = apple[["date", "revenue", "grossProfit", "ebitda", "netIncome", "eps"]].set_index("date")
+    apple["is_test"] = apple.index >= apple.index[-5]
+    apple["revenue"] = apple["revenue"].astype(float)
+    apple.index = pd.date_range("2017-12-30", periods=20, freq="Q")
+
+    return apple
