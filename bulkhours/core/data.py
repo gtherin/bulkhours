@@ -39,12 +39,16 @@ def get_data_from_file(label, on=None, **kwargs):
         return pd.read_csv(filename)
 
 
-def clean_data(df, query=None, index=None):
+def clean_data(df, query=None, index=None, test_data=None):
     if "date" in df.columns:
         df["date"] = pd.to_datetime(df["date"])
 
     if query:
         df = df.query(query)
+
+    if test_data:
+        df["is_test"] = df.index >= df.index[test_data]
+
     if index:
         if index == 0:
             df = df.set_index(df.columns[0])
@@ -53,7 +57,7 @@ def clean_data(df, query=None, index=None):
     return df
 
 
-def get_core_data(label, modules={}, credit=False, query=None, index=None, **kwargs):
+def get_core_data(label, modules={}, credit=False, query=None, index=None, test_data=None, **kwargs):
     data_info = (
         datasets[label] if label in datasets else ({"httplink": label} if "http" in label else {"files_list": label})
     )
@@ -73,7 +77,7 @@ def get_core_data(label, modules={}, credit=False, query=None, index=None, **kwa
     if "filter" in data_info:
         df = data_info["filter"](df)
 
-    return clean_data(df, query=query, index=index)
+    return clean_data(df, query=query, index=index, test_data=test_data)
 
 
 def get_image(label, ax=None):
