@@ -49,7 +49,6 @@ def get_apple(credit=True, **kwargs):
 
     apple.index = pd.to_datetime(apple.index)
     apple = apple[["date", "revenue", "grossProfit", "ebitda", "netIncome", "eps"]].set_index("date")
-    apple["is_test"] = apple.index >= apple.index[-5]
     apple["revenue"] = apple["revenue"].astype(float)
     apple.index = pd.date_range("2017-12-30", periods=20, freq="Q")
 
