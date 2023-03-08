@@ -21,6 +21,25 @@ class Sampler:
 Sampler.outsample_dt = time.time() - 300
 
 
+def get_apple(credit=True, **kwargs):
+    from ..core import data
+
+    apple = data.get_data_from_file("APPLE_DownloadFPrepStatementQuarter").iloc[-4 * 5 :]
+
+    apple.index = pd.to_datetime(apple.index)
+    apple = apple[["date", "revenue", "grossProfit", "ebitda", "netIncome", "eps"]].set_index("date")
+    apple["revenue"] = apple["revenue"].astype(float)
+    apple.index = pd.date_range("2017-12-30", periods=20, freq="Q")
+
+    return apple
+
+
+def display_sharpe_ratios(srs):
+    import IPython
+
+    IPython.display.display(srs.to_frame("pnl").T)
+
+
 def check_outsample(my_trading_algo):
     waiting_period = 5 * 60
     if (tdiff := time.time() - Sampler.outsample_dt) < waiting_period:
@@ -36,24 +55,15 @@ def check_outsample(my_trading_algo):
     pos = my_trading_algo(gdf)
 
     pnls = pd.DataFrame()
+    instr_list = ["ALPHABET", "CRUDE", "NASDAQ", "BRENT", "COPPER", "CORN", "SP500", "WHEAT"]
     for i in range(8):
-        pnls[f"pnl_{i}"] = gdf[f"ret_{i}"] * pos[f"pos_{i}"].shift(1)
+        pnls[instr_list[i]] = gdf[f"ret_{i}"] * pos[f"pos_{i}"].shift(1)
 
-    pnls["pnl_all"] = pnls.mean(axis=1)
-    print(np.sqrt(252) * pnls.mean() / pnls.std())
+    # Build the aggregated pnl
+    pnls["ALL"] = pnls.mean(axis=1)
 
-
-def get_apple(credit=True, **kwargs):
-    from ..core import data
-
-    apple = data.get_data_from_file("APPLE_DownloadFPrepStatementQuarter").iloc[-4 * 5 :]
-
-    apple.index = pd.to_datetime(apple.index)
-    apple = apple[["date", "revenue", "grossProfit", "ebitda", "netIncome", "eps"]].set_index("date")
-    apple["revenue"] = apple["revenue"].astype(float)
-    apple.index = pd.date_range("2017-12-30", periods=20, freq="Q")
-
-    return apple
+    # Sharpe ratio calculation
+    display_sharpe_ratios(np.sqrt(252) * pnls.mean() / pnls.std())
 
 
 def build_pnls(gdf, my_trading_algo, plot_pnl=True):
@@ -65,18 +75,18 @@ def build_pnls(gdf, my_trading_algo, plot_pnl=True):
     instr_list = ["ALPHABET", "CRUDE", "NASDAQ", "BRENT", "COPPER", "CORN", "SP500", "WHEAT"]
     for i in range(8):
         # The position has a 1-day lag (24h to go to position)
-        pnls[f"pnl_{instr_list[i]}"] = gdf[f"ret_{i}"] * pos[f"pos_{i}"].shift(1)
+        pnls[instr_list[i]] = gdf[f"ret_{i}"] * pos[f"pos_{i}"].shift(1)
 
     # Check risk
     raw_risk = pnls.abs().sum() / pnls.abs().sum().sum()
-    print(f"""WARNING: Risk is to small on {raw_risk[raw_risk < 0.03]}. It has to be at least 3% of total risk""")
+    if not raw_risk[raw_risk < 0.03].empty:
+        print(f"""WARNING: Risk is to small on {raw_risk[raw_risk < 0.03]}. It has to be at least 3% of total risk""")
 
     # Build the aggregated pnl
-    pnls["pnl_all"] = pnls.mean(axis=1)
+    pnls["ALL"] = pnls.mean(axis=1)
 
     # Sharpe ratio calculation
-    sr = np.sqrt(252) * pnls.mean() / pnls.std()
-    print(sr)
+    display_sharpe_ratios(np.sqrt(252) * pnls.mean() / pnls.std())
 
     # Plot pnls
     if plot_pnl:
