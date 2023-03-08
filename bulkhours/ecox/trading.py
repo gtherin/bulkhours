@@ -56,19 +56,29 @@ def get_apple(credit=True, **kwargs):
     return apple
 
 
-def build_pnls(gdf, my_trading_algo):
+def build_pnls(gdf, my_trading_algo, plot_pnl=True):
+    # The function you will be build
     pos = my_trading_algo(gdf)
 
     # Build position
     pnls = pd.DataFrame()
+    instr_list = ["ALPHABET", "CRUDE", "NASDAQ", "BRENT", "COPPER", "CORN", "SP500", "WHEAT"]
     for i in range(8):
         # The position has a 1-day lag (24h to go to position)
-        pnls[f"pnl_{i}"] = gdf[f"ret_{i}"] * pos[f"pos_{i}"].shift(1)
+        pnls[f"pnl_{instr_list[i]}"] = gdf[f"ret_{i}"] * pos[f"pos_{i}"].shift(1)
 
+    # Check risk
+    raw_risk = pnls.abs().sum() / pnls.abs().sum().sum()
+    print(f"""WARNING: Risk is to small on {raw_risk[raw_risk < 0.03]}. It has to be at least 3% of total risk""")
+
+    # Build the aggregated pnl
     pnls["pnl_all"] = pnls.mean(axis=1)
-    # 1. Implement the Sharpe ratio
+
+    # Sharpe ratio calculation
     sr = np.sqrt(252) * pnls.mean() / pnls.std()
     print(sr)
 
-    pnls.cumsum().plot()
+    # Plot pnls
+    if plot_pnl:
+        pnls.cumsum().plot()
     check_outsample(my_trading_algo)
