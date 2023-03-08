@@ -41,13 +41,20 @@ def display_sharpe_ratios(srs):
 
 
 def check_outsample(my_trading_algo):
+    import IPython
+
     waiting_period = 5 * 60
     if (tdiff := time.time() - Sampler.outsample_dt) < waiting_period:
-        print(f"This test can be runned in {waiting_period-tdiff:.0f} seconds.")
+        IPython.display.display(
+            f"Outsample test can be runned in {waiting_period-tdiff:.0f} seconds (possible every {waiting_period:.0f} seconds)."
+        )
         return
 
     Sampler.outsample_dt = time.time()
-    print(f"Do the test {tdiff}")
+    IPython.display.Markdown(
+        f"""Outsample test (possible every {waiting_period:.0f} seconds) 🤓:
+---"""
+    )
 
     from ..core import data
 
@@ -67,6 +74,8 @@ def check_outsample(my_trading_algo):
 
 
 def build_pnls(gdf, my_trading_algo, plot_pnl=True):
+    import IPython
+
     # The function you will be build
     pos = my_trading_algo(gdf)
 
@@ -80,7 +89,9 @@ def build_pnls(gdf, my_trading_algo, plot_pnl=True):
     # Check risk
     raw_risk = pnls.abs().sum() / pnls.abs().sum().sum()
     if not raw_risk[raw_risk < 0.03].empty:
-        print(f"""WARNING: Risk is to small on {raw_risk[raw_risk < 0.03]}. It has to be at least 3% of total risk""")
+        IPython.display.Markdown(
+            f"""⚠️ WARNING: Risk is to small on {raw_risk[raw_risk < 0.03]}. It has to be at least 3% of total risk"""
+        )
 
     # Build the aggregated pnl
     pnls["ALL"] = pnls.mean(axis=1)
