@@ -18,12 +18,13 @@ class Sampler:
     outsample_dt = None
 
 
-Sampler.outsample_dt = time.time() - 100
+Sampler.outsample_dt = time.time() - 300
 
 
 def check_outsample(my_trading_algo):
-    if (tdiff := time.time() - Sampler.outsample_dt) < 120:
-        print(f"This test can be runned in {120-tdiff:.0f} seconds.")
+    waiting_period = 5 * 60
+    if (tdiff := time.time() - Sampler.outsample_dt) < waiting_period:
+        print(f"This test can be runned in {waiting_period-tdiff:.0f} seconds.")
         return
 
     Sampler.outsample_dt = time.time()
@@ -53,3 +54,21 @@ def get_apple(credit=True, **kwargs):
     apple.index = pd.date_range("2017-12-30", periods=20, freq="Q")
 
     return apple
+
+
+def build_pnls(gdf, my_trading_algo):
+    pos = my_trading_algo(gdf)
+
+    # Build position
+    pnls = pd.DataFrame()
+    for i in range(8):
+        # The position has a 1-day lag (24h to go to position)
+        pnls[f"pnl_{i}"] = gdf[f"ret_{i}"] * pos[f"pos_{i}"].shift(1)
+
+    pnls["pnl_all"] = pnls.mean(axis=1)
+    # 1. Implement the Sharpe ratio
+    sr = np.sqrt(252) * pnls.mean() / pnls.std()
+    print(sr)
+
+    pnls.cumsum().plot()
+    check_outsample(my_trading_algo)
