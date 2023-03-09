@@ -274,7 +274,7 @@ def plot_stationary():
     np.random.seed(42)
     data = pd.Series(np.random.randn(nob), index=np.linspace(0, 1, nob))
 
-    ax.plot(data.index, data, lw=1, alpha=0.9, label=r"$x(t)$")
+    ax.plot(data.index, data, lw=1, alpha=0.9, label=r"$y(t)$")
     ax.plot(data.index, np.zeros(nob), lw=1, alpha=0.9, label=r"$\mu(t)=\mu$")
     ax.fill_between(data.index, -2, 2, alpha=0.2, label=r"$\sigma(t)=\sigma$")
 
@@ -295,7 +295,7 @@ def plot_stationary():
     datap = datas + 1.9 * data.std() / np.sqrt(nob)
     datam = datas - 1.9 * data.std() / np.sqrt(nob)
 
-    ax.plot(data.index, data, lw=1, alpha=0.9, label=r"$x(t)$")
+    ax.plot(data.index, data, lw=1, alpha=0.9, label=r"$y(t)$")
     ax.plot(data.index, datas, lw=1, alpha=0.9, label=r"$\mu(t)$")
     ax.fill_between(data.index, datam, datap, alpha=0.2, label=r"$\sigma(t)=\sigma$")
 
@@ -307,7 +307,7 @@ def plot_stationary():
     fac = np.linspace(10, 1, nob)
     data = pd.Series(fac * np.random.randn(nob), index=np.linspace(0, 1, nob))
 
-    ax.plot(data.index, data, lw=1, alpha=0.9, label=r"$x(t)$")
+    ax.plot(data.index, data, lw=1, alpha=0.9, label=r"$y(t)$")
     ax.plot(data.index, np.zeros(nob), lw=1, alpha=0.9, label=r"$\mu(t)=\mu$")
     ax.fill_between(data.index, -1.5 * fac, 1.5 * fac, alpha=0.2, label=r"$\sigma(t)$")
 
