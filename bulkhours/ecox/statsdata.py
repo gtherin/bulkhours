@@ -151,10 +151,14 @@ def get_sunspots(credit=True, **kwargs):
         )
 
     dta = pd.read_json("https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json")
-    dta = dta.set_index("time-tag")
-    dta.index = pd.to_datetime(dta.index)
-    dta.index.freq = dta.index.inferred_freq
-    return dta
+    sunspots = dta.set_index("time-tag")
+    sunspots.index = pd.to_datetime(sunspots.index)
+    sunspots.index.freq = sunspots.index.inferred_freq
+
+    sunspots = sunspots.resample("MS").mean()
+    sunspots = sunspots.resample("Q").mean().iloc[-400:]
+
+    return sunspots
 
 
 def get_sunspots_old(credit=True, **kwargs):
