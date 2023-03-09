@@ -143,7 +143,29 @@ def get_sunspots(credit=True, **kwargs):
     import statsmodels.api as sm  # Statistical models
 
     if credit:
-        print("https://www.statsmodels.org/dev/datasets/generated/sunspots.html")
+        print(
+            """Yearly sunspots data (ssn)
+- https://www.swpc.noaa.gov/products/solar-cycle-progression
+- Data source: https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
+        """
+        )
+
+    dta = pd.read_json("https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json")
+    dta = dta.set_index("time-tag")
+    dta.index = pd.to_datetime(dta.index)
+    dta.index.freq = dta.index.inferred_freq
+    dta
+
+
+def get_sunspots_old(credit=True, **kwargs):
+    import statsmodels.api as sm  # Statistical models
+
+    if credit:
+        print(
+            """Yearly sunspots data
+- Data source: https://www.statsmodels.org/dev/datasets/generated/sunspots.html
+        """
+        )
 
     dta = sm.datasets.sunspots.load_pandas().data
     dta.index = pd.Index(sm.tsa.datetools.dates_from_range("1700", "2008"))
@@ -151,3 +173,20 @@ def get_sunspots(credit=True, **kwargs):
     del dta["YEAR"]
 
     return dta
+
+
+def get_hhousing(credit=True, **kwargs):
+    from pandas_datareader import data as pdr  # To get data
+
+    if credit:
+        print(
+            """All-Transactions House Price Index for Houston
+- Data source: https://fred.stlouisfed.org/series/ATNHPIUS26420Q
+        """
+        )
+
+    data = pdr.get_data_fred("HOUSTNSA", "1959-01-01")  # , "2019-06-01")
+    housing = data.HOUSTNSA.pct_change().dropna()
+    # Scale by 100 to get percentages
+    housing = 100 * housing.asfreq("MS")
+    return housing
