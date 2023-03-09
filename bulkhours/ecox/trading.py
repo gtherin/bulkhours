@@ -40,6 +40,17 @@ def display_sharpe_ratios(srs):
     IPython.display.display(srs.to_frame("pnl").T)
 
 
+def get_pnls(gdf, pos):
+    pnls = pd.DataFrame()
+    instr_list = ["ALPHABET", "CRUDE", "NASDAQ", "BRENT", "COPPER", "CORN", "SP500", "WHEAT"]
+    for i in range(8):
+        pnls[instr_list[i]] = gdf[f"ret_{i}"] * pos[f"pos_{i}"].shift(1)
+
+    # Build the aggregated pnl
+    pnls["ALL"] = pnls.mean(axis=1)
+    return pnls
+
+
 def check_outsample(my_trading_algo):
     import IPython
 
@@ -64,14 +75,7 @@ def check_outsample(my_trading_algo):
 
     gdf = data.get_data_from_file("ffcontrol.csv")
     pos = my_trading_algo(gdf)
-
-    pnls = pd.DataFrame()
-    instr_list = ["ALPHABET", "CRUDE", "NASDAQ", "BRENT", "COPPER", "CORN", "SP500", "WHEAT"]
-    for i in range(8):
-        pnls[instr_list[i]] = gdf[f"ret_{i}"] * pos[f"pos_{i}"].shift(1)
-
-    # Build the aggregated pnl
-    pnls["ALL"] = pnls.mean(axis=1)
+    pnls = get_pnls(gdf, pos)
 
     # Sharpe ratio calculation
     display_sharpe_ratios(np.sqrt(252) * pnls.mean() / pnls.std())
