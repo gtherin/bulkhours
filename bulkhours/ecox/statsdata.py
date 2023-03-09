@@ -154,7 +154,7 @@ def get_sunspots(credit=True, **kwargs):
     dta = dta.set_index("time-tag")
     dta.index = pd.to_datetime(dta.index)
     dta.index.freq = dta.index.inferred_freq
-    dta
+    return dta
 
 
 def get_sunspots_old(credit=True, **kwargs):
