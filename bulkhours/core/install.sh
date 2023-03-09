@@ -28,6 +28,8 @@ then
     TS=`date '+%H:%M:%S' -d "+1 hour"`
     echo "RUN git clone https://github.com/guydegnol/bulkhours.git [$TS]" 
     rm -rf bulkhours 2> /dev/null && git clone https://github.com/guydegnol/bulkhours.git --depth 1 > /dev/null 2>&1
+    echo "RUN pip install --upgrade pip [$TS]"
+    pip install --upgrade pip > /dev/null 2>&1
     if [ "$3" = "econometrics" ]; then
         export IFS=","
         #packages="yfinance,geopandas,descartes"
