@@ -137,3 +137,17 @@ def get_air_passengers(credit=True, **kwargs):
     df["is_test"] = df.index >= df.index[120]
 
     return df
+
+
+def get_sunspots(credit=True, **kwargs):
+    import statsmodels.api as sm  # Statistical models
+
+    if credit:
+        print("https://www.statsmodels.org/dev/datasets/generated/sunspots.html")
+
+    dta = sm.datasets.sunspots.load_pandas().data
+    dta.index = pd.Index(sm.tsa.datetools.dates_from_range("1700", "2008"))
+    dta.index.freq = dta.index.inferred_freq
+    del dta["YEAR"]
+
+    return dta
