@@ -193,4 +193,4 @@ def get_hhousing(credit=True, **kwargs):
     housing = data.HOUSTNSA.pct_change().dropna()
     # Scale by 100 to get percentages
     housing = 100 * housing.asfreq("MS")
-    return housing
+    return housing.to_frame()
