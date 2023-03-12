@@ -3,6 +3,7 @@ from .brownian import plot_brownian_sample  # noqa
 from .gallery import *  # noqa
 from . import regression  # noqa
 from . import gradient  # noqa
+from . import co2  # noqa
 from . import trading  # noqa
 from . import france  # noqa
 from . import gmacro  # noqa
@@ -22,6 +23,7 @@ modules = {
     "gmacro": gmacro,
     "world": world,
     "trading": trading,
+    "co2": co2,
 }
 
 
