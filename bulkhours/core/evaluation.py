@@ -161,13 +161,15 @@ class Evaluation(Magics):
     def evaluation_cell_id(self, line, cell="", local_ns=None):
         cell_info = line.split()
         cell_id, cell_type = cell_info[0], cell_info[1] if len(cell_info) > 1 else "code"
+        cell_label = " ".join(cell_info[2:]) if cell_type == "codetext" else ""
+
+        buttons = [get_description(i, 0) for i in [0, 1, 2]]
+        output = ipywidgets.Output()
+
         if cell_type == "code":
             self.shell.run_cell(cell)
         elif cell_type == "markdown":
             IPython.display.display(IPython.display.Markdown(cell))
-
-        buttons = [get_description(i, 0) for i in [0, 1, 2]]
-        output = ipywidgets.Output()
 
         def func(b, i, func, args, kwargs):
             with output:
@@ -185,11 +187,6 @@ class Evaluation(Magics):
             [self.show_cell, [cell_id, cell_type], dict(private_msg=True)],
         ]
 
-        def fun0(b):
-            return func(b, 0, *kargs[0])
-
-        buttons[0].on_click(fun0)
-
         def fun1(b):
             return func(b, 1, *kargs[1])
 
@@ -200,4 +197,23 @@ class Evaluation(Magics):
 
         buttons[2].on_click(fun2)
 
-        IPython.display.display(ipywidgets.HBox(buttons[:2]), output)
+        def fun0(b):
+            return func(b, 0, *kargs[0])
+
+        if cell_type != "codetext":
+            buttons[0].on_click(fun0)
+        else:
+            label = ipywidgets.Button(description=cell_label, layout=ipywidgets.Layout(height="auto", width="auto"))
+            text = ipywidgets.Text()
+
+            def submit(b):
+                total = eval(text.value)
+                args = [send_answer_to_corrector, [cell_id], dict(answer=total, atype=cell_type, code=text.value)]
+                return func(b, 0, *args)
+
+            buttons[0].on_click(submit)
+
+        if cell_type == "codetext":
+            IPython.display.display(ipywidgets.HBox([label, text] + buttons[:2]), output)
+        else:
+            IPython.display.display(ipywidgets.HBox(buttons[:2]), output)
