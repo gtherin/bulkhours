@@ -148,6 +148,8 @@ class Evaluation(Magics):
             self.shell.run_cell(text["answer"])
         elif cell_type == "markdown":
             md(header=f"Correction ({cell_id}, {cell_type})", mdbody=text["answer"])
+        elif cell_type == "codetext":
+            md(mdbody=f"Correction 🤓: {text['answer']} (code({text['code']})")
 
     @line_cell_magic
     @needs_local_scope
