@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from .world import get_mapgeneric
 
 
 def get_air_passengers(credit=True, **kwargs):
@@ -27,6 +28,10 @@ def get_main(credit=True, **kwargs):
     return df
 
 
+def get_mapmain(**kwargs):
+    return get_mapgeneric(get_main(**kwargs))
+
+
 def get_concentrations(credit=True, zone="World", **kwargs):
     from ..core import data
 
@@ -41,3 +46,7 @@ def get_concentrations(credit=True, zone="World", **kwargs):
     if zone is not None:
         df = df.query(f"Entity == '{zone}'")
     return df
+
+
+def get_mapconcentrations(**kwargs):
+    return get_mapgeneric(get_concentrations(**kwargs))
