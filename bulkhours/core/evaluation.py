@@ -214,7 +214,7 @@ class Evaluation(Magics):
                 if text.value == "":
                     with output:
                         output.clear_output()
-                        md(mdbody=f"Nothing to send 🙈")
+                        md(mdbody=f"Nothing to send 🙈🙉🙊")
                     return
 
                 total = eval(text.value)
