@@ -65,7 +65,8 @@ def get_document(sid, user):
 def send_answer_to_corrector(question, update=False, user=None, comment="", **kwargs):
     user = os.environ["STUDENT"] if user is None else user
     kwargs.update({"update_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
-    if update:
+
+    if update and get_document(question, user).get().to_dict():
         get_document(question, user).update(kwargs)
     else:
         get_document(question, user).set(kwargs)
@@ -140,14 +141,13 @@ class Evaluation(Magics):
         super(Evaluation, self).__init__(shell)
 
         self.argparser = argparse.ArgumentParser(description="Evaluation params")
-        self.argparser.add_argument(
-            "-t", "--timeit", action="store_true", help="flag to return timeit result instead of stdout"
-        )
+        self.argparser.add_argument("-i", "--id", default=None)
+        self.argparser.add_argument("-u", "--user", default=os.environ["STUDENT"])
+        self.argparser.add_argument("-o", "--options", default=None)
         self.show_answer = False
 
     def show_cell(self, cell_id, cell_type, corrector="solution", private_msg=False, answer=None):
         data = get_solution_from_corrector(cell_id, corrector=corrector)
-        print(data)
 
         if data is None and private_msg:
             pass
@@ -185,8 +185,16 @@ class Evaluation(Magics):
     @line_cell_magic
     @needs_local_scope
     def update_cell_id(self, line, cell="", local_ns=None):
-        cell_id, cell_user, cell_field = line.split()
-        send_answer_to_corrector(cell_id, update=True, user=cell_user, **{cell_field: cell})
+        try:
+            args = self.argparser.parse_args(line.split())
+        except SystemExit as e:
+            self.argparser.print_help()
+            return
+
+        opts = {
+            a.split(":")[0]: cell if a.split(":")[1] == "CELL" else a.split(":")[1] for a in args.options.split(";")
+        }
+        send_answer_to_corrector(args.id, update=True, user=args.user, **opts)
 
     @line_cell_magic
     @needs_local_scope
