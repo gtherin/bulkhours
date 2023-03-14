@@ -120,11 +120,7 @@ def get_description(i, j, update=False, lan="fr"):
 def md(mdbody=None, header=None, rawbody=None, codebody=None):
     if header:
         IPython.display.display(
-            IPython.display.Markdown(
-                f"""---
-    **{header}** 🤓
-    ---"""
-            )
+            IPython.display.Markdown(f"<b><font face='FiraCode Nerd Font' size=4 color='red'>{header} 📚:<font></b>")
         )
 
     if mdbody and len(mdbody) > 1:
@@ -164,8 +160,8 @@ class Evaluation(Magics):
     ---"""
             )
             self.shell.run_cell(data["answer"])
-        elif cell_type == "markdown":
-            md(header=f"Correction ({cell_id}, {cell_type})", mdbody=data["answer"])
+        elif cell_type in ["markdown", "textarea"]:
+            md(header=f"Correction ({cell_id})", mdbody=data["answer"])
         elif cell_type == "codetext":
             md(mdbody=f"Correction 🤓: {data['answer']} (code({data['code']})")
         if "hidecode" in data:
@@ -252,6 +248,8 @@ class Evaluation(Magics):
             widgets = [ipywidgets.Textarea(placeholder="I don't know", disabled=False)]
         elif cell_type == "radios":
             widgets = [ipywidgets.RadioButtons(options=cell_checks, layout={"width": "max-content"})]
+        elif cell_type == "codetext":
+            widgets = [ipywidgets.Text()]
         else:
             widgets = []
 
