@@ -62,13 +62,15 @@ def get_document(sid, user):
     return firestore.Client().collection(sid).document(user)
 
 
-def send_answer_to_corrector(question, update=False, **kwargs):
+def send_answer_to_corrector(question, update=False, comment="", **kwargs):
     kwargs.update({"update_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
     if update:
         get_document(question, os.environ["STUDENT"]).update(kwargs)
     else:
         get_document(question, os.environ["STUDENT"]).set(kwargs)
-    print(f'Answer has been submited for: {question}/{os.environ["STUDENT"]}. You can resubmit it several times')
+    print(
+        f'Answer {comment} has been submited for: {question}/{os.environ["STUDENT"]}. You can resubmit it several times'
+    )
 
 
 def get_solution_from_corrector(question, corrector="solution"):
@@ -90,9 +92,7 @@ def get_description(i, j, update=False):
             dict(description="Hide message from corrector", button_style="warning"),
         ],
     ]
-    descriptions[i][j].update(
-        dict(display="flex", flex_flow="column", align_items="stretch", layout=ipywidgets.Layout(width="auto"))
-    )
+    descriptions[i][j].update(dict(flex_flow="column", align_items="stretch", layout=ipywidgets.Layout(width="200px")))
     if update:
         return descriptions[i][j]["button_style"], descriptions[i][j]["description"]
 
@@ -163,7 +163,6 @@ class Evaluation(Magics):
     def evaluation_cell_id(self, line, cell="", local_ns=None):
         cell_info = line.split()
         cell_id, cell_type = cell_info[0], cell_info[1] if len(cell_info) > 1 else "code"
-        cell_label = " ".join(cell_info[2:]) if cell_type == "codetext" else ""
 
         buttons = [get_description(i, 0) for i in [0, 1, 2]]
         output = ipywidgets.Output()
@@ -202,20 +201,74 @@ class Evaluation(Magics):
         def fun0(b):
             return func(b, 0, *kargs[0])
 
-        if cell_type != "codetext":
-            buttons[0].on_click(fun0)
-        else:
-            label = ipywidgets.Button(description=cell_label, layout=ipywidgets.Layout(height="auto", width="auto"))
+        if cell_type == "codetext":
+            cell_label = " ".join(cell_info[2:])
+
+            label = ipywidgets.HTML(
+                value=f"<font face='FiraCode Nerd Font' size=4 color='black'>{cell_label}<font>",
+                layout=ipywidgets.Layout(height="auto", width="auto"),
+            )
             text = ipywidgets.Text()
 
             def submit(b):
+                if text.value == "":
+                    with output:
+                        output.clear_output()
+                        md(mdbody=f"Nothing to send 🙈")
+                    return
+
                 total = eval(text.value)
-                args = [send_answer_to_corrector, [cell_id], dict(answer=total, atype=cell_type, code=text.value)]
+                args = [
+                    send_answer_to_corrector,
+                    [cell_id],
+                    dict(answer=total, atype=cell_type, code=text.value, comment=f"'{total}'"),
+                ]
                 return func(b, 0, *args)
 
             buttons[0].on_click(submit)
 
+        elif cell_type == "checkboxes":
+            cell_label = " ".join(cell_info[2:-1])
+            cell_checks = cell_info[-1].split(";")
+
+            htmlWidget = ipywidgets.HTML(
+                value=f"<font face='FiraCode Nerd Font' size=4 color='black'>{cell_label}<font>"
+            )
+
+            items = [htmlWidget] + [
+                ipywidgets.Checkbox(value=False, description=i, disabled=False, indent=False) for i in cell_checks
+            ]
+
+            def submit(b):
+                answer = ""
+                for k, i in enumerate(items[1:]):
+                    if i.value:
+                        answer += cell_checks[k] + ";"
+                args = [
+                    send_answer_to_corrector,
+                    [cell_id],
+                    dict(answer=answer, atype=cell_type, comment=f"'{answer}'"),
+                ]
+                return func(b, 0, *args)
+
+            buttons[0].on_click(submit)
+        else:
+            buttons[0].on_click(fun0)
+
         if cell_type == "codetext":
             IPython.display.display(ipywidgets.HBox([label, text] + buttons[:2]), output)
+        elif cell_type == "checkboxes":
+            IPython.display.display(
+                ipywidgets.HBox(
+                    items + buttons[:2],
+                    layout=ipywidgets.Layout(
+                        overflow="scroll hidden",
+                        width="auto",
+                        flex_flow="row",
+                        display="flex",
+                    ),
+                ),
+                output,
+            )
         else:
             IPython.display.display(ipywidgets.HBox(buttons[:2]), output)
