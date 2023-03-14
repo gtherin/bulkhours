@@ -270,7 +270,7 @@ class Evaluation(Magics):
                     total = eval(widgets[0].value)
                     pams = dict(answer=total, atype=cell_type, code=widgets[0].value, comment=f"'{total}'")
                 if cell_type in ["textarea", "intslider"]:
-                    pams = dict(answer=widgets[0].value, atype=cell_type, comment=f"'{total}'")
+                    pams = dict(answer=widgets[0].value, atype=cell_type, comment=f"'{widgets[0].value}'")
                 elif cell_type in ["checkboxes", "radios"]:
                     answer = ""
                     for k, i in enumerate(widgets):
