@@ -220,7 +220,7 @@ class Evaluation(Magics):
             return func(b, 0, *kargs[0])
 
         if cell_type in ["codetext", "textarea", "checkboxes", "radios", "intslider"]:
-            cell_label = " ".join(cell_info[2:])
+            cell_label = " ".join(cell_info[2:-1]) if ";" in cell_info[-1] else " ".join(cell_info[2:])
             cell_checks = cell_info[-1].split(";")
 
             label = ipywidgets.HTML(
@@ -291,7 +291,7 @@ class Evaluation(Magics):
             else ipywidgets.Layout()
         )
 
-        if cell_type in ["codetext", "textarea", "radios", "intslider"]:
-            IPython.display.display(ipywidgets.HBox([label] + widgets + buttons[:2], layout=layout), output)
-        else:
+        if cell_type in ["code", "markdown"]:
             IPython.display.display(ipywidgets.HBox(buttons[:2]), output)
+        else:
+            IPython.display.display(ipywidgets.HBox([label] + widgets + buttons[:2], layout=layout), output)
