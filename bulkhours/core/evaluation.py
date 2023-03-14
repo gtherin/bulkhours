@@ -219,15 +219,43 @@ class Evaluation(Magics):
         def fun0(b):
             return func(b, 0, *kargs[0])
 
-        if cell_type in ["codetext", "textarea"]:
+        if cell_type in ["codetext", "textarea", "checkboxes", "radios", "intslider"]:
             cell_label = " ".join(cell_info[2:])
+            cell_checks = cell_info[-1].split(";")
 
             label = ipywidgets.HTML(
                 value=f"<font face='FiraCode Nerd Font' size=4 color='black'>{cell_label}<font>",
                 layout=ipywidgets.Layout(height="auto", width="auto"),
             )
-            if cell_type == "textarea":
+
+            if cell_type == "checkboxes":
+                widgets = [
+                    ipywidgets.Checkbox(value=False, description=i, disabled=False, indent=False) for i in cell_checks
+                ]
+            elif cell_type == "intslider":
+                widgets = [
+                    ipywidgets.IntSlider(
+                        min=int(cell_checks[0]),
+                        max=int(cell_checks[1]),
+                        step=1,
+                        continuous_update=True,
+                        orientation="horizontal",
+                        readout=True,
+                        readout_format="d",
+                    )
+                ]
+
+            elif cell_type == "textarea":
                 widgets = [ipywidgets.Textarea(placeholder="I don't know", disabled=False)]  # value='I don\'t know',
+            elif cell_type == "radios":
+                widgets = [
+                    ipywidgets.RadioButtons(
+                        options=cell_checks,
+                        layout={"width": "max-content"},
+                        disabled=False,
+                    ),
+                ]
+
             else:
                 widgets = [ipywidgets.Text()]
 
@@ -238,64 +266,32 @@ class Evaluation(Magics):
                         md(mdbody=f"Nothing to send 🙈🙉🙊")
                     return
 
-                if cell_type == "textarea":
-                    pams = dict(answer=widgets[0].value, atype=cell_type)
-                else:
+                if cell_type in ["codetext"]:
                     total = eval(widgets[0].value)
                     pams = dict(answer=total, atype=cell_type, code=widgets[0].value, comment=f"'{total}'")
+                if cell_type in ["textarea", "intslider"]:
+                    pams = dict(answer=widgets[0].value, atype=cell_type, comment=f"'{total}'")
+                elif cell_type in ["checkboxes", "radios"]:
+                    answer = ""
+                    for k, i in enumerate(widgets):
+                        if i.value:
+                            answer += cell_checks[k] + ";"
+                    pams = dict(answer=answer, atype=cell_type)
+                else:
+                    pams = dict(answer=widgets[0].value, atype=cell_type)
                 return func(b, 0, send_answer_to_corrector, [cell_id], pams)
-
-            buttons[0].on_click(submit)
-
-        elif cell_type in ["checkboxes", "radios"]:
-            cell_label = " ".join(cell_info[2:-1])
-            cell_checks = cell_info[-1].split(";")
-
-            label = ipywidgets.HTML(value=f"<font face='FiraCode Nerd Font' size=4 color='black'>{cell_label}<font>")
-
-            if cell_type == "checkboxes":
-                widgets = [
-                    ipywidgets.Checkbox(value=False, description=i, disabled=False, indent=False) for i in cell_checks
-                ]
-            else:
-                widgets = [
-                    ipywidgets.RadioButtons(
-                        options=cell_checks,
-                        layout={"width": "max-content"},
-                        disabled=False,
-                    ),
-                ]
-
-            def submit(b):
-                answer = ""
-                for k, i in enumerate(widgets):
-                    if i.value:
-                        answer += cell_checks[k] + ";"
-                args = [
-                    send_answer_to_corrector,
-                    [cell_id],
-                    dict(answer=answer, atype=cell_type, comment=f"'{answer}'"),
-                ]
-                return func(b, 0, *args)
 
             buttons[0].on_click(submit)
         else:
             buttons[0].on_click(fun0)
 
-        if cell_type in ["codetext", "textarea", "radios"]:
-            IPython.display.display(ipywidgets.HBox([label] + widgets + buttons[:2]), output)
-        elif cell_type == "checkboxes":
-            IPython.display.display(
-                ipywidgets.HBox(
-                    [label] + widgets + buttons[:2],
-                    layout=ipywidgets.Layout(
-                        overflow="scroll hidden",
-                        width="auto",
-                        flex_flow="row",
-                        display="flex",
-                    ),
-                ),
-                output,
-            )
+        layout = (
+            ipywidgets.Layout(overflow="scroll hidden", width="auto", flex_flow="row", display="flex")
+            if cell_type == "checkboxes"
+            else ipywidgets.Layout()
+        )
+
+        if cell_type in ["codetext", "textarea", "radios", "intslider"]:
+            IPython.display.display(ipywidgets.HBox([label] + widgets + buttons[:2], layout=layout), output)
         else:
             IPython.display.display(ipywidgets.HBox(buttons[:2]), output)
