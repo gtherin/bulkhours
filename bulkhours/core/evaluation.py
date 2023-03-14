@@ -62,15 +62,14 @@ def get_document(sid, user):
     return firestore.Client().collection(sid).document(user)
 
 
-def send_answer_to_corrector(question, update=False, comment="", **kwargs):
+def send_answer_to_corrector(question, update=False, user=None, comment="", **kwargs):
+    user = os.environ["STUDENT"] if user is None else user
     kwargs.update({"update_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
     if update:
-        get_document(question, os.environ["STUDENT"]).update(kwargs)
+        get_document(question, user).update(kwargs)
     else:
-        get_document(question, os.environ["STUDENT"]).set(kwargs)
-    print(
-        f'Answer {comment} has been submited for: {question}/{os.environ["STUDENT"]}. You can resubmit it several times'
-    )
+        get_document(question, user).set(kwargs)
+    print(f"Answer {comment} has been submited for: {question}/{user}. You can resubmit it several times")
 
 
 def get_solution_from_corrector(question, corrector="solution"):
@@ -146,28 +145,35 @@ class Evaluation(Magics):
         )
         self.show_answer = False
 
-    def show_cell(self, cell_id, cell_type, corrector="solution", private_msg=False):
-        text = get_solution_from_corrector(cell_id, corrector=corrector)
+    def show_cell(self, cell_id, cell_type, corrector="solution", private_msg=False, answer=None):
+        data = get_solution_from_corrector(cell_id, corrector=corrector)
+        print(data)
 
-        if text is None and private_msg:
+        if data is None and private_msg:
             pass
-        elif text is None:
+        elif data is None:
             md(mdbody=f"""*Solution ({cell_id}, {cell_type}) is not available (yet 😕)*""")
         elif private_msg:
-            if (user := os.environ["STUDENT"]) in text or (user := "all") in text:
-                md(header=f"Message ({cell_id}, {user}) from corrector", rawbody=text[user])
+            if (user := os.environ["STUDENT"]) in data or (user := "all") in data:
+                md(header=f"Message ({cell_id}, {user}) from corrector", rawbody=data[user])
         elif cell_type == "code":
-            md(header=f"Correction ({cell_id}, {cell_type})", rawbody=text["answer"])
+            md(header=f"Correction ({cell_id}, {cell_type})", rawbody=data["answer"])
             md(
                 f"""---
-    **Let's execute the code (for {cell_id})** 💻
+**Let's execute the code (for {cell_id})** 💻
     ---"""
             )
-            self.shell.run_cell(text["answer"])
+            self.shell.run_cell(data["answer"])
         elif cell_type == "markdown":
-            md(header=f"Correction ({cell_id}, {cell_type})", mdbody=text["answer"])
+            md(header=f"Correction ({cell_id}, {cell_type})", mdbody=data["answer"])
         elif cell_type == "codetext":
-            md(mdbody=f"Correction 🤓: {text['answer']} (code({text['code']})")
+            md(mdbody=f"Correction 🤓: {data['answer']} (code({data['code']})")
+        if "hidecode" in data:
+            if answer is not None:
+                hide_code = data["hidecode"].replace("ANSWER", str(answer))
+            elif "answer" in data:
+                hide_code = data["hidecode"].replace("ANSWER", str(data["answer"]))
+            self.shell.run_cell(hide_code)
 
     @line_cell_magic
     @needs_local_scope
@@ -175,6 +181,12 @@ class Evaluation(Magics):
         cell_info = line.split()
         cell_id, cell_user = cell_info[0], cell_info[1] if len(cell_info) > 1 else "all"
         send_answer_to_corrector(cell_id, update=True, **{cell_user: cell})
+
+    @line_cell_magic
+    @needs_local_scope
+    def update_cell_id(self, line, cell="", local_ns=None):
+        cell_id, cell_user, cell_field = line.split()
+        send_answer_to_corrector(cell_id, update=True, user=cell_user, **{cell_field: cell})
 
     @line_cell_magic
     @needs_local_scope
@@ -200,90 +212,79 @@ class Evaluation(Magics):
                 else:
                     b.button_style, b.description = get_description(i, 0, update=True)
 
-        kargs = [
-            [send_answer_to_corrector, [cell_id], dict(answer=cell, atype=cell_type)],
-            [self.show_cell, [cell_id, cell_type], dict()],
-            [self.show_cell, [cell_id, cell_type], dict(private_msg=True)],
-        ]
+        cell_label = " ".join(cell_info[2:-1]) if ";" in cell_info[-1] else " ".join(cell_info[2:])
+        cell_checks = cell_info[-1].split(";")
+
+        if cell_type in ["code", "markdown"]:
+            label = []
+        else:
+            label = [
+                ipywidgets.HTML(
+                    value=f"<font face='FiraCode Nerd Font' size=4 color='black'>{cell_label}<font>",
+                    layout=ipywidgets.Layout(height="auto", width="auto"),
+                )
+            ]
+
+        if cell_type == "checkboxes":
+            widgets = [ipywidgets.Checkbox(value=False, description=i, indent=False) for i in cell_checks]
+        elif cell_type == "intslider":
+            widgets = [
+                ipywidgets.IntSlider(
+                    min=int(cell_checks[0]),
+                    max=int(cell_checks[1]),
+                    step=1,
+                    continuous_update=True,
+                    orientation="horizontal",
+                    readout=True,
+                    readout_format="d",
+                )
+            ]
+
+        elif cell_type == "textarea":
+            widgets = [ipywidgets.Textarea(placeholder="I don't know", disabled=False)]
+        elif cell_type == "radios":
+            widgets = [ipywidgets.RadioButtons(options=cell_checks, layout={"width": "max-content"})]
+        else:
+            widgets = []
+
+        def get_answer(widgets, cell_type):
+            if cell_type in ["codetext"]:
+                return eval(widgets[0].value)
+            elif cell_type in ["code", "markdown"]:
+                return cell
+            elif cell_type in ["checkboxes", "radios"]:
+                return ";".join([cell_checks[k] for k, i in enumerate(widgets) if i.value])
+            else:
+                return widgets[0].value
+
+        def submit(b):
+            answer = get_answer(widgets, cell_type)
+            if answer == "":
+                with output:
+                    output.clear_output()
+                    md(mdbody=f"Nothing to send 🙈🙉🙊")
+                return
+
+            pams = dict(answer=answer, atype=cell_type)
+
+            if cell_type in ["codetext"]:
+                pams.update(dict(code=widgets[0].value, comment=f"'{widgets[0].value}'"))
+            if cell_type in ["textarea", "intslider"]:
+                pams.update(dict(comment=f"'{widgets[0].value}'"))
+            return func(b, 0, send_answer_to_corrector, [cell_id], pams)
+
+        buttons[0].on_click(submit)
 
         def fun1(b):
-            return func(b, 1, *kargs[1])
+            answer = get_answer(widgets, cell_type)
+            return func(b, 1, self.show_cell, [cell_id, cell_type], dict(answer=answer))
 
         buttons[1].on_click(fun1)
 
         def fun2(b):
-            return func(b, 2, *kargs[2])
+            return func(b, 2, self.show_cell, [cell_id, cell_type], dict(private_msg=True))
 
         buttons[2].on_click(fun2)
-
-        def fun0(b):
-            return func(b, 0, *kargs[0])
-
-        if cell_type in ["codetext", "textarea", "checkboxes", "radios", "intslider"]:
-            cell_label = " ".join(cell_info[2:-1]) if ";" in cell_info[-1] else " ".join(cell_info[2:])
-            cell_checks = cell_info[-1].split(";")
-
-            label = ipywidgets.HTML(
-                value=f"<font face='FiraCode Nerd Font' size=4 color='black'>{cell_label}<font>",
-                layout=ipywidgets.Layout(height="auto", width="auto"),
-            )
-
-            if cell_type == "checkboxes":
-                widgets = [
-                    ipywidgets.Checkbox(value=False, description=i, disabled=False, indent=False) for i in cell_checks
-                ]
-            elif cell_type == "intslider":
-                widgets = [
-                    ipywidgets.IntSlider(
-                        min=int(cell_checks[0]),
-                        max=int(cell_checks[1]),
-                        step=1,
-                        continuous_update=True,
-                        orientation="horizontal",
-                        readout=True,
-                        readout_format="d",
-                    )
-                ]
-
-            elif cell_type == "textarea":
-                widgets = [ipywidgets.Textarea(placeholder="I don't know", disabled=False)]  # value='I don\'t know',
-            elif cell_type == "radios":
-                widgets = [
-                    ipywidgets.RadioButtons(
-                        options=cell_checks,
-                        layout={"width": "max-content"},
-                        disabled=False,
-                    ),
-                ]
-
-            else:
-                widgets = [ipywidgets.Text()]
-
-            def submit(b):
-                if widgets[0].value == "":
-                    with output:
-                        output.clear_output()
-                        md(mdbody=f"Nothing to send 🙈🙉🙊")
-                    return
-
-                if cell_type in ["codetext"]:
-                    total = eval(widgets[0].value)
-                    pams = dict(answer=total, atype=cell_type, code=widgets[0].value, comment=f"'{total}'")
-                if cell_type in ["textarea", "intslider"]:
-                    pams = dict(answer=widgets[0].value, atype=cell_type, comment=f"'{widgets[0].value}'")
-                elif cell_type in ["checkboxes", "radios"]:
-                    answer = ""
-                    for k, i in enumerate(widgets):
-                        if i.value:
-                            answer += cell_checks[k] + ";"
-                    pams = dict(answer=answer, atype=cell_type)
-                else:
-                    pams = dict(answer=widgets[0].value, atype=cell_type)
-                return func(b, 0, send_answer_to_corrector, [cell_id], pams)
-
-            buttons[0].on_click(submit)
-        else:
-            buttons[0].on_click(fun0)
 
         layout = (
             ipywidgets.Layout(overflow="scroll hidden", width="auto", flex_flow="row", display="flex")
@@ -291,7 +292,4 @@ class Evaluation(Magics):
             else ipywidgets.Layout()
         )
 
-        if cell_type in ["code", "markdown"]:
-            IPython.display.display(ipywidgets.HBox(buttons[:2]), output)
-        else:
-            IPython.display.display(ipywidgets.HBox([label] + widgets + buttons[:2], layout=layout), output)
+        IPython.display.display(ipywidgets.HBox(label + widgets + buttons[:2], layout=layout), output)
