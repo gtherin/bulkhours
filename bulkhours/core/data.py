@@ -72,6 +72,10 @@ def get_core_data(label, modules={}, credit=False, query=None, index=None, test_
         df = pd.read_csv(data_info["httplink"])
     else:
         df = get_data_from_file(data_info["files_list"], **data_info)
+
+    if type(df) == str:
+        return df
+
     df = clean_columns(df, data_info)
 
     if "filter" in data_info:
