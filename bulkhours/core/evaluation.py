@@ -92,7 +92,9 @@ def get_description(i, j, update=False):
             dict(description="Hide message from corrector", button_style="warning"),
         ],
     ]
-    descriptions[i][j].update(dict(flex_flow="column", align_items="stretch", layout=ipywidgets.Layout(width="200px")))
+    descriptions[i][j].update(
+        dict(flex_flow="column", align_items="stretch", layout=ipywidgets.Layout(width="max-content"))
+    )
     if update:
         return descriptions[i][j]["button_style"], descriptions[i][j]["description"]
 
@@ -201,47 +203,56 @@ class Evaluation(Magics):
         def fun0(b):
             return func(b, 0, *kargs[0])
 
-        if cell_type == "codetext":
+        if cell_type in ["codetext", "textarea"]:
             cell_label = " ".join(cell_info[2:])
 
             label = ipywidgets.HTML(
                 value=f"<font face='FiraCode Nerd Font' size=4 color='black'>{cell_label}<font>",
                 layout=ipywidgets.Layout(height="auto", width="auto"),
             )
-            text = ipywidgets.Text()
+            if cell_type == "textarea":
+                widgets = [ipywidgets.Textarea(placeholder="I don't know", disabled=False)]  # value='I don\'t know',
+            else:
+                widgets = [ipywidgets.Text()]
 
             def submit(b):
-                if text.value == "":
+                if widgets[0].value == "":
                     with output:
                         output.clear_output()
                         md(mdbody=f"Nothing to send 🙈🙉🙊")
                     return
 
-                total = eval(text.value)
-                args = [
-                    send_answer_to_corrector,
-                    [cell_id],
-                    dict(answer=total, atype=cell_type, code=text.value, comment=f"'{total}'"),
-                ]
-                return func(b, 0, *args)
+                if cell_type == "textarea":
+                    pams = dict(answer=widgets[0].value, atype=cell_type)
+                else:
+                    total = eval(widgets[0].value)
+                    pams = dict(answer=total, atype=cell_type, code=widgets[0].value, comment=f"'{total}'")
+                return func(b, 0, send_answer_to_corrector, [cell_id], pams)
 
             buttons[0].on_click(submit)
 
-        elif cell_type == "checkboxes":
+        elif cell_type in ["checkboxes", "radios"]:
             cell_label = " ".join(cell_info[2:-1])
             cell_checks = cell_info[-1].split(";")
 
-            htmlWidget = ipywidgets.HTML(
-                value=f"<font face='FiraCode Nerd Font' size=4 color='black'>{cell_label}<font>"
-            )
+            label = ipywidgets.HTML(value=f"<font face='FiraCode Nerd Font' size=4 color='black'>{cell_label}<font>")
 
-            items = [htmlWidget] + [
-                ipywidgets.Checkbox(value=False, description=i, disabled=False, indent=False) for i in cell_checks
-            ]
+            if cell_type == "checkboxes":
+                widgets = [
+                    ipywidgets.Checkbox(value=False, description=i, disabled=False, indent=False) for i in cell_checks
+                ]
+            else:
+                widgets = [
+                    ipywidgets.RadioButtons(
+                        options=cell_checks,
+                        layout={"width": "max-content"},
+                        disabled=False,
+                    ),
+                ]
 
             def submit(b):
                 answer = ""
-                for k, i in enumerate(items[1:]):
+                for k, i in enumerate(widgets):
                     if i.value:
                         answer += cell_checks[k] + ";"
                 args = [
@@ -255,12 +266,12 @@ class Evaluation(Magics):
         else:
             buttons[0].on_click(fun0)
 
-        if cell_type == "codetext":
-            IPython.display.display(ipywidgets.HBox([label, text] + buttons[:2]), output)
+        if cell_type in ["codetext", "textarea", "radios"]:
+            IPython.display.display(ipywidgets.HBox([label] + widgets + buttons[:2]), output)
         elif cell_type == "checkboxes":
             IPython.display.display(
                 ipywidgets.HBox(
-                    items + buttons[:2],
+                    [label] + widgets + buttons[:2],
                     layout=ipywidgets.Layout(
                         overflow="scroll hidden",
                         width="auto",
