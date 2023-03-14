@@ -77,21 +77,37 @@ def get_solution_from_corrector(question, corrector="solution"):
     return get_document(question, corrector).get().to_dict()
 
 
-def get_description(i, j, update=False):
-    descriptions = [
-        [
-            dict(description="Send answer to corrector", button_style="primary"),
-            dict(description="Answer sent to corrector", button_style="success"),
-        ],
-        [
-            dict(description="Show correction", button_style="primary"),
-            dict(description="Hide correction", button_style="danger"),
-        ],
-        [
-            dict(description="Message from corrector", button_style="info"),
-            dict(description="Hide message from corrector", button_style="warning"),
-        ],
-    ]
+def get_description(i, j, update=False, lan="fr"):
+    if lan == "fr":
+        descriptions = [
+            [
+                dict(description="Envoyer au correcteur", button_style="primary"),
+                dict(description="Correction envoyée", button_style="success"),
+            ],
+            [
+                dict(description="Voir la correction", button_style="primary"),
+                dict(description="Cacher la correction", button_style="danger"),
+            ],
+            [
+                dict(description="Message au correcteur", button_style="info"),
+                dict(description="Cacher le message du correcteur", button_style="warning"),
+            ],
+        ]
+    else:
+        descriptions = [
+            [
+                dict(description="Send answer to corrector", button_style="primary"),
+                dict(description="Answer sent to corrector", button_style="success"),
+            ],
+            [
+                dict(description="Show correction", button_style="primary"),
+                dict(description="Hide correction", button_style="danger"),
+            ],
+            [
+                dict(description="Message from corrector", button_style="info"),
+                dict(description="Hide message from corrector", button_style="warning"),
+            ],
+        ]
     descriptions[i][j].update(
         dict(flex_flow="column", align_items="stretch", layout=ipywidgets.Layout(width="max-content"))
     )
