@@ -42,8 +42,12 @@ class Evaluation(Magics):
             self.shell.run_cell(data["answer"])
         elif cell_type in ["markdown", "textarea"]:
             md(header=f"Correction ({cell_id})", mdbody=data["answer"])
-        elif cell_type in ["codetext", "intslider"]:
-            cc = "" if cell_type == "intslider" or data["answer"] == data["code"] else f" ({data['code']})"
+        elif cell_type in ["codetext", "intslider", "floatslider"]:
+            cc = (
+                ""
+                if cell_type in ["intslider", "floatslider"] or data["answer"] == data["code"]
+                else f" ({data['code']})"
+            )
             if data["answer"] == answer:
                 md(mdbody=f"🥳Correction: {data['answer']}{cc}", bc="green")
             else:
@@ -82,7 +86,8 @@ class Evaluation(Magics):
         cell_info = line.split()
         cell_id, cell_type = cell_info[0], cell_info[1] if len(cell_info) > 1 else "code"
 
-        buttons = [get_description(i, 0) for i in [0, 1, 2]]
+        buttons = [s.b for s in sbuttons]
+
         output = ipywidgets.Output()
 
         if cell_type == "code":
@@ -94,11 +99,9 @@ class Evaluation(Magics):
             with output:
                 output.clear_output()
                 self.show_answer = not self.show_answer
+                sbuttons[i].update_style(b, on=self.show_answer)
                 if self.show_answer:
-                    b.button_style, b.description = get_description(i, 1, update=True)
                     func(*args, **kwargs)
-                else:
-                    b.button_style, b.description = get_description(i, 0, update=True)
 
         cell_label = " ".join(cell_info[2:-1]) if ";" in cell_info[-1] else " ".join(cell_info[2:])
         cell_checks = cell_info[-1].split(";")
@@ -106,16 +109,16 @@ class Evaluation(Magics):
         if cell_type in ["code", "markdown"]:
             label = []
         else:
-            label = [
-                ipywidgets.HTML(
-                    value=f"<font face='FiraCode Nerd Font' size=4 color='black'>{cell_label}<font>",
-                    layout=ipywidgets.Layout(height="auto", width="auto"),
-                )
-            ]
+            label = (
+                f"<b><font face='FiraCode Nerd Font' size=4 color='red'>{cell_label}<font></b>"
+                if cell_type == "floatslider"
+                else f"<font face='FiraCode Nerd Font' size=4 color='black'>{cell_label}<font>"
+            )
+            label = [ipywidgets.HTML(value=label, layout=ipywidgets.Layout(height="auto", width="auto"))]
 
         if cell_type == "checkboxes":
             widgets = [ipywidgets.Checkbox(value=False, description=i, indent=False) for i in cell_checks]
-        elif cell_type == "intslider":
+        elif cell_type in ["intslider"]:
             widgets = [
                 ipywidgets.IntSlider(
                     min=int(cell_checks[0]),
@@ -125,6 +128,19 @@ class Evaluation(Magics):
                     orientation="horizontal",
                     readout=True,
                     readout_format="d",
+                )
+            ]
+        elif cell_type in ["floatslider"]:
+            widgets = [
+                ipywidgets.FloatSlider(
+                    min=float(cell_checks[0]),
+                    max=float(cell_checks[1]),
+                    value=float(cell_checks[2]),
+                    step=0.5,
+                    continuous_update=True,
+                    orientation="horizontal",
+                    readout=True,
+                    readout_format=".1f",
                 )
             ]
 
@@ -159,7 +175,7 @@ class Evaluation(Magics):
 
             if cell_type in ["codetext"]:
                 pams.update(dict(code=widgets[0].value, comment=f"'{widgets[0].value}'"))
-            if cell_type in ["textarea", "intslider"]:
+            if cell_type in ["textarea", "intslider", "floatslider"]:
                 pams.update(dict(comment=f"'{widgets[0].value}'"))
             return func(b, 0, firebase.send_answer_to_corrector, [cell_id], pams)
 
@@ -173,7 +189,7 @@ class Evaluation(Magics):
         def fun2(b):
             return func(b, 2, self.show_cell, [cell_id, cell_type], dict(private_msg=True))
 
-        buttons[-1].on_click(fun2)
+        buttons[2].on_click(fun2)
 
         layout = (
             ipywidgets.Layout(overflow="scroll hidden", width="auto", flex_flow="row", display="flex")
@@ -181,4 +197,7 @@ class Evaluation(Magics):
             else ipywidgets.Layout()
         )
 
-        IPython.display.display(ipywidgets.HBox(label + widgets + buttons[:2], layout=layout), output)
+        if cell_type == "floatslider":
+            IPython.display.display(ipywidgets.HBox(label + widgets + buttons[3:], layout=layout), output)
+        else:
+            IPython.display.display(ipywidgets.HBox(label + widgets + buttons[:2], layout=layout), output)
