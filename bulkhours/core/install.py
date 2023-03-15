@@ -11,7 +11,7 @@ def get_arg_parser(argv):
         description="Installation script evaluation",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("-u", "--user", default=os.environ["STUDENT"])
+    parser.add_argument("-u", "--user", default=None)
     parser.add_argument("-x", "--pass-code", help="Pass code", default=None)
     parser.add_argument("-X", "--pass-phrase", help="Pass code", default=None)
     parser.add_argument("-e", "--env-id", help=f"Environnment id")
