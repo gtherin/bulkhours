@@ -1,5 +1,6 @@
 from .data import *  # noqa
 from .evaluation import *  # noqa
+from .textstyles import *  # noqa
 import sys
 
 

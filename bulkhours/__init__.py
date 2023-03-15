@@ -1,6 +1,7 @@
 import os
 
 from .core.evaluation import Evaluation, set_up_student  # noqa
+from .core.logins import clean_student_name  # noqa
 from .core.data import get_core_data, get_image  # noqa
 from .core.timeit import timeit  # noqa
 from .core import geo  # noqa

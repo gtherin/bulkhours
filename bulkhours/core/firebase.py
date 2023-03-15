@@ -13,9 +13,11 @@ def get_document(sid, user):
     return firestore.Client().collection(sid).document(user)
 
 
-def send_answer_to_corrector(question, update=True, user=None, comment="", **kwargs):
+def send_answer_to_corrector(question, update=True, user=None, comment="", update_time=True, **kwargs):
     user = os.environ["STUDENT"] if user is None else user
-    kwargs.update({"update_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
+
+    if update_time:
+        kwargs.update({"update_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
 
     if update and get_document(question, user).get().to_dict():
         get_document(question, user).update(kwargs)
