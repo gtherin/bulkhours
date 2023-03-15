@@ -1,12 +1,6 @@
 import os
 
-from .core.evaluation import (
-    Evaluation,
-    set_up_student,
-    send_answer_to_corrector,
-    get_solution_from_corrector,
-    clean_student_name,
-)  # noqa
+from .core.evaluation import Evaluation, set_up_student  # noqa
 from .core.data import get_core_data, get_image  # noqa
 from .core.timeit import timeit  # noqa
 from .core import geo  # noqa
