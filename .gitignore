@@ -42,5 +42,4 @@ lib64
 setup.py
 abc.py
 .safe
-.safe2
 bulkhours/core/install.py
