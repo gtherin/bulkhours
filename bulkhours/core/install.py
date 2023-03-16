@@ -77,7 +77,7 @@ def main(argv=sys.argv[1:]):
 
     # Set up the package directory
     bulk_dir = "/content" if is_colab else "/home/guydegnol/projects"
-    env_id = "mock" if is_colab else "colab"
+    env_id = "colab" if is_colab else "mock"
 
     # Install main package
     print("RUN git clone https://github.com/guydegnol/bulkhours.git [%s, %.0fs]" % (env_id, time.time() - start_time))
