@@ -96,8 +96,8 @@ Not presented
 You need to login to be properly evealuated:
 ```python:
 import IPython
-bulkhours.init_env(login="jdoe", ip=IPython, pass_code="PASS_COURSE", env="econometrics")
-bulkhours.init_env(login="jdoe", ip=IPython, pass_code="PASS_COURSE", env="hpcgpu")
+bulkhours.init_env(login="jdoe", pass_code="PASS_COURSE", env="econometrics")
+bulkhours.init_env(login="jdoe", pass_code="PASS_COURSE", env="hpcgpu")
 ```
 
 ##### Cuda methods
@@ -115,8 +115,7 @@ int main() {
 
 You can load the magic methods with (in case you don't need to login):
 ```python:
-import IPython
-bulkhours.load_extra_magics(IPython)
+bulkhours.load_extra_magics()
 ```
 
 
@@ -139,7 +138,6 @@ The file has been downloaded from the page https://www.insee.fr/fr/statistiques/
 
 #### `bulkhours.get_data("france.salaires")`
 The file has been downloaded from the page https://www.insee.fr/fr/statistiques/6436313#tableau-figure2
-
 
 #### `data/world_gdp_hist.csv`
 "Data Source","World Development Indicators", "Last Updated Date","2022-12-22",
