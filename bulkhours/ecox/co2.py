@@ -3,17 +3,6 @@ import pandas as pd
 from .world import get_mapgeneric
 
 
-def get_air_passengers(credit=True, **kwargs):
-    from ..core import data
-
-    df = data.get_core_data("AirPassengers.csv", index="Month")
-    df.index = pd.to_datetime(df.index)
-    df.index.freq = "MS"
-    df["is_test"] = df.index >= df.index[120]
-
-    return df
-
-
 def get_main(credit=True, **kwargs):
     if credit:
         print(
