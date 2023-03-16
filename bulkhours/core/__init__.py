@@ -1,7 +1,9 @@
+import sys
+import argparse
+
 from .data import *  # noqa
 from .evaluation import *  # noqa
 from .textstyles import *  # noqa
-import sys
 
 
 def runrealcmd(command, verbose=True):

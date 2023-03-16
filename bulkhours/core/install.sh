@@ -9,7 +9,7 @@ notebook="$5"
 packages="$6"
 
 # Check the install procedure
-if [ "$passse" != "ARANCINI" ]; then
+if [ "$passse" != "POLPETTE" ]; then
     echo "Library bulkhours is no more available.";
     exit 0;
 fi
