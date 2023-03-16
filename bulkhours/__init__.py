@@ -124,7 +124,6 @@ def get_config():
 def init(verbose=False):
     kwargs = get_config()
     if len(kwargs) > 1:
-        print(kwargs)
         init_env(verbose=verbose, **kwargs)
 
 
