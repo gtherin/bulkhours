@@ -19,7 +19,7 @@ from .ecox.trading import *  # noqa
 econometrics = ecox  # noqa
 
 
-def load_extra_magics(verbose=True, nid=None):
+def load_extra_magics(verbose=True, nid=None, in_french=False):
     from .hpc.compiler import CCPPlugin
     import IPython
     from . import __version__
@@ -27,16 +27,16 @@ def load_extra_magics(verbose=True, nid=None):
     ipp = IPython.get_ipython()
     if ipp:
         ipp.register_magics(CCPPlugin(ipp))
-        ipp.register_magics(Evaluation(ipp, nid))
+        ipp.register_magics(Evaluation(ipp, nid, in_french))
 
     if verbose:
         print(f"ENV BULK Helper cOURSe (version={__version__.__version__})")
 
 
-def init_env(login=None, pass_code=None, env=None, verbose=False, nid=None, course_version=None):
+def init_env(login=None, pass_code=None, env=None, verbose=False, in_french=False, nid=None, course_version=None):
     student_login = set_up_student(login, pass_code=pass_code)
 
-    load_extra_magics(verbose=False, nid=nid)
+    load_extra_magics(verbose=False, nid=nid, in_french=in_french)
 
     if env in ["rl", "reinforcement learning"]:
         rl.init_env(verbose=verbose)

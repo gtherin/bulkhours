@@ -17,16 +17,13 @@ class BulkWidget:
 
     def get_label(self):
         if self.cinfo.type in ["code", "markdown"]:
-            label = []
-        else:
-            label = (
-                f"<b><font face='FiraCode Nerd Font' size=4 color='red'>{self.cinfo.label}<font></b>"
-                if self.cinfo.type == "floatslider"
-                else f"<font face='FiraCode Nerd Font' size=4 color='black'>{self.cinfo.label}<font>"
-            )
-            label = [ipywidgets.HTML(value=label, layout=ipywidgets.Layout(height="auto", width="auto"))]
-
-        return label
+            return None
+        label = (
+            f"<b><font face='FiraCode Nerd Font' size=4 color='red'>{self.cinfo.label}<font></b>"
+            if self.cinfo.type == "floatslider"
+            else f"<font face='FiraCode Nerd Font' size=4 color='black'>{self.cinfo.label}<font>"
+        )
+        return ipywidgets.HTML(value=label, layout=ipywidgets.Layout(height="auto", width="auto"))
 
     def get_widgets(self):
         cell_checks = self.cinfo.options.split(";")

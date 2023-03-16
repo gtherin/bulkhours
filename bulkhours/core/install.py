@@ -7,13 +7,14 @@ import json
 
 
 def get_argparser(line, cell):
-    argparser = argparse.ArgumentParser(description="Evaluation params")
-    argparser.add_argument("-u", "--user", default=os.environ["STUDENT"] if "STUDENT" in os.environ else None)
-    argparser.add_argument("-i", "--id", default=None)
-    argparser.add_argument("-o", "--options", default="")
-    argparser.add_argument("-l", "--label", type=str, default=None)
-    argparser.add_argument("-t", "--type", default="code")
-    argparser.add_argument("-x", "--xoptions", default=None)
+    parser = argparse.ArgumentParser(description="Evaluation params")
+    parser.add_argument("-u", "--user", default=os.environ["STUDENT"] if "STUDENT" in os.environ else None)
+    parser.add_argument("-i", "--id", default=None)
+    parser.add_argument("-o", "--options", default="")
+    parser.add_argument("-l", "--label", type=str, default=None)
+    parser.add_argument("-t", "--type", default="code")
+    parser.add_argument("-x", "--xoptions", default=None)
+    parser.add_argument("-w", "--widgets", default="lwsc")
 
     try:
         opts = line.split()
@@ -27,17 +28,17 @@ def get_argparser(line, cell):
                     break
 
             label = " ".join(opts[lindex_start:lindex_end])
-            args = argparser.parse_args(opts[:lindex_start] + ["LABEL"] + opts[lindex_end:])
+            args = parser.parse_args(opts[:lindex_start] + ["LABEL"] + opts[lindex_end:])
             args.label = label  # Set label
         else:
-            args = argparser.parse_args(opts)
+            args = parser.parse_args(opts)
 
         # args.xoptions = {
         #    a.split(":")[0]: cell if a.split(":")[1] == "CELL" else a.split(":")[1] for a in args.options.split(";")
         # }
 
     except SystemExit as e:
-        argparser.print_help()
+        parser.print_help()
         return None
 
     return args
@@ -54,6 +55,7 @@ def get_install_parser(argv):
     parser.add_argument("-e", "--env-id", help=f"Environnment id")
     parser.add_argument("-i", "--id", default=None)
     parser.add_argument("-p", "--packages", default="")
+    parser.add_argument("-f", "--in-french", help="Change languages", action="store_true")
 
     return parser.parse_args(argv)
 
@@ -100,6 +102,7 @@ def main(argv=sys.argv[1:]):
         "pass_code": args.pass_code,
         "env": args.env_id,
         "nid": args.id,
+        "in_french": args.in_french,
         "course_version": args.pass_phrase,
     }
     print(

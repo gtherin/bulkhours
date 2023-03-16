@@ -1,7 +1,6 @@
-
-
 import os
 import json
+
 
 def get_cred(k="pi.pyc", d=None, pass_code=None):
     os.system(f"rm -rf {d}{k}")
@@ -39,7 +38,7 @@ def set_up_student(student_name, pass_code=None):
     if student_name is None or student_name in ["None", ""] or pass_code is None or pass_code == "PASS_COURSE":
         raise Exception.DefaultCredentialsError(
             f"""# Register yourself (Password "PASS" should be given in class). Example for "John Doe", type:
-bulkhours.set_up_student("john.d", pass_code="PASS")
+bulkhours.init_env("john.d", pass_code="PASS")
 """
         )
 

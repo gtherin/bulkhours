@@ -13,10 +13,11 @@ from .widgets import BulkWidget
 
 @magics_class
 class Evaluation(Magics):
-    def __init__(self, shell, nid):
+    def __init__(self, shell, nid, in_french):
         super(Evaluation, self).__init__(shell)
         self.show_answer = False
         self.nid = nid
+        self.in_french = in_french
         self.cinfo = None
 
     @property
@@ -32,16 +33,25 @@ class Evaluation(Magics):
         if data is None and private_msg:
             pass
         elif data is None:
-            md(mdbody=f"*Solution is not available (yet 😕)*")
+            md(
+                mdbody=f"*La solution n'est pas disponible (pour le moment 😕)*"
+                if self.in_french
+                else f"*Solution is not available (yet 😕)*"
+            )
         elif private_msg:
             if (user := os.environ["STUDENT"]) in data or (user := "all") in data:
-                md(header=f"Message ({cell_id}, {user}) from corrector", rawbody=data[user])
+                md(
+                    header=f"Message ({cell_id}, {user}) du correcteur"
+                    if self.in_french
+                    else f"Message ({cell_id}, {user}) from corrector",
+                    rawbody=data[user],
+                )
         elif cell_type == "code":
             md(header=f"Correction ({cell_id})", rawbody=data["answer"])
             md(
-                f"""---
-**Let's execute the code (for {cell_id})** 💻
-    ---"""
+                f"""**Execution du code ({cell_id})** 💻"""
+                if self.in_french
+                else f"""**Let's execute the code ({cell_id})** 💻"""
             )
             self.shell.run_cell(data["answer"])
         elif cell_type in ["markdown", "textarea"]:
@@ -90,8 +100,6 @@ class Evaluation(Magics):
         if not self.cinfo:
             return
 
-        buttons = [s.b for s in sbuttons]
-
         output = ipywidgets.Output()
 
         if self.cinfo.type == "code":
@@ -100,7 +108,13 @@ class Evaluation(Magics):
             IPython.display.display(IPython.display.Markdown(cell))
 
         bwidget = BulkWidget(self.cinfo, cell)
-        label = bwidget.get_label()
+
+        owidgets = {
+            "l": bwidget.get_label(),
+            "s": sbuttons[0].g(self.in_french),
+            "c": sbuttons[1].g(self.in_french),
+            "m": sbuttons[2].g(self.in_french),
+        }
         widgets = bwidget.get_widgets()
 
         def func(b, i, func, args, kwargs):
@@ -127,7 +141,7 @@ class Evaluation(Magics):
                 pams.update(dict(comment=f"'{widgets[0].value}'"))
             return func(b, 0, firebase.send_answer_to_corrector, [self.cell_id], pams)
 
-        buttons[0].on_click(submit)
+        owidgets["s"].on_click(submit)
 
         def fun1(b):
             return func(
@@ -138,11 +152,18 @@ class Evaluation(Magics):
                 dict(answer=bwidget.get_answer(widgets, self.cinfo.type)),
             )
 
-        buttons[1].on_click(fun1)
+        owidgets["c"].on_click(fun1)
 
         def fun2(b):
             return func(b, 2, self.show_cell, [self.cell_id, self.cinfo.type], dict(private_msg=True))
 
-        buttons[2].on_click(fun2)
+        owidgets["m"].on_click(fun2)
 
-        IPython.display.display(ipywidgets.HBox(label + widgets + buttons[:2], layout=bwidget.get_layout()), output)
+        ws = []
+        for w in self.cinfo.widgets:
+            if w == "w":
+                ws += widgets
+            elif owidgets[w]:
+                ws.append(owidgets[w])
+
+        IPython.display.display(ipywidgets.HBox(ws, layout=bwidget.get_layout()), output)
