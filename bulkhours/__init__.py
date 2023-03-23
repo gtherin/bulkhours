@@ -14,6 +14,9 @@ from . import ecox  # noqa
 from . import beaut  # noqa
 from . import boids  # noqa
 from . import phyu  # noqa
+from .phyu.constants import constants  # noqa
+from .phyu.formulas import formulas  # noqa
+
 from .ecox.trading import *  # noqa
 
 econometrics = ecox  # noqa

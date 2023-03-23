@@ -95,9 +95,8 @@ Not presented
 
 You need to login to be properly evealuated:
 ```python:
-import IPython
-bulkhours.init_env(login="jdoe", pass_code="PASS_COURSE", env="econometrics")
-bulkhours.init_env(login="jdoe", pass_code="PASS_COURSE", env="hpcgpu")
+bulkhours.init_env(login="john.d", pass_code="PASS_COURSE", env="econometrics")
+bulkhours.init_env(login="john.d", pass_code="PASS_COURSE", env="hpcgpu")
 ```
 
 ##### Cuda methods
@@ -174,4 +173,3 @@ Data concentrations
 - bulkhours.get_data("gmacro.fr_gdp")
 - bulkhours.get_data("wages")
 - bulkhours.get_data("mincer.params") 
-
