@@ -103,7 +103,6 @@ def main(argv=sys.argv[1:]):
         "env": args.env_id,
         "nid": args.id,
         "in_french": args.in_french,
-        "course_version": args.pass_phrase,
     }
     print(
         "LOG login=%s, id=%s, env=%s [%s, %.0fs]" % (args.user, args.id, args.env_id, env_id, time.time() - start_time)

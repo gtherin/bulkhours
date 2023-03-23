@@ -15,7 +15,7 @@ from .widgets import BulkWidget
 class Evaluation(Magics):
     def __init__(self, shell, nid, in_french):
         super(Evaluation, self).__init__(shell)
-        self.show_answer = False
+        self.show_answer = True
         self.nid = nid
         self.in_french = in_french
         self.cinfo = None
@@ -122,7 +122,7 @@ class Evaluation(Magics):
                 output.clear_output()
                 self.show_answer = not self.show_answer
                 sbuttons[i].update_style(b, on=self.show_answer)
-                if self.show_answer:
+                if not self.show_answer:
                     func(*args, **kwargs)
 
         def submit(b):
