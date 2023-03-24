@@ -10,13 +10,13 @@ def md(data, size="+4", prefix="* "):
 
 
 default_configs = {
-    "albedo": {"c": "Albedo", "u": "Sans unité (entre 0 et 1)", "l": r"$A_{\mathrm{PAR}} = VAL$"},
-    "serre": {"c": "Effet de serre", "u": "Sans unité (entre 0 et 1)", "l": r"$S_{\mathrm{PAR}} = VAL$"},
+    "Albedo": {"c": "Albedo", "u": "Sans unité (entre 0 et 1)", "l": r"$A_{\mathrm{PAR}} = VAL$", "r": 2},
+    "Serre": {"c": "Effet de serre", "u": "Sans unité (entre 0 et 1)", "l": r"$S_{\mathrm{PAR}} = VAL$"},
     "d_ua": {"c": "Distance au soleil", "u": "ua", "l": r"$d_{\mathrm{soleil} \mathrm{PAR}} = VALUNI$"},
     "R_km": {"c": "Rayon", "u": "km", "l": r"$R_{\mathrm{PAR}} = VALUNI$", "r": 0},
-    "d_solm": {"c": "Distance au soleil", "u": "m", "l": r"$d_{\mathrm{soleil} \mathrm{PAR}} = VALUNI$"},
+    "d_solm": {"c": "Distance au soleil", "u": "m", "l": r"$d_{\mathrm{soleil} \mathrm{PAR}} = VALUNI$", "r": 2},
     "M_kg": {"c": "Masse", "u": "kg", "l": r"$M_{\mathrm{PAR}} = VALUNI$"},
-    "T_C": {"c": "Temperature moyenne", "u": "°C", "l": r"$T_{\mathrm{PAR}} = VALUNI$"},
+    "T_C": {"c": "Temperature moyenne", "u": "°C", "l": r"$T_{\mathrm{PAR}} = VALUNI$", "r": 1},
     "L_W": {"c": "Luminosité", "u": "W", "l": r"$L_{\mathrm{PAR}} = VALUNI$"},
 }
 
@@ -57,6 +57,8 @@ class Constant:
 
         if title and title == "mathrm":
             self.latex = self.latex.replace("ID", "\mathrm{%s}" % self.i)
+        elif title:
+            self.latex = self.latex.replace("ID", title)
         self.latex = self.latex.replace("ID", self.i).replace("VAL", self.fv()).replace("UNI", self.fu())
         self.latex = self.latex.replace("PAR", str(self.p)).replace("\mathrm{soleil}", "\odot")
 
@@ -97,31 +99,31 @@ class Units:
         self.add_constant(
             "c2k", sc.zero_Celsius, l=r"$VAL°K=0°C$", u="K.C-1", c="Celsius en Kelvin", r=2, a=["kelvin"]
         )
-        self.add_constant("c", 300_000, u="m.s-1", c="Celerité de la lumière", r=0)
+        self.add_constant("c", 300_000, u="m.s-1", c="Celerité de la lumière", r=0, a=["vitesse_lumiere"])
         self.add_constant(
-            "annee_lumiere",
+            "al",
             sc.light_year,
-            u="m.al-1",
+            u="m",
             c="Distance parcourue par la lumière en 1an",
-            a=["al"],
-            title="mathrm",
+            a=["annee_lumiere"],
         )
         self.add_constant(
             "parsec",
             sc.parsec,
             u="m.pc-1",
-            c="Unité astrononique sous-tend un angle d'une seconde d'arc",
+            c="Une Unité astrononique faisant un angle d'une seconde d'arc (déprécié)",
             l=r"$1pc \equiv \frac{180\cdot60\cdot60}{\pi} = VALm = 3.26al$",
         )
 
         self.add_constant("G", 6.67e-11, u="N.m2.kg-2", c="Constante de la gravitation", s=sc.G, r=2)
+        self.add_constant("g", 9.8, u="m.s-2", c="Acceleration standard de la gravitation", s=sc.g, r=1)
         self.add_constant("h", 6.626e-34, u="J.s", c="Constante de Planck", s=sc.h)
         self.add_constant("hbar", sc.hbar, l=r"$\bar{h} = \frac{h}{2\pi}$", u="J.s")
         self.add_constant(
             "N_A",
             sc.N_A,
             c="Nombre d'Avogadro",
-            l=r"$N_\mathcal{A} = 6.02 \cdot 10^{23} mol^{-1}$ (Carbone: $12g\Leftrightarrow 1mol$)",
+            l=r"$N_\mathcal{A} = VALUNI$ (Carbone: $12g\Leftrightarrow 1mol$)",
             u="mol-1",
             r=2,
             a=["A"],
@@ -139,15 +141,16 @@ class Units:
             "Wien",
             2.9e-3,
             c="Constante de Wien",
-            l=r"$\lambda_{\text{max}} \cdot T = 2.9 \cdot 10^{-3} m . K$",
+            l=r"$\lambda_{\text{max}} \cdot T = VALUNI$",
             s=sc.Wien,
+            u="m.K",
             a=["wien", "lambda_max"],
         )
         self.add_constant(
             "Rydberg",
             sc.Rydberg,
             c="Constante de Rydberg",
-            l=r"$R_H({\text{Hydrogene}}) = 110 000 \text{ cm}^{-1}$",
+            l=r"$R_H({\text{Hydrogene}}) = VALUNI$",
             u="m-1",
             r=1,
             a=["rydberg", "R_H"],
@@ -167,27 +170,59 @@ class Units:
         self.add_constant("r_bohr", 5.3e-11, l=r"$a = 5.3 \cdot 10^{-11} m$", c="Rayon de Bohr", u="m", a=["a"])
 
         self.add_constant("m_p", 1.6726e-27, c="Masse proton", u="kg", s=sc.proton_mass)
-        # self.add_constant("m_n", 9.109e-27, c="Masse neutron", u="kg", s=sc.neuton_mass)
+        self.add_constant(
+            "m_puma",
+            1.007276,
+            c="Masse proton",
+            u="uma",
+            l=r"$m_p = VALUNI$ ($1uma \equiv \frac{M(^{12}C)}{12}$)",
+            s=sc.physical_constants["proton relative atomic mass"][0],
+            r=6,
+        )
+        self.add_constant(
+            "m_numa",
+            1.008663,
+            c="Masse neutron",
+            u="uma",
+            l=r"$m_n = VALUNI$ ($1uma \equiv \frac{M(^{12}C)}{12}$)",
+            s=sc.physical_constants["neutron relative atomic mass"][0],
+            r=6,
+        )
+        self.add_constant(
+            "uma",
+            1.6605e-27,
+            c="Unité de Masse Atomique",
+            u="kg.uma-1",
+            s=sc.physical_constants["unified atomic mass unit"][0],
+            l=r"$m_{nuc} = VALUNI$ ($1uma \equiv \frac{M(^{12}C)}{12}$)",
+        )
+        self.add_constant(
+            "uma_mev",
+            931.5,
+            c="Unité de Masse Atomique (MeV)",
+            u="MeV.uma-1",
+            l=r"$m_{nuc} = VALUNI$ ($1uma \equiv \frac{M(^{12}C)}{12}$)",
+        )
 
         self.add_constant("M_mercure", 3.301e23, c="M_kg", p="mercure")
         self.add_constant("d_mercure", 0.47, c="d_ua", p="mercure")
         self.add_constant("R_mercure", 2439, c="R_km", p="mercure")
-        self.add_constant("A_mercure", 0.088, c="albedo", p="mercure")
-        self.add_constant("S_mercure", 0.000, c="serre", p="mercure")
+        self.add_constant("A_mercure", 0.088, c="Albedo", p="mercure")
+        self.add_constant("S_mercure", 0.000, c="Serre", p="mercure")
         self.add_constant("T_mercure", 167, c="T_C", p="mercure")
 
         self.add_constant("M_venus", 4.867e24, c="M_kg", p="venus")
         self.add_constant("d_venus", 0.72, c="d_ua", p="venus")
         self.add_constant("R_venus", 3390, c="R_km", p="venus")
-        self.add_constant("A_venus", 0.770, c="albedo", p="venus")
-        self.add_constant("S_venus", 0.991, c="serre", p="venus")
+        self.add_constant("A_venus", 0.770, c="Albedo", p="venus")
+        self.add_constant("S_venus", 0.991, c="Serre", p="venus")
         self.add_constant("T_venus", 464, c="T_C", p="venus")
 
         self.add_constant("M_terre", 5.972e24, c="M_kg", p="terre")
         self.add_constant("d_terre", 1.00, c="d_ua", p="terre")
         self.add_constant("R_terre", 6371, c="R_km", p="terre")
-        self.add_constant("A_terre", 0.300, c="albedo", p="terre")
-        self.add_constant("S_terre", 0.394, c="serre", p="terre")
+        self.add_constant("A_terre", 0.300, c="Albedo", p="terre")
+        self.add_constant("S_terre", 0.394, c="Serre", p="terre")
         self.add_constant("T_terre", 15, c="T_C", p="terre")
         self.add_constant(
             "d_terre_solm",
@@ -202,18 +237,18 @@ class Units:
         self.add_constant("M_mars", 6.417e23, c="M_kg", p="mars")
         self.add_constant("d_mars", 1.52, c="d_ua", p="mars")
         self.add_constant("R_mars", 3390, c="R_km", p="mars")
-        self.add_constant("A_mars", 0.250, c="albedo", p="mars")
-        self.add_constant("S_mars", 0.010, c="serre", p="mars")
+        self.add_constant("A_mars", 0.250, c="Albedo", p="mars")
+        self.add_constant("S_mars", 0.010, c="Serre", p="mars")
         self.add_constant("T_mars", -62.8, c="T_C", p="mars")
 
         self.add_constant("M_soleil", 1.988 * 10**30, c="M_kg", p="soleil")
         self.add_constant("R_soleil", 696_000, c="R_km", p="soleil")
-        self.add_constant("L_soleil", 3.83 * 10**26, c="L_W", p="soleil")
+        self.add_constant("L_soleil", 3.83 * 10**26, c="L_W", p="soleil", r=2)
         self.add_constant("T_soleil", 5800, c="T_C", p="soleil")
 
-        self.add_constant("A_lune", 0.11, c="albedo", p="lune")
+        self.add_constant("A_lune", 0.11, c="Albedo", p="lune")
         self.add_constant("d_lune", 1.00, c="d_ua", p="lune")
-        self.add_constant("pi", np.pi)
+        self.add_constant("pi", np.pi, r=6)
 
     def __getattr__(self, name: str):
         if name in self.csts:
