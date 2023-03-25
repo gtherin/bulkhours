@@ -35,8 +35,17 @@ then
         #packages="yfinance,geopandas,descartes"
         for package in $packages; do
             TS=`date '+%H:%M:%S' -d "+1 hour"`
-            echo "RUN pip install $package [$TS]"
-            pip install $package > /dev/null 2>&1
+            if [ "$package" = "latex" ]; then
+                apt install texlive-full pandoc > /dev/null 2>&1
+                #!apt install texlive texlive-xetex texlive-latex-extra latex-fonts-extra pandoc
+                #!apt install texlive texlive-lang-french texlive-lang-english texlive-latex-extra pandoc
+                #!pip install pypandoc
+
+                echo "RUN apt install $package [$TS]"
+            else
+                pip install $package > /dev/null 2>&1
+                echo "RUN pip install $package [$TS]"
+            fi
         done
     fi
 

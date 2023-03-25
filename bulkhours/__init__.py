@@ -8,6 +8,7 @@ from .core import geo  # noqa
 from .core.geo import geo_plot_country  # noqa
 from .core import runrealcmd  # noqa
 from .core import colors as c  # noqa
+from .core.hidder import *  # noqa
 from . import rl  # noqa
 from . import hpc  # noqa
 from . import ecox  # noqa
