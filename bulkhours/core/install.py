@@ -87,15 +87,16 @@ def main(argv=sys.argv[1:]):
             f"cd {bulk_dir} && rm -rf bulkhours 2> /dev/null && git clone https://github.com/guydegnol/bulkhours.git --depth 1 > /dev/null 2>&1"
         )
 
-    # Update pip
-    print("RUN pip install --upgrade pip [%s, %.0fs]" % (env_id, time.time() - start_time))
-    if is_colab:
-        os.system(f"pip install --upgrade pip > /dev/null 2>&1")
+    if args.packages != "":
+        # Update pip
+        print("RUN pip install --upgrade pip [%s, %.0fs]" % (env_id, time.time() - start_time))
+        if is_colab:
+            os.system(f"pip install --upgrade pip > /dev/null 2>&1")
 
-    # Install packages
-    for package in args.packages.split(","):
-        print("RUN pip install %s [%s, %.0fs]" % (package, env_id, time.time() - start_time))
-        os.system(f"pip install {package} > /dev/null 2>&1")
+        # Install packages
+        for package in args.packages.split(","):
+            print("RUN pip install %s [%s, %.0fs]" % (package, env_id, time.time() - start_time))
+            os.system(f"pip install {package} > /dev/null 2>&1")
 
     # Dump env variables
     data = {
