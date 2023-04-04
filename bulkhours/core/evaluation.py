@@ -169,7 +169,9 @@ class Evaluation(Magics):
                 ws.append(owidgets[w])
 
         if self.cinfo.type == "formula":
-            ws = [ws[0]] + [ipywidgets.HTMLMath("$" + cell + "$")] + ws[1:]
+            IPython.display.display(IPython.display.Markdown("fzegaeg = 1"))
+            # ws = [ws[0]] + [ipywidgets.HTMLMath("$" + cell + "$")] + ws[1:]
+            ws = [ws[0]] + ws[1:]
 
         IPython.display.display(ipywidgets.HBox(ws, layout=bwidget.get_layout()), output)
 

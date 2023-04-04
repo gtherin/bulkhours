@@ -51,7 +51,7 @@ def init_env(login=None, pass_code=None, env=None, verbose=False, in_french=Fals
     vfile = os.path.abspath(os.path.dirname(__file__)) + "/__version__.py"
     version = open(vfile).readline().split('"')[1]
 
-    print(f"Import BULK Helper cOURSe (version={version}, user={student_login}, env={env})")
+    print(f"Import BULK Helper cOURSe (version={version}, user= {student_login}, env={env})")
 
 
 def get_color(discipline):
