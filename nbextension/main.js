@@ -4,7 +4,7 @@ define([
     'jquery',
     'base/js/namespace',
     'base/js/events'
-], function(
+], function (
     $,
     Jupyter,
     events
@@ -16,27 +16,38 @@ define([
         var cell = Jupyter.notebook.get_selected_cell();
         // Toggle visibility of the input div
         cell.element.find("div.input").toggle('slow');
-        cell.metadata.hide_input = ! cell.metadata.hide_input;
+        cell.metadata.hide_input = !cell.metadata.hide_input;
     };
 
     var update_input_visibility = function () {
-        Jupyter.notebook.get_cells().forEach(function(cell) {
+        Jupyter.notebook.get_cells().forEach(function (cell) {
             if (cell.metadata.hide_input) {
                 cell.element.find("div.input").hide();
+            }
+            else {
+                cell.element.find("div.input").show();
             }
         })
     };
 
-    var load_ipython_extension = function() {
+    var load_ipython_extension = function () {
 
         // Add a button to the toolbar
         $(Jupyter.toolbar.add_buttons_group([
             Jupyter.keyboard_manager.actions.register({
-                help   : 'Toggle selected cell input display',
-                icon   : 'fa-chevron-up',
-                handler: function() {
+                help: 'Hide selected cell code (bulkhours)',
+                icon: 'fa-chevron-up',
+                handler: function () {
                     toggle_selected_input();
-                    setTimeout(function() { $('#btn-hide-input').blur(); }, 500);
+                    setTimeout(function () { $('#btn-hide-input').blur(); }, 500);
+                }
+            }, 'toggle-cell-input-display', 'hide_input'),
+            Jupyter.keyboard_manager.actions.register({
+                help: 'Show selected cell code (bulkhours)',
+                icon: 'fa-chevron-down',
+                handler: function () {
+                    toggle_selected_input();
+                    setTimeout(function () { $('#btn-hide-input').blur(); }, 500);
                 }
             }, 'toggle-cell-input-display', 'hide_input')
         ])).find('.btn').attr('id', 'btn-hide-input');
@@ -49,6 +60,7 @@ define([
     };
 
     return {
-        load_ipython_extension : load_ipython_extension
+        load_ipython_extension: load_ipython_extension,
+        load_ipython_extension2: load_ipython_extension
     };
 });

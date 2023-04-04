@@ -39,7 +39,6 @@ develop-eggs
 lib
 lib64
 
-setup.py
 abc.py
 .safe
 bulkhours/core/install.py
