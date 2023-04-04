@@ -80,8 +80,9 @@ def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="blac
         IPython.display.display(
             IPython.display.Markdown(f"<font face='FiraCode Nerd Font' size=4 color='{bc}'>{mdbody}<font>")
         )
+    if 0 and mdbody and len(mdbody) > 1:
+        IPython.display.display(IPython.display.Markdown(mdbody))
     if rawbody and len(rawbody) > 1:
         print(rawbody)
     if codebody and len(codebody) > 1:
         IPython.display.display(IPython.display.Code(codebody))
-

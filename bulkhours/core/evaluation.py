@@ -54,8 +54,11 @@ class Evaluation(Magics):
                 else f"""**Let's execute the code ({cell_id})** 💻"""
             )
             self.shell.run_cell(data["answer"])
-        elif cell_type in ["markdown", "textarea", "formula"]:
+        elif cell_type in ["markdown", "textarea"]:
             md(header=f"Correction ({cell_id})", mdbody=data["answer"])
+        elif cell_type in ["formula"]:
+            md(header=f"Correction ({cell_id})")
+            IPython.display.display(IPython.display.Markdown(data["answer"]))
         elif cell_type in ["codetext", "intslider", "floatslider"]:
             cc = (
                 ""
