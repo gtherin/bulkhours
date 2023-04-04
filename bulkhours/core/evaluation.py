@@ -101,8 +101,11 @@ class Evaluation(Magics):
             return
 
         output = ipywidgets.Output()
-
-        if self.cinfo.type == "code":
+        if self.cinfo.type == "code" and cell == "":
+            print("AAAAAAAAAAAAAAaaa")
+            return
+        elif self.cinfo.type == "code":
+            print(cell)
             self.shell.run_cell(cell)
         elif self.cinfo.type == "markdown":
             IPython.display.display(IPython.display.Markdown(cell))
@@ -167,3 +170,7 @@ class Evaluation(Magics):
                 ws.append(owidgets[w])
 
         IPython.display.display(ipywidgets.HBox(ws, layout=bwidget.get_layout()), output)
+
+        if self.cinfo.puppet != "":
+            print("PUPPET", self.cinfo.puppet)
+            # puppets.dance_puppets(tag)

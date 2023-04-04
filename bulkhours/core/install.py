@@ -5,6 +5,8 @@ import sys
 import time
 import json
 
+from . import puppets
+
 
 def get_argparser(line, cell):
     parser = argparse.ArgumentParser(description="Evaluation params")
@@ -15,6 +17,7 @@ def get_argparser(line, cell):
     parser.add_argument("-t", "--type", default="code")
     parser.add_argument("-x", "--xoptions", default=None)
     parser.add_argument("-w", "--widgets", default="lwsc")
+    parser.add_argument("-p", "--puppet", default="")
 
     try:
         opts = line.split()
