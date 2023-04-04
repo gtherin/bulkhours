@@ -76,7 +76,7 @@ class Constant:
 
         if code:
             for ai in [self.i] + self.a:
-                print(f"consts.{ai}={self.fv(latex=False)}  # {self.u}")
+                print(f"bkc.{ai}={self.fv(latex=False)}  # {self.u}")
 
     def __repr__(self):
         self.help()
