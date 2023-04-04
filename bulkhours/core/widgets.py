@@ -59,8 +59,8 @@ class BulkWidget:
             widgets = [ipywidgets.Textarea(placeholder="I don't know", disabled=False)]
         elif self.cinfo.type == "radios":
             widgets = [ipywidgets.RadioButtons(options=cell_checks, layout={"width": "max-content"})]
-        elif self.cinfo.type == "codetext":
-            widgets = [ipywidgets.Text()]
+        elif self.cinfo.type in ["codetext"]:
+            widgets = [ipywidgets.Text(value=self.cinfo.default)]
         else:
             widgets = []
 
@@ -77,6 +77,8 @@ class BulkWidget:
         cell_checks = self.cinfo.options.split(";")
         if cinfo_type in ["codetext"]:
             return eval(widgets[0].value)
+        elif cinfo_type in ["formula"]:
+            return self.cell
         elif cinfo_type in ["code", "markdown"]:
             return self.cell
         elif cinfo_type in ["checkboxes", "radios"]:

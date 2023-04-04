@@ -244,7 +244,7 @@ class Units:
 
         self.add_constant("M_soleil", 1.988 * 10**30, c="M_kg", p="soleil")
         self.add_constant("R_soleil", 696_000, c="R_km", p="soleil")
-        self.add_constant("L_soleil", 3.83 * 10**26, c="L_W", p="soleil", r=2)
+        self.add_constant("L_soleil", 3.83 * 10**26, c="L_W", p="soleil", r=2, a=["L_sol", "L_sun"])
         self.add_constant("T_soleil", 5800, c="T_C", p="soleil")
 
         self.add_constant("A_lune", 0.11, c="Albedo", p="lune")
