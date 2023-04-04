@@ -54,7 +54,7 @@ class Evaluation(Magics):
                 else f"""**Let's execute the code ({cell_id})** 💻"""
             )
             self.shell.run_cell(data["answer"])
-        elif cell_type in ["markdown", "textarea"]:
+        elif cell_type in ["markdown", "textarea", "formula"]:
             md(header=f"Correction ({cell_id})", mdbody=data["answer"])
         elif cell_type in ["codetext", "intslider", "floatslider"]:
             cc = (
@@ -105,7 +105,6 @@ class Evaluation(Magics):
             print("AAAAAAAAAAAAAAaaa")
             return
         elif self.cinfo.type == "code":
-            print(cell)
             self.shell.run_cell(cell)
         elif self.cinfo.type == "markdown":
             IPython.display.display(IPython.display.Markdown(cell))
@@ -168,6 +167,9 @@ class Evaluation(Magics):
                 ws += widgets
             elif owidgets[w]:
                 ws.append(owidgets[w])
+
+        if self.cinfo.type == "formula":
+            ws = [ws[0]] + [ipywidgets.HTMLMath("$" + cell + "$")] + ws[1:]
 
         IPython.display.display(ipywidgets.HBox(ws, layout=bwidget.get_layout()), output)
 
