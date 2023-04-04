@@ -62,14 +62,18 @@ class Constant:
         self.latex = self.latex.replace("ID", self.i).replace("VAL", self.fv()).replace("UNI", self.fu())
         self.latex = self.latex.replace("PAR", str(self.p)).replace("\mathrm{soleil}", "\odot")
 
-    def help(self, size="+3", code=True, markdown=True):
-        if markdown:
+    def help(self, size="+3", code=True, markdown=True, latex=False):
+        if markdown or latex:
             text = (
                 self.c + ": " + self.latex + f"   [{self.s}{self.u}]"
                 if self.s == self.s
                 else self.c + ": " + self.latex
             )
+        if markdown:
             md(text, size=size)
+        if latex:
+            print(text)
+
         if code:
             for ai in [self.i] + self.a:
                 print(f"consts.{ai}={self.fv(latex=False)}  # {self.u}")
@@ -258,17 +262,17 @@ class Units:
             return self.acsts[name].v
         return np.nan
 
-    def help(self, label=None, size="+2", code=True, markdown=True) -> None:
+    def help(self, label=None, size="+2", code=True, markdown=True, latex=False) -> None:
         if not label:
             print(self.csts.keys())
         elif label in self.csts:
-            self.csts[label].help(size=size, code=code, markdown=markdown)
+            self.csts[label].help(size=size, code=code, markdown=markdown, latex=latex)
         else:
             md(label, prefix="")
             print(f"from bulkhours import constants as consts")
             for k, v in self.csts.items():
                 if label.lower() in k.lower() or label.lower() in ["all"]:
-                    v.help(size=size, code=code, markdown=markdown)
+                    v.help(size=size, code=code, markdown=markdown, latex=latex)
 
     def DataFrame(self, index=[], columns=[]) -> pd.DataFrame:
         if index[0] in self.csts2d:
