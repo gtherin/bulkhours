@@ -102,7 +102,8 @@ bulkhours.init_env(login="john.d", pass_code="PASS_COURSE", env="econometrics") 
 
 Cuda basic extension compiles C/C++/CUDA code and exec it
 ```c:
-%%compile_and_exec
+%%evaluation_cell_id -i demo_cuda
+%%compile_and_exec -c nvcc
 #include <iostream>
 int main() {
     for (int i = 0; i <= 10; ++i) {
