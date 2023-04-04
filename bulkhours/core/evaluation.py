@@ -58,7 +58,7 @@ class Evaluation(Magics):
             md(header=f"Correction ({cell_id})", mdbody=data["answer"])
         elif cell_type in ["formula"]:
             md(header=f"Correction ({cell_id})")
-            IPython.display.display(IPython.display.Markdown(data["answer"]))
+            IPython.display.display(IPython.display.Markdown("$" + data["answer"] + "$"))
         elif cell_type in ["codetext", "intslider", "floatslider"]:
             cc = (
                 ""
