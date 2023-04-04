@@ -232,6 +232,7 @@ class Units:
             s=sc.au,
             u="m",
             l=r"$d_{\mathrm{soleil} \mathrm{PAR}} = 1ua = VALUNI$",
+            a=["d_terresoleil"],
         )
 
         self.add_constant("M_mars", 6.417e23, c="M_kg", p="mars")
