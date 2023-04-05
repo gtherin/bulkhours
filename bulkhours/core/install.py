@@ -37,6 +37,7 @@ def get_argparser(line, cell):
         opts = line.split()
         opts = get_opts("-l", opts)
         opts = get_opts("-d", opts)
+        opts = get_opts("-o", opts)
 
         args = parser.parse_args(opts)
 
@@ -113,7 +114,7 @@ def main(argv=sys.argv[1:]):
         "in_french": args.in_french,
     }
     print(
-        'LOG login= %s, id=%s, env=%s [%s, %.0fs]'
+        "LOG login= %s, id=%s, env=%s [%s, %.0fs]"
         % (args.user, args.id, args.env_id, env_id, time.time() - start_time)
     )
     with open(f"{bulk_dir}/bulkhours/.safe", "w", encoding="utf-8") as f:
