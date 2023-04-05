@@ -17,6 +17,7 @@ def get_data_from_file(label, on=None, subdir="data", **kwargs):
 
     filename = None
     for directory in ["bulkhours", ".", "..", "../../bulkhours", "../../../bulkhours"]:
+        print(f"{directory}/{subdir}/{label}*", len(glob.glob(f"{directory}/{subdir}/{label}*")))
         if len((files := glob.glob(f"{directory}/{subdir}/{label}*"))):
             filename = files[0]
     if not filename:
@@ -35,8 +36,8 @@ def evaluate_cpp_project(cinfo, cell):
     for f in filenames:
         cfilename = f"cache/{cinfo.id}_{f}"
         if not os.path.exists(cfilename):
-            print(f"Generate {cfilename}")
             rfilename = get_data_from_file(f"{cinfo.id}_{f}", subdir="bulkhours/hpc")
+            print(f"Generate {cfilename} from {rfilename}")
 
             data = open(rfilename).read()
             with open(cfilename, "w") as f:
