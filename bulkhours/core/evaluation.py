@@ -1,5 +1,5 @@
 import os
-import glob
+import subprocess
 
 from IPython.core.magic import Magics, cell_magic, magics_class, line_cell_magic, needs_local_scope
 import IPython
@@ -10,46 +10,7 @@ from .logins import *
 from . import firebase
 from . import install
 from .widgets import BulkWidget
-
-
-def evaluate_cpp_project(cinfo, cell):
-    layout = ipywidgets.Layout(height="500px", width="500px")
-
-    eid = "cpp_quadrilater"
-    filenames = ["quadrilater.h", "main.cpp", "Makefile"]
-    os.system("mkdir -p cache")
-
-    files = []
-    for f in filenames:
-        cfilename = f"cache/{eid}_{f}"
-        if not os.path.exists(cfilename):
-            print(f"Generate {cfilename}")
-            data = open(f"../../bulkhours/bulkhours/hpc/{eid}_{f}", "r").read()
-            with open(cfilename, "w") as f:
-                f.write(data)
-        data = open(cfilename, "r").read()
-        files.append(ipywidgets.Textarea(open(cfilename, "r").read(), layout=layout))
-
-    tab = ipywidgets.Tab(children=files)
-    for t, f in enumerate(filenames):
-        tab.set_title(t, f)
-
-    button = ipywidgets.Button(description="Compile and Execute")
-
-    import subprocess
-
-    def write_exec_process(b):
-        for t, f in enumerate(filenames):
-            cfilename = f"cache/{eid}_{f}"
-            with open(cfilename, "w") as f:
-                f.write(files[t].value)
-
-        cmd = f"/usr/bin/gcc main.cpp -o main.out"
-        subprocess.check_output(cmd.split(), stderr=subprocess.STDOUT)
-        subprocess.check_output("main.out")
-
-    button.on_click(write_exec_process)
-    return ipywidgets.VBox(children=[tab, button])
+from .widget_code_project import evaluate_cpp_project
 
 
 @magics_class
@@ -143,12 +104,12 @@ class Evaluation(Magics):
         self.cinfo = install.get_argparser(line, cell)
         if not self.cinfo:
             return
+
+        output = ipywidgets.Output()
         if self.cinfo.type == "code_project":
             return evaluate_cpp_project(self.cinfo, cell)
 
-        output = ipywidgets.Output()
         if self.cinfo.type == "code" and cell == "":
-            print("AAAAAAAAAAAAAAaaa")
             return
         elif self.cinfo.type == "code":
             self.shell.run_cell(cell)
