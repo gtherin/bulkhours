@@ -13,7 +13,7 @@ def clean_columns(df, data_info):
     return df
 
 
-def get_data_from_file(label, on=None, **kwargs):
+def get_data_from_file(label, on=None, subdir="data", **kwargs):
     if type(label) == list:
         if on:
             return pd.concat([get_data_from_file(f).set_index(on) for f in label], axis=1)
@@ -21,22 +21,22 @@ def get_data_from_file(label, on=None, **kwargs):
             return pd.concat([get_data_from_file(f) for f in label], axis=1)
 
     filename = None
-    for directory in ["bulkhours/data", "./data", "../data", "../../bulkhours/data"]:
-        if len((files := glob.glob(f"{directory}/{label}*"))):
+    for directory in ["bulkhours", ".", "..", "../../bulkhours"]:
+        if len((files := glob.glob(f"{directory}/{subdir}/{label}*"))):
             filename = files[0]
     if not filename:
         print(f"No data available for {label}")
         return None
 
     ext = filename.split(".")[-1]
-    if ext in ["png", "jpg", "gif", "xlsx"]:
-        return filename
-    elif ext == "xlsx":
+    if ext == "xlsx":
         return pd.read_excel(filename, **kwargs)
     elif ext == "tsv":
         return pd.read_csv(filename, sep="\t")
-    else:
+    elif ext in ["csv"]:
         return pd.read_csv(filename)
+    else:
+        return filename
 
 
 def clean_data(df, query=None, index=None, test_data=None):
