@@ -12,7 +12,7 @@ def md(data, size="+4", prefix="* "):
 default_configs = {
     "Albedo": {"c": "Albedo", "u": "Sans unité (entre 0 et 1)", "l": r"$A_{\mathrm{PAR}} = VAL$", "r": 2},
     "Serre": {"c": "Effet de serre", "u": "Sans unité (entre 0 et 1)", "l": r"$S_{\mathrm{PAR}} = VAL$"},
-    "d_ua": {"c": "Distance au soleil", "u": "ua", "l": r"$d_{\mathrm{soleil} \mathrm{PAR}} = VALUNI$"},
+    "d_ua": {"c": "Distance au soleil", "u": "ua", "l": r"$d_{\mathrm{soleil} \mathrm{PAR}} = VALUNI$", "r": 2},
     "R_km": {"c": "Rayon", "u": "km", "l": r"$R_{\mathrm{PAR}} = VALUNI$", "r": 0},
     "d_solm": {"c": "Distance au soleil", "u": "m", "l": r"$d_{\mathrm{soleil} \mathrm{PAR}} = VALUNI$", "r": 2},
     "M_kg": {"c": "Masse", "u": "kg", "l": r"$M_{\mathrm{PAR}} = VALUNI$"},

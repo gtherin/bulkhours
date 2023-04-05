@@ -1,0 +1,3 @@
+
+main: cpp_quadrilater_main.cpp
+    /usr/bin/gcc cpp_quadrilater_main.cpp -o main.out
