@@ -118,6 +118,13 @@ class Units:
             c="Une Unité astrononique faisant un angle d'une seconde d'arc (déprécié)",
             l=r"$1pc \equiv \frac{180\cdot60\cdot60}{\pi} = VALm = 3.26al$",
         )
+        self.add_constant(
+            "kparsec",
+            sc.parsec * 1000,
+            u="m.kpc-1",
+            c="Une Unité astrononique faisant un angle d'une seconde d'arc (déprécié)",
+            l=r"$1kpc \equiv \frac{1000\cdot180\cdot60\cdot60}{\pi}$",
+        )
 
         self.add_constant("G", 6.67e-11, u="N.m2.kg-2", c="Constante de la gravitation", s=sc.G, r=2)
         self.add_constant("g", 9.8, u="m.s-2", c="Acceleration standard de la gravitation", s=sc.g, r=1)

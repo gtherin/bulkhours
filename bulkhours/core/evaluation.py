@@ -11,6 +11,7 @@ from . import firebase
 from . import install
 from .widgets import BulkWidget
 from .widget_code_project import evaluate_cpp_project
+from .widget_table import get_table_widgets
 
 
 @magics_class
@@ -179,7 +180,7 @@ class Evaluation(Magics):
             IPython.display.display(IPython.display.Markdown("$" + cell + "$"))
             print("$" + cell + "$")
         if self.cinfo.type == "table":
-            IPython.display.display(self.get_table_widgets())
+            IPython.display.display(get_table_widgets(self.cinfo))
             IPython.display.display(ipywidgets.HBox(ws, layout=bwidget.get_layout()), output)
         else:
             IPython.display.display(ipywidgets.HBox(ws, layout=bwidget.get_layout()), output)
@@ -187,22 +188,3 @@ class Evaluation(Magics):
         # if self.cinfo.puppet != "":
         #    print("PUPPET", self.cinfo.puppet)
         #    puppets.dance_puppets(tag)
-
-    def get_table_widgets(self):
-        # %evaluation_cell_id -i Itable -t table -o x;y;;1;F;;10;I -p execute_on_start,toggle_on,lock
-        opts = self.cinfo.options
-
-        vbox = []
-        for r in opts.split(";;"):
-            raw = []
-            for c in r.split(";"):
-                if c == "F":
-                    raw.append(ipywidgets.FloatText(layout=ipywidgets.Layout(width="100px")))
-                elif c == "I":
-                    raw.append(ipywidgets.IntText(layout=ipywidgets.Layout(width="100px")))
-                elif c == "T":
-                    raw.append(ipywidgets.Text("", layout=ipywidgets.Layout(width="100px")))
-                else:
-                    raw.append(ipywidgets.HTMLMath(c, layout=ipywidgets.Layout(width="100px")))
-            vbox.append(ipywidgets.HBox(raw))
-        return ipywidgets.VBox(vbox)
