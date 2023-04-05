@@ -17,11 +17,10 @@ def get_data_from_file(label, on=None, subdir="data", **kwargs):
 
     filename = None
     for directory in ["bulkhours", ".", "..", "../../bulkhours", "../../../bulkhours"]:
-        print(f"{directory}/{subdir}/{label}*", len(glob.glob(f"{directory}/{subdir}/{label}*")))
         if len((files := glob.glob(f"{directory}/{subdir}/{label}*"))):
             filename = files[0]
     if not filename:
-        print(f"No data available for {label}")
+        print(f"No data available for {subdir}/{label}")
         return None
     return filename
 
@@ -33,9 +32,8 @@ def evaluate_cpp_project(cinfo, cell):
     os.system("mkdir -p cache")
 
     files = []
-    for f in filenames:
-        cfilename = f"cache/{cinfo.id}_{f}"
-        if not os.path.exists(cfilename):
+    for t, f in enumerate(filenames):
+        if not os.path.exists(cfilename := f"cache/{cinfo.id}_{f}"):
             rfilename = get_data_from_file(f"{cinfo.id}_{f}", subdir="bulkhours/hpc")
             print(f"Generate {cfilename} from {rfilename}")
 
@@ -53,8 +51,7 @@ def evaluate_cpp_project(cinfo, cell):
 
     def write_exec_process(b):
         for t, f in enumerate(filenames):
-            cfilename = f"cache/{eid}_{f}"
-            with open(cfilename, "w") as f:
+            with open(f"cache/{cinfo.id}_{f}", "w") as f:
                 f.write(files[t].value)
 
         cmd = f"/usr/bin/gcc main.cpp -o main.out"
