@@ -1,0 +1,13 @@
+myclass.o: myclass.h myclass.cpp
+	g++ -c myclass.cpp
+
+main.o: main.cpp
+	g++ -c main.cpp
+
+all: myclass.o main.o
+	echo "Hello, World"
+	/usr/bin/gcc -o main myclass.o main.o
+
+hello:
+	echo "Hello, World"
+	echo "This line will always print, because the file hello does not exist."
