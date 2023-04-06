@@ -10,7 +10,7 @@ from .logins import *
 from . import firebase
 from . import install
 from .widgets import BulkWidget
-from .widget_code_project import evaluate_cpp_project
+from .widget_code_project import evaluate_core_cpp_project
 from .widget_table import get_table_widgets
 
 
@@ -107,9 +107,6 @@ class Evaluation(Magics):
             return
 
         output = ipywidgets.Output()
-        if self.cinfo.type == "code_project":
-            return evaluate_cpp_project(self.cinfo, cell)
-
         if self.cinfo.type == "code" and cell == "":
             return
         elif self.cinfo.type == "code":
@@ -176,14 +173,34 @@ class Evaluation(Magics):
             elif owidgets[w]:
                 ws.append(owidgets[w])
 
+        if self.cinfo.type == "code_project":
+            # return evaluate_cpp_project(self.cinfo, cell)
+            tab, files = evaluate_core_cpp_project(self.cinfo, cell)
+            button = ipywidgets.Button(description="Compile and Execute")
+            filenames = self.cinfo.options.split(",")
+
+            def write_exec_process(b):
+                for t, fn in enumerate(filenames):
+                    with open(f"cache/{self.cinfo.id}_{fn}", "w") as f:
+                        f.write(files[t].value)
+                    print(f"Generate cache/{fn}")
+                    with open(f"cache/{fn}", "w") as f:
+                        f.write(files[t].value)
+
+                os.system(f"cd cache && make all && ./main")
+
+            button.on_click(write_exec_process)
+            hbox = ipywidgets.HBox([button] + ws, layout=bwidget.get_layout())
+
+            IPython.display.display(ipywidgets.VBox(children=[tab, hbox]), output)
+            return
+
         if self.cinfo.type == "formula":
             IPython.display.display(IPython.display.Markdown("$" + cell + "$"))
             print("$" + cell + "$")
         if self.cinfo.type == "table":
             IPython.display.display(get_table_widgets(self.cinfo))
-            IPython.display.display(ipywidgets.HBox(ws, layout=bwidget.get_layout()), output)
-        else:
-            IPython.display.display(ipywidgets.HBox(ws, layout=bwidget.get_layout()), output)
+        IPython.display.display(ipywidgets.HBox(ws, layout=bwidget.get_layout()), output)
 
         # if self.cinfo.puppet != "":
         #    print("PUPPET", self.cinfo.puppet)
