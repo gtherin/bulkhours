@@ -1,3 +1,6 @@
+quadrilater.o: quadrilater.h quadrilater.cpp
+	@g++ -c quadrilater.cpp
 
-main: cpp_quadrilater_main.cpp
-    /usr/bin/gcc cpp_quadrilater_main.cpp -o main.out
+all: quadrilater.o
+	@echo "- Compile and execute:"
+	@/usr/bin/g++ -o main quadrilater.o
