@@ -32,7 +32,7 @@ def get_data_from_file(label, on=None, subdir="data", **kwargs):
     return filename
 
 
-def evaluate_cpp_project(cinfo, cell):
+def evaluate_core_cpp_project(cinfo, cell):
     height = "550px"
     for o in cinfo.puppet.split(","):
         if "height=" in o:
@@ -59,8 +59,13 @@ def evaluate_cpp_project(cinfo, cell):
     tab = ipywidgets.Tab(children=files)
     for t, f in enumerate(filenames):
         tab.set_title(t, f)
+    return tab, files
 
+
+def evaluate_cpp_project(cinfo, cell):
+    tab, files = evaluate_core_cpp_project(cinfo, cell)
     button = ipywidgets.Button(description="Compile and Execute")
+    filenames = cinfo.options.split(",")
 
     def write_exec_process(b):
         for t, fn in enumerate(filenames):
