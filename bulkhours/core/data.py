@@ -1,3 +1,4 @@
+import os
 import glob
 import pandas as pd
 from .datasets import datasets
@@ -21,7 +22,14 @@ def get_data_from_file(label, on=None, subdir="data", **kwargs):
             return pd.concat([get_data_from_file(f) for f in label], axis=1)
 
     filename = None
-    for directory in ["bulkhours", ".", "..", "../../bulkhours"]:
+    for directory in [
+        "bulkhours",
+        ".",
+        "..",
+        "../../bulkhours",
+        "../../../bulkhours",
+        os.environ["HOME"] + "/projects/bulkhours",
+    ]:
         if len((files := glob.glob(f"{directory}/{subdir}/{label}*"))):
             filename = files[0]
     if not filename:

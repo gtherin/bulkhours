@@ -276,7 +276,8 @@ class Units:
         self.add_constant("d_lune", 1.00, c="d_ua", p="lune")
         self.add_constant("R_lune", 6371, c="R_km", p="lune")
         self.add_constant("A_lune", 0.11, c="Albedo", p="lune")
-        self.add_constant("d_terre_lune", 384400e3, c="Distance à la lune", p="lune")
+        self.add_constant("d_terre_lune", 384400e3, c="Distance à la lune",
+            l=r"$d_{\mathrm{terre} \mathrm{PAR}} = VALUNI$", p="lune")
 
         self.add_constant("pi", np.pi, r=6)
 
