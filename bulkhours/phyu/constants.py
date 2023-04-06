@@ -32,6 +32,12 @@ class Constant:
         else:
             return "%.{0}f".format(r) % v
 
+    @staticmethod
+    def print(data, args=[], size="+3", prefix="", r=3):
+        for i, a in enumerate(args):
+            data = data.replace(f"${i}", Constant.format(a, r=r))
+        md(data, size=size, prefix=prefix)
+
     def fv(self, latex=True):
         return Constant.format(self.v, r=self.r, latex=latex)
 
