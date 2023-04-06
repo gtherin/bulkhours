@@ -106,6 +106,10 @@ class Units:
             self.csts2d[c] = {}
         self.csts2d[c][p] = self.csts[k]
 
+    @staticmethod
+    def print(*args, **kwargs):
+        Constant.print(*args, **kwargs)
+
     def __init__(self) -> None:
         # See: https://docs.scipy.org/doc/scipy/reference/constants.html#rc437f0a4090e-codata2018
         self.acsts, self.csts, self.csts2d = {}, {}, {}
