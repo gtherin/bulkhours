@@ -1,11 +1,9 @@
 myclass.o: myclass.h myclass.cpp
-	g++ -c myclass.cpp
+	@g++ -c myclass.cpp
 
 main.o: main.cpp
-	g++ -c main.cpp
+	@g++ -c main.cpp
 
-main: myclass.o main.o
-	/usr/bin/gcc -o main myclass.o main.o
-
-all: main
-	echo "Compile all"
+all: myclass.o main.o
+	@echo "- Compile and execute:"
+	@/usr/bin/g++ -o main myclass.o main.o

@@ -1,4 +1,4 @@
-#include "myclass.cpp"
+#include "myclass.h"
 
 int main() {
   MyClass myObj;  
