@@ -22,14 +22,18 @@ default_configs = {
 
 
 class Constant:
-    def fv(self, latex=True):
-        if self.v == 0:
+    @staticmethod
+    def format(v, r=3, latex=True):
+        if v == 0:
             return "0"
-        elif np.abs(self.v) > 1e5 or np.abs(self.v) < 1e-5:
-            val = "%.{0}e".format(self.r) % self.v
+        elif np.abs(v) > 1e5 or np.abs(v) < 1e-5:
+            val = "%.{0}e".format(r) % v
             return "%s \cdot 10^{%s}" % (val.split("e")[0], int(val.split("e")[1])) if latex else val
         else:
-            return "%.{0}f".format(self.r) % self.v
+            return "%.{0}f".format(r) % v
+
+    def fv(self, latex=True):
+        return Constant.format(self.v, r=self.r, latex=latex)
 
     def fu(self):
         uni = str(self.u)
