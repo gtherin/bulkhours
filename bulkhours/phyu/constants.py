@@ -275,11 +275,11 @@ class Units:
         elif "," in label:
             label = label.split(",")
             for k, v in self.csts.items():
-                if label.lower() in label:
+                if k in label:
                     v.help(size=size, code=code, markdown=markdown, latex=latex)
         elif type(label) == list:
             for k, v in self.csts.items():
-                if label.lower() in label:
+                if k in label:
                     v.help(size=size, code=code, markdown=markdown, latex=latex)
         elif label in self.csts:
             self.csts[label].help(size=size, code=code, markdown=markdown, latex=latex)
