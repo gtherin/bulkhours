@@ -272,8 +272,12 @@ class Units:
         self.add_constant("L_soleil", 3.83 * 10**26, c="L_W", p="soleil", r=2, a=["L_sol", "L_sun"])
         self.add_constant("T_soleil", 5800, c="T_C", p="soleil")
 
-        self.add_constant("A_lune", 0.11, c="Albedo", p="lune")
+        self.add_constant("M_lune", 7.35e22, c="M_kg", p="lune")
         self.add_constant("d_lune", 1.00, c="d_ua", p="lune")
+        self.add_constant("R_lune", 6371, c="R_km", p="lune")
+        self.add_constant("A_lune", 0.11, c="Albedo", p="lune")
+        self.add_constant("d_terre_lune", 384400 * 10**3, c="Distance à la lune", p="lune")
+
         self.add_constant("pi", np.pi, r=6)
 
     def __getattr__(self, name: str):
