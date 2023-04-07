@@ -34,3 +34,30 @@ def git_push(argv=sys.argv[1:]):
     print(f"Update {oversion} => {nversion}")
     cmd = f"""git add . && git commit -m "{args.message}" && git push"""
     Popen(cmd, stdout=PIPE, shell=True, stderr=STDOUT)
+
+
+def ask_chat_gpt(question="", apikey="YOURKEY", model="gpt-3.5-turbo"):
+    import openai
+
+    if apikey == "YOURKEY":
+        IPython.display.display(
+            IPython.display.Markdown(
+                """## Interroger Chat-GPT
+Apres la creation d'un compte ChatGpt:
+* https://platform.openai.com/ai-text-classifier
+Vous devez creer une clé d'API
+"""
+            )
+        )
+        return
+
+    openai.api_key = apikey  # Have your own to run this cell !!!
+
+    completion = openai.ChatCompletion.create(
+        model=model,
+        messages=[{"role": "user", "content": (prompt := question)}],
+    )
+
+    # Display answer
+    IPython.display.display(IPython.display.Markdown("### " + prompt))
+    IPython.display.display(IPython.display.Markdown(completion["choices"][0]["message"]["content"]))
