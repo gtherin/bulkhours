@@ -107,7 +107,6 @@ class Evaluation(Magics):
             return
 
         output = ipywidgets.Output()
-
         bwidget = BulkWidget(self.cinfo, cell)
 
         owidgets = {
@@ -115,6 +114,7 @@ class Evaluation(Magics):
             "s": sbuttons[0].g(self.in_french),
             "c": sbuttons[1].g(self.in_french),
             "m": sbuttons[2].g(self.in_french),
+            "t": sbuttons[3].g(self.in_french),
         }
         widgets = bwidget.get_widgets()
 
