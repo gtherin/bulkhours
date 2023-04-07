@@ -60,22 +60,3 @@ def evaluate_core_cpp_project(cinfo, cell):
     for t, f in enumerate(filenames):
         tab.set_title(t, f)
     return tab, files
-
-
-def evaluate_cpp_project(cinfo, cell):
-    tab, files = evaluate_core_cpp_project(cinfo, cell)
-    button = ipywidgets.Button(description="Compile and Execute")
-    filenames = cinfo.options.split(",")
-
-    def write_exec_process(b):
-        for t, fn in enumerate(filenames):
-            with open(f"cache/{cinfo.id}_{fn}", "w") as f:
-                f.write(files[t].value)
-            print(f"Generate cache/{fn}")
-            with open(f"cache/{fn}", "w") as f:
-                f.write(files[t].value)
-
-        os.system(f"cd cache && make all && ./main")
-
-    button.on_click(write_exec_process)
-    return ipywidgets.VBox(children=[tab, button])

@@ -107,12 +107,6 @@ class Evaluation(Magics):
             return
 
         output = ipywidgets.Output()
-        if self.cinfo.type == "code" and cell == "":
-            return
-        elif self.cinfo.type == "code":
-            self.shell.run_cell(cell)
-        elif self.cinfo.type == "markdown":
-            IPython.display.display(IPython.display.Markdown(cell))
 
         bwidget = BulkWidget(self.cinfo, cell)
 
@@ -173,6 +167,13 @@ class Evaluation(Magics):
             elif owidgets[w]:
                 ws.append(owidgets[w])
 
+        if self.cinfo.type == "code" and cell == "":
+            return
+        elif self.cinfo.type == "code":
+            self.shell.run_cell(cell)
+        elif self.cinfo.type == "markdown":
+            IPython.display.display(IPython.display.Markdown(cell))
+
         if self.cinfo.type == "code_project":
             # return evaluate_cpp_project(self.cinfo, cell)
             tab, files = evaluate_core_cpp_project(self.cinfo, cell)
@@ -192,7 +193,12 @@ class Evaluation(Magics):
             button.on_click(write_exec_process)
             hbox = ipywidgets.HBox([button] + ws, layout=bwidget.get_layout())
 
-            IPython.display.display(ipywidgets.VBox(children=[tab, hbox]), output)
+            if 1:
+                tab2, files = evaluate_core_cpp_project(self.cinfo, cell)
+                htabs = ipywidgets.HBox([tab, tab2], layout=bwidget.get_layout())
+                IPython.display.display(ipywidgets.VBox(children=[htabs, hbox]), output)
+            else:
+                IPython.display.display(ipywidgets.VBox(children=[tab, hbox]), output)
             return
 
         if self.cinfo.type == "formula":
@@ -200,8 +206,5 @@ class Evaluation(Magics):
             print("$" + cell + "$")
         if self.cinfo.type == "table":
             IPython.display.display(get_table_widgets(self.cinfo))
-        IPython.display.display(ipywidgets.HBox(ws, layout=bwidget.get_layout()), output)
 
-        # if self.cinfo.puppet != "":
-        #    print("PUPPET", self.cinfo.puppet)
-        #    puppets.dance_puppets(tag)
+        IPython.display.display(ipywidgets.HBox(ws, layout=bwidget.get_layout()), output)
