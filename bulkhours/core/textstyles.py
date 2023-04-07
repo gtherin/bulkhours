@@ -77,10 +77,12 @@ def get_button(label):
     return [s for s in sbuttons if s.label == label][0]
 
 
-def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="black"):
+def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="black", icon="📚"):
     if header:
         IPython.display.display(
-            IPython.display.Markdown(f"<b><font face='FiraCode Nerd Font' size=4 color='{hc}'>{header} 📚:<font></b>")
+            IPython.display.Markdown(
+                f"<b><font face='FiraCode Nerd Font' size=4 color='{hc}'>{header} {icon}:<font></b>"
+            )
         )
 
     if mdbody and len(mdbody) > 1:
