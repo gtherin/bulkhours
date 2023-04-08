@@ -6,9 +6,10 @@ from .core.logins import clean_student_name  # noqa
 from .core.timeit import timeit  # noqa
 from .core import geo  # noqa
 from .core.geo import geo_plot_country  # noqa
-from .core import runrealcmd  # noqa
+from .core import runrealcmd, ask_chat_gpt  # noqa
 from .core import colors as c  # noqa
 from .core.puppets import *  # noqa
+
 from . import rl  # noqa
 from . import hpc  # noqa
 from . import ecox  # noqa

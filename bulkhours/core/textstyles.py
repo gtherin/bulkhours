@@ -61,10 +61,10 @@ sbuttons = [
     ),
     SwitchButton(
         "test",
-        dict(description="Test", button_style="info"),
-        dict(description="Test", button_style="info"),
-        dict(description="Test", button_style="info"),
-        dict(description="Test", button_style="info"),
+        dict(description="Save And test", button_style="info"),
+        dict(description="Sauver et tester", button_style="info"),
+        dict(description="Save And test", button_style="info"),
+        dict(description="Sauver et tester", button_style="info"),
     ),
 ]
 
