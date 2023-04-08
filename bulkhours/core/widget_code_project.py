@@ -32,13 +32,11 @@ def get_data_from_file(label, on=None, subdir="data", **kwargs):
     return filename
 
 
-def evaluate_core_cpp_project(cinfo, cell):
+def evaluate_core_cpp_project(cinfo, cell, show_solution=False):
     height = "550px"
     for o in cinfo.puppet.split(","):
         if "height=" in o:
             height = o.split("=")[1]
-
-    layout = ipywidgets.Layout(height=height, width="99%")
 
     filenames = cinfo.options.split(",")
     os.system("mkdir -p cache")
@@ -54,7 +52,21 @@ def evaluate_core_cpp_project(cinfo, cell):
             with open(cfilename, "w") as f:
                 f.write(data)
         data = open(cfilename, "r").read()
-        files.append(ipywidgets.Textarea(open(cfilename, "r").read(), layout=layout))
+
+        if show_solution:
+            data1 = ipywidgets.Textarea(
+                open(cfilename, "r").read(), layout=ipywidgets.Layout(height=height, width="49%")
+            )
+            data2 = ipywidgets.Output(layout={"height": height, "width": "49%"})
+            with data2:
+                IPython.display.display(IPython.display.Code(open(cfilename, "r").read()))
+            data = ipywidgets.HBox([data1, data2])
+        else:
+            data = ipywidgets.Textarea(
+                open(cfilename, "r").read(), layout=ipywidgets.Layout(height=height, width="99%")
+            )
+
+        files.append(data)
 
     tab = ipywidgets.Tab(children=files)
     for t, f in enumerate(filenames):

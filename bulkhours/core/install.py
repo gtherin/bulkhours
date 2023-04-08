@@ -29,11 +29,11 @@ def get_argparser(line, cell):
     parser.add_argument("-l", "--label", type=str, default="")
     parser.add_argument("-t", "--type", default="code")
     parser.add_argument("-x", "--xoptions", default=None)
-    parser.add_argument("-w", "--widgets", default="lwsc")
+    parser.add_argument("-w", "--widgets", default=None)
     parser.add_argument("-p", "--puppet", default="")
     parser.add_argument("-d", "--default", default="")
 
-    if 1:  # try:
+    try:
         opts = line.split()
         opts = get_opts("-l", opts)
         opts = get_opts("-d", opts)
@@ -45,9 +45,15 @@ def get_argparser(line, cell):
         #    a.split(":")[0]: cell if a.split(":")[1] == "CELL" else a.split(":")[1] for a in args.options.split(";")
         # }
 
-    # except SystemExit as e:
-    #    parser.print_help()
-    #    return None
+    except SystemExit as e:
+        parser.print_help()
+        return None
+
+    if args.widgets is None:
+        if args.widgets == "code_project":
+            args.widgets = "wolsc"
+        else:
+            args.widgets = "lwsc"
 
     return args
 

@@ -30,55 +30,6 @@ class Evaluation(Magics):
         else:
             return self.cinfo.id
 
-    def show_cell(self, cell_id, cell_type, corrector="solution", private_msg=False, answer=None):
-        data = firebase.get_solution_from_corrector(cell_id, corrector=corrector)
-
-        if data is None and private_msg:
-            pass
-        elif data is None:
-            md(
-                mdbody=f"*La solution n'est pas disponible (pour le moment 😕)*"
-                if self.in_french
-                else f"*Solution is not available (yet 😕)*"
-            )
-        elif private_msg:
-            if (user := os.environ["STUDENT"]) in data or (user := "all") in data:
-                md(
-                    header=f"Message ({cell_id}, {user}) du correcteur"
-                    if self.in_french
-                    else f"Message ({cell_id}, {user}) from corrector",
-                    rawbody=data[user],
-                )
-        elif cell_type == "code":
-            md(header=f"Correction ({cell_id})", rawbody=data["answer"])
-            md(
-                f"""**Execution du code ({cell_id})** 💻"""
-                if self.in_french
-                else f"""**Let's execute the code ({cell_id})** 💻"""
-            )
-            self.shell.run_cell(data["answer"])
-        elif cell_type in ["markdown", "textarea"]:
-            md(header=f"Correction ({cell_id})", mdbody=data["answer"])
-        elif cell_type in ["formula"]:
-            md(header=f"Correction ({cell_id})")
-            IPython.display.display(IPython.display.Markdown("$" + data["answer"] + "$"))
-        elif cell_type in ["codetext", "intslider", "floatslider"]:
-            cc = (
-                ""
-                if cell_type in ["intslider", "floatslider"] or data["answer"] == data["code"]
-                else f" ({data['code']})"
-            )
-            if data["answer"] == answer:
-                md(mdbody=f"🥳Correction: {data['answer']}{cc}", bc="green")
-            else:
-                md(mdbody=f"😔Correction: {data['answer']}{cc}", bc="red")
-        if data is not None and "hidecode" in data:
-            if answer is not None:
-                hide_code = data["hidecode"].replace("ANSWER", str(answer))
-            elif "answer" in data:
-                hide_code = data["hidecode"].replace("ANSWER", str(data["answer"]))
-            self.shell.run_cell(hide_code)
-
     @line_cell_magic
     @needs_local_scope
     def message_cell_id(self, line, cell="", local_ns=None):
@@ -106,7 +57,19 @@ class Evaluation(Magics):
         if not self.cinfo:
             return
 
+        style = """
+            <style>
+                .sol_background {background-color:#f7d1d1}
+                .cell_background {background-color:#F7F7F7}
+                .cell_border {background-color:#CFCFCF}
+            </style>
+        """
+        IPython.display.display(ipywidgets.HTML(style))
+
         output = ipywidgets.Output()
+        if self.cinfo.user == "solution":
+            output.add_class("sol_background")
+
         bwidget = BulkWidget(self.cinfo, cell)
 
         owidgets = {
@@ -115,12 +78,15 @@ class Evaluation(Magics):
             "c": sbuttons[1].g(self.in_french),
             "m": sbuttons[2].g(self.in_french),
             "t": sbuttons[3].g(self.in_french),
+            "o": sbuttons[4].g(self.in_french),
         }
         widgets = bwidget.get_widgets()
 
         def func(b, i, func, args, kwargs):
             with output:
                 output.clear_output()
+                IPython.display.display(ipywidgets.HTML(style))
+                output.add_class("sol_background")
                 self.show_answer = not self.show_answer
                 sbuttons[i].update_style(b, on=self.show_answer)
                 if not self.show_answer:
@@ -134,31 +100,44 @@ class Evaluation(Magics):
                     md(mdbody=f"Nothing to send 🙈🙉🙊")
                 return
 
-            pams = dict(answer=answer, atype=self.cinfo.type)
-
-            if self.cinfo.type in ["codetext"]:
-                pams.update(dict(code=widgets[0].value, comment=f"'{widgets[0].value}'"))
-            if self.cinfo.type in ["textarea", "intslider", "floatslider"]:
-                pams.update(dict(comment=f"'{widgets[0].value}'"))
-            return func(b, 0, firebase.send_answer_to_corrector, [self.cell_id], pams)
+            return func(
+                b, 0, firebase.send_answer_to_corrector, [self.cell_id], bwidget.get_submit_params(widgets, answer)
+            )
 
         owidgets["s"].on_click(submit)
 
-        def fun1(b):
+        def get_correction(b):
+            data = firebase.get_solution_from_corrector(self.cell_id, corrector="solution")
+
             return func(
                 b,
                 1,
-                self.show_cell,
-                [self.cell_id, self.cinfo.type],
+                BulkWidget.show_cell,
+                [self, self.cell_id, self.cinfo.type, data],
                 dict(answer=bwidget.get_answer(widgets, self.cinfo.type)),
             )
 
-        owidgets["c"].on_click(fun1)
+        owidgets["c"].on_click(get_correction)
 
-        def fun2(b):
-            return func(b, 2, self.show_cell, [self.cell_id, self.cinfo.type], dict(private_msg=True))
+        def send_message(b):
+            data = firebase.get_solution_from_corrector(self.cell_id, corrector="solution")
+            return func(
+                b, 2, BulkWidget.show_cell, [self, self.cell_id, self.cinfo.type, data], dict(private_msg=True)
+            )
 
-        owidgets["m"].on_click(fun2)
+        owidgets["m"].on_click(send_message)
+
+        def write_exec_process(b):
+            for t, fn in enumerate(filenames):
+                with open(f"cache/{self.cinfo.id}_{fn}", "w") as f:
+                    f.write(files[t].value)
+                print(f"Generate cache/{fn}")
+                with open(f"cache/{fn}", "w") as f:
+                    f.write(files[t].value)
+
+            os.system(f"cd cache && make all && ./main")
+
+        owidgets["o"].on_click(write_exec_process)
 
         ws = []
         for w in self.cinfo.widgets:
@@ -167,44 +146,33 @@ class Evaluation(Magics):
             elif owidgets[w]:
                 ws.append(owidgets[w])
 
-        if self.cinfo.type == "code" and cell == "":
-            return
-        elif self.cinfo.type == "code":
-            self.shell.run_cell(cell)
-        elif self.cinfo.type == "markdown":
-            IPython.display.display(IPython.display.Markdown(cell))
-
         if self.cinfo.type == "code_project":
-            # return evaluate_cpp_project(self.cinfo, cell)
             tab, files = evaluate_core_cpp_project(self.cinfo, cell)
-            button = ipywidgets.Button(description="Compile and Execute")
             filenames = self.cinfo.options.split(",")
 
-            def write_exec_process(b):
-                for t, fn in enumerate(filenames):
-                    with open(f"cache/{self.cinfo.id}_{fn}", "w") as f:
-                        f.write(files[t].value)
-                    print(f"Generate cache/{fn}")
-                    with open(f"cache/{fn}", "w") as f:
-                        f.write(files[t].value)
+            hbox = ipywidgets.HBox([owidgets["o"]] + ws, layout=bwidget.get_layout())
 
-                os.system(f"cd cache && make all && ./main")
-
-            button.on_click(write_exec_process)
-            hbox = ipywidgets.HBox([button] + ws, layout=bwidget.get_layout())
-
-            if 1:
+            if 0:
                 tab2, files = evaluate_core_cpp_project(self.cinfo, cell)
                 htabs = ipywidgets.HBox([tab, tab2], layout=bwidget.get_layout())
-                IPython.display.display(ipywidgets.VBox(children=[htabs, hbox]), output)
+                ws = ipywidgets.VBox(children=[htabs, hbox])
             else:
-                IPython.display.display(ipywidgets.VBox(children=[tab, hbox]), output)
+                ws = ipywidgets.VBox(children=[tab, hbox])
+            IPython.display.display(ws, output)
             return
 
-        if self.cinfo.type == "formula":
+        if self.cinfo.type == "code" and cell != "":
+            with output:
+                IPython.display.display(ipywidgets.HTML(style))
+                if self.cinfo.user == "solution":
+                    output.add_class("sol_background")
+                self.shell.run_cell(cell)
+        elif self.cinfo.type == "markdown":
+            IPython.display.display(IPython.display.Markdown(cell))
+        elif self.cinfo.type == "formula":
             IPython.display.display(IPython.display.Markdown("$" + cell + "$"))
             print("$" + cell + "$")
-        if self.cinfo.type == "table":
+        elif self.cinfo.type == "table":
             IPython.display.display(get_table_widgets(self.cinfo))
 
         IPython.display.display(ipywidgets.HBox(ws, layout=bwidget.get_layout()), output)
