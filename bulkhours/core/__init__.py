@@ -36,10 +36,10 @@ def git_push(argv=sys.argv[1:]):
     Popen(cmd, stdout=PIPE, shell=True, stderr=STDOUT)
 
 
-def ask_chat_gpt(question="", apikey="YOURKEY", model="gpt-3.5-turbo"):
+def ask_chat_gpt(question="", api_key="YOURKEY", model="gpt-3.5-turbo"):
     import openai
 
-    if apikey == "YOURKEY":
+    if api_key == "YOURKEY":
         IPython.display.display(
             IPython.display.Markdown(
                 """## Interroger Chat-GPT
@@ -51,7 +51,7 @@ Vous devez creer une clé d'API
         )
         return
 
-    openai.api_key = apikey  # Have your own to run this cell !!!
+    openai.api_key = api_key  # Have your own to run this cell !!!
 
     completion = openai.ChatCompletion.create(
         model=model,
