@@ -12,6 +12,7 @@ from . import install
 from .widgets import BulkWidget
 from .widget_code_project import evaluate_core_cpp_project
 from .widget_table import get_table_widgets
+from . import colors
 
 
 @magics_class
@@ -57,18 +58,9 @@ class Evaluation(Magics):
         if not self.cinfo:
             return
 
-        style = """
-            <style>
-                .sol_background {background-color:#f7d1d1}
-                .cell_background {background-color:#F7F7F7}
-                .cell_border {background-color:#CFCFCF}
-            </style>
-        """
-        IPython.display.display(ipywidgets.HTML(style))
-
         output = ipywidgets.Output()
         if self.cinfo.user == "solution":
-            output.add_class("sol_background")
+            colors.set_style(output, "sol_background")
 
         bwidget = BulkWidget(self.cinfo, cell)
 
@@ -85,8 +77,7 @@ class Evaluation(Magics):
         def func(b, i, func, args, kwargs):
             with output:
                 output.clear_output()
-                IPython.display.display(ipywidgets.HTML(style))
-                output.add_class("sol_background")
+                colors.set_style(output, "sol_background")
                 self.show_answer = not self.show_answer
                 sbuttons[i].update_style(b, on=self.show_answer)
                 if not self.show_answer:
@@ -163,9 +154,8 @@ class Evaluation(Magics):
 
         if self.cinfo.type == "code" and cell != "":
             with output:
-                IPython.display.display(ipywidgets.HTML(style))
                 if self.cinfo.user == "solution":
-                    output.add_class("sol_background")
+                    colors.set_style(output, "sol_background")
                 self.shell.run_cell(cell)
         elif self.cinfo.type == "markdown":
             IPython.display.display(IPython.display.Markdown(cell))

@@ -3,6 +3,7 @@ import numpy as np
 
 from .textstyles import *
 from .logins import *
+from . import colors
 
 
 def get_table_widgets(cinfo):
@@ -10,7 +11,8 @@ def get_table_widgets(cinfo):
     # %evaluation_cell_id -i Itable -t table -o ;0.5 kpc;1 kpc;1.5 kpc;2 kpc;;v(km/s);I;I;I;I -p execute_on_start,toggle_on,lock
 
     data = np.array([r.split(";") for r in cinfo.options.split(";;")])
-    grid = ipywidgets.GridspecLayout(*data.shape, layout=ipywidgets.Layout(border="3px solid #eaeaea"))
+    grid = ipywidgets.GridspecLayout(*data.shape)  # , layout=ipywidgets.Layout(border="1px solid #eaeaea"))
+    # colors.set_style(grid, "sol_background")
 
     for i, _ in enumerate(data):
         for j, col in enumerate(data[i]):
@@ -28,8 +30,12 @@ def get_table_widgets(cinfo):
                 )
             else:
                 grid[i, j] = ipywidgets.Button(
-                    description=col, button_style="warning", layout=ipywidgets.Layout(height="auto", width="auto")
+                    description=col,
+                    # display="flex",
+                    # layout=ipywidgets.Layout(height="auto", width="100%"),
+                    # button_style="button3"
+                    # style={"description_width": "initial"},
+                    layout=ipywidgets.Layout(height="auto", width="auto", border="3px solid #eaeaea"),
                 )
-                grid[i, j].style.text_color = "black"
-                grid[i, j].style.button_color = "#eaeaea"
+                # colors.set_style(grid[i, j], "button3")
     return grid
