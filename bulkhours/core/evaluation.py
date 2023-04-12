@@ -102,13 +102,30 @@ class Evaluation(Magics):
 
         widgets = bwidget.get_widgets()
 
+        bbox = []
+        ws = []
+        for w in self.cinfo.widgets:
+            if w == "|":
+                bbox.append(ipywidgets.HBox(ws))
+                ws = []
+            elif w == "w":
+                ws += widgets
+            elif w == "l" and abuttons[w] is not None:
+                ws.append(abuttons[w])
+            elif abuttons[w]:
+                ws.append(abuttons[w].b)
+        if len(ws) > 0:
+            bbox.append(ipywidgets.HBox(ws))
+
         if self.cinfo.type == "code_project":
 
             def submit(b):
                 return update_button(b, "s", WidgetCodeProject.submit, [self, bwidget, widgets, output], dict())
 
             def get_correction(b):
-                return update_button(b, "c", WidgetCodeProject.get_core_correction, [self, bwidget, widgets], dict())
+                return update_button(
+                    b, "c", WidgetCodeProject.get_core_correction, [self, bbox[1], bwidget, output], dict()
+                )
 
         else:
 
@@ -134,21 +151,6 @@ class Evaluation(Magics):
 
         abuttons["o"].b.on_click(write_exec_process)
 
-        bbox = []
-        ws = []
-        for w in self.cinfo.widgets:
-            if w == "|":
-                bbox.append(ipywidgets.HBox(ws))
-                ws = []
-            elif w == "w":
-                ws += widgets
-            elif w == "l" and abuttons[w] is not None:
-                ws.append(abuttons[w])
-            elif abuttons[w]:
-                ws.append(abuttons[w].b)
-        if len(ws) > 0:
-            bbox.append(ipywidgets.HBox(ws))
-
         if self.cinfo.type == "code" and cell != "":
             with output:
                 if self.cinfo.user == "solution":
@@ -160,14 +162,7 @@ class Evaluation(Magics):
             IPython.display.display(IPython.display.Markdown("$" + cell + "$"))
             print("$" + cell + "$")
         elif self.cinfo.type == "code_project":
-            if 0:
-                tab2, _ = evaluate_core_cpp_project(self.cinfo, cell, show_solution=True)
-                htabs = ipywidgets.HBox([tab2])  # , layout=bwidget.get_layout())
-                IPython.display.display(htabs)
-                IPython.display.display(bbox[1], output)
-                # ws = ipywidgets.VBox(children=[htabs, hbox])
-            else:
-                bwidget.widget.basic_execution(bbox[1], bwidget, output)
+            bwidget.widget.basic_execution(bbox[1], bwidget, output)
             return
 
         bbox = bbox[0] if len(bbox) == 1 else ipywidgets.VBox(bbox)

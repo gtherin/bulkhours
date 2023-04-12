@@ -28,7 +28,7 @@ def get_data_from_file(label, on=None, subdir="data", **kwargs):
     return filename
 
 
-def evaluate_core_cpp_project(cinfo, cell, show_solution=False):
+def evaluate_core_cpp_project(cinfo, show_solution=False):
     height = "550px"
     for o in cinfo.puppet.split(","):
         if "height=" in o:
@@ -36,6 +36,9 @@ def evaluate_core_cpp_project(cinfo, cell, show_solution=False):
 
     filenames = cinfo.options.split(",")
     os.system("mkdir -p cache")
+
+    if show_solution:
+        solution = firebase.get_solution_from_corrector(cinfo.id, corrector="solution")
 
     files = []
     for t, f in enumerate(filenames):
@@ -53,9 +56,11 @@ def evaluate_core_cpp_project(cinfo, cell, show_solution=False):
             data1 = ipywidgets.Textarea(
                 open(cfilename, "r").read(), layout=ipywidgets.Layout(height=height, width="49%")
             )
-            data2 = ipywidgets.Output(layout={"height": height, "width": "49%"})
-            with data2:
-                IPython.display.display(IPython.display.Code(open(cfilename, "r").read()))
+
+            data2 = ipywidgets.Textarea(solution[f], layout=ipywidgets.Layout(height=height, width="49%"))
+            # data2 = ipywidgets.Output(layout={"height": height, "width": "49%"})
+            # with data2:
+            #    IPython.display.display(IPython.display.Code(solution[f]))
             data = ipywidgets.HBox([data1, data2])
         else:
             data = ipywidgets.Textarea(
@@ -72,7 +77,7 @@ def evaluate_core_cpp_project(cinfo, cell, show_solution=False):
 
 class WidgetCodeProject(base.WidgetBase):
     def get_widget(self):
-        self.widget, self.files = evaluate_core_cpp_project(self.cinfo, self.cell, show_solution=False)
+        self.widget, self.files = evaluate_core_cpp_project(self.cinfo, show_solution=False)
         return self.widget
 
     def get_answer(self):
@@ -99,16 +104,18 @@ class WidgetCodeProject(base.WidgetBase):
         IPython.display.display(buttons, output)
 
     @staticmethod
-    def get_core_correction(self, buttons, bwidget, output, cell):
-        tab2, _ = evaluate_core_cpp_project(self.cinfo, cell, show_solution=True)
-        htabs = ipywidgets.HBox([tab2])  # , layout=bwidget.get_layout())
-        IPython.display.display(htabs)
-        IPython.display.display(buttons, output)
+    def get_core_correction(self, buttons, bwidget, output):
+        files = bwidget.widget.files
+        filenames = self.cinfo.options.split(",")
 
-    # @staticmethod
-    # def get_core_correction(self, bwidget, widgets):
-    #    data = firebase.get_solution_from_corrector(self.cinfo.id, corrector="solution")
-    #    return BulkWidget.display_correction(self, bwidget, widgets, data)
+        WidgetCodeProject.write_exec_process(self, files, filenames, exec_process=False)
+
+        with output:
+            output.clear_output()
+            tab2, _ = evaluate_core_cpp_project(self.cinfo, show_solution=True)
+            htabs = ipywidgets.HBox([tab2])  # , layout=bwidget.get_layout())
+            IPython.display.display(htabs)
+        # IPython.display.display(buttons, output)
 
     @staticmethod
     def submit(self, bwidget, widgets, output):
