@@ -43,6 +43,7 @@ buttonb {
 .button1 {background-color:#eaeaea ; color:red ; font-size:100% ; border: 1px solid #eaeaea}
 .button2 {background-color:#eaeaea ; color:red}
         </style>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     """
     IPython.display.display(ipywidgets.HTML(style))
     object.add_class(style)
