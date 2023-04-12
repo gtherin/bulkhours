@@ -41,17 +41,15 @@ def get_argparser(line, cell):
 
         args = parser.parse_args(opts)
 
-        # args.xoptions = {
-        #    a.split(":")[0]: cell if a.split(":")[1] == "CELL" else a.split(":")[1] for a in args.options.split(";")
-        # }
-
     except SystemExit as e:
         parser.print_help()
         return None
 
     if args.widgets is None:
-        if args.widgets == "code_project":
-            args.widgets = "wolsc"
+        if args.type == "code_project":
+            args.widgets = "w|olsc"
+        elif args.type == "table":
+            args.widgets = "w|sc"
         else:
             args.widgets = "lwsc"
 

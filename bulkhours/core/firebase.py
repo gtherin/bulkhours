@@ -13,17 +13,19 @@ def get_document(sid, user):
     return firestore.Client().collection(sid).document(user)
 
 
-def send_answer_to_corrector(question, update=True, user=None, comment="", update_time=True, **kwargs):
+def send_answer_to_corrector(cinfo, update=True, user=None, comment="", update_time=True, **kwargs):
+    question = cinfo.id
     user = os.environ["STUDENT"] if user is None else user
 
+    uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if update_time:
-        kwargs.update({"update_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
+        kwargs.update({"update_time": uptime})
 
     if update and get_document(question, user).get().to_dict():
         get_document(question, user).update(kwargs)
     else:
         get_document(question, user).set(kwargs)
-    print(f"Answer {comment} has been submited for: {question}/{user}. You can resubmit it several times")
+    print(f"Answer {comment} has been submited at {uptime} for {question}/{user}. You can resubmit it several times")
 
 
 def get_solution_from_corrector(question, corrector="solution"):

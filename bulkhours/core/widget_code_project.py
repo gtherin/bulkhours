@@ -9,6 +9,7 @@ from .textstyles import *
 from .logins import *
 from . import firebase
 from . import install
+from .widget_table import WidgetBase
 from .widgets import BulkWidget
 
 
@@ -72,3 +73,16 @@ def evaluate_core_cpp_project(cinfo, cell, show_solution=False):
     for t, f in enumerate(filenames):
         tab.set_title(t, f)
     return tab, files
+
+
+class WidgetCodeProject(WidgetBase):
+    def get_widget(self):
+        tab, self.files = evaluate_core_cpp_project(self.cinfo, self.cell, show_solution=False)
+        return tab
+
+    def get_answer(self):
+        print(self.widget)
+        return self.widget
+
+    def get_params(self, answer):
+        return dict(answer=answer, atype=self.cinfo.type)

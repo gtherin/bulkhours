@@ -1,5 +1,6 @@
 import os
 import subprocess
+import time
 
 from IPython.core.magic import Magics, cell_magic, magics_class, line_cell_magic, needs_local_scope
 import IPython
@@ -11,7 +12,6 @@ from . import firebase
 from . import install
 from .widgets import BulkWidget
 from .widget_code_project import evaluate_core_cpp_project
-from .widget_table import get_table_widgets
 from . import colors
 
 
@@ -35,8 +35,7 @@ class Evaluation(Magics):
     @needs_local_scope
     def message_cell_id(self, line, cell="", local_ns=None):
         self.cinfo = install.get_argparser(line, cell)
-        cell_id, cell_user = self.cell_id, self.cinfo.user
-        firebase.send_answer_to_corrector(cell_id, **{cell_user: cell})
+        firebase.send_answer_to_corrector(self.cinfo, **{self.cinfo.user: cell})
 
     @line_cell_magic
     @needs_local_scope
@@ -49,7 +48,7 @@ class Evaluation(Magics):
             a.split(":")[0]: cell if a.split(":")[1] == "CELL" else a.split(":")[1]
             for a in self.cinfo.options.split(";")
         }
-        firebase.send_answer_to_corrector(self.cell_id, user=self.cinfo.user, **opts)
+        firebase.send_answer_to_corrector(self.cinfo, user=self.cinfo.user, **opts)
 
     @line_cell_magic
     @needs_local_scope
@@ -62,7 +61,7 @@ class Evaluation(Magics):
         if self.cinfo.user == "solution":
             colors.set_style(output, "sol_background")
 
-        bwidget = BulkWidget(self.cinfo, cell)
+        bwidget = BulkWidget(self.cinfo, cell, in_french=self.in_french)
 
         owidgets = {
             "l": bwidget.get_label(),
@@ -74,51 +73,44 @@ class Evaluation(Magics):
         }
         widgets = bwidget.get_widgets()
 
-        def func(b, i, func, args, kwargs):
+        def update_button(b, i, funct, args, kwargs):
             with output:
                 output.clear_output()
                 colors.set_style(output, "sol_background")
                 self.show_answer = not self.show_answer
-                sbuttons[i].update_style(b, on=self.show_answer)
+                sbuttons[i].update_style(b, style="warning")
                 if not self.show_answer:
-                    func(*args, **kwargs)
+                    try:
+                        funct(*args, **kwargs)
+                    except TypeError as e:
+                        sbuttons[i].update_style(b, style="danger")
+                    except Exception as e:
+                        sbuttons[i].update_style(b, style="danger")
+
+                if sbuttons[i].sleep_on:
+                    sbuttons[i].update_style(b, style="off")
+                    time.sleep(sbuttons[i].sleep_on)
+                    self.show_answer = True
+                    # output.clear_output()
+
+                sbuttons[i].update_style(b, style="on" if self.show_answer else "off")
 
         def submit(b):
-            answer = bwidget.get_answer(widgets, self.cinfo.type)
-            if answer == "":
-                with output:
-                    output.clear_output()
-                    md(mdbody=f"Nothing to send 🙈🙉🙊")
-                return
-
-            return func(
-                b, 0, firebase.send_answer_to_corrector, [self.cell_id], bwidget.get_submit_params(widgets, answer)
-            )
+            return update_button(b, 0, BulkWidget.submit, [self, bwidget, widgets, output], dict())
 
         owidgets["s"].on_click(submit)
 
         def get_correction(b):
-            data = firebase.get_solution_from_corrector(self.cell_id, corrector="solution")
-
-            return func(
-                b,
-                1,
-                BulkWidget.show_cell,
-                [self, self.cell_id, self.cinfo.type, data],
-                dict(answer=bwidget.get_answer(widgets, self.cinfo.type)),
-            )
+            return update_button(b, 1, BulkWidget.get_core_correction, [self, bwidget, widgets], dict())
 
         owidgets["c"].on_click(get_correction)
 
         def send_message(b):
-            data = firebase.get_solution_from_corrector(self.cell_id, corrector="solution")
-            return func(
-                b, 2, BulkWidget.show_cell, [self, self.cell_id, self.cinfo.type, data], dict(private_msg=True)
-            )
+            return update_button(b, 2, BulkWidget.send_message, [self], dict())
 
         owidgets["m"].on_click(send_message)
 
-        def write_exec_process(b):
+        def write_exec_process1(self, files, filenames):
             for t, fn in enumerate(filenames):
                 with open(f"cache/{self.cinfo.id}_{fn}", "w") as f:
                     f.write(files[t].value)
@@ -128,20 +120,31 @@ class Evaluation(Magics):
 
             os.system(f"cd cache && make all && ./main")
 
+        def write_exec_process(b):
+            return update_button(b, 4, write_exec_process1, [self, files, filenames], dict())
+
         owidgets["o"].on_click(write_exec_process)
 
+        bbox = []
         ws = []
         for w in self.cinfo.widgets:
-            if w == "w":
+            if w == "|":
+                bbox.append(ipywidgets.HBox(ws))
+                ws = []
+            elif w == "w":
                 ws += widgets
             elif owidgets[w]:
                 ws.append(owidgets[w])
+        if len(ws) > 0:
+            bbox.append(ipywidgets.HBox(ws))
+
+        bbox = bbox[0] if len(bbox) == 1 else ipywidgets.VBox(bbox)
 
         if self.cinfo.type == "code_project":
             tab, files = evaluate_core_cpp_project(self.cinfo, cell)
             filenames = self.cinfo.options.split(",")
 
-            hbox = ipywidgets.HBox([owidgets["o"]] + ws, layout=bwidget.get_layout())
+            hbox = ipywidgets.HBox(ws, layout=bwidget.get_layout())
 
             if 0:
                 tab2, files = evaluate_core_cpp_project(self.cinfo, cell)
@@ -162,7 +165,5 @@ class Evaluation(Magics):
         elif self.cinfo.type == "formula":
             IPython.display.display(IPython.display.Markdown("$" + cell + "$"))
             print("$" + cell + "$")
-        elif self.cinfo.type == "table":
-            IPython.display.display(get_table_widgets(self.cinfo))
 
-        IPython.display.display(ipywidgets.HBox(ws, layout=bwidget.get_layout()), output)
+        IPython.display.display(bbox, output)
