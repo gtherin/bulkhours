@@ -96,7 +96,7 @@ class Evaluation(Magics):
                         ii, description = 0, b.description
                         while p1.is_alive():
                             b.description = fun[ii % len(fun)] + description
-                            time.sleep(0.1)
+                            time.sleep(0.02)
                             ii += 1
 
                     except TypeError as e:
