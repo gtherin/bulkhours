@@ -87,26 +87,27 @@ class Evaluation(Magics):
                 self.show_answer = not self.show_answer
                 sbuttons[i].update_style(b, style="warning")
                 if not self.show_answer:
-                    try:
+                    if 1:
+                    #try:
                         p1 = multiprocessing.Process(target=funct, args=args, kwargs=kwargs)
                         p1.start()
                         loop = ["plane", "rocket", "space-shuttle"]
                         fun = ["🙈", "🙉", "🙊"]
                         fun = ["🌑", "🌒", "🌓‍", "🌖", "🌗", "🌘"]
-                        ii = 0
 
-                        description = sbuttons[i].description
+                        ii, description = 0, b.description
                         while p1.is_alive():
                             print(p1.is_alive(), loop[ii % len(loop)])
-                            sbuttons[i].description = fun[ii % len(fun)] + description
+                            b.description = fun[ii % len(fun)] + description
                             time.sleep(0.25)
                             ii += 1
 
                         # funct(*args, **kwargs)
-                    except TypeError as e:
-                        sbuttons[i].update_style(b, style="danger")
-                    except Exception as e:
-                        sbuttons[i].update_style(b, style="danger")
+                    #except TypeError as e:
+                    #    sbuttons[i].update_style(b, style="danger")
+                    #time.sleep(0.25)
+                    #except Exception as e:
+                    #    sbuttons[i].update_style(b, style="danger")
 
                 self.show_answer = sbuttons[i].wait(self.show_answer, b)
                 sbuttons[i].update_style(b, style="on" if self.show_answer else "off")
