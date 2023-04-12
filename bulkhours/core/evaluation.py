@@ -77,6 +77,12 @@ class Evaluation(Magics):
         def update_button(b, i, funct, args, kwargs):
             with output:
                 output.clear_output()
+                IPython.display.display(
+                    IPython.display.HTML(
+                        '<link rel="stylesheet" href="//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>'
+                    )
+                )
+
                 colors.set_style(output, "sol_background")
                 self.show_answer = not self.show_answer
                 sbuttons[i].update_style(b, style="warning")
@@ -88,8 +94,8 @@ class Evaluation(Magics):
                         ii = 0
 
                         while p1.is_alive():
-                            print(p1.is_alive(), loop[ii % 2])
-                            sbuttons[i].icon = loop[ii % 2]
+                            print(p1.is_alive(), loop[ii % len(loop)])
+                            sbuttons[i].icon = loop[ii % len(loop)]
                             time.sleep(0.5)
                             ii += 1
 

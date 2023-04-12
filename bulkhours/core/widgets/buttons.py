@@ -27,12 +27,13 @@ class SwitchButton:
             button.description, button.button_style = self.d[style]["description"], self.d[style]["button_style"]
         elif style == "danger":
             button.description, button.button_style = "Erreur" if self.in_french else "Error", "danger"
+        button.description = "<h3>zezhzrhzrj</h3>"
         # button.disabled = style in ["warning", "danger"]
         # if style not in ["warning"]:
         #    button.icon = ""
-        button.icon = "fa-spinner fa-pulse fa-1x fa-fw" if style in ["warning"] else ""
-        button.icon = button.icon.replace("/\b(\w)/g", "fa-$1")
-        # button.icon = "shuttle"
+        # button.icon = "fa-spinner fa-pulse fa-1x fa-fw" if style in ["warning"] else ""
+        # button.icon = "fa-shuttle"
+        # button.icon = button.icon.replace("/\b(\w)/g", "fa-$1")
         # icon.replace(/\b(\w)/g, 'fa-$1')
 
     def g(self, in_french):
@@ -45,7 +46,7 @@ class SwitchButton:
                 align_items="stretch",
                 tooltip=args["description"],
                 layout=ipywidgets.Layout(width="max-content"),
-                icon="plane",
+                # icon="plane",
             )
         )
         return ipywidgets.Button(**args)
