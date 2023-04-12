@@ -21,6 +21,6 @@ class WidgetBase:
     def get_params(self, answer):
         return dict(answer=answer, atype=self.cinfo.type)
 
-    def get_label(self):
+    def get_label_widget(self):
         label = f"<b><font face='FiraCode Nerd Font' size=4 color='red'>{self.cinfo.label}<font></b>"
         return ipywidgets.HTML(value=label, layout=ipywidgets.Layout(height="auto", width="auto"))

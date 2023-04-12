@@ -1,17 +1,18 @@
 import os
 import subprocess
 import time
+import multiprocessing
 
 from IPython.core.magic import Magics, cell_magic, magics_class, line_cell_magic, needs_local_scope
 import IPython
 import ipywidgets
 
-from .widgets.buttons import *
+from .widgets.buttons import get_all_buttons, get_buttons_list
 from .logins import *
 from . import firebase
 from . import install
 from .widgets.bulk_widget import BulkWidget
-from .widgets.code_project import evaluate_core_cpp_project
+from .widgets.code_project import evaluate_core_cpp_project, WidgetCodeProject
 from . import colors
 
 
@@ -19,7 +20,6 @@ from . import colors
 class Evaluation(Magics):
     def __init__(self, shell, nid, in_french):
         super(Evaluation, self).__init__(shell)
-        self.show_answer = True
         self.nid = nid
         self.in_french = in_french
         self.cinfo = None
@@ -62,81 +62,63 @@ class Evaluation(Magics):
             colors.set_style(output, "sol_background")
 
         bwidget = BulkWidget(self.cinfo, cell, in_french=self.in_french)
+        abuttons = get_buttons_list(bwidget.get_label_widget(), self.in_french)
 
-        owidgets = {
-            "l": bwidget.get_label(),
-            "s": sbuttons[0].g(self.in_french),
-            "c": sbuttons[1].g(self.in_french),
-            "m": sbuttons[2].g(self.in_french),
-            "t": sbuttons[3].g(self.in_french),
-            "o": sbuttons[4].g(self.in_french),
-        }
-        widgets = bwidget.get_widgets()
-        import multiprocessing
-
-        def update_button(b, i, funct, args, kwargs):
+        def update_button(b, idx, funct, args, kwargs):
             with output:
                 output.clear_output()
-                IPython.display.display(
-                    IPython.display.HTML(
-                        '<link rel="stylesheet" href="//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>'
-                    )
-                )
 
                 colors.set_style(output, "sol_background")
-                self.show_answer = not self.show_answer
-                sbuttons[i].update_style(b, style="warning")
-                if not self.show_answer:
+                abuttons[idx].is_on = not abuttons[idx].is_on
+
+                abuttons[idx].update_style(b, style="warning")
+                if not abuttons[idx].is_on:
                     try:
                         p1 = multiprocessing.Process(target=funct, args=args, kwargs=kwargs)
                         p1.start()
-                        fun = ["🙈", "🙉", "🙊"]
-                        fun = ["🌑", "🌒", "🌓‍", "🌖", "🌗", "🌘"]
+                        fun, sleep = ["🙈", "🙉", "🙊"], 0.3
+                        fun, sleep = ["🌑", "🌒", "🌓‍", "🌖", "🌗", "🌘"], 0.3
+                        fun, sleep = ["🤛‍", "✋", "✌"], 0.3
+                        fun, sleep = ["🏊", "🚴", "🏃"], 0.3
+                        fun, sleep = ["🙂‍", "😐", "😪", "😴", "😅"], 0.3
+                        fun, sleep = ["🟥", "🟧", "🟨‍", "🟩", "🟦", "🟪"], 0.3
 
                         ii, description = 0, b.description
                         while p1.is_alive():
                             b.description = fun[ii % len(fun)] + description
-                            time.sleep(0.02)
+                            time.sleep(sleep)
                             ii += 1
 
-                    except TypeError as e:
-                        sbuttons[i].update_style(b, style="danger")
-                        time.sleep(0.25)
-                    except Exception as e:
-                        sbuttons[i].update_style(b, style="danger")
+                        abuttons[idx].is_on = abuttons[idx].wait(abuttons[idx].is_on, b)
 
-                self.show_answer = sbuttons[i].wait(self.show_answer, b)
-                sbuttons[i].update_style(b, style="on" if self.show_answer else "off")
+                    except:
+                        abuttons[idx].update_style(b, style="danger")
+                        time.sleep(2)
+                        abuttons[idx].is_on = True
+
+                abuttons[idx].update_style(b, style="on" if abuttons[idx].is_on else "off")
+
+        widgets = bwidget.get_widgets()
 
         def submit(b):
-            return update_button(b, 0, BulkWidget.submit, [self, bwidget, widgets, output], dict())
+            return update_button(b, "s", BulkWidget.submit, [self, bwidget, widgets, output], dict())
 
-        owidgets["s"].on_click(submit)
+        abuttons["s"].b.on_click(submit)
 
         def get_correction(b):
-            return update_button(b, 1, BulkWidget.get_core_correction, [self, bwidget, widgets], dict())
+            return update_button(b, "c", BulkWidget.get_core_correction, [self, bwidget, widgets], dict())
 
-        owidgets["c"].on_click(get_correction)
+        abuttons["c"].b.on_click(get_correction)
 
         def send_message(b):
-            return update_button(b, 2, BulkWidget.send_message, [self], dict())
+            return update_button(b, "m", BulkWidget.send_message, [self], dict())
 
-        owidgets["m"].on_click(send_message)
-
-        def write_exec_process1(self, files, filenames):
-            for t, fn in enumerate(filenames):
-                with open(f"cache/{self.cinfo.id}_{fn}", "w") as f:
-                    f.write(files[t].value)
-                print(f"Generate cache/{fn}")
-                with open(f"cache/{fn}", "w") as f:
-                    f.write(files[t].value)
-
-            os.system(f"cd cache && make all && ./main")
+        abuttons["m"].b.on_click(send_message)
 
         def write_exec_process(b):
-            return update_button(b, 4, write_exec_process1, [self, files, filenames], dict())
+            return update_button(b, "o", WidgetCodeProject.write_exec_process, [self, files, filenames], dict())
 
-        owidgets["o"].on_click(write_exec_process)
+        abuttons["o"].b.on_click(write_exec_process)
 
         bbox = []
         ws = []
@@ -146,8 +128,8 @@ class Evaluation(Magics):
                 ws = []
             elif w == "w":
                 ws += widgets
-            elif owidgets[w]:
-                ws.append(owidgets[w])
+            elif abuttons[w]:
+                ws.append(abuttons[w].b)
         if len(ws) > 0:
             bbox.append(ipywidgets.HBox(ws))
 
