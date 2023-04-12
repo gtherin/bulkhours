@@ -91,11 +91,14 @@ class Evaluation(Magics):
                         p1 = multiprocessing.Process(target=funct, args=args, kwargs=kwargs)
                         p1.start()
                         loop = ["plane", "rocket", "space-shuttle"]
+                        fun = ["🙈", "🙉", "🙊"]
                         ii = 0
 
+                        description = sbuttons[i].description
                         while p1.is_alive():
                             print(p1.is_alive(), loop[ii % len(loop)])
-                            sbuttons[i].icon = loop[ii % len(loop)]
+                            # sbuttons[i].icon = loop[ii % len(loop)]
+                            sbuttons[i].description = fun[ii % len(fun)] + description
                             time.sleep(0.5)
                             ii += 1
 
