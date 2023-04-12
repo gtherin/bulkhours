@@ -25,6 +25,13 @@ class SwitchButton:
         self.sleep_on = sleep_on
 
     def update_style(self, button, style=None):
+        import IPython
+        IPython.display.display(
+            IPython.display.HTML(
+                """<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> """
+            )
+        )
+
         if style in ["warning", "on", "off"]:
             button.description, button.button_style = self.d[style]["description"], self.d[style]["button_style"]
         elif style == "danger":

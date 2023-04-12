@@ -53,11 +53,6 @@ class Evaluation(Magics):
     @line_cell_magic
     @needs_local_scope
     def evaluation_cell_id(self, line, cell="", local_ns=None):
-        IPython.display.display(
-            IPython.display.HTML(
-                """<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> """
-            )
-        )
         self.cinfo = install.get_argparser(line, cell)
         if not self.cinfo:
             return
@@ -77,6 +72,7 @@ class Evaluation(Magics):
             "o": sbuttons[4].g(self.in_french),
         }
         widgets = bwidget.get_widgets()
+        import multiprocessing
 
         def update_button(b, i, funct, args, kwargs):
             with output:
@@ -86,7 +82,16 @@ class Evaluation(Magics):
                 sbuttons[i].update_style(b, style="warning")
                 if not self.show_answer:
                     try:
-                        funct(*args, **kwargs)
+                        p1 = multiprocessing.Process(target=funct, args=args, kwargs=kwargs)
+                        p1.start()
+                        loop = ["plane", "rocket", "space-shuttle"]
+
+                        while p1.is_alive():
+                            print(p1.is_alive())
+                            time.sleep(1)
+                            sbuttons[i].icon = loop[0]
+
+                        # funct(*args, **kwargs)
                     except TypeError as e:
                         sbuttons[i].update_style(b, style="danger")
                     except Exception as e:
