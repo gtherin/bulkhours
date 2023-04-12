@@ -27,7 +27,7 @@ class SwitchButton:
             button.description, button.button_style = self.d[style]["description"], self.d[style]["button_style"]
         elif style == "danger":
             button.description, button.button_style = "Erreur" if self.in_french else "Error", "danger"
-        button.description = "<h3>zezhzrhzrj</h3>"
+        # button.description = "<h3>zezhzrhzrj</h3>"
         # button.disabled = style in ["warning", "danger"]
         # if style not in ["warning"]:
         #    button.icon = ""
