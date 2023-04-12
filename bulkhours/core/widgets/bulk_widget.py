@@ -16,7 +16,7 @@ class BulkWidget:
         else:
             self.widget = None
 
-    def get_label(self):
+    def get_label_widget(self):
         if self.cinfo.type in ["code", "markdown"]:
             return None
         label = (

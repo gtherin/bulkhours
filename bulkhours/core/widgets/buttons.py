@@ -14,6 +14,7 @@ class SwitchButton:
         off_description,
         off_description_fr,
         sleep_on=None,
+        width=None,
     ) -> None:
         self.label = label
         self.en = dict(on=on_description, warning=tmp_description, off=off_description)
@@ -21,18 +22,17 @@ class SwitchButton:
         self.show_answer, self.in_french = True, False
         self.d = self.fr if self.in_french else self.en
         self.sleep_on = sleep_on
+        self.width = width
+        self.is_on = True
+        self.b = None
 
     def update_style(self, button, style=None):
         if style in ["warning", "on", "off"]:
             button.description, button.button_style = self.d[style]["description"], self.d[style]["button_style"]
         elif style == "danger":
-            button.description, button.button_style = "Erreur" if self.in_french else "Error", "danger"
-        # button.description = "<h3>zezhzrhzrj</h3>"
+            button.description, button.button_style = "✖ Erreur" if self.in_french else "✖ Error", "danger"
         # button.disabled = style in ["warning", "danger"]
-        # if style not in ["warning"]:
-        #    button.icon = ""
         # button.icon = "fa-spinner fa-pulse fa-1x fa-fw" if style in ["warning"] else ""
-        # button.icon = "fa-shuttle"
         # button.icon = button.icon.replace("/\b(\w)/g", "fa-$1")
         # icon.replace(/\b(\w)/g, 'fa-$1')
 
@@ -45,11 +45,11 @@ class SwitchButton:
                 flex_flow="column",
                 align_items="stretch",
                 tooltip=args["description"],
-                layout=ipywidgets.Layout(width="max-content"),
-                # icon="plane",
+                layout=ipywidgets.Layout(width=self.width if self.width is not None else "max-content"),
             )
         )
-        return ipywidgets.Button(**args)
+        self.b = ipywidgets.Button(**args)
+        return self.b
 
     def wait(self, show_answer, button, style="off", sleep=None):
         sleep = self.sleep_on if sleep is None else sleep
@@ -65,63 +65,76 @@ class SwitchButton:
         return True
 
 
-sbuttons = [
-    SwitchButton(
-        "submit",
-        dict(description="Send answer to corrector", button_style="primary"),
-        dict(description="Envoyer au correcteur", button_style="primary"),
-        dict(description="Operation in progress", button_style="warning"),
-        dict(description="Operation en cours   ", button_style="warning"),
-        dict(description="Answer sent to corrector", button_style="success"),
-        dict(description="Correction envoyée", button_style="success"),
-        sleep_on=4,
-    ),
-    SwitchButton(
-        "correct",
-        dict(description="Show correction", button_style="primary"),
-        dict(description="Voir la correction", button_style="primary"),
-        dict(description="Operation in progress", button_style="warning"),
-        dict(description="Operation en cours   ", button_style="warning"),
-        dict(description="Hide correction", button_style="danger"),
-        dict(description="Cacher la correction", button_style="danger"),
-    ),
-    SwitchButton(
-        "message",
-        dict(description="Message from corrector", button_style="info"),
-        dict(description="Message au correcteur", button_style="info"),
-        dict(description="Operation in progress", button_style="warning"),
-        dict(description="Operation en cours   ", button_style="warning"),
-        dict(description="Hide message from corrector", button_style="warning"),
-        dict(description="Cacher le message du correcteur", button_style="warning"),
-    ),
-    SwitchButton(
-        "evaluate",
-        dict(description="Save the grade", button_style="info"),
-        dict(description="Sauvegarder la note", button_style="info"),
-        dict(description="Operation in progress", button_style="warning"),
-        dict(description="Operation en cours   ", button_style="warning"),
-        dict(description="Grade saved", button_style="warning"),
-        dict(description="Note sauvegardée", button_style="warning"),
-    ),
-    SwitchButton(
-        "test",
-        dict(description="Save And test", button_style="info"),
-        dict(description="Sauver et tester", button_style="info"),
-        dict(description="Operation in progress", button_style="warning"),
-        dict(description="Operation en cours   ", button_style="warning"),
-        dict(description="Saved and tested", button_style="success"),
-        dict(description="Sauver et tester", button_style="success"),
-        sleep_on=1,
-    ),
-]
+def get_all_buttons():
+    return [
+        SwitchButton(
+            "submit",
+            dict(description="Send answer to corrector", button_style="primary"),
+            dict(description="Envoyer au correcteur", button_style="primary"),
+            dict(description="Operation in progress", button_style="warning"),
+            dict(description="Operation en cours   ", button_style="warning"),
+            dict(description="Answer sent to corrector", button_style="success"),
+            dict(description="Correction envoyée", button_style="success"),
+            sleep_on=2,
+            width="150px",
+        ),
+        SwitchButton(
+            "correct",
+            dict(description="Show correction", button_style="primary"),
+            dict(description="Voir la correction", button_style="primary"),
+            dict(description="Operation in progress", button_style="warning"),
+            dict(description="Operation en cours   ", button_style="warning"),
+            dict(description="Hide correction", button_style="danger"),
+            dict(description="Cacher la correction", button_style="danger"),
+            width="150px",
+        ),
+        SwitchButton(
+            "message",
+            dict(description="Message from corrector", button_style="info"),
+            dict(description="Message au correcteur", button_style="info"),
+            dict(description="Operation in progress", button_style="warning"),
+            dict(description="Operation en cours   ", button_style="warning"),
+            dict(description="Hide message from corrector", button_style="danger"),
+            dict(description="Cacher le message du correcteur", button_style="danger"),
+            width="150px",
+        ),
+        SwitchButton(
+            "evaluate",
+            dict(description="Save the grade", button_style="info"),
+            dict(description="Sauvegarder la note", button_style="info"),
+            dict(description="Operation in progress", button_style="warning"),
+            dict(description="Operation en cours   ", button_style="warning"),
+            dict(description="Grade saved", button_style="success"),
+            dict(description="Note sauvegardée", button_style="success"),
+            width="150px",
+        ),
+        SwitchButton(
+            "test",
+            dict(description="Save And test", button_style="info"),
+            dict(description="Sauver et tester", button_style="info"),
+            dict(description="Operation in progress", button_style="warning"),
+            dict(description="Operation en cours   ", button_style="warning"),
+            dict(description="Saved and tested", button_style="success"),
+            dict(description="Sauver et tester", button_style="success"),
+            sleep_on=1,
+            width="130px",
+        ),
+    ]
 
 
-def get_buttons_label():
-    return [s.label for s in sbuttons]
+def get_buttons_list(label_widget, in_french):
+    abuttons = get_all_buttons()
+
+    for s in abuttons:
+        s.g(in_french)
+
+    widgets = {"l": label_widget}
+    widgets.update(dict(zip("scmto", abuttons)))
+    return widgets
 
 
 def get_button(label):
-    return [s for s in sbuttons if s.label == label][0]
+    return [s for s in get_all_buttons() if s.label == label][0]
 
 
 def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="black", icon="📚"):

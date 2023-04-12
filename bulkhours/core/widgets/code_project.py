@@ -80,3 +80,14 @@ class WidgetCodeProject(base.WidgetBase):
 
     def get_params(self, answer):
         return dict(answer=answer, atype=self.cinfo.type)
+
+    @staticmethod
+    def write_exec_process(self, files, filenames):
+        for t, fn in enumerate(filenames):
+            with open(f"cache/{self.cinfo.id}_{fn}", "w") as f:
+                f.write(files[t].value)
+            print(f"Generate cache/{fn}")
+            with open(f"cache/{fn}", "w") as f:
+                f.write(files[t].value)
+
+        os.system(f"cd cache && make all && ./main")
