@@ -2,6 +2,7 @@ import os
 import subprocess
 import time
 import multiprocessing
+import numpy as np
 
 from IPython.core.magic import Magics, cell_magic, magics_class, line_cell_magic, needs_local_scope
 import IPython
@@ -82,17 +83,18 @@ class Evaluation(Magics):
                         fun, sleep = ["🏊", "🚴", "🏃"], 0.3
                         fun, sleep = ["🙂‍", "😐", "😪", "😴", "😅"], 0.3
                         fun, sleep = ["🟥", "🟧", "🟨‍", "🟩", "🟦", "🟪"], 0.3
-
                         ii, description = 0, b.description
                         while p1.is_alive():
                             b.description = fun[ii % len(fun)] + description
-                            time.sleep(sleep)
+
+                            time.sleep(sleep * np.abs((np.random.normal() + 1)))
                             ii += 1
 
                         abuttons[idx].is_on = abuttons[idx].wait(abuttons[idx].is_on, b)
 
-                    except:
+                    except Exception as e:
                         abuttons[idx].update_style(b, style="danger")
+                        IPython.display.display(e)
                         time.sleep(2)
                         abuttons[idx].is_on = True
 
@@ -116,39 +118,28 @@ class Evaluation(Magics):
         abuttons["m"].b.on_click(send_message)
 
         def write_exec_process(b):
+            files = bwidget.widget.files
+            filenames = self.cinfo.options.split(",")
             return update_button(b, "o", WidgetCodeProject.write_exec_process, [self, files, filenames], dict())
 
         abuttons["o"].b.on_click(write_exec_process)
 
         bbox = []
         ws = []
+        print(self.cinfo.widgets)
         for w in self.cinfo.widgets:
             if w == "|":
                 bbox.append(ipywidgets.HBox(ws))
                 ws = []
             elif w == "w":
                 ws += widgets
+            elif w == "l" and abuttons[w] is not None:
+                ws.append(abuttons[w])
             elif abuttons[w]:
                 ws.append(abuttons[w].b)
         if len(ws) > 0:
+            print(ws)
             bbox.append(ipywidgets.HBox(ws))
-
-        bbox = bbox[0] if len(bbox) == 1 else ipywidgets.VBox(bbox)
-
-        if self.cinfo.type == "code_project":
-            tab, files = evaluate_core_cpp_project(self.cinfo, cell)
-            filenames = self.cinfo.options.split(",")
-
-            hbox = ipywidgets.HBox(ws, layout=bwidget.get_layout())
-
-            if 0:
-                tab2, files = evaluate_core_cpp_project(self.cinfo, cell)
-                htabs = ipywidgets.HBox([tab, tab2], layout=bwidget.get_layout())
-                ws = ipywidgets.VBox(children=[htabs, hbox])
-            else:
-                ws = ipywidgets.VBox(children=[tab, hbox])
-            IPython.display.display(ws, output)
-            return
 
         if self.cinfo.type == "code" and cell != "":
             with output:
@@ -160,5 +151,16 @@ class Evaluation(Magics):
         elif self.cinfo.type == "formula":
             IPython.display.display(IPython.display.Markdown("$" + cell + "$"))
             print("$" + cell + "$")
+        elif self.cinfo.type == "code_project":
+            if 0:
+                tab2, _ = evaluate_core_cpp_project(self.cinfo, cell, show_solution=True)
+                htabs = ipywidgets.HBox([tab2])  # , layout=bwidget.get_layout())
+                IPython.display.display(htabs)
+                IPython.display.display(bbox[1], output)
+                # ws = ipywidgets.VBox(children=[htabs, hbox])
+            else:
+                bwidget.widget.basic_execution(bbox[1], bwidget, output)
+            return
 
+        bbox = bbox[0] if len(bbox) == 1 else ipywidgets.VBox(bbox)
         IPython.display.display(bbox, output)
