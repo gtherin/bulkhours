@@ -71,18 +71,17 @@ def evaluate_core_cpp_project(cinfo, cell, show_solution=False):
 
 class WidgetCodeProject(base.WidgetBase):
     def get_widget(self):
-        tab, self.files = evaluate_core_cpp_project(self.cinfo, self.cell, show_solution=False)
-        return tab
+        self.widget, self.files = evaluate_core_cpp_project(self.cinfo, self.cell, show_solution=False)
+        return self.widget
 
     def get_answer(self):
-        print(self.widget)
         return self.widget
 
     def get_params(self, answer):
         return dict(answer=answer, atype=self.cinfo.type)
 
     @staticmethod
-    def write_exec_process(self, files, filenames):
+    def write_exec_process(self, files, filenames, exec_process=True):
         for t, fn in enumerate(filenames):
             with open(f"cache/{self.cinfo.id}_{fn}", "w") as f:
                 f.write(files[t].value)
@@ -90,4 +89,17 @@ class WidgetCodeProject(base.WidgetBase):
             with open(f"cache/{fn}", "w") as f:
                 f.write(files[t].value)
 
-        os.system(f"cd cache && make all && ./main")
+        if exec_process:
+            os.system(f"cd cache && make all && ./main")
+
+    def basic_execution(self, buttons, bwidget, output):
+        htabs = ipywidgets.VBox(children=[bwidget.widget.widget])
+        IPython.display.display(htabs)
+        IPython.display.display(buttons, output)
+
+    @staticmethod
+    def get_core_correction(self, buttons, bwidget, output, cell):
+        tab2, _ = evaluate_core_cpp_project(self.cinfo, cell, show_solution=True)
+        htabs = ipywidgets.HBox([tab2])  # , layout=bwidget.get_layout())
+        IPython.display.display(htabs)
+        IPython.display.display(buttons, output)

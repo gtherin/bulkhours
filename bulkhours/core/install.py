@@ -50,6 +50,8 @@ def get_argparser(line, cell):
             args.widgets = "w|olsc"
         elif args.type == "table":
             args.widgets = "w|sc"
+        elif args.type in ["code"]:
+            args.widgets = "sc"
         else:
             args.widgets = "lwsc"
 

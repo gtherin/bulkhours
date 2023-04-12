@@ -5,6 +5,7 @@ import ipywidgets
 from .buttons import *
 from .. import firebase
 from .table import WidgetTable
+from .code_project import WidgetCodeProject
 
 
 class BulkWidget:
@@ -13,6 +14,8 @@ class BulkWidget:
         self.cell = cell
         if cinfo.type in ["table"]:
             self.widget = WidgetTable(cinfo, cell, in_french)
+        elif cinfo.type in ["code_project"]:
+            self.widget = WidgetCodeProject(cinfo, cell, in_french)
         else:
             self.widget = None
 
@@ -80,16 +83,16 @@ class BulkWidget:
             else ipywidgets.Layout()
         )
 
-    def get_answer(self, widgets, cinfo_type):
+    def get_answer(self, widgets):
         if self.widget:
             return self.widget.get_answer()
-        elif cinfo_type in ["codetext"]:
+        elif self.cinfo.type in ["codetext"]:
             return eval(widgets[0].value)
-        elif cinfo_type in ["formula"]:
+        elif self.cinfo.type in ["formula"]:
             return self.cell
-        elif cinfo_type in ["code", "markdown"]:
+        elif self.cinfo.type in ["code", "markdown"]:
             return self.cell
-        elif cinfo_type in ["checkboxes", "radios"]:
+        elif self.cinfo.type in ["checkboxes", "radios"]:
             cell_checks = self.cinfo.options.split(";")
             return ";".join([cell_checks[k] for k, i in enumerate(widgets) if i.value])
         else:
@@ -107,7 +110,7 @@ class BulkWidget:
 
     @staticmethod
     def submit(self, bwidget, widgets, output):
-        answer = bwidget.get_answer(widgets, self.cinfo.type)
+        answer = bwidget.get_answer(widgets)
         if answer == "":
             with output:
                 output.clear_output()
@@ -119,36 +122,36 @@ class BulkWidget:
     @staticmethod
     def get_core_correction(self, bwidget, widgets):
         data = firebase.get_solution_from_corrector(self.cinfo.id, corrector="solution")
-        print(data)
-        print(bwidget)
-        return BulkWidget.show_cell(self, self.cinfo, data, answer=bwidget.get_answer(widgets, self.cinfo.type))
+        return BulkWidget.display_correction(self, bwidget, widgets, data)
 
     @staticmethod
     def send_message(self):
         data = firebase.get_solution_from_corrector(self.cell_id, corrector="solution")
-        return BulkWidget.show_cell(self, self.cinfo, data, private_msg=True)
+        if (user := os.environ["STUDENT"]) in data or (user := "all") in data:
+            md(
+                header=f"Message ({self.cinfo.id}, {user}) du correcteur"
+                if self.in_french
+                else f"Message ({self.cinfo.id}, {user}) from corrector",
+                rawbody=data[user],
+            )
 
     @staticmethod
-    def show_cell(self, cinfo, data, private_msg=False, answer=None):
-        cell_id = cinfo.id
+    def display_correction(self, bwidget, widgets, data):
+        cell_id = self.cinfo.id
         in_french = self.in_french
-        cell_type = cinfo.type
-        if data is None and private_msg:
-            pass
+        cell_type = self.cinfo.type
+        answer = bwidget.get_answer(widgets)
+
+        if bwidget.widget:
+            bwidget.widget.display_correction(data, answer=answer)
+            return
+
         elif data is None:
             md(
                 mdbody=f"*La solution n'est pas disponible (pour le moment 😕)*"
                 if in_french
                 else f"*Solution is not available (yet 😕)*"
             )
-        elif private_msg:
-            if (user := os.environ["STUDENT"]) in data or (user := "all") in data:
-                md(
-                    header=f"Message ({cell_id}, {user}) du correcteur"
-                    if in_french
-                    else f"Message ({cell_id}, {user}) from corrector",
-                    rawbody=data[user],
-                )
         elif cell_type == "code":
             md(header=f"Correction ({cell_id})", rawbody=data["answer"])
             md(
