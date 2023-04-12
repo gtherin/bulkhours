@@ -85,11 +85,13 @@ class Evaluation(Magics):
                         p1 = multiprocessing.Process(target=funct, args=args, kwargs=kwargs)
                         p1.start()
                         loop = ["plane", "rocket", "space-shuttle"]
+                        ii = 0
 
                         while p1.is_alive():
-                            print(p1.is_alive())
-                            time.sleep(1)
-                            sbuttons[i].icon = loop[0]
+                            print(p1.is_alive(), loop[ii % 2])
+                            sbuttons[i].icon = loop[ii % 2]
+                            time.sleep(0.5)
+                            ii += 1
 
                         # funct(*args, **kwargs)
                     except TypeError as e:

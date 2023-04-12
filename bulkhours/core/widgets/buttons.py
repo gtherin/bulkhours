@@ -3,8 +3,6 @@ import ipywidgets
 import time
 
 
-
-
 class SwitchButton:
     def __init__(
         self,
@@ -25,19 +23,17 @@ class SwitchButton:
         self.sleep_on = sleep_on
 
     def update_style(self, button, style=None):
-        import IPython
-        IPython.display.display(
-            IPython.display.HTML(
-                """<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> """
-            )
-        )
-
         if style in ["warning", "on", "off"]:
             button.description, button.button_style = self.d[style]["description"], self.d[style]["button_style"]
         elif style == "danger":
             button.description, button.button_style = "Erreur" if self.in_french else "Error", "danger"
-        button.disabled = style in ["warning", "danger"]
+        # button.disabled = style in ["warning", "danger"]
+        # if style not in ["warning"]:
+        #    button.icon = ""
         button.icon = "fa-spinner fa-pulse fa-1x fa-fw" if style in ["warning"] else ""
+        button.icon = button.icon.replace("/\b(\w)/g", "fa-$1")
+        # button.icon = "shuttle"
+        # icon.replace(/\b(\w)/g, 'fa-$1')
 
     def g(self, in_french):
         self.in_french = in_french
@@ -49,6 +45,7 @@ class SwitchButton:
                 align_items="stretch",
                 tooltip=args["description"],
                 layout=ipywidgets.Layout(width="max-content"),
+                icon="plane",
             )
         )
         return ipywidgets.Button(**args)
