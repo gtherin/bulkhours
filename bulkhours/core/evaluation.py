@@ -53,6 +53,11 @@ class Evaluation(Magics):
     @line_cell_magic
     @needs_local_scope
     def evaluation_cell_id(self, line, cell="", local_ns=None):
+        IPython.display.display(
+            IPython.display.HTML(
+                """<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> """
+            )
+        )
         self.cinfo = install.get_argparser(line, cell)
         if not self.cinfo:
             return
