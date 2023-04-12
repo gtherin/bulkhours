@@ -4,6 +4,7 @@ import ipywidgets
 
 from .buttons import *
 from ..logins import *
+from .. import firebase
 from . import base
 
 
@@ -103,3 +104,19 @@ class WidgetCodeProject(base.WidgetBase):
         htabs = ipywidgets.HBox([tab2])  # , layout=bwidget.get_layout())
         IPython.display.display(htabs)
         IPython.display.display(buttons, output)
+
+    # @staticmethod
+    # def get_core_correction(self, bwidget, widgets):
+    #    data = firebase.get_solution_from_corrector(self.cinfo.id, corrector="solution")
+    #    return BulkWidget.display_correction(self, bwidget, widgets, data)
+
+    @staticmethod
+    def submit(self, bwidget, widgets, output):
+        files = bwidget.widget.files
+        filenames = self.cinfo.options.split(",")
+
+        WidgetCodeProject.write_exec_process(self, files, filenames, exec_process=False)
+        pams = {fn: files[t].value for t, fn in enumerate(filenames)}
+        pams.update(dict(atype=self.cinfo.type))
+
+        return firebase.send_answer_to_corrector(self.cinfo, update_time=False, **pams)
