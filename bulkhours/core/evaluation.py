@@ -102,13 +102,23 @@ class Evaluation(Magics):
 
         widgets = bwidget.get_widgets()
 
-        def submit(b):
-            return update_button(b, "s", BulkWidget.submit, [self, bwidget, widgets, output], dict())
+        if self.cinfo.type == "code_project":
+
+            def submit(b):
+                return update_button(b, "s", WidgetCodeProject.submit, [self, bwidget, widgets, output], dict())
+
+            def get_correction(b):
+                return update_button(b, "c", WidgetCodeProject.get_core_correction, [self, bwidget, widgets], dict())
+
+        else:
+
+            def submit(b):
+                return update_button(b, "s", BulkWidget.submit, [self, bwidget, widgets, output], dict())
+
+            def get_correction(b):
+                return update_button(b, "c", BulkWidget.get_core_correction, [self, bwidget, widgets], dict())
 
         abuttons["s"].b.on_click(submit)
-
-        def get_correction(b):
-            return update_button(b, "c", BulkWidget.get_core_correction, [self, bwidget, widgets], dict())
 
         abuttons["c"].b.on_click(get_correction)
 
@@ -126,7 +136,6 @@ class Evaluation(Magics):
 
         bbox = []
         ws = []
-        print(self.cinfo.widgets)
         for w in self.cinfo.widgets:
             if w == "|":
                 bbox.append(ipywidgets.HBox(ws))
@@ -138,7 +147,6 @@ class Evaluation(Magics):
             elif abuttons[w]:
                 ws.append(abuttons[w].b)
         if len(ws) > 0:
-            print(ws)
             bbox.append(ipywidgets.HBox(ws))
 
         if self.cinfo.type == "code" and cell != "":
