@@ -3,6 +3,8 @@ import ipywidgets
 import time
 
 
+
+
 class SwitchButton:
     def __init__(
         self,
@@ -28,7 +30,7 @@ class SwitchButton:
         elif style == "danger":
             button.description, button.button_style = "Erreur" if self.in_french else "Error", "danger"
         button.disabled = style in ["warning", "danger"]
-        button.icon = "spinner" if style in ["warning"] else ""
+        button.icon = "fa-spinner fa-pulse fa-1x fa-fw" if style in ["warning"] else ""
 
     def g(self, in_french):
         self.in_french = in_french
@@ -44,15 +46,16 @@ class SwitchButton:
         )
         return ipywidgets.Button(**args)
 
-    def conclude(self, show_answer, button):
-        if not self.sleep_on:
+    def wait(self, show_answer, button, style="off", sleep=None):
+        sleep = self.sleep_on if sleep is None else sleep
+        if not sleep:
             return show_answer
 
-        self.update_style(button, style="off")
+        self.update_style(button, style=style)
         description = button.description
-        for u in range(int(self.sleep_on)):
-            d = self.sleep_on - u
-            button.description = f"{d}s " + description
+        for u in range(int(sleep)):
+            d = sleep - u
+            button.description = f"{d} " + description
             time.sleep(1)
         return True
 
@@ -62,8 +65,8 @@ sbuttons = [
         "submit",
         dict(description="Send answer to corrector", button_style="primary"),
         dict(description="Envoyer au correcteur", button_style="primary"),
-        dict(description="Operation in progress...", button_style="warning"),
-        dict(description="Operation en cours   ...", button_style="warning"),
+        dict(description="Operation in progress", button_style="warning"),
+        dict(description="Operation en cours   ", button_style="warning"),
         dict(description="Answer sent to corrector", button_style="success"),
         dict(description="Correction envoyée", button_style="success"),
         sleep_on=4,
@@ -72,8 +75,8 @@ sbuttons = [
         "correct",
         dict(description="Show correction", button_style="primary"),
         dict(description="Voir la correction", button_style="primary"),
-        dict(description="Operation in progress...", button_style="warning"),
-        dict(description="Operation en cours   ...", button_style="warning"),
+        dict(description="Operation in progress", button_style="warning"),
+        dict(description="Operation en cours   ", button_style="warning"),
         dict(description="Hide correction", button_style="danger"),
         dict(description="Cacher la correction", button_style="danger"),
     ),
@@ -81,8 +84,8 @@ sbuttons = [
         "message",
         dict(description="Message from corrector", button_style="info"),
         dict(description="Message au correcteur", button_style="info"),
-        dict(description="Operation in progress...", button_style="warning"),
-        dict(description="Operation en cours   ...", button_style="warning"),
+        dict(description="Operation in progress", button_style="warning"),
+        dict(description="Operation en cours   ", button_style="warning"),
         dict(description="Hide message from corrector", button_style="warning"),
         dict(description="Cacher le message du correcteur", button_style="warning"),
     ),
@@ -90,8 +93,8 @@ sbuttons = [
         "evaluate",
         dict(description="Save the grade", button_style="info"),
         dict(description="Sauvegarder la note", button_style="info"),
-        dict(description="Operation in progress...", button_style="warning"),
-        dict(description="Operation en cours   ...", button_style="warning"),
+        dict(description="Operation in progress", button_style="warning"),
+        dict(description="Operation en cours   ", button_style="warning"),
         dict(description="Grade saved", button_style="warning"),
         dict(description="Note sauvegardée", button_style="warning"),
     ),
@@ -99,8 +102,8 @@ sbuttons = [
         "test",
         dict(description="Save And test", button_style="info"),
         dict(description="Sauver et tester", button_style="info"),
-        dict(description="Operation in progress...", button_style="warning"),
-        dict(description="Operation en cours   ...", button_style="warning"),
+        dict(description="Operation in progress", button_style="warning"),
+        dict(description="Operation en cours   ", button_style="warning"),
         dict(description="Saved and tested", button_style="success"),
         dict(description="Sauver et tester", button_style="success"),
         sleep_on=1,

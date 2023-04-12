@@ -87,7 +87,7 @@ class Evaluation(Magics):
                     except Exception as e:
                         sbuttons[i].update_style(b, style="danger")
 
-                self.show_answer = sbuttons[i].conclude(self.show_answer, b)
+                self.show_answer = sbuttons[i].wait(self.show_answer, b)
                 sbuttons[i].update_style(b, style="on" if self.show_answer else "off")
 
         def submit(b):
