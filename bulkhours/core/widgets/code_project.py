@@ -1,16 +1,10 @@
 import os
-import subprocess
-
-from IPython.core.magic import Magics, cell_magic, magics_class, line_cell_magic, needs_local_scope
 import IPython
 import ipywidgets
 
-from .textstyles import *
-from .logins import *
-from . import firebase
-from . import install
-from .widget_table import WidgetBase
-from .widgets import BulkWidget
+from .buttons import *
+from ..logins import *
+from . import base
 
 
 def get_data_from_file(label, on=None, subdir="data", **kwargs):
@@ -75,7 +69,7 @@ def evaluate_core_cpp_project(cinfo, cell, show_solution=False):
     return tab, files
 
 
-class WidgetCodeProject(WidgetBase):
+class WidgetCodeProject(base.WidgetBase):
     def get_widget(self):
         tab, self.files = evaluate_core_cpp_project(self.cinfo, self.cell, show_solution=False)
         return tab

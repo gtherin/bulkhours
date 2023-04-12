@@ -1,14 +1,10 @@
 import os
-
-from IPython.core.magic import Magics, cell_magic, magics_class, line_cell_magic, needs_local_scope
 import IPython
 import ipywidgets
 
-from .textstyles import *
-from .logins import *
-from . import firebase
-from . import install
-from .widget_table import WidgetTable
+from .buttons import *
+from .. import firebase
+from .table import WidgetTable
 
 
 class BulkWidget:
