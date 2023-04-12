@@ -28,7 +28,7 @@ def get_data_from_file(label, on=None, subdir="data", **kwargs):
     return filename
 
 
-def evaluate_core_cpp_project(cinfo, show_solution=False):
+def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
     height = "550px"
     for o in cinfo.puppet.split(","):
         if "height=" in o:
@@ -45,7 +45,8 @@ def evaluate_core_cpp_project(cinfo, show_solution=False):
         ff = f.split(":")
         if not os.path.exists(cfilename := f"cache/{cinfo.id}_{ff[0]}"):
             rfilename = get_data_from_file(f"{cinfo.id}_{ff[0]}", subdir="bulkhours/hpc")
-            print(f"Generate {cfilename} from {rfilename}")
+            if verbose:
+                print(f"Generate {cfilename} from {rfilename}")
 
             data = open(rfilename).read()
             with open(cfilename, "w") as f:
@@ -88,10 +89,10 @@ class WidgetCodeProject(base.WidgetBase):
 
     @staticmethod
     def write_exec_process(self, files, filenames, exec_process=True):
+        print(f"Save files cache/{filenames}")
         for t, fn in enumerate(filenames):
             with open(f"cache/{self.cinfo.id}_{fn}", "w") as f:
                 f.write(files[t].value)
-            print(f"Generate cache/{fn}")
             with open(f"cache/{fn}", "w") as f:
                 f.write(files[t].value)
 
