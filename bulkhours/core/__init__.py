@@ -3,7 +3,7 @@ import argparse
 
 from .data import *  # noqa
 from .evaluation import *  # noqa
-from .textstyles import *  # noqa
+from .widgets.buttons import *  # noqa
 
 
 def runrealcmd(command, verbose=True):

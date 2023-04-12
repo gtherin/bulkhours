@@ -6,12 +6,12 @@ from IPython.core.magic import Magics, cell_magic, magics_class, line_cell_magic
 import IPython
 import ipywidgets
 
-from .textstyles import *
+from .widgets.buttons import *
 from .logins import *
 from . import firebase
 from . import install
-from .widgets import BulkWidget
-from .widget_code_project import evaluate_core_cpp_project
+from .widgets.bulk_widget import BulkWidget
+from .widgets.code_project import evaluate_core_cpp_project
 from . import colors
 
 
@@ -87,12 +87,7 @@ class Evaluation(Magics):
                     except Exception as e:
                         sbuttons[i].update_style(b, style="danger")
 
-                if sbuttons[i].sleep_on:
-                    sbuttons[i].update_style(b, style="off")
-                    time.sleep(sbuttons[i].sleep_on)
-                    self.show_answer = True
-                    # output.clear_output()
-
+                self.show_answer = sbuttons[i].conclude(self.show_answer, b)
                 sbuttons[i].update_style(b, style="on" if self.show_answer else "off")
 
         def submit(b):
