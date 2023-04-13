@@ -64,7 +64,7 @@ def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
             if os.path.exists("/content"):
                 data1 = ipywidgets.Output(layout={"height": height, "width": midwidth})
                 with data1:
-                    IPython.display.display(IPython.display.Code(data))
+                    IPython.display.display(IPython.display.Code(open(cfilename, "r").read()))
 
                 data2 = ipywidgets.Output(layout={"height": height, "width": midwidth})
                 with data2:
