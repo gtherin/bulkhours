@@ -70,8 +70,17 @@ def get_install_parser(argv):
     parser.add_argument("-i", "--id", default=None)
     parser.add_argument("-p", "--packages", default="")
     parser.add_argument("-f", "--in-french", help="Change languages", action="store_true")
+    parser.add_argument("-k", "--api-key", default="YOUR_KEY")
 
-    return parser.parse_args(argv)
+    api_key = argv[argv.index("-k") + 1] if "-k" in argv else "YOUR_KEY"
+
+    if "-k" in argv:
+        argv[argv.index("-k") + 1] = "YOUR_KEY"
+
+    argv = parser.parse_args(argv)
+    argv.api_key = api_key
+
+    return argv
 
 
 def main(argv=sys.argv[1:]):
@@ -118,6 +127,7 @@ def main(argv=sys.argv[1:]):
         "env": args.env_id,
         "nid": args.id,
         "in_french": args.in_french,
+        "api_key": args.api_key,
     }
     print(
         "LOG login= %s, id=%s, env=%s [%s, %.0fs]"

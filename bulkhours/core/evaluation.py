@@ -9,14 +9,16 @@ from . import install
 from .widgets.bulk_widget import BulkWidget
 from .widgets.code_project import WidgetCodeProject
 from . import colors
+from . import gpt
 
 
 @magics_class
 class Evaluation(Magics):
-    def __init__(self, shell, nid, in_french):
+    def __init__(self, shell, nid, in_french, api_key):
         super(Evaluation, self).__init__(shell)
         self.nid = nid
         self.in_french = in_french
+        self.api_key = api_key
         self.cinfo = None
 
     @property
@@ -60,6 +62,7 @@ class Evaluation(Magics):
         abuttons = get_buttons_list(bwidget.get_label_widget(), self.in_french)
 
         widgets = bwidget.get_widgets()
+        gtext = ipywidgets.Text("")
 
         bbox = []
         ws = []
@@ -69,6 +72,8 @@ class Evaluation(Magics):
                 ws = []
             elif w == "w":
                 ws += widgets
+            elif w == "g":
+                ws += [gtext, abuttons[w].b]
             elif w == "l" and abuttons[w] is not None:
                 ws.append(abuttons[w])
             elif abuttons[w]:
@@ -115,6 +120,19 @@ class Evaluation(Magics):
 
         abuttons["m"].b.on_click(send_message)
 
+        def ask_chatgpt(b):
+            return update_button(
+                b,
+                "g",
+                gpt.ask_chat_gpt,
+                output,
+                abuttons,
+                [gtext.value],
+                dict(api_key=self.api_key, is_code=True, temperature=0.5),
+            )
+
+        abuttons["g"].b.on_click(ask_chatgpt)
+
         def write_exec_process(b):
             return update_button(
                 b, "t", WidgetCodeProject.write_exec_process, output, abuttons, [self, bwidget], dict()
@@ -134,7 +152,6 @@ class Evaluation(Magics):
             print("$" + cell + "$")
         elif self.cinfo.type == "code_project":
             bwidget.widget.basic_execution(bbox[1], bwidget, output)
-            return
 
         bbox = bbox[0] if len(bbox) == 1 else ipywidgets.VBox(bbox)
         IPython.display.display(bbox, output)
