@@ -142,9 +142,9 @@ class BulkWidget:
         cell_type = self.cinfo.type
         answer = bwidget.get_answer(widgets)
 
+        print("")
         if bwidget.widget:
             bwidget.widget.display_correction(data, answer=answer)
-            return
 
         elif data is None:
             md(
@@ -159,7 +159,6 @@ class BulkWidget:
                 if in_french
                 else f"""**Let's execute the code ({cell_id})** 💻"""
             )
-            self.shell.run_cell(data["answer"])
         elif cell_type in ["markdown", "textarea"]:
             md(header=f"Correction ({cell_id})", mdbody=data["answer"])
         elif cell_type in ["formula"]:
@@ -181,3 +180,5 @@ class BulkWidget:
             elif "answer" in data:
                 hide_code = data["hidecode"].replace("ANSWER", str(data["answer"]))
             self.shell.run_cell(hide_code)
+        if cell_type == "code":
+            self.shell.run_cell(data["answer"])

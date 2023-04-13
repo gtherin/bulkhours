@@ -2,6 +2,7 @@ import os
 import IPython
 import ipywidgets
 import subprocess
+import glob
 
 from .buttons import *
 from ..logins import *
@@ -9,20 +10,14 @@ from .. import firebase
 from . import base
 
 
-def get_data_from_file(label, on=None, subdir="data", **kwargs):
-    import glob
-
+def get_data_from_file(cinfo, label, on=None, subdir="data", **kwargs):
     filename = None
-    for directory in [
-        "bulkhours",
-        ".",
-        "..",
-        "../../bulkhours",
-        "../../../bulkhours",
-        os.environ["HOME"] + "/projects/bulkhours",
-    ]:
-        if len((files := glob.glob(f"{directory}/{subdir}/{label}*"))):
-            filename = files[0]
+    for r in ["bulkhours_admin", "bulkhours"]:
+        if cinfo.user != "solution" and r == "bulkhours_admin":
+            continue
+        for directory in [r, ".", "..", "../../" + r, "../../../" + r, os.environ["HOME"] + "/projects/" + r]:
+            if filename is None and len((files := glob.glob(f"{directory}/{subdir}/{label}*"))):
+                filename = files[0]
     if not filename:
         print(f"No data available for {subdir}/{label}")
         return None
@@ -46,14 +41,13 @@ def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
     if show_solution:
         solution = firebase.get_solution_from_corrector(cinfo.id, corrector="solution")
         solution = {k.replace("_dot_", "."): v for k, v in solution.items()}
-        IPython.display.display(solution)
 
     files = []
     for t, f in enumerate(filenames):
         ff = f.split(":")
         if not os.path.exists(cfilename := f"cache/{cinfo.id}_{ff[0]}"):
-            rfilename = get_data_from_file(f"{cinfo.id}_{ff[0]}", subdir="bulkhours/hpc")
-            if verbose:
+            rfilename = get_data_from_file(cinfo, f"{cinfo.id}_{ff[0]}", subdir="data/exercices")
+            if 1:  # verbose:
                 print(f"Generate {cfilename} from {rfilename}")
 
             # Store in files to be compiled
