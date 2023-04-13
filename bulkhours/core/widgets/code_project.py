@@ -137,4 +137,4 @@ class WidgetCodeProject(base.WidgetBase):
         pams = {fn: files[t].value for t, fn in enumerate(filenames)}
         pams.update(dict(atype=self.cinfo.type))
 
-        return firebase.send_answer_to_corrector(self.cinfo, update_time=False, **pams)
+        return firebase.send_answer_to_corrector(self.cinfo, **pams)
