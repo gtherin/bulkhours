@@ -60,10 +60,10 @@ def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
                 open(cfilename, "r").read(), layout=ipywidgets.Layout(height=height, width="49%")
             )
 
-            data2 = ipywidgets.Textarea(solution[f], layout=ipywidgets.Layout(height=height, width="49%"))
-            # data2 = ipywidgets.Output(layout={"height": height, "width": "49%"})
-            # with data2:
-            #    IPython.display.display(IPython.display.Code(solution[f]))
+            # data2 = ipywidgets.Textarea(solution[f], layout=ipywidgets.Layout(height=height, width="49%"))
+            data2 = ipywidgets.Output(layout={"height": height, "width": "49%"})
+            with data2:
+                IPython.display.display(IPython.display.Code(solution[f]))
             data = ipywidgets.HBox([data1, data2])
         else:
             data = ipywidgets.Textarea(
@@ -90,7 +90,10 @@ class WidgetCodeProject(base.WidgetBase):
         return dict(answer=answer, atype=self.cinfo.type)
 
     @staticmethod
-    def write_exec_process(self, files, filenames, exec_process=True):
+    def write_exec_process(self, bwidget, exec_process=True):
+        files = bwidget.widget.files
+        filenames = self.cinfo.options.split(",")
+
         for t, fn in enumerate(filenames):
             with open(f"cache/{self.cinfo.id}_{fn}", "w") as f:
                 f.write(files[t].value)
@@ -116,10 +119,7 @@ class WidgetCodeProject(base.WidgetBase):
 
     @staticmethod
     def get_core_correction(self, buttons, bwidget, output):
-        files = bwidget.widget.files
-        filenames = self.cinfo.options.split(",")
-
-        WidgetCodeProject.write_exec_process(self, files, filenames, exec_process=False)
+        WidgetCodeProject.write_exec_process(self, bwidget, exec_process=False)
 
         with output:
             output.clear_output()
@@ -133,7 +133,7 @@ class WidgetCodeProject(base.WidgetBase):
         files = bwidget.widget.files
         filenames = self.cinfo.options.split(",")
 
-        WidgetCodeProject.write_exec_process(self, files, filenames, exec_process=False)
+        WidgetCodeProject.write_exec_process(self, bwidget, exec_process=False)
         pams = {fn: files[t].value for t, fn in enumerate(filenames)}
         pams.update(dict(atype=self.cinfo.type))
 

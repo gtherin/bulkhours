@@ -1,19 +1,13 @@
-import os
-import subprocess
-import time
-import multiprocessing
-import numpy as np
-
 from IPython.core.magic import Magics, cell_magic, magics_class, line_cell_magic, needs_local_scope
 import IPython
 import ipywidgets
 
-from .widgets.buttons import get_all_buttons, get_buttons_list
+from .widgets.buttons import get_buttons_list, update_button
 from .logins import *
 from . import firebase
 from . import install
 from .widgets.bulk_widget import BulkWidget
-from .widgets.code_project import evaluate_core_cpp_project, WidgetCodeProject
+from .widgets.code_project import WidgetCodeProject
 from . import colors
 
 
@@ -65,41 +59,6 @@ class Evaluation(Magics):
         bwidget = BulkWidget(self.cinfo, cell, in_french=self.in_french)
         abuttons = get_buttons_list(bwidget.get_label_widget(), self.in_french)
 
-        def update_button(b, idx, funct, args, kwargs):
-            with output:
-                output.clear_output()
-
-                colors.set_style(output, "sol_background")
-                abuttons[idx].is_on = not abuttons[idx].is_on
-
-                abuttons[idx].update_style(b, style="warning")
-                if not abuttons[idx].is_on:
-                    try:
-                        p1 = multiprocessing.Process(target=funct, args=args, kwargs=kwargs)
-                        p1.start()
-                        fun, sleep = ["🙈", "🙉", "🙊"], 0.3
-                        fun, sleep = ["🌑", "🌒", "🌓‍", "🌖", "🌗", "🌘"], 0.3
-                        fun, sleep = ["🤛‍", "✋", "✌"], 0.3
-                        fun, sleep = ["🏊", "🚴", "🏃"], 0.3
-                        fun, sleep = ["🙂‍", "😐", "😪", "😴", "😅"], 0.3
-                        fun, sleep = ["🟥", "🟧", "🟨‍", "🟩", "🟦", "🟪"], 0.3
-                        ii, description = 0, b.description
-                        while p1.is_alive():
-                            b.description = fun[ii % len(fun)] + description
-
-                            time.sleep(sleep * np.abs((np.random.normal() + 1)))
-                            ii += 1
-
-                        abuttons[idx].is_on = abuttons[idx].wait(abuttons[idx].is_on, b)
-
-                    except Exception as e:
-                        abuttons[idx].update_style(b, style="danger")
-                        IPython.display.display(e)
-                        time.sleep(2)
-                        abuttons[idx].is_on = True
-
-                abuttons[idx].update_style(b, style="on" if abuttons[idx].is_on else "off")
-
         widgets = bwidget.get_widgets()
 
         bbox = []
@@ -120,36 +79,48 @@ class Evaluation(Magics):
         if self.cinfo.type == "code_project":
 
             def submit(b):
-                return update_button(b, "s", WidgetCodeProject.submit, [self, bwidget, widgets, output], dict())
+                return update_button(
+                    b, "s", WidgetCodeProject.submit, output, abuttons, [self, bwidget, widgets, output], dict()
+                )
 
             def get_correction(b):
                 return update_button(
-                    b, "c", WidgetCodeProject.get_core_correction, [self, bbox[1], bwidget, output], dict()
+                    b,
+                    "c",
+                    WidgetCodeProject.get_core_correction,
+                    output,
+                    abuttons,
+                    [self, bbox[1], bwidget, output],
+                    dict(),
                 )
 
         else:
 
             def submit(b):
-                return update_button(b, "s", BulkWidget.submit, [self, bwidget, widgets, output], dict())
+                return update_button(
+                    b, "s", BulkWidget.submit, output, abuttons, [self, bwidget, widgets, output], dict()
+                )
 
             def get_correction(b):
-                return update_button(b, "c", BulkWidget.get_core_correction, [self, bwidget, widgets], dict())
+                return update_button(
+                    b, "c", BulkWidget.get_core_correction, output, abuttons, [self, bwidget, widgets], dict()
+                )
 
         abuttons["s"].b.on_click(submit)
 
         abuttons["c"].b.on_click(get_correction)
 
         def send_message(b):
-            return update_button(b, "m", BulkWidget.send_message, [self], dict())
+            return update_button(b, "m", BulkWidget.send_message, output, abuttons, [self], dict())
 
         abuttons["m"].b.on_click(send_message)
 
         def write_exec_process(b):
-            files = bwidget.widget.files
-            filenames = self.cinfo.options.split(",")
-            return update_button(b, "o", WidgetCodeProject.write_exec_process, [self, files, filenames], dict())
+            return update_button(
+                b, "t", WidgetCodeProject.write_exec_process, output, abuttons, [self, bwidget], dict()
+            )
 
-        abuttons["o"].b.on_click(write_exec_process)
+        abuttons["t"].b.on_click(write_exec_process)
 
         if self.cinfo.type == "code" and cell != "":
             with output:

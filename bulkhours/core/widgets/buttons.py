@@ -1,6 +1,7 @@
 import IPython
 import ipywidgets
 import time
+from .. import colors
 
 
 class SwitchButton:
@@ -106,6 +107,7 @@ def get_all_buttons():
             dict(description="Operation en cours   ", button_style="warning"),
             dict(description="Grade saved", button_style="success"),
             dict(description="Note sauvegardée", button_style="success"),
+            sleep_on=3,
             width="150px",
         ),
         SwitchButton(
@@ -122,14 +124,14 @@ def get_all_buttons():
     ]
 
 
-def get_buttons_list(label_widget, in_french):
+def get_buttons_list(label=None, in_french=False):
     abuttons = get_all_buttons()
 
     for s in abuttons:
         s.g(in_french)
 
-    widgets = {"l": label_widget}
-    widgets.update(dict(zip("scmto", abuttons)))
+    widgets = {"l": label}
+    widgets.update(dict(zip("scmet", abuttons)))
     return widgets
 
 
@@ -155,3 +157,43 @@ def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="blac
         print(rawbody)
     if codebody and len(codebody) > 1:
         IPython.display.display(IPython.display.Code(codebody))
+
+
+import multiprocessing
+import numpy as np
+
+
+def update_button(b, idx, funct, output, abuttons, args, kwargs):
+    with output:
+        output.clear_output()
+
+        colors.set_style(output, "sol_background")
+        abuttons[idx].is_on = not abuttons[idx].is_on
+
+        abuttons[idx].update_style(b, style="warning")
+        if not abuttons[idx].is_on:
+            try:
+                p1 = multiprocessing.Process(target=funct, args=args, kwargs=kwargs)
+                p1.start()
+                fun, sleep = ["🙈", "🙉", "🙊"], 0.3
+                fun, sleep = ["🌑", "🌒", "🌓‍", "🌖", "🌗", "🌘"], 0.3
+                fun, sleep = ["🤛‍", "✋", "✌"], 0.3
+                fun, sleep = ["🏊", "🚴", "🏃"], 0.3
+                fun, sleep = ["🙂‍", "😐", "😪", "😴", "😅"], 0.3
+                fun, sleep = ["🟥", "🟧", "🟨‍", "🟩", "🟦", "🟪"], 0.3
+                ii, description = 0, b.description
+                while p1.is_alive():
+                    b.description = fun[ii % len(fun)] + description
+
+                    time.sleep(sleep * np.abs((np.random.normal() + 1)))
+                    ii += 1
+
+                abuttons[idx].is_on = abuttons[idx].wait(abuttons[idx].is_on, b)
+
+            except Exception as e:
+                abuttons[idx].update_style(b, style="danger")
+                IPython.display.display(e)
+                time.sleep(2)
+                abuttons[idx].is_on = True
+
+        abuttons[idx].update_style(b, style="on" if abuttons[idx].is_on else "off")
