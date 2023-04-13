@@ -30,8 +30,7 @@ def get_data_from_file(label, on=None, subdir="data", **kwargs):
 
 
 def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
-    height = "550px"
-    width = "900px"
+    height, width = "550px", "900px"
     # 20 px par ligne
     for o in cinfo.puppet.split(","):
         if "height=" in o:
@@ -46,6 +45,8 @@ def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
 
     if show_solution:
         solution = firebase.get_solution_from_corrector(cinfo.id, corrector="solution")
+        solution = {k.replace("_dot_", "."): v for k, v in solution.items()}
+        IPython.display.display(solution)
 
     files = []
     for t, f in enumerate(filenames):
@@ -70,7 +71,9 @@ def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
                 with data2:
                     IPython.display.display(IPython.display.Code(solution[f]))
             else:
-                data1 = ipywidgets.Textarea(data, layout=ipywidgets.Layout(height=height, width=midwidth))
+                data1 = ipywidgets.Textarea(
+                    open(cfilename, "r").read(), layout=ipywidgets.Layout(height=height, width=midwidth)
+                )
                 data2 = ipywidgets.Textarea(solution[f], layout=ipywidgets.Layout(height=height, width=midwidth))
 
             data = ipywidgets.HBox([data1, data2])
@@ -144,7 +147,7 @@ class WidgetCodeProject(base.WidgetBase):
         filenames = self.cinfo.options.split(",")
 
         WidgetCodeProject.write_exec_process(self, bwidget, exec_process=False)
-        pams = {fn: files[t].value for t, fn in enumerate(filenames)}
+        pams = {fn.replace(".", "_dot_"): files[t].value for t, fn in enumerate(filenames)}
         pams.update(dict(atype=self.cinfo.type))
 
         return firebase.send_answer_to_corrector(self.cinfo, **pams)
