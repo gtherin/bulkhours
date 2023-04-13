@@ -1,6 +1,7 @@
 import os
 import IPython
 import ipywidgets
+import subprocess
 
 from .buttons import *
 from ..logins import *
@@ -89,7 +90,6 @@ class WidgetCodeProject(base.WidgetBase):
 
     @staticmethod
     def write_exec_process(self, files, filenames, exec_process=True):
-        print(f"Save files cache/{filenames}")
         for t, fn in enumerate(filenames):
             with open(f"cache/{self.cinfo.id}_{fn}", "w") as f:
                 f.write(files[t].value)
@@ -97,7 +97,15 @@ class WidgetCodeProject(base.WidgetBase):
                 f.write(files[t].value)
 
         if exec_process:
-            os.system(f"cd cache && make all && ./main")
+            print(f"Save files cache/{filenames}, compile and execute program")
+            os.system('echo "cd cache && pwd && ls && make all && ./main" > cache/main.sh && chmod 777 cache/main.sh')
+            result = subprocess.run(
+                "bash cache/main.sh".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+            )
+            print(result.stdout)
+
+        else:
+            print(f"Save files cache/{filenames}")
 
     def basic_execution(self, buttons, bwidget, output):
         htabs = ipywidgets.VBox(children=[bwidget.widget.widget])
