@@ -31,10 +31,15 @@ def get_data_from_file(label, on=None, subdir="data", **kwargs):
 
 def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
     height = "550px"
+    width = "900px"
     # 20 px par ligne
     for o in cinfo.puppet.split(","):
         if "height=" in o:
             height = o.split("=")[1]
+        if "width=" in o:
+            width = o.split("=")[1]
+
+    midwidth = "%.0fpx" % (int(width[:-2]) / 2)
 
     filenames = cinfo.options.split(",")
     os.system("mkdir -p cache")
@@ -56,18 +61,23 @@ def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
                 f.write(data)
 
         if show_solution:
-            data1 = ipywidgets.Textarea(
-                open(cfilename, "r").read(), layout=ipywidgets.Layout(height=height, width="49%")
-            )
+            if os.path.exists("/content"):
+                data1 = ipywidgets.Output(layout={"height": height, "width": midwidth})
+                with data1:
+                    IPython.display.display(IPython.display.Code(data))
 
-            # data2 = ipywidgets.Textarea(solution[f], layout=ipywidgets.Layout(height=height, width="49%"))
-            data2 = ipywidgets.Output(layout={"height": height, "width": "49%"})
-            with data2:
-                IPython.display.display(IPython.display.Code(solution[f]))
+                data2 = ipywidgets.Output(layout={"height": height, "width": midwidth})
+                with data2:
+                    IPython.display.display(IPython.display.Code(solution[f]))
+            else:
+                data1 = ipywidgets.Textarea(data, layout=ipywidgets.Layout(height=height, width=midwidth))
+                data2 = ipywidgets.Textarea(solution[f], layout=ipywidgets.Layout(height=height, width=midwidth))
+
             data = ipywidgets.HBox([data1, data2])
+
         else:
             data = ipywidgets.Textarea(
-                open(cfilename, "r").read(), layout=ipywidgets.Layout(height=height, width="99%")
+                open(cfilename, "r").read(), layout=ipywidgets.Layout(height=height, width=width)
             )
 
         files.append(data)
