@@ -1,1 +1,0 @@
-git pull && git add . && git commit -m "Fix execution" && git push
