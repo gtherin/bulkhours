@@ -47,7 +47,7 @@ def get_argparser(line, cell):
 
     if args.widgets is None:
         if args.type == "code_project":
-            args.widgets = "w|olsc"
+            args.widgets = "w|tsc"
         elif args.type == "table":
             args.widgets = "w|sc"
         elif args.type in ["code"]:

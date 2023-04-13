@@ -1,5 +1,6 @@
 import sys
 import argparse
+import subprocess
 
 from .data import *  # noqa
 from .evaluation import *  # noqa
@@ -7,19 +8,15 @@ from .widgets.buttons import *  # noqa
 
 
 def runrealcmd(command, verbose=True):
-    from subprocess import Popen, PIPE, STDOUT
-
     logfile = open("install.log", "w")
-    stdout, stderr = PIPE, STDOUT
+    stdout, stderr = subprocess.PIPE, subprocess.STDOUT
     stdout, stderr = logfile, logfile
-    process = Popen(command, stdout=stdout, shell=True, stderr=stderr, bufsize=1, close_fds=True)
+    process = subprocess.Popen(command, stdout=stdout, shell=True, stderr=stderr, bufsize=1, close_fds=True)
     print(f"RUN {command}")
     process.wait()
 
 
 def git_push(argv=sys.argv[1:]):
-    from subprocess import Popen, PIPE, STDOUT
-
     parser = argparse.ArgumentParser(description="Git helper")
     parser.add_argument("-m", "--message", help="Message", default="Some changes")
     args = parser.parse_args(argv)

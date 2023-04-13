@@ -20,6 +20,8 @@ def send_answer_to_corrector(cinfo, update=True, user=None, comment="", update_t
     uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if update_time:
         kwargs.update({"update_time": uptime})
+    if user == "solution":
+        kwargs.update({"note": 10})
 
     if update and get_document(question, user).get().to_dict():
         get_document(question, user).update(kwargs)
