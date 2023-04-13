@@ -172,7 +172,8 @@ def update_button(b, idx, funct, output, abuttons, args, kwargs):
 
         abuttons[idx].update_style(b, style="warning")
         if not abuttons[idx].is_on:
-            try:
+            if 1:
+                # try:
                 p1 = multiprocessing.Process(target=funct, args=args, kwargs=kwargs)
                 p1.start()
                 fun, sleep = ["🙈", "🙉", "🙊"], 0.3
@@ -190,7 +191,8 @@ def update_button(b, idx, funct, output, abuttons, args, kwargs):
 
                 abuttons[idx].is_on = abuttons[idx].wait(abuttons[idx].is_on, b)
 
-            except Exception as e:
+            if 0:
+                # except Exception as e:
                 abuttons[idx].update_style(b, style="danger")
                 IPython.display.display(e)
                 time.sleep(2)
