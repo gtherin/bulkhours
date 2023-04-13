@@ -98,7 +98,7 @@ class WidgetCodeProject(base.WidgetBase):
 
         if exec_process:
             print(f"Save files cache/{filenames}, compile and execute program")
-            os.system('echo "cd cache && pwd && ls && make all && ./main" > cache/main.sh && chmod 777 cache/main.sh')
+            os.system('echo "cd cache && make all && ./main" > cache/main.sh && chmod 777 cache/main.sh')
             result = subprocess.run(
                 "bash cache/main.sh".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
             )
