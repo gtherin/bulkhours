@@ -1,6 +1,9 @@
 import IPython
 import ipywidgets
 import time
+import multiprocessing
+import numpy as np
+
 from .. import colors
 
 
@@ -121,6 +124,16 @@ def get_all_buttons():
             sleep_on=1,
             width="130px",
         ),
+        SwitchButton(
+            "gpt",
+            dict(description="Ask Chat-gpt", button_style="info"),
+            dict(description="Demande à Chat-gpt", button_style="info"),
+            dict(description="Operation in progress", button_style="warning"),
+            dict(description="Operation en cours   ", button_style="warning"),
+            dict(description="Hide result", button_style="danger"),
+            dict(description="Cacher le résultat", button_style="danger"),
+            width="150px",
+        ),
     ]
 
 
@@ -131,7 +144,7 @@ def get_buttons_list(label=None, in_french=False):
         s.g(in_french)
 
     widgets = {"l": label}
-    widgets.update(dict(zip("scmet", abuttons)))
+    widgets.update(dict(zip("scmetg", abuttons)))
     return widgets
 
 
@@ -151,16 +164,10 @@ def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="blac
         IPython.display.display(
             IPython.display.Markdown(f"<font face='FiraCode Nerd Font' size=4 color='{bc}'>{mdbody}<font>")
         )
-    if 0 and mdbody and len(mdbody) > 1:
-        IPython.display.display(IPython.display.Markdown(mdbody))
     if rawbody and len(rawbody) > 1:
         print(rawbody)
     if codebody and len(codebody) > 1:
         IPython.display.display(IPython.display.Code(codebody))
-
-
-import multiprocessing
-import numpy as np
 
 
 def update_button(b, idx, funct, output, abuttons, args, kwargs):

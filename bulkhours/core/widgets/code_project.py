@@ -47,7 +47,7 @@ def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
         ff = f.split(":")
         if not os.path.exists(cfilename := f"cache/{cinfo.id}_{ff[0]}"):
             rfilename = get_data_from_file(cinfo, f"{cinfo.id}_{ff[0]}", subdir="data/exercices")
-            if 1:  # verbose:
+            if verbose:
                 print(f"Generate {cfilename} from {rfilename}")
 
             # Store in files to be compiled
