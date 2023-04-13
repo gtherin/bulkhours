@@ -33,20 +33,13 @@ def git_push(argv=sys.argv[1:]):
 
     print(f"Update {oversion} => {nversion}")
     with open("git_push.sh", "w") as f:
-        f.write(
-            f"""git pull
-git status && git add . && git commit -m "{args.message}"
-git push
-"""
-        )
-
-    print("AAAAAAAAAAA")
+        f.write(f"""git pull && git add . && git commit -m "{args.message}" && git push""")
     print(
         subprocess.run("bash git_push.sh".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True).stdout
     )
 
-    cmd = f"""git add . && git commit -m "{args.message}" && git push"""
-    Popen(cmd, stdout=PIPE, shell=True, stderr=STDOUT)
+    # cmd = f"""git add . && git commit -m "{args.message}" && git push"""
+    # Popen(cmd, stdout=PIPE, shell=True, stderr=STDOUT)
 
 
 def ask_chat_gpt(question="", api_key="YOURKEY", model="gpt-3.5-turbo"):
