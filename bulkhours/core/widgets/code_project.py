@@ -31,6 +31,7 @@ def get_data_from_file(label, on=None, subdir="data", **kwargs):
 
 def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
     height = "550px"
+    # 20 px par ligne
     for o in cinfo.puppet.split(","):
         if "height=" in o:
             height = o.split("=")[1]
@@ -49,10 +50,10 @@ def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
             if verbose:
                 print(f"Generate {cfilename} from {rfilename}")
 
+            # Store in files to be compiled
             data = open(rfilename).read()
             with open(cfilename, "w") as f:
                 f.write(data)
-        data = open(cfilename, "r").read()
 
         if show_solution:
             data1 = ipywidgets.Textarea(
@@ -99,10 +100,11 @@ class WidgetCodeProject(base.WidgetBase):
         if exec_process:
             print(f"Save files cache/{filenames}, compile and execute program")
             os.system('echo "cd cache && make all && ./main" > cache/main.sh && chmod 777 cache/main.sh')
-            result = subprocess.run(
-                "bash cache/main.sh".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+            print(
+                subprocess.run(
+                    "bash cache/main.sh".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+                ).stdout
             )
-            print(result.stdout)
 
         else:
             print(f"Save files cache/{filenames}")
