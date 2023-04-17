@@ -153,6 +153,7 @@ def get_button(label):
 
 
 def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="black", icon="📚"):
+    print("")
     if header:
         IPython.display.display(
             IPython.display.Markdown(
@@ -160,7 +161,7 @@ def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="blac
             )
         )
 
-    if mdbody and len(mdbody) > 1:
+    if mdbody and (type(mdbody) in [int, float] or len(mdbody) > 1):
         IPython.display.display(
             IPython.display.Markdown(f"<font face='FiraCode Nerd Font' size=4 color='{bc}'>{mdbody}<font>")
         )
@@ -173,7 +174,6 @@ def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="blac
 def update_button(b, idx, funct, output, abuttons, args, kwargs):
     with output:
         output.clear_output()
-
         colors.set_style(output, "sol_background")
         abuttons[idx].is_on = not abuttons[idx].is_on
 

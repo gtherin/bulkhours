@@ -7,10 +7,12 @@ from . import base
 
 
 class WidgetTable(base.WidgetBase):
+    widget_id = "table"
+
     def get_data(self):
         return np.array([r.split(";") for r in self.cinfo.options.split(";;")])
 
-    def get_widget(self, force_correction=None):
+    def init_widget(self, force_correction=None):
         # %evaluation_cell_id -i Itable -t table -o x;y;;1;F;;10;I -p execute_on_start,toggle_on,lock
         # %evaluation_cell_id -i Itable -t table -o ;0.5 kpc;1 kpc;1.5 kpc;2 kpc;;v(km/s);I;I;I;I -p execute_on_start,toggle_on,lock
 
@@ -62,17 +64,17 @@ class WidgetTable(base.WidgetBase):
         answer = ";".join(answer)
         return answer
 
-    def get_params(self, answer):
-        return dict(answer=answer, atype=self.cinfo.type)
+    def get_params(self):
+        return dict(answer=self.get_answer(), atype=self.cinfo.type)
 
-    def display_correction(self, data, answer=None):
+    def display_correction(self, data, output=None):
         import IPython
 
         md(header=f"Correction ({self.cinfo.id})")
         IPython.display.display(
             ipywidgets.HBox(
                 [
-                    self.get_widget(force_correction=data["answer"].split(";")),
+                    self.init_widget(force_correction=data["answer"].split(";")),
                 ]
             )
         )

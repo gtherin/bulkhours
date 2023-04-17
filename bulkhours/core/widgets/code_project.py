@@ -86,23 +86,25 @@ def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
 
 
 class WidgetCodeProject(base.WidgetBase):
-    def get_widget(self):
+    widget_id = "code_project"
+
+    def init_widget(self):
         self.widget, self.files = evaluate_core_cpp_project(self.cinfo, show_solution=False)
         return self.widget
 
     def get_answer(self):
         return self.widget
 
-    def get_params(self, answer):
-        return dict(answer=answer, atype=self.cinfo.type)
+    def get_params(self):
+        return dict(answer=self.get_answer(), atype=self.cinfo.type)
 
     @staticmethod
-    def write_exec_process(self, bwidget, exec_process=True):
-        files = bwidget.widget.files
-        filenames = self.cinfo.options.split(",")
+    def write_exec_process(bwidget, exec_process=True):
+        files = bwidget.files
+        filenames = bwidget.cinfo.options.split(",")
 
         for t, fn in enumerate(filenames):
-            with open(f"cache/{self.cinfo.id}_{fn}", "w") as f:
+            with open(f"cache/{bwidget.cinfo.id}_{fn}", "w") as f:
                 f.write(files[t].value)
             with open(f"cache/{fn}", "w") as f:
                 f.write(files[t].value)
@@ -120,13 +122,12 @@ class WidgetCodeProject(base.WidgetBase):
             print(f"Save files cache/{filenames}")
 
     def basic_execution(self, buttons, bwidget, output):
-        htabs = ipywidgets.VBox(children=[bwidget.widget.widget])
+        htabs = ipywidgets.VBox(children=[bwidget.widget])
         IPython.display.display(htabs)
         IPython.display.display(buttons, output)
 
-    @staticmethod
-    def get_core_correction(self, buttons, bwidget, output):
-        WidgetCodeProject.write_exec_process(self, bwidget, exec_process=False)
+    def display_ecorrection(self, output):
+        WidgetCodeProject.write_exec_process(self, exec_process=False)
 
         with output:
             output.clear_output()
@@ -135,13 +136,15 @@ class WidgetCodeProject(base.WidgetBase):
             IPython.display.display(htabs)
         # IPython.display.display(buttons, output)
 
-    @staticmethod
-    def submit(self, bwidget, widgets, output):
-        files = bwidget.widget.files
+    def submit(self, output):
+        files = self.files
         filenames = self.cinfo.options.split(",")
 
-        WidgetCodeProject.write_exec_process(self, bwidget, exec_process=False)
-        pams = {fn.replace(".", "_dot_"): files[t].value for t, fn in enumerate(filenames)}
-        pams.update(dict(atype=self.cinfo.type))
+        with output:
+            output.clear_output()
 
-        return firebase.send_answer_to_corrector(self.cinfo, **pams)
+            WidgetCodeProject.write_exec_process(self, exec_process=False)
+            pams = {fn.replace(".", "_dot_"): files[t].value for t, fn in enumerate(filenames)}
+            pams.update(dict(atype=self.cinfo.type))
+
+            return firebase.send_answer_to_corrector(self.cinfo, **pams)

@@ -1,3 +1,4 @@
+import os
 import sys
 import argparse
 import subprocess
@@ -35,6 +36,4 @@ def git_push(argv=sys.argv[1:]):
     print(
         subprocess.run("bash git_push.sh".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True).stdout
     )
-
-    # cmd = f"""git add . && git commit -m "{args.message}" && git push"""
-    # Popen(cmd, stdout=PIPE, shell=True, stderr=STDOUT)
+    os.system("rm -rf git_push.sh")
