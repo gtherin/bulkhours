@@ -6,7 +6,7 @@ from .widgets.buttons import get_buttons_list, update_button
 from .logins import *
 from . import firebase
 from . import install
-from .widgets.bulk_widget import BulkWidget
+from .widgets import bulk_widget as widget_helper
 from .widgets.code_project import WidgetCodeProject
 from . import colors
 from . import gpt
@@ -58,10 +58,8 @@ class Evaluation(Magics):
         if self.cinfo.user == "solution":
             colors.set_style(output, "sol_background")
 
-        bwidget = BulkWidget(self.cinfo, cell, in_french=self.in_french)
+        bwidget = widget_helper.create_widget(self.cinfo, cell, self.in_french, self.shell)
         abuttons = get_buttons_list(bwidget.get_label_widget(), self.in_french)
-
-        widgets = bwidget.get_widgets()
         gtext = ipywidgets.Text("")
 
         bbox = []
@@ -71,7 +69,7 @@ class Evaluation(Magics):
                 bbox.append(ipywidgets.HBox(ws))
                 ws = []
             elif w == "w":
-                ws += widgets
+                ws += [bwidget.widget]
             elif w == "g":
                 ws += [gtext, abuttons[w].b]
             elif w == "l" and abuttons[w] is not None:
@@ -81,46 +79,28 @@ class Evaluation(Magics):
         if len(ws) > 0:
             bbox.append(ipywidgets.HBox(ws))
 
-        if self.cinfo.type == "code_project":
+        def get_exec_line(l, func):
+            return f"""def func_{l}(b): return update_button(b, "{l}", {func}, output, abuttons, [bwidget, output], dict())"""
 
-            def submit(b):
-                return update_button(
-                    b, "s", WidgetCodeProject.submit, output, abuttons, [self, bwidget, widgets, output], dict()
-                )
+        butts = {"m": "send_message", "t": "write_exec_process", "c": "display_correction", "s": "submit"}
 
-            def get_correction(b):
-                return update_button(
-                    b,
-                    "c",
-                    WidgetCodeProject.get_core_correction,
-                    output,
-                    abuttons,
-                    [self, bbox[1], bwidget, output],
-                    dict(),
-                )
+        def func_m(b):
+            return update_button(b, "m", bwidget.__class__.send_message, output, abuttons, [bwidget, output], dict())
 
-        else:
+        def func_t(b):
+            return update_button(
+                b, "t", bwidget.__class__.write_exec_process, output, abuttons, [bwidget, output], dict()
+            )
 
-            def submit(b):
-                return update_button(
-                    b, "s", BulkWidget.submit, output, abuttons, [self, bwidget, widgets, output], dict()
-                )
+        def func_c(b):
+            return update_button(
+                b, "c", bwidget.__class__.display_ecorrection, output, abuttons, [bwidget, output], dict()
+            )
 
-            def get_correction(b):
-                return update_button(
-                    b, "c", BulkWidget.get_core_correction, output, abuttons, [self, bwidget, widgets], dict()
-                )
+        def func_s(b):
+            return update_button(b, "s", bwidget.__class__.submit, output, abuttons, [bwidget, output], dict())
 
-        abuttons["s"].b.on_click(submit)
-
-        abuttons["c"].b.on_click(get_correction)
-
-        def send_message(b):
-            return update_button(b, "m", BulkWidget.send_message, output, abuttons, [self], dict())
-
-        abuttons["m"].b.on_click(send_message)
-
-        def ask_chatgpt(b):
+        def func_a(b):
             return update_button(
                 b,
                 "g",
@@ -131,14 +111,9 @@ class Evaluation(Magics):
                 dict(api_key=self.api_key, is_code=True, temperature=0.5),
             )
 
-        abuttons["g"].b.on_click(ask_chatgpt)
-
-        def write_exec_process(b):
-            return update_button(
-                b, "t", WidgetCodeProject.write_exec_process, output, abuttons, [self, bwidget], dict()
-            )
-
-        abuttons["t"].b.on_click(write_exec_process)
+        for l, func in butts.items():
+            exec("""abuttons["{l}"].b.on_click(func_{l})""".format(l=l))
+        exec("""abuttons["g"].b.on_click(func_a)""")
 
         if self.cinfo.type == "code" and cell != "":
             with output:
@@ -151,7 +126,8 @@ class Evaluation(Magics):
             IPython.display.display(IPython.display.Markdown("$" + cell + "$"))
             print("$" + cell + "$")
         elif self.cinfo.type == "code_project":
-            bwidget.widget.basic_execution(bbox[1], bwidget, output)
+            bwidget.basic_execution(bbox[1], bwidget, output)
+            return
 
         bbox = bbox[0] if len(bbox) == 1 else ipywidgets.VBox(bbox)
         IPython.display.display(bbox, output)

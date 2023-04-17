@@ -48,9 +48,9 @@ def get_argparser(line, cell):
     if args.widgets is None:
         if args.type == "code_project":
             args.widgets = "w|tsc"
-        elif args.type == "table":
-            args.widgets = "w|sc"
-        elif args.type in ["code"]:
+        elif args.type in ["table", "checkboxes"]:
+            args.widgets = "lw|sc"
+        elif args.type in ["code", "markdown"]:
             args.widgets = "sc"
         else:
             args.widgets = "lwsc"
@@ -117,8 +117,12 @@ def main(argv=sys.argv[1:]):
 
         # Install packages
         for package in args.packages.split(","):
-            print("RUN pip install %s [%s, %.0fs]" % (package, env_id, time.time() - start_time))
-            os.system(f"pip install {package} > /dev/null 2>&1")
+            if package not in ["wkhtmltopdf"]:
+                print("RUN pip install %s [%s, %.0fs]" % (package, env_id, time.time() - start_time))
+                os.system(f"pip install {package} > /dev/null 2>&1")
+            else:
+                print("RUN apt install %s [%s, %.0fs]" % (package, env_id, time.time() - start_time))
+                os.system(f"apt install {package} > /dev/null 2>&1")
 
     # Dump env variables
     data = {
