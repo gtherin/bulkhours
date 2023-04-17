@@ -1,15 +1,29 @@
 from IPython.core.magic import Magics, cell_magic, magics_class, line_cell_magic, needs_local_scope
 import IPython
 import ipywidgets
+import sys, inspect
 
 from .widgets.buttons import get_buttons_list, update_button
 from .logins import *
 from . import firebase
 from . import install
-from .widgets import bulk_widget as widget_helper
-from .widgets.code_project import WidgetCodeProject
 from . import colors
 from . import gpt
+
+
+from .widgets.base import WidgetBase
+from .widgets.table import WidgetTable
+from .widgets.code_project import WidgetCodeProject
+from .widgets.sliders import WidgetFloatSlider, WidgetIntSlider
+from .widgets.texts import WidgetCodeText, WidgetTextArea
+from .widgets.selectors import WidgetCheckboxes, WidgetRadios
+from .widgets.cells import WidgetCode, WidgetMarkdown, WidgetFormula
+
+
+def create_widget(cinfo, cell, in_french, shell):
+    for _, obj in inspect.getmembers(sys.modules[__name__]):
+        if inspect.isclass(obj) and hasattr(obj, "widget_id") and obj.widget_id == cinfo.type:
+            return obj(cinfo, cell, in_french, shell)
 
 
 @magics_class
@@ -58,7 +72,7 @@ class Evaluation(Magics):
         if self.cinfo.user == "solution":
             colors.set_style(output, "sol_background")
 
-        bwidget = widget_helper.create_widget(self.cinfo, cell, self.in_french, self.shell)
+        bwidget = create_widget(self.cinfo, cell, self.in_french, self.shell)
         abuttons = get_buttons_list(bwidget.get_label_widget(), self.in_french)
         gtext = ipywidgets.Text("")
 

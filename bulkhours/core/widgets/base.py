@@ -26,7 +26,7 @@ class WidgetBase:
         return dict(answer=self.get_answer(), atype=self.cinfo.type)
 
     def get_label_widget(self):
-        label = f"<b><font face='FiraCode Nerd Font' size=4 color='red'>{self.cinfo.label}<font></b>"
+        label = f"<b><font face='FiraCode Nerd Font' size=4 color='black'>{self.cinfo.label}<font></b>"
         return ipywidgets.HTML(value=label, layout=ipywidgets.Layout(height="auto", width="auto"))
 
     def get_answer(self):
@@ -61,3 +61,13 @@ class WidgetBase:
             return
 
         return firebase.send_answer_to_corrector(self.cinfo, **self.get_params())
+
+    def send_message(self, output):
+        data = firebase.get_solution_from_corrector(self.cell_id, corrector="solution")
+        if (user := os.environ["STUDENT"]) in data or (user := "all") in data:
+            md(
+                header=f"Message ({self.cinfo.id}, {user}) du correcteur"
+                if self.in_french
+                else f"Message ({self.cinfo.id}, {user}) from corrector",
+                rawbody=data[user],
+            )
