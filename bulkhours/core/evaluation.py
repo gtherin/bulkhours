@@ -74,7 +74,7 @@ class Evaluation(Magics):
 
         bwidget = create_widget(self.cinfo, cell, self.in_french, self.shell)
         abuttons = get_buttons_list(bwidget.get_label_widget(), self.in_french)
-        gtext = ipywidgets.Text("")
+        gtext = ipywidgets.Text(self.cinfo.label)
 
         bbox = []
         ws = []
