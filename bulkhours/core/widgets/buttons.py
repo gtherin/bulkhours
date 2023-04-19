@@ -168,7 +168,13 @@ def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="blac
     if rawbody and len(rawbody) > 1:
         print(rawbody)
     if codebody and len(codebody) > 1:
-        IPython.display.display(IPython.display.Code(codebody))
+        if "g++" in codebody:
+            language = "cpp"
+        if "nvcc" in codebody:
+            language = "cuda"
+        else:
+            language = None
+        IPython.display.display(IPython.display.Code(codebody, language=language))
 
 
 def update_button(b, idx, funct, output, abuttons, args, kwargs):
