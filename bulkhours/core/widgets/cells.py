@@ -13,7 +13,7 @@ class WidgetCode(WidgetBase):
         return self.cell
 
     def display_correction(self, data, output=None):
-        codebody = "google.colab" in sys.modules and self.user != "solution"
+        codebody = "google.colab" in sys.modules and self.cinfo.user != "solution"
         md(header=f"Correction ({self.cinfo.id})", **{"codebody" if codebody else "rawbody": data["answer"]})
         md(
             f"""**Execution du code ({self.cinfo.id})** 💻"""
