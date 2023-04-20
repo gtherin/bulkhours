@@ -70,6 +70,7 @@ class WidgetTable(base.WidgetBase):
     def display_correction(self, data, output=None):
         import IPython
 
+        print("")
         md(header=f"Correction ({self.cinfo.id})")
         IPython.display.display(
             ipywidgets.HBox(
