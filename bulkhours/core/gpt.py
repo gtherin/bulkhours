@@ -31,9 +31,10 @@ Vous devez creer une clé d'API
     print("")
 
     if model in ["image"]:
-        response = openai.Image.create(prompt=prompt, n=1, size=size)
+        response = openai.Image.create(prompt=question, n=1, size=size)
         image_url = response["data"][0]["url"]
         IPython.display.display(IPython.display.Image(url=image_url))
+        return
 
     completion = openai.ChatCompletion.create(
         model=model, messages=[{"role": "user", "content": (prompt := question)}], temperature=temperature
