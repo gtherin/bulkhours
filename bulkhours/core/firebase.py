@@ -8,6 +8,9 @@ def get_document(sid, user):
     if "STUDENT" not in os.environ:
         set_up_student(None)
 
+    if not os.path.path.exists(os.environ["GOOGLE_APPLICATION_CREDENTIALS"]):
+        set_up_student(os.environ["STUDENT"])
+
     from google.cloud import firestore
 
     return firestore.Client().collection(sid).document(user)
