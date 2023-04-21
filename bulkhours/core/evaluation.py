@@ -55,7 +55,7 @@ class Evaluation(Magics):
             widgets.set_style(output, "sol_background")
 
         bwidget = widgets.create_widget(self.cinfo, cell, self.in_french, self.shell)
-        abuttons = widgets.get_buttons_list(bwidget.get_label_widget(), self.in_french)
+        abuttons = widgets.get_buttons_list(bwidget.get_label_widget(), in_french=self.in_french, user=self.cinfo.user)
         gtext = ipywidgets.Text(self.cinfo.label)
 
         bbox = []
