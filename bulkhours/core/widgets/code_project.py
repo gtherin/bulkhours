@@ -4,9 +4,8 @@ import ipywidgets
 import subprocess
 import glob
 
-from .buttons import *
-from ..logins import *
-from .. import firebase
+# from .buttons import *
+# from ..logins import *
 from . import base
 
 
@@ -25,6 +24,8 @@ def get_data_from_file(cinfo, label, on=None, subdir="data", **kwargs):
 
 
 def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
+    from .. import firebase
+
     height, width = "550px", "900px"
     # 20 px par ligne
     for o in cinfo.puppet.split(","):
@@ -121,11 +122,6 @@ class WidgetCodeProject(base.WidgetBase):
         else:
             print(f"Save files cache/{filenames}")
 
-    def basic_execution(self, buttons, bwidget, output):
-        htabs = ipywidgets.VBox(children=[bwidget.widget])
-        IPython.display.display(htabs)
-        IPython.display.display(buttons, output)
-
     def display_ecorrection(self, output):
         WidgetCodeProject.write_exec_process(self, exec_process=False)
 
@@ -137,6 +133,8 @@ class WidgetCodeProject(base.WidgetBase):
         # IPython.display.display(buttons, output)
 
     def submit(self, output):
+        from .. import firebase
+
         files = self.files
         filenames = self.cinfo.options.split(",")
 
@@ -148,3 +146,8 @@ class WidgetCodeProject(base.WidgetBase):
             pams.update(dict(atype=self.cinfo.type))
 
             return firebase.send_answer_to_corrector(self.cinfo, **pams)
+
+    def execute_raw_cell(self, bbox, output):
+        htabs = ipywidgets.VBox(children=[self.widget])
+        IPython.display.display(htabs)
+        IPython.display.display(bbox[1], output)

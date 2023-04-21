@@ -1,8 +1,8 @@
 import ipywidgets
 
-from .buttons import *
 from .base import WidgetBase
 from .sliders import WidgetIntSlider
+from .tools import md
 
 
 class WidgetCodeText(WidgetBase):
