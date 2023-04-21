@@ -5,8 +5,11 @@ import subprocess
 
 from .data import *  # noqa
 from .evaluation import *  # noqa
-from .widgets.buttons import *  # noqa
-from .gpt import ask_chat_gpt  # noqa
+
+from .widgets.tools import md  # noqa
+
+# from .widgets.buttons import *  # noqa
+# from .gpt import ask_chat_gpt  # noqa
 
 
 def runrealcmd(command, verbose=True):

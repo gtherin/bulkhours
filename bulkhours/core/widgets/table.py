@@ -1,9 +1,8 @@
 import ipywidgets
 import numpy as np
 
-from .buttons import *
-from ..logins import *
 from . import base
+from .tools import md
 
 
 class WidgetTable(base.WidgetBase):

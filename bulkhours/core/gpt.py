@@ -1,7 +1,3 @@
-import sys
-import argparse
-import subprocess
-
 from .data import *  # noqa
 from .evaluation import *  # noqa
 from .widgets.buttons import *  # noqa
@@ -53,4 +49,10 @@ Vous devez creer une clé d'API
         else:
             IPython.display.display(IPython.display.Code(content))
     else:
-        IPython.display.display(IPython.display.Markdown(content))
+        is_markdown = False
+        for c in content.split("```"):
+            is_markdown = not is_markdown
+            if is_markdown:
+                IPython.display.display(IPython.display.Markdown(c))
+            else:
+                IPython.display.display(IPython.display.Code(c))

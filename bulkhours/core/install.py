@@ -57,6 +57,9 @@ def get_argparser(line, cell):
 
     return args
 
+    # from .widgets import check_widget
+    # return check_widget(args)
+
 
 def get_install_parser(argv):
     parser = argparse.ArgumentParser(

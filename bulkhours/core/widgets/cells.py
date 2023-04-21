@@ -1,5 +1,7 @@
+import IPython
 import sys
-from .buttons import *
+
+from .tools import md
 from .base import WidgetBase
 
 
@@ -23,6 +25,16 @@ class WidgetCode(WidgetBase):
         if self.cinfo.type == "code" and data is not None and "answer" in data:
             self.shell.run_cell(data["answer"])
 
+    def execute_raw_cell(self, bbox, output):
+        from . import colors
+
+        if self.cell != "":
+            with output:
+                if self.cinfo.user == "solution":
+                    colors.set_style(output, "sol_background")
+                self.shell.run_cell(self.cell)
+        WidgetBase.execute_raw_cell(self, bbox, output)
+
 
 class WidgetMarkdown(WidgetCode):
     widget_id = "markdown"
@@ -30,10 +42,21 @@ class WidgetMarkdown(WidgetCode):
     def display_correction(self, data, output=None):
         md(header=f"Correction ({self.cinfo.id})", mdbody=data["answer"])
 
+    def execute_raw_cell(self, bbox, output):
+        IPython.display.display(IPython.display.Markdown(self.cell))
+        WidgetBase.execute_raw_cell(self, bbox, output)
+
 
 class WidgetFormula(WidgetCode):
     widget_id = "formula"
 
     def display_correction(self, data, output=None):
-        md(header=f"Correction ({self.cinfo.id})")
-        IPython.display.display(IPython.display.Markdown("$" + data["answer"] + "$"))
+        with output:
+            md(header=f"Correction ({self.cinfo.id})")
+            IPython.display.display(IPython.display.Markdown("$" + data["answer"] + "$"))
+
+    def execute_raw_cell(self, bbox, output):
+        with output:
+            IPython.display.display(IPython.display.Markdown("$" + self.cell + "$"))
+            print("$" + self.cell + "$")
+        WidgetBase.execute_raw_cell(self, bbox, output)

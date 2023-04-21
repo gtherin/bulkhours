@@ -1,29 +1,11 @@
 from IPython.core.magic import Magics, cell_magic, magics_class, line_cell_magic, needs_local_scope
-import IPython
 import ipywidgets
-import sys, inspect
-
-from .widgets.buttons import get_buttons_list, update_button
 from .logins import *
 from . import firebase
 from . import install
-from . import colors
+
+from . import widgets
 from . import gpt
-
-
-from .widgets.base import WidgetBase
-from .widgets.table import WidgetTable
-from .widgets.code_project import WidgetCodeProject
-from .widgets.sliders import WidgetFloatSlider, WidgetIntSlider
-from .widgets.texts import WidgetCodeText, WidgetTextArea
-from .widgets.selectors import WidgetCheckboxes, WidgetRadios
-from .widgets.cells import WidgetCode, WidgetMarkdown, WidgetFormula
-
-
-def create_widget(cinfo, cell, in_french, shell):
-    for _, obj in inspect.getmembers(sys.modules[__name__]):
-        if inspect.isclass(obj) and hasattr(obj, "widget_id") and obj.widget_id == cinfo.type:
-            return obj(cinfo, cell, in_french, shell)
 
 
 @magics_class
@@ -70,10 +52,10 @@ class Evaluation(Magics):
 
         output = ipywidgets.Output()
         if self.cinfo.user == "solution":
-            colors.set_style(output, "sol_background")
+            widgets.set_style(output, "sol_background")
 
-        bwidget = create_widget(self.cinfo, cell, self.in_french, self.shell)
-        abuttons = get_buttons_list(bwidget.get_label_widget(), self.in_french)
+        bwidget = widgets.create_widget(self.cinfo, cell, self.in_french, self.shell)
+        abuttons = widgets.get_buttons_list(bwidget.get_label_widget(), self.in_french)
         gtext = ipywidgets.Text(self.cinfo.label)
 
         bbox = []
@@ -99,23 +81,25 @@ class Evaluation(Magics):
         butts = {"m": "send_message", "t": "write_exec_process", "c": "display_correction", "s": "submit"}
 
         def func_m(b):
-            return update_button(b, "m", bwidget.__class__.send_message, output, abuttons, [bwidget, output], dict())
+            return widgets.update_button(
+                b, "m", bwidget.__class__.send_message, output, abuttons, [bwidget, output], dict()
+            )
 
         def func_t(b):
-            return update_button(
+            return widgets.update_button(
                 b, "t", bwidget.__class__.write_exec_process, output, abuttons, [bwidget, output], dict()
             )
 
         def func_c(b):
-            return update_button(
+            return widgets.update_button(
                 b, "c", bwidget.__class__.display_ecorrection, output, abuttons, [bwidget, output], dict()
             )
 
         def func_s(b):
-            return update_button(b, "s", bwidget.__class__.submit, output, abuttons, [bwidget, output], dict())
+            return widgets.update_button(b, "s", bwidget.__class__.submit, output, abuttons, [bwidget, output], dict())
 
         def func_a(b):
-            return update_button(
+            return widgets.update_button(
                 b,
                 "g",
                 gpt.ask_chat_gpt,
@@ -129,19 +113,4 @@ class Evaluation(Magics):
             exec("""abuttons["{l}"].b.on_click(func_{l})""".format(l=l))
         exec("""abuttons["g"].b.on_click(func_a)""")
 
-        if self.cinfo.type == "code" and cell != "":
-            with output:
-                if self.cinfo.user == "solution":
-                    colors.set_style(output, "sol_background")
-                self.shell.run_cell(cell)
-        elif self.cinfo.type == "markdown":
-            IPython.display.display(IPython.display.Markdown(cell))
-        elif self.cinfo.type == "formula":
-            IPython.display.display(IPython.display.Markdown("$" + cell + "$"))
-            print("$" + cell + "$")
-        elif self.cinfo.type == "code_project":
-            bwidget.basic_execution(bbox[1], bwidget, output)
-            return
-
-        bbox = bbox[0] if len(bbox) == 1 else ipywidgets.VBox(bbox)
-        IPython.display.display(bbox, output)
+        bwidget.execute_raw_cell(bbox, output)

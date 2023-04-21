@@ -1,7 +1,6 @@
-import matplotlib.colors as mcolors
-
-
 def colors(cmap):
+    import matplotlib.colors as mcolors
+
     if cmap == "b":
         return list(mcolors.BASE_COLORS.values())
     elif cmap == "c":

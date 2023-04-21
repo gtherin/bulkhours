@@ -1,13 +1,11 @@
+import os
 import ipywidgets
-import numpy as np
-
-from .buttons import *
-from ..logins import *
-from .. import firebase
+from .tools import md
 
 
 class WidgetBase:
     widget_id = "base"
+    default_wopts = "lwsc"
 
     def __init__(self, cinfo, cell, in_french, shell):
         self.cinfo = cinfo
@@ -33,6 +31,8 @@ class WidgetBase:
         return self.widget.value
 
     def display_ecorrection(self, output):
+        from .. import firebase
+
         data = firebase.get_solution_from_corrector(self.cinfo.id, corrector="solution")
         if data is None:
             with output:
@@ -53,6 +53,8 @@ class WidgetBase:
             self.shell.run_cell(hide_code)
 
     def submit(self, output):
+        from .. import firebase
+
         answer = self.get_answer()
         if answer == "":
             with output:
@@ -63,6 +65,9 @@ class WidgetBase:
         return firebase.send_answer_to_corrector(self.cinfo, **self.get_params())
 
     def send_message(self, output):
+        from .. import firebase
+        from .colors import md
+
         data = firebase.get_solution_from_corrector(self.cell_id, corrector="solution")
         if (user := os.environ["STUDENT"]) in data or (user := "all") in data:
             md(
@@ -71,3 +76,12 @@ class WidgetBase:
                 else f"Message ({self.cinfo.id}, {user}) from corrector",
                 rawbody=data[user],
             )
+
+    def execute_raw_cell(self, bbox, output):
+        import IPython
+
+        bbox = bbox[0] if len(bbox) == 1 else ipywidgets.VBox(bbox)
+        IPython.display.display(bbox, output)
+
+    def display_correction(self, data, output=None):
+        md(header=f"Correction ({self.cinfo.id})", mdbody=data["answer"])
