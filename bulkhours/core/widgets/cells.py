@@ -53,10 +53,10 @@ class WidgetFormula(WidgetCode):
     def display_correction(self, data, output=None):
         with output:
             md(header=f"Correction ({self.cinfo.id})")
-            IPython.display.display(IPython.display.Markdown("$" + data["answer"] + "$"))
+        IPython.display.display(IPython.display.Markdown("$" + data["answer"] + "$"))
 
     def execute_raw_cell(self, bbox, output):
         with output:
             IPython.display.display(IPython.display.Markdown("$" + self.cell + "$"))
-            print("$" + self.cell + "$")
+            print("$" + self.cell[:-1] + "$")
         WidgetBase.execute_raw_cell(self, bbox, output)
