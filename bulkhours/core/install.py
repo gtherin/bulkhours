@@ -50,7 +50,7 @@ def get_argparser(line, cell):
             args.widgets = "w|tsc"
         elif args.type in ["table", "checkboxes"]:
             args.widgets = "lw|sc"
-        elif args.type in ["code", "markdown"]:
+        elif args.type in ["code", "markdown", "formula"]:
             args.widgets = "sc"
         else:
             args.widgets = "lwsc"
