@@ -144,8 +144,8 @@ def get_sunspots(credit=True, **kwargs):
 
     if credit:
         print(
-            """Yearly sunspots data (ssn)
-- https://www.swpc.noaa.gov/products/solar-cycle-progression
+            """Quarterly sunspots data (ssn)
+- Direct source: https://www.swpc.noaa.gov/products/solar-cycle-progression
 - Data source: https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
         """
         )

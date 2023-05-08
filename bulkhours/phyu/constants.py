@@ -17,6 +17,7 @@ default_configs = {
     "d_solm": {"c": "Distance au soleil", "u": "m", "l": r"$d_{\mathrm{soleil} \mathrm{PAR}} = VALUNI$", "r": 2},
     "M_kg": {"c": "Masse", "u": "kg", "l": r"$M_{\mathrm{PAR}} = VALUNI$"},
     "T_C": {"c": "Temperature moyenne", "u": "°C", "l": r"$T_{\mathrm{PAR}} = VALUNI$", "r": 1},
+    "T_K": {"c": "Temperature moyenne", "u": "°K", "l": r"$T_{\mathrm{PAR}} = VALUNI$", "r": 1},
     "L_W": {"c": "Luminosité", "u": "W", "l": r"$L_{\mathrm{PAR}} = VALUNI$"},
 }
 
@@ -276,8 +277,9 @@ class Units:
         self.add_constant("d_lune", 1.00, c="d_ua", p="lune")
         self.add_constant("R_lune", 6371, c="R_km", p="lune")
         self.add_constant("A_lune", 0.11, c="Albedo", p="lune")
-        self.add_constant("d_terre_lune", 384400e3, c="Distance à la lune",
-            l=r"$d_{\mathrm{terre} \mathrm{PAR}} = VALUNI$", p="lune")
+        self.add_constant(
+            "d_terre_lune", 384400e3, c="Distance à la lune", l=r"$d_{\mathrm{terre} \mathrm{PAR}} = VALUNI$", p="lune"
+        )
 
         self.add_constant("pi", np.pi, r=6)
 
