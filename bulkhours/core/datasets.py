@@ -13,11 +13,19 @@ def clean_life_expectancy_vs_gdp_2018(df):
 datasets = {
     "vaccinations": dict(
         httplink="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv",
-        source="https://ourworldindata.org/coronavirus",
+        source="""Coronavirus Pandemic (COVID-19) data
+- Direct source: https://ourworldindata.org/coronavirus,
+- Info on the columns: https://github.com/owid/covid-19-data/tree/master/public/data/
+- Data source: https://covid19.who.int/data
+""",
     ),
     "covid": dict(
         httplink="https://covid.ourworldindata.org/data/owid-covid-data.csv",
-        source="https://ourworldindata.org/coronavirus",
+        source="""Coronavirus Pandemic (COVID-19) data
+- Direct source: https://ourworldindata.org/coronavirus,
+- Info on the columns: https://github.com/owid/covid-19-data/tree/master/public/data/
+- Data source: https://covid19.who.int/data
+""",
     ),
     "poverty": dict(
         httplink="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
