@@ -3,11 +3,16 @@ import numpy as np
 
 def get_mapgeneric(df):
     import geopandas as gpd
+    from ..core import data
 
     if "continent" in df.columns:
         del df["continent"]
 
-    world = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
+    # filepath = data.get_core_data("ne_110m_admin_0_countries_lakes.shp")
+    filepath = gpd.datasets.get_path("naturalearth_lowres")
+    world = gpd.read_file(filepath)
+
+    # world = gpd.read_file(gpd.datasets.get_path(""))
 
     world = world[(world.pop_est > 0) & (world.name != "Antarctica")]
     # world[world.continent == 'South America']
@@ -30,7 +35,7 @@ def geo_format(df, timeopt):
     if timeopt == "last" or type(timeopt) == int:
         df = df[df.groupby("country")["year"].rank(method="dense", ascending=False) == 1.0]
     if timeopt:
-        df = df.groupby(["country", "year"]).mean().reset_index()
+        df = df.groupby(["country", "year"]).mean(numeric_only=True).reset_index()
 
     return df
 
