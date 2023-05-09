@@ -162,24 +162,6 @@ def get_sunspots(credit=True, **kwargs):
     return sunspots
 
 
-def get_sunspots_old(credit=True, **kwargs):
-    import statsmodels.api as sm  # Statistical models
-
-    if credit:
-        print(
-            """Yearly sunspots data
-- Data source: https://www.statsmodels.org/dev/datasets/generated/sunspots.html
-        """
-        )
-
-    dta = sm.datasets.sunspots.load_pandas().data
-    dta.index = pd.Index(sm.tsa.datetools.dates_from_range("1700", "2008"))
-    dta.index.freq = dta.index.inferred_freq
-    del dta["YEAR"]
-
-    return dta
-
-
 def get_hhousing(credit=True, **kwargs):
     from pandas_datareader import data as pdr  # To get data
 
