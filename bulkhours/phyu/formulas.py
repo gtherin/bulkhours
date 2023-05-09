@@ -57,7 +57,7 @@ class Formulas:
 
     def help(self, label=None, size="+2") -> None:
         if not label:
-            for k in ["Stefan", "Wien", "Ritz", "Eclairement"]:
+            for k in ["Stefan", "Wien", "Ritz", "Eclairement", "EquilibreThermique"]:
                 md(k, prefix="")
                 getattr(self, k)
         elif hasattr(self, label):

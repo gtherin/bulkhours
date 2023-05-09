@@ -231,7 +231,7 @@ class Units:
         )
 
         self.add_constant("M_mercure", 3.301e23, c="M_kg", p="mercure")
-        self.add_constant("d_mercure", 0.47, c="d_ua", p="mercure")
+        self.add_constant("d_mercure", 0.381, c="d_ua", p="mercure")
         self.add_constant("R_mercure", 2439, c="R_km", p="mercure")
         self.add_constant("A_mercure", 0.088, c="Albedo", p="mercure")
         self.add_constant("S_mercure", 0.000, c="Serre", p="mercure")
