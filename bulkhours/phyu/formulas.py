@@ -47,6 +47,14 @@ class Formulas:
             size="+2",
         )
 
+    @property
+    def ForcageRadiatif(self):
+        md(r"Forcage radiatif: $F = S\cdot \sigma \cdot T^4$")
+
+    @property
+    def EquilibreThermique(self):
+        md(r"Equilibre thermique: $(1-A)\frac{ L_\odot R^2}{4 d^2} \equiv (1-S) 4 \pi R^2 \sigma T^4$")
+
     def help(self, label=None, size="+2") -> None:
         if not label:
             for k in ["Stefan", "Wien", "Ritz", "Eclairement"]:
