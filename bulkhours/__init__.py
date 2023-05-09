@@ -139,7 +139,7 @@ def api_key():
     kwargs = get_config()
     api_key = kwargs.get("api_key", None)
     if ":sk-" in api_key:
-        return api_key.split(":sk-")[1]
+        return "sk-" + api_key.split(":sk-")[1]
 
 
 init()
