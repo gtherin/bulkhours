@@ -74,6 +74,8 @@ def get_install_parser(argv):
     parser.add_argument("-p", "--packages", default="")
     parser.add_argument("-f", "--in-french", help="Change languages", action="store_true")
     parser.add_argument("-k", "--api-key", default="YOUR_KEY")
+    parser.add_argument("-t", "--token", default="", help="YOUR_BK_KEY")
+    parser.add_argument("-a", "--atoken", default="", help="YOUR_BKA_KEY")
 
     api_key = argv[argv.index("-k") + 1] if "-k" in argv else "YOUR_KEY"
 
@@ -106,10 +108,20 @@ def main(argv=sys.argv[1:]):
     env_id = "colab" if is_colab else "mock"
 
     # Install main package
-    print("RUN git clone https://github.com/guydegnol/bulkhours.git [%s, %.0fs]" % (env_id, time.time() - start_time))
     if is_colab:
+        if args.atoken != "":
+            print(
+                "RUN git clone https://github.com/guydegnol/bulkhours_admin.git [%s, %.0fs]"
+                % (env_id, time.time() - start_time)
+            )
+            os.system(
+                f"cd {bulk_dir} && rm -rf bulkhours_admin 2> /dev/null && git clone https://{args.atoken}@github.com/guydegnol/bulkhours_admin.git --depth 1 > /dev/null 2>&1"
+            )
+        print(
+            "RUN git clone https://github.com/guydegnol/bulkhours.git [%s, %.0fs]" % (env_id, time.time() - start_time)
+        )
         os.system(
-            f"cd {bulk_dir} && rm -rf bulkhours 2> /dev/null && git clone https://github.com/guydegnol/bulkhours.git --depth 1 > /dev/null 2>&1"
+            f"cd {bulk_dir} && rm -rf bulkhours 2> /dev/null && git clone https://github.com/{args.token}@guydegnol/bulkhours.git --depth 1 > /dev/null 2>&1"
         )
 
     if args.packages != "":
