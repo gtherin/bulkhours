@@ -15,24 +15,24 @@ datasets = {
         httplink="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv",
         source="""Coronavirus Pandemic (COVID-19) data
 - Direct source: https://ourworldindata.org/coronavirus,
-- Info on the columns: https://github.com/owid/covid-19-data/tree/master/public/data/
 - Data source: https://covid19.who.int/data
+- Info columns: https://github.com/owid/covid-19-data/tree/master/public/data/
 """,
     ),
     "covid": dict(
         httplink="https://covid.ourworldindata.org/data/owid-covid-data.csv",
         source="""Coronavirus Pandemic (COVID-19) data
 - Direct source: https://ourworldindata.org/coronavirus,
-- Info on the columns: https://github.com/owid/covid-19-data/tree/master/public/data/
 - Data source: https://covid19.who.int/data
+- Info columns: https://github.com/owid/covid-19-data/tree/master/public/data/
 """,
     ),
     "poverty": dict(
         httplink="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
         source="""World Bank Poverty and Inequality Platform
 - Direct source: https://ourworldindata.org/poverty
-- Info on the columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
 - Data source: https://pip.worldbank.org/
+- Info columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
         """,
     ),
     "supercomputers": dict(

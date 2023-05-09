@@ -147,6 +147,7 @@ def get_sunspots(credit=True, **kwargs):
             """Quarterly sunspots data (ssn)
 - Direct source: https://www.swpc.noaa.gov/products/solar-cycle-progression
 - Data source: https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
+- Info columns: https://en.wikipedia.org/wiki/Wolf_number
         """
         )
 
