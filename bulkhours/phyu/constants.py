@@ -290,26 +290,32 @@ class Units:
             return self.acsts[name].v
         return np.nan
 
-    def help(self, label=None, size="+2", code=True, markdown=True, latex=False) -> None:
+    def help(self, label=None, size=2, code=True, markdown=True, latex=False) -> None:
+        if type(size) == str:
+            size = int(size)
+
+        tsize = f"+{size}" if size > 0 else str(size)
+
         if not label:
             print(self.csts.keys())
         elif "," in label:
             label = label.split(",")
             for k, v in self.csts.items():
                 if k in label:
-                    v.help(size=size, code=code, markdown=markdown, latex=latex)
+                    v.help(size=tsize, code=code, markdown=markdown, latex=latex)
         elif type(label) == list:
             for k, v in self.csts.items():
                 if k in label:
-                    v.help(size=size, code=code, markdown=markdown, latex=latex)
+                    v.help(size=tsize, code=code, markdown=markdown, latex=latex)
         elif label in self.csts:
-            self.csts[label].help(size=size, code=code, markdown=markdown, latex=latex)
+            self.csts[label].help(size=tsize, code=code, markdown=markdown, latex=latex)
         else:
-            md(label, prefix="")
-            print(f"from bulkhours import constants as consts")
+            md(label, prefix="", size=f"+{size+1}" if size > 0 else str(size - 1))
+            if code:
+                print(f"from bulkhours import constants as consts")
             for k, v in self.csts.items():
                 if label.lower() in k.lower() or label.lower() in ["all"]:
-                    v.help(size=size, code=code, markdown=markdown, latex=latex)
+                    v.help(size=tsize, code=code, markdown=markdown, latex=latex)
 
     def DataFrame(self, index=[], columns=[]) -> pd.DataFrame:
         if index[0] in self.csts2d:

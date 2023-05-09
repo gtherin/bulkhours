@@ -11,6 +11,9 @@ def clean_columns(df, data_info):
         for c in data_info["drop"]:
             del df[c]
 
+    if "is_test" in data_info:
+        df["is_test"] = df.index >= df.index[data_info["is_test"]]
+
     return df
 
 
