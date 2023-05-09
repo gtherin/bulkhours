@@ -51,9 +51,6 @@ def init_env(
 
     if env in ["rl", "reinforcement learning"]:
         rl.init_env(verbose=verbose)
-    elif env in ["econometrics", "ecox"]:
-        # runrealcmd("pip install yfinance  # Data loader for finance data", verbose=verbose)
-        pass
     set_style()
     vfile = os.path.abspath(os.path.dirname(__file__)) + "/__version__.py"
     version = open(vfile).readline().split('"')[1]
@@ -136,6 +133,13 @@ def init(verbose=False):
     kwargs = get_config()
     if len(kwargs) > 1:
         init_env(verbose=verbose, **kwargs)
+
+
+def api_key():
+    kwargs = get_config()
+    api_key = kwargs.get("api_key", None)
+    if ":sk-" in api_key:
+        return api_key.split(":sk-")[1]
 
 
 init()
