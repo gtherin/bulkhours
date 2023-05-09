@@ -37,7 +37,10 @@ datasets = {
     ),
     "supercomputers": dict(
         httplink="https://raw.githubusercontent.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv",
-        source="https://ourworldindata.org/grapher/supercomputer-power-flops",
+        source="""Computational capacity of the fastest supercomputers
+- Direct source: https://ourworldindata.org/grapher/supercomputer-power-flops
+- Info columns: The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year.
+        """,
     ),
     "scipy_distributions_list": dict(drop=get_scipy_distributions_list),
     "macro": dict(
