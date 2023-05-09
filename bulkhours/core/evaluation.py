@@ -2,7 +2,7 @@ from IPython.core.magic import Magics, cell_magic, magics_class, line_cell_magic
 import ipywidgets
 from .logins import *
 from . import firebase
-from . import install
+from . import parser
 
 from . import widgets
 from . import gpt
@@ -27,13 +27,13 @@ class Evaluation(Magics):
     @line_cell_magic
     @needs_local_scope
     def message_cell_id(self, line, cell="", local_ns=None):
-        self.cinfo = install.get_argparser(line, cell)
+        self.cinfo = parser.get_argparser(line, cell)
         firebase.send_answer_to_corrector(self.cinfo, **{self.cinfo.user: cell})
 
     @line_cell_magic
     @needs_local_scope
     def update_cell_id(self, line, cell="", local_ns=None):
-        self.cinfo = install.get_argparser(line, cell)
+        self.cinfo = parser.get_argparser(line, cell)
         if not self.cinfo:
             return
 
@@ -46,7 +46,7 @@ class Evaluation(Magics):
     @line_cell_magic
     @needs_local_scope
     def evaluation_cell_id(self, line, cell="", local_ns=None):
-        self.cinfo = install.get_argparser(line, cell)
+        self.cinfo = parser.get_argparser(line, cell)
         if not self.cinfo:
             return
 
