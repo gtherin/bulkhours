@@ -11,6 +11,7 @@ from .core.gpt import ask_chat_gpt  # noqa
 from .core.widgets import colors as c  # noqa
 from .core import widgets  # noqa
 from .core.puppets import *  # noqa
+from .core.help import data_help  # noqa
 
 
 from . import rl  # noqa
