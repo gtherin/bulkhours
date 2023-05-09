@@ -7,8 +7,8 @@ def get_main(credit=True, **kwargs):
     if credit:
         print(
             """Data on CO2 and Greenhouse Gas Emissions by Our World in Data
-- https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv
 - Data source: https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv
+- Info columns: https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv
         """
         )
 

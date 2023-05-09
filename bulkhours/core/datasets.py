@@ -14,7 +14,7 @@ datasets = {
     "vaccinations": dict(
         httplink="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv",
         source="""Coronavirus Pandemic (COVID-19) data
-- Direct source: https://ourworldindata.org/coronavirus,
+- Direct source: https://ourworldindata.org/coronavirus
 - Data source: https://covid19.who.int/data
 - Info columns: https://github.com/owid/covid-19-data/tree/master/public/data/
 """,
@@ -22,7 +22,7 @@ datasets = {
     "covid": dict(
         httplink="https://covid.ourworldindata.org/data/owid-covid-data.csv",
         source="""Coronavirus Pandemic (COVID-19) data
-- Direct source: https://ourworldindata.org/coronavirus,
+- Direct source: https://ourworldindata.org/coronavirus
 - Data source: https://covid19.who.int/data
 - Info columns: https://github.com/owid/covid-19-data/tree/master/public/data/
 """,
@@ -39,7 +39,7 @@ datasets = {
         httplink="https://raw.githubusercontent.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv",
         source="""Computational capacity of the fastest supercomputers
 - Direct source: https://ourworldindata.org/grapher/supercomputer-power-flops
-- Info columns: The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year.
+- Info columns: The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year
         """,
     ),
     "scipy_distributions_list": dict(drop=get_scipy_distributions_list),
@@ -60,7 +60,7 @@ datasets = {
         source="""Life expectancy versus GDP/capita per country
 - Direct source: https://ourworldindata.org/grapher/life-expectancy-vs-gdp-per-capita
 - Data source: Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)
-- GDP info: GDP per capita is measured in 2011 international dollars, which corrects for inflation and cross-country price differences
+- Info columns: GDP per capita is measured in 2011 international dollars, which corrects for inflation and cross-country price differences
         """,
         filter=clean_life_expectancy_vs_gdp_2018,
         rename=[
