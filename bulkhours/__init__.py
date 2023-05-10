@@ -72,7 +72,7 @@ def init_env(
     versions = open(vfile).readlines()
     version, aversion, mversion = [versions[i].split('"')[1] for i in range(3)]
 
-    info = f"Import BULK Helper cOURSe (version='{version}', user='{student_login}', nid='{nid}'"
+    info = f"Import BULK Helper cOURSe (user='{student_login}', id='{nid}', \x1b[0mversion='{version}'"
     if env is not None:
         info += f", env='{env}'"
 
