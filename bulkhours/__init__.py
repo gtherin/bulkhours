@@ -13,7 +13,7 @@ from .core.timeit import timeit  # noqa
 from .core import geo  # noqa
 from .core.geo import geo_plot_country  # noqa
 from .core import runrealcmd  # noqa
-from .core.gpt import ask_chat_gpt  # noqa
+from .core.gpt import ask_chat_gpt, ask_dall_e  # noqa
 from .core.widgets import colors as c  # noqa
 from .core import widgets  # noqa
 from .core.puppets import *  # noqa

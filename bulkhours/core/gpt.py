@@ -27,7 +27,7 @@ Vous devez creer une clé d'API
         )
         return
 
-    openai.api_key = api_key  # Have your own to run this cell !!!
+    openai.api_key = api_key
     print("")
 
     if model in ["image"]:
@@ -60,3 +60,7 @@ Vous devez creer une clé d'API
                 IPython.display.display(IPython.display.Markdown(c))
             else:
                 IPython.display.display(IPython.display.Code(c))
+
+
+def ask_dall_e(question="", temperature=0.5, size="256x256"):
+    ask_chat_gpt(question, model="image", size=size, temperature=temperature, is_code=False)
