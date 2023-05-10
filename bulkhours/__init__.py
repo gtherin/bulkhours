@@ -77,7 +77,7 @@ def init_env(
         info += f", env='{env}'"
 
     if atoken != DEFAULT_TOKEN:
-        info = f"\x1b[31m{info},\x1b[0m \x1b[36mpversion='{mversion}'\x1b[0m, \x1b[31maversion='{aversion}'\x1b[0m⚠️"
+        info = f"\x1b[31m{info},\x1b[0m \x1b[36mpversion='{mversion}'\x1b[0m🚀, \x1b[31maversion='{aversion}'\x1b[0m⚠️"
     elif mtoken != DEFAULT_TOKEN:
         info = f"{info}, \x1b[36mpversion='{mversion}'\x1b[0m🚀"
     else:
