@@ -81,7 +81,7 @@ def init_env(
     elif mtoken != DEFAULT_TOKEN:
         info = f"{info}, \x1b[36mpversion='{mversion}'\x1b[0m🚀"
     else:
-        info = f"{info}, \x1b[36m. To activate the 🚀 mode, please contact the admin of the package\x1b[0m"
+        info = f"{info}, \x1b[36m. To activate the 🚀 mode, please contact bulkhours@guydegnol.net\x1b[0m"
 
     print(f"{info})")
 
