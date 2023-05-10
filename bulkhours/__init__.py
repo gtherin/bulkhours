@@ -59,7 +59,16 @@ def init_env(login=None, pass_code=None, env=None, verbose=False, in_french=Fals
     vfile = os.path.abspath(os.path.dirname(__file__)) + "/__version__.py"
     version = open(vfile).readline().split('"')[1]
 
-    print(f"Import BULK Helper cOURSe (version='{version}', user='{student_login}', nid='{nid}', env='{env}')")
+    info = f"Import BULK Helper cOURSe (version='{version}', user='{student_login}', nid='{nid}'"
+    if env is not None:
+        info += f", env='{env}'"
+
+    if bulkhours_premium is not None:
+        from bulkhours_premium.__version__ import __version__ as pversion
+
+        info = f"\x1b[36m{info}, pversion='{pversion}')\x1b[0m🚀"
+
+    print(f"{info})")
 
 
 def get_color(discipline):
