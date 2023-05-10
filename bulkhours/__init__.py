@@ -1,5 +1,11 @@
 import os
 
+try:
+    import bulkhours_premium
+except ImportError:
+    print("bulkhours_premium not installed")
+
+
 from .core.data import get_core_data, get_image  # noqa
 from .core.evaluation import Evaluation, set_up_student  # noqa
 from .core.logins import clean_student_name  # noqa
@@ -42,9 +48,7 @@ def load_extra_magics(verbose=True, nid=None, in_french=False, api_key=None):
         print(f"ENV BULK Helper cOURSe (version={__version__.__version__})")
 
 
-def init_env(
-    login=None, pass_code=None, env=None, verbose=False, in_french=False, nid=None, course_version=None, api_key=None
-):
+def init_env(login=None, pass_code=None, env=None, verbose=False, in_french=False, nid=None, api_key=None):
     student_login = set_up_student(login, pass_code=pass_code)
 
     load_extra_magics(verbose=False, nid=nid, in_french=in_french, api_key=api_key)
@@ -55,7 +59,7 @@ def init_env(
     vfile = os.path.abspath(os.path.dirname(__file__)) + "/__version__.py"
     version = open(vfile).readline().split('"')[1]
 
-    print(f"Import BULK Helper cOURSe (version={version}, user= {student_login}, env={env})")
+    print(f"Import BULK Helper cOURSe (version='{version}', user='{student_login}', nid='{nid}', env='{env}')")
 
 
 def get_color(discipline):
@@ -133,13 +137,6 @@ def init(verbose=False):
     kwargs = get_config()
     if len(kwargs) > 1:
         init_env(verbose=verbose, **kwargs)
-
-
-def api_key():
-    kwargs = get_config()
-    api_key = kwargs.get("api_key", None)
-    if ":sk-" in api_key:
-        return "sk-" + api_key.split(":sk-")[1]
 
 
 init()
