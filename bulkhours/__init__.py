@@ -48,7 +48,18 @@ def load_extra_magics(verbose=True, nid=None, in_french=False, api_key=None):
         print(f"ENV BULK Helper cOURSe (version={__version__.__version__})")
 
 
-def init_env(login=None, pass_code=None, env=None, verbose=False, in_french=False, nid=None, api_key=None):
+def init_env(
+    login=None,
+    pass_code=None,
+    env=None,
+    verbose=False,
+    in_french=False,
+    nid=None,
+    api_key=None,
+    promo="",
+    atoken="",
+    ptoken="",
+):
     student_login = set_up_student(login, pass_code=pass_code)
 
     load_extra_magics(verbose=False, nid=nid, in_french=in_french, api_key=api_key)
@@ -57,18 +68,16 @@ def init_env(login=None, pass_code=None, env=None, verbose=False, in_french=Fals
         rl.init_env(verbose=verbose)
     set_style()
     vfile = os.path.abspath(os.path.dirname(__file__)) + "/__version__.py"
-    print(open(vfile).readline().split('"'))
-    version = open(vfile).readline().split('"')[1]
+    versions = open(vfile).readlines()
+    version, aversion, pversion = [versions[i].split('"')[1] for i in range(3)]
 
     info = f"Import BULK Helper cOURSe (version='{version}', user='{student_login}', nid='{nid}'"
     if env is not None:
         info += f", env='{env}'"
 
-    if bulkhours_premium is not None:
-        print(dir(bulkhours_premium))
-        # from bulkhours_premium.__version__ import __version__ as pversion
-        pversion = "1.0"
-
+    if atoken != "":
+        info = f"\x1b[31m{info},\x1b[0m \x1b[36mpversion='{pversion}'\x1b[0m, \x1b[31maversion='{aversion}'\x1b[0m⚠️"
+    elif ptoken != "":
         info = f"{info}, \x1b[36mpversion='{pversion}'\x1b[0m🚀"
 
     print(f"{info})")
