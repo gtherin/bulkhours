@@ -1,17 +1,21 @@
 from .data import *  # noqa
 from .evaluation import *  # noqa
 from .widgets.buttons import *  # noqa
+from . import tools
 
 
 def ask_chat_gpt(
-    question="", api_key="YOURKEY", model="gpt-3.5-turbo", temperature=0.5, is_code=False, size="256x256"
+    question="", api_key="YOUR_KEY", model="gpt-3.5-turbo", temperature=0.5, is_code=False, size="256x256"
 ):
     """
-    temperature Conservateur(0) => Creatif(1)
+    temperature Conservative(0) => Creative(1)
     """
+
+    api_key = tools.get_value("api_key")
+
     import openai
 
-    if api_key == "YOURKEY":
+    if api_key == "YOUR_KEY":
         IPython.display.display(
             IPython.display.Markdown(
                 """## Interroger Chat-GPT

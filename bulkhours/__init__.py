@@ -146,10 +146,12 @@ def geo_plot(data=None, timeopt="last", **kwargs):
     return geo.geo_plot(data, timeopt=timeopt, **kwargs)
 
 
-def get_config():
+def get_config(directory=None):
     import json
 
-    jsonfile = os.path.dirname(__file__) + "/../.safe"
+    directory = os.path.dirname(__file__) + "/../" if directory is None else directory
+
+    jsonfile = directory + "/.safe"
     if os.path.exists(jsonfile):
         with open(jsonfile) as json_file:
             return json.load(json_file)
