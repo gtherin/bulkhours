@@ -57,6 +57,7 @@ def init_env(login=None, pass_code=None, env=None, verbose=False, in_french=Fals
         rl.init_env(verbose=verbose)
     set_style()
     vfile = os.path.abspath(os.path.dirname(__file__)) + "/__version__.py"
+    print(open(vfile).readline().split('"'))
     version = open(vfile).readline().split('"')[1]
 
     info = f"Import BULK Helper cOURSe (version='{version}', user='{student_login}', nid='{nid}'"
