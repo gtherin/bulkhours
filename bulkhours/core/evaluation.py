@@ -52,7 +52,7 @@ class Evaluation(Magics):
 
         output = ipywidgets.Output()
         if self.cinfo.user == "solution":
-            widgets.set_style(output, "sol_background")
+            widgets.c.set_style(output, "sol_background")
 
         bwidget = widgets.create_widget(self.cinfo, cell, self.in_french, self.shell)
         abuttons = widgets.get_buttons_list(bwidget.get_label_widget(), in_french=self.in_french, user=self.cinfo.user)
