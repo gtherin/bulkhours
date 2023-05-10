@@ -64,9 +64,11 @@ def init_env(login=None, pass_code=None, env=None, verbose=False, in_french=Fals
         info += f", env='{env}'"
 
     if bulkhours_premium is not None:
-        from bulkhours_premium.__version__ import __version__ as pversion
+        print(dir(bulkhours_premium))
+        # from bulkhours_premium.__version__ import __version__ as pversion
+        pversion = "1.0"
 
-        info = f"\x1b[36m{info}, pversion='{pversion}')\x1b[0m🚀"
+        info = f"{info}, \x1b[36mpversion='{pversion}'\x1b[0m🚀"
 
     print(f"{info})")
 
