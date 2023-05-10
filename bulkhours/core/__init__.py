@@ -30,8 +30,18 @@ def git_push(argv=sys.argv[1:]):
     version = (oversion := open(vfile).readline().split('"')[1]).split(".")
     nversion = f"{version[0]}.{version[1]}.{int(version[2])+1}"
 
+    avfile = os.path.abspath(os.path.dirname(__file__)) + "/../../../bulkhours_admin/bulkhours_admin/__version__.py"
+    aversion = (open(avfile).readline().split('"')[1]).split(".")
+
+    pvfile = (
+        os.path.abspath(os.path.dirname(__file__)) + "/../../../bulkhours_premium/bulkhours_premium/__version__.py"
+    )
+    pversion = (open(pvfile).readline().split('"')[1]).split(".")
+
     with open(vfile, "w") as the_file:
         the_file.write(f"""__version__ = "{nversion}"\n""")
+        the_file.write(f"""__aversion__ = "{aversion}"\n""")
+        the_file.write(f"""__pversion__ = "{pversion}"\n""")
 
     print(f"Update {oversion} => {nversion}")
     with open("git_push.sh", "w") as f:
