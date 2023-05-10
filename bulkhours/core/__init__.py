@@ -43,13 +43,13 @@ def git_push(argv=sys.argv[1:]):
     with open(vfile, "w") as the_file:
         the_file.write(f"""__version__ = "{nversion}"\n""")
         the_file.write(f"""__aversion__ = "{naversion}"\n""")
-        the_file.write(f"""__pversion__ = "{npversion}"\n""")
+        the_file.write(f"""__mversion__ = "{npversion}"\n""")
 
     with open(avfile, "w") as the_file:
-        the_file.write(f"""__aversion__ = "{naversion}"\n""")
+        the_file.write(f"""__version__ = "{naversion}"\n""")
 
     with open(pvfile, "w") as the_file:
-        the_file.write(f"""__pversion__ = "{npversion}"\n""")
+        the_file.write(f"""__version__ = "{npversion}"\n""")
 
     print(f"Update {oversion} => {nversion}")
     with open("git_push.sh", "w") as f:
