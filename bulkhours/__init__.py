@@ -32,6 +32,7 @@ from .phyu.formulas import formulas  # noqa
 from .ecox.trading import *  # noqa
 
 econometrics = ecox  # noqa
+DEFAULT_TOKEN = "NO_TOKEN"
 
 
 def load_extra_magics(verbose=True, nid=None, in_french=False, api_key=None):
@@ -55,10 +56,10 @@ def init_env(
     verbose=False,
     in_french=False,
     nid=None,
-    api_key=None,
-    promo="",
-    atoken="",
-    mtoken="",
+    promo=None,
+    api_key=DEFAULT_TOKEN,
+    atoken=DEFAULT_TOKEN,
+    mtoken=DEFAULT_TOKEN,
 ):
     student_login = set_up_student(login, pass_code=pass_code)
 
@@ -75,9 +76,9 @@ def init_env(
     if env is not None:
         info += f", env='{env}'"
 
-    if atoken != "":
+    if atoken != DEFAULT_TOKEN:
         info = f"\x1b[31m{info},\x1b[0m \x1b[36mpversion='{mversion}'\x1b[0m, \x1b[31maversion='{aversion}'\x1b[0m⚠️"
-    elif mtoken != "":
+    elif mtoken != DEFAULT_TOKEN:
         info = f"{info}, \x1b[36mpversion='{mversion}'\x1b[0m🚀"
 
     print(f"{info})")
