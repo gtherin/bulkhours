@@ -14,20 +14,19 @@ class EmptyEvaluation(Magics):
     def evaluation_cell_id(self, line, cell="", local_ns=None):
         import IPython
 
-        IPython.display.display(
-            IPython.display.Markdown(
-                """
+        tooltip = """
 The ```evaluation_cell_id``` functionalities are not available anymore. 
 You can remove its call line from the cell (probably the first line) or
 contact bulkhours@guydegnol.net to have a new token to reactivate it"""
-            )
-        )
+        IPython.display.display(IPython.display.Markdown(tooltip))
+        d = "Evaluation non disponible" if self.in_french else "Evaluation not available"
         IPython.display.display(
             ipywidgets.Button(
-                description="Evaluation not available",
-                button_style="success",
+                description=d,
+                button_style="warning",
                 layout=ipywidgets.Layout(width="max-content"),
-                disabled=True
+                disabled=True,
+                tooltip=tooltip,
             )
         )
 
