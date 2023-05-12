@@ -6,10 +6,9 @@ from .core.tools import is_premium
 if 1:
     try:
         import bulkhours_premium
-        from bulkhours_premium.core.evaluation import Evaluation, set_up_student  # noqa
+        from bulkhours_premium import Evaluation, set_up_student
     except ImportError:
         bulkhours_premium = None
-        from .core.evaluation import Evaluation, set_up_student  # noqa
 else:
     from .core.evaluation import Evaluation, set_up_student  # noqa
 
