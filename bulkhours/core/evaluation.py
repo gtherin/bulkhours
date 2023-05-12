@@ -46,7 +46,22 @@ class Evaluation(Magics):
     @line_cell_magic
     @needs_local_scope
     def evaluation_cell_id(self, line, cell="", local_ns=None):
+        if 1:  # TODO: PREMIUM_ACTIVATION
+            import IPython
+
+            IPython.display.display(
+                IPython.display.Markdown(
+                    """
+The ```evaluation_cell_id``` functionalities are not available anymore. 
+You can remove its call line from the cell (probably the first line) or
+contact bulkhours@guydegnol.net to have a new token to reactivate it"""
+                )
+            )
+            self.shell.run_cell(cell)
+            return
+
         self.cinfo = parser.get_argparser(line, cell)
+
         if not self.cinfo:
             return
 
