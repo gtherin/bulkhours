@@ -26,9 +26,8 @@ contact bulkhours@guydegnol.net to have a new token to reactivate it"""
             ipywidgets.Button(
                 description="Evaluation not available",
                 button_style="success",
-                tooltip="Evaluation not available",
                 layout=ipywidgets.Layout(width="max-content"),
-                disabled=True,
+                disabled=True
             )
         )
 
