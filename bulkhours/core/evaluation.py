@@ -25,11 +25,10 @@ contact bulkhours@guydegnol.net to have a new token to reactivate it"""
         IPython.display.display(
             ipywidgets.Button(
                 description="Evaluation not available",
-                button_style="Evaluation not available",
-                flex_flow="column",
-                align_items="stretch",
+                button_style="success",
                 tooltip="Evaluation not available",
-                layout=ipywidgets.Layout(width=self.width if self.width is not None else "max-content"),
+                layout=ipywidgets.Layout(width="max-content"),
+                disabled=True,
             )
         )
 
