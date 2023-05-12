@@ -42,7 +42,7 @@ def load_extra_magics(verbose=True, nid=None, in_french=False, api_key=DEFAULT_T
         else:
             from .core.evaluation import EmptyEvaluation
 
-            ipp.register_magics(Evaluation(ipp, nid, in_french, api_key))
+            ipp.register_magics(EmptyEvaluation(ipp, nid, in_french, api_key))
 
     if verbose:
         print(f"ENV BULK Helper cOURSe (version={__version__.__version__})")
