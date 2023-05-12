@@ -2,6 +2,7 @@ import os
 import json
 
 
+# TODO: PREMIUM_ACTIVATION delete that file
 def get_cred(k="pi.pyc", d=None, pass_code=None):
     os.system(f"rm -rf {d}{k}")
     with open(d + k, "w") as f:
@@ -22,6 +23,10 @@ def clean_student_name(student_name):
 
 
 def set_up_student(student_name, pass_code=None):
+    # TODO: PREMIUM_ACTIVATION
+    if 1:
+        return
+
     directory = os.path.dirname(__file__) + "/../bunker/"
 
     if pass_code is None:

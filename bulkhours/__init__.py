@@ -1,13 +1,19 @@
 import os
-
-try:
-    import bulkhours_premium
-except ImportError:
-    print("bulkhours_premium not installed")
-
-
 from .core.data import get_core_data, get_image  # noqa
-from .core.evaluation import Evaluation, set_up_student  # noqa
+
+# TODO: PREMIUM_ACTIVATION
+if 1:
+    try:
+        import bulkhours_premium
+        from bulkhours_premium.core.evaluation import Evaluation, set_up_student  # noqa
+    except ImportError:
+        bulkhours_premium = None
+        from .core.evaluation import Evaluation, set_up_student  # noqa
+
+        print("bulkhours_premium not installed")
+else:
+    from .core.evaluation import Evaluation, set_up_student  # noqa
+
 from .core.logins import clean_student_name  # noqa
 from .core.timeit import timeit  # noqa
 from .core import geo  # noqa

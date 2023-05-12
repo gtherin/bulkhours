@@ -13,3 +13,14 @@ def get_config():
 
 def get_value(key):
     return get_config().get(key)
+
+
+def is_premium(verbose=False):
+    try:
+        import bulkhours_premium
+
+        return True
+    except ImportError:
+        if verbose:
+            print("bulkhours_premium not installed")
+        return False
