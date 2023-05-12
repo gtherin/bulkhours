@@ -3,9 +3,9 @@ import ipywidgets
 
 
 @magics_class
-class Evaluation(Magics):
+class EmptyEvaluation(Magics):
     def __init__(self, shell, nid, in_french, api_key):
-        super(Evaluation, self).__init__(shell)
+        super(EmptyEvaluation, self).__init__(shell)
         self.nid = nid
         self.in_french = in_french
 

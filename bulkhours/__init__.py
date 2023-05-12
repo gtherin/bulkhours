@@ -1,18 +1,6 @@
 import os
 from .core.data import get_core_data, get_image  # noqa
 from .core.tools import is_premium
-
-# TODO: PREMIUM_ACTIVATION
-if 1:
-    try:
-        import bulkhours_premium
-        from bulkhours_premium import Evaluation, set_up_student
-    except ImportError:
-        bulkhours_premium = None
-else:
-    from .core.evaluation import Evaluation, set_up_student  # noqa
-
-from .core.logins import clean_student_name  # noqa
 from .core.timeit import timeit  # noqa
 from .core import geo  # noqa
 from .core.geo import geo_plot_country  # noqa
@@ -47,7 +35,14 @@ def load_extra_magics(verbose=True, nid=None, in_french=False, api_key=None):
     ipp = IPython.get_ipython()
     if ipp:
         ipp.register_magics(CCPPlugin(ipp))
-        ipp.register_magics(Evaluation(ipp, nid, in_french, api_key))
+        if is_premium():
+            from bulkhours_premium import Evaluation, set_up_student
+
+            ipp.register_magics(Evaluation(ipp, nid, in_french, api_key))
+        else:
+            from .core.evaluation import EmptyEvaluation, set_up_student
+
+            ipp.register_magics(Evaluation(ipp, nid, in_french, api_key))
 
     if verbose:
         print(f"ENV BULK Helper cOURSe (version={__version__.__version__})")
@@ -68,7 +63,9 @@ def init_env(
     info = f"Import BULK Helper cOURSe ("
     print(is_premium())
 
-    if mtoken is None:
+    if mtoken is not None and is_premium():
+        from bulkhours_premium import set_up_student
+
         student_login = set_up_student(login, pass_code=pass_code)
         info += f"user='{student_login}', "
 
