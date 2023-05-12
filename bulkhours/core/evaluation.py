@@ -17,12 +17,12 @@ class EmptyEvaluation(Magics):
         tooltip = (
             """
 Les fonctionnalités 'evaluation_cell_id' ne sont plus disponibles😕.
-Vous pouvez supprimer son appel de la cellule (probablement la première ligne) ou
+Vous pouvez supprimer son appel de la cellule (pour enlever ce button) ou
 contacter bulkhours@guydegnol.net pour avoir un nouveau token pour reactiver le service🚀"""
             if self.in_french
             else """
 The 'evaluation_cell_id' functionalities are no more available😕. 
-You can remove its call line from the cell (probably the first line) or
+You can remove its call line from the cell (to remove that button) or
 contact bulkhours@guydegnol.net to have a new token to reactivate the service🚀"""
         )
 
