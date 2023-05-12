@@ -36,11 +36,11 @@ def load_extra_magics(verbose=True, nid=None, in_french=False, api_key=None):
     if ipp:
         ipp.register_magics(CCPPlugin(ipp))
         if is_premium():
-            from bulkhours_premium import Evaluation, set_up_student
+            from bulkhours_premium import Evaluation
 
             ipp.register_magics(Evaluation(ipp, nid, in_french, api_key))
         else:
-            from .core.evaluation import EmptyEvaluation, set_up_student
+            from .core.evaluation import EmptyEvaluation
 
             ipp.register_magics(Evaluation(ipp, nid, in_french, api_key))
 
@@ -63,7 +63,7 @@ def init_env(
     info = f"Import BULK Helper cOURSe ("
     print(is_premium())
 
-    if mtoken is not None and is_premium():
+    if mtoken != DEFAULT_TOKEN and is_premium():
         from bulkhours_premium import set_up_student
 
         student_login = set_up_student(login, pass_code=pass_code)
