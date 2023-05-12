@@ -14,11 +14,19 @@ class EmptyEvaluation(Magics):
     def evaluation_cell_id(self, line, cell="", local_ns=None):
         import IPython
 
-        tooltip = """
-The ```evaluation_cell_id``` functionalities are not available anymore. 
+        tooltip = (
+            """
+Les fonctionnalités ```evaluation_cell_id``` ne sont plus disponibles.
+Vous pouvez supprimer son appel de la cellule (probablement la première ligne) ou
+contacter bulkhours@guydegnol.net pour avoir un nouveau token pour reactiver le service🚀"""
+            if self.in_french
+            else """
+The ```evaluation_cell_id``` functionalities are no more available. 
 You can remove its call line from the cell (probably the first line) or
-contact bulkhours@guydegnol.net to have a new token to reactivate it"""
-        IPython.display.display(IPython.display.Markdown(tooltip))
+contact bulkhours@guydegnol.net to have a new token to reactivate the service🚀"""
+        )
+
+        # IPython.display.display(IPython.display.Markdown(tooltip))
         d = "Evaluation non disponible" if self.in_french else "Evaluation not available"
         IPython.display.display(
             ipywidgets.Button(
