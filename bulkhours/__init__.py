@@ -27,7 +27,7 @@ econometrics = ecox  # noqa
 DEFAULT_TOKEN = "NO_TOKEN"
 
 
-def load_extra_magics(verbose=True, nid=None, in_french=False, api_key=None):
+def load_extra_magics(verbose=True, nid=None, in_french=False, api_key=DEFAULT_TOKEN, mtoken=DEFAULT_TOKEN):
     from .hpc.compiler import CCPPlugin
     import IPython
     from . import __version__
@@ -35,7 +35,7 @@ def load_extra_magics(verbose=True, nid=None, in_french=False, api_key=None):
     ipp = IPython.get_ipython()
     if ipp:
         ipp.register_magics(CCPPlugin(ipp))
-        if is_premium():
+        if is_premium(mtoken):
             from bulkhours_premium import Evaluation
 
             ipp.register_magics(Evaluation(ipp, nid, in_french, api_key))
@@ -61,9 +61,9 @@ def init_env(
     mtoken=DEFAULT_TOKEN,
 ):
     info = f"Import BULK Helper cOURSe ("
-    print(is_premium())
+    print(is_premium(mtoken))
 
-    if mtoken != DEFAULT_TOKEN and is_premium():
+    if mtoken != DEFAULT_TOKEN and is_premium(mtoken):
         from bulkhours_premium import set_up_student
 
         student_login = set_up_student(login, pass_code=pass_code)
@@ -72,7 +72,7 @@ def init_env(
     if nid is None:
         info += f"id='{nid}', "
 
-    load_extra_magics(verbose=False, nid=nid, in_french=in_french, api_key=api_key)
+    load_extra_magics(verbose=False, nid=nid, in_french=in_french, api_key=api_key, mtoken=mtoken)
 
     if env in ["rl", "reinforcement learning"]:
         rl.init_env(verbose=verbose)
@@ -86,13 +86,13 @@ def init_env(
         info += f", env='{env}'"
 
     if atoken != DEFAULT_TOKEN:
-        info = f"\x1b[31m{info},\x1b[0m \x1b[36mpversion='{mversion}'\x1b[0m🚀, \x1b[31maversion='{aversion}'\x1b[0m⚠️"
+        info = f"\x1b[31m{info},\x1b[0m \x1b[36mpversion='{mversion}'\x1b[0m🚀, \x1b[31maversion='{aversion}'\x1b[0m⚠️)"
     elif mtoken != DEFAULT_TOKEN:
-        info = f"{info}, \x1b[36mpversion='{mversion}'\x1b[0m🚀"
+        info = f"{info}, \x1b[36mpversion='{mversion}'\x1b[0m🚀)"
     else:
-        info = f"{info}, \x1b[36m. To activate the 🚀 mode, please contact bulkhours@guydegnol.net\x1b[0m"
+        info = f"{info})\x1b[36m. To activate the 🚀 mode, please contact bulkhours@guydegnol.net\x1b[0m"
 
-    print(f"{info})")
+    print(f"{info}")
 
 
 def get_color(discipline):
