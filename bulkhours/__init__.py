@@ -59,7 +59,6 @@ def init_env(
     mtoken=DEFAULT_TOKEN,
 ):
     info = f"Import BULK Helper cOURSe ("
-    print(is_premium(mtoken))
 
     if mtoken != DEFAULT_TOKEN and is_premium(mtoken):
         from bulkhours_premium import set_up_student
