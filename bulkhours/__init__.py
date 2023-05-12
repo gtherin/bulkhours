@@ -1,5 +1,6 @@
 import os
 from .core.data import get_core_data, get_image  # noqa
+from .core.tools import is_premium
 
 # TODO: PREMIUM_ACTIVATION
 if 1:
@@ -9,8 +10,6 @@ if 1:
     except ImportError:
         bulkhours_premium = None
         from .core.evaluation import Evaluation, set_up_student  # noqa
-
-        print("bulkhours_premium not installed")
 else:
     from .core.evaluation import Evaluation, set_up_student  # noqa
 
@@ -67,7 +66,15 @@ def init_env(
     atoken=DEFAULT_TOKEN,
     mtoken=DEFAULT_TOKEN,
 ):
-    student_login = set_up_student(login, pass_code=pass_code)
+    info = f"Import BULK Helper cOURSe ("
+    print(is_premium())
+
+    if mtoken is None:
+        student_login = set_up_student(login, pass_code=pass_code)
+        info += f"user='{student_login}', "
+
+    if nid is None:
+        info += f"id='{nid}', "
 
     load_extra_magics(verbose=False, nid=nid, in_french=in_french, api_key=api_key)
 
@@ -78,7 +85,7 @@ def init_env(
     versions = open(vfile).readlines()
     version, aversion, mversion = [versions[i].split('"')[1] for i in range(3)]
 
-    info = f"Import BULK Helper cOURSe (user='{student_login}', id='{nid}', \x1b[0mversion='{version}'"
+    info += f"\x1b[0mversion='{version}'"
     if env is not None:
         info += f", env='{env}'"
 
