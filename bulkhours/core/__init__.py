@@ -4,9 +4,6 @@ import argparse
 import subprocess
 
 from .data import *  # noqa
-from .evaluation import *  # noqa
-
-from .widgets.tools import md  # noqa
 
 
 def runrealcmd(command, verbose=True):
@@ -14,7 +11,8 @@ def runrealcmd(command, verbose=True):
     stdout, stderr = subprocess.PIPE, subprocess.STDOUT
     stdout, stderr = logfile, logfile
     process = subprocess.Popen(command, stdout=stdout, shell=True, stderr=stderr, bufsize=1, close_fds=True)
-    print(f"RUN {command}")
+    if verbose:
+        print(f"RUN {command}")
     process.wait()
 
 
