@@ -6,7 +6,7 @@ from .core import geo  # noqa
 from .core.geo import geo_plot_country  # noqa
 from .core import runrealcmd  # noqa
 from .core.gpt import ask_chat_gpt, ask_dall_e  # noqa
-from .core.widgets import colors as c  # noqa
+from .core import colors as c  # noqa
 from .core.help import data_help  # noqa
 
 
@@ -38,9 +38,9 @@ def load_extra_magics(verbose=True, nid=None, in_french=False, api_key=DEFAULT_T
 
             ipp.register_magics(Evaluation(ipp, nid, in_french, api_key))
         else:
-            from .core.evaluation import EmptyEvaluation
+            from .core.premium_mock import MockEvaluation
 
-            ipp.register_magics(EmptyEvaluation(ipp, nid, in_french, api_key))
+            ipp.register_magics(MockEvaluation(ipp, nid, in_french, api_key))
 
     if verbose:
         print(f"ENV BULK Helper cOURSe (version={__version__.__version__})")

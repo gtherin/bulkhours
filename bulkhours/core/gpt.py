@@ -1,6 +1,6 @@
 import IPython
 from .data import *  # noqa
-from .evaluation import *  # noqa
+from .premium_mock import *  # noqa
 
 # from .widgets.buttons import *  # noqa
 from . import tools
