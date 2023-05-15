@@ -4,6 +4,7 @@ import argparse
 import subprocess
 
 from .data import *  # noqa
+from .tools import md  # noqa
 
 
 def runrealcmd(command, verbose=True):
