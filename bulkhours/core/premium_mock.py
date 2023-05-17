@@ -1,4 +1,4 @@
-from IPython.core.magic import Magics, cell_magic, magics_class, line_cell_magic, needs_local_scope
+from IPython.core.magic import Magics, magics_class, line_cell_magic, needs_local_scope
 import ipywidgets
 
 
