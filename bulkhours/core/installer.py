@@ -75,6 +75,25 @@ def get_install_parser(argv):
     return argv
 
 
+def install_pkg(pkg, is_colab, args, env_id, start_time):
+    if is_colab:
+        if f"{pkg}_token" in args.tokens and args.tokens[f"{pkg}_token"] != DEFAULT_TOKEN:
+            os.system(
+                f"cd {bulk_dir} && rm -rf bulkhours_{pkg} 2> /dev/null && git clone https://{args.tokens['{pkg}_token'].replace('/', '_')}@github.com/guydegnol/bulkhours_{pkg}.git --depth 1 > /dev/null 2>&1"
+            )
+    if os.path.exists(f"{bulk_dir}/bulkhours_{pkg}/"):
+        einfo = "🚀" if pkg != "admin" else "⚠️\x1b[41m\x1b[37mfor teachers only\x1b[0m"
+        print(
+            "\x1b[36mRUN git clone https://github.com/guydegnol/bulkhours_%s.git [%s, %.0fs]\x1b[0m%s"
+            % (pkg, env_id, time.time() - start_time, einfo)
+        )
+
+    else:
+        print(
+            f"RUN install bulkhours_{pkg}: installation failed 🚫. Check that your {pkg}_token is still valid (contact: bulkhours@guydegnol.net)"
+        )
+
+
 def main(argv=sys.argv[1:]):
     # Log datetime
     start_time = time.time()
@@ -97,34 +116,8 @@ def main(argv=sys.argv[1:]):
     # print("RUN install bulkhours [%s]" % stime.strftime("%H:%M:%S"))
 
     # Install main package
-    if is_colab:
-        if "admin_token" in args.tokens and args.tokens["admin_token"] != DEFAULT_TOKEN:
-            os.system(
-                f"cd {bulk_dir} && rm -rf bulkhours_admin 2> /dev/null && git clone https://{args.tokens['admin_token'].replace('/', '_')}@github.com/guydegnol/bulkhours_admin.git --depth 1 > /dev/null 2>&1"
-            )
-    if os.path.exists(f"{bulk_dir}/bulkhours_admin/"):
-        print(
-            "\x1b[31mRUN git clone https://github.com/guydegnol/bulkhours_admin.git [%s, %.0fs]\x1b[0m⚠️\x1b[41m\x1b[37mfor teachers only\x1b[0m"
-            % (env_id, time.time() - start_time)
-        )
-    else:
-        print(
-            "RUN install bulkhours_admin: installation failed 🚫. Check that your admin_token is still valid (contact: bulkhours@guydegnol.net)"
-        )
-
-        if "premium_token" in args.tokens and args.tokens["premium_token"] != DEFAULT_TOKEN:
-            os.system(
-                f"cd {bulk_dir} && rm -rf bulkhours_premium 2> /dev/null && git clone https://{args.tokens['premium_token'].replace('/', '_')}@github.com/guydegnol/bulkhours_premium.git --depth 1 > /dev/null 2>&1"
-            )
-    if not os.path.exists(f"{bulk_dir}/bulkhours_premium/"):
-        print(
-            "RUN install bulkhours_premium: installation failed 🚫. Check that your premium_token is still valid (contact: bulkhours@guydegnol.net)"
-        )
-    else:
-        print(
-            "\x1b[36mRUN git clone https://github.com/guydegnol/bulkhours_premium.git [%s, %.0fs]\x1b[0m🚀"
-            % (env_id, time.time() - start_time)
-        )
+    install_pkg("admin", is_colab, args, env_id, start_time)
+    install_pkg("premium", is_colab, args, env_id, start_time)
 
     if args.packages != "None":
         # Update pip
