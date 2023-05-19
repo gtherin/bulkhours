@@ -4,7 +4,37 @@ import sys
 import time
 import json
 
+import zlib
+from base64 import urlsafe_b64encode as b64e, urlsafe_b64decode as b64d
+
 DEFAULT_TOKEN = "NO_TOKEN"
+is_colab = os.path.exists("/content")
+
+# Set up the package directory
+bulk_dir = "/content" if is_colab else "/home/guydegnol/projects"
+
+
+def obscure(data) -> bytes:
+    return b64e(zlib.compress(data.encode("utf-8"), 9))
+
+
+def unobscure(obscured: bytes) -> bytes:
+    return zlib.decompress(b64d(obscured)).decode("utf-8")
+
+
+def get_tokens(promo_token):
+    _, nb_key = promo_token.split("::")
+
+    with open(f"{bulk_dir}/bulkhours/data/radian.png") as f:
+        TOKENS = f.readline()
+
+    for db_key in TOKENS.split("::"):
+        try:
+            tokens = unobscure(nb_key.encode("utf-8") + db_key.encode("utf-8"))
+            return tokens
+        except:
+            pass
+    return {}
 
 
 def get_opts(opt_key, opts):
@@ -36,53 +66,45 @@ def get_install_parser(argv):
     parser.add_argument("-t", "--tokens", default=DEFAULT_TOKEN)
 
     argv = get_opts("-u", argv)
-    api_key = argv[argv.index("-k") + 1] if "-k" in argv else DEFAULT_TOKEN
-    token = argv[argv.index("-t") + 1] if "-t" in argv else DEFAULT_TOKEN
-    atoken = argv[argv.index("-a") + 1] if "-a" in argv else DEFAULT_TOKEN
-    mtoken = argv[argv.index("-m") + 1] if "-m" in argv else DEFAULT_TOKEN
-    pass_code = argv[argv.index("-x") + 1] if "-x" in argv else DEFAULT_TOKEN
-
-    if "-k" in argv:
-        argv[argv.index("-k") + 1] = DEFAULT_TOKEN
-    if "-t" in argv:
-        argv[argv.index("-t") + 1] = DEFAULT_TOKEN
-    if "-a" in argv:
-        argv[argv.index("-a") + 1] = DEFAULT_TOKEN
-    if "-m" in argv:
-        argv[argv.index("-m") + 1] = DEFAULT_TOKEN
-    if "-x" in argv:
-        argv[argv.index("-x") + 1] = DEFAULT_TOKEN
+    api_key = argv[argv.index("-k") + 1].replace("-", "___") if "-k" in argv else DEFAULT_TOKEN
 
     argv = parser.parse_args(argv)
-    argv.api_key = "sk-" + api_key.split(":sk-")[-1] if ":sk-" in api_key else api_key
-    argv.pass_code = pass_code.split(":skar_")[-1]
-    argv.token = token.replace("/", ",,")
-    argv.atoken = atoken.replace("/", ",,")
-    argv.mtoken = mtoken.replace("/", ",,")
+    argv.api_key = api_key.replace("___", "-")
+    # argv.tokens = tokens  # .replace("/", ",,")
+    # argv.atoken = atoken.replace("/", ",,")
+    # argv.mtoken = mtoken.replace("/", ",,")
 
     return argv
 
 
 def main(argv=sys.argv[1:]):
-    args = get_install_parser(argv)
-
-    # Set up a colab flag
-    is_colab = os.path.exists("/content")
-
     # Log datetime
     start_time = time.time()
+    env_id = "colab" if is_colab else "mock"
+
+    if is_colab:
+        # Get the bulkhours basic package
+        print(
+            "RUN git clone https://github.com/guydegnol/bulkhours.git [%s, %.0fs]" % (env_id, time.time() - start_time)
+        )
+        os.system(
+            f"cd {bulk_dir} && rm -rf bulkhours 2> /dev/null && git clone https://github.com/guydegnol/bulkhours.git --depth 1 > /dev/null 2>&1"
+        )
+
+    if not os.path.exists(f"{bulk_dir}/bulkhours/"):
+        print("RUN install bulkhours: aborted 💥, package is no more available")
+        return
+
+    args = get_install_parser(argv)
+
     # stime = datetime.datetime.now() + datetime.timedelta(seconds=3600) if is_colab else datetime.datetime.now()
     # print("RUN install bulkhours [%s]" % stime.strftime("%H:%M:%S"))
 
-    # Set up the package directory
-    bulk_dir = "/content" if is_colab else "/home/guydegnol/projects"
-    env_id = "colab" if is_colab else "mock"
-
     # Install main package
     if is_colab:
-        if args.atoken != DEFAULT_TOKEN:
+        if args.tokens["atoken"] != DEFAULT_TOKEN:
             os.system(
-                f"cd {bulk_dir} && rm -rf bulkhours_admin 2> /dev/null && git clone https://{args.atoken}@github.com/guydegnol/bulkhours_admin.git --depth 1 > /dev/null 2>&1"
+                f"cd {bulk_dir} && rm -rf bulkhours_admin 2> /dev/null && git clone https://{args.tokens['atoken']}@github.com/guydegnol/bulkhours_admin.git --depth 1 > /dev/null 2>&1"
             )
             if os.path.exists(f"{bulk_dir}/bulkhours_admin/"):
                 print(
@@ -94,9 +116,9 @@ def main(argv=sys.argv[1:]):
                     "RUN install bulkhours_admin: installation failed 🚫. Check that your atoken is still valid (contact: bulkhours@guydegnol.net)"
                 )
 
-        if args.mtoken != DEFAULT_TOKEN:
+        if args.tokens["mtoken"] != DEFAULT_TOKEN:
             os.system(
-                f"cd {bulk_dir} && rm -rf bulkhours_premium 2> /dev/null && git clone https://{args.mtoken}@github.com/guydegnol/bulkhours_premium.git --depth 1 > /dev/null 2>&1"
+                f"cd {bulk_dir} && rm -rf bulkhours_premium 2> /dev/null && git clone https://{args.tokens['mtoken']}@github.com/guydegnol/bulkhours_premium.git --depth 1 > /dev/null 2>&1"
             )
             if not os.path.exists(f"{bulk_dir}/bulkhours_premium/"):
                 print(
@@ -107,17 +129,6 @@ def main(argv=sys.argv[1:]):
                     "\x1b[36mRUN git clone https://github.com/guydegnol/bulkhours_premium.git [%s, %.0fs]\x1b[0m🚀"
                     % (env_id, time.time() - start_time)
                 )
-
-        print(
-            "RUN git clone https://github.com/guydegnol/bulkhours.git [%s, %.0fs]" % (env_id, time.time() - start_time)
-        )
-        os.system(
-            f"cd {bulk_dir} && rm -rf bulkhours 2> /dev/null && git clone https://{args.token}@github.com/guydegnol/bulkhours.git --depth 1 > /dev/null 2>&1"
-        )
-
-    if not os.path.exists(f"{bulk_dir}/bulkhours/"):
-        print("RUN install bulkhours: aborted 💥, package is no more available")
-        return
 
     if args.packages != "":
         # Update pip
@@ -136,17 +147,9 @@ def main(argv=sys.argv[1:]):
         print("\x1b[0m")
 
     # Dump env variables
-    data = {
-        "login": args.user,
-        "pass_code": args.pass_code,
-        "atoken": args.atoken,
-        "mtoken": args.mtoken,
-        "promo": args.promo,
-        "env": args.env_id,
-        "nid": args.id,
-        "in_french": args.in_french,
-        "api_key": args.api_key,
-    }
+    data = {"login": args.user, "env": args.env_id, "nid": args.id, "in_french": args.in_french}
+    data.update(args.tokens)
+    # print("LOG login= %s, id=%s, env=%s [%s, %.0fs]" % (args.user, args.id, args.env_id, env_id, time.time() - start_time))
     with open(f"{bulk_dir}/bulkhours/.safe", "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 

@@ -1,6 +1,6 @@
 import os
 from .core.data import get_core_data, get_image  # noqa
-from .core.tools import is_premium, is_admin
+from .core.tools import is_premium
 from .core.timeit import timeit  # noqa
 from .core import geo  # noqa
 from .core.geo import geo_plot_country  # noqa
@@ -22,13 +22,12 @@ from .phyu.formulas import formulas  # noqa
 from .ecox.trading import *  # noqa
 
 
-if is_admin():
-    import bulkhours_admin as admin
-else:
-    admin = None
+# try:
+#    import bulkhours_admin as admin  # noqa
+#
+# except ImportError:
+#    admin = None
 
-
-econometrics = ecox  # noqa
 DEFAULT_TOKEN = "NO_TOKEN"
 
 
