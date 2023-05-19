@@ -1,50 +1,3 @@
-def is_admin():
-    try:
-        import bulkhours_admin
-
-        return True
-    except ImportError:
-        return False
-
-
-def summary(*kargs, **kwargs):
-    from .tools import get_config
-
-    config = get_config()
-    if not is_admin():
-        mock_message(config["in_french"])
-        return
-    from bulkhours_admin import summary as admin_summary
-
-    return admin_summary(*kargs, **kwargs)
-
-
-def evaluate(*kargs, **kwargs):
-    from .tools import get_config, md
-
-    config = get_config()
-    if not is_admin():
-        mock_message(config["in_french"])
-        return
-
-    from bulkhours_admin import evaluate as admin_evaluate
-
-    return admin_evaluate(*kargs, md=md, **kwargs)
-
-
-def get_audio(*kargs, **kwargs):
-    from .tools import get_config
-
-    config = get_config()
-    if not is_admin():
-        mock_message(config["in_french"])
-        return
-
-    from bulkhours_admin.audio.Audio import get_audio as admin_get_audio
-
-    return admin_get_audio
-
-
 def mock_message(in_french):
     import IPython
 
@@ -61,3 +14,38 @@ contact bulkhours@guydegnol.net to have a new token to reactivate the serviceðŸš
     )
 
     IPython.display.display(tooltip)
+
+
+def import_from(module, name):
+    module = __import__(module, fromlist=[name])
+    return getattr(module, name)
+
+
+def generic_func(func, *kargs, **kwargs):
+    try:
+        import bulkhours_admin
+
+        return func(*kargs, **kwargs)
+
+    except ImportError:
+        from .tools import get_config
+
+        config = get_config()
+        mock_message(config["in_french"])
+
+
+def summary(*kargs, **kwargs):
+    func = import_from("bulkhours_admin", "summary")
+    return generic_func(func, *kargs, **kwargs)
+
+
+def get_audio(*kargs, **kwargs):
+    func = import_from("bulkhours_admin.audio", "get_audio")
+    return generic_func(func, *kargs, **kwargs)
+
+
+def evaluate(*kargs, **kwargs):
+    from .tools import md
+
+    func = import_from("bulkhours_admin", "evaluate")
+    return generic_func(func, *kargs, md=md, **kwargs)
