@@ -1,6 +1,6 @@
 import os
 from .core.data import get_core_data, get_image  # noqa
-from .core.tools import is_premium
+from .core.tools import is_premium, get_config, get_value  # noqa
 from .core.timeit import timeit  # noqa
 from .core import geo  # noqa
 from .core.geo import geo_plot_country  # noqa
@@ -31,7 +31,9 @@ from .ecox.trading import *  # noqa
 DEFAULT_TOKEN = "NO_TOKEN"
 
 
-def load_extra_magics(verbose=True, nid=None, in_french=False, api_key=DEFAULT_TOKEN, premium_token=DEFAULT_TOKEN):
+def load_extra_magics(
+    verbose=True, nid=None, in_french=False, openai_token=DEFAULT_TOKEN, premium_token=DEFAULT_TOKEN
+):
     from .hpc.compiler import CCPPlugin
     import IPython
     from . import __version__
@@ -42,11 +44,11 @@ def load_extra_magics(verbose=True, nid=None, in_french=False, api_key=DEFAULT_T
         if is_premium(premium_token):
             from bulkhours_premium import Evaluation
 
-            ipp.register_magics(Evaluation(ipp, nid, in_french, api_key))
+            ipp.register_magics(Evaluation(ipp, nid, in_french, openai_token))
         else:
             from .core.premium_mock import MockEvaluation
 
-            ipp.register_magics(MockEvaluation(ipp, nid, in_french, api_key))
+            ipp.register_magics(MockEvaluation(ipp, nid, in_french, openai_token))
 
     if verbose:
         print(f"ENV BULK Helper cOURSe (version={__version__.__version__})")
@@ -60,7 +62,7 @@ def init_env(
     in_french=False,
     nid=None,
     promo=None,
-    ai_api_key=DEFAULT_TOKEN,
+    openai_token=DEFAULT_TOKEN,
     admin_token=DEFAULT_TOKEN,
     premium_token=DEFAULT_TOKEN,
 ):
@@ -75,7 +77,9 @@ def init_env(
     if nid is None:
         info += f"id='{nid}', "
 
-    load_extra_magics(verbose=False, nid=nid, in_french=in_french, api_key=ai_api_key, premium_token=premium_token)
+    load_extra_magics(
+        verbose=False, nid=nid, in_french=in_french, openai_token=openai_token, premium_token=premium_token
+    )
 
     if env in ["rl", "reinforcement learning"]:
         rl.init_env(verbose=verbose)
@@ -158,6 +162,7 @@ def geo_plot(data=None, timeopt="last", **kwargs):
     return geo.geo_plot(data, timeopt=timeopt, **kwargs)
 
 
+"""
 def get_config(directory=None):
     import json
 
@@ -169,6 +174,7 @@ def get_config(directory=None):
             return json.load(json_file)
 
     return {}
+"""
 
 
 def init(verbose=False):

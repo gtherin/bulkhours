@@ -62,21 +62,20 @@ def get_install_parser(argv):
     parser.add_argument("-i", "--id", default=None)
     parser.add_argument("-p", "--packages", default="")
     parser.add_argument("-f", "--in-french", help="Change languages", action="store_true")
-    parser.add_argument("-k", "--api-key", default=DEFAULT_TOKEN)
+    parser.add_argument("-k", "--openai-token", default=DEFAULT_TOKEN)
     parser.add_argument("-t", "--tokens", default={})
 
     argv = get_opts("-u", argv)
-    api_key = argv[argv.index("-k") + 1].replace("-", "___") if "-k" in argv else DEFAULT_TOKEN
+    openai_token = argv[argv.index("-k") + 1].replace("-", "___") if "-k" in argv else DEFAULT_TOKEN
 
     argv = parser.parse_args(argv)
-    argv.api_key = api_key.replace("___", "-")
+    argv.openai_token = openai_token.replace("___", "-")
     argv.tokens = get_tokens(argv.tokens)
 
     return argv
 
 
 def main(argv=sys.argv[1:]):
-    print("FFFFFFFFFFFFFFF")
     # Log datetime
     start_time = time.time()
     env_id = "colab" if is_colab else "mock"
@@ -95,17 +94,12 @@ def main(argv=sys.argv[1:]):
         return
 
     args = get_install_parser(argv)
-    print(args.tokens, type(args.tokens))
-
     # stime = datetime.datetime.now() + datetime.timedelta(seconds=3600) if is_colab else datetime.datetime.now()
     # print("RUN install bulkhours [%s]" % stime.strftime("%H:%M:%S"))
 
     # Install main package
     if is_colab:
         if "admin_token" in args.tokens and args.tokens["admin_token"] != DEFAULT_TOKEN:
-            print(
-                f"cd {bulk_dir} && rm -rf bulkhours_admin 2> /dev/null && git clone https://{args.tokens['admin_token'].replace('/', '_')}@github.com/guydegnol/bulkhours_admin.git --depth 1 > /dev/null 2>&1"
-            )
             os.system(
                 f"cd {bulk_dir} && rm -rf bulkhours_admin 2> /dev/null && git clone https://{args.tokens['admin_token'].replace('/', '_')}@github.com/guydegnol/bulkhours_admin.git --depth 1 > /dev/null 2>&1"
             )
