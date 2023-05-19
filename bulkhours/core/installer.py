@@ -100,6 +100,7 @@ def main(argv=sys.argv[1:]):
 
     # Get the bulkhours basic package
     print("RUN git clone https://github.com/guydegnol/bulkhours.git [%s, %.0fs]" % (env_id, time.time() - start_time))
+    print(args.tokens)
 
     if is_colab:
         os.system(
