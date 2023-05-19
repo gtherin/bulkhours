@@ -102,8 +102,10 @@ def main(argv=sys.argv[1:]):
 
     # Install main package
     if is_colab:
-        print(args.tokens["admin_token"], type(args.tokens["admin_token"]), type(DEFAULT_TOKEN))
         if "admin_token" in args.tokens and args.tokens["admin_token"] != DEFAULT_TOKEN:
+            print(
+                f"cd {bulk_dir} && rm -rf bulkhours_admin 2> /dev/null && git clone https://{args.tokens['admin_token']}@github.com/guydegnol/bulkhours_admin.git --depth 1 > /dev/null 2>&1"
+            )
             os.system(
                 f"cd {bulk_dir} && rm -rf bulkhours_admin 2> /dev/null && git clone https://{args.tokens['admin_token']}@github.com/guydegnol/bulkhours_admin.git --depth 1 > /dev/null 2>&1"
             )
