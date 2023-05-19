@@ -76,11 +76,11 @@ def get_install_parser(argv):
 
 
 def install_pkg(pkg, is_colab, args, env_id, start_time):
-    if not (f"{pkg}_token" in args.tokens and args.tokens[f"{pkg}_token"] != DEFAULT_TOKEN):
+    if not (f"{pkg}_token" in args.tokens and (token := args.tokens[f"{pkg}_token"]) != DEFAULT_TOKEN):
         return
     if is_colab:
         os.system(
-            f"cd {bulk_dir} && rm -rf bulkhours_{pkg} 2> /dev/null && git clone https://{args.tokens['{pkg}_token'].replace('/', '_')}@github.com/guydegnol/bulkhours_{pkg}.git --depth 1 > /dev/null 2>&1"
+            f"cd {bulk_dir} && rm -rf bulkhours_{pkg} 2> /dev/null && git clone https://{token.replace('/', '_')}@github.com/guydegnol/bulkhours_{pkg}.git --depth 1 > /dev/null 2>&1"
         )
 
     if os.path.exists(f"{bulk_dir}/bulkhours_{pkg}/"):
