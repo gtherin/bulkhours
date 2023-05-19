@@ -17,24 +17,31 @@ def runrealcmd(command, verbose=True):
     process.wait()
 
 
+def get_nversion(version):
+    sversion = version.split(".")
+    if int(sversion[2]) > 30:
+        return f"{sversion[0]}.{int(sversion[1])+1}.0"
+    else:
+        return f"{sversion[0]}.{sversion[1]}.{int(sversion[2])+1}"
+
+
+def get_fversion(filename):
+    return os.path.abspath(os.path.dirname(__file__)) + filename
+
+
 def git_push(argv=sys.argv[1:]):
     parser = argparse.ArgumentParser(description="Git helper")
     parser.add_argument("-m", "--message", help="Message", default="Some changes")
     args = parser.parse_args(argv)
 
-    vfile = os.path.abspath(os.path.dirname(__file__)) + "/../__version__.py"
-    version = (oversion := open(vfile).readline().split('"')[1]).split(".")
-    nversion = f"{version[0]}.{version[1]}.{int(version[2])+1}"
+    vfile = get_fversion("/../__version__.py")
+    nversion = get_nversion(oversion := open(vfile).readline().split('"')[1])
 
-    avfile = os.path.abspath(os.path.dirname(__file__)) + "/../../../bulkhours_admin/bulkhours_admin/__version__.py"
-    aversion = (open(avfile).readline().split('"')[1]).split(".")
-    naversion = f"{aversion[0]}.{aversion[1]}.{int(aversion[2])+1}"
+    avfile = get_fversion("/../../../bulkhours_admin/bulkhours_admin/__version__.py")
+    naversion = get_nversion(aversion := open(avfile).readline().split('"')[1])
 
-    pvfile = (
-        os.path.abspath(os.path.dirname(__file__)) + "/../../../bulkhours_premium/bulkhours_premium/__version__.py"
-    )
-    pversion = (open(pvfile).readline().split('"')[1]).split(".")
-    npversion = f"{pversion[0]}.{pversion[1]}.{int(pversion[2])+1}"
+    pvfile = get_fversion("/../../../bulkhours_premium/bulkhours_premium/__version__.py")
+    npversion = get_nversion(pversion := open(pvfile).readline().split('"')[1])
 
     with open(vfile, "w") as the_file:
         the_file.write(f"""__version__ = "{nversion}"\n""")
@@ -50,11 +57,10 @@ def git_push(argv=sys.argv[1:]):
     print(f"Update {oversion} => {nversion}")
     with open("git_push.sh", "w") as f:
         f.write(f"""python /home/guydegnol/projects/bulkhours_admin/scripts/generate_keys.py\n""")
-        f.write(f"""git pull && git add . && git commit -m "{args.message}" && git push\n""")
-        f.write(
-            f"""cd ../bulkhours_premium && git pull && git add . && git commit -m "{args.message}" && git push\n"""
-        )
-        f.write(f"""cd ../bulkhours_admin && git pull && git add . && git commit -m "{args.message}" && git push\n""")
+        for p in ["", "_premium", "_admin"]:
+            f.write(
+                f"""cd ../bulkhours{p} && git pull && git add . && git commit -m "{args.message}" && git push 2> /dev/null\n"""
+            )
         f.write(f"""python /home/guydegnol/projects/bulkhours_admin/scripts/generate_keys.py\n""")
     print(
         subprocess.run("bash git_push.sh".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True).stdout
