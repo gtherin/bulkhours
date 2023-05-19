@@ -42,8 +42,8 @@ def get_value(key):
     return get_config().get(key)
 
 
-def is_premium(mtoken="NO_TOKEN", verbose=False):
-    if mtoken == "NO_TOKEN":
+def is_premium(premium_token="NO_TOKEN", verbose=False):
+    if premium_token == "NO_TOKEN":
         return False
     try:
         import bulkhours_premium
