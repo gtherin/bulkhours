@@ -1,3 +1,3 @@
-__version__ = "3.4.46"
-__aversion__ = "2.6.46"
-__mversion__ = "1.1.46"
+__version__ = "3.4.47"
+__aversion__ = "2.6.47"
+__mversion__ = "1.1.47"
