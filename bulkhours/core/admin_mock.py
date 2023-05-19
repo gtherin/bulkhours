@@ -32,6 +32,19 @@ def evaluate(*kargs, **kwargs):
     return admin_evaluate(*kargs, md=md, **kwargs)
 
 
+def get_audio(*kargs, **kwargs):
+    from .tools import get_config
+
+    config = get_config()
+    if not is_admin():
+        mock_message(config["in_french"])
+        return
+
+    from bulkhours_admin.audio.Audio import get_audio as admin_get_audio
+
+    return admin_get_audio
+
+
 def mock_message(in_french):
     import IPython
 
