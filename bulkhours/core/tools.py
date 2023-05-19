@@ -53,16 +53,3 @@ def is_premium(mtoken="NO_TOKEN", verbose=False):
         if verbose:
             print("bulkhours_premium not installed")
         return False
-
-
-def is_admin(atoken="NO_TOKEN", verbose=False):
-    if atoken == "NO_TOKEN":
-        return False
-    try:
-        import bulkhours_admin
-
-        return True
-    except ImportError:
-        if verbose:
-            print("bulkhours_admin not available")
-        return False

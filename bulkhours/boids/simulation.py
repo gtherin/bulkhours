@@ -5,22 +5,23 @@ from .boid import Boid
 from .obstacle import Obstacle
 from .button import Button
 
+import os
 
 
 class PyGameRendering:
-
     def __init__(self) -> None:
-
         pygame.init()
+        pygame.display.Info()
+
         Boid.width, Boid.height = pygame.display.Info().current_w, pygame.display.Info().current_h - 40
         self.border = 30
         self.screen = pygame.display.set_mode((Boid.width, Boid.height))
-        pygame.display.set_caption('Boids')
+        pygame.display.set_caption("Boids")
 
         # Fill background
         self.background = pygame.Surface(self.screen.get_size())
         self.background = self.background.convert()
-        self.background.fill((0, 0, 0)) # BLACK = (0, 0, 0)
+        self.background.fill((0, 0, 0))  # BLACK = (0, 0, 0)
 
         self.boid_list = pygame.sprite.Group()
         self.predator_list = pygame.sprite.Group()
@@ -30,20 +31,52 @@ class PyGameRendering:
         self.rebound_on_border = False
 
     def get_init_pos(self, border=False):
-        return [random.randint(0, Boid.width), random.randint(0, Boid.height)] if not border else [random.randint(self.border, Boid.width - self.border), random.randint(self.border, Boid.height - self.border)]
+        return (
+            [random.randint(0, Boid.width), random.randint(0, Boid.height)]
+            if not border
+            else [
+                random.randint(self.border, Boid.width - self.border),
+                random.randint(self.border, Boid.height - self.border),
+            ]
+        )
 
-    def add_boids(self, boids_list, nboids, cohesion_weight=100, alignment_weight=40, separation_weight=5, obstacle_avoidance_weight=10, goal_weight=100, field_of_view=200, max_speed=8):
+    def add_boids(
+        self,
+        boids_list,
+        nboids,
+        cohesion_weight=100,
+        alignment_weight=40,
+        separation_weight=5,
+        obstacle_avoidance_weight=10,
+        goal_weight=100,
+        field_of_view=200,
+        max_speed=8,
+    ):
         img_file = "bulkhours/boids/predator.png" if "predator" in boids_list else "bulkhours/boids/boid.png"
         x, y = self.get_init_pos("predator" in boids_list)
 
         for _ in range(nboids):
-            boid = Boid(x, y, cohesion_weight, alignment_weight, separation_weight, obstacle_avoidance_weight, goal_weight, field_of_view, max_speed, img_file)
+            boid = Boid(
+                x,
+                y,
+                cohesion_weight,
+                alignment_weight,
+                separation_weight,
+                obstacle_avoidance_weight,
+                goal_weight,
+                field_of_view,
+                max_speed,
+                img_file,
+            )
             getattr(self, boids_list).add(boid)
             self.all_sprites_list.add(boid)
 
     def add_obstacle(self, nboids):
         for i in range(nboids):
-            obstacle = Obstacle(random.randint(0 + self.border, Boid.width - self.border), random.randint(0 + self.border, Boid.height - self.border))
+            obstacle = Obstacle(
+                random.randint(0 + self.border, Boid.width - self.border),
+                random.randint(0 + self.border, Boid.height - self.border),
+            )
             # Add the obstacle to the lists of objects
             self.obstacle_list.add(obstacle)
             self.all_sprites_list.add(obstacle)
@@ -76,13 +109,20 @@ class PyGameRendering:
                 self.running = False
             if event.type != pygame.KEYDOWN:
                 return
-            
+
             mods = pygame.key.get_mods()
 
             if event.key == pygame.K_p:
                 if (mods and pygame.KMOD_LSHIFT) or (mods and pygame.KMOD_CAPS):
                     print("Add predator", self.predator_list)
-                    self.add_boids("predator_list", 1, obstacle_avoidance_weight=0, goal_weight=50, field_of_view=70, max_speed=8.5)
+                    self.add_boids(
+                        "predator_list",
+                        1,
+                        obstacle_avoidance_weight=0,
+                        goal_weight=50,
+                        field_of_view=70,
+                        max_speed=8.5,
+                    )
                 else:
                     print("Delete predator", self.predator_list)
                     self.predator_list.sprites()[-1].kill()
@@ -110,31 +150,65 @@ class PyGameRendering:
                 print("QUIT K_ESCAPE")
                 self.running = False
 
-
     def rebound(self):
         # TODO Either make this work or add a genetic algorithm and kill them
         # If a predator manages to touch a prey, the prey gets eaten!
         for boid in self.boid_list:
-            #collisions = pygame.sprite.spritecollide(predator, self.close_prey, True)
+            # collisions = pygame.sprite.spritecollide(predator, self.close_prey, True)
             collisions = pygame.sprite.spritecollide(boid, self.obstacle_list, False)
             for obstacle in collisions:
                 boid.velocityX += -1 * (obstacle.real_x - boid.rect.x)
                 boid.velocityY += -1 * (obstacle.real_y - boid.rect.y)
 
 
-def main():
+def main2():
+    # Simple pygame program
 
+    # Import and initialize the pygame library
+    import pygame
+
+    pygame.init()
+
+    # Set up the drawing window
+    screen = pygame.display.set_mode([500, 500])
+
+    # Run until the user asks to quit
+    running = True
+    while running:
+        # Did the user click the window close button?
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        # Fill the background with white
+        screen.fill((255, 255, 255))
+
+        # Draw a solid blue circle in the center
+        pygame.draw.circle(screen, (0, 0, 255), (250, 250), 75)
+
+        # Flip the display
+        pygame.display.flip()
+
+    # Done! Time to quit.
+    pygame.quit()
+
+
+def main():
+    if 1:
+        main2()
+        return
     rendering = PyGameRendering()
     rendering.add_boids("boid_list", 70, obstacle_avoidance_weight=15, goal_weight=0, field_of_view=70)
-    rendering.add_boids("predator_list", 5, obstacle_avoidance_weight=0, goal_weight=50, field_of_view=70, max_speed=8.5)
+    rendering.add_boids(
+        "predator_list", 5, obstacle_avoidance_weight=0, goal_weight=50, field_of_view=70, max_speed=8.5
+    )
     rendering.add_obstacle(3)
 
-    but = Button('Yo man', rendering.screen)
+    but = Button("Yo man", rendering.screen)
 
     rendering.prepare()
 
     while rendering.running:
-
         rendering.get_event()
         pos = pygame.mouse.get_pos()
 
@@ -170,7 +244,7 @@ def main():
             if avoid:
                 boid.flee(predator)
             else:
-                #boid.goal(*pos)
+                # boid.goal(*pos)
                 boid.go_to_middle()
             boid.update(True)
 
