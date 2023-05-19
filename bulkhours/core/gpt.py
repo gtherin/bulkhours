@@ -7,17 +7,17 @@ from . import tools
 
 
 def ask_chat_gpt(
-    question="", api_key="YOUR_KEY", model="gpt-3.5-turbo", temperature=0.5, is_code=False, size="256x256"
+    question="", openai_token="YOUR_KEY", model="gpt-3.5-turbo", temperature=0.5, is_code=False, size="256x256"
 ):
     """
     temperature Conservative(0) => Creative(1)
     """
 
-    api_key = tools.get_value("api_key")
+    openai_token = tools.get_value("openai_token")
 
     import openai
 
-    if api_key == "YOUR_KEY":
+    if openai_token == "YOUR_KEY":
         IPython.display.display(
             IPython.display.Markdown(
                 """## Interroger Chat-GPT
@@ -29,7 +29,7 @@ Vous devez creer une clé d'API
         )
         return
 
-    openai.api_key = api_key
+    openai.api_key = openai_token
     print("")
 
     if model in ["image"]:
