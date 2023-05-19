@@ -4,6 +4,7 @@ import json
 
 def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="black", icon="📚"):
     import IPython
+
     print("")
     if header:
         IPython.display.display(
@@ -51,4 +52,17 @@ def is_premium(mtoken="NO_TOKEN", verbose=False):
     except ImportError:
         if verbose:
             print("bulkhours_premium not installed")
+        return False
+
+
+def is_admin(atoken="NO_TOKEN", verbose=False):
+    if atoken == "NO_TOKEN":
+        return False
+    try:
+        import bulkhours_admin
+
+        return True
+    except ImportError:
+        if verbose:
+            print("bulkhours_admin not available")
         return False
