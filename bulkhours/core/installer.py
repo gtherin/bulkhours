@@ -71,13 +71,12 @@ def get_install_parser(argv):
     argv = parser.parse_args(argv)
     argv.api_key = api_key.replace("___", "-")
     argv.tokens = get_tokens(argv.tokens)
-    # argv.atoken = atoken.replace("/", ",,")
-    # argv.mtoken = mtoken.replace("/", ",,")
 
     return argv
 
 
 def main(argv=sys.argv[1:]):
+    print("FFFFFFFFFFFFFFF")
     # Log datetime
     start_time = time.time()
     env_id = "colab" if is_colab else "mock"
@@ -96,6 +95,7 @@ def main(argv=sys.argv[1:]):
         return
 
     args = get_install_parser(argv)
+    print(args.tokens)
 
     # stime = datetime.datetime.now() + datetime.timedelta(seconds=3600) if is_colab else datetime.datetime.now()
     # print("RUN install bulkhours [%s]" % stime.strftime("%H:%M:%S"))
@@ -152,6 +152,7 @@ def main(argv=sys.argv[1:]):
     # print("LOG login= %s, id=%s, env=%s [%s, %.0fs]" % (args.user, args.id, args.env_id, env_id, time.time() - start_time))
     with open(f"{bulk_dir}/bulkhours/.safe", "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
+    return
 
 
 if __name__ == "__main__":
