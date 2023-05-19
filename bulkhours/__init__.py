@@ -72,7 +72,7 @@ def init_env(
         if promo is not None:
             info += f"class='{promo}', "
 
-    if nid is None:
+    if nid is not None:
         info += f"id='{nid}', "
 
     load_extra_magics(
