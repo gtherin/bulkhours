@@ -95,7 +95,7 @@ def main(argv=sys.argv[1:]):
         return
 
     args = get_install_parser(argv)
-    print(args.tokens)
+    print(args.tokens, type(args.tokens))
 
     # stime = datetime.datetime.now() + datetime.timedelta(seconds=3600) if is_colab else datetime.datetime.now()
     # print("RUN install bulkhours [%s]" % stime.strftime("%H:%M:%S"))
