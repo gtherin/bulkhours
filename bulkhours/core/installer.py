@@ -104,10 +104,10 @@ def main(argv=sys.argv[1:]):
     if is_colab:
         if "admin_token" in args.tokens and args.tokens["admin_token"] != DEFAULT_TOKEN:
             print(
-                f"cd {bulk_dir} && rm -rf bulkhours_admin 2> /dev/null && git clone https://{args.tokens['admin_token']}@github.com/guydegnol/bulkhours_admin.git --depth 1 > /dev/null 2>&1"
+                f"cd {bulk_dir} && rm -rf bulkhours_admin 2> /dev/null && git clone https://{args.tokens['admin_token'].replace('/', '_')}@github.com/guydegnol/bulkhours_admin.git --depth 1 > /dev/null 2>&1"
             )
             os.system(
-                f"cd {bulk_dir} && rm -rf bulkhours_admin 2> /dev/null && git clone https://{args.tokens['admin_token']}@github.com/guydegnol/bulkhours_admin.git --depth 1 > /dev/null 2>&1"
+                f"cd {bulk_dir} && rm -rf bulkhours_admin 2> /dev/null && git clone https://{args.tokens['admin_token'].replace('/', '_')}@github.com/guydegnol/bulkhours_admin.git --depth 1 > /dev/null 2>&1"
             )
             if os.path.exists(f"{bulk_dir}/bulkhours_admin/"):
                 print(
@@ -121,7 +121,7 @@ def main(argv=sys.argv[1:]):
 
         if "premium_token" in args.tokens and args.tokens["premium_token"] != DEFAULT_TOKEN:
             os.system(
-                f"cd {bulk_dir} && rm -rf bulkhours_premium 2> /dev/null && git clone https://{args.tokens['premium_token']}@github.com/guydegnol/bulkhours_premium.git --depth 1 > /dev/null 2>&1"
+                f"cd {bulk_dir} && rm -rf bulkhours_premium 2> /dev/null && git clone https://{args.tokens['premium_token'].replace('/', '_')}@github.com/guydegnol/bulkhours_premium.git --depth 1 > /dev/null 2>&1"
             )
             if not os.path.exists(f"{bulk_dir}/bulkhours_premium/"):
                 print(
