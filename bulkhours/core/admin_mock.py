@@ -35,7 +35,8 @@ def generic_func(func, *kargs, **kwargs):
 
 
 def summary(*kargs, **kwargs):
-    func = import_from("bulkhours_admin", "summary")
+    from bulkhours_admin import summary as func
+
     return generic_func(func, *kargs, **kwargs)
 
 
