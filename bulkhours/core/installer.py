@@ -31,7 +31,7 @@ def get_tokens(promo_token):
     for db_key in TOKENS.split("::"):
         try:
             tokens = unobscure(nb_key.encode("utf-8") + db_key.encode("utf-8"))
-            return tokens
+            return eval(tokens)
         except:
             pass
     return {}
