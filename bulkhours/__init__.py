@@ -60,7 +60,7 @@ def init_env(
     in_french=False,
     nid=None,
     promo=None,
-    api_key=DEFAULT_TOKEN,
+    ai_api_key=DEFAULT_TOKEN,
     atoken=DEFAULT_TOKEN,
     mtoken=DEFAULT_TOKEN,
 ):
@@ -75,7 +75,7 @@ def init_env(
     if nid is None:
         info += f"id='{nid}', "
 
-    load_extra_magics(verbose=False, nid=nid, in_french=in_french, api_key=api_key, mtoken=mtoken)
+    load_extra_magics(verbose=False, nid=nid, in_french=in_french, api_key=ai_api_key, mtoken=mtoken)
 
     if env in ["rl", "reinforcement learning"]:
         rl.init_env(verbose=verbose)
