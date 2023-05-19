@@ -76,11 +76,10 @@ def get_install_parser(argv):
 
 
 def install_pkg(pkg, is_colab, args, env_id, start_time):
-    if is_colab:
-        if f"{pkg}_token" in args.tokens and args.tokens[f"{pkg}_token"] != DEFAULT_TOKEN:
-            os.system(
-                f"cd {bulk_dir} && rm -rf bulkhours_{pkg} 2> /dev/null && git clone https://{args.tokens['{pkg}_token'].replace('/', '_')}@github.com/guydegnol/bulkhours_{pkg}.git --depth 1 > /dev/null 2>&1"
-            )
+    if is_colab and f"{pkg}_token" in args.tokens and args.tokens[f"{pkg}_token"] != DEFAULT_TOKEN:
+        os.system(
+            f"cd {bulk_dir} && rm -rf bulkhours_{pkg} 2> /dev/null && git clone https://{args.tokens['{pkg}_token'].replace('/', '_')}@github.com/guydegnol/bulkhours_{pkg}.git --depth 1 > /dev/null 2>&1"
+        )
     if os.path.exists(f"{bulk_dir}/bulkhours_{pkg}/"):
         einfo = "🚀" if pkg != "admin" else "⚠️\x1b[41m\x1b[37mfor teachers only\x1b[0m"
         print(
@@ -88,7 +87,7 @@ def install_pkg(pkg, is_colab, args, env_id, start_time):
             % (pkg, env_id, time.time() - start_time, einfo)
         )
 
-    else:
+    elif f"{pkg}_token" in args.tokens and args.tokens[f"{pkg}_token"] != DEFAULT_TOKEN:
         print(
             f"RUN install bulkhours_{pkg}: installation failed 🚫. Check that your {pkg}_token is still valid (contact: bulkhours@guydegnol.net)"
         )
