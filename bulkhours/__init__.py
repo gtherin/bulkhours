@@ -22,11 +22,10 @@ from .phyu.formulas import formulas  # noqa
 from .ecox.trading import *  # noqa
 
 
-# try:
-#    import bulkhours_admin as admin  # noqa
-#
-# except ImportError:
-#    admin = None
+try:
+    import bulkhours_admin as admin  # noqa
+except ImportError:
+    admin = None
 
 DEFAULT_TOKEN = "NO_TOKEN"
 
