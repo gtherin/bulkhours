@@ -8,6 +8,7 @@ from .core import runrealcmd  # noqa
 from .core.gpt import ask_chat_gpt, ask_dall_e  # noqa
 from .core import colors as c  # noqa
 from .core.help import data_help  # noqa
+from .core import admin_mock as admin  # noqa
 
 
 from . import rl  # noqa
@@ -21,11 +22,6 @@ from .phyu.formulas import formulas  # noqa
 
 from .ecox.trading import *  # noqa
 
-
-try:
-    import bulkhours_admin as admin  # noqa
-except ImportError:
-    admin = None
 
 DEFAULT_TOKEN = "NO_TOKEN"
 
