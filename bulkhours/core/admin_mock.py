@@ -40,7 +40,7 @@ def summary(*kargs, **kwargs):
 
 
 def get_audio(*kargs, **kwargs):
-    func = import_from("bulkhours_admin.audio", "get_audio")
+    func = import_from("bulkhours_admin", "get_audio")
     return generic_func(func, *kargs, **kwargs)
 
 
