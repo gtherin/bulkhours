@@ -85,9 +85,11 @@ def install_pkg(pkg, is_colab, args, env_id, start_time):
 
     if os.path.exists(f"{bulk_dir}/bulkhours_{pkg}/"):
         einfo = "🚀" if pkg != "admin" else "⚠️\x1b[41m\x1b[37mfor teachers only\x1b[0m"
+        color = "\x1b[36mRUN git clone " if pkg != "admin" else "\x1b[31mRUN git clone "
+
         print(
-            "\x1b[36mRUN git clone https://github.com/guydegnol/bulkhours_%s.git [%s, %.0fs]\x1b[0m%s"
-            % (pkg, env_id, time.time() - start_time, einfo)
+            "%shttps://github.com/guydegnol/bulkhours_%s.git [%s, %.0fs]\x1b[0m%s"
+            % (color, pkg, env_id, time.time() - start_time, einfo)
         )
 
     else:
