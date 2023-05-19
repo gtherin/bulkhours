@@ -14,9 +14,9 @@ def summary(*kargs, **kwargs):
     if not is_admin():
         mock_message(config["in_french"])
         return
-    from bulkhours_admin import summary
+    from bulkhours_admin import summary as admin_summary
 
-    summary(*kargs, **kwargs)
+    return admin_summary(*kargs, **kwargs)
 
 
 def evaluate(*kargs, **kwargs):
@@ -27,9 +27,9 @@ def evaluate(*kargs, **kwargs):
         mock_message(config["in_french"])
         return
 
-    from bulkhours_admin import evaluate
+    from bulkhours_admin import evaluate as admin_evaluate
 
-    evaluate(*kargs, **kwargs)
+    return admin_evaluate(*kargs, **kwargs)
 
 
 def mock_message(in_french):
