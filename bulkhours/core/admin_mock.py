@@ -7,7 +7,7 @@ def is_admin():
         return False
 
 
-def evaluate(*kargs, **kwargs):
+def summary(*kargs, **kwargs):
     from .tools import get_config
 
     config = get_config()
