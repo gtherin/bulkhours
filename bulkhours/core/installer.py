@@ -82,6 +82,7 @@ def install_pkg(pkg, is_colab, args, env_id, start_time):
         os.system(
             f"cd {bulk_dir} && rm -rf bulkhours_{pkg} 2> /dev/null && git clone https://{args.tokens['{pkg}_token'].replace('/', '_')}@github.com/guydegnol/bulkhours_{pkg}.git --depth 1 > /dev/null 2>&1"
         )
+
     if os.path.exists(f"{bulk_dir}/bulkhours_{pkg}/"):
         einfo = "🚀" if pkg != "admin" else "⚠️\x1b[41m\x1b[37mfor teachers only\x1b[0m"
         print(
@@ -117,7 +118,6 @@ def main(argv=sys.argv[1:]):
     # print("RUN install bulkhours [%s]" % stime.strftime("%H:%M:%S"))
 
     # Install main package
-    print(args.tokens)
     install_pkg("admin", is_colab, args, env_id, start_time)
     install_pkg("premium", is_colab, args, env_id, start_time)
 
