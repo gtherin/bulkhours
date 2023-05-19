@@ -16,16 +16,10 @@ contact bulkhours@guydegnol.net to have a new token to reactivate the serviceðŸš
     IPython.display.display(tooltip)
 
 
-def import_from(module, name):
-    module = __import__(module, fromlist=[name])
-    return getattr(module, name)
-
-
 def generic_func(func, *kargs, **kwargs):
     try:
-        import bulkhours_admin
-
-        return func(*kargs, **kwargs)
+        module = __import__("bulkhours_admin", fromlist=[func])
+        return getattr(module, func)(*kargs, **kwargs)
 
     except ImportError:
         from .tools import get_config
@@ -35,18 +29,14 @@ def generic_func(func, *kargs, **kwargs):
 
 
 def summary(*kargs, **kwargs):
-    from bulkhours_admin import summary as func
-
-    return generic_func(func, *kargs, **kwargs)
+    return generic_func("summary", *kargs, **kwargs)
 
 
 def get_audio(*kargs, **kwargs):
-    func = import_from("bulkhours_admin", "get_audio")
-    return generic_func(func, *kargs, **kwargs)
+    return generic_func("get_audio", *kargs, **kwargs)
 
 
 def evaluate(*kargs, **kwargs):
     from .tools import md
 
-    func = import_from("bulkhours_admin", "evaluate")
-    return generic_func(func, *kargs, md=md, **kwargs)
+    return generic_func("evaluate", *kargs, md=md, **kwargs)
