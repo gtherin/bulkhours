@@ -63,14 +63,14 @@ def get_install_parser(argv):
     parser.add_argument("-p", "--packages", default="")
     parser.add_argument("-f", "--in-french", help="Change languages", action="store_true")
     parser.add_argument("-k", "--api-key", default=DEFAULT_TOKEN)
-    parser.add_argument("-t", "--tokens", default=DEFAULT_TOKEN)
+    parser.add_argument("-t", "--tokens", default={})
 
     argv = get_opts("-u", argv)
     api_key = argv[argv.index("-k") + 1].replace("-", "___") if "-k" in argv else DEFAULT_TOKEN
 
     argv = parser.parse_args(argv)
     argv.api_key = api_key.replace("___", "-")
-    # argv.tokens = tokens  # .replace("/", ",,")
+    argv.tokens = get_tokens(argv.tokens)
     # argv.atoken = atoken.replace("/", ",,")
     # argv.mtoken = mtoken.replace("/", ",,")
 
