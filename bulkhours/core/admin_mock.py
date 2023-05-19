@@ -20,7 +20,7 @@ def summary(*kargs, **kwargs):
 
 
 def evaluate(*kargs, **kwargs):
-    from .tools import get_config
+    from .tools import get_config, md
 
     config = get_config()
     if not is_admin():
@@ -29,7 +29,7 @@ def evaluate(*kargs, **kwargs):
 
     from bulkhours_admin import evaluate as admin_evaluate
 
-    return admin_evaluate(*kargs, **kwargs)
+    return admin_evaluate(*kargs, md=md, **kwargs)
 
 
 def mock_message(in_french):
