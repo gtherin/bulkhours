@@ -102,10 +102,10 @@ def main(argv=sys.argv[1:]):
 
     # Install main package
     if is_colab:
-        print(args.tokens["atoken"], type(args.tokens["atoken"]), type(DEFAULT_TOKEN))
-        if "atoken" in args.tokens and args.tokens["atoken"] != DEFAULT_TOKEN:
+        print(args.tokens["admin_token"], type(args.tokens["admin_token"]), type(DEFAULT_TOKEN))
+        if "admin_token" in args.tokens and args.tokens["admin_token"] != DEFAULT_TOKEN:
             os.system(
-                f"cd {bulk_dir} && rm -rf bulkhours_admin 2> /dev/null && git clone https://{args.tokens['atoken']}@github.com/guydegnol/bulkhours_admin.git --depth 1 > /dev/null 2>&1"
+                f"cd {bulk_dir} && rm -rf bulkhours_admin 2> /dev/null && git clone https://{args.tokens['admin_token']}@github.com/guydegnol/bulkhours_admin.git --depth 1 > /dev/null 2>&1"
             )
             if os.path.exists(f"{bulk_dir}/bulkhours_admin/"):
                 print(
@@ -114,16 +114,16 @@ def main(argv=sys.argv[1:]):
                 )
             else:
                 print(
-                    "RUN install bulkhours_admin: installation failed 🚫. Check that your atoken is still valid (contact: bulkhours@guydegnol.net)"
+                    "RUN install bulkhours_admin: installation failed 🚫. Check that your admin_token is still valid (contact: bulkhours@guydegnol.net)"
                 )
 
-        if "mtoken" in args.tokens and args.tokens["mtoken"] != DEFAULT_TOKEN:
+        if "premium_token" in args.tokens and args.tokens["premium_token"] != DEFAULT_TOKEN:
             os.system(
-                f"cd {bulk_dir} && rm -rf bulkhours_premium 2> /dev/null && git clone https://{args.tokens['mtoken']}@github.com/guydegnol/bulkhours_premium.git --depth 1 > /dev/null 2>&1"
+                f"cd {bulk_dir} && rm -rf bulkhours_premium 2> /dev/null && git clone https://{args.tokens['premium_token']}@github.com/guydegnol/bulkhours_premium.git --depth 1 > /dev/null 2>&1"
             )
             if not os.path.exists(f"{bulk_dir}/bulkhours_premium/"):
                 print(
-                    "RUN install bulkhours_premium: installation failed 🚫. Check that your mtoken is still valid (contact: bulkhours@guydegnol.net)"
+                    "RUN install bulkhours_premium: installation failed 🚫. Check that your premium_token is still valid (contact: bulkhours@guydegnol.net)"
                 )
             else:
                 print(

@@ -31,7 +31,7 @@ from .ecox.trading import *  # noqa
 DEFAULT_TOKEN = "NO_TOKEN"
 
 
-def load_extra_magics(verbose=True, nid=None, in_french=False, api_key=DEFAULT_TOKEN, mtoken=DEFAULT_TOKEN):
+def load_extra_magics(verbose=True, nid=None, in_french=False, api_key=DEFAULT_TOKEN, premium_token=DEFAULT_TOKEN):
     from .hpc.compiler import CCPPlugin
     import IPython
     from . import __version__
@@ -39,7 +39,7 @@ def load_extra_magics(verbose=True, nid=None, in_french=False, api_key=DEFAULT_T
     ipp = IPython.get_ipython()
     if ipp:
         ipp.register_magics(CCPPlugin(ipp))
-        if is_premium(mtoken):
+        if is_premium(premium_token):
             from bulkhours_premium import Evaluation
 
             ipp.register_magics(Evaluation(ipp, nid, in_french, api_key))
@@ -54,28 +54,28 @@ def load_extra_magics(verbose=True, nid=None, in_french=False, api_key=DEFAULT_T
 
 def init_env(
     login=None,
-    pass_code=None,
+    db_token=None,
     env=None,
     verbose=False,
     in_french=False,
     nid=None,
     promo=None,
     ai_api_key=DEFAULT_TOKEN,
-    atoken=DEFAULT_TOKEN,
-    mtoken=DEFAULT_TOKEN,
+    admin_token=DEFAULT_TOKEN,
+    premium_token=DEFAULT_TOKEN,
 ):
     info = f"Import BULK Helper cOURSe ("
 
-    if mtoken != DEFAULT_TOKEN and is_premium(mtoken):
+    if premium_token != DEFAULT_TOKEN and is_premium(premium_token):
         from bulkhours_premium import set_up_student
 
-        student_login = set_up_student(login, pass_code=pass_code)
+        student_login = set_up_student(login, db_token=db_token)
         info += f"user='{student_login}', "
 
     if nid is None:
         info += f"id='{nid}', "
 
-    load_extra_magics(verbose=False, nid=nid, in_french=in_french, api_key=ai_api_key, mtoken=mtoken)
+    load_extra_magics(verbose=False, nid=nid, in_french=in_french, api_key=ai_api_key, premium_token=premium_token)
 
     if env in ["rl", "reinforcement learning"]:
         rl.init_env(verbose=verbose)
@@ -88,9 +88,9 @@ def init_env(
     if env is not None:
         info += f", env='{env}'"
 
-    if atoken != DEFAULT_TOKEN:
+    if admin_token != DEFAULT_TOKEN:
         info = f"\x1b[31m{info},\x1b[0m \x1b[36mpversion='{mversion}'\x1b[0m🚀, \x1b[31maversion='{aversion}'\x1b[0m⚠️)"
-    elif mtoken != DEFAULT_TOKEN:
+    elif premium_token != DEFAULT_TOKEN:
         info = f"{info}, \x1b[36mpversion='{mversion}'\x1b[0m🚀)"
     else:
         info = f"{info})\x1b[36m. To activate the 🚀 mode, please contact bulkhours@guydegnol.net\x1b[0m"
