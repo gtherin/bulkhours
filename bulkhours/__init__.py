@@ -69,7 +69,7 @@ def init_env(
         student_login = set_up_student(login, db_token=db_token)
         info += f"user='{student_login}', "
 
-        if promo is None:
+        if promo is not None:
             info += f"class='{promo}', "
 
     if nid is None:
@@ -162,7 +162,6 @@ def geo_plot(data=None, timeopt="last", **kwargs):
 
 def init(verbose=False):
     kwargs = get_config()
-    print(kwargs)
     if len(kwargs) > 1:
         init_env(verbose=verbose, **kwargs)
 
