@@ -74,6 +74,9 @@ def init_env(
         student_login = set_up_student(login, db_token=db_token)
         info += f"user='{student_login}', "
 
+        if promo is None:
+            info += f"class='{promo}', "
+
     if nid is None:
         info += f"id='{nid}', "
 
