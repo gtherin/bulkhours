@@ -162,6 +162,7 @@ def geo_plot(data=None, timeopt="last", **kwargs):
 
 def init(verbose=False):
     kwargs = get_config()
+    print(kwargs)
     if len(kwargs) > 1:
         init_env(verbose=verbose, **kwargs)
 
