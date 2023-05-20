@@ -52,6 +52,24 @@ def get_opts(opt_key, opts):
     return opts[:lindex_start] + [label] + opts[lindex_end:]
 
 
+def format_opt(label, raw2norm=True):
+    rr = {"-": "__minus__", "@": "__at__", " ": "__space__", "/": "__slash__"}
+    if len(label) > 0 and label[0] != "-":
+        for k, v in rr.items():
+            label = label.replace(k, v) if raw2norm else label.replace(v, k)
+    return label
+
+
+def format_opts(argv):
+    nargv = []
+    for a in argv:
+        if a[0] != "-" and nargv[-1][0] != "-":
+            nargv[-1] += " " + a
+        else:
+            nargv.append(a)
+    return [format_opt(a) for a in nargv]
+
+
 def get_install_parser(argv):
     parser = argparse.ArgumentParser(
         description="Installation script evaluation",
@@ -65,11 +83,10 @@ def get_install_parser(argv):
     parser.add_argument("-k", "--openai-token", default=DEFAULT_TOKEN)
     parser.add_argument("-t", "--tokens", default={})
 
-    argv = get_opts("-u", argv)
-    openai_token = argv[argv.index("-k") + 1].replace("-", "___") if "-k" in argv else DEFAULT_TOKEN
-
-    argv = parser.parse_args(argv)
-    argv.openai_token = openai_token.replace("___", "-")
+    argv = parser.parse_args(format_opts(argv))
+    for k in ["user", "env_id", "id", "packages", "openai_token"]:
+        if getattr(argv, k):
+            setattr(argv, k, format_opt(getattr(argv, k), raw2norm=False))
     argv.tokens = get_tokens(argv.tokens)
 
     return argv
