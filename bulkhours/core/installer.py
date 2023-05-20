@@ -83,6 +83,7 @@ def get_install_parser(argv):
     parser.add_argument("-k", "--openai-token", default=DEFAULT_TOKEN)
     parser.add_argument("-t", "--tokens", default={})
 
+    print(format_opts(argv))
     argv = parser.parse_args(format_opts(argv))
     for k in ["user", "env_id", "id", "packages", "openai_token"]:
         if getattr(argv, k):
