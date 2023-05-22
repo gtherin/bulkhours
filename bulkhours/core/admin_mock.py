@@ -32,8 +32,8 @@ def summary(*kargs, **kwargs):
     return generic_func("summary", *kargs, **kwargs)
 
 
-# def update_students(*kargs, **kwargs):
-#    return generic_func("summary", *kargs, **kwargs)
+def edit_students(*kargs, **kwargs):
+    return generic_func("edit_students", *kargs, **kwargs)
 
 
 def get_audio(*kargs, **kwargs):

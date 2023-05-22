@@ -50,9 +50,10 @@ def load_extra_magics(
             ipp.register_magics(MockEvaluation(ipp, nid, in_french, openai_token))
 
         if is_admin(admin_token):
-            from bulkhours_admin import SudoEvaluation
+            from bulkhours_admin import SudoEvaluation, EditStudents
 
             ipp.register_magics(SudoEvaluation(ipp, nid, in_french, openai_token))
+            ipp.register_magics(EditStudents(ipp, nid, in_french, openai_token))
 
 
 def init_env(
@@ -78,9 +79,12 @@ def init_env(
 
         if promo is not None:
             info += f"class='{promo}', "
+            os.environ["BLK_CLASSROOM"] = promo
 
+    os.environ["BLK_LANGUAGE"] = "fr" if in_french else "en"
     if nid is not None:
         info += f"id='{nid}', "
+        os.environ["BLK_NBID"] = nid
 
     load_extra_magics(
         nid=nid, in_french=in_french, openai_token=openai_token, premium_token=premium_token, admin_token=admin_token
@@ -96,9 +100,10 @@ def init_env(
     info += f"\x1b[0mversion='{version}'"
     if env is not None:
         info += f", env='{env}'"
+        os.environ["BLK_ENV"] = env
 
     if admin_token != DEFAULT_TOKEN:
-        info = f"\x1b[31m{info},\x1b[0m \x1b[36mpremium_ver='{mversion}'\x1b[0m🚀, \x1b[31madmin_ver='{aversion}'\x1b[0m⚠️\x1b[41m\x1b[37mfor teachers only\x1b[0m)"
+        info = f"\x1b[31m{info},\x1b[0m \x1b[36mpremium='{mversion}'\x1b[0m🚀, \x1b[31madmin='{aversion}'\x1b[0m⚠️\x1b[41m\x1b[37mfor teachers only\x1b[0m)"
     elif premium_token != DEFAULT_TOKEN:
         info = f"{info}, \x1b[36mpversion='{mversion}'\x1b[0m🚀)"
     else:
@@ -168,9 +173,7 @@ def geo_plot(data=None, timeopt="last", **kwargs):
 
 
 def init(verbose=False):
-    kwargs = get_config()
-    if len(kwargs) > 1:
-        init_env(verbose=verbose, **kwargs)
+    init_env(verbose=verbose, **get_config())
 
 
 init()
