@@ -73,7 +73,8 @@ def init_env(
         from bulkhours_premium import set_up_student
 
         student_login = set_up_student(login, db_token=db_token)
-        info += f"user='{student_login}', "
+        is_known_student = "✅" if 1 else "❌"
+        info += f"user='{student_login}'{is_known_student}, "
 
         if promo is not None:
             info += f"class='{promo}', "
@@ -97,7 +98,7 @@ def init_env(
         info += f", env='{env}'"
 
     if admin_token != DEFAULT_TOKEN:
-        info = f"\x1b[31m{info},\x1b[0m \x1b[36mpversion='{mversion}'\x1b[0m🚀, \x1b[31maversion='{aversion}'\x1b[0m⚠️)"
+        info = f"\x1b[31m{info},\x1b[0m \x1b[36mpremium_ver='{mversion}'\x1b[0m🚀, \x1b[31madmin_ver='{aversion}'\x1b[0m⚠️\x1b[41m\x1b[37mfor teachers only\x1b[0m)"
     elif premium_token != DEFAULT_TOKEN:
         info = f"{info}, \x1b[36mpversion='{mversion}'\x1b[0m🚀)"
     else:
