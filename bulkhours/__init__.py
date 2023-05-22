@@ -1,6 +1,6 @@
 import os
 from .core.data import get_core_data, get_image  # noqa
-from .core.tools import is_premium, get_config, get_value  # noqa
+from .core.tools import is_premium, is_admin, get_config, get_value  # noqa
 from .core.timeit import timeit  # noqa
 from .core import geo  # noqa
 from .core.geo import geo_plot_country  # noqa
@@ -27,7 +27,11 @@ DEFAULT_TOKEN = "NO_TOKEN"
 
 
 def load_extra_magics(
-    verbose=True, nid=None, in_french=False, openai_token=DEFAULT_TOKEN, premium_token=DEFAULT_TOKEN
+    nid=None,
+    in_french=False,
+    openai_token=DEFAULT_TOKEN,
+    premium_token=DEFAULT_TOKEN,
+    admin_token=DEFAULT_TOKEN,
 ):
     from .hpc.compiler import CCPPlugin
     import IPython
@@ -45,8 +49,10 @@ def load_extra_magics(
 
             ipp.register_magics(MockEvaluation(ipp, nid, in_french, openai_token))
 
-    if verbose:
-        print(f"ENV BULK Helper cOURSe (version={__version__.__version__})")
+        if is_admin(admin_token):
+            from bulkhours_admin import SudoEvaluation
+
+            ipp.register_magics(SudoEvaluation(ipp, nid, in_french, openai_token))
 
 
 def init_env(
@@ -76,7 +82,7 @@ def init_env(
         info += f"id='{nid}', "
 
     load_extra_magics(
-        verbose=False, nid=nid, in_french=in_french, openai_token=openai_token, premium_token=premium_token
+        nid=nid, in_french=in_french, openai_token=openai_token, premium_token=premium_token, admin_token=admin_token
     )
 
     if env in ["rl", "reinforcement learning"]:
