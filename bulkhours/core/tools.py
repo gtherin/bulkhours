@@ -53,3 +53,16 @@ def is_premium(premium_token="NO_TOKEN", verbose=False):
         if verbose:
             print("bulkhours_premium not installed")
         return False
+
+
+def is_admin(admin_token="NO_TOKEN", verbose=False):
+    if admin_token == "NO_TOKEN":
+        return False
+    try:
+        import bulkhours_admin
+
+        return True
+    except ImportError:
+        if verbose:
+            print("bulkhours_admin not installed")
+        return False
