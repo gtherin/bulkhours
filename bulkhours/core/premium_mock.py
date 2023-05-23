@@ -6,7 +6,6 @@ import ipywidgets
 class MockEvaluation(Magics):
     def __init__(self, shell, nid, in_french, openai_token):
         super(MockEvaluation, self).__init__(shell)
-        self.nid = nid
         self.in_french = in_french
 
     @line_cell_magic
