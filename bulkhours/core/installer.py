@@ -120,6 +120,9 @@ def install_dependencies(packages, start_time=None):
     if packages in [None, "None", ""]:
         return
 
+    if start_time is None:
+        start_time = time.time()
+
     env_id = "colab" if is_colab else "mock"
 
     # Update pip
