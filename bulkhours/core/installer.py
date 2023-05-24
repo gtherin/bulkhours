@@ -92,8 +92,8 @@ def get_install_parser(argv):
     return argv
 
 
-def install_pkg(pkg, is_colab, args, env_id, start_time):
-    if not (f"{pkg}_token" in args.tokens and (token := args.tokens[f"{pkg}_token"]) != DEFAULT_TOKEN):
+def install_pkg(pkg, is_colab, tokens, env_id, start_time):
+    if not (f"{pkg}_token" in tokens and (token := tokens[f"{pkg}_token"]) != DEFAULT_TOKEN):
         return
     if is_colab:
         os.system(
@@ -178,8 +178,8 @@ def main(argv=sys.argv[1:]):
     # Install main package
     print("DDDDDDDDDDDDDDDDDDDDDDDDD", args)
     print("DDDDDDDDDDDDDDDDDDDDDDDDD", args.tokens)
-    install_pkg("admin", is_colab, args, env_id, start_time)
-    install_pkg("premium", is_colab, args, env_id, start_time)
+    install_pkg("admin", is_colab, args.tokens, env_id, start_time)
+    install_pkg("premium", is_colab, args.tokens, env_id, start_time)
 
     install_dependencies(args.packages, start_time=start_time)
 
