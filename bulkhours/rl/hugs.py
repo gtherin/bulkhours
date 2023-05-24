@@ -90,7 +90,7 @@ class PPOHugs:
             # When the model was trained on Python 3.8 the pickle protocol is 5, But Python 3.6, 3.7 use protocol 4
             custom_objects={"learning_rate": 0.0, "lr_schedule": lambda _: 0.0, "clip_range": lambda _: 0.0},
             print_system_info=True,
-            env=self.make(),
+            # env=self.make(),
         )
         return self.model
 
