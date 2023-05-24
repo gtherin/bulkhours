@@ -93,7 +93,9 @@ class PPOHugs:
 
         repo_id = repo_id if type(repo_id) == str else self.repo_id
         self.model = stable_baselines3.PPO.load(
-            huggingface_sb3.load_from_hub(repo_id, f"{self.model_name}.zip"),  # The model filename.zip,
+            huggingface_sb3.load_from_hub(
+                repo_id.replace("bulkhours", "guydegnol"), f"{self.model_name}.zip"
+            ),  # The model filename.zip,
             # When the model was trained on Python 3.8 the pickle protocol is 5, But Python 3.6, 3.7 use protocol 4
             custom_objects={"learning_rate": 0.0, "lr_schedule": lambda _: 0.0, "clip_range": lambda _: 0.0},
             print_system_info=True,
