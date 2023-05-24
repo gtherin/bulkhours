@@ -177,6 +177,7 @@ def main(argv=sys.argv[1:]):
 
     # Install main package
     print("DDDDDDDDDDDDDDDDDDDDDDDDD", args)
+    print("DDDDDDDDDDDDDDDDDDDDDDDDD", args.tokens)
     install_pkg("admin", is_colab, args, env_id, start_time)
     install_pkg("premium", is_colab, args, env_id, start_time)
 
