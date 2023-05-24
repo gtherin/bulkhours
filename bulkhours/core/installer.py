@@ -176,8 +176,6 @@ def main(argv=sys.argv[1:]):
     # print("RUN install bulkhours [%s]" % stime.strftime("%H:%M:%S"))
 
     # Install main package
-    print("DDDDDDDDDDDDDDDDDDDDDDDDD", args)
-    print("DDDDDDDDDDDDDDDDDDDDDDDDD", args.tokens)
     install_pkg("admin", is_colab, args.tokens, env_id, start_time)
     install_pkg("premium", is_colab, args.tokens, env_id, start_time)
 
@@ -188,7 +186,6 @@ def main(argv=sys.argv[1:]):
     data.update(args.tokens)
     # print("LOG login= %s, id=%s, env=%s [%s, %.0fs]" % (args.user, args.id, args.env_id, env_id, time.time() - start_time))
     with open(f"{bulk_dir}/bulkhours/.safe", "w", encoding="utf-8") as f:
-        print(data)
         json.dump(data, f, ensure_ascii=False, indent=4)
 
 
