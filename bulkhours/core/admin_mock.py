@@ -6,9 +6,9 @@ import ipywidgets
 def mock_message(in_french):
 
     tooltip = (
-        "Les fonctionnalités 'admin' ne sont pas disponibles en mode eleve👩‍🎓.Contacter bulkhours@guydegnol.net en cas de probleme"
+        "Les fonctionnalités 'admin' ne sont pas disponibles en mode eleve👨‍🎓.Contacter bulkhours@guydegnol.net en cas de probleme"
         if in_french
-        else "The 'admin' functionalities are not available in student mode👩‍🎓. Contact bulkhours@guydegnol.net in case of problem"
+        else "The 'admin' functionalities are not available in student mode👨‍🎓. Contact bulkhours@guydegnol.net in case of problem"
     )
 
     return tooltip
@@ -52,7 +52,7 @@ class AdminEvaluation(Magics):
 
     @line_cell_magic
     @needs_local_scope
-    def update_cell_id_admin(self, line, cell="", local_ns=None):
+    def evaluation_cell_id_admin(self, line, cell="", local_ns=None):
         IPython.display.display(mock_message(self.in_french))
         IPython.display.display(
             ipywidgets.Button(
@@ -69,5 +69,11 @@ class AdminEvaluation(Magics):
 
     @line_cell_magic
     @needs_local_scope
-    def evaluation_cell_id_admin(self, line, cell="", local_ns=None):
-        self.update_cell_id_admin(line, cell=cell, local_ns=local_ns)
+    def update_cell_id_admin(self, *kargs, **kwargs):
+        return self.evaluation_cell_id_admin(*kargs, **kwargs)
+
+    @line_cell_magic
+    @needs_local_scope
+    def edit_students_admin(self, *kargs, **kwargs):
+        return self.evaluation_cell_id_admin(*kargs, **kwargs)
+
