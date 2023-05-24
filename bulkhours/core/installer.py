@@ -116,6 +116,28 @@ def install_pkg(pkg, is_colab, args, env_id, start_time):
         )
 
 
+def install_dependencies(packages, start_time=None):
+    if packages in [None, "None", ""]:
+        return
+
+    env_id = "colab" if is_colab else "mock"
+
+    # Update pip
+    print("\x1b[37mRUN pip install [%s]: pip [%.0fs]" % (env_id, time.time() - start_time), end="", flush=True)
+    if is_colab:
+        os.system(f"pip install --upgrade pip > /dev/null 2>&1")
+
+    # Install packages
+    for package in packages.split(","):
+        if package not in "wkhtmltopdf,swig,cmake,python-opengl,ffmpeg,xvfb".split(","):
+            print(", %s [%.0fs]" % (package, time.time() - start_time), end="", flush=True)
+            os.system(f"pip install {package} > /dev/null 2>&1")
+        else:
+            print(", %s [apt, %.0fs]" % (package, time.time() - start_time), end="", flush=True)
+            os.system(f"apt install {package} > /dev/null 2>&1")
+    print("\x1b[0m")
+
+
 def main(argv=sys.argv[1:]):
     # Log datetime
     start_time = time.time()
@@ -141,21 +163,7 @@ def main(argv=sys.argv[1:]):
     install_pkg("admin", is_colab, args, env_id, start_time)
     install_pkg("premium", is_colab, args, env_id, start_time)
 
-    if args.packages != "None":
-        # Update pip
-        print("\x1b[37mRUN pip install [%s]: pip [%.0fs]" % (env_id, time.time() - start_time), end="", flush=True)
-        if is_colab:
-            os.system(f"pip install --upgrade pip > /dev/null 2>&1")
-
-        # Install packages
-        for package in args.packages.split(","):
-            if package not in "wkhtmltopdf,swig,cmake,python-opengl,ffmpeg,xvfb".split(","):
-                print(", %s [%.0fs]" % (package, time.time() - start_time), end="", flush=True)
-                os.system(f"pip install {package} > /dev/null 2>&1")
-            else:
-                print(", %s [apt, %.0fs]" % (package, time.time() - start_time), end="", flush=True)
-                os.system(f"apt install {package} > /dev/null 2>&1")
-        print("\x1b[0m")
+    install_dependencies(args.packages, start_time=start_time)
 
     # Dump env variables
     data = {"login": args.user, "env": args.env_id, "nid": args.id, "in_french": args.in_french}

@@ -9,6 +9,7 @@ from .core.gpt import ask_chat_gpt, ask_dall_e  # noqa
 from .core import colors as c  # noqa
 from .core.help import data_help  # noqa
 from .core import admin_mock as admin  # noqa
+from .core import installer  # noqa
 
 
 from . import rl  # noqa
@@ -67,6 +68,7 @@ def init_env(
     openai_token=DEFAULT_TOKEN,
     admin_token=DEFAULT_TOKEN,
     premium_token=DEFAULT_TOKEN,
+    packages=None,
 ):
     info = f"Import BULK Helper cOURSe ("
 
@@ -92,6 +94,8 @@ def init_env(
 
     if env in ["rl", "reinforcement learning"]:
         rl.init_env(verbose=verbose)
+    installer.install_dependencies(packages)
+
     set_style()
     vfile = os.path.abspath(os.path.dirname(__file__)) + "/__version__.py"
     versions = open(vfile).readlines()
