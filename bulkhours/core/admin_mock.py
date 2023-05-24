@@ -6,13 +6,9 @@ import ipywidgets
 def mock_message(in_french):
 
     tooltip = (
-        """
-Les fonctionnalités 'admin' ne sont pas disponibles en mode eleve👩‍.
-Contacter bulkhours@guydegnol.net en cas de probleme"""
+        "Les fonctionnalités 'admin' ne sont pas disponibles en mode eleve👩‍🎓.Contacter bulkhours@guydegnol.net en cas de probleme"
         if in_french
-        else """
-The 'admin' functionalities are not available in student mode👩‍🎓. 
-Contact bulkhours@guydegnol.net in case of problem"""
+        else "The 'admin' functionalities are not available in student mode👩‍🎓. Contact bulkhours@guydegnol.net in case of problem"
     )
 
     return tooltip
