@@ -11,7 +11,6 @@ class PPOHugs:
         huggingface_hub.login(pass_code, add_to_git_credential=True)
 
     def make(self) -> None:
-        # import gym
         import gymnasium as gym
 
         env = gym.make(self.env_id)
@@ -62,6 +61,7 @@ class PPOHugs:
         )
 
     def push(self, repo_id=None) -> None:
+        import gymnasium as gym
         import huggingface_sb3
         import stable_baselines3
 
@@ -70,12 +70,16 @@ class PPOHugs:
         repo_id = repo_id if type(repo_id) == str else self.repo_id
 
         # PLACE the package_to_hub function you've just filled here
+        eval_env = stable_baselines3.common.vec_env.DummyVecEnv(
+            [lambda: gym.make(self.env_id, render_mode="rgb_array")]
+        )
+
         huggingface_sb3.package_to_hub(
             model=self.model,  # Our trained model
             model_name=self.model_name,  # The name of our trained model
             model_architecture=self.model_architecture,  # The model architecture we used: in our case PPO
             env_id=self.env_id,  # Name of the environment
-            eval_env=stable_baselines3.common.vec_env.DummyVecEnv([lambda: self.make()]),  # Create the evaluation env
+            eval_env=eval_env,  # Create the evaluation env
             repo_id=self.repo_id,  # id of the model repository from the Hugging Face Hub (repo_id = {organization}/{repo_name} for instance ThomasSimonini/ppo-LunarLander-v2
             commit_message=f"Upload {self.model_architecture} {self.env_id} trained agent",
         )
@@ -104,10 +108,13 @@ class PPOHugs:
             self.push()
 
     def evaluate(self):
-        from stable_baselines3.common.evaluation import evaluate_policy
+        import gymnasium as gym
+        import stable_baselines3
 
-        eval_env = self.make()
-        mean_reward, std_reward = evaluate_policy(self.model, eval_env, n_eval_episodes=10, deterministic=True)
+        eval_env = gym.make(self.env_id)
+        mean_reward, std_reward = stable_baselines3.common.evaluation.evaluate_policy(
+            self.model, eval_env, n_eval_episodes=10, deterministic=True
+        )
         print(f"mean_reward={mean_reward:.2f} +/- {std_reward}")
 
     @staticmethod
