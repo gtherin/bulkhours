@@ -37,7 +37,7 @@ class PPOHugs:
         self.model_architecture = model_architecture  # Define the model architecture we used
         self.repo_id = f"guydegnol/{self.model_name}"  # Change with your repo id, you can't push with mine 😄
 
-        self.login(pass_code=pass_code)
+        self.login(pass_code=os.environ["BLK_HUGGINGFACE_TOKEN"] if pass_code is None else pass_code)
         # self.env = self.make_vec_env()
         if type(init) == str:
             self.pull(init)

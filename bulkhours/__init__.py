@@ -27,36 +27,6 @@ from .ecox.trading import *  # noqa
 DEFAULT_TOKEN = "NO_TOKEN"
 
 
-def load_extra_magics(
-    nid=None,
-    in_french=False,
-    openai_token=DEFAULT_TOKEN,
-    premium_token=DEFAULT_TOKEN,
-    admin_token=DEFAULT_TOKEN,
-):
-    from .hpc.compiler import CCPPlugin
-    import IPython
-    from . import __version__
-
-    ipp = IPython.get_ipython()
-    if ipp:
-        ipp.register_magics(CCPPlugin(ipp))
-        if is_premium(premium_token):
-            from bulkhours_premium import Evaluation
-
-            ipp.register_magics(Evaluation(ipp, nid, in_french, openai_token))
-        else:
-            from .core.premium_mock import MockEvaluation
-
-            ipp.register_magics(MockEvaluation(ipp, nid, in_french, openai_token))
-
-        if is_admin(admin_token):
-            from bulkhours_admin import SudoEvaluation, EditStudents
-
-            ipp.register_magics(SudoEvaluation(ipp, nid, in_french, openai_token))
-            ipp.register_magics(EditStudents(ipp, nid, in_french, openai_token))
-
-
 def init_env(
     login=None,
     db_token=None,
@@ -71,7 +41,14 @@ def init_env(
     huggingface_token=DEFAULT_TOKEN,
     packages=None,
 ):
+    import IPython
+
     info = f"Import BULK Helper cOURSe ("
+
+    if huggingface_token is not None:
+        os.environ["BLK_HUGGINGFACE_TOKEN"] = huggingface_token
+
+    os.environ["BLK_LANGUAGE"] = "fr" if in_french else "en"
 
     if premium_token != DEFAULT_TOKEN and is_premium(premium_token):
         from bulkhours_premium import set_up_student
@@ -84,15 +61,29 @@ def init_env(
             info += f"class='{promo}', "
             os.environ["BLK_CLASSROOM"] = promo
 
-    os.environ["BLK_HUGGINGFACE_TOKEN"] = huggingface_token
-    os.environ["BLK_LANGUAGE"] = "fr" if in_french else "en"
     if nid is not None:
         info += f"id='{nid}', "
         os.environ["BLK_NBID"] = nid
 
-    load_extra_magics(
-        nid=nid, in_french=in_french, openai_token=openai_token, premium_token=premium_token, admin_token=admin_token
-    )
+    if ipp := IPython.get_ipython():
+        from .hpc.compiler import CCPPlugin
+
+        ipp.register_magics(CCPPlugin(ipp))
+
+        if is_premium(premium_token):
+            from bulkhours_premium import Evaluation
+
+            ipp.register_magics(Evaluation(ipp, nid, in_french, openai_token))
+        else:
+            from .core.premium_mock import MockEvaluation
+
+            ipp.register_magics(MockEvaluation(ipp, nid, in_french, openai_token))
+
+        if is_admin(admin_token):
+            from bulkhours_admin import SudoEvaluation, EditStudents
+
+            ipp.register_magics(SudoEvaluation(ipp, nid, in_french, openai_token))
+            ipp.register_magics(EditStudents(ipp, nid, in_french, openai_token))
 
     if env in ["rl", "reinforcement learning"]:
         rl.init_env(verbose=verbose)

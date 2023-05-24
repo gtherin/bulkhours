@@ -126,8 +126,12 @@ def install_dependencies(packages, start_time=None):
     env_id = "colab" if is_colab else "mock"
 
     # Update pip
-    # print("\x1b[37mRUN pip install [%s]: pip [%.0fs]" % (env_id, time.time() - start_time), end="", flush=True)
-    print("\x1b[37mRUN pip install [%s]: " % (env_id), end="", flush=True)
+    print("\x1b[37mRUN pip/apt install [%s]: " % (env_id), end="", flush=True)
+
+    # packages = "swig,cmake,python-opengl,ffmpeg,xvfb,gym==0.25.2,pyvirtualdisplay,stable-baselines3[extra],box2d,box2d-kengz,array2gif,huggingface_sb3,pyglet==1.5.1"
+    packages = packages.replace(
+        "HUGGING_FACE", "swig,cmake,HF_UNIT1,apt-get,python-opengl,ffmpeg,xvfb,pyvirtualdisplay,shimmy>=0.2.1"
+    )
 
     # Install packages
     for package in packages.split(","):
