@@ -149,7 +149,7 @@ def main(argv=sys.argv[1:]):
 
         # Install packages
         for package in args.packages.split(","):
-            if package not in ["wkhtmltopdf"]:
+            if package not in "wkhtmltopdf,swig,cmake,python-opengl,ffmpeg,xvfb".split(","):
                 print(", %s [%.0fs]" % (package, time.time() - start_time), end="", flush=True)
                 os.system(f"pip install {package} > /dev/null 2>&1")
             else:

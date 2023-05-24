@@ -7,7 +7,6 @@ from ..core import runrealcmd
 def init_env(verbose=True):
     """Use pip from the current kernel"""
     import tensorflow as tf
-    import IPython as ip
 
     if "google.colab" in sys.modules:
         # runrealcmd("sudo apt-get update", verbose=verbose)
