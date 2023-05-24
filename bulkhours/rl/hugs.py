@@ -11,7 +11,8 @@ class PPOHugs:
         huggingface_hub.login(pass_code, add_to_git_credential=True)
 
     def make(self) -> None:
-        import gym
+        # import gym
+        import gymnasium as gym
 
         env = gym.make(self.env_id)
         env.reset()

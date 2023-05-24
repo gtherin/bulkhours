@@ -126,17 +126,26 @@ def install_dependencies(packages, start_time=None):
     env_id = "colab" if is_colab else "mock"
 
     # Update pip
-    print("\x1b[37mRUN pip install [%s]: pip [%.0fs]" % (env_id, time.time() - start_time), end="", flush=True)
-    if is_colab:
-        os.system(f"pip install --upgrade pip > /dev/null 2>&1")
+    # print("\x1b[37mRUN pip install [%s]: pip [%.0fs]" % (env_id, time.time() - start_time), end="", flush=True)
+    print("\x1b[37mRUN pip install [%s]: " % (env_id), end="", flush=True)
 
     # Install packages
     for package in packages.split(","):
-        if package not in "wkhtmltopdf,swig,cmake,python-opengl,ffmpeg,xvfb".split(","):
-            print(", %s [%.0fs]" % (package, time.time() - start_time), end="", flush=True)
+        print("%s [%.0fs]," % (package, time.time() - start_time), end="", flush=True)
+        if not is_colab:
+            continue
+
+        if package == "pip":
+            os.system(f"pip install --upgrade pip > /dev/null 2>&1")
+        elif package == "apt-get":
+            os.system(f"sudo apt-get update > /dev/null 2>&1")
+        elif package == "HF_UNIT1":
+            os.system(
+                f"pip install -r https://raw.githubusercontent.com/huggingface/deep-rl-class/main/notebooks/unit1/requirements-unit1.txt > /dev/null 2>&1"
+            )
+        elif package not in "wkhtmltopdf,swig,cmake,python-opengl,ffmpeg,xvfb".split(","):
             os.system(f"pip install {package} > /dev/null 2>&1")
         else:
-            print(", %s [apt, %.0fs]" % (package, time.time() - start_time), end="", flush=True)
             os.system(f"apt install {package} > /dev/null 2>&1")
     print("\x1b[0m")
 

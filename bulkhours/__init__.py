@@ -68,6 +68,7 @@ def init_env(
     openai_token=DEFAULT_TOKEN,
     admin_token=DEFAULT_TOKEN,
     premium_token=DEFAULT_TOKEN,
+    huggingface_token=DEFAULT_TOKEN,
     packages=None,
 ):
     info = f"Import BULK Helper cOURSe ("
@@ -83,6 +84,7 @@ def init_env(
             info += f"class='{promo}', "
             os.environ["BLK_CLASSROOM"] = promo
 
+    os.environ["BLK_HUGGINGFACE_TOKEN"] = huggingface_token
     os.environ["BLK_LANGUAGE"] = "fr" if in_french else "en"
     if nid is not None:
         info += f"id='{nid}', "
@@ -128,12 +130,7 @@ def set_style():
     axis_color = "#4F77AA"  # cdcdcd
 
     def get_color(discipline):
-        colors = {
-            "swimming": "#581845",
-            "cycling": "#C70039",
-            "running": "#FF5733",
-            "axis": "#4F77AA",
-        }
+        colors = {"swimming": "#581845", "cycling": "#C70039", "running": "#FF5733", "axis": "#4F77AA"}
         return colors[discipline] if discipline in colors else "black"
 
     plt.rcParams["axes.grid"] = True
