@@ -107,6 +107,13 @@ class PPOHugs:
         if push:
             self.push()
 
+    def visualize(self, factor=1.5):
+        import IPython
+
+        IPython.display.HTML(
+            f"""<video width="{factor*480}" height="{factor*360}" controls autoplay loop><source src="https://huggingface.co/guydegnol/ppo-LunarLander-v2/resolve/main/replay.mp4" type="video/mp4"></video>"""
+        )
+
     def evaluate(self):
         import gymnasium as gym
         import stable_baselines3
