@@ -84,6 +84,10 @@ def init_env(
 
             ipp.register_magics(SudoEvaluation(ipp, nid, in_french, openai_token))
             ipp.register_magics(EditStudents(ipp, nid, in_french, openai_token))
+        else:
+            from .core.admin_mock import AdminEvaluation
+
+            ipp.register_magics(AdminEvaluation(ipp, nid, in_french, openai_token))
 
     if env in ["rl", "reinforcement learning"]:
         rl.init_env(verbose=verbose)
