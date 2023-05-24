@@ -186,6 +186,7 @@ def main(argv=sys.argv[1:]):
     data.update(args.tokens)
     # print("LOG login= %s, id=%s, env=%s [%s, %.0fs]" % (args.user, args.id, args.env_id, env_id, time.time() - start_time))
     with open(f"{bulk_dir}/bulkhours/.safe", "w", encoding="utf-8") as f:
+        print(data)
         json.dump(data, f, ensure_ascii=False, indent=4)
 
 
