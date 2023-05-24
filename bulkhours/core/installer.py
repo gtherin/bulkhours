@@ -176,7 +176,7 @@ def main(argv=sys.argv[1:]):
     # print("RUN install bulkhours [%s]" % stime.strftime("%H:%M:%S"))
 
     # Install main package
-    print(args)
+    print("DDDDDDDDDDDDDDDDDDDDDDDDD", args)
     install_pkg("admin", is_colab, args, env_id, start_time)
     install_pkg("premium", is_colab, args, env_id, start_time)
 
