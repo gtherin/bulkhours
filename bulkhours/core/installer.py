@@ -72,8 +72,7 @@ def format_opts(argv):
 
 def get_install_parser(argv):
     parser = argparse.ArgumentParser(
-        description="Installation script evaluation",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description="Installation script", formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument("-u", "--user", default=None)
     parser.add_argument("-e", "--env-id", help=f"Environnment id")
