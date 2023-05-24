@@ -139,7 +139,7 @@ def install_dependencies(packages, start_time=None):
             os.system(f"pip install --upgrade pip > /dev/null 2>&1")
         elif package == "apt-get":
             os.system(f"sudo apt-get update > /dev/null 2>&1")
-        elif package == "HF_UNIT1":
+        elif package == "HF_UNIT1":  # stable-baselines3==2.0.0a5,gymnasium[box2d],huggingface_sb3
             os.system(
                 f"pip install -r https://raw.githubusercontent.com/huggingface/deep-rl-class/main/notebooks/unit1/requirements-unit1.txt > /dev/null 2>&1"
             )
