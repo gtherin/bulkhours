@@ -37,12 +37,15 @@ class PPOHugs:
         self.model_architecture = model_architecture  # Define the model architecture we used
         self.repo_id = f"guydegnol/{self.model_name}"  # Change with your repo id, you can't push with mine 😄
 
-        self.login(pass_code=os.environ["BLK_HUGGINGFACE_TOKEN"] if pass_code is None else pass_code)
-        # self.env = self.make_vec_env()
-        if type(init) == str:
-            self.pull(init)
-        elif init:
-            self.create_from_scratch()
+        if "BLK_HUGGINGFACE_TOKEN" in os.environ:
+            self.login(pass_code=os.environ["BLK_HUGGINGFACE_TOKEN"] if pass_code is None else pass_code)
+            # self.env = self.make_vec_env()
+            if type(init) == str:
+                self.pull(init)
+            elif init:
+                self.create_from_scratch()
+        else:
+            print("\x1b[31m⚠️Please install HUGGING_FACE libraries first\x1b[0m)")
 
     def create_from_scratch(self) -> None:
         import stable_baselines3
@@ -110,8 +113,10 @@ class PPOHugs:
     def visualize(self, factor=1.5):
         import IPython
 
-        IPython.display.HTML(
-            f"""<video width="{factor*480}" height="{factor*360}" controls autoplay loop><source src="https://huggingface.co/guydegnol/ppo-LunarLander-v2/resolve/main/replay.mp4" type="video/mp4"></video>"""
+        IPython.display.display(
+            IPython.display.HTML(
+                f"""<video width="{factor*480}" height="{factor*360}" controls autoplay loop><source src="https://huggingface.co/guydegnol/ppo-LunarLander-v2/resolve/main/replay.mp4" type="video/mp4"></video>"""
+            )
         )
 
     def evaluate(self):
