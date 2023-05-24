@@ -1,5 +1,13 @@
 import os
 import json
+import ipywidgets
+
+
+def html(label, size="4", color="black"):
+    return ipywidgets.HTML(
+        value=f"<b><font face='FiraCode Nerd Font' size={size} color='{color}'>{label}<font></b>",
+        layout=ipywidgets.Layout(height="auto", width="auto"),
+    )
 
 
 def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="black", icon="📚"):
@@ -7,16 +15,10 @@ def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="blac
 
     print("")
     if header:
-        IPython.display.display(
-            IPython.display.Markdown(
-                f"<b><font face='FiraCode Nerd Font' size=4 color='{hc}'>{header} {icon}:<font></b>"
-            )
-        )
+        IPython.display.display(html(header + "" + icon, size="4", color=hc))
 
     if mdbody and (type(mdbody) in [int, float] or len(mdbody) > 1):
-        IPython.display.display(
-            IPython.display.Markdown(f"<font face='FiraCode Nerd Font' size=4 color='{bc}'>{mdbody}<font>")
-        )
+        IPython.display.display(html(mdbody, size="4", color=bc))
     if rawbody and len(rawbody) > 1:
         print(rawbody)
     if codebody and len(codebody) > 1:
