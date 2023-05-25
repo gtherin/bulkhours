@@ -28,6 +28,7 @@ def get_tokens(promo_token):
     with open(f"{bulk_dir}/bulkhours/data/radian.png") as f:
         TOKENS = f.readline()
 
+    print(TOKENS)
     for db_key in TOKENS.split("::"):
         print("AAAAAAAAAAA", db_key)
         if 1:
