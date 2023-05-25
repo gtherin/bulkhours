@@ -111,7 +111,7 @@ def init_env(
         info += f", env='{env}'"
         os.environ["BLK_ENV"] = env
 
-    info += "time=%s, " % stime.strftime("%H:%M:%S")
+    info += ", time='%s'" % stime.strftime("%H:%M:%S")
     if admin_token != DEFAULT_TOKEN:
         info = f"\x1b[31m{info},\x1b[0m \x1b[36mpremium='{mversion}'\x1b[0m🚀, \x1b[31madmin='{aversion}'\x1b[0m⚠️\x1b[41m\x1b[37mfor teachers only\x1b[0m)"
     elif premium_token != DEFAULT_TOKEN:
@@ -178,7 +178,6 @@ def geo_plot(data=None, timeopt="last", **kwargs):
 
 
 def init(verbose=False):
-    print(get_config())
     init_env(verbose=verbose, **get_config())
 
 
