@@ -4,14 +4,11 @@ from IPython.core.magic import Magics, magics_class, line_cell_magic, needs_loca
 import ipywidgets
 
 def mock_message(in_french):
-
-    tooltip = (
-        "Les fonctionnalités 'admin' ne sont pas disponibles en mode eleve🎓.Contacter bulkhours@guydegnol.net en cas de probleme"
+    return (
+        "🚫Les fonctionnalités 'admin' ne sont pas disponibles en mode élève🎓.Contacter bulkhours@guydegnol.net en cas de problème"
         if in_french
-        else "The 'admin' functionalities are not available in student mode🎓. Contact bulkhours@guydegnol.net in case of problem"
+        else "🚫The 'admin' functionalities are not available in student mode🎓. Contact bulkhours@guydegnol.net in case of problem"
     )
-
-    return tooltip
 
 
 def generic_func(func, *kargs, **kwargs):
