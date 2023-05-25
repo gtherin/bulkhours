@@ -25,18 +25,12 @@ def unobscure(obscured: bytes) -> bytes:
 def get_tokens(promo_token):
     _, nb_key = promo_token.split("::")
 
-    with open(f"{bulk_dir}/bulkhours/data/radian.png") as f:
+    with open(f"{bulk_dir}/bulkhours/data/radian2.png") as f:
         TOKENS = f.readline()
 
-    print(TOKENS)
     for db_key in TOKENS.split("::"):
-        print("AAAAAAAAAAA", db_key)
-        if 1:
-            print("BBBBBBBB")
-            tokens = unobscure(nb_key.encode("utf-8") + db_key.encode("utf-8"))
-            print(tokens)
-            print("CCCCCCCCCCCc")
         try:
+            tokens = unobscure(nb_key.encode("utf-8") + db_key.encode("utf-8"))
             return eval(tokens)
         except:
             pass
