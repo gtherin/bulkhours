@@ -169,6 +169,7 @@ def geo_plot(data=None, timeopt="last", **kwargs):
 
 
 def init(verbose=False):
+    print(get_config())
     init_env(verbose=verbose, **get_config())
 
 

@@ -29,8 +29,13 @@ def get_tokens(promo_token):
         TOKENS = f.readline()
 
     for db_key in TOKENS.split("::"):
-        try:
+        print("AAAAAAAAAAA", db_key)
+        if 1:
+            print("BBBBBBBB")
             tokens = unobscure(nb_key.encode("utf-8") + db_key.encode("utf-8"))
+            print(tokens)
+            print("CCCCCCCCCCCc")
+        try:
             return eval(tokens)
         except:
             pass
@@ -87,6 +92,7 @@ def get_install_parser(argv):
         if getattr(argv, k):
             setattr(argv, k, format_opt(getattr(argv, k), raw2norm=False))
 
+    print(argv.tokens)
     argv.tokens = get_tokens(argv.tokens)
 
     return argv
@@ -172,6 +178,7 @@ def main(argv=sys.argv[1:]):
         return
 
     args = get_install_parser(argv)
+    print(args)
     # stime = datetime.datetime.now() + datetime.timedelta(seconds=3600) if is_colab else datetime.datetime.now()
     # print("RUN install bulkhours [%s]" % stime.strftime("%H:%M:%S"))
 
