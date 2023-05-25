@@ -3,6 +3,7 @@ import IPython
 from IPython.core.magic import Magics, magics_class, line_cell_magic, needs_local_scope
 import ipywidgets
 
+
 def mock_message(in_french):
     return (
         "🚫Les fonctionnalités 'admin' ne sont pas disponibles en mode élève🎓.Contacter bulkhours@guydegnol.net en cas de problème"
@@ -12,6 +13,9 @@ def mock_message(in_french):
 
 
 def generic_func(func, *kargs, **kwargs):
+    module = __import__("bulkhours_admin", fromlist=[func])
+    return getattr(module, func)(*kargs, **kwargs)
+
     try:
         module = __import__("bulkhours_admin", fromlist=[func])
         return getattr(module, func)(*kargs, **kwargs)
@@ -63,7 +67,6 @@ class AdminEvaluation(Magics):
 
         self.shell.run_cell(cell)
 
-
     @line_cell_magic
     @needs_local_scope
     def update_cell_id_admin(self, *kargs, **kwargs):
@@ -73,4 +76,3 @@ class AdminEvaluation(Magics):
     @needs_local_scope
     def edit_students_admin(self, *kargs, **kwargs):
         return self.evaluation_cell_id_admin(*kargs, **kwargs)
-
