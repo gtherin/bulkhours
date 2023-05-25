@@ -88,10 +88,9 @@ def init_env(
             ipp.register_magics(MockEvaluation(ipp, nid, in_french, openai_token))
 
         if is_admin(admin_token):
-            from bulkhours_admin import SudoEvaluation, EditStudents
+            from bulkhours_admin import SudoEvaluation
 
             ipp.register_magics(SudoEvaluation(ipp, nid, in_french, openai_token))
-            ipp.register_magics(EditStudents(ipp, nid, in_french, openai_token))
         else:
             from .core.admin_mock import AdminEvaluation
 

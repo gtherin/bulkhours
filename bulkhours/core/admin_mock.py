@@ -39,10 +39,13 @@ def get_audio(*kargs, **kwargs):
     return generic_func("get_audio", *kargs, **kwargs)
 
 
-def evaluate(*kargs, **kwargs):
-    from .tools import md
+def dashboard(*kargs, **kwargs):
+    return generic_func("dashboard", *kargs, **kwargs)
 
-    return generic_func("evaluate", *kargs, md=md, **kwargs)
+
+def evaluate(*kargs, **kwargs):
+    # from .tools import md
+    return generic_func("evaluate", *kargs, **kwargs)  #
 
 
 @magics_class
@@ -70,9 +73,4 @@ class AdminEvaluation(Magics):
     @line_cell_magic
     @needs_local_scope
     def update_cell_id_admin(self, *kargs, **kwargs):
-        return self.evaluation_cell_id_admin(*kargs, **kwargs)
-
-    @line_cell_magic
-    @needs_local_scope
-    def edit_students_admin(self, *kargs, **kwargs):
         return self.evaluation_cell_id_admin(*kargs, **kwargs)
