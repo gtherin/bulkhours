@@ -1,4 +1,6 @@
 import os
+import datetime
+
 from .core.data import get_core_data, get_image  # noqa
 from .core.tools import is_premium, is_admin, get_config, get_value  # noqa
 from .core.timeit import timeit  # noqa
@@ -61,6 +63,12 @@ def init_env(
             info += f"class='{promo}', "
             os.environ["BLK_CLASSROOM"] = promo
 
+    stime = (
+        datetime.datetime.now() + datetime.timedelta(seconds=3600)
+        if os.path.exists("/content")
+        else datetime.datetime.now()
+    )
+
     if nid is not None:
         info += f"id='{nid}', "
         os.environ["BLK_NBID"] = nid
@@ -103,6 +111,7 @@ def init_env(
         info += f", env='{env}'"
         os.environ["BLK_ENV"] = env
 
+    info += "time=%s, " % stime.strftime("%H:%M:%S")
     if admin_token != DEFAULT_TOKEN:
         info = f"\x1b[31m{info},\x1b[0m \x1b[36mpremium='{mversion}'\x1b[0m🚀, \x1b[31madmin='{aversion}'\x1b[0m⚠️\x1b[41m\x1b[37mfor teachers only\x1b[0m)"
     elif premium_token != DEFAULT_TOKEN:
