@@ -95,7 +95,7 @@ Not presented
 
 You need to login to be properly be evaluated:
 ```python:
-bulkhours.init_env(login="john.d", pass_code="PASS_COURSE", env="econometrics") # econometrics or hpcgpu
+bulkhours.init_env(login="john.d", pass_code="DEFAULT_TOKEN", env="econometrics") # econometrics or hpcgpu
 ```
 
 ##### Cuda methods

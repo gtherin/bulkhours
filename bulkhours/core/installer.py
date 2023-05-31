@@ -31,7 +31,8 @@ def get_tokens(promo_token):
     for db_key in TOKENS.split("::"):
         try:
             tokens = unobscure(nb_key.encode("utf-8") + db_key.encode("utf-8"))
-            return eval(tokens)
+            tokens = eval(tokens)
+            return {s[0]: s[1] for s in tokens}
         except:
             pass
     return {}
@@ -87,9 +88,7 @@ def get_install_parser(argv):
         if getattr(argv, k):
             setattr(argv, k, format_opt(getattr(argv, k), raw2norm=False))
 
-    print(argv.tokens)
     argv.tokens = get_tokens(argv.tokens)
-    print(argv.tokens)
 
     return argv
 
