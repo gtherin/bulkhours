@@ -57,9 +57,13 @@ def init_env(
         from bulkhours_premium import set_up_student
 
         config = set_up_student(login, db_token=db_token, promo=promo)
+
         is_known_student = "students" in config and (login in config["students"] or login in config["admins"])
         if not is_known_student:
-            # raise IOError(f" ❌\x1b[41m\x1b[37m '{login}'  is not a known student. Please contact the teacher\x1b[0m")
+            if 0:
+                raise Exception.IndexError(
+                    f" ❌\x1b[41m\x1b[37m '{login}'  is not a known student. Please contact the teacher\x1b[0m"
+                )
             info += f"user='{login}' ❌, "
         else:
             info += f"user='{login}' ✅, "
