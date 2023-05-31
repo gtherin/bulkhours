@@ -64,7 +64,7 @@ def init_env(
                 raise Exception.IndexError(
                     f" ❌\x1b[41m\x1b[37m '{login}'  is not a known student. Please contact the teacher\x1b[0m"
                 )
-            info += f"user='{login}' ❌ (student unknown. Contact the teacher), "
+            info += f"user='{login}' ❌ (\x1b[41m\x1b[37mstudent unknown. Contact the teacher\x1b[0m), "
         else:
             info += f"user='{login}' ✅, "
 
