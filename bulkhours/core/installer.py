@@ -68,7 +68,6 @@ def format_opts(argv):
             nargv[-1] += " " + a
         else:
             nargv.append(a)
-    print(nargv)
     return [format_opt(a) for a in nargv]
 
 
