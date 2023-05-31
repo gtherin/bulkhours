@@ -7,7 +7,7 @@ from .core.timeit import timeit  # noqa
 from .core import geo  # noqa
 from .core.geo import geo_plot_country  # noqa
 from .core import runrealcmd  # noqa
-from .core.gpt import ask_chat_gpt, ask_dall_e  # noqa
+from .core.premium_mock import ask_chat_gpt, ask_dall_e  # noqa
 from .core import colors as c  # noqa
 from .core.help import data_help  # noqa
 from .core import admin_mock as admin  # noqa
@@ -42,6 +42,7 @@ def init_env(
     premium_token=DEFAULT_TOKEN,
     huggingface_token=DEFAULT_TOKEN,
     packages=None,
+    **kwargs,
 ):
     import IPython
 
@@ -55,9 +56,11 @@ def init_env(
     if premium_token != DEFAULT_TOKEN and is_premium(premium_token):
         from bulkhours_premium import set_up_student
 
-        student_login = set_up_student(login, db_token=db_token)
-        is_known_student = "✅" if 1 else "❌"
-        info += f"user='{student_login}'{is_known_student}, "
+        config = set_up_student(login, db_token=db_token, promo=promo)
+        is_known_student = "students" in config and (login in config["students"] or login in config["admins"])
+        if not is_known_student:
+            raise IOError(f" ❌\x1b[41m\x1b[37m '{login}'  is not a known student. Please contact the teacher\x1b[0m")
+        info += f"user='{login}' ✅, "
 
         if promo is not None:
             info += f"class='{promo}', "
