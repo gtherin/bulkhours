@@ -23,6 +23,17 @@ def generic_func(func, *kargs, **kwargs):
         IPython.display.display(mock_message(config["in_french"]))
 
 
+def is_documented_by(func):
+    def wrapper(target):
+        module = __import__("bulkhours_admin", fromlist=[func])
+        original = getattr(module, func)
+
+        target.__doc__ = original.__doc__
+        return target
+
+    return wrapper
+
+
 @magics_class
 class AdminEvaluation(Magics):
     def __init__(self, shell, nid, in_french, openai_token):
@@ -50,21 +61,40 @@ class AdminEvaluation(Magics):
         return self.evaluation_cell_id_admin(*kargs, **kwargs)
 
 
-def summary(*kargs, **kwargs):
-    return generic_func("summary", *kargs, **kwargs)
+class AdminMove:
+    @staticmethod
+    @is_documented_by("summary")
+    def summary(*kargs, **kwargs):
+        return generic_func("summary", *kargs, **kwargs)
 
+    @staticmethod
+    @is_documented_by("get_audio")
+    def get_audio(*kargs, **kwargs):
+        return generic_func("get_audio", *kargs, **kwargs)
 
-def edit_students(*kargs, **kwargs):
-    return generic_func("edit_students", *kargs, **kwargs)
+    @staticmethod
+    @is_documented_by("dashboard")
+    def dashboard(*kargs, **kwargs):
+        return generic_func("dashboard", *kargs, **kwargs)
 
+    @staticmethod
+    @is_documented_by("evaluate")
+    def evaluate(*kargs, **kwargs):
+        return generic_func("evaluate", *kargs, **kwargs)
 
-def get_audio(*kargs, **kwargs):
-    return generic_func("get_audio", *kargs, **kwargs)
+    @staticmethod
+    @is_documented_by("is_equal")
+    def is_equal(*kargs, **kwargs):
+        return generic_func("is_equal", *kargs, **kwargs)
 
+    def __getattr__(cls, key, *kargs, **kwargs):
+        if key == "is_equal":
+            return cls._summary(*kargs, **kwargs)
+        elif key == "Bar":
+            return cls._bar_func()
+        elif key == "summary":
+            return generic_func("summary", *kargs, **kwargs)
+        raise AttributeError(key)
 
-def dashboard(*kargs, **kwargs):
-    return generic_func("dashboard", *kargs, **kwargs)
-
-
-def evaluate(*kargs, **kwargs):
-    return generic_func("evaluate", *kargs, **kwargs)
+    def __str__(cls):
+        return "custom str for %s" % (cls.__name__,)
