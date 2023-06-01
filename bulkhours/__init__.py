@@ -10,7 +10,10 @@ from .core import runrealcmd  # noqa
 from .core.premium_mock import ask_chat_gpt, ask_dall_e  # noqa
 from .core import colors as c  # noqa
 from .core.help import data_help  # noqa
-from .core import admin_mock as admin  # noqa
+
+from .core.admin_mock import AdminMove as admin  # noqa
+
+# from .core.admin_mock import AdminEvaluation as admin  # noqa
 from .core import installer  # noqa
 
 
