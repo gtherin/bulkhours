@@ -193,3 +193,14 @@ def init(verbose=False):
 
 
 init()
+
+
+def html(label, display=True, style="raw"):
+    import IPython
+
+    if style == "title":
+        data = IPython.display.HTML(f"<b><font face='FiraCode Nerd Font' size=6 color='black'>{label}<font></b>")
+    else:
+        data = IPython.display.HTML(label)
+    if display:
+        IPython.display.display(data)
