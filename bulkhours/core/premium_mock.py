@@ -8,7 +8,7 @@ def mock_message(in_french):
     return (
         "Les fonctionnalités 'premium' ne sont pas disponibles avec votre token😕. Contacter bulkhours@guydegnol.net pour avoir un new token🚀"
         if in_french
-        else "The 'premium' functionalities are not available with your token😕. Contact bulkhours@guydegnol.net to have a new tokenee🚀"
+        else "The 'premium' functionalities are not available with your token😕. Contact bulkhours@guydegnol.net to have a new tokeneee🚀"
     )
 
 
@@ -16,6 +16,7 @@ def generic_func(func, *kargs, **kwargs):
     from .tools import get_value
 
     in_french = get_value("in_french")
+    print(is_premium())
 
     if not is_premium():
         IPython.display.display(mock_message(in_french))

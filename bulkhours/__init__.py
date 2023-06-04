@@ -11,7 +11,7 @@ from .core.premium_mock import PremiumMove as premium  # noqa
 
 ask_chat_gpt = premium.ask_chat_gpt  # noqa
 ask_dall_e = premium.ask_dall_e  # noqa
-# is_equal = premium.is_equal  # noqa
+is_equal = premium.is_equal  # noqa
 
 from .core import colors as c  # noqa
 from .core.help import data_help  # noqa

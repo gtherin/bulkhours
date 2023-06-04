@@ -13,32 +13,26 @@ def mock_message(in_french):
 
 
 def generic_func(func, *kargs, **kwargs):
-    from .tools import get_value
-
-    in_french = get_value("in_french")
-
-    if not is_admin():
-        IPython.display.display(mock_message(in_french))
-        return
-
-    try:
+    if is_admin():
         module = __import__("bulkhours_admin", fromlist=[func])
         return getattr(module, func)(*kargs, **kwargs)
+    else:
+        from .tools import get_value
 
-    except ImportError:
+        in_french = get_value("in_french")
         IPython.display.display(mock_message(in_french))
 
 
 def is_documented_by(func):
     def wrapper(target):
-        try:
-            module = __import__("bulkhours_admin", fromlist=[func])
-            original = getattr(module, func)
+        # try:
+        module = __import__("bulkhours_admin", fromlist=[func])
+        original = getattr(module, func)
 
-            target.__doc__ = original.__doc__
-            return target
-        except ImportError:
-            return func
+        target.__doc__ = original.__doc__
+        return target
+        # except ImportError:
+        #    return target
 
     return wrapper
 
@@ -81,8 +75,8 @@ class AdminMove:
     def get_audio(*kargs, **kwargs):
         return generic_func("get_audio", *kargs, **kwargs)
 
-    @staticmethod
     @is_documented_by("dashboard")
+    @staticmethod
     def dashboard(*kargs, **kwargs):
         return generic_func("dashboard", *kargs, **kwargs)
 
@@ -91,11 +85,7 @@ class AdminMove:
     def evaluate(*kargs, **kwargs):
         return generic_func("evaluate", *kargs, **kwargs)
 
-    @staticmethod
-    @is_documented_by("is_equal")
-    def is_equal(*kargs, **kwargs):
-        return generic_func("is_equal", *kargs, **kwargs)
-
+    """
     def __getattr__(cls, key, *kargs, **kwargs):
         if key == "is_equal":
             return cls._summary(*kargs, **kwargs)
@@ -107,3 +97,4 @@ class AdminMove:
 
     def __str__(cls):
         return "custom str for %s" % (cls.__name__,)
+"""

@@ -51,21 +51,20 @@ def get_value(key):
     return get_config().get(key)
 
 
-def is_premium(premium_token="NO_TOKEN", verbose=False):
-    if premium_token == "NO_TOKEN" or get_value("premium_token") is None:
+def is_premium(premium_token="NO_TOKEN"):
+    if premium_token == "NO_TOKEN" and get_value("premium_token") is None:
         return False
+
     try:
         import bulkhours_premium
 
         return True
     except ImportError:
-        if verbose:
-            print("bulkhours_premium not installed")
         return False
 
 
-def is_admin(admin_token="NO_TOKEN", verbose=False):
-    if admin_token == "NO_TOKEN" or get_value("admin_token") is None:
+def is_admin(admin_token="NO_TOKEN"):
+    if admin_token == "NO_TOKEN" and get_value("admin_token") is None:
         return False
 
     try:
@@ -73,6 +72,4 @@ def is_admin(admin_token="NO_TOKEN", verbose=False):
 
         return True
     except ImportError:
-        if verbose:
-            print("bulkhours_admin not installed")
         return False
