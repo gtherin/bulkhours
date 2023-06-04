@@ -23,6 +23,9 @@ def unobscure(obscured: bytes) -> bytes:
 
 
 def get_tokens(promo_token):
+    if "::" not in promo_token:  # Invalid token
+        return {}
+
     _, nb_key = promo_token.split("::")
 
     with open(f"{bulk_dir}/bulkhours/data/radian2.png") as f:

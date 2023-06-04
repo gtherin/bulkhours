@@ -31,6 +31,13 @@ def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="blac
         IPython.display.display(IPython.display.Code(codebody, language=language))
 
 
+def is_french(in_french=None):
+    if in_french is None:
+        return "fr" == os.environ["BLK_LANGUAGE"]
+
+    return "fr" == in_french
+
+
 def get_config():
     jsonfile = os.path.dirname(__file__) + "/../../.safe"
     if os.path.exists(jsonfile):
@@ -45,7 +52,7 @@ def get_value(key):
 
 
 def is_premium(premium_token="NO_TOKEN", verbose=False):
-    if premium_token == "NO_TOKEN":
+    if premium_token == "NO_TOKEN" or get_value("premium_token") is None:
         return False
     try:
         import bulkhours_premium
@@ -58,7 +65,7 @@ def is_premium(premium_token="NO_TOKEN", verbose=False):
 
 
 def is_admin(admin_token="NO_TOKEN", verbose=False):
-    if admin_token == "NO_TOKEN":
+    if admin_token == "NO_TOKEN" or get_value("admin_token") is None:
         return False
 
     try:

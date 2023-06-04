@@ -1,26 +1,32 @@
 import IPython
 from IPython.core.magic import Magics, magics_class, line_cell_magic, needs_local_scope
 import ipywidgets
+from .tools import is_admin
 
 
 def mock_message(in_french):
     return (
-        "🚫Les fonctionnalités 'admin' ne sont pas disponibles en mode élève🎓.Contacter bulkhours@guydegnol.net en cas de problème"
+        "🚫Les fonctionnalités 'admin' ne sont pas disponibles avec vos token. Contacter bulkhours@guydegnol.net en cas de problème."
         if in_french
-        else "🚫The 'admin' functionalities are not available in student mode🎓. Contact bulkhours@guydegnol.net in case of problem"
+        else "🚫The 'admin' functionalities are not available with your token. Contact bulkhours@guydegnol.net in case of problem."
     )
 
 
 def generic_func(func, *kargs, **kwargs):
+    from .tools import get_value
+
+    in_french = get_value("in_french")
+
+    if not is_admin():
+        IPython.display.display(mock_message(in_french))
+        return
+
     try:
         module = __import__("bulkhours_admin", fromlist=[func])
         return getattr(module, func)(*kargs, **kwargs)
 
     except ImportError:
-        from .tools import get_config
-
-        config = get_config()
-        IPython.display.display(mock_message(config["in_french"]))
+        IPython.display.display(mock_message(in_french))
 
 
 def is_documented_by(func):
