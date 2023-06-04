@@ -65,7 +65,11 @@ def init_env(
 
         config = set_up_student(login, db_token=db_token, promo=promo, subject=subject)
 
-        is_known_student = "students" in config and (login in config["students"] or login in config["admins"])
+        print(config[config["virtual_room"]])
+
+        is_known_student = config["virtual_room"] in config and (
+            login in config[config["virtual_room"]] or login in config["admins"]
+        )
         if not is_known_student:
             if 0:
                 raise Exception.IndexError(
