@@ -7,7 +7,12 @@ from .core.timeit import timeit  # noqa
 from .core import geo  # noqa
 from .core.geo import geo_plot_country  # noqa
 from .core import runrealcmd  # noqa
-from .core.premium_mock import ask_chat_gpt, ask_dall_e, is_equal  # noqa
+from .core.premium_mock import PremiumMove as premium  # noqa
+
+ask_chat_gpt = premium.ask_chat_gpt  # noqa
+ask_dall_e = premium.ask_dall_e  # noqa
+# is_equal = premium.is_equal  # noqa
+
 from .core import colors as c  # noqa
 from .core.help import data_help  # noqa
 
