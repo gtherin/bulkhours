@@ -106,6 +106,10 @@ def init_env(
             from bulkhours_admin import SudoEvaluation
 
             ipp.register_magics(SudoEvaluation(ipp, nid, in_french, openai_token))
+            from bulkhours_admin import Dashboard
+
+            ipp.register_magics(Dashboard(ipp, nid, in_french, openai_token))
+
         else:
             from .core.admin_mock import AdminEvaluation
 
