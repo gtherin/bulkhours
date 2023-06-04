@@ -8,7 +8,7 @@ def mock_message(in_french):
     return (
         "Les fonctionnalités 'premium' ne sont pas disponibles avec votre token😕. Contacter bulkhours@guydegnol.net pour avoir un new token🚀"
         if in_french
-        else "The 'premium' functionalities are not available with your token😕. Contact bulkhours@guydegnol.net to have a new token🚀"
+        else "The 'premium' functionalities are not available with your token😕. Contact bulkhours@guydegnol.net to have a new tokenee🚀"
     )
 
 
@@ -51,13 +51,32 @@ class MockEvaluation(Magics):
         self.shell.run_cell(cell)
 
 
-def ask_chat_gpt(*kargs, **kwargs):
-    return generic_func("ask_chat_gpt", *kargs, **kwargs)
+def is_documented_by(func):
+    def wrapper(target):
+        try:
+            module = __import__("bulkhours_premium", fromlist=[func])
+            original = getattr(module, func)
+
+            target.__doc__ = original.__doc__
+            return target
+        except ImportError:
+            return func
+
+    return wrapper
 
 
-def ask_dall_e(*kargs, **kwargs):
-    return generic_func("ask_dall_e", *kargs, **kwargs)
+class PremiumMove:
+    @staticmethod
+    @is_documented_by("ask_chat_gpt")
+    def ask_chat_gpt(*kargs, **kwargs):
+        return generic_func("ask_chat_gpt", *kargs, **kwargs)
 
+    @staticmethod
+    @is_documented_by("ask_dall_e")
+    def ask_dall_e(*kargs, **kwargs):
+        return generic_func("ask_dall_e", *kargs, **kwargs)
 
-def is_equal(*kargs, **kwargs):
-    return generic_func("is_equal", *kargs, **kwargs)
+    @staticmethod
+    @is_documented_by("is_equal")
+    def is_equal(*kargs, **kwargs):
+        return generic_func("is_equal", *kargs, **kwargs)
