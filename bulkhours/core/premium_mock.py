@@ -1,26 +1,32 @@
 import IPython
 from IPython.core.magic import Magics, magics_class, line_cell_magic, needs_local_scope
 import ipywidgets
+from .tools import is_premium
 
 
 def mock_message(in_french):
     return (
-        "Les fonctionnalités 'evaluation_cell_id' ne sont plus disponibles😕. Vous pouvez supprimer son appel de la cellule (pour enlever ce button) ou contacter bulkhours@guydegnol.net pour avoir un nouveau token pour reactiver le service🚀"
+        "Les fonctionnalités 'premium' ne sont pas disponibles avec votre token😕. Contacter bulkhours@guydegnol.net pour avoir un new token🚀"
         if in_french
-        else "The 'evaluation_cell_id' functionalities are no more available😕. You can remove its call line from the cell (to remove that button) or contact bulkhours@guydegnol.net to have a new token to reactivate the service🚀"
+        else "The 'premium' functionalities are not available with your token😕. Contact bulkhours@guydegnol.net to have a new token🚀"
     )
 
 
 def generic_func(func, *kargs, **kwargs):
+    from .tools import get_value
+
+    in_french = get_value("in_french")
+
+    if not is_premium():
+        IPython.display.display(mock_message(in_french))
+        return
+
     try:
         module = __import__("bulkhours_premium", fromlist=[func])
         return getattr(module, func)(*kargs, **kwargs)
 
     except ImportError:
-        from .tools import get_config
-
-        config = get_config()
-        IPython.display.display(mock_message(config["in_french"]))
+        IPython.display.display(mock_message(in_french))
 
 
 @magics_class
@@ -51,3 +57,7 @@ def ask_chat_gpt(*kargs, **kwargs):
 
 def ask_dall_e(*kargs, **kwargs):
     return generic_func("ask_dall_e", *kargs, **kwargs)
+
+
+def is_equal(*kargs, **kwargs):
+    return generic_func("is_equal", *kargs, **kwargs)
