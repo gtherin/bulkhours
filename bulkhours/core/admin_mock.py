@@ -25,14 +25,14 @@ def generic_func(func, *kargs, **kwargs):
 
 def is_documented_by(func):
     def wrapper(target):
-        # try:
-        module = __import__("bulkhours_admin", fromlist=[func])
-        original = getattr(module, func)
+        try:
+            module = __import__("bulkhours_admin", fromlist=[func])
+            original = getattr(module, func)
 
-        target.__doc__ = original.__doc__
-        return target
-        # except ImportError:
-        #    return target
+            target.__doc__ = original.__doc__
+            return target
+        except ImportError:
+            return target
 
     return wrapper
 
