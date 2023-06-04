@@ -48,6 +48,7 @@ def init_env(
     premium_token=DEFAULT_TOKEN,
     huggingface_token=DEFAULT_TOKEN,
     packages=None,
+    subject=None,
     **kwargs,
 ):
     import IPython
@@ -62,13 +63,13 @@ def init_env(
     if premium_token != DEFAULT_TOKEN and is_premium(premium_token):
         from bulkhours_premium import set_up_student
 
-        config = set_up_student(login, db_token=db_token, promo=promo)
+        config = set_up_student(login, db_token=db_token, promo=promo, subject=subject)
 
         is_known_student = "students" in config and (login in config["students"] or login in config["admins"])
         if not is_known_student:
             if 0:
                 raise Exception.IndexError(
-                    f" ❌\x1b[41m\x1b[37m '{login}'  is not a known student. Please contact the teacher\x1b[0m"
+                    f" ❌\x1b[41m\x1b[37m '{login}' is not a known student. Please contact the teacher\x1b[0m"
                 )
             info += f"user='{login}' ❌ (\x1b[41m\x1b[37mUnknown user. Contact the teacher\x1b[0m), "
         else:
