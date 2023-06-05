@@ -53,6 +53,8 @@ def init_env(
 ):
     import IPython
 
+    print(kwargs)
+
     info = f"Import BULK Helper cOURSe ("
 
     if huggingface_token is not None:
@@ -64,8 +66,7 @@ def init_env(
         from bulkhours_premium import set_up_student
 
         config = set_up_student(login, db_token=db_token, promo=promo, subject=subject)
-
-        print(config[config["virtual_room"]])
+        print(config)
 
         is_known_student = config["virtual_room"] in config and (
             login in config[config["virtual_room"]] or login in config["admins"]
@@ -79,9 +80,12 @@ def init_env(
         else:
             info += f"user='{login}' ✅, "
 
-        if promo is not None:
-            info += f"class='{promo}', "
+        if subject is not None:
+            info += f"subject='{subject}', "
+            os.environ["BLK_SUBJECT"] = subject
+            info += f"vroom='{promo}', "
             os.environ["BLK_CLASSROOM"] = promo
+            os.environ["BLK_VIRTUALROOM"] = promo
 
     stime = (
         datetime.datetime.now() + datetime.timedelta(seconds=3600)
