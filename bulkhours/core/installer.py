@@ -81,12 +81,11 @@ def get_install_parser(argv):
     parser.add_argument("-u", "--user", default=None)
     parser.add_argument("-i", "--id", default=None)
     parser.add_argument("-p", "--packages", default="None")
-    parser.add_argument("-l", "--language", default="fr")
     parser.add_argument("-k", "--openai-token", default=DEFAULT_TOKEN)
     parser.add_argument("-t", "--tokens", default={})
 
     argv = parser.parse_args(format_opts(argv))
-    for k in ["user", "id", "packages", "language", "openai_token", "tokens"]:
+    for k in ["user", "id", "packages", "openai_token", "tokens"]:
         if getattr(argv, k):
             setattr(argv, k, format_opt(getattr(argv, k), raw2norm=False))
 
@@ -117,6 +116,12 @@ def install_pkg(pkg, is_colab, tokens, env_id, start_time):
         print(
             f"RUN install bulkhours_{pkg}: installation failed 🚫. Check that your {pkg}_token is still valid (contact: bulkhours@guydegnol.net)"
         )
+
+
+def dump_config(args):
+    data = {"login": args.user, "nid": args.id, **args.tokens}
+    with open(f"{bulk_dir}/bulkhours/.safe", "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
 
 
 def install_dependencies(packages, start_time=None):
@@ -181,13 +186,8 @@ def main(argv=sys.argv[1:]):
     # Install main package
     install_pkg("admin", is_colab, args.tokens, env_id, start_time)
     install_pkg("premium", is_colab, args.tokens, env_id, start_time)
-
     install_dependencies(args.packages, start_time=start_time)
-
-    # Dump env variables
-    data = {"login": args.user, "nid": args.id, "language": args.language, **args.tokens}
-    with open(f"{bulk_dir}/bulkhours/.safe", "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
+    dump_config(args)  # Dump env variables
 
 
 if __name__ == "__main__":

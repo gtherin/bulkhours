@@ -18,8 +18,6 @@ from .core.help import data_help  # noqa
 
 from .core.admin_mock import AdminMove as admin  # noqa
 from .core import installer  # noqa
-
-
 from . import rl  # noqa
 from . import hpc  # noqa
 from . import ecox  # noqa
@@ -38,8 +36,7 @@ DEFAULT_TOKEN = "NO_TOKEN"
 def init_env(
     login=None,
     db_token=None,
-    verbose=False,
-    language=False,
+    language="fr",
     nid=None,
     openai_token=DEFAULT_TOKEN,
     admin_token=DEFAULT_TOKEN,
@@ -57,30 +54,12 @@ def init_env(
     if huggingface_token is not None:
         os.environ["BLK_HUGGINGFACE_TOKEN"] = huggingface_token
 
-    os.environ["BLK_LANGUAGE"] = language
-
     if premium_token != DEFAULT_TOKEN and is_premium(premium_token):
-        from bulkhours_premium import set_up_student
+        from bulkhours_premium import init_prems
 
-        config = set_up_student(login, db_token=db_token, virtual_room=virtual_room, subject=subject)
-
-        is_known_student = config["virtual_room"] in config and (
-            login in config[config["virtual_room"]] or login in config["admins"]
-        )
-        if not is_known_student:
-            if 0:
-                raise Exception.IndexError(
-                    f" ❌\x1b[41m\x1b[37m '{login}' is not a known student. Please contact the teacher\x1b[0m"
-                )
-            info += f"user='{login}' ❌ (\x1b[41m\x1b[37mUnknown user. Contact the teacher\x1b[0m), "
-        else:
-            info += f"user='{login}' ✅, "
-
-        if subject is not None:
-            info += f"subject='{subject}', "
-            os.environ["BLK_SUBJECT"] = subject
-            info += f"vroom='{virtual_room}', "
-            os.environ["BLK_VIRTUALROOM"] = virtual_room
+        info = init_prems(info, login, nid, db_token=db_token, virtual_room=virtual_room, subject=subject)
+    else:
+        os.environ["BLK_LANGUAGE"] = language
 
     stime = (
         datetime.datetime.now() + datetime.timedelta(seconds=3600)
