@@ -52,7 +52,6 @@ def init_env(
 ):
     import IPython
 
-    print(kwargs)
     info = f"Import BULK Helper cOURSe ("
 
     if huggingface_token is not None:
