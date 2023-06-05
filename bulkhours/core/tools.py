@@ -52,6 +52,9 @@ def get_value(key):
 
 
 def is_premium(premium_token="NO_TOKEN"):
+    import bulkhours_premium
+
+    return True
     if premium_token == "NO_TOKEN" and get_value("premium_token") is None:
         return False
 
@@ -64,6 +67,9 @@ def is_premium(premium_token="NO_TOKEN"):
 
 
 def is_admin(admin_token="NO_TOKEN"):
+    import bulkhours_admin
+
+    return True
     if admin_token == "NO_TOKEN" and get_value("admin_token") is None:
         return False
 
