@@ -81,17 +81,16 @@ def get_install_parser(argv):
     parser.add_argument("-u", "--user", default=None)
     parser.add_argument("-i", "--id", default=None)
     parser.add_argument("-p", "--packages", default="None")
-    parser.add_argument("-f", "--in-french", help="Change languages", action="store_true")
+    parser.add_argument("-l", "--language", default="fr")
     parser.add_argument("-k", "--openai-token", default=DEFAULT_TOKEN)
     parser.add_argument("-t", "--tokens", default={})
 
     argv = parser.parse_args(format_opts(argv))
-    for k in ["user", "id", "packages", "openai_token", "tokens"]:
+    for k in ["user", "id", "packages", "language", "openai_token", "tokens"]:
         if getattr(argv, k):
             setattr(argv, k, format_opt(getattr(argv, k), raw2norm=False))
 
     argv.tokens = get_tokens(argv.tokens)
-    print(argv)
 
     return argv
 
@@ -186,7 +185,7 @@ def main(argv=sys.argv[1:]):
     install_dependencies(args.packages, start_time=start_time)
 
     # Dump env variables
-    data = {"login": args.user, "nid": args.id, "in_french": args.in_french, **args.tokens}
+    data = {"login": args.user, "nid": args.id, "language": args.language, **args.tokens}
     with open(f"{bulk_dir}/bulkhours/.safe", "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 

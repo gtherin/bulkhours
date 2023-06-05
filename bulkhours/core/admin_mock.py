@@ -4,10 +4,10 @@ import ipywidgets
 from .tools import is_admin
 
 
-def mock_message(in_french):
+def mock_message(language):
     return (
         "🚫Les fonctionnalités 'admin' ne sont pas disponibles avec vos token. Contacter bulkhours@guydegnol.net en cas de problème."
-        if in_french
+        if language == "fr"
         else "🚫The 'admin' functionalities are not available with your token. Contact bulkhours@guydegnol.net in case of problem."
     )
 
@@ -19,8 +19,8 @@ def generic_func(func, *kargs, **kwargs):
     else:
         from .tools import get_value
 
-        in_french = get_value("in_french")
-        IPython.display.display(mock_message(in_french))
+        language = get_value("language")
+        IPython.display.display(mock_message(language))
 
 
 def is_documented_by(func):
@@ -39,20 +39,20 @@ def is_documented_by(func):
 
 @magics_class
 class AdminEvaluation(Magics):
-    def __init__(self, shell, nid, in_french, openai_token):
+    def __init__(self, shell, nid, language, openai_token):
         super(AdminEvaluation, self).__init__(shell)
-        self.in_french = in_french
+        self.language = language
 
     @line_cell_magic
     @needs_local_scope
     def evaluation_cell_id_admin(self, line, cell="", local_ns=None):
-        IPython.display.display(mock_message(self.in_french))
+        IPython.display.display(mock_message(self.language))
         IPython.display.display(
             ipywidgets.Button(
-                description="Evaluation non disponible😕" if self.in_french else "Evaluation not available😕",
+                description="Evaluation non disponible😕" if self.language == "fr" else "Evaluation not available😕",
                 layout=ipywidgets.Layout(width="max-content"),
                 disabled=True,
-                tooltip=mock_message(self.in_french),
+                tooltip=mock_message(self.language),
             )
         )
 
