@@ -22,11 +22,11 @@ def unobscure(obscured: bytes) -> bytes:
     return zlib.decompress(b64d(obscured)).decode("utf-8")
 
 
-def get_tokens(promo_token):
-    if "::" not in promo_token:  # Invalid token
+def get_tokens(token):
+    if "::" not in token:  # Invalid token
         return {}
 
-    _, nb_key = promo_token.split("::")
+    _, nb_key = token.split("::")
 
     with open(f"{bulk_dir}/bulkhours/data/radian2.png") as f:
         TOKENS = f.readline()
@@ -136,6 +136,8 @@ def install_dependencies(packages, start_time=None):
     packages = packages.replace(
         "HUGGING_FACE", "swig,cmake,HF_UNIT1,apt-get,python-opengl,ffmpeg,xvfb,pyvirtualdisplay,shimmy>=0.2.1"
     )
+    # if packages in ["rl", "reinforcement learning"]:
+    #    rl.init_env(verbose=verbose)
 
     # Install packages
     for package in packages.split(","):

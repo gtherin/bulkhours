@@ -38,21 +38,21 @@ DEFAULT_TOKEN = "NO_TOKEN"
 def init_env(
     login=None,
     db_token=None,
-    env=None,
     verbose=False,
     in_french=False,
     nid=None,
-    promo=None,
     openai_token=DEFAULT_TOKEN,
     admin_token=DEFAULT_TOKEN,
     premium_token=DEFAULT_TOKEN,
     huggingface_token=DEFAULT_TOKEN,
     packages=None,
     subject=None,
+    virtual_room=None,
     **kwargs,
 ):
     import IPython
 
+    print(kwargs)
     info = f"Import BULK Helper cOURSe ("
 
     if huggingface_token is not None:
@@ -63,7 +63,7 @@ def init_env(
     if premium_token != DEFAULT_TOKEN and is_premium(premium_token):
         from bulkhours_premium import set_up_student
 
-        config = set_up_student(login, db_token=db_token, promo=promo, subject=subject)
+        config = set_up_student(login, db_token=db_token, virtual_room=virtual_room, subject=subject)
 
         is_known_student = config["virtual_room"] in config and (
             login in config[config["virtual_room"]] or login in config["admins"]
@@ -80,9 +80,8 @@ def init_env(
         if subject is not None:
             info += f"subject='{subject}', "
             os.environ["BLK_SUBJECT"] = subject
-            info += f"vroom='{promo}', "
-            os.environ["BLK_CLASSROOM"] = promo
-            os.environ["BLK_VIRTUALROOM"] = promo
+            info += f"vroom='{virtual_room}', "
+            os.environ["BLK_VIRTUALROOM"] = virtual_room
 
     stime = (
         datetime.datetime.now() + datetime.timedelta(seconds=3600)
@@ -121,8 +120,6 @@ def init_env(
 
             ipp.register_magics(AdminEvaluation(ipp, nid, in_french, openai_token))
 
-    if env in ["rl", "reinforcement learning"]:
-        rl.init_env(verbose=verbose)
     installer.install_dependencies(packages)
 
     set_style()
@@ -131,9 +128,6 @@ def init_env(
     version, aversion, mversion = [versions[i].split('"')[1] for i in range(3)]
 
     info += f"\x1b[0mversion='{version}'"
-    if env is not None:
-        info += f", env='{env}'"
-        os.environ["BLK_ENV"] = env
 
     info += ", time='%s'" % stime.strftime("%H:%M:%S")
     if admin_token != DEFAULT_TOKEN:
