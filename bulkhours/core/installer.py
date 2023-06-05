@@ -91,6 +91,7 @@ def get_install_parser(argv):
             setattr(argv, k, format_opt(getattr(argv, k), raw2norm=False))
 
     argv.tokens = get_tokens(argv.tokens)
+    print(argv)
 
     return argv
 
