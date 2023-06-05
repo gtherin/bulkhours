@@ -39,7 +39,7 @@ def init_env(
     login=None,
     db_token=None,
     verbose=False,
-    in_french=False,
+    language=False,
     nid=None,
     openai_token=DEFAULT_TOKEN,
     admin_token=DEFAULT_TOKEN,
@@ -57,7 +57,7 @@ def init_env(
     if huggingface_token is not None:
         os.environ["BLK_HUGGINGFACE_TOKEN"] = huggingface_token
 
-    os.environ["BLK_LANGUAGE"] = "fr" if in_french else "en"
+    os.environ["BLK_LANGUAGE"] = language
 
     if premium_token != DEFAULT_TOKEN and is_premium(premium_token):
         from bulkhours_premium import set_up_student
@@ -100,24 +100,24 @@ def init_env(
         if is_premium(premium_token):
             from bulkhours_premium import Evaluation
 
-            ipp.register_magics(Evaluation(ipp, nid, in_french, openai_token))
+            ipp.register_magics(Evaluation(ipp, nid, language, openai_token))
         else:
             from .core.premium_mock import MockEvaluation
 
-            ipp.register_magics(MockEvaluation(ipp, nid, in_french, openai_token))
+            ipp.register_magics(MockEvaluation(ipp, nid, language, openai_token))
 
         if is_admin(admin_token):
             from bulkhours_admin import SudoEvaluation
 
-            ipp.register_magics(SudoEvaluation(ipp, nid, in_french, openai_token))
+            ipp.register_magics(SudoEvaluation(ipp, nid, language, openai_token))
             from bulkhours_admin import Dashboard
 
-            ipp.register_magics(Dashboard(ipp, nid, in_french, openai_token))
+            ipp.register_magics(Dashboard(ipp, nid, language, openai_token))
 
         else:
             from .core.admin_mock import AdminEvaluation
 
-            ipp.register_magics(AdminEvaluation(ipp, nid, in_french, openai_token))
+            ipp.register_magics(AdminEvaluation(ipp, nid, language, openai_token))
 
     installer.install_dependencies(packages)
 

@@ -4,10 +4,10 @@ import ipywidgets
 from .tools import is_premium
 
 
-def mock_message(in_french):
+def mock_message(language):
     return (
         "Les fonctionnalités 'premium' ne sont pas disponibles avec votre token😕. Contacter bulkhours@guydegnol.net pour avoir un new token🚀"
-        if in_french
+        if language == "fr"
         else "The 'premium' functionalities are not available with your token😕. Contact bulkhours@guydegnol.net to have a new tokeneee🚀"
     )
 
@@ -15,11 +15,11 @@ def mock_message(in_french):
 def generic_func(func, *kargs, **kwargs):
     from .tools import get_value
 
-    in_french = get_value("in_french")
+    language = get_value("language")
     print(is_premium())
 
     if not is_premium():
-        IPython.display.display(mock_message(in_french))
+        IPython.display.display(mock_message(language))
         return
 
     try:
@@ -27,25 +27,25 @@ def generic_func(func, *kargs, **kwargs):
         return getattr(module, func)(*kargs, **kwargs)
 
     except ImportError:
-        IPython.display.display(mock_message(in_french))
+        IPython.display.display(mock_message(language))
 
 
 @magics_class
 class MockEvaluation(Magics):
-    def __init__(self, shell, nid, in_french, openai_token):
+    def __init__(self, shell, nid, language, openai_token):
         super(MockEvaluation, self).__init__(shell)
-        self.in_french = in_french
+        self.language = language
 
     @line_cell_magic
     @needs_local_scope
     def evaluation_cell_id(self, line, cell="", local_ns=None):
-        IPython.display.display(mock_message(self.in_french))
+        IPython.display.display(mock_message(self.language))
         IPython.display.display(
             ipywidgets.Button(
-                description="Evaluation non disponible😕" if self.in_french else "Evaluation not available😕",
+                description="Evaluation non disponible😕" if self.language == "fr" else "Evaluation not available😕",
                 layout=ipywidgets.Layout(width="max-content"),
                 disabled=True,
-                tooltip=mock_message(self.in_french),
+                tooltip=mock_message(self.language),
             )
         )
 
