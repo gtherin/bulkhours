@@ -39,20 +39,19 @@ def is_documented_by(func):
 
 @magics_class
 class AdminEvaluation(Magics):
-    def __init__(self, shell, nid, language, openai_token):
-        super(AdminEvaluation, self).__init__(shell)
-        self.language = language
-
     @line_cell_magic
     @needs_local_scope
     def evaluation_cell_id_admin(self, line, cell="", local_ns=None):
-        IPython.display.display(mock_message(self.language))
+        import os
+
+        language = os.environ["BLK_LANGUAGE"]
+        IPython.display.display(mock_message(language))
         IPython.display.display(
             ipywidgets.Button(
-                description="Evaluation non disponible😕" if self.language == "fr" else "Evaluation not available😕",
+                description="Evaluation non disponible😕" if language == "fr" else "Evaluation not available😕",
                 layout=ipywidgets.Layout(width="max-content"),
                 disabled=True,
-                tooltip=mock_message(self.language),
+                tooltip=mock_message(language),
             )
         )
 
