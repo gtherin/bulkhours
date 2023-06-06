@@ -65,7 +65,7 @@ def get_value(key, e=""):
     return get_config(e=e).get(key)
 
 
-def is_premium(debug=True):
+def is_premium(debug=False):
     token = get_value("premium_token", e="p")
 
     if token is None:
