@@ -78,14 +78,12 @@ def get_install_parser(argv):
     parser = argparse.ArgumentParser(
         description="Installation script", formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument("-u", "--user", default=None)
-    parser.add_argument("-i", "--id", default=None)
     parser.add_argument("-p", "--packages", default="None")
     parser.add_argument("-k", "--openai-token", default=DEFAULT_TOKEN)
     parser.add_argument("-t", "--tokens", default={})
 
     argv = parser.parse_args(format_opts(argv))
-    for k in ["user", "id", "packages", "openai_token", "tokens"]:
+    for k in ["packages", "openai_token", "tokens"]:
         if getattr(argv, k):
             setattr(argv, k, format_opt(getattr(argv, k), raw2norm=False))
 
@@ -116,21 +114,6 @@ def install_pkg(pkg, is_colab, tokens, env_id, start_time):
         print(
             f"RUN install bulkhours_{pkg}: installation failed 🚫. Check that your {pkg}_token is still valid (contact: bulkhours@guydegnol.net)"
         )
-
-
-def dump_config(args):
-    if os.path.exists(jsonfile := f"{bulk_dir}/bulkhours/.safe") and "BLK_STATUS" in os.environ:
-        with open(jsonfile) as f:
-            data = json.load(f)
-        data.update({"login": args.user, "nid": args.id, **args.tokens})
-        data["status"] += 1
-        os.environ["BLK_STATUS"] = f"INSTALLED_{data['status']}"
-    else:
-        data = {"login": args.user, "nid": args.id, "status": 0, **args.tokens}
-
-    os.environ["BLK_STATUS"] = f"INSTALLED_{data['status']}"
-    with open(jsonfile, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
 
 
 def install_dependencies(packages, start_time=None):
@@ -199,7 +182,10 @@ def main(argv=sys.argv[1:]):
     install_pkg("admin", is_colab, args.tokens, env_id, start_time)
     install_pkg("premium", is_colab, args.tokens, env_id, start_time)
     install_dependencies(args.packages, start_time=start_time)
-    dump_config(args)  # Dump env variables
+
+    # Dump env variables
+    with open(f"{bulk_dir}/bulkhours/.safep", "w", encoding="utf-8") as f:
+        json.dump(args.tokens, f, ensure_ascii=False, indent=4)
 
 
 if __name__ == "__main__":
