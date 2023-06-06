@@ -119,8 +119,17 @@ def install_pkg(pkg, is_colab, tokens, env_id, start_time):
 
 
 def dump_config(args):
-    data = {"login": args.user, "nid": args.id, **args.tokens}
-    with open(f"{bulk_dir}/bulkhours/.safe", "w", encoding="utf-8") as f:
+    if os.path.exists(jsonfile := f"{bulk_dir}/bulkhours/.safe") and "BLK_STATUS" in os.environ:
+        with open(jsonfile) as f:
+            data = json.load(f)
+        data.update({"login": args.user, "nid": args.id, **args.tokens})
+        data["status"] += 1
+        os.environ["BLK_STATUS"] = f"INSTALLED_{data['status']}"
+    else:
+        data = {"login": args.user, "nid": args.id, "status": 0, **args.tokens}
+
+    os.environ["BLK_STATUS"] = f"INSTALLED_{data['status']}"
+    with open(jsonfile, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
 
