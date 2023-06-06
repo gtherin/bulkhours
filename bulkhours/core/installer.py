@@ -180,7 +180,6 @@ def main(argv=sys.argv[1:]):
         return
 
     args = get_install_parser(argv)
-    print()
 
     # Install main package
     install_pkg("admin", is_colab, args.tokens, env_id, start_time, args.debug)
