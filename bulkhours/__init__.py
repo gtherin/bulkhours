@@ -59,6 +59,8 @@ def init_env(
 
         info = init_prems(info, login, nid, db_token=db_token, virtual_room=virtual_room, subject=subject)
     else:
+        # config["global"]["language"] = language
+
         os.environ["BLK_LANGUAGE"] = language
 
     stime = (
@@ -96,7 +98,7 @@ def init_env(
         else:
             from .core.admin_mock import AdminEvaluation
 
-            ipp.register_magics(AdminEvaluation(ipp, nid, language, openai_token))
+            ipp.register_magics(AdminEvaluation(ipp, nid, openai_token))
 
     installer.install_dependencies(packages)
 
