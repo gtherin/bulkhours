@@ -72,10 +72,11 @@ def is_premium(debug=True):
         return False
 
     if debug:
+        print("import bulkhours_premium")
         import bulkhours_premium
 
     try:
-        import bulkhours_admin
+        import bulkhours_premium
 
         return True
     except ImportError:
@@ -88,6 +89,7 @@ def is_admin(debug=False):
         return False
 
     if debug:
+        print("import bulkhours_admin")
         import bulkhours_admin
 
     try:
