@@ -39,6 +39,9 @@ def is_documented_by(func):
 
 @magics_class
 class AdminEvaluation(Magics):
+    def __init__(self, shell, nid, openai_token):
+        super(AdminEvaluation, self).__init__(shell)
+
     @line_cell_magic
     @needs_local_scope
     def evaluation_cell_id_admin(self, line, cell="", local_ns=None):
