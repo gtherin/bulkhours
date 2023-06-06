@@ -179,7 +179,10 @@ def main(argv=sys.argv[1:]):
     env_id = "colab" if is_colab else "mock"
 
     # Get the bulkhours basic package
-    print("RUN git clone https://github.com/guydegnol/bulkhours.git [%s, %.0fs]" % (env_id, time.time() - start_time))
+    print(
+        "RUN git clone https://github.com/guydegnol/bulkhours.git [%s, %.0fs, 16:12]"
+        % (env_id, time.time() - start_time)
+    )
 
     if is_colab:
         os.system(
