@@ -1,7 +1,7 @@
 import IPython
 from IPython.core.magic import Magics, magics_class, line_cell_magic, needs_local_scope
 import ipywidgets
-from .tools import is_admin
+from .tools import is_admin, get_value
 
 
 def mock_message(language):
@@ -17,8 +17,6 @@ def generic_func(func, *kargs, **kwargs):
         module = __import__("bulkhours_admin", fromlist=[func])
         return getattr(module, func)(*kargs, **kwargs)
     else:
-        from .tools import get_value
-
         language = get_value("language")
         IPython.display.display(mock_message(language))
 
@@ -39,15 +37,10 @@ def is_documented_by(func):
 
 @magics_class
 class AdminEvaluation(Magics):
-    def __init__(self, shell, nid, openai_token):
-        super(AdminEvaluation, self).__init__(shell)
-
     @line_cell_magic
     @needs_local_scope
     def evaluation_cell_id_admin(self, line, cell="", local_ns=None):
-        import os
-
-        language = os.environ["BLK_LANGUAGE"]
+        language = get_value("language")
         IPython.display.display(mock_message(language))
         IPython.display.display(
             ipywidgets.Button(

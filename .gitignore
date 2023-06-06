@@ -40,6 +40,6 @@ lib
 lib64
 
 abc.py
-.safe
+.safe*
 bulkhours/core/install.py
 git_push.sh

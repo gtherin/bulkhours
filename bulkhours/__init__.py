@@ -33,35 +33,17 @@ from .ecox.trading import *  # noqa
 DEFAULT_TOKEN = "NO_TOKEN"
 
 
-def init_env(
-    login=None,
-    db_token=None,
-    language="fr",
-    nid=None,
-    openai_token=DEFAULT_TOKEN,
-    admin_token=DEFAULT_TOKEN,
-    premium_token=DEFAULT_TOKEN,
-    huggingface_token=DEFAULT_TOKEN,
-    packages=None,
-    subject=None,
-    virtual_room=None,
-    **kwargs,
-):
+def init_env(debug=False, **kwargs):
     import IPython
 
     info = f"Import BULK Helper cOURSe ("
 
-    if huggingface_token is not None:
-        os.environ["BLK_HUGGINGFACE_TOKEN"] = huggingface_token
+    config = get_config(do_update=True, **kwargs)
 
-    if premium_token != DEFAULT_TOKEN and is_premium(premium_token):
+    if is_premium(debug=debug):
         from bulkhours_premium import init_prems
 
-        info = init_prems(info, login, nid, db_token=db_token, virtual_room=virtual_room, subject=subject)
-    else:
-        # config["global"]["language"] = language
-
-        os.environ["BLK_LANGUAGE"] = language
+        info = init_prems(info)
 
     stime = (
         datetime.datetime.now() + datetime.timedelta(seconds=3600)
@@ -69,38 +51,35 @@ def init_env(
         else datetime.datetime.now()
     )
 
-    if nid is not None:
-        info += f"id='{nid}', "
-        os.environ["BLK_NBID"] = nid
+    if config.get("notebook_id") is not None:
+        info += f"nb_id='{config.get('notebook_id')}', "
 
     if ipp := IPython.get_ipython():
         from .hpc.compiler import CCPPlugin
 
         ipp.register_magics(CCPPlugin(ipp))
 
-        if is_premium(premium_token):
+        if is_premium():
             from bulkhours_premium import Evaluation
 
-            ipp.register_magics(Evaluation(ipp, nid, openai_token))
+            ipp.register_magics(Evaluation(ipp))
         else:
             from .core.premium_mock import MockEvaluation
 
-            ipp.register_magics(MockEvaluation(ipp, nid, openai_token))
+            ipp.register_magics(MockEvaluation(ipp))
 
-        if is_admin(admin_token):
+        if is_admin(debug=debug):
             from bulkhours_admin import SudoEvaluation
 
-            ipp.register_magics(SudoEvaluation(ipp, nid, openai_token))
-            from bulkhours_admin import Dashboard
-
-            ipp.register_magics(Dashboard(ipp, nid, openai_token))
+            ipp.register_magics(SudoEvaluation(ipp))
 
         else:
             from .core.admin_mock import AdminEvaluation
 
-            ipp.register_magics(AdminEvaluation(ipp, nid, openai_token))
+            ipp.register_magics(AdminEvaluation(ipp))
 
-    installer.install_dependencies(packages)
+    if "packages" in config:
+        installer.install_dependencies(config["packages"])
 
     set_style()
     vfile = os.path.abspath(os.path.dirname(__file__)) + "/__version__.py"
@@ -110,14 +89,15 @@ def init_env(
     info += f"\x1b[0mversion='{version}'"
 
     info += ", time='%s'" % stime.strftime("%H:%M:%S")
-    if admin_token != DEFAULT_TOKEN:
+    if is_admin():
         info = f"\x1b[31m{info},\x1b[0m \x1b[36mpremium='{mversion}'\x1b[0m🚀, \x1b[31madmin='{aversion}'\x1b[0m⚠️\x1b[41m\x1b[37mfor teachers only🎓\x1b[0m)"
-    elif premium_token != DEFAULT_TOKEN:
+    elif is_premium():
         info = f"{info}, \x1b[36mpversion='{mversion}'\x1b[0m🚀)"
     else:
         info = f"{info})\x1b[36m. To activate the 🚀 mode, please contact bulkhours@guydegnol.net\x1b[0m"
 
     print(f"{info}")
+    os.environ["BLK_STATUS"] = f"INITIALIZED"
 
 
 def get_color(discipline):
@@ -175,11 +155,7 @@ def geo_plot(data=None, timeopt="last", **kwargs):
     return geo.geo_plot(data, timeopt=timeopt, **kwargs)
 
 
-def init(verbose=False):
-    init_env(verbose=verbose, **get_config())
-
-
-init()
+# init_env()
 
 
 def html(label, display=True, style="raw"):
