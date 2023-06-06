@@ -109,7 +109,7 @@ def init_env(
 
     info += ", time='%s'" % stime.strftime("%H:%M:%S")
     if admin_token != DEFAULT_TOKEN:
-        info = f"\x1b[31m{info},\x1b[0m \x1b[36mpremium='{mversion}'\x1b[0m🚀, \x1b[31madmin='{aversion}'\x1b[0m⚠️\x1b[41m\x1b[37mfor teachers only\x1b[0m)"
+        info = f"\x1b[31m{info},\x1b[0m \x1b[36mpremium='{mversion}'\x1b[0m🚀, \x1b[31madmin='{aversion}'\x1b[0m⚠️\x1b[41m\x1b[37mfor teachers only🎓\x1b[0m)"
     elif premium_token != DEFAULT_TOKEN:
         info = f"{info}, \x1b[36mpversion='{mversion}'\x1b[0m🚀)"
     else:
