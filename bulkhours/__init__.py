@@ -79,19 +79,19 @@ def init_env(
         if is_premium(premium_token):
             from bulkhours_premium import Evaluation
 
-            ipp.register_magics(Evaluation(ipp, nid, language, openai_token))
+            ipp.register_magics(Evaluation(ipp, nid, openai_token))
         else:
             from .core.premium_mock import MockEvaluation
 
-            ipp.register_magics(MockEvaluation(ipp, nid, language, openai_token))
+            ipp.register_magics(MockEvaluation(ipp, nid, openai_token))
 
         if is_admin(admin_token):
             from bulkhours_admin import SudoEvaluation
 
-            ipp.register_magics(SudoEvaluation(ipp, nid, language, openai_token))
+            ipp.register_magics(SudoEvaluation(ipp, nid, openai_token))
             from bulkhours_admin import Dashboard
 
-            ipp.register_magics(Dashboard(ipp, nid, language, openai_token))
+            ipp.register_magics(Dashboard(ipp, nid, openai_token))
 
         else:
             from .core.admin_mock import AdminEvaluation
