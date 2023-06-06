@@ -81,6 +81,7 @@ def get_install_parser(argv):
     parser.add_argument("-p", "--packages", default="None")
     parser.add_argument("-k", "--openai-token", default=DEFAULT_TOKEN)
     parser.add_argument("-t", "--tokens", default={})
+    parser.add_argument("-d", "--debug", action="store_true")
 
     argv = parser.parse_args(format_opts(argv))
     for k in ["packages", "openai_token", "tokens"]:
@@ -92,13 +93,15 @@ def get_install_parser(argv):
     return argv
 
 
-def install_pkg(pkg, is_colab, tokens, env_id, start_time):
+def install_pkg(pkg, is_colab, tokens, env_id, start_time, debug):
     if not (f"{pkg}_token" in tokens and (token := tokens[f"{pkg}_token"]) != DEFAULT_TOKEN):
         return
     if is_colab:
         os.system(
             f"cd {bulk_dir} && rm -rf bulkhours_{pkg} 2> /dev/null && git clone https://{token.replace('/', '_')}@github.com/guydegnol/bulkhours_{pkg}.git --depth 1 > /dev/null 2>&1"
         )
+    if debug:
+        print(f"git clone https://{token.replace('/', '_')}@github.com/guydegnol/bulkhours_{pkg}.git --depth 1")
 
     if os.path.exists(f"{bulk_dir}/bulkhours_{pkg}/"):
         if 0:
@@ -116,7 +119,7 @@ def install_pkg(pkg, is_colab, tokens, env_id, start_time):
         )
 
 
-def install_dependencies(packages, start_time=None):
+def install_dependencies(packages, start_time, debug):
     if packages in [None, "None", ""]:
         return
 
@@ -177,15 +180,18 @@ def main(argv=sys.argv[1:]):
         return
 
     args = get_install_parser(argv)
+    print()
 
     # Install main package
-    install_pkg("admin", is_colab, args.tokens, env_id, start_time)
-    install_pkg("premium", is_colab, args.tokens, env_id, start_time)
-    install_dependencies(args.packages, start_time=start_time)
+    install_pkg("admin", is_colab, args.tokens, env_id, start_time, args.debug)
+    install_pkg("premium", is_colab, args.tokens, env_id, start_time, args.debug)
+    install_dependencies(args.packages, start_time, args.debug)
 
     # Dump env variables
     with open(f"{bulk_dir}/bulkhours/.safep", "w", encoding="utf-8") as f:
         json.dump(args.tokens, f, ensure_ascii=False, indent=4)
+        if args.debug:
+            print(args.tokens)
 
 
 if __name__ == "__main__":
