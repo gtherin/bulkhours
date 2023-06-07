@@ -1,5 +1,6 @@
 import os
 import glob
+import numpy as np
 import pandas as pd
 from .datasets import datasets
 
@@ -39,6 +40,8 @@ def get_data_from_file(label, on=None, subdir="data", **kwargs):
         print(f"No data available for {label}")
         return None
 
+    import h5py
+
     ext = filename.split(".")[-1]
     if ext == "xlsx":
         return pd.read_excel(filename, **kwargs)
@@ -46,11 +49,21 @@ def get_data_from_file(label, on=None, subdir="data", **kwargs):
         return pd.read_csv(filename, sep="\t")
     elif ext in ["csv"]:
         return pd.read_csv(filename)
+    elif ext in ["h5"]:
+        if "key" in kwargs:
+            return np.array(h5py.File(filename, "r")[kwargs["key"]][:])
+        elif "format" in kwargs and kwargs["format"] == "filename":
+            return filename
+        else:
+            return h5py.File(filename, "r")
     else:
         return filename
 
 
 def clean_data(df, query=None, index=None, test_data=None):
+    if type(df).__module__ == "numpy":
+        return df
+
     if "date" in df.columns:
         df["date"] = pd.to_datetime(df["date"])
 
