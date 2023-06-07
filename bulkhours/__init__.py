@@ -1,5 +1,7 @@
 import os
 import datetime
+import zoneinfo
+
 
 from .core.data import get_core_data, get_image  # noqa
 from .core.tools import is_premium, is_admin, get_config, get_value  # noqa
@@ -45,11 +47,7 @@ def init_env(debug=False, **kwargs):
 
         info = init_prems(info)
 
-    stime = (
-        datetime.datetime.now() + datetime.timedelta(seconds=3600)
-        if os.path.exists("/content")
-        else datetime.datetime.now()
-    )
+    stime = datetime.datetime.now(tz=zoneinfo.ZoneInfo("Europe/Paris")).strftime("%Y-%m-%d %H:%M:%S")
 
     if config.get("notebook_id") is not None:
         info += f"nb_id='{config.get('notebook_id')}', "
