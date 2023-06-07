@@ -47,7 +47,7 @@ def init_env(debug=False, **kwargs):
 
         info = init_prems(info)
 
-    stime = datetime.datetime.now(tz=zoneinfo.ZoneInfo("Europe/Paris")).strftime("%Y-%m-%d %H:%M:%S")
+    stime = datetime.datetime.now(tz=zoneinfo.ZoneInfo("Europe/Paris"))
 
     if config.get("notebook_id") is not None:
         info += f"nb_id='{config.get('notebook_id')}', "
