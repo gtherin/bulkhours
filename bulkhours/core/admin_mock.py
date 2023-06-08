@@ -79,17 +79,3 @@ class AdminMove:
     @is_documented_by("evaluate")
     def evaluate(*kargs, **kwargs):
         return generic_func("evaluate", *kargs, **kwargs)
-
-    """
-    def __getattr__(cls, key, *kargs, **kwargs):
-        if key == "is_equal":
-            return cls._summary(*kargs, **kwargs)
-        elif key == "Bar":
-            return cls._bar_func()
-        elif key == "summary":
-            return generic_func("summary", *kargs, **kwargs)
-        raise AttributeError(key)
-
-    def __str__(cls):
-        return "custom str for %s" % (cls.__name__,)
-"""
