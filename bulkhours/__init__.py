@@ -49,9 +49,6 @@ def init_env(debug=False, **kwargs):
 
     stime = datetime.datetime.now(tz=zoneinfo.ZoneInfo("Europe/Paris"))
 
-    if config.get("notebook_id") is not None:
-        info += f"nb_id='{config.get('notebook_id')}', "
-
     if ipp := IPython.get_ipython():
         from .hpc.compiler import CCPPlugin
 
