@@ -28,7 +28,7 @@ class CCPPlugin(Magics):
         for l in output.split("\n"):
             print(l)
 
-    def get_params(self, code=None):
+    def get_code_decomposition(self, code=None):
         info = {}
         rawdata = code
         if rawdata != "":
@@ -56,7 +56,7 @@ class CCPPlugin(Magics):
             self.argparser.print_help()
             return
 
-        params = self.get_params(code=cell)
+        params = self.get_code_decomposition(code=cell)
 
         with tempfile.TemporaryDirectory() as tmp_dir:
             try:
