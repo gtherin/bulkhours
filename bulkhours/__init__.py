@@ -35,12 +35,12 @@ from .ecox.trading import *  # noqa
 DEFAULT_TOKEN = "NO_TOKEN"
 
 
-def init_env(debug=False, **kwargs):
+def init_env(debug=False, from_scratch=False, **kwargs):
     import IPython
 
     info = f"Import BULK Helper cOURSe ("
 
-    config = get_config(do_update=True, **kwargs)
+    config = get_config(do_update=True, from_scratch=from_scratch, **kwargs)
 
     if is_premium(debug=debug):
         from bulkhours_premium import init_prems

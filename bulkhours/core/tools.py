@@ -38,12 +38,12 @@ def get_json_file(e):
     return os.path.dirname(__file__) + f"/../../.safe{e}"
 
 
-def get_config(e="", do_update=False, is_namespace=False, **kwargs):
+def get_config(e="", do_update=False, from_scratch=False, is_namespace=False, **kwargs):
     config = {}
     if e == "":
         config.update(get_config(e="p"))
 
-    if os.path.exists(jsonfile := get_json_file(e)):
+    if os.path.exists(jsonfile := get_json_file(e)) and not from_scratch:
         with open(jsonfile) as json_file:
             config.update(json.load(json_file))
 
