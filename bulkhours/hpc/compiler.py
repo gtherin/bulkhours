@@ -28,33 +28,55 @@ class CCPPlugin(Magics):
         for l in output.split("\n"):
             print(l)
 
+    def get_params(self, code=None):
+        info = {}
+        rawdata = code
+        if rawdata != "":
+            info.update({"answer": "", "evaluation": "", "explanation": ""})
+            mode = "answer"
+            for l in rawdata.splitlines():
+                for tmode in ["evaluation", "explanation"]:
+                    if f"def student_{tmode}_function(" in l or f"float student_{tmode}_function(" in l:
+                        mode = tmode
+                    elif mode == tmode and len(l) > 0 and l[0] != " ":
+                        mode = "answer"
+                        if l[0] == "}":
+                            l = ""
+
+                if l.split("(")[0] not in ["student_evaluation_function(", "student_explanation_function("]:
+                    info[mode] += l + "\n"
+
+        return info
+
     @line_cell_magic
     def compile_and_exec(self, line, cell="", local_ns=None):
         try:
-            args = self.argparser.parse_args(line.split())
+            self.cinfo = self.argparser.parse_args(line.split())
         except SystemExit as e:
             self.argparser.print_help()
             return
+
+        params = self.get_params(code=cell)
 
         with tempfile.TemporaryDirectory() as tmp_dir:
             try:
                 # Write code file in a temp file
                 file_path = os.path.join(tmp_dir, str(uuid.uuid4()))
-                file_code = file_path + (".c" if args.compiler in ["g++", "gcc"] else ".cu")
+                file_code = file_path + (".c" if self.cinfo.compiler in ["g++", "gcc"] else ".cu")
                 with open(file_code, "w") as f:
-                    f.write(cell)
+                    f.write(params["answer"])
 
                 # Compile file
-                if args.compiler in ["g++", "gcc"]:
-                    cmd = f"/usr/bin/{args.compiler} {file_code} -o {file_path}.out"
+                if self.cinfo.compiler in ["g++", "gcc"]:
+                    cmd = f"/usr/bin/{self.cinfo.compiler} {file_code} -o {file_path}.out"
                 else:
                     cmd = f"/usr/local/cuda/bin/nvcc {file_code} -o {file_path}.out -Wno-deprecated-gpu-targets"
                 subprocess.check_output(cmd.split(), stderr=subprocess.STDOUT)
 
                 # Run executable file
-                return self.run(file_path + ".out", timeit=args.timeit)
+                return self.run(file_path + ".out", timeit=self.cinfo.timeit)
             except OSError as e:
-                print(f"Compiler {args.compiler} is probably not here.")
+                print(f"Compiler {self.cinfo.compiler} is probably not here.")
                 self.argparser.print_help()
                 for l in e.output.decode("utf8").split("\n"):
                     print(l)
