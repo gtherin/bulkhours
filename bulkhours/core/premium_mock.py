@@ -42,7 +42,7 @@ class MockEvaluation(Magics):
             )
         )
 
-        self.shell.run_cell(cell)
+        IPython.get_ipython().run_cell(cell)
 
 
 def is_documented_by(func):
