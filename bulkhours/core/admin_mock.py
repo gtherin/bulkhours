@@ -51,7 +51,7 @@ class AdminEvaluation(Magics):
             )
         )
 
-        self.shell.run_cell(cell)
+        IPython.get_ipython().run_cell(cell)
 
     @line_cell_magic
     @needs_local_scope
