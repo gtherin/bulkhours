@@ -32,7 +32,19 @@ from .phyu.formulas import formulas  # noqa
 from .ecox.trading import *  # noqa
 
 
-DEFAULT_TOKEN = "NO_TOKEN"
+class CellContext:
+    """This context cell contains cell executions:
+    - Two are defined by default: 'student' or 'teacher'
+    When using the correction code, the stdout and answer are filled
+    """
+
+    @property
+    def stdout(self):
+        return False
+
+    @property
+    def answer(self):
+        return False
 
 
 def init_env(debug=False, from_scratch=False, **kwargs):
@@ -93,7 +105,7 @@ def init_env(debug=False, from_scratch=False, **kwargs):
 
     print(f"{info}")
     os.environ["BLK_STATUS"] = f"INITIALIZED"
-    return None, None
+    return CellContext(), CellContext()
 
 
 def get_color(discipline):
