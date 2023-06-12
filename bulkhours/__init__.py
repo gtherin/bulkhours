@@ -93,6 +93,7 @@ def init_env(debug=False, from_scratch=False, **kwargs):
 
     print(f"{info}")
     os.environ["BLK_STATUS"] = f"INITIALIZED"
+    return None, None
 
 
 def get_color(discipline):
