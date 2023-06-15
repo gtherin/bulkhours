@@ -75,16 +75,6 @@ def init_env(debug=False, from_scratch=False, **kwargs):
 
             ipp.register_magics(MockEvaluation(ipp))
 
-        if is_admin(debug=debug):
-            from bulkhours_admin import SudoEvaluation
-
-            ipp.register_magics(SudoEvaluation(ipp))
-
-        else:
-            from .core.admin_mock import AdminEvaluation
-
-            ipp.register_magics(AdminEvaluation(ipp))
-
     if "packages" in config:
         installer.install_dependencies(config["packages"])
 
