@@ -41,21 +41,6 @@ def get_tokens(token):
     return {}
 
 
-def get_opts(opt_key, opts):
-    if opt_key not in opts:
-        return opts
-
-    lindex_start = opts.index(opt_key) + 1
-    lindex_end = len(opts)
-    for i, o in enumerate(opts[lindex_start + 1 :]):
-        if len(o) == 2 and o[0] == "-":
-            lindex_end = lindex_start + i + 1
-            break
-
-    label = " ".join(opts[lindex_start:lindex_end])
-    return opts[:lindex_start] + [label] + opts[lindex_end:]
-
-
 def format_opt(label, raw2norm=True):
     rr = {"-": "__minus__", "@": "__at__", " ": "__space__", "/": "__slash__"}
     if len(label) > 0 and label[0] != "-":
