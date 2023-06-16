@@ -86,7 +86,7 @@ def init_env(debug=False, from_scratch=False, **kwargs):
     info += f"\x1b[0mversion='{version}'"
 
     info += ", time='%s'" % stime.strftime("%H:%M:%S")
-    if is_admin():
+    if is_admin(debug=debug):
         info = f"\x1b[31m{info},\x1b[0m \x1b[36mpremium='{mversion}'\x1b[0m🚀, \x1b[31madmin='{aversion}'\x1b[0m⚠️\x1b[41m\x1b[37mfor teachers only🎓\x1b[0m)"
     elif is_premium():
         info = f"{info}, \x1b[36mpversion='{mversion}'\x1b[0m🚀)"
