@@ -30,7 +30,12 @@ datasets = [
 """,
         kwargs=dict(zone="World"),
     ),
-    dict(label="co2.mapconcentrations", category="Climate", raw_data="get_mapgeneric(co2.concentrations)"),
+    dict(
+        label="co2.mapconcentrations",
+        category="Climate",
+        raw_data="get_mapgeneric(co2.concentrations)",
+        source="Same as previous, with extra gps information",
+    ),
     dict(
         label="co2.main",
         category="Climate",
@@ -71,7 +76,12 @@ datasets = [
 - Info columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
         """,
     ),
-    dict(label="world.mappoverty", category="Economics", raw_data="get_mapgeneric(world.poverty)"),
+    dict(
+        label="world.mappoverty",
+        category="Economics",
+        raw_data="get_mapgeneric(world.poverty)",
+        source="Same as previous, with extra gps information",
+    ),
     dict(
         label="world.gdp",
         category="Economics",
@@ -82,13 +92,23 @@ datasets = [
 - Info columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
         """,
     ),
-    dict(label="world.gdp", category="Economics", raw_data="get_mapgeneric(world.gdp)"),
+    dict(
+        label="world.mapgdp",
+        category="Economics",
+        raw_data="get_mapgeneric(world.gdp)",
+        source="Same as previous, with extra gps information",
+    ),
     dict(
         label="world.macro",
         category="Economics",
         source="""Nope""",
     ),
-    dict(label="world.macro", category="Economics", raw_data="get_mapgeneric(world.macro)"),
+    dict(
+        label="world.mapmacro",
+        category="Economics",
+        raw_data="get_mapgeneric(world.macro)",
+        source="Same as previous, with extra gps information",
+    ),
     dict(
         label="world.corruption",
         category="Economics",
@@ -103,7 +123,12 @@ datasets = [
 - Info columns: The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year
         """,
     ),
-    dict(label="scipy_distributions_list", category="Economics", drop=get_scipy_distributions_list),
+    dict(
+        label="scipy_distributions_list",
+        category="Economics",
+        drop=get_scipy_distributions_list,
+        source="""Scipy list of models""",
+    ),
     dict(
         label="macro",
         category="Economics",
@@ -116,6 +141,7 @@ datasets = [
             "continent.tsv",
         ],
         on="country",
+        source="nope",
     ),
     dict(
         label="life_expectancy_vs_gdp_2018",
