@@ -13,6 +13,9 @@
 
 #### `bulkhours.get_data("world.poverty")`
 World Bank Poverty and Inequality Platform
+- Direct source: [securities.csv](securities.csv)
+- Direct source: [a workaround link](repo/blob/master/README.md)
+
 - Direct source: https://ourworldindata.org/poverty
 - Data source: https://pip.worldbank.org/
 - Info columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
