@@ -14,7 +14,7 @@
 #### `bulkhours.get_data("world.poverty")`
 World Bank Poverty and Inequality Platform
 - Direct source: [securities.csv](securities.csv)
-- Direct source: [a workaround link](repo/blob/main/README.md)
+- Direct source: [a workaround link](../README.md)
 - Direct source: [a workaround link](bulkhours/blob/main/README.md)
 
 - Direct source: https://ourworldindata.org/poverty
