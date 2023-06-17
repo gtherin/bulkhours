@@ -10,6 +10,9 @@ from .core import geo  # noqa
 from .core.geo import geo_plot_country  # noqa
 from .core import runrealcmd  # noqa
 from .core.premium_mock import PremiumMove as premium  # noqa
+from .core.datasets import datasets  # noqa
+from .core.datasets import datacategories  # noqa
+
 
 ask_chat_gpt = premium.ask_chat_gpt  # noqa
 ask_dall_e = premium.ask_dall_e  # noqa

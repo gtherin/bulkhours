@@ -21,7 +21,7 @@ class Sampler:
 Sampler.outsample_dt = time.time() - 300
 
 
-def get_apple(credit=True, **kwargs):
+def get_apple(**kwargs):
     from ..core import data
 
     apple = data.get_data_from_file("APPLE_DownloadFPrepStatementQuarter").iloc[-4 * 5 :]
