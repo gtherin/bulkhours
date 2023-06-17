@@ -40,10 +40,10 @@ def geo_format(df, timeopt):
     return df
 
 
-def get_poverty(credit=True, timeopt=None, **kwargs):
+def get_poverty(timeopt=None, **kwargs):
     from ..core import data
 
-    df = data.get_core_data("poverty", credit=credit)
+    df = data.get_core_data("poverty")
     return geo_format(df, timeopt)
 
 
@@ -51,12 +51,10 @@ def get_mappoverty(**kwargs):
     return get_mapgeneric(get_poverty(**kwargs))
 
 
-def get_gdp(credit=True, timeopt=None, **kwargs):
+def get_gdp(timeopt=None, **kwargs):
     from ..core import data
 
-    df = data.get_core_data(
-        "world_gdp_hist", drop=["Country Code", "Indicator Name", "Indicator Code", "Unnamed: 66"], credit=credit
-    )
+    df = data.get_core_data("world_gdp_hist", drop=["Country Code", "Indicator Name", "Indicator Code", "Unnamed: 66"])
     df = df.set_index("Country Name").stack().to_frame().reset_index()
     df.columns = ["country", "year", "gdp"]
 
@@ -67,17 +65,21 @@ def get_mapgdp(**kwargs):
     return get_mapgeneric(get_gdp(**kwargs))
 
 
-def get_macro(credit=True, **kwargs):
+def get_macro(**kwargs):
     from ..core import data
 
-    df = data.get_core_data("macro", credit=credit)
+    df = data.get_core_data("macro")
     return geo_format(df, None)
 
 
-def get_corruption(credit=True, show_truth=False, **kwargs):
+def get_mapmacro(**kwargs):
+    return get_mapgeneric(get_macro(**kwargs))
+
+
+def get_corruption(show_truth=False, **kwargs):
     from ..core import data
 
-    df = data.get_core_data("macro", credit=credit)
+    df = data.get_core_data("macro")
 
     if not show_truth:
         df["corruption_index"] = df["corruption_index"].where(
@@ -87,7 +89,3 @@ def get_corruption(credit=True, show_truth=False, **kwargs):
     macro = macro.dropna(subset=["annual_income", "gdp_per_capita", "unemployment_rate"])
 
     return geo_format(macro, None)
-
-
-def get_mapmacro(**kwargs):
-    return get_mapgeneric(get_macro(**kwargs))

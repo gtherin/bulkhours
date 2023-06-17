@@ -1,18 +1,11 @@
 from io import StringIO
-import numpy as np
 import pandas as pd
 
 
-def get_stats(credit=True):
-    if credit:
-        print(
-            """Descriptive statistics of hourly wages in selected EU countries in 2010 (in PPS) 
-Table 2: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf
-    """
-        )
-
-    data = StringIO(
-        """Country Mean Minimum Maximum Variance Coefficient of variation
+def get_stats():
+    return pd.read_csv(
+        StringIO(
+            """Country Mean Minimum Maximum Variance Coefficient of variation
 Austria 16.196 7.330 46.400 64.591 0.4962
 Belgium 18.741 10.010 42.140 58.243 0.4072
 Bulgaria 5.349 2.340 13.050 7.771 0.5212
@@ -36,23 +29,15 @@ Spain 14.489 7.390 35.940 44.362 0.4597
 Sweden 14.651 9.550 28.050 18.079 0.2902
 United Kingdom 16.368 7.590 36.390 53.933 0.4487
 """
-    )
-    df = pd.read_csv(data, sep=" ").set_index("Country")
-    return df
+        ),
+        sep=" ",
+    ).set_index("Country")
 
 
-def get_params(credit=True):
-    if credit:
-        print(
-            """ln(hourly_wage) = alpha_0i + alpha_1i * edu + alpha_2i * age + alpha_3i * age**2
-Table 3. https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf
-The results of estimation of parameters in Mincer equations in a set of countries. We
-put the point estimates, standard errors (in italics) and p-values for zero restriction test of a
-particular parameter (in square brackets)        
-        """
-        )
-    data = StringIO(
-        """Country alpha_0i alpha_1i alpha_2i alpha_3i alpha_0i_e alpha_1i_e alpha_2i_e alpha_3i_e
+def get_params():
+    return pd.read_csv(
+        StringIO(
+            """Country alpha_0i alpha_1i alpha_2i alpha_3i alpha_0i_e alpha_1i_e alpha_2i_e alpha_3i_e
 Austria 0.804517 0.331677 0.426552 -0.03883 0.218682 0.021472 0.113136 0.01396
 Belgium 1.297771 0.285186 0.335843 -0.02938 0.142724 0.014014 0.073839 0.009111
 Bulgaria 0.322091 0.416255 0.113577 -0.01772 0.228792 0.022465 0.118367 0.014605
@@ -75,6 +60,6 @@ Slovenia 0.764813 0.385382 0.233162 -0.01591 0.190327 0.018688 0.098467 0.01215
 Spain 1.181748 0.317969 0.161371 -0.0043 0.187973 0.018457 0.097249 0.011999
 Sweden 1.471135 0.19044 0.324012 -0.03441 0.14431 0.014169 0.07466 0.009212
 United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.011896"""
-    )
-    df = pd.read_csv(data, sep=" ").set_index("Country")
-    return df
+        ),
+        sep=" ",
+    ).set_index("Country")

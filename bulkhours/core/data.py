@@ -25,20 +25,23 @@ def get_data_from_file(label, on=None, subdir="data", **kwargs):
         else:
             return pd.concat([get_data_from_file(f) for f in label], axis=1)
 
-    filename = None
-    for directory in [
-        "bulkhours",
-        ".",
-        "..",
-        "../../bulkhours",
-        "../../../bulkhours",
-        os.environ["HOME"] + "/projects/bulkhours",
-    ]:
-        if len((files := glob.glob(f"{directory}/{subdir}/{label}*"))):
-            filename = files[0]
-    if not filename:
-        print(f"No data available for {label}")
-        return None
+    if "http" in label:
+        filename = label
+    else:
+        filename = None
+        for directory in [
+            "bulkhours",
+            ".",
+            "..",
+            "../../bulkhours",
+            "../../../bulkhours",
+            os.environ["HOME"] + "/projects/bulkhours",
+        ]:
+            if len((files := glob.glob(f"{directory}/{subdir}/{label}*"))):
+                filename = files[0]
+        if not filename:
+            print(f"No data available for {label}")
+            return None
 
     import h5py
 
@@ -81,21 +84,19 @@ def clean_data(df, query=None, index=None, test_data=None):
     return df
 
 
-def get_core_data(label, modules={}, credit=False, query=None, index=None, test_data=None, **kwargs):
-    data_info = (
-        datasets[label] if label in datasets else ({"httplink": label} if "http" in label else {"files_list": label})
-    )
+def get_core_data(label, modules={}, credit=True, query=None, index=None, test_data=None, **kwargs):
+    data_info = datasets[label] if label in datasets else {"raw_data": label}
     data_info.update(kwargs)
+    if credit and label not in datasets:
+        print(f"Data {label} is not referenced")
     if credit and "source" in data_info:
         print(data_info["source"])
 
     if (di := label.split(".")[0]) in modules:
         func = label.replace(di + ".", "get_")
         df = getattr(modules[di], func)(credit=credit, **data_info)
-    elif "httplink" in data_info:
-        df = pd.read_csv(data_info["httplink"])
     else:
-        df = get_data_from_file(data_info["files_list"], **data_info)
+        df = get_data_from_file(data_info["raw_data"], **data_info)
 
     if type(df) == str:
         return df
@@ -106,6 +107,39 @@ def get_core_data(label, modules={}, credit=False, query=None, index=None, test_
         df = data_info["filter"](df)
 
     return clean_data(df, query=query, index=index, test_data=test_data)
+
+
+class DataDocInterpreter:
+    def __init__(self, func):
+        self.func = func
+        self.docstring = func.__doc__
+
+    @property
+    def doc(self):
+        return self.docstring
+
+    @property
+    def data(self):
+        df = {}
+
+        directory = os.path.abspath(os.path.dirname(__file__) + f"/../../data/")
+
+        for e, l in enumerate(self.docstring.splitlines()):
+            if e == 0:
+                df["description"] = l
+            elif ":" in l:
+                key, value = l[: l.find(":")], l[l.find(":") + 1 :]
+                key = key.replace(" ", "").replace("-", "").lower()
+                if key == "datafile":
+                    value = value.replace(" ", "").replace("bulkhours:/", directory)
+
+                    df[key] = value
+
+        return df
+
+    def generate_readme(self):
+        df = self.func(credit=True)
+        return self.docstring
 
 
 def get_image(label, ax=None):
