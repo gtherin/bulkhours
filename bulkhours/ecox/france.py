@@ -205,3 +205,6 @@ Année	écart relatif du revenu salarial moyen	écart relatif du revenu salarial
         df[c] = df[c].str.replace(" ", "").str.replace(",", ".").astype(float)
 
     return df
+
+
+# def get_pyramide(**kwargs):

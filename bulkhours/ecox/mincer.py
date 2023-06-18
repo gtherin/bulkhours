@@ -2,7 +2,7 @@ from io import StringIO
 import pandas as pd
 
 
-def get_stats():
+def get_stats(**kwargs):
     return pd.read_csv(
         StringIO(
             """Country Mean Minimum Maximum Variance Coefficient of variation
@@ -34,7 +34,7 @@ United Kingdom 16.368 7.590 36.390 53.933 0.4487
     ).set_index("Country")
 
 
-def get_params():
+def get_params(**kwargs):
     return pd.read_csv(
         StringIO(
             """Country alpha_0i alpha_1i alpha_2i alpha_3i alpha_0i_e alpha_1i_e alpha_2i_e alpha_3i_e

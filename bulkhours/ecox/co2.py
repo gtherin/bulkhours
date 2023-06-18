@@ -7,7 +7,7 @@ from .world import get_mapgeneric
 def get_concentrations(zone="World", **kwargs):
     from ..core import data
 
-    df = data.get_core_data("climate-change.csv")
+    df = data.get_data_from_file("climate-change.csv")
     if zone is not None:
         df = df.query(f"Entity == '{zone}'")
     return df

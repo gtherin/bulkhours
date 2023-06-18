@@ -2,15 +2,18 @@ import os
 import glob
 import numpy as np
 import pandas as pd
-from .datasets import datasets
+from .datasets import ddatasets
 
 
 def clean_columns(df, data_info):
-    if "rename" in data_info:
-        df.columns = data_info["rename"]
     if "drop" in data_info:
         for c in data_info["drop"]:
             del df[c]
+
+    if "rename" in data_info:
+        if len(df.columns) != len(data_info["rename"]):
+            print("Problem with data columns")
+        df.columns = data_info["rename"]
 
     if "is_test" in data_info:
         df["is_test"] = df.index >= df.index[data_info["is_test"]]
@@ -18,15 +21,15 @@ def clean_columns(df, data_info):
     return df
 
 
-def get_data_from_file(label, on=None, subdir="data", **kwargs):
-    if type(label) == list:
+def get_data_from_file(raw_data, on=None, subdir="data", **kwargs):
+    if type(raw_data) == list:
         if on:
-            return pd.concat([get_data_from_file(f).set_index(on) for f in label], axis=1)
+            return pd.concat([get_data_from_file(f).set_index(on) for f in raw_data], axis=1)
         else:
-            return pd.concat([get_data_from_file(f) for f in label], axis=1)
+            return pd.concat([get_data_from_file(f) for f in raw_data], axis=1)
 
-    if "http" in label:
-        filename = label
+    if "http" in raw_data:
+        filename = raw_data
     else:
         filename = None
         for directory in [
@@ -37,10 +40,10 @@ def get_data_from_file(label, on=None, subdir="data", **kwargs):
             "../../../bulkhours",
             os.environ["HOME"] + "/projects/bulkhours",
         ]:
-            if len((files := glob.glob(f"{directory}/{subdir}/{label}*"))):
+            if len((files := glob.glob(f"{directory}/{subdir}/{raw_data}*"))):
                 filename = files[0]
         if not filename:
-            print(f"No data available for {label}")
+            print(f"No data available for {raw_data}")
             return None
 
     import h5py
@@ -64,7 +67,7 @@ def get_data_from_file(label, on=None, subdir="data", **kwargs):
 
 
 def clean_data(df, query=None, index=None, test_data=None):
-    if type(df).__module__ == "numpy":
+    if type(df).__module__ == "numpy" or type(df) in [list, dict]:
         return df
 
     if "date" in df.columns:
@@ -85,18 +88,21 @@ def clean_data(df, query=None, index=None, test_data=None):
 
 
 def get_core_data(label, modules={}, credit=True, query=None, index=None, test_data=None, **kwargs):
-    data_info = datasets[label] if label in datasets else {"raw_data": label}
+    data_info = ddatasets[label] if label in ddatasets else {"raw_data": label}
     data_info.update(kwargs)
-    if credit and label not in datasets:
-        print(f"Data {label} is not referenced")
-    if credit and "source" in data_info:
-        print(data_info["source"])
+    if credit:
+        if "source" in data_info:
+            print(data_info["source"])
+        else:
+            print(f"Data {label} is not referenced")
 
     if (di := label.split(".")[0]) in modules:
         func = label.replace(di + ".", "get_")
-        df = getattr(modules[di], func)(credit=credit, **data_info)
+        print(func, getattr(modules[di], func))
+        df = getattr(modules[di], func)(**data_info)
     else:
-        df = get_data_from_file(data_info["raw_data"], **data_info)
+        data_info2 = {k: v for k, v in data_info.items() if k != "raw_data"}
+        df = get_data_from_file(data_info["raw_data"], **data_info2)
 
     if type(df) == str:
         return df

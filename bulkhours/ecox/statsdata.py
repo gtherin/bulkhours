@@ -2,6 +2,12 @@ import numpy as np
 import pandas as pd
 
 
+def get_scipy_distributions_list(**kwargs):
+    import scipy as sp
+
+    return [d for d in dir(sp.stats._continuous_distns) if not d in ["levy_stable", "studentized_range"]]
+
+
 def get_oil(**kwargs):
     return pd.Series(
         [
@@ -124,7 +130,7 @@ def get_aust(**kwargs):
 def get_air_passengers(**kwargs):
     from ..core import data
 
-    df = data.get_core_data("AirPassengers.csv", index="Month")
+    df = data.get_data_from_file("AirPassengers.csv").set_index("Month")
     df.index = pd.to_datetime(df.index)
     df.index.freq = "MS"
     df["is_test"] = df.index >= df.index[120]
