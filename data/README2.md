@@ -13,6 +13,7 @@
 
 #### `bulkhours.get_data("world.poverty")`
 - Raw data: [https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv](pip_dataset.csv)
+- Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)
 World Bank Poverty and Inequality Platform
 - Direct source: https://ourworldindata.org/poverty
 - Data source: https://pip.worldbank.org/
@@ -22,11 +23,13 @@ World Bank Poverty and Inequality Platform
 
 #### `bulkhours.get_data("world.mappoverty")`
 - Raw data: [https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv](pip_dataset.csv)
+- Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)
 Same as previous, with extra gps information
 
 
 #### `bulkhours.get_data("world.gdp")`
 - Raw data: [https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv](pip_dataset.csv)
+- Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)
 World Bank Poverty and Inequality Platform
 - Direct source: https://ourworldindata.org/poverty
 - Data source: https://pip.worldbank.org/
@@ -36,6 +39,7 @@ World Bank Poverty and Inequality Platform
 
 #### `bulkhours.get_data("world.mapgdp")`
 - Raw data: [https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv](pip_dataset.csv)
+- Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)
 Same as previous, with extra gps information
 
 
@@ -53,6 +57,7 @@ nope
 
 #### `bulkhours.get_data("world.life_expectancy_vs_gdp_2018")`
 - Raw data: [https://github.com/guydegnol/bulkhours/blob/main/data/life-expectancy-vs-gdp-per-capita.csv](life-expectancy-vs-gdp-per-capita.csv)
+- Raw data: [life-expectancy-vs-gdp-per-capita.csv](https://github.com/guydegnol/bulkhours/blob/main/data/life-expectancy-vs-gdp-per-capita.csv)
 Life expectancy versus GDP/capita per country
 - Direct source: https://ourworldindata.org/grapher/life-expectancy-vs-gdp-per-capita
 - Data source: Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)
@@ -77,6 +82,7 @@ particular parameter (in square brackets)
 
 #### `bulkhours.get_data("pyramide")`
 - Raw data: [https://github.com/guydegnol/bulkhours/blob/main/data/pyramide.tsv](pyramide.tsv)
+- Raw data: [pyramide.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/pyramide.tsv)
 Age de la population au 1er janvier ; données provisoires arrêtées à fin novembre 2022 (https://www.insee.fr/fr/)
 Lecture : au 1er janvier 2023, la France compte 805 914 personnes de 65 ans dont 425 143 femmes et 380 771 hommes. Champ : France.
     Source : https://www.insee.fr/fr/statistiques/2381472#tableau-figure1
@@ -143,31 +149,5 @@ https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
     Lecture: au 4e trimestre 2022. le produit interieur brut (PIB) en volume augmente de 0.1 % par rapport au trimestre precedent.
     Source : Insee, comptes nationaux trimestriels - base 2014.
     Contributions Demande,Variations de stocks,Commerce exterieur
-
-
-#### `bulkhours.get_data("gmacro.fr_unemployement")`
-https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
-
-
-#### `bulkhours.get_data("gmacro.us_gdp")`
-https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html
-
-
-#### `bulkhours.get_data("gmacro.fr_gdp")`
-https://www.insee.fr/
-
-
-#### `bulkhours.get_data("statsdata.scipy_distributions_list")`
-Scipy list of models
-
-
-#### `bulkhours.get_data("statsdata.oil")`
-Oil production in Saudi Arabia from 1996 to 2007
-        https://www.statsmodels.org/stable/index.html
-        
-
-
-#### `bulkhours.get_data("statsdata.air")`
-https://www.statsmodels.org/stable/index.html
 
 
