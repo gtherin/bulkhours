@@ -29,7 +29,7 @@ def gradient_descent(X, Y, learnRate=0.01, epochs=2000, reg=0):
 
 
 def main1():
-    cancerdf = data.get_core_data("prostate.tsv").reset_index()
+    cancerdf = data.get_data_from_file("prostate.tsv").reset_index()
 
     trainCancer, testCancer = cancerdf[cancerdf.loc[:, "train"] == "T"], cancerdf[cancerdf.loc[:, "train"] == "F"]
     x_train, y_train = trainCancer.drop(columns=["id", "lpsa", "train"]), trainCancer.loc[:, "lpsa"]

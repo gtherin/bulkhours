@@ -1,14 +1,3 @@
-def get_scipy_distributions_list():
-    import scipy as sp
-
-    return [d for d in dir(sp.stats._continuous_distns) if not d in ["levy_stable", "studentized_range"]]
-
-
-def clean_life_expectancy_vs_gdp_2018(df):
-    df = df.dropna().query("Year == 2018 and Population > 1e7")
-    return df
-
-
 datacategories = [
     dict(label="Economics", tag="Economics"),
     dict(label="Predictive maintenance", tag="Maintenance"),
@@ -33,7 +22,7 @@ datasets = [
     dict(
         label="co2.mapconcentrations",
         category="Climate",
-        raw_data="get_mapgeneric(co2.concentrations)",
+        raw_data="climate-change.csv",
         source="Same as previous, with extra gps information",
     ),
     dict(
@@ -45,7 +34,11 @@ datasets = [
 - Info columns: https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv
         """,
     ),
-    dict(label="co2.mapmain", category="Climate", raw_data="get_mapgeneric(co2.main)"),
+    dict(
+        label="co2.mapmain",
+        category="Climate",
+        raw_data="https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv",
+    ),
     dict(
         label="vaccinations",
         category="Health",
@@ -79,7 +72,7 @@ datasets = [
     dict(
         label="world.mappoverty",
         category="Economics",
-        raw_data="get_mapgeneric(world.poverty)",
+        raw_data="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
         source="Same as previous, with extra gps information",
     ),
     dict(
@@ -95,42 +88,12 @@ datasets = [
     dict(
         label="world.mapgdp",
         category="Economics",
-        raw_data="get_mapgeneric(world.gdp)",
+        raw_data="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
+        # raw_data="get_mapgeneric(world.gdp)",
         source="Same as previous, with extra gps information",
     ),
     dict(
         label="world.macro",
-        category="Economics",
-        source="""Nope""",
-    ),
-    dict(
-        label="world.mapmacro",
-        category="Economics",
-        raw_data="get_mapgeneric(world.macro)",
-        source="Same as previous, with extra gps information",
-    ),
-    dict(
-        label="world.corruption",
-        category="Economics",
-        source="""Nope""",
-    ),
-    dict(
-        label="supercomputers",
-        category="Computing",
-        raw_data="https://raw.githubusercontent.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv",
-        source="""Computational capacity of the fastest supercomputers
-- Direct source: https://ourworldindata.org/grapher/supercomputer-power-flops
-- Info columns: The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year
-        """,
-    ),
-    dict(
-        label="scipy_distributions_list",
-        category="Economics",
-        drop=get_scipy_distributions_list,
-        source="""Scipy list of models""",
-    ),
-    dict(
-        label="macro",
         category="Economics",
         raw_data=[
             "corruption.csv",
@@ -144,16 +107,52 @@ datasets = [
         source="nope",
     ),
     dict(
-        label="life_expectancy_vs_gdp_2018",
+        label="world.mapmacro",
         category="Economics",
-        raw_data=["life-expectancy-vs-gdp-per-capita.csv"],
+        raw_data=[
+            "corruption.csv",
+            "cost_of_living.csv",
+            "richest_countries.csv",
+            "unemployment.csv",
+            "tourism.csv",
+            "continent.tsv",
+        ],
+        on="country",
+        source="Same as previous, with extra gps information",
+    ),
+    dict(
+        label="world.corruption",
+        category="Economics",
+        raw_data=[
+            "corruption.csv",
+            "cost_of_living.csv",
+            "richest_countries.csv",
+            "unemployment.csv",
+            "tourism.csv",
+            "continent.tsv",
+        ],
+        on="country",
+        source="nope",
+    ),
+    dict(
+        label="supercomputers",
+        category="Computing",
+        raw_data="https://raw.githubusercontent.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv",
+        source="""Computational capacity of the fastest supercomputers
+- Direct source: https://ourworldindata.org/grapher/supercomputer-power-flops
+- Info columns: The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year
+        """,
+    ),
+    dict(
+        label="world.life_expectancy_vs_gdp_2018",
+        category="Economics",
+        raw_data="life-expectancy-vs-gdp-per-capita.csv",
         info="GDP per capita is measured in 2011 international dollars, which corrects for inflation and cross-country price differences",
         source="""Life expectancy versus GDP/capita per country
 - Direct source: https://ourworldindata.org/grapher/life-expectancy-vs-gdp-per-capita
 - Data source: Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)
 - Info columns: GDP per capita is measured in 2011 international dollars, which corrects for inflation and cross-country price differences
         """,
-        filter=clean_life_expectancy_vs_gdp_2018,
         rename=[
             "Country",
             "Code",
@@ -164,7 +163,7 @@ datasets = [
             "Population",
             "Continent",
         ],
-        drop=["annotations", "Continent"],
+        # drop=["annotations", "Continent"],
     ),
     dict(
         label="mincer.stats",
@@ -184,9 +183,9 @@ particular parameter (in square brackets)
         """,
     ),
     dict(
-        label="france.pyramide",
+        label="pyramide",
         category="Economics",
-        raw_data=["pyramide.tsv"],
+        raw_data="pyramide.tsv",
         source="""Age de la population au 1er janvier ; données provisoires arrêtées à fin novembre 2022 (https://www.insee.fr/fr/)
 Lecture : au 1er janvier 2023, la France compte 805 914 personnes de 65 ans dont 425 143 femmes et 380 771 hommes. Champ : France.
     Source : https://www.insee.fr/fr/statistiques/2381472#tableau-figure1
@@ -275,6 +274,11 @@ Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
         source="""https://www.insee.fr/""",
     ),
     dict(
+        label="statsdata.scipy_distributions_list",
+        category="Economics",
+        source="""Scipy list of models""",
+    ),
+    dict(
         label="statsdata.oil",
         category="Economics",
         source="""Oil production in Saudi Arabia from 1996 to 2007
@@ -332,4 +336,4 @@ Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
         raw_data=["APPLE_DownloadFPrepStatementQuarter.tsv"],
     ),
 ]
-datasets2 = {v["label"]: v for v in datasets}
+ddatasets = {v["label"]: v for v in datasets}
