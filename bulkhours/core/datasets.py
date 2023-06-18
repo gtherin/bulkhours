@@ -310,7 +310,7 @@ Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
         label="statsdata.air_passengers",
         category="Economics",
         source="""https://www.statsmodels.org/stable/index.html""",
-        raw_data=["AirPassengers.csv"],
+        raw_data="AirPassengers.csv",
     ),
     dict(
         label="statsdata.sunspots",
@@ -320,6 +320,7 @@ Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
 - Data source: https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
 - Info columns: https://en.wikipedia.org/wiki/Wolf_number
         """,
+        raw_data="https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json",
     ),
     dict(
         label="statsdata.hhousing",
@@ -333,7 +334,146 @@ Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
         category="Economics",
         source="""FPREP
         """,
-        raw_data=["APPLE_DownloadFPrepStatementQuarter.tsv"],
+        raw_data="APPLE_DownloadFPrepStatementQuarter.tsv",
+    ),
+    dict(
+        label="continent",
+        category="Economics",
+        source="""iso m49 country information
+Standardized country information
+        """,
+        raw_data="continent.tsv",
+    ),
+    dict(
+        label="continent",
+        category="Economics",
+        source="""iso m49 country information
+Standardized country information
+        """,
+        raw_data="continent.tsv",
+    ),
+    dict(
+        label="corruption",
+        category="Economics",
+        source="""Corruption index per country
+        """,
+        raw_data="corruption.csv",
+    ),
+    dict(
+        label="cost_of_living",
+        category="Economics",
+        source="""country,cost_index,monthly_income,purchasing_power_index
+        """,
+        raw_data="cost_of_living.csv",
+    ),
+    dict(
+        label="richest_countries",
+        category="Economics",
+        source="""country,gdp_per_capita
+        """,
+        raw_data="richest_countries.csv",
+    ),
+    dict(
+        label="tourism",
+        category="Economics",
+        source="""country,tourists_in_millions,receipts_in_billions,receipts_per_tourist,percentage_of_gdp
+
+        """,
+        raw_data="tourism.csv",
+    ),
+    dict(
+        label="unemployment",
+        category="Economics",
+        source="""country,unemployment_rate
+        """,
+        raw_data="unemployment.csv",
+    ),
+    dict(
+        label="co2.travel_mode",
+        category="Climate",
+        source="""Transportation info
+https://ourworldindata.org/grapher/carbon-footprint-travel-mode
+        """,
+        raw_data="carbon-footprint-travel-mode.csv",
+    ),
+    dict(
+        label="train_catvnoncat",
+        category="IA",
+        source="""Cat or not""",
+        raw_data="train_catvnoncat.h5",
+    ),
+    dict(
+        label="test_catvnoncat",
+        category="IA",
+        source="""Cat or not""",
+        raw_data="test_catvnoncat.h5",
+    ),
+    dict(
+        label="maintenance1",
+        category="Maintenance",
+        raw_data="https://raw.githubusercontent.com/shadgriffin/feature_engineering_equipment_failure/main/fe_equipment_failure_data_1.csv",
+        source="""Bing bing""",
+    ),
+    dict(
+        label="maintenance2",
+        category="Maintenance",
+        raw_data="https://raw.githubusercontent.com/shadgriffin/feature_engineering_equipment_failure/main/fe_equipment_failure_data_2.csv",
+        source="""Bing bing""",
     ),
 ]
+
+
+for f in (
+    ["chose1.jpg", "chose2.jpg", "radian2.png", "README.md", "brown.gif", "gradient_descent.png", "TCL.png"]
+    + ["lognormal.png", "in_trading.csv", "galton.jpg", "ffcontrol.csv", "galtonr.png"]
+    + ["exercices", "freefight.csv"]
+):
+    datasets.append(dict(label=f, raw_data=f, category="Internal"))
+
+
 ddatasets = {v["label"]: v for v in datasets}
+
+
+def get_rdata(d):
+    if "raw_data" not in d:
+        return ""
+    if "http" in d["raw_data"]:
+        label = d["raw_data"].split("/")[-1]
+        return f'- Raw data: [{label}]({d["raw_data"]})\n'
+    if type(d["raw_data"]) in [list]:
+        return ""
+    return f'- Raw data: [{d["raw_data"]}](https://github.com/guydegnol/bulkhours/blob/main/data/{d["raw_data"]})\n'
+
+
+import glob
+
+
+def build_data_readme():
+    ffile = open("/home/guydegnol/projects/bulkhours/data/README.md", "w")
+    ffile.write('# Data<a name="data"></a>\n\n')
+
+    for c, category in enumerate(datacategories):
+        ffile.write(f'{c+1}. [{category["label"]}](#{category["tag"]})\n')
+
+    for c, category in enumerate(datacategories):
+        ffile.write(f'\n\n### {c+1}. {category["label"]}<a name="{category["tag"]}"></a>\n\n')
+
+        for d in datasets:
+            if d["category"] != category["label"]:
+                continue
+            rdata = get_rdata(d)
+            comment = f"""#### `bulkhours.get_data("{d["label"]}")`
+    {rdata}{d["source"]}\n"""
+            # print(d["label"], comment)
+            # bulkhours.get_data(d["label"])
+            ffile.write(comment)
+
+    raw_files = set()
+    for d in datasets:
+        if "raw_data" in d and type(d["raw_data"]) == str:
+            raw_files.add(d["raw_data"])
+
+    dfiles = [f.split("/")[-1] for f in glob.glob("/home/guydegnol/projects/bulkhours/data/*")]
+    for f in dfiles:
+        if f not in raw_files:  # and ".png" not in f and ".jpg" not in f:
+            print(f)

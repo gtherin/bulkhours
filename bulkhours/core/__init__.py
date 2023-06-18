@@ -5,6 +5,7 @@ import subprocess
 
 from .data import *  # noqa
 from .tools import md  # noqa
+from .datasets import build_data_readme  # noqa
 
 
 def runrealcmd(command, verbose=True):
