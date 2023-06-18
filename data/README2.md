@@ -171,32 +171,6 @@ Oil production in Saudi Arabia from 1996 to 2007
 https://www.statsmodels.org/stable/index.html
 
 
-                                         #### `bulkhours.get_data("gmacro.fr_unemployement")`
-https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
-
-
-#### `bulkhours.get_data("gmacro.us_gdp")`
-https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html
-
-
-#### `bulkhours.get_data("gmacro.fr_gdp")`
-https://www.insee.fr/
-
-
-#### `bulkhours.get_data("statsdata.scipy_distributions_list")`
-Scipy list of models
-
-
-#### `bulkhours.get_data("statsdata.oil")`
-Oil production in Saudi Arabia from 1996 to 2007
-        https://www.statsmodels.org/stable/index.html
-        
-
-
-#### `bulkhours.get_data("statsdata.air")`
-https://www.statsmodels.org/stable/index.html
-
-
 #### `bulkhours.get_data("statsdata.livestock2")`
 Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods.
         https://www.statsmodels.org/stable/index.html
@@ -234,7 +208,6 @@ FPREP
 ### 3. Computing<a name="Computing"></a>
 
 #### `bulkhours.get_data("supercomputers")`
-- Raw data: [https://raw.githubusercontent.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv](Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv)
 - Raw data: [Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv](https://raw.githubusercontent.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv)
 Computational capacity of the fastest supercomputers
 - Direct source: https://ourworldindata.org/grapher/supercomputer-power-flops
@@ -259,7 +232,6 @@ Quarterly sunspots data (ssn)
 ### 5. Health<a name="Health"></a>
 
 #### `bulkhours.get_data("vaccinations")`
-- Raw data: [https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv](vaccinations.csv)
 - Raw data: [vaccinations.csv](https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv)
 Coronavirus Pandemic (COVID-19) data
 - Direct source: https://ourworldindata.org/coronavirus
@@ -269,7 +241,6 @@ Coronavirus Pandemic (COVID-19) data
 
 
 #### `bulkhours.get_data("covid")`
-- Raw data: [https://covid.ourworldindata.org/data/owid-covid-data.csv](owid-covid-data.csv)
 - Raw data: [owid-covid-data.csv](https://covid.ourworldindata.org/data/owid-covid-data.csv)
 Coronavirus Pandemic (COVID-19) data
 - Direct source: https://ourworldindata.org/coronavirus
