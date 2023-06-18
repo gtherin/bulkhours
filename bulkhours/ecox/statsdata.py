@@ -127,10 +127,10 @@ def get_aust(**kwargs):
     return pd.Series(data, pd.date_range(start="2005", end="2010-Q4", freq="QS-OCT")).to_frame("aust")
 
 
-def get_air_passengers(**kwargs):
+def get_air_passengers(**data_info):
     from ..core import data
 
-    df = data.get_data_from_file("AirPassengers.csv").set_index("Month")
+    df = data.get_data_from_file(data_info["raw_data"]).set_index("Month")
     df.index = pd.to_datetime(df.index)
     df.index.freq = "MS"
     df["is_test"] = df.index >= df.index[120]
@@ -138,8 +138,8 @@ def get_air_passengers(**kwargs):
     return df
 
 
-def get_sunspots(**kwargs):
-    dta = pd.read_json("https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json")
+def get_sunspots(**data_info):
+    dta = pd.read_json(data_info["raw_data"])
     sunspots = dta.set_index("time-tag")
     sunspots.index = pd.to_datetime(sunspots.index)
     sunspots.index.freq = sunspots.index.inferred_freq

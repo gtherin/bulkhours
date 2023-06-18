@@ -21,10 +21,10 @@ class Sampler:
 Sampler.outsample_dt = time.time() - 300
 
 
-def get_apple(**kwargs):
+def get_apple(**data_info):
     from ..core import data
 
-    apple = data.get_data_from_file("APPLE_DownloadFPrepStatementQuarter").iloc[-4 * 5 :]
+    apple = data.get_data_from_file(data_info["raw_data"]).iloc[-4 * 5 :]
 
     apple.index = pd.to_datetime(apple.index)
     apple = apple[["date", "revenue", "grossProfit", "ebitda", "netIncome", "eps"]].set_index("date")
