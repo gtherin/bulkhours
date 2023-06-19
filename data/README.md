@@ -1,12 +1,27 @@
-# Data<a name="data"></a>
+#Data
 
 1. [Economics](#Economics)
+1 [Economics](#getting-started-with-markdown)
 2. [Predictive maintenance](#Maintenance)
+2 [Predictive maintenance](#getting-started-with-markdown)
 3. [Computing](#Computing)
+3 [Computing](#getting-started-with-markdown)
 4. [Physics](#Physics)
+4 [Physics](#getting-started-with-markdown)
 5. [Health](#Health)
+5 [Health](#getting-started-with-markdown)
 6. [Climate Evolution](#Climate)
+6 [Climate Evolution](#getting-started-with-markdown)
 7. [Other Machine learning training data](#IA)
+7 [Other Machine learning training data](#getting-started-with-markdown)
+
+
+### [1. Economics](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#Economics)
+
+
+
+### 1. Economics
+
 
 
 ### 1. Economics<a name="Economics"></a>
@@ -20,7 +35,11 @@ World Bank Poverty and Inequality Platform
         
 #### `bulkhours.get_data("world.mappoverty")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)
-Same as previous, with extra gps information
+World Bank Poverty and Inequality Platform
+- Direct source: https://ourworldindata.org/poverty
+- Data source: https://pip.worldbank.org/
+- Info columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
+        
 #### `bulkhours.get_data("world.gdp")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)
 World Bank Poverty and Inequality Platform
@@ -212,7 +231,23 @@ COR
 COR
 
 
+### [2. Predictive maintenance](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#Maintenance)
+
+
+
+### 2. Predictive maintenance
+
+
+
 ### 2. Predictive maintenance<a name="Maintenance"></a>
+
+
+
+### [3. Computing](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#Computing)
+
+
+
+### 3. Computing
 
 
 
@@ -226,6 +261,14 @@ Computational capacity of the fastest supercomputers
         
 
 
+### [4. Physics](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#Physics)
+
+
+
+### 4. Physics
+
+
+
 ### 4. Physics<a name="Physics"></a>
 
 #### `bulkhours.get_data("statsdata.sunspots")`
@@ -235,6 +278,14 @@ Quarterly sunspots data (ssn)
 - Data source: https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
 - Info columns: https://en.wikipedia.org/wiki/Wolf_number
         
+
+
+### [5. Health](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#Health)
+
+
+
+### 5. Health
+
 
 
 ### 5. Health<a name="Health"></a>
@@ -265,7 +316,23 @@ Coronavirus Pandemic (COVID-19) data
 
 
 
+### [6. Climate Evolution](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#Climate)
+
+
+
+### 6. Climate Evolution
+
+
+
 ### 6. Climate Evolution<a name="Climate"></a>
+
+
+
+### [7. Other Machine learning training data](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#IA)
+
+
+
+### 7. Other Machine learning training data
 
 
 
