@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import time
 
-from ..data import tools
+from . import tools
 
 
 def get_test_data():
@@ -14,6 +14,18 @@ class Sampler:
 
 
 Sampler.outsample_dt = time.time() - 300
+
+
+@tools.register("statsdata.apple")
+def get_apple(self):
+    apple = self.read_raw_data(self.raw_data).iloc[-4 * 5 :]
+
+    apple.index = pd.to_datetime(apple.index)
+    apple = apple[["date", "revenue", "grossProfit", "ebitda", "netIncome", "eps"]].set_index("date")
+    apple["revenue"] = apple["revenue"].astype(float)
+    apple.index = pd.date_range("2017-12-30", periods=20, freq="Q")
+
+    return apple
 
 
 def display_sharpe_ratios(srs):

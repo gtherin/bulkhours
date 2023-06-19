@@ -1,33 +1,11 @@
-from .statsdata import *  # noqa
 from .brownian import plot_brownian_sample  # noqa
 from .gallery import *  # noqa
 from . import regression  # noqa
 from . import gradient  # noqa
-from . import co2  # noqa
 from . import trading  # noqa
-from . import france  # noqa
-from . import gmacro  # noqa
-from . import statsdata  # noqa
-from . import mincer  # noqa
-from . import world  # noqa
-import scipy as sp
 
 from .block import Block, BlockCoin, BlockMsg  # noqa
 from .blockchain import BlockChain  # noqa
-
-
-modules = {
-    "france": france,
-    "mincer": mincer,
-    "statsdata": statsdata,
-    "gmacro": gmacro,
-    "world": world,
-    "trading": trading,
-    "co2": co2,
-}
-
-
-datasets = {}
 
 
 def random(samples_number, sample_size, mu=4, distrib="bimodal", seed=42):

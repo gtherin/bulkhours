@@ -34,6 +34,7 @@ datasets = [
 - Data source: https://pip.worldbank.org/
 - Info columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
         """,
+        # drop=["Country Code", "Indicator Name", "Indicator Code", "Unnamed: 66"]
     ),
     dict(
         label="world.mapgdp",
@@ -55,6 +56,7 @@ datasets = [
         ],
         on="country",
         source="nope",
+        enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
     ),
     dict(
         label="world.mapmacro",
@@ -69,6 +71,7 @@ datasets = [
         ],
         on="country",
         source="Same as previous, with extra gps information",
+        enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
     ),
     dict(
         label="world.corruption",
@@ -83,6 +86,7 @@ datasets = [
         ],
         on="country",
         source="nope",
+        enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
     ),
     dict(
         label="world.life_expectancy_vs_gdp_2018",
@@ -105,6 +109,8 @@ datasets = [
             "Continent",
         ],
         # drop=["annotations", "Continent"],
+        enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
+        filter="Year == 2018 and Population > 1e7",
     ),
     dict(
         label="mincer.stats",
@@ -266,7 +272,7 @@ Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
         source="""Kaggle
 https://github.com/kyi3081/stock-analysis
         """,
-        rawdata="https://raw.githubusercontent.com/kyi3081/stock-analysis/master/prices-split-adjusted.csv",
+        raw_data="https://raw.githubusercontent.com/kyi3081/stock-analysis/master/prices-split-adjusted.csv",
     ),
     dict(
         label="fundamentals",
@@ -274,7 +280,7 @@ https://github.com/kyi3081/stock-analysis
         source="""Kaggle
 https://github.com/kyi3081/stock-analysis
         """,
-        rawdata="https://raw.githubusercontent.com/kyi3081/stock-analysis/master/fundamentals.csv",
+        raw_data="https://raw.githubusercontent.com/kyi3081/stock-analysis/master/fundamentals.csv",
     ),
     dict(
         label="securities",
@@ -282,7 +288,7 @@ https://github.com/kyi3081/stock-analysis
         source="""Kaggle
 https://github.com/kyi3081/stock-analysis
         """,
-        rawdata="https://raw.githubusercontent.com/kyi3081/stock-analysis/master/securities.csv",
+        raw_data="https://raw.githubusercontent.com/kyi3081/stock-analysis/master/securities.csv",
     ),
     dict(
         label="trading.apple",
@@ -362,7 +368,6 @@ Standardized country information
         category="Climate",
         raw_data="climate-change.csv",
         source="""Data concentrations
-- Data file: bulkhours://climate-change.csv
 - Data source: https://ourworldindata.org/atmospheric-concentrations
 """,
         kwargs=dict(zone="World"),
@@ -474,49 +479,3 @@ for f in (
 
 
 ddatasets = {v["label"]: v for v in datasets}
-
-
-def get_rdata(d):
-    if "raw_data" not in d:
-        return ""
-    if "http" in d["raw_data"]:
-        label = d["raw_data"].split("/")[-1]
-        address = d["raw_data"].replace("raw.githubusercontent.com", "github.com")
-        return f"- Raw data: [{label}]({address})\n"
-    if type(d["raw_data"]) in [list]:
-        return ""
-    return f'- Raw data: [{d["raw_data"]}](https://github.com/guydegnol/bulkhours/blob/main/data/{d["raw_data"]})\n'
-
-
-import glob
-
-
-def build_data_readme():
-    ffile = open("/home/guydegnol/projects/bulkhours/data/README.md", "w")
-    ffile.write('# Data<a name="data"></a>\n\n')
-
-    for c, category in enumerate(datacategories):
-        ffile.write(f'{c+1}. [{category["label"]}](#{category["tag"]})\n')
-
-    for c, category in enumerate(datacategories):
-        ffile.write(f'\n\n### {c+1}. {category["label"]}<a name="{category["tag"]}"></a>\n\n')
-
-        for d in datasets:
-            if d["category"] != category["label"]:
-                continue
-            rdata = get_rdata(d)
-            comment = f"""#### `bulkhours.get_data("{d["label"]}")`
-{rdata}{d["source"]}\n"""
-            print(d["label"])  # , comment)
-            #bulkhours.get_data(d["label"])
-            ffile.write(comment)
-
-    raw_files = set()
-    for d in datasets:
-        if "raw_data" in d and type(d["raw_data"]) == str:
-            raw_files.add(d["raw_data"])
-
-    dfiles = [f.split("/")[-1] for f in glob.glob("/home/guydegnol/projects/bulkhours/data/*")]
-    for f in dfiles:
-        if f not in raw_files:  # and ".png" not in f and ".jpg" not in f:
-            print(f)
