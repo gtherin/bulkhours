@@ -26,7 +26,9 @@ def build_readme():
 
     for c, category in enumerate(datacategories):
         ffile.write(f'{c+1}. [{category["label"]}](#{category["tag"]})\n')
-        ffile.write(f'{c+1} [{category["label"]}](#getting-started-with-markdown)\n')
+        ffile.write(
+            f'{c+1} [{category["label"]}](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#{category["tag"]})\n'
+        )
 
     for c, category in enumerate(datacategories):
         ffile.write(

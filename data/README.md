@@ -1,19 +1,19 @@
 #Data
 
 1. [Economics](#Economics)
-1 [Economics](#getting-started-with-markdown)
+1 [Economics](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#Economics)
 2. [Predictive maintenance](#Maintenance)
-2 [Predictive maintenance](#getting-started-with-markdown)
+2 [Predictive maintenance](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#Maintenance)
 3. [Computing](#Computing)
-3 [Computing](#getting-started-with-markdown)
+3 [Computing](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#Computing)
 4. [Physics](#Physics)
-4 [Physics](#getting-started-with-markdown)
+4 [Physics](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#Physics)
 5. [Health](#Health)
-5 [Health](#getting-started-with-markdown)
+5 [Health](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#Health)
 6. [Climate Evolution](#Climate)
-6 [Climate Evolution](#getting-started-with-markdown)
+6 [Climate Evolution](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#Climate)
 7. [Other Machine learning training data](#IA)
-7 [Other Machine learning training data](#getting-started-with-markdown)
+7 [Other Machine learning training data](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#IA)
 
 
 ### [1. Economics](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#Economics)
