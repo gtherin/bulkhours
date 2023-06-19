@@ -8,7 +8,7 @@ def mock_message(language):
     return (
         "Les fonctionnalités 'premium' ne sont pas disponibles avec votre token😕. Contacter bulkhours@guydegnol.net pour avoir un new token🚀"
         if language == "fr"
-        else "The 'premium' functionalities are not available with your token😕. Contact bulkhours@guydegnol.net to have a new tokeneee🚀"
+        else "The 'premium' functionalities are not available with your token😕. Contact bulkhours@guydegnol.net to have a new token🚀"
     )
 
 

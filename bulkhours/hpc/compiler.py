@@ -30,22 +30,22 @@ class CCPPlugin(Magics):
 
     def get_cell_decomposition(self, code=None):
         info = {}
-        rawdata = code
+        rawdata = self.cell_source if code is None else code
         if rawdata != "":
-            info.update({"answer": "", "evaluation": "", "explanation": ""})
-            mode = "answer"
+            info.update({"main_execution": "", "evaluation": "", "explanation": ""})
+            mode = "main_execution"
             for l in rawdata.splitlines():
                 for tmode in ["evaluation", "explanation"]:
+                    # Switch modes
                     if f"def student_{tmode}_function(" in l or f"float student_{tmode}_function(" in l:
                         mode = tmode
-                    elif mode == tmode and len(l) > 0 and l[0] != " ":
-                        mode = "answer"
-                        if l[0] == "}":
-                            l = ""
-
-                if l.split("(")[0] not in ["student_evaluation_function(", "student_explanation_function("]:
-                    info[mode] += l + "\n"
-
+                    # elif mode == tmode and len(l) > 0 and l[0] != " ":
+                    #    mode = "main_execution"
+                    # Remove endline for c++ function
+                    # if l[0] == "}":
+                    #    continue
+                # print(mode, l, f"float student_{tmode}_function(" in l)
+                info[mode] += l + "\n"
         return info
 
     @line_cell_magic
@@ -57,6 +57,7 @@ class CCPPlugin(Magics):
             return
 
         params = self.get_cell_decomposition(code=cell)
+        # print(params["main_execution"])
 
         with tempfile.TemporaryDirectory() as tmp_dir:
             try:
@@ -64,7 +65,7 @@ class CCPPlugin(Magics):
                 file_path = os.path.join(tmp_dir, str(uuid.uuid4()))
                 file_code = file_path + (".c" if self.cinfo.compiler in ["g++", "gcc"] else ".cu")
                 with open(file_code, "w") as f:
-                    f.write(params["answer"])
+                    f.write(params["main_execution"])
 
                 # Compile file
                 if self.cinfo.compiler in ["g++", "gcc"]:
