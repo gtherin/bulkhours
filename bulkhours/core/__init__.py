@@ -54,6 +54,7 @@ def git_push(argv=sys.argv[1:]):
         the_file.write(f"""__version__ = "{npversion}"\n""")
 
     with open("git_push.sh", "w") as f:
+        # f.write(f"""python /home/guydegnol/projects/pyservice/pyservice/bulkhours.data.build_readme()\n""")
         f.write(f"""python /home/guydegnol/projects/pyservice/pyservice/generate_bulkhours_keys.py\n""")
         for p in ["", "_premium", "_admin"]:
             f.write(
