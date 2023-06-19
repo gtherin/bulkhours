@@ -29,6 +29,11 @@ def get_fversion(filename):
 
 
 def git_push(argv=sys.argv[1:]):
+    # Update the data doc
+    from bulkhours.data import build_readme
+
+    build_readme()
+
     parser = argparse.ArgumentParser(description="Git helper")
     parser.add_argument("-m", "--message", help="Message", default="Some changes")
     args = parser.parse_args(argv)
