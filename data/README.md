@@ -146,14 +146,17 @@ All-Transactions House Price Index for Houston
 - Data source: https://fred.stlouisfed.org/series/ATNHPIUS26420Q
         
 #### `bulkhours.get_data("prices-split-adjusted")`
+- Raw data: [prices-split-adjusted.csv](https://github.com/kyi3081/stock-analysis/master/prices-split-adjusted.csv)
 Kaggle
 https://github.com/kyi3081/stock-analysis
         
 #### `bulkhours.get_data("fundamentals")`
+- Raw data: [fundamentals.csv](https://github.com/kyi3081/stock-analysis/master/fundamentals.csv)
 Kaggle
 https://github.com/kyi3081/stock-analysis
         
 #### `bulkhours.get_data("securities")`
+- Raw data: [securities.csv](https://github.com/kyi3081/stock-analysis/master/securities.csv)
 Kaggle
 https://github.com/kyi3081/stock-analysis
         
