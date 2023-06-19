@@ -73,21 +73,34 @@ class Constant:
         self.latex = self.latex.replace("ID", self.i).replace("VAL", self.fv()).replace("UNI", self.fu())
         self.latex = self.latex.replace("PAR", str(self.p)).replace("\mathrm{soleil}", "\odot")
 
-    def help(self, size="+3", code=True, markdown=True, latex=False):
+    def help(self, size="+3", code=True, markdown=True, latex=False, as_str=False):
         if markdown or latex:
             text = (
                 self.c + ": " + self.latex + f"   [{self.s}{self.u}]"
                 if self.s == self.s
                 else self.c + ": " + self.latex
             )
+        hpstr = ""
         if markdown:
-            md(text, size=size)
+            if as_str:
+                hpstr += r"* <font size='%s'>%s</font><br/>" % (size, text)
+            else:
+                md(text, size=size)
         if latex:
-            print(text)
+            if as_str:
+                hpstr += text + "\n"
+            else:
+                print(text)
 
         if code:
             for ai in [self.i] + self.a:
-                print(f"bkc.{ai}={self.fv(latex=False)}  # {self.u}")
+                if as_str:
+                    hpstr += f"\n>bkc.{ai}={self.fv(latex=False)}  # {self.u}" + "\n"
+                else:
+                    print(f"bkc.{ai}={self.fv(latex=False)}  # {self.u}")
+
+        if as_str:
+            return hpstr + "\n"
 
     def __repr__(self):
         self.help()
@@ -316,6 +329,13 @@ class Units:
             for k, v in self.csts.items():
                 if label.lower() in k.lower() or label.lower() in ["all"]:
                     v.help(size=tsize, code=code, markdown=markdown, latex=latex)
+
+    def info(self, size="+3", code=True, markdown=True, latex=False):
+        output = "\n"
+        for k, v in self.csts.items():
+            output += v.help(size=size, code=code, markdown=markdown, latex=latex, as_str=True)
+
+        return output
 
     def DataFrame(self, index=[], columns=[]) -> pd.DataFrame:
         if index[0] in self.csts2d:
