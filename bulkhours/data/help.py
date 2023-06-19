@@ -22,12 +22,17 @@ def get_rdata(d, dname, dlabel):
 
 def build_readme():
     ffile = open(get_readme_filename(), "w")
-    ffile.write('# Data<a name="data"></a>\n\n')
+    ffile.write("#Data\n\n")
 
     for c, category in enumerate(datacategories):
         ffile.write(f'{c+1}. [{category["label"]}](#{category["tag"]})\n')
+        ffile.write(f'{c+1} [{category["label"]}](#getting-started-with-markdown)\n')
 
     for c, category in enumerate(datacategories):
+        ffile.write(
+            f'\n\n### [{c+1}. {category["label"]}](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#{category["tag"]})\n\n'
+        )
+        ffile.write(f'\n\n### {c+1}. {category["label"]}\n\n')
         ffile.write(f'\n\n### {c+1}. {category["label"]}<a name="{category["tag"]}"></a>\n\n')
 
         for d in datasets:
