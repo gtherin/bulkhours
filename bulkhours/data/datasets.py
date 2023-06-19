@@ -23,7 +23,11 @@ datasets = [
         label="world.mappoverty",
         category="Economics",
         raw_data="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
-        source="Same as previous, with extra gps information",
+        source="""World Bank Poverty and Inequality Platform
+- Direct source: https://ourworldindata.org/poverty
+- Data source: https://pip.worldbank.org/
+- Info columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
+        """,
     ),
     dict(
         label="world.gdp",
@@ -110,7 +114,7 @@ datasets = [
         ],
         # drop=["annotations", "Continent"],
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
-        filter="Year == 2018 and Population > 1e7",
+        query="Year == 2018 and Population > 1e7",
     ),
     dict(
         label="mincer.stats",

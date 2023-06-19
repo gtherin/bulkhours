@@ -39,9 +39,9 @@ def geo_format(df, timeopt):
 
 
 @tools.register("world.poverty")
-def get_poverty(self, timeopt=None, **data_info):
-    df = self.read_raw_data(self.raw_data, **data_info)
-
+def get_poverty(self, timeopt=None):
+    timeopt = self.data_info["timeopt"] if "timeopt" in self.data_info else None
+    df = self.read_raw_data(self.raw_data)
     return geo_format(df, timeopt)
 
 
@@ -52,7 +52,8 @@ def get_mappoverty(self, **kwargs):
 
 @tools.register("world.gdp")
 def get_gdp(self, timeopt=None, **data_info):
-    df = self.read_raw_data(self.raw_data, **data_info)
+    timeopt = self.data_info["timeopt"] if "timeopt" in self.data_info else None
+    df = self.read_raw_data(self.raw_data)
     df = df.set_index("country").stack().to_frame().reset_index()
     df.columns = ["country", "year", "gdp"]
 
@@ -66,7 +67,7 @@ def get_mapgdp(self, **kwargs):
 
 @tools.register("world.macro")
 def get_macro(self, **data_info):
-    df = self.read_raw_data(self.raw_data, **data_info)
+    df = self.read_raw_data(self.raw_data)
     return geo_format(df, None)
 
 
@@ -77,7 +78,8 @@ def get_mapmacro(self, **kwargs):
 
 @tools.register("world.corruption")
 def get_corruption(self, show_truth=False, **data_info):
-    df = self.read_raw_data(self.raw_data, **data_info)
+    show_truth = self.data_info["show_truth"] if "show_truth" in self.data_info else False
+    df = self.read_raw_data(self.raw_data)
 
     if not show_truth:
         df["corruption_index"] = df["corruption_index"].where(
@@ -91,12 +93,12 @@ def get_corruption(self, show_truth=False, **data_info):
 
 @tools.register("world.life_expectancy_vs_gdp_2018")
 def get_life_expectancy_vs_gdp_2018(self, **data_info):
-    return self.read_raw_data(self.raw_data, **data_info).dropna()
+    return self.read_raw_data(self.raw_data).dropna()
 
 
 @tools.register("co2.concentrations")
 def get_concentrations(self, zone="World", **data_info):
-    df = self.read_raw_data(self.raw_data, **data_info)
+    df = self.read_raw_data(self.raw_data)
 
     df = df.rename(columns={"Entity": "country", "Year": "year"})
 
