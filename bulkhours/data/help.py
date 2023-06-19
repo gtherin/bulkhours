@@ -22,24 +22,25 @@ def get_rdata(d, dname, dlabel):
 
 def build_readme():
     ffile = open(get_readme_filename(), "w")
-    ffile.write("#Data\n\n")
+    ffile.write("# Data\n\n")
+
+    from ..phyu.constants import Units
 
     for c, category in enumerate(datacategories):
-        ffile.write(f'{c+1}. [{category["label"]}](#{category["tag"]})\n')
-        ffile.write(
-            f'{c+1} [{category["label"]}](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#{category["tag"]})\n'
-        )
+        ffile.write(f'- [{c+1}. {category["label"]}](#{category["tag"]})\n')
 
     for c, category in enumerate(datacategories):
-        ffile.write(
-            f'\n\n### [{c+1}. {category["label"]}](https://github.com/guydegnol/bulkhours/blob/main/data/README.md#{category["tag"]})\n\n'
-        )
+        # ffile.write(f'\n\n### [{c+1}. {category["label"]}](#{category["tag"]})\n\n')
         ffile.write(f'\n\n### {c+1}. {category["label"]}\n\n')
-        ffile.write(f'\n\n### {c+1}. {category["label"]}<a name="{category["tag"]}"></a>\n\n')
+        # ffile.write(f'\n\n### {c+1}. {category["label"]}<a name="{category["tag"]}"></a>\n\n')
+
+        if category["label"] == "Physics":
+            ffile.write(Units().info(size="+1", code=True))
 
         for d in datasets:
             if d["category"] != category["label"]:
                 continue
+
             rdata = get_rdata(d, "raw_data", "Raw data")
             edata = get_rdata(d, "enrich_data", "Rich data")
             comment = f"""#### `bulkhours.get_data("{d["label"]}")`
