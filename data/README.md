@@ -32,13 +32,17 @@ World Bank Poverty and Inequality Platform
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)
 Same as previous, with extra gps information
 #### `bulkhours.get_data("world.macro")`
+- Rich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)
 nope
 #### `bulkhours.get_data("world.mapmacro")`
+- Rich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)
 Same as previous, with extra gps information
 #### `bulkhours.get_data("world.corruption")`
+- Rich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)
 nope
 #### `bulkhours.get_data("world.life_expectancy_vs_gdp_2018")`
 - Raw data: [life-expectancy-vs-gdp-per-capita.csv](https://github.com/guydegnol/bulkhours/blob/main/data/life-expectancy-vs-gdp-per-capita.csv)
+- Rich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)
 Life expectancy versus GDP/capita per country
 - Direct source: https://ourworldindata.org/grapher/life-expectancy-vs-gdp-per-capita
 - Data source: Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)
