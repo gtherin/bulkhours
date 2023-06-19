@@ -3,24 +3,21 @@ import datetime
 import zoneinfo
 
 
-from .core.data import get_core_data, get_image  # noqa
 from .core.tools import is_premium, is_admin, get_config, get_value  # noqa
 from .core.timeit import timeit  # noqa
 from .core import geo  # noqa
 from .core.geo import geo_plot_country  # noqa
 from .core import runrealcmd  # noqa
 from .core.premium_mock import PremiumMove as premium  # noqa
-from .core.datasets import datasets  # noqa
-from .core.datasets import datacategories  # noqa
 
+from . import data  # noqa
+from .data import get_data, get_image  # noqa
 
 ask_chat_gpt = premium.ask_chat_gpt  # noqa
 ask_dall_e = premium.ask_dall_e  # noqa
 is_equal = premium.is_equal  # noqa
 
 from .core import colors as c  # noqa
-from .core.help import data_help  # noqa
-
 from .core.admin_mock import AdminMove as admin  # noqa
 from .core import installer  # noqa
 from . import rl  # noqa
@@ -140,10 +137,6 @@ def set_style():
     plt.rcParams["axes.prop_cycle"] = cycler(
         color=[get_color(c) for c in ["swimming", "cycling", "running", "The end"]]
     )
-
-
-def get_data(label, **kwargs):
-    return get_core_data(label, modules=ecox.modules, **kwargs)
 
 
 def geo_plot(data=None, timeopt="last", **kwargs):

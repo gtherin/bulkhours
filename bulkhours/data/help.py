@@ -1,4 +1,53 @@
-def data_help():
+import glob
+
+from .datasets import datasets, datacategories
+
+
+def get_rdata(d, dname, dlabel):
+    if dname not in d:
+        return ""
+    if "http" in d[dname]:
+        label = d[dname].split("/")[-1]
+        address = d[dname].replace("raw.githubusercontent.com", "github.com")
+        return f"- {dlabel}: [{label}]({address})\n"
+    if type(d[dname]) in [list]:
+        return ""
+    return f"- {dlabel}: [{d[dname]}](https://github.com/guydegnol/bulkhours/blob/main/data/{d[dname]})\n"
+
+
+def build_readme():
+    ffile = open("/home/guydegnol/projects/bulkhours/data/README.md", "w")
+    ffile.write('# Data<a name="data"></a>\n\n')
+
+    for c, category in enumerate(datacategories):
+        ffile.write(f'{c+1}. [{category["label"]}](#{category["tag"]})\n')
+
+    for c, category in enumerate(datacategories):
+        ffile.write(f'\n\n### {c+1}. {category["label"]}<a name="{category["tag"]}"></a>\n\n')
+
+        for d in datasets:
+            if d["category"] != category["label"]:
+                continue
+            rdata = get_rdata(d, "raw_data", "Raw data")
+            edata = get_rdata(d, "enrich_data", "Rich data")
+            comment = f"""#### `bulkhours.get_data("{d["label"]}")`
+{rdata}{edata}{d["source"]}\n"""
+            # print(d["label"])  # , comment)
+            # bulkhours.get_data(d["label"])
+            ffile.write(comment)
+
+    raw_files = set()
+    for d in datasets:
+        if "raw_data" in d and type(d["raw_data"]) == str:
+            raw_files.add(d["raw_data"])
+
+    dfiles = [f.split("/")[-1] for f in glob.glob("/home/guydegnol/projects/bulkhours/data/*")]
+    for f in dfiles:
+        if f not in raw_files:
+            print(f"{f}: data is not referenced")
+
+
+def help():
     import IPython
 
     IPython.display.display(

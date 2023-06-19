@@ -2,13 +2,18 @@ import numpy as np
 import pandas as pd
 
 
-def get_scipy_distributions_list(**kwargs):
+from . import tools
+
+
+@tools.register("statsdata.scipy_distributions_list")
+def get_scipy_distributions_list(self):
     import scipy as sp
 
     return [d for d in dir(sp.stats._continuous_distns) if not d in ["levy_stable", "studentized_range"]]
 
 
-def get_oil(**kwargs):
+@tools.register("statsdata.oil")
+def get_oil(self):
     return pd.Series(
         [
             446.6565,
@@ -28,7 +33,8 @@ def get_oil(**kwargs):
     ).to_frame("oil")
 
 
-def get_air(**kwargs):
+@tools.register("statsdata.air")
+def get_air(self):
     air = pd.Series(
         [
             17.5534,
@@ -52,7 +58,8 @@ def get_air(**kwargs):
     return air.to_frame("air")
 
 
-def get_livestock2(**kwargs):
+@tools.register("statsdata.livestock2")
+def get_livestock2(self):
     index = pd.date_range(start="1970", end="2001", freq="A")
     return pd.Series(
         [
@@ -92,12 +99,14 @@ def get_livestock2(**kwargs):
     ).to_frame("livestock2")
 
 
-def get_livestock3(**kwargs):
+@tools.register("statsdata.livestock3")
+def get_livestock3(self):
     data = [407.9979, 403.4608, 413.8249, 428.105, 445.3387, 452.9942, 455.7402]
     return pd.Series(data, pd.date_range(start="2001", end="2008", freq="A")).to_frame("livestock3")
 
 
-def get_aust(**kwargs):
+@tools.register("statsdata.aust")
+def get_aust(self):
     data = [
         41.7275,
         24.0418,
@@ -127,10 +136,10 @@ def get_aust(**kwargs):
     return pd.Series(data, pd.date_range(start="2005", end="2010-Q4", freq="QS-OCT")).to_frame("aust")
 
 
-def get_air_passengers(**data_info):
-    from ..core import data
+@tools.register("statsdata.air_passengers")
+def get_air_passengers(self):
+    df = self.read_raw_data(self.raw_data).set_index("Month")
 
-    df = data.get_data_from_file(data_info["raw_data"]).set_index("Month")
     df.index = pd.to_datetime(df.index)
     df.index.freq = "MS"
     df["is_test"] = df.index >= df.index[120]
@@ -138,8 +147,9 @@ def get_air_passengers(**data_info):
     return df
 
 
-def get_sunspots(**data_info):
-    dta = pd.read_json(data_info["raw_data"])
+@tools.register("statsdata.sunspots")
+def get_sunspots(self):
+    dta = pd.read_json(self.raw_data)
     sunspots = dta.set_index("time-tag")
     sunspots.index = pd.to_datetime(sunspots.index)
     sunspots.index.freq = sunspots.index.inferred_freq
@@ -150,7 +160,8 @@ def get_sunspots(**data_info):
     return sunspots
 
 
-def get_hhousing(**kwargs):
+@tools.register("statsdata.hhousing")
+def get_hhousing(self):
     from pandas_datareader import data as pdr  # To get data
 
     data = pdr.get_data_fred("HOUSTNSA", "1959-01-01")  # , "2019-06-01")
