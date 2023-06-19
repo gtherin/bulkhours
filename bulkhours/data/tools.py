@@ -115,7 +115,11 @@ class DataParser:
     def get_data(self):
         if self.credit:
             if self.source is not None:
-                print(self.source)
+                print(
+                    f"""{self.source}
+\x1b[31mBulkHours database info:\x1b[0m https://github.com/guydegnol/bulkhours/blob/main/data/README.md
+                """
+                )
             else:
                 print(f"Data {self.label} is not referenced")
 
