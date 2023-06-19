@@ -10,56 +10,6 @@ datacategories = [
 
 datasets = [
     dict(
-        label="co2.concentrations",
-        category="Climate",
-        raw_data="climate-change.csv",
-        source="""Data concentrations
-- Data file: bulkhours://climate-change.csv
-- Data source: https://ourworldindata.org/atmospheric-concentrations
-""",
-        kwargs=dict(zone="World"),
-    ),
-    dict(
-        label="co2.mapconcentrations",
-        category="Climate",
-        raw_data="climate-change.csv",
-        source="Same as previous, with extra gps information",
-    ),
-    dict(
-        label="co2.main",
-        category="Climate",
-        raw_data="https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv",
-        source="""Data on CO2 and Greenhouse Gas Emissions by Our World in Data
-- Data source: https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv
-- Info columns: https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv
-        """,
-    ),
-    dict(
-        label="co2.mapmain",
-        category="Climate",
-        raw_data="https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv",
-    ),
-    dict(
-        label="vaccinations",
-        category="Health",
-        raw_data="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv",
-        source="""Coronavirus Pandemic (COVID-19) data
-- Direct source: https://ourworldindata.org/coronavirus
-- Data source: https://covid19.who.int/data
-- Info columns: https://github.com/owid/covid-19-data/tree/master/public/data/
-""",
-    ),
-    dict(
-        label="covid",
-        category="Health",
-        raw_data="https://covid.ourworldindata.org/data/owid-covid-data.csv",
-        source="""Coronavirus Pandemic (COVID-19) data
-- Direct source: https://ourworldindata.org/coronavirus
-- Data source: https://covid19.who.int/data
-- Info columns: https://github.com/owid/covid-19-data/tree/master/public/data/
-""",
-    ),
-    dict(
         label="world.poverty",
         category="Economics",
         raw_data="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
@@ -133,15 +83,6 @@ datasets = [
         ],
         on="country",
         source="nope",
-    ),
-    dict(
-        label="supercomputers",
-        category="Computing",
-        raw_data="https://raw.githubusercontent.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv",
-        source="""Computational capacity of the fastest supercomputers
-- Direct source: https://ourworldindata.org/grapher/supercomputer-power-flops
-- Info columns: The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year
-        """,
     ),
     dict(
         label="world.life_expectancy_vs_gdp_2018",
@@ -313,16 +254,6 @@ Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
         raw_data="AirPassengers.csv",
     ),
     dict(
-        label="statsdata.sunspots",
-        category="Physics",
-        source="""Quarterly sunspots data (ssn)
-- Direct source: https://www.swpc.noaa.gov/products/solar-cycle-progression
-- Data source: https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
-- Info columns: https://en.wikipedia.org/wiki/Wolf_number
-        """,
-        raw_data="https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json",
-    ),
-    dict(
         label="statsdata.hhousing",
         category="Economics",
         source="""All-Transactions House Price Index for Houston
@@ -330,19 +261,35 @@ Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
         """,
     ),
     dict(
+        label="prices-split-adjusted",
+        category="Economics",
+        source="""Kaggle
+https://github.com/kyi3081/stock-analysis
+        """,
+        rawdata="https://raw.githubusercontent.com/kyi3081/stock-analysis/master/prices-split-adjusted.csv",
+    ),
+    dict(
+        label="fundamentals",
+        category="Economics",
+        source="""Kaggle
+https://github.com/kyi3081/stock-analysis
+        """,
+        rawdata="https://raw.githubusercontent.com/kyi3081/stock-analysis/master/fundamentals.csv",
+    ),
+    dict(
+        label="securities",
+        category="Economics",
+        source="""Kaggle
+https://github.com/kyi3081/stock-analysis
+        """,
+        rawdata="https://raw.githubusercontent.com/kyi3081/stock-analysis/master/securities.csv",
+    ),
+    dict(
         label="trading.apple",
         category="Economics",
         source="""FPREP
         """,
         raw_data="APPLE_DownloadFPrepStatementQuarter.tsv",
-    ),
-    dict(
-        label="continent",
-        category="Economics",
-        source="""iso m49 country information
-Standardized country information
-        """,
-        raw_data="continent.tsv",
     ),
     dict(
         label="continent",
@@ -384,9 +331,104 @@ Standardized country information
     dict(
         label="unemployment",
         category="Economics",
-        source="""country,unemployment_rate
-        """,
+        source="""country,unemployment_rate""",
         raw_data="unemployment.csv",
+    ),
+    dict(
+        label="wages",
+        category="Economics",
+        source="""Simple synthetic data for exercice""",
+        raw_data="wages.tsv",
+    ),
+    dict(label="COR_1", category="Economics", source="COR", raw_data="Données septembre partie 1.xlsx"),
+    dict(label="COR_2", category="Economics", source="COR", raw_data="Données_RA2022_P2.xlsx"),
+    dict(
+        label="COR_2bis", category="Economics", source="COR", raw_data="Données complémentaires partie 2 RA 2022.xlsx"
+    ),
+    dict(label="COR_3", category="Economics", source="COR", raw_data="Données septembre 2022 - partie 3.xlsx"),
+    dict(label="COR_4", category="Economics", source="COR", raw_data="Données_RA2022_P4.xlsx"),
+    dict(label="COR_5", category="Economics", source="COR", raw_data="Données septembre 2022 - partie 5.xlsx"),
+    dict(
+        label="supercomputers",
+        category="Computing",
+        raw_data="https://raw.githubusercontent.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv",
+        source="""Computational capacity of the fastest supercomputers
+- Direct source: https://ourworldindata.org/grapher/supercomputer-power-flops
+- Info columns: The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year
+        """,
+    ),
+    dict(
+        label="co2.concentrations",
+        category="Climate",
+        raw_data="climate-change.csv",
+        source="""Data concentrations
+- Data file: bulkhours://climate-change.csv
+- Data source: https://ourworldindata.org/atmospheric-concentrations
+""",
+        kwargs=dict(zone="World"),
+    ),
+    dict(
+        label="co2.mapconcentrations",
+        category="Climate",
+        raw_data="climate-change.csv",
+        source="Same as previous, with extra gps information",
+    ),
+    dict(
+        label="co2.main",
+        category="Climate",
+        raw_data="https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv",
+        source="""Data on CO2 and Greenhouse Gas Emissions by Our World in Data
+- Data source: https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv
+- Info columns: https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv
+        """,
+    ),
+    dict(
+        label="co2.mapmain",
+        category="Climate",
+        raw_data="https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv",
+    ),
+    dict(
+        label="vaccinations",
+        category="Health",
+        raw_data="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv",
+        source="""Coronavirus Pandemic (COVID-19) data
+- Direct source: https://ourworldindata.org/coronavirus
+- Data source: https://covid19.who.int/data
+- Info columns: https://github.com/owid/covid-19-data/tree/master/public/data/
+""",
+    ),
+    dict(
+        label="prostate",
+        category="Health",
+        raw_data="prostate.tsv",
+        source="""https://hastie.su.domains/ElemStatLearn/data.html
+        
+columns: lcavol, lweight, age, lbph, svi, lcp, gleason, pgg45, [outcome]
+
+lpsa train/test indicator (column 10) This last column indicates which 67 observations were used as the "training set" and which 30 as the test set, as described on page 48 in the book.
+There was an error in these data in the first edition of this book. Subject 32 had a value of 6.1 for lweight, which translates to a 449 gm prostate! The correct value is 44.9 gm. We are grateful to Prof. Stephen W. Link for alerting us to this error.
+The features must first be scaled to have mean zero and  variance 96 (=n) before the analyses in Tables 3.1 and beyond.  That is, if x is the  96 by 8 matrix of features, we compute xp <- scale(x,TRUE,TRUE)
+""",
+    ),
+    dict(
+        label="covid",
+        category="Health",
+        raw_data="https://covid.ourworldindata.org/data/owid-covid-data.csv",
+        source="""Coronavirus Pandemic (COVID-19) data
+- Direct source: https://ourworldindata.org/coronavirus
+- Data source: https://covid19.who.int/data
+- Info columns: https://github.com/owid/covid-19-data/tree/master/public/data/
+""",
+    ),
+    dict(
+        label="statsdata.sunspots",
+        category="Physics",
+        source="""Quarterly sunspots data (ssn)
+- Direct source: https://www.swpc.noaa.gov/products/solar-cycle-progression
+- Data source: https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
+- Info columns: https://en.wikipedia.org/wiki/Wolf_number
+        """,
+        raw_data="https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json",
     ),
     dict(
         label="co2.travel_mode",
@@ -439,7 +481,8 @@ def get_rdata(d):
         return ""
     if "http" in d["raw_data"]:
         label = d["raw_data"].split("/")[-1]
-        return f'- Raw data: [{label}]({d["raw_data"]})\n'
+        address = d["raw_data"].replace("raw.githubusercontent.com", "github.com")
+        return f"- Raw data: [{label}]({address})\n"
     if type(d["raw_data"]) in [list]:
         return ""
     return f'- Raw data: [{d["raw_data"]}](https://github.com/guydegnol/bulkhours/blob/main/data/{d["raw_data"]})\n'
@@ -463,9 +506,9 @@ def build_data_readme():
                 continue
             rdata = get_rdata(d)
             comment = f"""#### `bulkhours.get_data("{d["label"]}")`
-    {rdata}{d["source"]}\n"""
-            # print(d["label"], comment)
-            # bulkhours.get_data(d["label"])
+{rdata}{d["source"]}\n"""
+            print(d["label"])  # , comment)
+            #bulkhours.get_data(d["label"])
             ffile.write(comment)
 
     raw_files = set()
