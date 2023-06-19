@@ -64,7 +64,6 @@ def get_data_from_file(raw_data, **kwargs):
     elif ext in ["csv"]:
         return pd.read_csv(filename)
     elif ext in ["h5"]:
-        print(filename, kwargs)
         if "key" in kwargs:
             return np.array(h5py.File(filename, "r")[kwargs["key"]][:])
         elif "format" in kwargs and kwargs["format"] == "filename":
@@ -85,7 +84,6 @@ class DataParser:
         raw_data=None,
         credit=False,
         source=None,
-        filter=None,
         query=None,
         index=None,
         test_data=None,
@@ -96,7 +94,7 @@ class DataParser:
         **data_info,
     ) -> None:
         self.label, self.raw_data, self.credit = label, raw_data, credit
-        self.source, self.filter, self.query, self.index, self.test_data = source, filter, query, index, test_data
+        self.source, self.query, self.index, self.test_data = source, query, index, test_data
         self.data_info = data_info
         self.on = on
         self.drop = drop
@@ -130,13 +128,6 @@ class DataParser:
             return df
 
         df = clean_columns(df, drop=self.drop, rename=self.rename, is_test=self.is_test)
-
-        if self.filter is not None:
-            if type(self.filter) == str:
-                df = df.query(self.filter)
-            else:
-                df = self.filter(df)
-
         return clean_data(df, query=self.query, index=self.index, test_data=self.test_data)
 
     def get_image(self, ax=None):
