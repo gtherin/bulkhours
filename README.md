@@ -1,22 +1,12 @@
 This package is a support library for different courses. 
 
-1. [Plan of econometrics course](#planeco)
-2. [Plan of High Performance Programming on GPU course](#planhpc)
-3. [Course methods](#methods)
-4. [Data information](#data)
-5. [Other stuffs](#stuffs)
 
+## 1. [Data information](data/README.md)
+## 2. [Plan of High Performance Programming on GPU course](bulkhours/hpc/README.md)
+## 3. [Plan of High Performance Programming on GPU course](bulkhours/ecox/README.md)
+## 4. [Course methods](#methods)
+## 5. [Other stuffs](#stuffs)
 
-## Plan of econometrics course <a name="planeco"></a>
-[Plan of High Performance Programming on GPU course](bulkhours/ecox/README.md)
-
-## Plan of High Performance Programming on GPU course <a name="planhpc"></a>
-
-[Plan of High Performance Programming on GPU course](bulkhours/hpc/README.md)
-
-
-## Data information<a name="data"></a>
-[Data information](data/README.md)
 
 ## Methods <a name="methods"></a>
 
