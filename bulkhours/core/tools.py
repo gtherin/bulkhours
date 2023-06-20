@@ -57,7 +57,7 @@ def copy_config(e="", config={}, do_update=False, from_scratch=False, is_namespa
         config["email"] = config["email"].lower()
 
     if do_update:
-        with open(jsonfile := get_json_file(e), "w", encoding="utf-8") as f:
+        with open(get_json_file(e), "w", encoding="utf-8") as f:
             json.dump(config, f, ensure_ascii=False, indent=4)
 
     if is_namespace:
