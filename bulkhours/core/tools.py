@@ -38,14 +38,19 @@ def get_json_file(e):
     return os.path.dirname(__file__) + f"/../../.safe{e}"
 
 
-def get_config(e="", do_update=False, from_scratch=False, is_namespace=False, **kwargs):
-    config = {}
-    if e == "":
-        config.update(get_config(e="p"))
+def copy_config(e="", config={}, do_update=False, from_scratch=False, is_namespace=False, **kwargs):
+    """Important to copy the config"""
+    if config == {}:
+        if e == "":
+            config.update(get_config(e="p"))
 
-    if os.path.exists(jsonfile := get_json_file(e)) and not from_scratch:
-        with open(jsonfile) as json_file:
-            config.update(json.load(json_file))
+        if os.path.exists(jsonfile := get_json_file(e)) and not from_scratch:
+            with open(jsonfile) as json_file:
+                config.update(json.load(json_file))
+
+    # Convert from Namespace
+    if type(config) != dict:
+        config = vars(config)
 
     config.update(kwargs)
     if "email" in config:
@@ -59,6 +64,10 @@ def get_config(e="", do_update=False, from_scratch=False, is_namespace=False, **
         return Namespace(**config)
 
     return config
+
+
+def get_config(*kargs, **kwargs):
+    return copy_config(*kargs, **kwargs)
 
 
 def get_value(key, e=""):
@@ -77,6 +86,10 @@ def is_premium(debug=False):
 
     try:
         import bulkhours_premium
+
+        bulkhours_premium.tools.copy_config = copy_config
+        bulkhours_premium.tools.get_config = get_config
+        bulkhours_premium.tools.get_value = get_value
 
         return True
     except ImportError:
