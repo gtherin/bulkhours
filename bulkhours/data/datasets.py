@@ -424,6 +424,12 @@ https://ourworldindata.org/grapher/carbon-footprint-travel-mode
         raw_data="carbon-footprint-travel-mode.csv",
     ),
     dict(
+        label="catvnoncat",
+        category="IA",
+        source="""Cat or not""",
+        raw_data="train_catvnoncat.h5",
+    ),
+    dict(
         label="train_catvnoncat",
         category="IA",
         source="""Cat or not""",
