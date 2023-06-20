@@ -461,7 +461,6 @@ ddatasets = {v["label"]: v for v in datasets}
 
 
 for d in range(len(datasets)):
-    if "reference" in datasets[d]:
-        if (lr := datasets[d]["reference"]) in ddatasets:
-            datasets[d] = {**ddatasets[lr], **datasets[d]}
-            ddatasets[datasets[d]["label"]] = datasets[d]
+    if "reference" in datasets[d] and (lr := datasets[d]["reference"]) in ddatasets:
+        datasets[d] = {**ddatasets[lr], **datasets[d]}
+        ddatasets[datasets[d]["label"]] = datasets[d]
