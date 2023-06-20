@@ -34,13 +34,17 @@ World Bank Poverty and Inequality Platform
         
 #### `bulkhours.get_data("world.mapgdp")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)
-Same as previous, with extra gps information
+World Bank Poverty and Inequality Platform
+- Direct source: https://ourworldindata.org/poverty
+- Data source: https://pip.worldbank.org/
+- Info columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
+        
 #### `bulkhours.get_data("world.macro")`
 - Rich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)
 nope
 #### `bulkhours.get_data("world.mapmacro")`
 - Rich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)
-Same as previous, with extra gps information
+nope
 #### `bulkhours.get_data("world.corruption")`
 - Rich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)
 nope
@@ -188,32 +192,39 @@ country,gdp_per_capita
 #### `bulkhours.get_data("tourism")`
 - Raw data: [tourism.csv](https://github.com/guydegnol/bulkhours/blob/main/data/tourism.csv)
 country,tourists_in_millions,receipts_in_billions,receipts_per_tourist,percentage_of_gdp
-
         
 #### `bulkhours.get_data("unemployment")`
 - Raw data: [unemployment.csv](https://github.com/guydegnol/bulkhours/blob/main/data/unemployment.csv)
 country,unemployment_rate
+        
 #### `bulkhours.get_data("wages")`
 - Raw data: [wages.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/wages.tsv)
 Simple synthetic data for exercice
+        
 #### `bulkhours.get_data("COR_1")`
 - Raw data: [Données septembre partie 1.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données septembre partie 1.xlsx)
 COR
+    
 #### `bulkhours.get_data("COR_2")`
 - Raw data: [Données_RA2022_P2.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données_RA2022_P2.xlsx)
 COR
+    
 #### `bulkhours.get_data("COR_2bis")`
 - Raw data: [Données complémentaires partie 2 RA 2022.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données complémentaires partie 2 RA 2022.xlsx)
 COR
+    
 #### `bulkhours.get_data("COR_3")`
 - Raw data: [Données septembre 2022 - partie 3.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données septembre 2022 - partie 3.xlsx)
 COR
+    
 #### `bulkhours.get_data("COR_4")`
 - Raw data: [Données_RA2022_P4.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données_RA2022_P4.xlsx)
 COR
+    
 #### `bulkhours.get_data("COR_5")`
 - Raw data: [Données septembre 2022 - partie 5.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données septembre 2022 - partie 5.xlsx)
 COR
+    
 
 
 ### 2. Predictive maintenance

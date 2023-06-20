@@ -40,13 +40,7 @@ datasets = [
         """,
         # drop=["Country Code", "Indicator Name", "Indicator Code", "Unnamed: 66"]
     ),
-    dict(
-        label="world.mapgdp",
-        category="Economics",
-        raw_data="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
-        # raw_data="get_mapgeneric(world.gdp)",
-        source="Same as previous, with extra gps information",
-    ),
+    dict(label="world.mapgdp", reference="world.gdp"),
     dict(
         label="world.macro",
         category="Economics",
@@ -62,21 +56,7 @@ datasets = [
         source="nope",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
     ),
-    dict(
-        label="world.mapmacro",
-        category="Economics",
-        raw_data=[
-            "corruption.csv",
-            "cost_of_living.csv",
-            "richest_countries.csv",
-            "unemployment.csv",
-            "tourism.csv",
-            "continent.tsv",
-        ],
-        on="country",
-        source="Same as previous, with extra gps information",
-        enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
-    ),
+    dict(label="world.mapmacro", reference="world.macro"),
     dict(
         label="world.corruption",
         category="Economics",
@@ -334,30 +314,35 @@ Standardized country information
         label="tourism",
         category="Economics",
         source="""country,tourists_in_millions,receipts_in_billions,receipts_per_tourist,percentage_of_gdp
-
         """,
         raw_data="tourism.csv",
     ),
     dict(
         label="unemployment",
         category="Economics",
-        source="""country,unemployment_rate""",
+        source="""country,unemployment_rate
+        """,
         raw_data="unemployment.csv",
     ),
     dict(
         label="wages",
         category="Economics",
-        source="""Simple synthetic data for exercice""",
+        source="""Simple synthetic data for exercice
+        """,
         raw_data="wages.tsv",
     ),
-    dict(label="COR_1", category="Economics", source="COR", raw_data="Données septembre partie 1.xlsx"),
-    dict(label="COR_2", category="Economics", source="COR", raw_data="Données_RA2022_P2.xlsx"),
     dict(
-        label="COR_2bis", category="Economics", source="COR", raw_data="Données complémentaires partie 2 RA 2022.xlsx"
+        label="COR_1",
+        category="Economics",
+        source="""COR
+    """,
+        raw_data="Données septembre partie 1.xlsx",
     ),
-    dict(label="COR_3", category="Economics", source="COR", raw_data="Données septembre 2022 - partie 3.xlsx"),
-    dict(label="COR_4", category="Economics", source="COR", raw_data="Données_RA2022_P4.xlsx"),
-    dict(label="COR_5", category="Economics", source="COR", raw_data="Données septembre 2022 - partie 5.xlsx"),
+    dict(label="COR_2", reference="COR_1", raw_data="Données_RA2022_P2.xlsx"),
+    dict(label="COR_2bis", reference="COR_1", raw_data="Données complémentaires partie 2 RA 2022.xlsx"),
+    dict(label="COR_3", reference="COR_1", raw_data="Données septembre 2022 - partie 3.xlsx"),
+    dict(label="COR_4", reference="COR_1", raw_data="Données_RA2022_P4.xlsx"),
+    dict(label="COR_5", reference="COR_1", raw_data="Données septembre 2022 - partie 5.xlsx"),
     dict(
         label="supercomputers",
         category="Computing",
@@ -376,12 +361,7 @@ Standardized country information
 """,
         kwargs=dict(zone="World"),
     ),
-    dict(
-        label="co2.mapconcentrations",
-        category="Climate",
-        raw_data="climate-change.csv",
-        source="Same as previous, with extra gps information",
-    ),
+    dict(label="co2.mapconcentrations", reference="co2.concentrations"),
     dict(
         label="co2.main",
         category="Climate",
@@ -391,11 +371,7 @@ Standardized country information
 - Info columns: https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv
         """,
     ),
-    dict(
-        label="co2.mapmain",
-        category="Climate",
-        raw_data="https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv",
-    ),
+    dict(label="co2.mapmain", reference="co2.main"),
     dict(
         label="vaccinations",
         category="Health",
@@ -481,5 +457,11 @@ for f in (
 ):
     datasets.append(dict(label=f, raw_data=f, category="Internal"))
 
-
 ddatasets = {v["label"]: v for v in datasets}
+
+
+for d in range(len(datasets)):
+    if "reference" in datasets[d]:
+        if (lr := datasets[d]["reference"]) in ddatasets:
+            datasets[d] = {**ddatasets[lr], **datasets[d]}
+            ddatasets[datasets[d]["label"]] = datasets[d]
