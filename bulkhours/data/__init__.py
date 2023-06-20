@@ -23,9 +23,7 @@ from .datasets import datasets, ddatasets, datacategories  # noqa
 
 
 def get_data(label, **kwargs):
-    data_info = ddatasets[label] if label in ddatasets else {"raw_data": label}
-    data_info.update(kwargs)
-
+    data_info = {**ddatasets[label], **kwargs} if label in ddatasets else {"raw_data": label, **kwargs}
     return tools.DataParser(**data_info).get_data()
 
 
