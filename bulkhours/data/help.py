@@ -27,13 +27,13 @@ def build_readme():
     from ..phyu.constants import Units
 
     for c, category in enumerate(datacategories):
-        ffile.write(f'- [{c+1}. {category["label"]}](#{category["tag"]}) \n')
+        ffile.write(f'- [{c+1}. {category["label"]}](#{category["label"]}) \n')
 
     for c, category in enumerate(datacategories):
         # ffile.write(f'\n\n### [{c+1}. {category["label"]}](#{category["tag"]})\n\n')
         # ffile.write(f'\n\n### {c+1}. {category["label"]} <a name="{category["tag"]}"></a> \n\n')
-        ffile.write(f'\n\n### {category["tag"]} <a name="{category["tag"]}"></a> \n\n')
-        # ffile.write(f'\n\n### {category["tag"]} \n\n')
+        # ffile.write(f'\n\n### {category["tag"]} <a name="{category["tag"]}"></a> \n\n')
+        ffile.write(f'\n\n### {category["label"]} \n\n')
 
         if category["label"] == "Physics":
             ffile.write(Units().info(size="+1", code=True))
