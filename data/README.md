@@ -250,241 +250,297 @@ Computational capacity of the fastest supercomputers
 ### Physics 
 
 
-* <font size='+1'>Celsius en Kelvin: $273.15°K=0°C$</font><br/>```python
+* <font size='+1'>Celsius en Kelvin: $273.15°K=0°C$</font><br/>
+```python
 bkc.c2k=273.15  # K.C-1
 bkc.kelvin=273.15  # K.C-1
 ```
 
-* <font size='+1'>Celerité de la lumière: $c = 3 \cdot 10^{5}m\cdot s^{-1}$</font><br/>```python
+* <font size='+1'>Celerité de la lumière: $c = 3 \cdot 10^{5}m\cdot s^{-1}$</font><br/>
+```python
 bkc.c=3e+05  # m.s-1
 bkc.vitesse_lumiere=3e+05  # m.s-1
 ```
 
-* <font size='+1'>Distance parcourue par la lumière en 1an: $al = 9.461 \cdot 10^{15}m$</font><br/>```python
+* <font size='+1'>Distance parcourue par la lumière en 1an: $al = 9.461 \cdot 10^{15}m$</font><br/>
+```python
 bkc.al=9.461e+15  # m
 bkc.annee_lumiere=9.461e+15  # m
 ```
 
-* <font size='+1'>Une Unité astrononique faisant un angle d'une seconde d'arc (déprécié): $1pc \equiv \frac{180\cdot60\cdot60}{\pi} = 3.086 \cdot 10^{16}m = 3.26al$</font><br/>```python
+* <font size='+1'>Une Unité astrononique faisant un angle d'une seconde d'arc (déprécié): $1pc \equiv \frac{180\cdot60\cdot60}{\pi} = 3.086 \cdot 10^{16}m = 3.26al$</font><br/>
+```python
 bkc.parsec=3.086e+16  # m.pc-1
 ```
 
-* <font size='+1'>Une Unité astrononique faisant un angle d'une seconde d'arc (déprécié): $1kpc \equiv \frac{1000\cdot180\cdot60\cdot60}{\pi}$</font><br/>```python
+* <font size='+1'>Une Unité astrononique faisant un angle d'une seconde d'arc (déprécié): $1kpc \equiv \frac{1000\cdot180\cdot60\cdot60}{\pi}$</font><br/>
+```python
 bkc.kparsec=3.086e+19  # m.kpc-1
 ```
 
-* <font size='+1'>Constante de la gravitation: $G = 6.67 \cdot 10^{-11}N\cdot m^2\cdot kg^{-2}$   [6.6743e-11N.m2.kg-2]</font><br/>```python
+* <font size='+1'>Constante de la gravitation: $G = 6.67 \cdot 10^{-11}N\cdot m^2\cdot kg^{-2}$   [6.6743e-11N.m2.kg-2]</font><br/>
+```python
 bkc.G=6.67e-11  # N.m2.kg-2
 ```
 
-* <font size='+1'>Acceleration standard de la gravitation: $g = 9.8m\cdot s^{-2}$   [9.80665m.s-2]</font><br/>```python
+* <font size='+1'>Acceleration standard de la gravitation: $g = 9.8m\cdot s^{-2}$   [9.80665m.s-2]</font><br/>
+```python
 bkc.g=9.8  # m.s-2
 ```
 
-* <font size='+1'>Constante de Planck: $h = 6.626 \cdot 10^{-34}J\cdot s$   [6.62607015e-34J.s]</font><br/>```python
+* <font size='+1'>Constante de Planck: $h = 6.626 \cdot 10^{-34}J\cdot s$   [6.62607015e-34J.s]</font><br/>
+```python
 bkc.h=6.626e-34  # J.s
 ```
 
-* <font size='+1'>: $\bar{h} = \frac{h}{2\pi}$</font><br/>```python
+* <font size='+1'>: $\bar{h} = \frac{h}{2\pi}$</font><br/>
+```python
 bkc.hbar=1.055e-34  # J.s
 ```
 
-* <font size='+1'>Nombre d'Avogadro: $N_\mathcal{A} = 6.02 \cdot 10^{23}mol-1$ (Carbone: $12g\Leftrightarrow 1mol$)</font><br/>```python
+* <font size='+1'>Nombre d'Avogadro: $N_\mathcal{A} = 6.02 \cdot 10^{23}mol-1$ (Carbone: $12g\Leftrightarrow 1mol$)</font><br/>
+```python
 bkc.N_A=6.02e+23  # mol-1
 bkc.A=6.02e+23  # mol-1
 ```
 
-* <font size='+1'>Constante de Stefan-Boltzmann: $\sigma = 5.67 \cdot 10^{-8} W\cdot m^{-2}\cdot K^{-4}$</font><br/>```python
+* <font size='+1'>Constante de Stefan-Boltzmann: $\sigma = 5.67 \cdot 10^{-8} W\cdot m^{-2}\cdot K^{-4}$</font><br/>
+```python
 bkc.sigma=5.67e-08  # W.m-2.K-4
 bkc.stefan=5.67e-08  # W.m-2.K-4
 ```
 
-* <font size='+1'>Constante de Wien: $\lambda_{\text{max}} \cdot T = 0.003m\cdot K$   [0.002897771955m.K]</font><br/>```python
+* <font size='+1'>Constante de Wien: $\lambda_{\text{max}} \cdot T = 0.003m\cdot K$   [0.002897771955m.K]</font><br/>
+```python
 bkc.Wien=0.003  # m.K
 bkc.wien=0.003  # m.K
 bkc.lambda_max=0.003  # m.K
 ```
 
-* <font size='+1'>Constante de Rydberg: $R_H({\text{Hydrogene}}) = 1.1 \cdot 10^{7}m-1$</font><br/>```python
+* <font size='+1'>Constante de Rydberg: $R_H({\text{Hydrogene}}) = 1.1 \cdot 10^{7}m-1$</font><br/>
+```python
 bkc.Rydberg=1.1e+07  # m-1
 bkc.rydberg=1.1e+07  # m-1
 bkc.R_H=1.1e+07  # m-1
 ```
 
-* <font size='+1'>Energie cinetique e sous 1Volt: $\mathrm{eV} = 1.6 \cdot 10^{-19}J\cdot eV^{-1}$   [1.602176634e-19J.eV-1]</font><br/>```python
+* <font size='+1'>Energie cinetique e sous 1Volt: $\mathrm{eV} = 1.6 \cdot 10^{-19}J\cdot eV^{-1}$   [1.602176634e-19J.eV-1]</font><br/>
+```python
 bkc.eV=1.6e-19  # J.eV-1
 bkc.ev=1.6e-19  # J.eV-1
 ```
 
-* <font size='+1'>Masse electron: $m_e = 9.109 \cdot 10^{-31}kg$   [9.1093837015e-31kg]</font><br/>```python
+* <font size='+1'>Masse electron: $m_e = 9.109 \cdot 10^{-31}kg$   [9.1093837015e-31kg]</font><br/>
+```python
 bkc.m_e=9.109e-31  # kg
 ```
 
-* <font size='+1'>Rayon de Bohr: $a = 5.3 \cdot 10^{-11} m$</font><br/>```python
+* <font size='+1'>Rayon de Bohr: $a = 5.3 \cdot 10^{-11} m$</font><br/>
+```python
 bkc.r_bohr=5.300e-11  # m
 bkc.a=5.300e-11  # m
 ```
 
-* <font size='+1'>Masse proton: $m_p = 1.673 \cdot 10^{-27}kg$   [1.67262192369e-27kg]</font><br/>```python
+* <font size='+1'>Masse proton: $m_p = 1.673 \cdot 10^{-27}kg$   [1.67262192369e-27kg]</font><br/>
+```python
 bkc.m_p=1.673e-27  # kg
 ```
 
-* <font size='+1'>Masse proton: $m_p = 1.007276uma$ ($1uma \equiv \frac{M(^{12}C)}{12}$)   [1.007276466621uma]</font><br/>```python
+* <font size='+1'>Masse proton: $m_p = 1.007276uma$ ($1uma \equiv \frac{M(^{12}C)}{12}$)   [1.007276466621uma]</font><br/>
+```python
 bkc.m_puma=1.007276  # uma
 ```
 
-* <font size='+1'>Masse neutron: $m_n = 1.008663uma$ ($1uma \equiv \frac{M(^{12}C)}{12}$)   [1.00866491595uma]</font><br/>```python
+* <font size='+1'>Masse neutron: $m_n = 1.008663uma$ ($1uma \equiv \frac{M(^{12}C)}{12}$)   [1.00866491595uma]</font><br/>
+```python
 bkc.m_numa=1.008663  # uma
 ```
 
-* <font size='+1'>Unité de Masse Atomique: $m_{nuc} = 1.660 \cdot 10^{-27}kg\cdot uma^{-1}$ ($1uma \equiv \frac{M(^{12}C)}{12}$)   [1.6605390666e-27kg.uma-1]</font><br/>```python
+* <font size='+1'>Unité de Masse Atomique: $m_{nuc} = 1.660 \cdot 10^{-27}kg\cdot uma^{-1}$ ($1uma \equiv \frac{M(^{12}C)}{12}$)   [1.6605390666e-27kg.uma-1]</font><br/>
+```python
 bkc.uma=1.660e-27  # kg.uma-1
 ```
 
-* <font size='+1'>Unité de Masse Atomique (MeV): $m_{nuc} = 931.500MeV\cdot uma^{-1}$ ($1uma \equiv \frac{M(^{12}C)}{12}$)</font><br/>```python
+* <font size='+1'>Unité de Masse Atomique (MeV): $m_{nuc} = 931.500MeV\cdot uma^{-1}$ ($1uma \equiv \frac{M(^{12}C)}{12}$)</font><br/>
+```python
 bkc.uma_mev=931.500  # MeV.uma-1
 ```
 
-* <font size='+1'>Masse: $M_{\mathrm{mercure}} = 3.301 \cdot 10^{23}kg$</font><br/>```python
+* <font size='+1'>Masse: $M_{\mathrm{mercure}} = 3.301 \cdot 10^{23}kg$</font><br/>
+```python
 bkc.M_mercure=3.301e+23  # kg
 ```
 
-* <font size='+1'>Distance au soleil: $d_{\odot \mathrm{mercure}} = 0.38ua$</font><br/>```python
+* <font size='+1'>Distance au soleil: $d_{\odot \mathrm{mercure}} = 0.38ua$</font><br/>
+```python
 bkc.d_mercure=0.38  # ua
 ```
 
-* <font size='+1'>Rayon: $R_{\mathrm{mercure}} = 2439km$</font><br/>```python
+* <font size='+1'>Rayon: $R_{\mathrm{mercure}} = 2439km$</font><br/>
+```python
 bkc.R_mercure=2439  # km
 ```
 
-* <font size='+1'>Albedo: $A_{\mathrm{mercure}} = 0.09$</font><br/>```python
+* <font size='+1'>Albedo: $A_{\mathrm{mercure}} = 0.09$</font><br/>
+```python
 bkc.A_mercure=0.09  # Sans unité (entre 0 et 1)
 ```
 
-* <font size='+1'>Effet de serre: $S_{\mathrm{mercure}} = 0$</font><br/>```python
+* <font size='+1'>Effet de serre: $S_{\mathrm{mercure}} = 0$</font><br/>
+```python
 bkc.S_mercure=0  # Sans unité (entre 0 et 1)
 ```
 
-* <font size='+1'>Temperature moyenne: $T_{\mathrm{mercure}} = 167.0°C$</font><br/>```python
+* <font size='+1'>Temperature moyenne: $T_{\mathrm{mercure}} = 167.0°C$</font><br/>
+```python
 bkc.T_mercure=167.0  # °C
 ```
 
-* <font size='+1'>Masse: $M_{\mathrm{venus}} = 4.867 \cdot 10^{24}kg$</font><br/>```python
+* <font size='+1'>Masse: $M_{\mathrm{venus}} = 4.867 \cdot 10^{24}kg$</font><br/>
+```python
 bkc.M_venus=4.867e+24  # kg
 ```
 
-* <font size='+1'>Distance au soleil: $d_{\odot \mathrm{venus}} = 0.72ua$</font><br/>```python
+* <font size='+1'>Distance au soleil: $d_{\odot \mathrm{venus}} = 0.72ua$</font><br/>
+```python
 bkc.d_venus=0.72  # ua
 ```
 
-* <font size='+1'>Rayon: $R_{\mathrm{venus}} = 3390km$</font><br/>```python
+* <font size='+1'>Rayon: $R_{\mathrm{venus}} = 3390km$</font><br/>
+```python
 bkc.R_venus=3390  # km
 ```
 
-* <font size='+1'>Albedo: $A_{\mathrm{venus}} = 0.77$</font><br/>```python
+* <font size='+1'>Albedo: $A_{\mathrm{venus}} = 0.77$</font><br/>
+```python
 bkc.A_venus=0.77  # Sans unité (entre 0 et 1)
 ```
 
-* <font size='+1'>Effet de serre: $S_{\mathrm{venus}} = 0.991$</font><br/>```python
+* <font size='+1'>Effet de serre: $S_{\mathrm{venus}} = 0.991$</font><br/>
+```python
 bkc.S_venus=0.991  # Sans unité (entre 0 et 1)
 ```
 
-* <font size='+1'>Temperature moyenne: $T_{\mathrm{venus}} = 464.0°C$</font><br/>```python
+* <font size='+1'>Temperature moyenne: $T_{\mathrm{venus}} = 464.0°C$</font><br/>
+```python
 bkc.T_venus=464.0  # °C
 ```
 
-* <font size='+1'>Masse: $M_{\mathrm{terre}} = 5.972 \cdot 10^{24}kg$</font><br/>```python
+* <font size='+1'>Masse: $M_{\mathrm{terre}} = 5.972 \cdot 10^{24}kg$</font><br/>
+```python
 bkc.M_terre=5.972e+24  # kg
 ```
 
-* <font size='+1'>Distance au soleil: $d_{\odot \mathrm{terre}} = 1.00ua$</font><br/>```python
+* <font size='+1'>Distance au soleil: $d_{\odot \mathrm{terre}} = 1.00ua$</font><br/>
+```python
 bkc.d_terre=1.00  # ua
 ```
 
-* <font size='+1'>Rayon: $R_{\mathrm{terre}} = 6371km$</font><br/>```python
+* <font size='+1'>Rayon: $R_{\mathrm{terre}} = 6371km$</font><br/>
+```python
 bkc.R_terre=6371  # km
 ```
 
-* <font size='+1'>Albedo: $A_{\mathrm{terre}} = 0.30$</font><br/>```python
+* <font size='+1'>Albedo: $A_{\mathrm{terre}} = 0.30$</font><br/>
+```python
 bkc.A_terre=0.30  # Sans unité (entre 0 et 1)
 ```
 
-* <font size='+1'>Effet de serre: $S_{\mathrm{terre}} = 0.394$</font><br/>```python
+* <font size='+1'>Effet de serre: $S_{\mathrm{terre}} = 0.394$</font><br/>
+```python
 bkc.S_terre=0.394  # Sans unité (entre 0 et 1)
 ```
 
-* <font size='+1'>Temperature moyenne: $T_{\mathrm{terre}} = 15.0°C$</font><br/>```python
+* <font size='+1'>Temperature moyenne: $T_{\mathrm{terre}} = 15.0°C$</font><br/>
+```python
 bkc.T_terre=15.0  # °C
 ```
 
-* <font size='+1'>Distance au soleil: $d_{\odot \mathrm{terre}} = 1ua = 1.500 \cdot 10^{11}m$   [149597870700.0m]</font><br/>```python
+* <font size='+1'>Distance au soleil: $d_{\odot \mathrm{terre}} = 1ua = 1.500 \cdot 10^{11}m$   [149597870700.0m]</font><br/>
+```python
 bkc.d_terre_solm=1.500e+11  # m
 bkc.d_terresoleil=1.500e+11  # m
 ```
 
-* <font size='+1'>Masse: $M_{\mathrm{mars}} = 6.417 \cdot 10^{23}kg$</font><br/>```python
+* <font size='+1'>Masse: $M_{\mathrm{mars}} = 6.417 \cdot 10^{23}kg$</font><br/>
+```python
 bkc.M_mars=6.417e+23  # kg
 ```
 
-* <font size='+1'>Distance au soleil: $d_{\odot \mathrm{mars}} = 1.52ua$</font><br/>```python
+* <font size='+1'>Distance au soleil: $d_{\odot \mathrm{mars}} = 1.52ua$</font><br/>
+```python
 bkc.d_mars=1.52  # ua
 ```
 
-* <font size='+1'>Rayon: $R_{\mathrm{mars}} = 3390km$</font><br/>```python
+* <font size='+1'>Rayon: $R_{\mathrm{mars}} = 3390km$</font><br/>
+```python
 bkc.R_mars=3390  # km
 ```
 
-* <font size='+1'>Albedo: $A_{\mathrm{mars}} = 0.25$</font><br/>```python
+* <font size='+1'>Albedo: $A_{\mathrm{mars}} = 0.25$</font><br/>
+```python
 bkc.A_mars=0.25  # Sans unité (entre 0 et 1)
 ```
 
-* <font size='+1'>Effet de serre: $S_{\mathrm{mars}} = 0.010$</font><br/>```python
+* <font size='+1'>Effet de serre: $S_{\mathrm{mars}} = 0.010$</font><br/>
+```python
 bkc.S_mars=0.010  # Sans unité (entre 0 et 1)
 ```
 
-* <font size='+1'>Temperature moyenne: $T_{\mathrm{mars}} = -62.8°C$</font><br/>```python
+* <font size='+1'>Temperature moyenne: $T_{\mathrm{mars}} = -62.8°C$</font><br/>
+```python
 bkc.T_mars=-62.8  # °C
 ```
 
-* <font size='+1'>Masse: $M_{\odot} = 1.988 \cdot 10^{30}kg$</font><br/>```python
+* <font size='+1'>Masse: $M_{\odot} = 1.988 \cdot 10^{30}kg$</font><br/>
+```python
 bkc.M_soleil=1.988e+30  # kg
 ```
 
-* <font size='+1'>Rayon: $R_{\odot} = 7 \cdot 10^{5}km$</font><br/>```python
+* <font size='+1'>Rayon: $R_{\odot} = 7 \cdot 10^{5}km$</font><br/>
+```python
 bkc.R_soleil=7e+05  # km
 ```
 
-* <font size='+1'>Luminosité: $L_{\odot} = 3.83 \cdot 10^{26}W$</font><br/>```python
+* <font size='+1'>Luminosité: $L_{\odot} = 3.83 \cdot 10^{26}W$</font><br/>
+```python
 bkc.L_soleil=3.83e+26  # W
 bkc.L_sol=3.83e+26  # W
 bkc.L_sun=3.83e+26  # W
 ```
 
-* <font size='+1'>Temperature moyenne: $T_{\odot} = 5800.0°C$</font><br/>```python
+* <font size='+1'>Temperature moyenne: $T_{\odot} = 5800.0°C$</font><br/>
+```python
 bkc.T_soleil=5800.0  # °C
 ```
 
-* <font size='+1'>Masse: $M_{\mathrm{lune}} = 7.350 \cdot 10^{22}kg$</font><br/>```python
+* <font size='+1'>Masse: $M_{\mathrm{lune}} = 7.350 \cdot 10^{22}kg$</font><br/>
+```python
 bkc.M_lune=7.350e+22  # kg
 ```
 
-* <font size='+1'>Distance au soleil: $d_{\odot \mathrm{lune}} = 1.00ua$</font><br/>```python
+* <font size='+1'>Distance au soleil: $d_{\odot \mathrm{lune}} = 1.00ua$</font><br/>
+```python
 bkc.d_lune=1.00  # ua
 ```
 
-* <font size='+1'>Rayon: $R_{\mathrm{lune}} = 6371km$</font><br/>```python
+* <font size='+1'>Rayon: $R_{\mathrm{lune}} = 6371km$</font><br/>
+```python
 bkc.R_lune=6371  # km
 ```
 
-* <font size='+1'>Albedo: $A_{\mathrm{lune}} = 0.11$</font><br/>```python
+* <font size='+1'>Albedo: $A_{\mathrm{lune}} = 0.11$</font><br/>
+```python
 bkc.A_lune=0.11  # Sans unité (entre 0 et 1)
 ```
 
-* <font size='+1'>Distance à la lune: $d_{\mathrm{terre} \mathrm{lune}} = 3.844 \cdot 10^{8}$</font><br/>```python
+* <font size='+1'>Distance à la lune: $d_{\mathrm{terre} \mathrm{lune}} = 3.844 \cdot 10^{8}$</font><br/>
+```python
 bkc.d_terre_lune=3.844e+08  # 
 ```
 
-* <font size='+1'>: $pi = 3.141593$</font><br/>```python
+* <font size='+1'>: $pi = 3.141593$</font><br/>
+```python
 bkc.pi=3.141593  # 
 ```
 
