@@ -1,11 +1,11 @@
 datacategories = [
     dict(label="Economics", tag="Economics"),
-    dict(label="Predictive maintenance", tag="Maintenance"),
+    dict(label="Predictive maintenance", tag="Predictive_Maintenance"),
     dict(label="Computing", tag="Computing"),
     dict(label="Physics", tag="Physics"),
     dict(label="Health", tag="Health"),
-    dict(label="Climate Evolution", tag="Climate"),
-    dict(label="Other Machine learning training data", tag="IA"),
+    dict(label="Climate Evolution", tag="Climate_Evolution"),
+    dict(label="Machine learning data", tag="Machine_learning"),
 ]
 
 datasets = [
@@ -359,7 +359,7 @@ realint   - Real interest rate (tbilrate - infl)
     dict(
         label="co2.concentrations",
         summary="Greenhouse effect gaz concentrations",
-        category="Climate",
+        category="Climate_Evolution",
         raw_data="climate-change.csv",
         ref_source="""https://ourworldindata.org/atmospheric-concentrations""",
         kwargs=dict(zone="World"),
@@ -369,7 +369,7 @@ realint   - Real interest rate (tbilrate - infl)
     dict(
         label="co2.main",
         summary="Data on CO2 and Greenhouse Gas Emissions by Our World in Data",
-        category="Climate",
+        category="Climate_Evolution",
         raw_data="https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/co2.py",
         columns="https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv",
@@ -417,32 +417,32 @@ The features must first be scaled to have mean zero and  variance 96 (=n) before
     dict(
         label="co2.travel_mode",
         summary="CO2 transportation info",
-        category="Climate",
+        category="Climate_Evolution",
         ref_source="""https://ourworldindata.org/grapher/carbon-footprint-travel-mode""",
         raw_data="carbon-footprint-travel-mode.csv",
     ),
     dict(
         label="train_catvnoncat",
         summary="Cat or not training data",
-        category="IA",
+        category="Machine_learning",
         raw_data="train_catvnoncat.h5",
     ),
     dict(
         label="test_catvnoncat",
         summary="Cat or not test data",
-        category="IA",
+        category="Machine_learning",
         raw_data="test_catvnoncat.h5",
     ),
     dict(
         label="maintenance1",
         summary="Equipment failure data (1)",
-        category="Maintenance",
+        category="Predictive_Maintenance",
         raw_data="https://raw.githubusercontent.com/shadgriffin/feature_engineering_equipment_failure/main/fe_equipment_failure_data_1.csv",
     ),
     dict(
         label="maintenance2",
         summary="Equipment failure data (2)",
-        category="Maintenance",
+        category="Predictive_Maintenance",
         raw_data="https://raw.githubusercontent.com/shadgriffin/feature_engineering_equipment_failure/main/fe_equipment_failure_data_2.csv",
     ),
 ]
