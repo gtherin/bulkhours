@@ -39,7 +39,7 @@ def build_readme():
             ffile.write(Units().info(size="+1", code=True))
 
         for d in datasets:
-            if d["category"] != category["label"]:
+            if d["category"] != category["tag"]:
                 continue
 
             rdata = get_rdata(d, "raw_data", "Raw data")

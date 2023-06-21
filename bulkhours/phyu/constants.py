@@ -93,10 +93,13 @@ class Constant:
                 print(text)
 
         if code:
-            for ai in [self.i] + self.a:
-                if as_str:
-                    hpstr += f"\n>bkc.{ai}={self.fv(latex=False)}  # {self.u}" + "\n"
-                else:
+            if as_str:
+                hpstr += f"```python\n"
+                for ai in [self.i] + self.a:
+                    hpstr += f"bkc.{ai}={self.fv(latex=False)}  # {self.u}\n"
+                hpstr += f"```\n"
+            else:
+                for ai in [self.i] + self.a:
                     print(f"bkc.{ai}={self.fv(latex=False)}  # {self.u}")
 
         if as_str:
