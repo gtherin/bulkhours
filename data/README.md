@@ -1,12 +1,12 @@
 # Data
 
 - [1. Economics](#Economics) 
-- [2. Predictive maintenance](#Maintenance) 
+- [2. Predictive maintenance](#Predictive_Maintenance) 
 - [3. Computing](#Computing) 
 - [4. Physics](#Physics) 
 - [5. Health](#Health) 
-- [6. Climate Evolution](#Climate) 
-- [7. Other Machine learning training data](#IA) 
+- [6. Climate Evolution](#Climate_Evolution) 
+- [7. Machine learning data](#Machine_learning) 
 
 
 ## Economics 
@@ -289,7 +289,7 @@ realint   - Real interest rate (tbilrate - infl)
 
 
 
-## Maintenance 
+## Predictive_Maintenance 
 
 ### Equipment failure data (1)
 #### `bulkhours.get_data("maintenance1")`
@@ -645,7 +645,7 @@ The features must first be scaled to have mean zero and  variance 96 (=n) before
 
 
 
-## Climate 
+## Climate_Evolution 
 
 ### Greenhouse effect gaz concentrations
 #### `bulkhours.get_data("co2.concentrations")`
@@ -678,7 +678,7 @@ The features must first be scaled to have mean zero and  variance 96 (=n) before
 
 
 
-## IA 
+## Machine_learning 
 
 ### Cat or not training data
 #### `bulkhours.get_data("train_catvnoncat")`
