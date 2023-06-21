@@ -13,7 +13,7 @@ datasets = [
         label="world.poverty",
         category="Economics",
         raw_data="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
-        source="""World Bank Poverty and Inequality Platform
+        source="""- Summary: World Bank Poverty and Inequality Platform
 - Direct source: https://ourworldindata.org/poverty
 - Data source: https://pip.worldbank.org/
 - Info columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
@@ -23,7 +23,7 @@ datasets = [
         label="world.mappoverty",
         category="Economics",
         raw_data="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
-        source="""World Bank Poverty and Inequality Platform
+        source="""- Summary: World Bank Poverty and Inequality Platform
 - Direct source: https://ourworldindata.org/poverty
 - Data source: https://pip.worldbank.org/
 - Info columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
@@ -33,7 +33,7 @@ datasets = [
         label="world.gdp",
         category="Economics",
         raw_data="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
-        source="""World Bank Poverty and Inequality Platform
+        source="""- Summary: World Bank Poverty and Inequality Platform
 - Direct source: https://ourworldindata.org/poverty
 - Data source: https://pip.worldbank.org/
 - Info columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
@@ -53,7 +53,8 @@ datasets = [
             "continent.tsv",
         ],
         on="country",
-        source="nope",
+        source="""- Summary: nope
+        """,
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
     ),
     dict(label="world.mapmacro", reference="world.macro"),
@@ -69,7 +70,8 @@ datasets = [
             "continent.tsv",
         ],
         on="country",
-        source="nope",
+        source="""- Summary: nope
+        """,
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
     ),
     dict(
@@ -77,7 +79,7 @@ datasets = [
         category="Economics",
         raw_data="life-expectancy-vs-gdp-per-capita.csv",
         info="GDP per capita is measured in 2011 international dollars, which corrects for inflation and cross-country price differences",
-        source="""Life expectancy versus GDP/capita per country
+        source="""- Summary: Life expectancy versus GDP/capita per country
 - Direct source: https://ourworldindata.org/grapher/life-expectancy-vs-gdp-per-capita
 - Data source: Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)
 - Info columns: GDP per capita is measured in 2011 international dollars, which corrects for inflation and cross-country price differences
@@ -99,14 +101,14 @@ datasets = [
     dict(
         label="mincer.stats",
         category="Economics",
-        source="""Descriptive statistics of hourly wages in selected EU countries in 2010 (in PPS) 
+        source="""- Summary: Descriptive statistics of hourly wages in selected EU countries in 2010 (in PPS) 
 Table 2: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf
     """,
     ),
     dict(
         label="mincer.params",
         category="Economics",
-        source="""ln(hourly_wage) = alpha_0i + alpha_1i * edu + alpha_2i * age + alpha_3i * age**2
+        source="""- Summary: ln(hourly_wage) = alpha_0i + alpha_1i * edu + alpha_2i * age + alpha_3i * age**2
 Table 3. https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf
 The results of estimation of parameters in Mincer equations in a set of countries. We
 put the point estimates, standard errors (in italics) and p-values for zero restriction test of a
@@ -117,7 +119,7 @@ particular parameter (in square brackets)
         label="pyramide",
         category="Economics",
         raw_data="pyramide.tsv",
-        source="""Age de la population au 1er janvier ; données provisoires arrêtées à fin novembre 2022 (https://www.insee.fr/fr/)
+        source="""- Summary: Age de la population au 1er janvier ; données provisoires arrêtées à fin novembre 2022 (https://www.insee.fr/fr/)
 Lecture : au 1er janvier 2023, la France compte 805 914 personnes de 65 ans dont 425 143 femmes et 380 771 hommes. Champ : France.
     Source : https://www.insee.fr/fr/statistiques/2381472#tableau-figure1
     """,
@@ -125,7 +127,7 @@ Lecture : au 1er janvier 2023, la France compte 805 914 personnes de 65 ans don
     dict(
         label="france.retraites",
         category="Economics",
-        source="""Salaires mensuels nets en équivalent temps plein (EQTP) en 2020 (https://www.insee.fr/fr/)
+        source="""- Summary: Salaires mensuels nets en équivalent temps plein (EQTP) en 2020 (https://www.insee.fr/fr/)
         Source https://www.insee.fr/fr/statistiques/2415121#tableau-figure1
 
         Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020
@@ -138,7 +140,7 @@ Lecture : au 1er janvier 2023, la France compte 805 914 personnes de 65 ans don
     dict(
         label="france.income",
         category="Economics",
-        source="""Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020 (https://www.insee.fr/fr/)
+        source="""- Summary: Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020 (https://www.insee.fr/fr/)
         Source https://www.insee.fr/fr/statistiques/6436313#tableau-figure2
       - Note : certains salaires en EQTP sont inférieurs au Smic ; ceci est en effet permis par certains statuts.
     Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d’incohérences entre salaires et durées travaillées dans
@@ -151,7 +153,7 @@ Lecture : au 1er janvier 2023, la France compte 805 914 personnes de 65 ans don
     dict(
         label="france.salaires",
         category="Economics",
-        source="""Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019 (https://www.insee.fr/fr/)
+        source="""- Summary: Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019 (https://www.insee.fr/fr/)
           Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
     En 2019, le revenu salarial annuel moyen dans le secteur privé et la fonction publique s’élève à 18_970 euros
     pour les femmes, soit un niveau inférieur de 22 % à celui des hommes (figure 1).
@@ -163,12 +165,13 @@ Lecture : au 1er janvier 2023, la France compte 805 914 personnes de 65 ans don
     colonne 3: Revenu annuel Femmes moyen Écart relatif (en %)
     colonne 4: Salaire annuel Femmes moyen EQTP
     colonne 4: Salaire annuel Hommes moyen EQTP
-    colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)""",
+    colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
+    """,
     ),
     dict(
         label="france.histsalaires",
         category="Economics",
-        source="""Inégalités salariales entre femmes et hommes de 1995 à 2019 (https://www.insee.fr/fr/)
+        source="""- Summary: Inégalités salariales entre femmes et hommes de 1995 à 2019 (https://www.insee.fr/fr/)
 Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
 
     colonne 1: Revenu annuel Femmes moyen
@@ -176,84 +179,95 @@ Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
     colonne 3: Revenu annuel Femmes moyen Écart relatif (en %)
     colonne 4: Salaire annuel Femmes moyen EQTP
     colonne 4: Salaire annuel Hommes moyen EQTP
-    colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)""",
+    colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
+    """,
     ),
     dict(
         label="gmacro.fr_qgdp",
         category="Economics",
-        source="""https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
+        source="""- Summary: https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
         Evolution du PIB et de ses composantes par rapport au trimestre precedent en volume en %
     nd : donnee non disponible.
     Note : donnees revistees ; les volumes sont mesures aux prix de l'annee precedente changés et corriges des variations saisonnieres et des effets des jours ouvrables.
     Lecture: au 4e trimestre 2022. le produit interieur brut (PIB) en volume augmente de 0.1 % par rapport au trimestre precedent.
     Source : Insee, comptes nationaux trimestriels - base 2014.
-    Contributions Demande,Variations de stocks,Commerce exterieur""",
+    Contributions Demande,Variations de stocks,Commerce exterieur
+    """,
     ),
     dict(
         label="gmacro.fr_unemployement",
         category="Economics",
-        source="""https://www.insee.fr/fr/statistiques/2830547#tableau-figure1""",
+        source="""- Summary: https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
+        """,
     ),
     dict(
         label="gmacro.us_gdp",
         category="Economics",
-        source="""https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html""",
+        source="""- Summary: https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html
+        """,
     ),
     dict(
         label="gmacro.fr_gdp",
         category="Economics",
-        source="""https://www.insee.fr/""",
+        source="""- Summary: https://www.insee.fr/
+        """,
     ),
     dict(
         label="statsdata.scipy_distributions_list",
         category="Economics",
-        source="""Scipy list of models""",
+        source="""- Summary: Scipy list of models
+        """,
     ),
     dict(
         label="statsdata.oil",
         category="Economics",
-        source="""Oil production in Saudi Arabia from 1996 to 2007
+        source="""- Summary: Oil production in Saudi Arabia from 1996 to 2007
         https://www.statsmodels.org/stable/index.html
         """,
     ),
     dict(
         label="statsdata.air",
         category="Economics",
-        source="""https://www.statsmodels.org/stable/index.html""",
+        source="""- Summary: https://www.statsmodels.org/stable/index.html
+        """,
     ),
     dict(
         label="statsdata.livestock2",
         category="Economics",
-        source="""Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods.
-        https://www.statsmodels.org/stable/index.html""",
+        source="""- Summary: Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods.
+        https://www.statsmodels.org/stable/index.html
+        """,
     ),
     dict(
         label="statsdata.livestock3",
         category="Economics",
-        source="""https://www.statsmodels.org/stable/index.html""",
+        source="""- Summary: https://www.statsmodels.org/stable/index.html
+        """,
     ),
     dict(
         label="statsdata.aust",
         category="Economics",
-        source="""https://www.statsmodels.org/stable/index.html""",
+        source="""- Summary: https://www.statsmodels.org/stable/index.html
+        """,
     ),
     dict(
         label="statsdata.air_passengers",
         category="Economics",
-        source="""https://www.statsmodels.org/stable/index.html""",
+        source="""- Summary: https://www.statsmodels.org/stable/index.html
+        """,
         raw_data="AirPassengers.csv",
     ),
     dict(
         label="statsdata.hhousing",
         category="Economics",
-        source="""All-Transactions House Price Index for Houston
+        source="""- Summary: All-Transactions House Price Index for Houston
 - Data source: https://fred.stlouisfed.org/series/ATNHPIUS26420Q
         """,
     ),
     dict(
         label="prices-split-adjusted",
         category="Economics",
-        source="""Kaggle
+        source="""- Summary: Kaggle
 https://github.com/kyi3081/stock-analysis
         """,
         raw_data="https://raw.githubusercontent.com/kyi3081/stock-analysis/master/prices-split-adjusted.csv",
@@ -261,7 +275,7 @@ https://github.com/kyi3081/stock-analysis
     dict(
         label="fundamentals",
         category="Economics",
-        source="""Kaggle
+        source="""- Summary: Kaggle
 https://github.com/kyi3081/stock-analysis
         """,
         raw_data="https://raw.githubusercontent.com/kyi3081/stock-analysis/master/fundamentals.csv",
@@ -269,7 +283,7 @@ https://github.com/kyi3081/stock-analysis
     dict(
         label="securities",
         category="Economics",
-        source="""Kaggle
+        source="""- Summary: Kaggle
 https://github.com/kyi3081/stock-analysis
         """,
         raw_data="https://raw.githubusercontent.com/kyi3081/stock-analysis/master/securities.csv",
@@ -277,14 +291,14 @@ https://github.com/kyi3081/stock-analysis
     dict(
         label="trading.apple",
         category="Economics",
-        source="""FPREP
+        source="""- Summary: FPREP
         """,
         raw_data="APPLE_DownloadFPrepStatementQuarter.tsv",
     ),
     dict(
         label="continent",
         category="Economics",
-        source="""iso m49 country information
+        source="""- Summary: iso m49 country information
 Standardized country information
         """,
         raw_data="continent.tsv",
@@ -292,49 +306,49 @@ Standardized country information
     dict(
         label="corruption",
         category="Economics",
-        source="""Corruption index per country
+        source="""- Summary: Corruption index per country
         """,
         raw_data="corruption.csv",
     ),
     dict(
         label="cost_of_living",
         category="Economics",
-        source="""country,cost_index,monthly_income,purchasing_power_index
+        source="""- Summary: country,cost_index,monthly_income,purchasing_power_index
         """,
         raw_data="cost_of_living.csv",
     ),
     dict(
         label="richest_countries",
         category="Economics",
-        source="""country,gdp_per_capita
+        source="""- Summary: country,gdp_per_capita
         """,
         raw_data="richest_countries.csv",
     ),
     dict(
         label="tourism",
         category="Economics",
-        source="""country,tourists_in_millions,receipts_in_billions,receipts_per_tourist,percentage_of_gdp
+        source="""- Summary: country,tourists_in_millions,receipts_in_billions,receipts_per_tourist,percentage_of_gdp
         """,
         raw_data="tourism.csv",
     ),
     dict(
         label="unemployment",
         category="Economics",
-        source="""country,unemployment_rate
+        source="""- Summary: country,unemployment_rate
         """,
         raw_data="unemployment.csv",
     ),
     dict(
         label="wages",
         category="Economics",
-        source="""Simple synthetic data for exercice
+        source="""- Summary: Simple synthetic data for exercice
         """,
         raw_data="wages.tsv",
     ),
     dict(
         label="COR_1",
         category="Economics",
-        source="""COR
+        source="""- Summary: COR
     """,
         raw_data="Données septembre partie 1.xlsx",
     ),
@@ -347,7 +361,7 @@ Standardized country information
         label="supercomputers",
         category="Computing",
         raw_data="https://raw.githubusercontent.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv",
-        source="""Computational capacity of the fastest supercomputers
+        source="""- Summary: Computational capacity of the fastest supercomputers
 - Direct source: https://ourworldindata.org/grapher/supercomputer-power-flops
 - Info columns: The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year
         """,
@@ -356,7 +370,7 @@ Standardized country information
         label="co2.concentrations",
         category="Climate",
         raw_data="climate-change.csv",
-        source="""Data concentrations
+        source="""- Summary: Data concentrations
 - Data source: https://ourworldindata.org/atmospheric-concentrations
 """,
         kwargs=dict(zone="World"),
@@ -366,7 +380,7 @@ Standardized country information
         label="co2.main",
         category="Climate",
         raw_data="https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv",
-        source="""Data on CO2 and Greenhouse Gas Emissions by Our World in Data
+        source="""- Summary: Data on CO2 and Greenhouse Gas Emissions by Our World in Data
 - Data source: https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv
 - Info columns: https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv
         """,
@@ -376,7 +390,7 @@ Standardized country information
         label="vaccinations",
         category="Health",
         raw_data="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv",
-        source="""Coronavirus Pandemic (COVID-19) data
+        source="""- Summary: Coronavirus Pandemic (COVID-19) data
 - Direct source: https://ourworldindata.org/coronavirus
 - Data source: https://covid19.who.int/data
 - Info columns: https://github.com/owid/covid-19-data/tree/master/public/data/
@@ -386,7 +400,7 @@ Standardized country information
         label="prostate",
         category="Health",
         raw_data="prostate.tsv",
-        source="""https://hastie.su.domains/ElemStatLearn/data.html
+        source="""- Summary: https://hastie.su.domains/ElemStatLearn/data.html
         
 columns: lcavol, lweight, age, lbph, svi, lcp, gleason, pgg45, [outcome]
 
@@ -399,7 +413,7 @@ The features must first be scaled to have mean zero and  variance 96 (=n) before
         label="covid",
         category="Health",
         raw_data="https://covid.ourworldindata.org/data/owid-covid-data.csv",
-        source="""Coronavirus Pandemic (COVID-19) data
+        source="""- Summary: Coronavirus Pandemic (COVID-19) data
 - Direct source: https://ourworldindata.org/coronavirus
 - Data source: https://covid19.who.int/data
 - Info columns: https://github.com/owid/covid-19-data/tree/master/public/data/
@@ -408,7 +422,7 @@ The features must first be scaled to have mean zero and  variance 96 (=n) before
     dict(
         label="statsdata.sunspots",
         category="Physics",
-        source="""Quarterly sunspots data (ssn)
+        source="""- Summary: Quarterly sunspots data (ssn)
 - Direct source: https://www.swpc.noaa.gov/products/solar-cycle-progression
 - Data source: https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
 - Info columns: https://en.wikipedia.org/wiki/Wolf_number
@@ -418,7 +432,7 @@ The features must first be scaled to have mean zero and  variance 96 (=n) before
     dict(
         label="co2.travel_mode",
         category="Climate",
-        source="""Transportation info
+        source="""- Summary: Transportation info
 https://ourworldindata.org/grapher/carbon-footprint-travel-mode
         """,
         raw_data="carbon-footprint-travel-mode.csv",
@@ -426,32 +440,37 @@ https://ourworldindata.org/grapher/carbon-footprint-travel-mode
     dict(
         label="catvnoncat",
         category="IA",
-        source="""Cat or not""",
+        source="""- Summary: Cat or not
+        """,
         raw_data="train_catvnoncat.h5",
     ),
     dict(
         label="train_catvnoncat",
         category="IA",
-        source="""Cat or not""",
+        source="""- Summary: Cat or not
+        """,
         raw_data="train_catvnoncat.h5",
     ),
     dict(
         label="test_catvnoncat",
         category="IA",
-        source="""Cat or not""",
+        source="""- Summary: Cat or not
+        """,
         raw_data="test_catvnoncat.h5",
     ),
     dict(
         label="maintenance1",
         category="Maintenance",
         raw_data="https://raw.githubusercontent.com/shadgriffin/feature_engineering_equipment_failure/main/fe_equipment_failure_data_1.csv",
-        source="""Bing bing""",
+        source="""- Summary: Bing bing
+        """,
     ),
     dict(
         label="maintenance2",
         category="Maintenance",
         raw_data="https://raw.githubusercontent.com/shadgriffin/feature_engineering_equipment_failure/main/fe_equipment_failure_data_2.csv",
-        source="""Bing bing""",
+        source="""- Summary: Bing bing
+        """,
     ),
 ]
 

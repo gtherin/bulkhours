@@ -13,55 +13,59 @@
 
 #### `bulkhours.get_data("world.poverty")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)
-World Bank Poverty and Inequality Platform
+- Summary: World Bank Poverty and Inequality Platform
 - Direct source: https://ourworldindata.org/poverty
 - Data source: https://pip.worldbank.org/
 - Info columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
         
 #### `bulkhours.get_data("world.mappoverty")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)
-World Bank Poverty and Inequality Platform
+- Summary: World Bank Poverty and Inequality Platform
 - Direct source: https://ourworldindata.org/poverty
 - Data source: https://pip.worldbank.org/
 - Info columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
         
 #### `bulkhours.get_data("world.gdp")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)
-World Bank Poverty and Inequality Platform
+- Summary: World Bank Poverty and Inequality Platform
 - Direct source: https://ourworldindata.org/poverty
 - Data source: https://pip.worldbank.org/
 - Info columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
         
 #### `bulkhours.get_data("world.mapgdp")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)
-World Bank Poverty and Inequality Platform
+- Summary: World Bank Poverty and Inequality Platform
 - Direct source: https://ourworldindata.org/poverty
 - Data source: https://pip.worldbank.org/
 - Info columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
         
 #### `bulkhours.get_data("world.macro")`
 - Rich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)
-nope
+- Summary: nope
+        
 #### `bulkhours.get_data("world.mapmacro")`
 - Rich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)
-nope
+- Summary: nope
+        
 #### `bulkhours.get_data("world.corruption")`
 - Rich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)
-nope
+- Summary: nope
+        
 #### `bulkhours.get_data("world.life_expectancy_vs_gdp_2018")`
 - Raw data: [life-expectancy-vs-gdp-per-capita.csv](https://github.com/guydegnol/bulkhours/blob/main/data/life-expectancy-vs-gdp-per-capita.csv)
+
 - Rich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)
-Life expectancy versus GDP/capita per country
+- Summary: Life expectancy versus GDP/capita per country
 - Direct source: https://ourworldindata.org/grapher/life-expectancy-vs-gdp-per-capita
 - Data source: Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)
 - Info columns: GDP per capita is measured in 2011 international dollars, which corrects for inflation and cross-country price differences
         
 #### `bulkhours.get_data("mincer.stats")`
-Descriptive statistics of hourly wages in selected EU countries in 2010 (in PPS) 
+- Summary: Descriptive statistics of hourly wages in selected EU countries in 2010 (in PPS) 
 Table 2: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf
     
 #### `bulkhours.get_data("mincer.params")`
-ln(hourly_wage) = alpha_0i + alpha_1i * edu + alpha_2i * age + alpha_3i * age**2
+- Summary: ln(hourly_wage) = alpha_0i + alpha_1i * edu + alpha_2i * age + alpha_3i * age**2
 Table 3. https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf
 The results of estimation of parameters in Mincer equations in a set of countries. We
 put the point estimates, standard errors (in italics) and p-values for zero restriction test of a
@@ -69,12 +73,13 @@ particular parameter (in square brackets)
         
 #### `bulkhours.get_data("pyramide")`
 - Raw data: [pyramide.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/pyramide.tsv)
-Age de la population au 1er janvier ; données provisoires arrêtées à fin novembre 2022 (https://www.insee.fr/fr/)
+
+- Summary: Age de la population au 1er janvier ; données provisoires arrêtées à fin novembre 2022 (https://www.insee.fr/fr/)
 Lecture : au 1er janvier 2023, la France compte 805 914 personnes de 65 ans dont 425 143 femmes et 380 771 hommes. Champ : France.
     Source : https://www.insee.fr/fr/statistiques/2381472#tableau-figure1
     
 #### `bulkhours.get_data("france.retraites")`
-Salaires mensuels nets en équivalent temps plein (EQTP) en 2020 (https://www.insee.fr/fr/)
+- Summary: Salaires mensuels nets en équivalent temps plein (EQTP) en 2020 (https://www.insee.fr/fr/)
         Source https://www.insee.fr/fr/statistiques/2415121#tableau-figure1
 
         Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020
@@ -84,7 +89,7 @@ Salaires mensuels nets en équivalent temps plein (EQTP) en 2020 (https://www.in
     Champ : France hors Mayotte, salariés du privé et des entreprises publiques, y compris bénéficiaires de contrats aidés et de contrats de professionnalisation ; hors apprentis, stagiaires, salariés agricoles et salariés des particuliers employeurs.
     
 #### `bulkhours.get_data("france.income")`
-Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020 (https://www.insee.fr/fr/)
+- Summary: Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020 (https://www.insee.fr/fr/)
         Source https://www.insee.fr/fr/statistiques/6436313#tableau-figure2
       - Note : certains salaires en EQTP sont inférieurs au Smic ; ceci est en effet permis par certains statuts.
     Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d’incohérences entre salaires et durées travaillées dans
@@ -94,7 +99,7 @@ Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 202
     de contrats de professionnalisation ; hors apprentis, stagiaires, salariés agricoles et salariés des particuliers employeurs.
     
 #### `bulkhours.get_data("france.salaires")`
-Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019 (https://www.insee.fr/fr/)
+- Summary: Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019 (https://www.insee.fr/fr/)
           Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
     En 2019, le revenu salarial annuel moyen dans le secteur privé et la fonction publique s’élève à 18_970 euros
     pour les femmes, soit un niveau inférieur de 22 % à celui des hommes (figure 1).
@@ -107,8 +112,9 @@ Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019 (https:/
     colonne 4: Salaire annuel Femmes moyen EQTP
     colonne 4: Salaire annuel Hommes moyen EQTP
     colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
+    
 #### `bulkhours.get_data("france.histsalaires")`
-Inégalités salariales entre femmes et hommes de 1995 à 2019 (https://www.insee.fr/fr/)
+- Summary: Inégalités salariales entre femmes et hommes de 1995 à 2019 (https://www.insee.fr/fr/)
 Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
 
     colonne 1: Revenu annuel Femmes moyen
@@ -117,113 +123,139 @@ Source https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
     colonne 4: Salaire annuel Femmes moyen EQTP
     colonne 4: Salaire annuel Hommes moyen EQTP
     colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
+    
 #### `bulkhours.get_data("gmacro.fr_qgdp")`
-https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
+- Summary: https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
         Evolution du PIB et de ses composantes par rapport au trimestre precedent en volume en %
     nd : donnee non disponible.
     Note : donnees revistees ; les volumes sont mesures aux prix de l'annee precedente changés et corriges des variations saisonnieres et des effets des jours ouvrables.
     Lecture: au 4e trimestre 2022. le produit interieur brut (PIB) en volume augmente de 0.1 % par rapport au trimestre precedent.
     Source : Insee, comptes nationaux trimestriels - base 2014.
     Contributions Demande,Variations de stocks,Commerce exterieur
+    
 #### `bulkhours.get_data("gmacro.fr_unemployement")`
-https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
+- Summary: https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
+        
 #### `bulkhours.get_data("gmacro.us_gdp")`
-https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html
+- Summary: https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html
+        
 #### `bulkhours.get_data("gmacro.fr_gdp")`
-https://www.insee.fr/
+- Summary: https://www.insee.fr/
+        
 #### `bulkhours.get_data("statsdata.scipy_distributions_list")`
-Scipy list of models
+- Summary: Scipy list of models
+        
 #### `bulkhours.get_data("statsdata.oil")`
-Oil production in Saudi Arabia from 1996 to 2007
+- Summary: Oil production in Saudi Arabia from 1996 to 2007
         https://www.statsmodels.org/stable/index.html
         
 #### `bulkhours.get_data("statsdata.air")`
-https://www.statsmodels.org/stable/index.html
+- Summary: https://www.statsmodels.org/stable/index.html
+        
 #### `bulkhours.get_data("statsdata.livestock2")`
-Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods.
+- Summary: Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods.
         https://www.statsmodels.org/stable/index.html
+        
 #### `bulkhours.get_data("statsdata.livestock3")`
-https://www.statsmodels.org/stable/index.html
+- Summary: https://www.statsmodels.org/stable/index.html
+        
 #### `bulkhours.get_data("statsdata.aust")`
-https://www.statsmodels.org/stable/index.html
+- Summary: https://www.statsmodels.org/stable/index.html
+        
 #### `bulkhours.get_data("statsdata.air_passengers")`
 - Raw data: [AirPassengers.csv](https://github.com/guydegnol/bulkhours/blob/main/data/AirPassengers.csv)
-https://www.statsmodels.org/stable/index.html
+
+- Summary: https://www.statsmodels.org/stable/index.html
+        
 #### `bulkhours.get_data("statsdata.hhousing")`
-All-Transactions House Price Index for Houston
+- Summary: All-Transactions House Price Index for Houston
 - Data source: https://fred.stlouisfed.org/series/ATNHPIUS26420Q
         
 #### `bulkhours.get_data("prices-split-adjusted")`
 - Raw data: [prices-split-adjusted.csv](https://github.com/kyi3081/stock-analysis/master/prices-split-adjusted.csv)
-Kaggle
+- Summary: Kaggle
 https://github.com/kyi3081/stock-analysis
         
 #### `bulkhours.get_data("fundamentals")`
 - Raw data: [fundamentals.csv](https://github.com/kyi3081/stock-analysis/master/fundamentals.csv)
-Kaggle
+- Summary: Kaggle
 https://github.com/kyi3081/stock-analysis
         
 #### `bulkhours.get_data("securities")`
 - Raw data: [securities.csv](https://github.com/kyi3081/stock-analysis/master/securities.csv)
-Kaggle
+- Summary: Kaggle
 https://github.com/kyi3081/stock-analysis
         
 #### `bulkhours.get_data("trading.apple")`
 - Raw data: [APPLE_DownloadFPrepStatementQuarter.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/APPLE_DownloadFPrepStatementQuarter.tsv)
-FPREP
+
+- Summary: FPREP
         
 #### `bulkhours.get_data("continent")`
 - Raw data: [continent.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/continent.tsv)
-iso m49 country information
+
+- Summary: iso m49 country information
 Standardized country information
         
 #### `bulkhours.get_data("corruption")`
 - Raw data: [corruption.csv](https://github.com/guydegnol/bulkhours/blob/main/data/corruption.csv)
-Corruption index per country
+
+- Summary: Corruption index per country
         
 #### `bulkhours.get_data("cost_of_living")`
 - Raw data: [cost_of_living.csv](https://github.com/guydegnol/bulkhours/blob/main/data/cost_of_living.csv)
-country,cost_index,monthly_income,purchasing_power_index
+
+- Summary: country,cost_index,monthly_income,purchasing_power_index
         
 #### `bulkhours.get_data("richest_countries")`
 - Raw data: [richest_countries.csv](https://github.com/guydegnol/bulkhours/blob/main/data/richest_countries.csv)
-country,gdp_per_capita
+
+- Summary: country,gdp_per_capita
         
 #### `bulkhours.get_data("tourism")`
 - Raw data: [tourism.csv](https://github.com/guydegnol/bulkhours/blob/main/data/tourism.csv)
-country,tourists_in_millions,receipts_in_billions,receipts_per_tourist,percentage_of_gdp
+
+- Summary: country,tourists_in_millions,receipts_in_billions,receipts_per_tourist,percentage_of_gdp
         
 #### `bulkhours.get_data("unemployment")`
 - Raw data: [unemployment.csv](https://github.com/guydegnol/bulkhours/blob/main/data/unemployment.csv)
-country,unemployment_rate
+
+- Summary: country,unemployment_rate
         
 #### `bulkhours.get_data("wages")`
 - Raw data: [wages.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/wages.tsv)
-Simple synthetic data for exercice
+
+- Summary: Simple synthetic data for exercice
         
 #### `bulkhours.get_data("COR_1")`
 - Raw data: [Données septembre partie 1.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données septembre partie 1.xlsx)
-COR
+
+- Summary: COR
     
 #### `bulkhours.get_data("COR_2")`
 - Raw data: [Données_RA2022_P2.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données_RA2022_P2.xlsx)
-COR
+
+- Summary: COR
     
 #### `bulkhours.get_data("COR_2bis")`
 - Raw data: [Données complémentaires partie 2 RA 2022.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données complémentaires partie 2 RA 2022.xlsx)
-COR
+
+- Summary: COR
     
 #### `bulkhours.get_data("COR_3")`
 - Raw data: [Données septembre 2022 - partie 3.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données septembre 2022 - partie 3.xlsx)
-COR
+
+- Summary: COR
     
 #### `bulkhours.get_data("COR_4")`
 - Raw data: [Données_RA2022_P4.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données_RA2022_P4.xlsx)
-COR
+
+- Summary: COR
     
 #### `bulkhours.get_data("COR_5")`
 - Raw data: [Données septembre 2022 - partie 5.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données septembre 2022 - partie 5.xlsx)
-COR
+
+- Summary: COR
     
 
 
@@ -231,17 +263,19 @@ COR
 
 #### `bulkhours.get_data("maintenance1")`
 - Raw data: [fe_equipment_failure_data_1.csv](https://github.com/shadgriffin/feature_engineering_equipment_failure/main/fe_equipment_failure_data_1.csv)
-Bing bing
+- Summary: Bing bing
+        
 #### `bulkhours.get_data("maintenance2")`
 - Raw data: [fe_equipment_failure_data_2.csv](https://github.com/shadgriffin/feature_engineering_equipment_failure/main/fe_equipment_failure_data_2.csv)
-Bing bing
+- Summary: Bing bing
+        
 
 
 ### Computing 
 
 #### `bulkhours.get_data("supercomputers")`
 - Raw data: [Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv](https://github.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv)
-Computational capacity of the fastest supercomputers
+- Summary: Computational capacity of the fastest supercomputers
 - Direct source: https://ourworldindata.org/grapher/supercomputer-power-flops
 - Info columns: The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year
         
@@ -546,7 +580,7 @@ bkc.pi=3.141593  #
 
 #### `bulkhours.get_data("statsdata.sunspots")`
 - Raw data: [observed-solar-cycle-indices.json](https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json)
-Quarterly sunspots data (ssn)
+- Summary: Quarterly sunspots data (ssn)
 - Direct source: https://www.swpc.noaa.gov/products/solar-cycle-progression
 - Data source: https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
 - Info columns: https://en.wikipedia.org/wiki/Wolf_number
@@ -557,14 +591,15 @@ Quarterly sunspots data (ssn)
 
 #### `bulkhours.get_data("vaccinations")`
 - Raw data: [vaccinations.csv](https://github.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv)
-Coronavirus Pandemic (COVID-19) data
+- Summary: Coronavirus Pandemic (COVID-19) data
 - Direct source: https://ourworldindata.org/coronavirus
 - Data source: https://covid19.who.int/data
 - Info columns: https://github.com/owid/covid-19-data/tree/master/public/data/
 
 #### `bulkhours.get_data("prostate")`
 - Raw data: [prostate.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/prostate.tsv)
-https://hastie.su.domains/ElemStatLearn/data.html
+
+- Summary: https://hastie.su.domains/ElemStatLearn/data.html
         
 columns: lcavol, lweight, age, lbph, svi, lcp, gleason, pgg45, [outcome]
 
@@ -574,7 +609,7 @@ The features must first be scaled to have mean zero and  variance 96 (=n) before
 
 #### `bulkhours.get_data("covid")`
 - Raw data: [owid-covid-data.csv](https://covid.ourworldindata.org/data/owid-covid-data.csv)
-Coronavirus Pandemic (COVID-19) data
+- Summary: Coronavirus Pandemic (COVID-19) data
 - Direct source: https://ourworldindata.org/coronavirus
 - Data source: https://covid19.who.int/data
 - Info columns: https://github.com/owid/covid-19-data/tree/master/public/data/
@@ -585,29 +620,32 @@ Coronavirus Pandemic (COVID-19) data
 
 #### `bulkhours.get_data("co2.concentrations")`
 - Raw data: [climate-change.csv](https://github.com/guydegnol/bulkhours/blob/main/data/climate-change.csv)
-Data concentrations
+
+- Summary: Data concentrations
 - Data source: https://ourworldindata.org/atmospheric-concentrations
 
 #### `bulkhours.get_data("co2.mapconcentrations")`
 - Raw data: [climate-change.csv](https://github.com/guydegnol/bulkhours/blob/main/data/climate-change.csv)
-Data concentrations
+
+- Summary: Data concentrations
 - Data source: https://ourworldindata.org/atmospheric-concentrations
 
 #### `bulkhours.get_data("co2.main")`
 - Raw data: [owid-co2-data.csv](https://github.com/owid/co2-data/master/owid-co2-data.csv)
-Data on CO2 and Greenhouse Gas Emissions by Our World in Data
+- Summary: Data on CO2 and Greenhouse Gas Emissions by Our World in Data
 - Data source: https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv
 - Info columns: https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv
         
 #### `bulkhours.get_data("co2.mapmain")`
 - Raw data: [owid-co2-data.csv](https://github.com/owid/co2-data/master/owid-co2-data.csv)
-Data on CO2 and Greenhouse Gas Emissions by Our World in Data
+- Summary: Data on CO2 and Greenhouse Gas Emissions by Our World in Data
 - Data source: https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv
 - Info columns: https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv
         
 #### `bulkhours.get_data("co2.travel_mode")`
 - Raw data: [carbon-footprint-travel-mode.csv](https://github.com/guydegnol/bulkhours/blob/main/data/carbon-footprint-travel-mode.csv)
-Transportation info
+
+- Summary: Transportation info
 https://ourworldindata.org/grapher/carbon-footprint-travel-mode
         
 
@@ -616,10 +654,16 @@ https://ourworldindata.org/grapher/carbon-footprint-travel-mode
 
 #### `bulkhours.get_data("catvnoncat")`
 - Raw data: [train_catvnoncat.h5](https://github.com/guydegnol/bulkhours/blob/main/data/train_catvnoncat.h5)
-Cat or not
+
+- Summary: Cat or not
+        
 #### `bulkhours.get_data("train_catvnoncat")`
 - Raw data: [train_catvnoncat.h5](https://github.com/guydegnol/bulkhours/blob/main/data/train_catvnoncat.h5)
-Cat or not
+
+- Summary: Cat or not
+        
 #### `bulkhours.get_data("test_catvnoncat")`
 - Raw data: [test_catvnoncat.h5](https://github.com/guydegnol/bulkhours/blob/main/data/test_catvnoncat.h5)
-Cat or not
+
+- Summary: Cat or not
+        
