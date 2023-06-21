@@ -1,12 +1,12 @@
 # Data
 
 - [1. Economics](#Economics) 
-- [2. Predictive maintenance](#Predictive maintenance) 
+- [2. Predictive maintenance](#Maintenance) 
 - [3. Computing](#Computing) 
 - [4. Physics](#Physics) 
 - [5. Health](#Health) 
-- [6. Climate Evolution](#Climate Evolution) 
-- [7. Other Machine learning training data](#Other Machine learning training data) 
+- [6. Climate Evolution](#Climate) 
+- [7. Other Machine learning training data](#IA) 
 
 
 ### Economics 
@@ -227,7 +227,7 @@ COR
     
 
 
-### Predictive maintenance 
+### Maintenance 
 
 
 
@@ -477,9 +477,9 @@ Coronavirus Pandemic (COVID-19) data
 
 
 
-### Climate Evolution 
+### Climate 
 
 
 
-### Other Machine learning training data 
+### IA 
 
