@@ -16,7 +16,7 @@ def get_rdata(d, dname):
         address = d[dname].replace("raw.githubusercontent.com", "github.com")
         return f"[{label}]({address})"
     if type(d[dname]) in [list]:
-        return ""
+        return ", ".join([f"[{f}](https://github.com/guydegnol/bulkhours/blob/main/data/{f})" for f in d[dname]])
     return f"[{d[dname]}](https://github.com/guydegnol/bulkhours/blob/main/data/{d[dname]})"
 
 

@@ -11,7 +11,7 @@ datacategories = [
 datasets = [
     dict(
         label="world.poverty",
-        summary="World Bank Poverty and Inequality Platform",
+        summary="World Bank Poverty and Inequality data",
         category="Economics",
         raw_data="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
         ref_source="https://ourworldindata.org/poverty",
@@ -21,17 +21,12 @@ datasets = [
     ),
     dict(
         label="world.mappoverty",
-        summary="World Bank Poverty and Inequality data",
-        category="Economics",
-        raw_data="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
-        ref_source="https://ourworldindata.org/poverty",
-        source="""- Data source: https://pip.worldbank.org/""",
-        enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
-        columns="https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv",
+        summary="World Bank Poverty and Inequality data (with gpx extra info)",
+        reference="world.poverty",
     ),
     dict(
         label="world.gdp",
-        summary="World Bank Poverty and Inequality data",
+        summary="World Bank Gdp data",
         category="Economics",
         raw_data="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
         ref_source="https://ourworldindata.org/poverty",
@@ -40,7 +35,7 @@ datasets = [
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
         columns="https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv",
     ),
-    dict(label="world.mapgdp", reference="world.gdp"),
+    dict(label="world.mapgdp", summary="World Bank Gdp data (with gpx extra info)", reference="world.gdp"),
     dict(
         label="world.macro",
         summary="Global economic data",
@@ -56,7 +51,7 @@ datasets = [
         on="country",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
     ),
-    dict(label="world.mapmacro", reference="world.macro"),
+    dict(label="world.mapmacro", summary="Global economic data (with gpx extra info)", reference="world.macro"),
     dict(
         label="world.life_expectancy_vs_gdp_2018",
         summary="Life expectancy versus GDP/capita per country",
@@ -87,7 +82,7 @@ datasets = [
     ),
     dict(
         label="mincer.params",
-        summary="Mincer equation parameters country per country",
+        summary="Mincer equation parameters per country",
         category="Economics",
         ref_source="https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 3)",
         source="""- Mincer equation formula: ln(hourly_wage) = alpha_0i + alpha_1i * edu + alpha_2i * age + alpha_3i * age**2
@@ -98,15 +93,15 @@ particular parameter (in square brackets)        """,
     ),
     dict(
         label="pyramide",
-        summary="Age de la population au 1er janvier ; données provisoires arrêtées à fin novembre 2022",
+        summary="Age de la population au 1er janvier (fin novembre 2022)",
         category="Economics",
         raw_data="pyramide.tsv",
-        source="""- Lecture : au 1er janvier 2023, la France compte 805 914 personnes de 65 ans dont 425 143 femmes et 380 771 hommes. Champ : France""",
+        source="""- Lecture : au 1er janvier 2023, la France compte 805 914 personnes de 65 ans dont 425 143 femmes et 380 771 hommes. Champ : France""",
         ref_source="https://www.insee.fr/fr/statistiques/2381472#tableau-figure1",
     ),
     dict(
         label="france.retraites",
-        summary="Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020",
+        summary="Cotisants, retraités et rapport démographique tous régimes en 2020",
         category="Economics",
         source="""- Note: certains salaires en EQTP sont inférieurs au Smic ; ceci est en effet permis par certains statuts. Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d’incohérences entre salaires et durées travaillées dans les déclarations administratives, qui ne peuvent être toutes redressées.
 - Lecture: en 2020, en EQTP, 50 % des salariés gagnent plus de 2 005 euros.
@@ -119,7 +114,7 @@ particular parameter (in square brackets)        """,
         summary="Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020",
         category="Economics",
         source="""- Note : certains salaires en EQTP sont inférieurs au Smic ; ceci est en effet permis par certains statuts.
-Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d’incohérences entre salaires et durées travaillées dans
+Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d'incohérences entre salaires et durées travaillées dans
 les déclarations administratives, qui ne peuvent être toutes redressées.
 - Lecture : en 2020, en EQTP, 50 % des salariés gagnent plus de 2 005 euros.
 - Champ : France hors Mayotte, salariés du privé et des entreprises publiques, y compris bénéficiaires de contrats aidés et
@@ -131,10 +126,10 @@ de contrats de professionnalisation ; hors apprentis, stagiaires, salariés agri
         label="france.salaires",
         summary="Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019",
         category="Economics",
-        source="""En 2019, le revenu salarial annuel moyen dans le secteur privé et la fonction publique s’élève à 18_970 euros
+        source="""En 2019, le revenu salarial annuel moyen dans le secteur privé et la fonction publique s'élève à 18_970 euros
 pour les femmes, soit un niveau inférieur de 22 % à celui des hommes (figure 1).
 Le revenu salarial médian des femmes est inférieur de 16 % à celui des hommes (figure 2).
-Cet écart s’amplifie à la fois dans les bas revenus (écart de 25 % pour le premier décile du revenu salarial) et
+Cet écart s'amplifie à la fois dans les bas revenus (écart de 25 % pour le premier décile du revenu salarial) et
 dans les hauts revenus (écart de 21 % pour le neuvième décile).
 colonne 1: Revenu annuel Femmes moyen
 colonne 2: Revenu annuel Hommes moyen
@@ -172,25 +167,51 @@ colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
     ),
     dict(
         label="gmacro.fr_unemployement",
-        summary="https://www.insee.fr/fr/statistiques/2830547#tableau-figure1",
+        summary="Évolution du produit intérieur brut et de ses composantes",
         category="Economics",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py",
+        ref_source="https://www.insee.fr/fr/statistiques/2830547#tableau-figure1",
     ),
     dict(
         label="gmacro.us_gdp",
-        summary="https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html",
+        summary="United States Macroeconomic data",
         category="Economics",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py",
+        ref_source="https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html",
+        columns="""year      - 1959q1 - 2009q3
+quarter   - 1-4
+realgdp   - Real gross domestic product (Bil. of chained 2005 US$,
+            seasonally adjusted annual rate)
+realcons  - Real personal consumption expenditures (Bil. of chained
+            2005 US$, seasonally adjusted annual rate)
+realinv   - Real gross private domestic investment (Bil. of chained
+            2005 US$, seasonally adjusted annual rate)
+realgovt  - Real federal consumption expenditures & gross investment
+            (Bil. of chained 2005 US$, seasonally adjusted annual rate)
+realdpi   - Real private disposable income (Bil. of chained 2005
+            US$, seasonally adjusted annual rate)
+cpi       - End of the quarter consumer price index for all urban
+            consumers: all items (1982-84 = 100, seasonally adjusted).
+m1        - End of the quarter M1 nominal money stock (Seasonally
+            adjusted)
+tbilrate  - Quarterly monthly average of the monthly 3-month
+            treasury bill: secondary market rate
+unemp     - Seasonally adjusted unemployment rate (%)
+pop       - End of the quarter total population: all ages incl. armed
+            forces over seas
+infl      - Inflation rate (ln(cpi_{t}/cpi_{t-1}) * 400)
+realint   - Real interest rate (tbilrate - infl)
+        """,
     ),
     dict(
         label="gmacro.fr_gdp",
-        summary="https://www.insee.fr/",
+        summary="France Macroeconomic data",
         category="Economics",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py",
     ),
     dict(
         label="statsdata.scipy_distributions_list",
-        summary="Scipy list of models",
+        summary="Scipy list of available distributions",
         category="Economics",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
     ),
@@ -203,7 +224,7 @@ colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
     ),
     dict(
         label="statsdata.air",
-        summary="",
+        summary="Air pollution data",
         category="Economics",
         ref_source="""https://www.statsmodels.org/stable/index.html""",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
@@ -217,20 +238,20 @@ colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
     ),
     dict(
         label="statsdata.livestock3",
-        summary="https://www.statsmodels.org/stable/index.html",
+        summary="Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods. (3)",
         category="Economics",
         ref_source="""https://www.statsmodels.org/stable/index.html""",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
     ),
     dict(
         label="statsdata.aust",
-        summary="https://www.statsmodels.org/stable/index.html",
+        summary="International visitor night in Australia (millions) < 2005",
         category="Economics",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
     ),
     dict(
         label="statsdata.air_passengers",
-        summary="https://www.statsmodels.org/stable/index.html",
+        summary="International visitor night in Australia (millions) > 2005",
         category="Economics",
         raw_data="AirPassengers.csv",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
@@ -244,28 +265,28 @@ colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
     ),
     dict(
         label="prices-split-adjusted",
-        summary="Kaggle",
+        summary="Market prices of SP500 stocks",
         category="Economics",
         ref_source="""https://github.com/kyi3081/stock-analysis""",
         raw_data="https://raw.githubusercontent.com/kyi3081/stock-analysis/master/prices-split-adjusted.csv",
     ),
     dict(
         label="fundamentals",
-        summary="Kaggle",
+        summary="Market fundamentals of SP500 stocks",
         category="Economics",
         ref_source="""https://github.com/kyi3081/stock-analysis""",
         raw_data="https://raw.githubusercontent.com/kyi3081/stock-analysis/master/fundamentals.csv",
     ),
     dict(
         label="securities",
-        summary="Kaggle",
+        summary="Stocks information for SP500",
         category="Economics",
         ref_source="""https://github.com/kyi3081/stock-analysis""",
         raw_data="https://raw.githubusercontent.com/kyi3081/stock-analysis/master/securities.csv",
     ),
     dict(
         label="trading.apple",
-        summary="FPREP",
+        summary="Statement of Apple stock (Quarterly)",
         category="Economics",
         raw_data="APPLE_DownloadFPrepStatementQuarter.tsv",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/trading.py",
@@ -284,27 +305,31 @@ colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
     ),
     dict(
         label="cost_of_living",
-        summary="country,cost_index,monthly_income,purchasing_power_index",
+        summary="Cost of living",
         category="Economics",
         raw_data="cost_of_living.csv",
+        columns="country,cost_index,monthly_income,purchasing_power_index",
     ),
     dict(
         label="richest_countries",
-        summary="country,gdp_per_capita",
+        summary="GDP per capita per country",
         category="Economics",
         raw_data="richest_countries.csv",
+        columns="country,gdp_per_capita",
     ),
     dict(
         label="tourism",
-        summary="country,tourists_in_millions,receipts_in_billions,receipts_per_tourist,percentage_of_gdp",
+        summary="Tourism information per country",
         category="Economics",
         raw_data="tourism.csv",
+        columns="country,gdp_per_capita",
     ),
     dict(
         label="unemployment",
-        summary="country,unemployment_rate",
+        summary="Unemployemnt rates per country",
         category="Economics",
         raw_data="unemployment.csv",
+        columns="country,gdp_per_capita",
     ),
     dict(
         label="wages",
@@ -314,7 +339,7 @@ colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
     ),
     dict(
         label="COR_1",
-        summary="COR",
+        summary="COR data",
         category="Economics",
         raw_data="Données septembre partie 1.xlsx",
     ),
