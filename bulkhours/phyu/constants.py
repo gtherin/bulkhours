@@ -94,7 +94,7 @@ class Constant:
 
         if code:
             if as_str:
-                hpstr += f"```python\n"
+                hpstr += f"\n```python\n"
                 for ai in [self.i] + self.a:
                     hpstr += f"bkc.{ai}={self.fv(latex=False)}  # {self.u}\n"
                 hpstr += f"```\n"

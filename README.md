@@ -1,19 +1,14 @@
 This package is a support library for different courses. 
 
 
-1. [Data information page](data/README.md)
-2. [Plan of High Performance Programming on GPU course](bulkhours/hpc/README.md)
-3. [Plan of the econometrics course](bulkhours/ecox/README.md)
-4. [Methods](#methods)
-
-
-## Methods <a name="methods"></a>
-
-- [evaluation_cell_id](#evaluation_cell_id)
-- [student_evaluation_function](#student_evaluation_function)
-- [is_equal](#is_equal)
-- [student_explanation_function](#student_explanation_function)
-- [compile_and_exec](#compile_and_exec)
+- [Data information page](data/README.md)
+- Method [evaluation_cell_id](#evaluation_cell_id)
+- Method [student_evaluation_function](#student_evaluation_function)
+- Method [is_equal](#is_equal)
+- Method [student_explanation_function](#student_explanation_function)
+- Method [compile_and_exec](#compile_and_exec)
+- [Plan of High Performance Programming on GPU course](bulkhours/hpc/README.md)
+- [Plan of the econometrics course](bulkhours/ecox/README.md)
 
 
 ### `evaluation_cell_id` <a name="evaluation_cell_id"></a>
@@ -71,13 +66,27 @@ int main() {
 
 ### `student_evaluation_function` <a name="student_evaluation_function"></a>
 
+
+In a cell with the magic method `evaluation_cell_id` activated, 
+the codes of the student and the codes of the teacher are both run (using the current notebook previous variables).
+So variables of the cells are available in 2 different contexts: ``teacher` `student`.
+Example:
+
 ```python
-def student_evaluation_function(min_score=0, max_score=10):
+data_test = image2vector(image)
+
+def student_evaluation_function():
     data_ref = np.array([[0.67826139, 0.29380381, 0.90714982]])
-    if np.max(np.abs(image2vector(image)-data_ref)) < 0.001:
-        return max_score
-    return min_score
+    score = 0
+    if np.max(np.abs(student.data_test-data_ref)) < 0.001:
+        score += 2
+    # Should be the same test than the previous one, assuming, teacher.my_tested_data = data_ref
+    if np.max(np.abs(student.my_tested_data-teacher.my_tested_data)) < 0.001:
+        score += 2
+    return score
 ```
+
+This code is also run to estimate students notes
 
 
 ### `is_equal` <a name="is_equal"></a>
