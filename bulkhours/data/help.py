@@ -17,7 +17,7 @@ def get_rdata(d, dname, dlabel):
         return f"- {dlabel}: [{label}]({address})\n"
     if type(d[dname]) in [list]:
         return ""
-    return f"- {dlabel}: [{d[dname]}](https://github.com/guydegnol/bulkhours/blob/main/data/{d[dname]})\n"
+    return f"- {dlabel}: [{d[dname]}](https://github.com/guydegnol/bulkhours/blob/main/data/{d[dname]})\n\n"
 
 
 def build_readme():
