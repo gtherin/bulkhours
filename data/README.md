@@ -9,7 +9,7 @@
 - [7. Other Machine learning training data](#IA) 
 
 
-### Economics 
+## Economics <a name="# Economics"></a> 
 
 ### World Bank Poverty and Inequality data
 #### `bulkhours.get_data("world.poverty")`
@@ -289,7 +289,7 @@ realint   - Real interest rate (tbilrate - infl)
 
 
 
-### Maintenance 
+## Predictive maintenance <a name="# Maintenance"></a> 
 
 ### Equipment failure data (1)
 #### `bulkhours.get_data("maintenance1")`
@@ -301,7 +301,7 @@ realint   - Real interest rate (tbilrate - infl)
 
 
 
-### Computing 
+## Computing <a name="# Computing"></a> 
 
 ### Computational capacity of the fastest supercomputers
 #### `bulkhours.get_data("supercomputers")`
@@ -311,7 +311,7 @@ realint   - Real interest rate (tbilrate - infl)
 
 
 
-### Physics 
+## Physics <a name="# Physics"></a> 
 
 
 * <font size='+1'>Celsius en Kelvin: $273.15°K=0°C$</font><br/>
@@ -618,7 +618,7 @@ bkc.pi=3.141593  #
 
 
 
-### Health 
+## Health <a name="# Health"></a> 
 
 ### Coronavirus Pandemic (COVID-19) data
 #### `bulkhours.get_data("vaccinations")`
@@ -645,7 +645,7 @@ The features must first be scaled to have mean zero and  variance 96 (=n) before
 
 
 
-### Climate 
+## Climate Evolution <a name="# Climate"></a> 
 
 ### Greenhouse effect gaz concentrations
 #### `bulkhours.get_data("co2.concentrations")`
@@ -678,7 +678,7 @@ The features must first be scaled to have mean zero and  variance 96 (=n) before
 
 
 
-### IA 
+## Other Machine learning training data <a name="# IA"></a> 
 
 ### Cat or not training data
 #### `bulkhours.get_data("train_catvnoncat")`
