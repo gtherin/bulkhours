@@ -9,18 +9,18 @@ This package is a support library for different courses.
 
 ## Methods <a name="methods"></a>
 
-[evaluation_cell_id](#evaluation_cell_id)
-[student_evaluation_function](#student_evaluation_function)
-[student_explanation_function](#student_explanation_function)
-[compile_and_exec](#compile_and_exec)
+- [evaluation_cell_id](#evaluation_cell_id)
+- [student_evaluation_function](#student_evaluation_function)
+- [student_explanation_function](#student_explanation_function)
+- [compile_and_exec](#compile_and_exec)
 
 
-##### `evaluation_cell_id` <a name="evaluation_cell_id"></a>
+#### `evaluation_cell_id` <a name="evaluation_cell_id"></a>
 
 To evaluate a notebook, you need to tag a cell using `evaluation_cell_id` magic method (lmine or cell). 
 By doing this, your cell will link several users cells (example: between one teacher with his students).
 
-```python
+```bash
 %%evaluation_cell_id -h 
 
 usage: %%evaluation_cell_id -i CELL_ID 
@@ -31,7 +31,7 @@ usage: %%evaluation_cell_id -i CELL_ID
 
 You have several types of cell available, 
 
-##### `student_evaluation_function` <a name="student_evaluation_function"></a>
+#### `student_evaluation_function` <a name="student_evaluation_function"></a>
 
 
 - data_test should be a numpy compatible object
@@ -50,7 +50,7 @@ def student_evaluation_function(max_score=10, debug=False, run=False, run=False)
     return score
 ```
 
-```python:
+```python
 def student_evaluation_function(max_score=10):
     data_ref = np.array([[0.67826139, 0.29380381, 0.90714982]])
     if np.max(np.abs(image2vector(image)-data_ref)) < 0.001:
@@ -77,7 +77,7 @@ float student_evaluation_function(bool debug=false, bool run=false, bool show_co
 }
 ```
 
-##### `student_explanation_function` <a name="student_explanation_function"></a>
+#### `student_explanation_function` <a name="student_explanation_function"></a>
 
 ```python
 def student_explanation_function():
@@ -87,12 +87,12 @@ def student_explanation_function():
     plt.legend()
 ```
 
-##### `compile_and_exec` <a name="compile_and_exec"></a>
+#### `compile_and_exec` <a name="compile_and_exec"></a>
 
 Working with Cuda/C++ methods
 
 
-```python
+```bash
 usage: ipykernel_launcher.py [-h] [-t] [-c {nvcc,g++,gcc}]
 
 compile_and_exec params
