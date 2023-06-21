@@ -20,7 +20,7 @@ This package is a support library for different courses.
 To evaluate a notebook, you need to tag a cell using `evaluation_cell_id` magic method (lmine or cell). 
 By doing this, your cell will link several users cells (example: between one teacher with his students).
 
-```python:
+```python
 %%evaluation_cell_id -h 
 
 usage: %%evaluation_cell_id -i CELL_ID 
@@ -36,7 +36,7 @@ You have several types of cell available,
 
 - data_test should be a numpy compatible object
 
-```python:
+```python
 def student_evaluation_function(max_score=10, debug=False, run=False, run=False):
     score = 1
     score += bulkhours.is_equal(data_test=student.m_train, teacher.m_train, max_score=1)
@@ -58,7 +58,7 @@ def student_evaluation_function(max_score=10):
     return 0
 ```
 
-```c:
+```c
 %%evaluation_cell_id -i cpp -w scoa -l Construire une suite géométrique de raison 2 en C++, de 2 a 1024
 %%compile_and_exec -c g++
 #include <iostream>
@@ -79,7 +79,7 @@ float student_evaluation_function(bool debug=false, bool run=false, bool show_co
 
 ##### `student_explanation_function` <a name="student_explanation_function"></a>
 
-```python:
+```python
 def student_explanation_function():
     ax = plt.hist(np.round((np.random.normal(loc=teacher.answer, scale=20, size=1000))), bins=20, label="Sondage")
     plt.vlines(teacher.answer, 0, 35, color="red", label=f"Valeur actuelle: %sm" % teacher.answer)
@@ -92,7 +92,7 @@ def student_explanation_function():
 Working with Cuda/C++ methods
 
 
-```c:
+```python
 usage: ipykernel_launcher.py [-h] [-t] [-c {nvcc,g++,gcc}]
 
 compile_and_exec params
@@ -112,7 +112,7 @@ options:
 ```
 
 Cuda basic extension compiles C/C++/CUDA code and exec it
-```c:
+```c
 %%evaluation_cell_id -i demo_cuda
 %%compile_and_exec -c nvcc
 #include <iostream>
