@@ -8,16 +8,16 @@ def get_readme_filename(filename="README.md"):
     return os.path.abspath(os.path.dirname(__file__) + f"../../../data/{filename}")
 
 
-def get_rdata(d, dname, dlabel):
+def get_rdata(d, dname):
     if dname not in d:
         return ""
     if "http" in d[dname]:
         label = d[dname].split("/")[-1]
         address = d[dname].replace("raw.githubusercontent.com", "github.com")
-        return f"- {dlabel}: [{label}]({address})\n"
+        return f"[{label}]({address})"
     if type(d[dname]) in [list]:
         return ""
-    return f"- {dlabel}: [{d[dname]}](https://github.com/guydegnol/bulkhours/blob/main/data/{d[dname]})\n\n"
+    return f"[{d[dname]}](https://github.com/guydegnol/bulkhours/blob/main/data/{d[dname]})"
 
 
 def build_readme():
@@ -42,10 +42,23 @@ def build_readme():
             if d["category"] != category["tag"]:
                 continue
 
-            rdata = get_rdata(d, "raw_data", "Raw data")
-            edata = get_rdata(d, "enrich_data", "Rich data")
-            comment = f"""#### `bulkhours.get_data("{d["label"]}")`
-{rdata}{edata}{d["source"]}\n"""
+            comment = ""
+            if "summary" in d:
+                comment += f"### {d['summary']}\n"
+            comment += f'#### `bulkhours.get_data("{d["label"]}")`\n'
+            if "raw_data" in d:
+                comment += f"- Raw data {get_rdata(d, 'raw_data')}\n"
+            if "enrich_data" in d:
+                comment += f"- Enrich data: {get_rdata(d, 'enrich_data')}\n"
+            if "source" in d:
+                comment += d["source"] + "\n"
+            if "ref_source" in d:
+                comment += f"- Direct source: {d['ref_source']}\n"
+            if "columns" in d:
+                comment += f"> Columns: {d['columns']}\n"
+
+            comment += "\n"
+
             # print(d["label"])  # , comment)
             # bulkhours.get_data(d["label"])
             ffile.write(comment)
