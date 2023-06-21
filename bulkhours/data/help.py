@@ -32,8 +32,8 @@ def build_readme():
     for c, category in enumerate(datacategories):
         # ffile.write(f'\n\n## [{c+1}. {category["label"]}](#{category["tag"]})\n\n')
         # ffile.write(f'\n\n## {c+1}. {category["label"]} <a name="{category["tag"]}"></a> \n\n')
-        ffile.write(f'\n\n## {category["label"]} <a name="# {category["tag"]}"></a> \n\n')
-        # ffile.write(f'\n\n## {category["tag"]} \n\n')
+        # ffile.write(f'\n\n## {category["label"]} <a name="# {category["tag"]}"></a> \n\n')
+        ffile.write(f'\n\n## {category["tag"]} \n\n')
 
         if category["label"] == "Physics":
             ffile.write(Units().info(size="+1", code=True))
