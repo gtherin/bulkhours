@@ -11,10 +11,6 @@
 
 ### Economics <a name="Economics"></a> 
 
-
-
-### Economics 
-
 #### `bulkhours.get_data("world.poverty")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)
 World Bank Poverty and Inequality Platform
@@ -235,15 +231,7 @@ COR
 
 
 
-### Maintenance 
-
-
-
 ### Computing <a name="Computing"></a> 
-
-
-
-### Computing 
 
 #### `bulkhours.get_data("supercomputers")`
 - Raw data: [Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv](https://github.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv)
@@ -254,10 +242,6 @@ Computational capacity of the fastest supercomputers
 
 
 ### Physics <a name="Physics"></a> 
-
-
-
-### Physics 
 
 
 * <font size='+1'>Celsius en Kelvin: $273.15°K=0°C$</font><br/>
@@ -467,10 +451,6 @@ Quarterly sunspots data (ssn)
 
 ### Health <a name="Health"></a> 
 
-
-
-### Health 
-
 #### `bulkhours.get_data("vaccinations")`
 - Raw data: [vaccinations.csv](https://github.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv)
 Coronavirus Pandemic (COVID-19) data
@@ -501,13 +481,5 @@ Coronavirus Pandemic (COVID-19) data
 
 
 
-### Climate 
-
-
-
 ### IA <a name="IA"></a> 
-
-
-
-### IA 
 
