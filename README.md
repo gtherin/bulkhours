@@ -20,7 +20,7 @@ This package is a support library for different courses.
 To evaluate a notebook, you need to tag a cell using `evaluation_cell_id` magic method (lmine or cell). 
 By doing this, your cell will link several users cells (example: between one teacher with his students).
 
-```console
+```shell
 %%evaluation_cell_id -h 
 
 usage: %%evaluation_cell_id -i CELL_ID 
@@ -92,7 +92,7 @@ def student_explanation_function():
 Working with Cuda/C++ methods
 
 
-```console
+```shell
 usage: ipykernel_launcher.py [-h] [-t] [-c {nvcc,g++,gcc}]
 
 compile_and_exec params
