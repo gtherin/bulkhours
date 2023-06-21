@@ -1,11 +1,10 @@
 This package is a support library for different courses. 
 
 
-## 1. [Data information](data/README.md)
-## 2. [Plan of High Performance Programming on GPU course](bulkhours/hpc/README.md)
-## 3. [Plan of High Performance Programming on GPU course](bulkhours/ecox/README.md)
-## 4. [Course methods](#methods)
-## 5. [Other stuffs](#stuffs)
+1. [Data information page](data/README.md)
+2. [Plan of High Performance Programming on GPU course](bulkhours/hpc/README.md)
+3. [Plan of the econometrics course](bulkhours/ecox/README.md)
+4. [Magic methods](#methods)
 
 
 ## Methods <a name="methods"></a>
@@ -17,7 +16,7 @@ You need to login to be properly be evaluated:
 bulkhours.init_env(login="john.doe@bulkhours")
 ```
 
-##### Cuda methods
+##### Cuda/C++ methods
 
 Cuda basic extension compiles C/C++/CUDA code and exec it
 ```c:
@@ -29,11 +28,6 @@ int main() {
         std::cout << i << std::endl;
     }
 }
-```
-
-You can load the magic methods with (in case you don't need to login):
-```python:
-bulkhours.load_extra_magics()
 ```
 
 

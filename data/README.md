@@ -1,15 +1,15 @@
 # Data
 
-- [1. Economics](#Economics)
-- [2. Predictive maintenance](#Maintenance)
-- [3. Computing](#Computing)
-- [4. Physics](#Physics)
-- [5. Health](#Health)
-- [6. Climate Evolution](#Climate)
-- [7. Other Machine learning training data](#IA)
+- [1. Economics](#Economics) 
+- [2. Predictive maintenance](#Maintenance) 
+- [3. Computing](#Computing) 
+- [4. Physics](#Physics) 
+- [5. Health](#Health) 
+- [6. Climate Evolution](#Climate) 
+- [7. Other Machine learning training data](#IA) 
 
 
-### 1. Economics
+### 1. Economics <a name="Economics"></a> 
 
 #### `bulkhours.get_data("world.poverty")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)
@@ -227,11 +227,11 @@ COR
     
 
 
-### 2. Predictive maintenance
+### 2. Predictive maintenance <a name="Maintenance"></a> 
 
 
 
-### 3. Computing
+### 3. Computing <a name="Computing"></a> 
 
 #### `bulkhours.get_data("supercomputers")`
 - Raw data: [Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv](https://github.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv)
@@ -241,7 +241,7 @@ Computational capacity of the fastest supercomputers
         
 
 
-### 4. Physics
+### 4. Physics <a name="Physics"></a> 
 
 
 * <font size='+1'>Celsius en Kelvin: $273.15°K=0°C$</font><br/>
@@ -449,7 +449,7 @@ Quarterly sunspots data (ssn)
         
 
 
-### 5. Health
+### 5. Health <a name="Health"></a> 
 
 #### `bulkhours.get_data("vaccinations")`
 - Raw data: [vaccinations.csv](https://github.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv)
@@ -477,9 +477,9 @@ Coronavirus Pandemic (COVID-19) data
 
 
 
-### 6. Climate Evolution
+### 6. Climate Evolution <a name="Climate"></a> 
 
 
 
-### 7. Other Machine learning training data
+### 7. Other Machine learning training data <a name="IA"></a> 
 
