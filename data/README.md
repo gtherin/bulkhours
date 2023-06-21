@@ -11,7 +11,7 @@
 
 ### Economics 
 
-### World Bank Poverty and Inequality Platform
+### World Bank Poverty and Inequality data
 #### `bulkhours.get_data("world.poverty")`
 - Raw data [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)
@@ -19,7 +19,7 @@
 - Direct source: https://ourworldindata.org/poverty
 > Columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
 
-### World Bank Poverty and Inequality data
+### World Bank Poverty and Inequality data (with gpx extra info)
 #### `bulkhours.get_data("world.mappoverty")`
 - Raw data [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)
@@ -27,7 +27,7 @@
 - Direct source: https://ourworldindata.org/poverty
 > Columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
 
-### World Bank Poverty and Inequality data
+### World Bank Gdp data
 #### `bulkhours.get_data("world.gdp")`
 - Raw data [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)
@@ -35,7 +35,7 @@
 - Direct source: https://ourworldindata.org/poverty
 > Columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
 
-### World Bank Poverty and Inequality data
+### World Bank Gdp data (with gpx extra info)
 #### `bulkhours.get_data("world.mapgdp")`
 - Raw data [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)
@@ -45,12 +45,12 @@
 
 ### Global economic data
 #### `bulkhours.get_data("world.macro")`
-- Raw data 
+- Raw data [corruption.csv](https://github.com/guydegnol/bulkhours/blob/main/data/corruption.csv), [cost_of_living.csv](https://github.com/guydegnol/bulkhours/blob/main/data/cost_of_living.csv), [richest_countries.csv](https://github.com/guydegnol/bulkhours/blob/main/data/richest_countries.csv), [unemployment.csv](https://github.com/guydegnol/bulkhours/blob/main/data/unemployment.csv), [tourism.csv](https://github.com/guydegnol/bulkhours/blob/main/data/tourism.csv), [continent.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/continent.tsv)
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)
 
-### Global economic data
+### Global economic data (with gpx extra info)
 #### `bulkhours.get_data("world.mapmacro")`
-- Raw data 
+- Raw data [corruption.csv](https://github.com/guydegnol/bulkhours/blob/main/data/corruption.csv), [cost_of_living.csv](https://github.com/guydegnol/bulkhours/blob/main/data/cost_of_living.csv), [richest_countries.csv](https://github.com/guydegnol/bulkhours/blob/main/data/richest_countries.csv), [unemployment.csv](https://github.com/guydegnol/bulkhours/blob/main/data/unemployment.csv), [tourism.csv](https://github.com/guydegnol/bulkhours/blob/main/data/tourism.csv), [continent.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/continent.tsv)
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)
 
 ### Life expectancy versus GDP/capita per country
@@ -64,7 +64,7 @@
 #### `bulkhours.get_data("mincer.stats")`
 - Direct source: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 2)
 
-### Mincer equation parameters country per country
+### Mincer equation parameters per country
 #### `bulkhours.get_data("mincer.params")`
 - Enrich data: [mincer.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/mincer.py)
 - Mincer equation formula: ln(hourly_wage) = alpha_0i + alpha_1i * edu + alpha_2i * age + alpha_3i * age**2
@@ -73,13 +73,13 @@ put the point estimates, standard errors (in italics) and p-values for zero rest
 particular parameter (in square brackets)        
 - Direct source: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 3)
 
-### Age de la population au 1er janvier ; données provisoires arrêtées à fin novembre 2022
+### Age de la population au 1er janvier (fin novembre 2022)
 #### `bulkhours.get_data("pyramide")`
 - Raw data [pyramide.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/pyramide.tsv)
-- Lecture : au 1er janvier 2023, la France compte 805 914 personnes de 65 ans dont 425 143 femmes et 380 771 hommes. Champ : France
+- Lecture : au 1er janvier 2023, la France compte 805 914 personnes de 65 ans dont 425 143 femmes et 380 771 hommes. Champ : France
 - Direct source: https://www.insee.fr/fr/statistiques/2381472#tableau-figure1
 
-### Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020
+### Cotisants, retraités et rapport démographique tous régimes en 2020
 #### `bulkhours.get_data("france.retraites")`
 - Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)
 - Note: certains salaires en EQTP sont inférieurs au Smic ; ceci est en effet permis par certains statuts. Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d’incohérences entre salaires et durées travaillées dans les déclarations administratives, qui ne peuvent être toutes redressées.
@@ -91,7 +91,7 @@ particular parameter (in square brackets)
 #### `bulkhours.get_data("france.income")`
 - Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)
 - Note : certains salaires en EQTP sont inférieurs au Smic ; ceci est en effet permis par certains statuts.
-Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d’incohérences entre salaires et durées travaillées dans
+Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d'incohérences entre salaires et durées travaillées dans
 les déclarations administratives, qui ne peuvent être toutes redressées.
 - Lecture : en 2020, en EQTP, 50 % des salariés gagnent plus de 2 005 euros.
 - Champ : France hors Mayotte, salariés du privé et des entreprises publiques, y compris bénéficiaires de contrats aidés et
@@ -101,10 +101,10 @@ de contrats de professionnalisation ; hors apprentis, stagiaires, salariés agri
 ### Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019
 #### `bulkhours.get_data("france.salaires")`
 - Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)
-En 2019, le revenu salarial annuel moyen dans le secteur privé et la fonction publique s’élève à 18_970 euros
+En 2019, le revenu salarial annuel moyen dans le secteur privé et la fonction publique s'élève à 18_970 euros
 pour les femmes, soit un niveau inférieur de 22 % à celui des hommes (figure 1).
 Le revenu salarial médian des femmes est inférieur de 16 % à celui des hommes (figure 2).
-Cet écart s’amplifie à la fois dans les bas revenus (écart de 25 % pour le premier décile du revenu salarial) et
+Cet écart s'amplifie à la fois dans les bas revenus (écart de 25 % pour le premier décile du revenu salarial) et
 dans les hauts revenus (écart de 21 % pour le neuvième décile).
 colonne 1: Revenu annuel Femmes moyen
 colonne 2: Revenu annuel Hommes moyen
@@ -135,19 +135,45 @@ colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
 - Contributions Demande,Variations de stocks,Commerce exterieur
 - Direct source: https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
 
-### https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
+### Évolution du produit intérieur brut et de ses composantes
 #### `bulkhours.get_data("gmacro.fr_unemployement")`
 - Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)
+- Direct source: https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
 
-### https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html
+### United States Macroeconomic data
 #### `bulkhours.get_data("gmacro.us_gdp")`
 - Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)
+- Direct source: https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html
+> Columns: year      - 1959q1 - 2009q3
+quarter   - 1-4
+realgdp   - Real gross domestic product (Bil. of chained 2005 US$,
+            seasonally adjusted annual rate)
+realcons  - Real personal consumption expenditures (Bil. of chained
+            2005 US$, seasonally adjusted annual rate)
+realinv   - Real gross private domestic investment (Bil. of chained
+            2005 US$, seasonally adjusted annual rate)
+realgovt  - Real federal consumption expenditures & gross investment
+            (Bil. of chained 2005 US$, seasonally adjusted annual rate)
+realdpi   - Real private disposable income (Bil. of chained 2005
+            US$, seasonally adjusted annual rate)
+cpi       - End of the quarter consumer price index for all urban
+            consumers: all items (1982-84 = 100, seasonally adjusted).
+m1        - End of the quarter M1 nominal money stock (Seasonally
+            adjusted)
+tbilrate  - Quarterly monthly average of the monthly 3-month
+            treasury bill: secondary market rate
+unemp     - Seasonally adjusted unemployment rate (%)
+pop       - End of the quarter total population: all ages incl. armed
+            forces over seas
+infl      - Inflation rate (ln(cpi_{t}/cpi_{t-1}) * 400)
+realint   - Real interest rate (tbilrate - infl)
+        
 
-### https://www.insee.fr/
+### France Macroeconomic data
 #### `bulkhours.get_data("gmacro.fr_gdp")`
 - Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)
 
-### Scipy list of models
+### Scipy list of available distributions
 #### `bulkhours.get_data("statsdata.scipy_distributions_list")`
 - Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)
 
@@ -156,7 +182,7 @@ colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
 - Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)
 - Direct source: https://www.statsmodels.org/stable/index.html
 
-### 
+### Air pollution data
 #### `bulkhours.get_data("statsdata.air")`
 - Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)
 - Direct source: https://www.statsmodels.org/stable/index.html
@@ -166,16 +192,16 @@ colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
 - Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)
 - Direct source: https://www.statsmodels.org/stable/index.html
 
-### https://www.statsmodels.org/stable/index.html
+### Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods. (3)
 #### `bulkhours.get_data("statsdata.livestock3")`
 - Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)
 - Direct source: https://www.statsmodels.org/stable/index.html
 
-### https://www.statsmodels.org/stable/index.html
+### International visitor night in Australia (millions) < 2005
 #### `bulkhours.get_data("statsdata.aust")`
 - Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)
 
-### https://www.statsmodels.org/stable/index.html
+### International visitor night in Australia (millions) > 2005
 #### `bulkhours.get_data("statsdata.air_passengers")`
 - Raw data [AirPassengers.csv](https://github.com/guydegnol/bulkhours/blob/main/data/AirPassengers.csv)
 - Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)
@@ -185,22 +211,22 @@ colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
 - Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)
 - Direct source: https://fred.stlouisfed.org/series/ATNHPIUS26420Q
 
-### Kaggle
+### Market prices of SP500 stocks
 #### `bulkhours.get_data("prices-split-adjusted")`
 - Raw data [prices-split-adjusted.csv](https://github.com/kyi3081/stock-analysis/master/prices-split-adjusted.csv)
 - Direct source: https://github.com/kyi3081/stock-analysis
 
-### Kaggle
+### Market fundamentals of SP500 stocks
 #### `bulkhours.get_data("fundamentals")`
 - Raw data [fundamentals.csv](https://github.com/kyi3081/stock-analysis/master/fundamentals.csv)
 - Direct source: https://github.com/kyi3081/stock-analysis
 
-### Kaggle
+### Stocks information for SP500
 #### `bulkhours.get_data("securities")`
 - Raw data [securities.csv](https://github.com/kyi3081/stock-analysis/master/securities.csv)
 - Direct source: https://github.com/kyi3081/stock-analysis
 
-### FPREP
+### Statement of Apple stock (Quarterly)
 #### `bulkhours.get_data("trading.apple")`
 - Raw data [APPLE_DownloadFPrepStatementQuarter.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/APPLE_DownloadFPrepStatementQuarter.tsv)
 - Enrich data: [trading.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/trading.py)
@@ -213,47 +239,51 @@ colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
 #### `bulkhours.get_data("corruption")`
 - Raw data [corruption.csv](https://github.com/guydegnol/bulkhours/blob/main/data/corruption.csv)
 
-### country,cost_index,monthly_income,purchasing_power_index
+### Cost of living
 #### `bulkhours.get_data("cost_of_living")`
 - Raw data [cost_of_living.csv](https://github.com/guydegnol/bulkhours/blob/main/data/cost_of_living.csv)
+> Columns: country,cost_index,monthly_income,purchasing_power_index
 
-### country,gdp_per_capita
+### GDP per capita per country
 #### `bulkhours.get_data("richest_countries")`
 - Raw data [richest_countries.csv](https://github.com/guydegnol/bulkhours/blob/main/data/richest_countries.csv)
+> Columns: country,gdp_per_capita
 
-### country,tourists_in_millions,receipts_in_billions,receipts_per_tourist,percentage_of_gdp
+### Tourism information per country
 #### `bulkhours.get_data("tourism")`
 - Raw data [tourism.csv](https://github.com/guydegnol/bulkhours/blob/main/data/tourism.csv)
+> Columns: country,gdp_per_capita
 
-### country,unemployment_rate
+### Unemployemnt rates per country
 #### `bulkhours.get_data("unemployment")`
 - Raw data [unemployment.csv](https://github.com/guydegnol/bulkhours/blob/main/data/unemployment.csv)
+> Columns: country,gdp_per_capita
 
 ### Simple synthetic data for exercice
 #### `bulkhours.get_data("wages")`
 - Raw data [wages.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/wages.tsv)
 
-### COR
+### COR data
 #### `bulkhours.get_data("COR_1")`
 - Raw data [Données septembre partie 1.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données septembre partie 1.xlsx)
 
-### COR
+### COR data
 #### `bulkhours.get_data("COR_2")`
 - Raw data [Données_RA2022_P2.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données_RA2022_P2.xlsx)
 
-### COR
+### COR data
 #### `bulkhours.get_data("COR_2bis")`
 - Raw data [Données complémentaires partie 2 RA 2022.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données complémentaires partie 2 RA 2022.xlsx)
 
-### COR
+### COR data
 #### `bulkhours.get_data("COR_3")`
 - Raw data [Données septembre 2022 - partie 3.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données septembre 2022 - partie 3.xlsx)
 
-### COR
+### COR data
 #### `bulkhours.get_data("COR_4")`
 - Raw data [Données_RA2022_P4.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données_RA2022_P4.xlsx)
 
-### COR
+### COR data
 #### `bulkhours.get_data("COR_5")`
 - Raw data [Données septembre 2022 - partie 5.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données septembre 2022 - partie 5.xlsx)
 
