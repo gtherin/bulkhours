@@ -13,8 +13,12 @@ def get_rdata(d, dname):
         return ""
     if "http" in d[dname]:
         label = d[dname].split("/")[-1]
-        address = d[dname].replace("raw.githubusercontent.com", "github.com")
-        return f"[{label}]({address})  ([raw]({d[dname]}))"
+        if "raw.githubusercontent.com" in d[dname]:
+            address = d[dname].replace("raw.githubusercontent.com", "github.com")
+            return f"[{label}]({address})  ([raw]({d[dname]}))"
+        else:
+            address = d[dname].replace("github.com", "raw.githubusercontent.com")
+            return f"[{label}]({d[dname]})  ([raw]({address}))"
     if type(d[dname]) in [list]:
         return ", ".join([f"[{f}](https://github.com/guydegnol/bulkhours/blob/main/data/{f})" for f in d[dname]])
     return f"[{d[dname]}](https://github.com/guydegnol/bulkhours/blob/main/data/{d[dname]})"
