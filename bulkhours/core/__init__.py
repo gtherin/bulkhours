@@ -32,11 +32,13 @@ def git_push(argv=sys.argv[1:]):
     # Update the data doc
     from bulkhours.data import build_readme
 
-    build_readme()
-
     parser = argparse.ArgumentParser(description="Git helper")
     parser.add_argument("-m", "--message", help="Message", default="Some changes")
+    parser.add_argument("-r", "--readme", action="store_true")
     args = parser.parse_args(argv)
+
+    if args.readme:
+        build_readme()
 
     vfile = get_fversion("/../__version__.py")
     nversion = get_nversion(oversion := open(vfile).readline().split('"')[1])

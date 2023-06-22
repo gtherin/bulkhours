@@ -15,7 +15,7 @@ datasets = [
         category="Economics",
         raw_data="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
         ref_source="https://ourworldindata.org/poverty",
-        source="""- Data source: https://pip.worldbank.org/""",
+        ref_site="""https://pip.worldbank.org/""",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
         columns="https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv",
     ),
@@ -30,7 +30,7 @@ datasets = [
         category="Economics",
         raw_data="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
         ref_source="https://ourworldindata.org/poverty",
-        source="""- Data source: https://pip.worldbank.org/""",
+        ref_site="""https://pip.worldbank.org/""",
         # drop=["Country Code", "Indicator Name", "Indicator Code", "Unnamed: 66"]
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
         columns="https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv",
@@ -59,7 +59,7 @@ datasets = [
         raw_data="life-expectancy-vs-gdp-per-capita.csv",
         info="GDP per capita is measured in 2011 international dollars, which corrects for inflation and cross-country price differences",
         ref_source="https://ourworldindata.org/grapher/life-expectancy-vs-gdp-per-capita",
-        source="""- Data source: Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)""",
+        ref_site="""Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)""",
         rename=[
             "Country",
             "Code",
@@ -88,7 +88,7 @@ datasets = [
         source="""- Mincer equation formula: ln(hourly_wage) = alpha_0i + alpha_1i * edu + alpha_2i * age + alpha_3i * age**2
 The results of estimation of parameters in Mincer equations in a set of countries. We
 put the point estimates, standard errors (in italics) and p-values for zero restriction test of a
-particular parameter (in square brackets)        """,
+particular parameter (in square brackets)""",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/mincer.py",
     ),
     dict(
@@ -96,7 +96,7 @@ particular parameter (in square brackets)        """,
         summary="Age de la population au 1er janvier (fin novembre 2022)",
         category="Economics",
         raw_data="pyramide.tsv",
-        source="""- Lecture : au 1er janvier 2023, la France compte 805 914 personnes de 65 ans dont 425 143 femmes et 380 771 hommes. Champ : France""",
+        source="""la France compte 805 914 personnes de 65 ans dont 425 143 femmes et 380 771 hommes""",
         ref_source="https://www.insee.fr/fr/statistiques/2381472#tableau-figure1",
     ),
     dict(
@@ -126,17 +126,12 @@ de contrats de professionnalisation ; hors apprentis, stagiaires, salariés agri
         label="france.salaires",
         summary="Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019",
         category="Economics",
+        columns="""Revenu annuel Femmes moyen, Revenu annuel Hommes moyen, Revenu annuel Femmes moyen Écart relatif (en %), Salaire annuel Femmes moyen EQTP, Salaire annuel Hommes moyen EQTP, Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)""",
         source="""En 2019, le revenu salarial annuel moyen dans le secteur privé et la fonction publique s'élève à 18_970 euros
 pour les femmes, soit un niveau inférieur de 22 % à celui des hommes (figure 1).
 Le revenu salarial médian des femmes est inférieur de 16 % à celui des hommes (figure 2).
 Cet écart s'amplifie à la fois dans les bas revenus (écart de 25 % pour le premier décile du revenu salarial) et
-dans les hauts revenus (écart de 21 % pour le neuvième décile).
-colonne 1: Revenu annuel Femmes moyen
-colonne 2: Revenu annuel Hommes moyen
-colonne 3: Revenu annuel Femmes moyen Écart relatif (en %)
-colonne 4: Salaire annuel Femmes moyen EQTP
-colonne 4: Salaire annuel Hommes moyen EQTP
-colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)""",
+dans les hauts revenus (écart de 21 % pour le neuvième décile).""",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py",
         ref_source="https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805",
     ),
@@ -144,7 +139,7 @@ colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)""",
         label="france.histsalaires",
         summary="Inégalités salariales entre femmes et hommes de 1995 à 2019",
         category="Economics",
-        source="""colonne 1: Revenu annuel Femmes moyen
+        columns="""colonne 1: Revenu annuel Femmes moyen
 colonne 2: Revenu annuel Hommes moyen
 colonne 3: Revenu annuel Femmes moyen Écart relatif (en %)
 colonne 4: Salaire annuel Femmes moyen EQTP
@@ -384,7 +379,7 @@ realint   - Real interest rate (tbilrate - infl)
         summary="Coronavirus Pandemic (COVID-19) data",
         category="Health",
         raw_data="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv",
-        source="""- Data source: https://covid19.who.int/data""",
+        ref_site="""https://covid19.who.int/data""",
         ref_source="""https://ourworldindata.org/coronavirus""",
         columns="https://github.com/owid/covid-19-data/tree/master/public/data/",
     ),
@@ -404,7 +399,7 @@ The features must first be scaled to have mean zero and  variance 96 (=n) before
         summary="Coronavirus Pandemic (COVID-19) data",
         category="Health",
         raw_data="https://covid.ourworldindata.org/data/owid-covid-data.csv",
-        source="""- Data source: https://covid19.who.int/data""",
+        ref_site="""https://covid19.who.int/data""",
         ref_source="https://ourworldindata.org/coronavirus",
         columns="https://github.com/owid/covid-19-data/tree/master/public/data/",
     ),
@@ -412,7 +407,7 @@ The features must first be scaled to have mean zero and  variance 96 (=n) before
         label="statsdata.sunspots",
         summary="Quarterly sunspots activity (ssn)",
         category="Physics",
-        source="""- Data source: https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json""",
+        ref_site="""https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json""",
         raw_data="https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
         ref_source="https://www.swpc.noaa.gov/products/solar-cycle-progression",
