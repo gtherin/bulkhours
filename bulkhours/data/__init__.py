@@ -7,17 +7,6 @@ from .gmacro import *  # noqa
 from .mincer import *  # noqa
 from .world import *  # noqa
 
-# from .france import *  # noqa
-
-# from . import co2  # noqa
-# from . import trading  # noqa
-# from . import france  # noqa
-# from . import gmacro  # noqa
-# from . import statsdata  # noqa
-# from . import mincer  # noqa
-# from . import world  # noqa
-
-
 from .help import build_readme, help  # noqa
 from .datasets import datasets, ddatasets, datacategories  # noqa
 
