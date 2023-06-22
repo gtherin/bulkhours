@@ -14,7 +14,7 @@ def get_rdata(d, dname):
     if "http" in d[dname]:
         label = d[dname].split("/")[-1]
         address = d[dname].replace("raw.githubusercontent.com", "github.com")
-        return f"[{label}]({address})"
+        return f"[{label}]({address})  ([raw]({d[dname]}))"
     if type(d[dname]) in [list]:
         return ", ".join([f"[{f}](https://github.com/guydegnol/bulkhours/blob/main/data/{f})" for f in d[dname]])
     return f"[{d[dname]}](https://github.com/guydegnol/bulkhours/blob/main/data/{d[dname]})"
@@ -47,7 +47,7 @@ def build_readme():
                 comment += f"### {d['summary']}\n"
             comment += f'#### `bulkhours.get_data("{d["label"]}")`\n'
             if "raw_data" in d:
-                comment += f"- Raw data {get_rdata(d, 'raw_data')}\n"
+                comment += f"- Raw data: {get_rdata(d, 'raw_data')}\n"
             if "enrich_data" in d:
                 comment += f"- Enrich data: {get_rdata(d, 'enrich_data')}\n"
             if "source" in d:
