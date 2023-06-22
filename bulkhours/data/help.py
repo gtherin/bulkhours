@@ -1,7 +1,8 @@
 import glob
 import os
 
-from .datasets import datasets, datacategories
+from . import tools
+from .datasets import datasets, ddatasets, datacategories  # noqa
 
 
 def get_readme_filename(filename="README.md"):
@@ -17,14 +18,14 @@ def get_rdata(d, dname):
             address = d[dname].replace("raw.githubusercontent.com", "github.com")
             return f"[{label}]({address})  ([raw]({d[dname]}))"
         else:
-            address = d[dname].replace("github.com", "raw.githubusercontent.com")
+            address = d[dname].replace("github.com", "raw.githubusercontent.com").replace("blob/", "")
             return f"[{label}]({d[dname]})  ([raw]({address}))"
     if type(d[dname]) in [list]:
         return ", ".join([f"[{f}](https://github.com/guydegnol/bulkhours/blob/main/data/{f})" for f in d[dname]])
     return f"[{d[dname]}](https://github.com/guydegnol/bulkhours/blob/main/data/{d[dname]})"
 
 
-def build_readme():
+def build_readme(load_data=True):
     ffile = open(get_readme_filename(), "w")
     ffile.write("# Data\n\n")
 
@@ -46,6 +47,14 @@ def build_readme():
             if d["category"] != category["tag"]:
                 continue
 
+            columns = None
+            if load_data:
+                try:
+                    data = tools.DataParser(**d).get_data()
+                    columns = list(data.columns)
+                except:
+                    pass
+
             comment = ""
             if "summary" in d:
                 comment += f"### {d['summary']}\n"
@@ -58,13 +67,16 @@ def build_readme():
                 comment += d["source"] + "\n"
             if "ref_source" in d:
                 comment += f"- Direct source: {d['ref_source']}\n"
-            if "columns" in d:
-                comment += f"> Columns: {d['columns']}\n"
+            if "columns" in d or columns is not None:
+                comment += f"- Columns:\n"
+                if "columns" in d:
+                    comment += f"> {d['columns']}\n"
+                if columns is not None:
+                    cols = ",".join(columns)
+                    comment += f"> {cols}\n"
 
             comment += "\n"
 
-            # print(d["label"])  # , comment)
-            # bulkhours.get_data(d["label"])
             ffile.write(comment)
 
     raw_files = set()
