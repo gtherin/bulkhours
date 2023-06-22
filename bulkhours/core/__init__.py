@@ -60,8 +60,13 @@ def git_push(argv=sys.argv[1:]):
     with open(pvfile, "w") as the_file:
         the_file.write(f"""__version__ = "{npversion}"\n""")
 
+    root_dir = "/home/guydegnol/projects"
     with open("git_push.sh", "w") as f:
-        # f.write(f"""python /home/guydegnol/projects/pyservice/pyservice/bulkhours.data.build_readme()\n""")
+        f.write(f"cp -r {root_dir}/bulkhours/README.md {root_dir}/bulkhours.wiki/Home.md\n")
+        f.write(f"cp -r {root_dir}/bulkhours/data/README.md {root_dir}/bulkhours.wiki/Data.md\n")
+        f.write(f"cp -r {root_dir}/bulkhours/bulkhours/ecox/README.md {root_dir}/bulkhours.wiki/Econometrics.md\n")
+        f.write(f"cp -r {root_dir}/bulkhours/bulkhours/hpc/README.md {root_dir}/bulkhours.wiki/HPC.md\n")
+
         f.write(f"""python /home/guydegnol/projects/pyservice/pyservice/generate_bulkhours_keys.py\n""")
         for p in ["", "_premium", "_admin"]:
             f.write(
