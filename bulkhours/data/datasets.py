@@ -435,15 +435,27 @@ The features must first be scaled to have mean zero and  variance 96 (=n) before
     ),
     dict(
         label="maintenance1",
-        summary="Equipment failure data (1)",
+        summary="Synthetic data for machine failure data (1)",
         category="Predictive_Maintenance",
         raw_data="https://raw.githubusercontent.com/shadgriffin/feature_engineering_equipment_failure/main/fe_equipment_failure_data_1.csv",
     ),
     dict(
         label="maintenance2",
-        summary="Equipment failure data (2)",
+        summary="Synthetic data for machine failure data (2)",
         category="Predictive_Maintenance",
         raw_data="https://raw.githubusercontent.com/shadgriffin/feature_engineering_equipment_failure/main/fe_equipment_failure_data_2.csv",
+    ),
+    dict(
+        label="maintenance3",
+        summary="Synthetic data for machine failure data (3)",
+        category="Predictive_Maintenance",
+        raw_data="https://raw.githubusercontent.com/shadgriffin/machine_failure/master/equipment_failure_data_1.csv",
+    ),
+    dict(
+        label="maintenance4",
+        summary="Synthetic data for machine failure data (4)",
+        category="Predictive_Maintenance",
+        raw_data="https://raw.githubusercontent.com/shadgriffin/machine_failure/master/equipment_failure_data_2.csv",
     ),
 ]
 
