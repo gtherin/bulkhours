@@ -14,7 +14,7 @@
 ### World Bank Poverty and Inequality data
 #### `bulkhours.get_data("world.poverty")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv))
-- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py))
 - Data source: https://pip.worldbank.org/
 - Direct source: https://ourworldindata.org/poverty
 > Columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
@@ -22,7 +22,7 @@
 ### World Bank Poverty and Inequality data (with gpx extra info)
 #### `bulkhours.get_data("world.mappoverty")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv))
-- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py))
 - Data source: https://pip.worldbank.org/
 - Direct source: https://ourworldindata.org/poverty
 > Columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
@@ -30,7 +30,7 @@
 ### World Bank Gdp data
 #### `bulkhours.get_data("world.gdp")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv))
-- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py))
 - Data source: https://pip.worldbank.org/
 - Direct source: https://ourworldindata.org/poverty
 > Columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
@@ -38,7 +38,7 @@
 ### World Bank Gdp data (with gpx extra info)
 #### `bulkhours.get_data("world.mapgdp")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv))
-- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py))
 - Data source: https://pip.worldbank.org/
 - Direct source: https://ourworldindata.org/poverty
 > Columns: https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
@@ -46,17 +46,17 @@
 ### Global economic data
 #### `bulkhours.get_data("world.macro")`
 - Raw data: [corruption.csv](https://github.com/guydegnol/bulkhours/blob/main/data/corruption.csv), [cost_of_living.csv](https://github.com/guydegnol/bulkhours/blob/main/data/cost_of_living.csv), [richest_countries.csv](https://github.com/guydegnol/bulkhours/blob/main/data/richest_countries.csv), [unemployment.csv](https://github.com/guydegnol/bulkhours/blob/main/data/unemployment.csv), [tourism.csv](https://github.com/guydegnol/bulkhours/blob/main/data/tourism.csv), [continent.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/continent.tsv)
-- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py))
 
 ### Global economic data (with gpx extra info)
 #### `bulkhours.get_data("world.mapmacro")`
 - Raw data: [corruption.csv](https://github.com/guydegnol/bulkhours/blob/main/data/corruption.csv), [cost_of_living.csv](https://github.com/guydegnol/bulkhours/blob/main/data/cost_of_living.csv), [richest_countries.csv](https://github.com/guydegnol/bulkhours/blob/main/data/richest_countries.csv), [unemployment.csv](https://github.com/guydegnol/bulkhours/blob/main/data/unemployment.csv), [tourism.csv](https://github.com/guydegnol/bulkhours/blob/main/data/tourism.csv), [continent.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/continent.tsv)
-- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py))
 
 ### Life expectancy versus GDP/capita per country
 #### `bulkhours.get_data("world.life_expectancy_vs_gdp_2018")`
 - Raw data: [life-expectancy-vs-gdp-per-capita.csv](https://github.com/guydegnol/bulkhours/blob/main/data/life-expectancy-vs-gdp-per-capita.csv)
-- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py))
 - Data source: Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)
 - Direct source: https://ourworldindata.org/grapher/life-expectancy-vs-gdp-per-capita
 
@@ -66,7 +66,7 @@
 
 ### Mincer equation parameters per country
 #### `bulkhours.get_data("mincer.params")`
-- Enrich data: [mincer.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/mincer.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/mincer.py))
+- Enrich data: [mincer.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/mincer.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/mincer.py))
 - Mincer equation formula: ln(hourly_wage) = alpha_0i + alpha_1i * edu + alpha_2i * age + alpha_3i * age**2
 The results of estimation of parameters in Mincer equations in a set of countries. We
 put the point estimates, standard errors (in italics) and p-values for zero restriction test of a
@@ -81,7 +81,7 @@ particular parameter (in square brackets)
 
 ### Cotisants, retraités et rapport démographique tous régimes en 2020
 #### `bulkhours.get_data("france.retraites")`
-- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py))
+- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py))
 - Note: certains salaires en EQTP sont inférieurs au Smic ; ceci est en effet permis par certains statuts. Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d’incohérences entre salaires et durées travaillées dans les déclarations administratives, qui ne peuvent être toutes redressées.
 - Lecture: en 2020, en EQTP, 50 % des salariés gagnent plus de 2 005 euros.
 - Champ: France hors Mayotte, salariés du privé et des entreprises publiques, y compris bénéficiaires de contrats aidés et de contrats de professionnalisation ; hors apprentis, stagiaires, salariés agricoles et salariés des particuliers employeurs.
@@ -89,7 +89,7 @@ particular parameter (in square brackets)
 
 ### Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020
 #### `bulkhours.get_data("france.income")`
-- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py))
+- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py))
 - Note : certains salaires en EQTP sont inférieurs au Smic ; ceci est en effet permis par certains statuts.
 Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d'incohérences entre salaires et durées travaillées dans
 les déclarations administratives, qui ne peuvent être toutes redressées.
@@ -100,7 +100,7 @@ de contrats de professionnalisation ; hors apprentis, stagiaires, salariés agri
 
 ### Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019
 #### `bulkhours.get_data("france.salaires")`
-- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py))
+- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py))
 En 2019, le revenu salarial annuel moyen dans le secteur privé et la fonction publique s'élève à 18_970 euros
 pour les femmes, soit un niveau inférieur de 22 % à celui des hommes (figure 1).
 Le revenu salarial médian des femmes est inférieur de 16 % à celui des hommes (figure 2).
@@ -116,7 +116,7 @@ colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
 
 ### Inégalités salariales entre femmes et hommes de 1995 à 2019
 #### `bulkhours.get_data("france.histsalaires")`
-- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py))
+- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py))
 colonne 1: Revenu annuel Femmes moyen
 colonne 2: Revenu annuel Hommes moyen
 colonne 3: Revenu annuel Femmes moyen Écart relatif (en %)
@@ -128,7 +128,7 @@ colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
 
 ### Evolution du PIB et de ses composantes par rapport au trimestre precedent en volume en %
 #### `bulkhours.get_data("gmacro.fr_qgdp")`
-- Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py))
+- Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py))
 - Note : donnees revistees ; les volumes sont mesures aux prix de l'annee precedente changés et corriges des variations saisonnieres et des effets des jours ouvrables.
 - Lecture: au 4e trimestre 2022. le produit interieur brut (PIB) en volume augmente de 0.1 % par rapport au trimestre precedent.
 - Source : Insee, comptes nationaux trimestriels - base 2014.
@@ -137,12 +137,12 @@ colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
 
 ### Évolution du produit intérieur brut et de ses composantes
 #### `bulkhours.get_data("gmacro.fr_unemployement")`
-- Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py))
+- Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py))
 - Direct source: https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
 
 ### United States Macroeconomic data
 #### `bulkhours.get_data("gmacro.us_gdp")`
-- Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py))
+- Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py))
 - Direct source: https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html
 > Columns: year      - 1959q1 - 2009q3
 quarter   - 1-4
@@ -171,44 +171,44 @@ realint   - Real interest rate (tbilrate - infl)
 
 ### France Macroeconomic data
 #### `bulkhours.get_data("gmacro.fr_gdp")`
-- Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py))
+- Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py))
 
 ### Scipy list of available distributions
 #### `bulkhours.get_data("statsdata.scipy_distributions_list")`
-- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py))
+- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py))
 
 ### Oil production in Saudi Arabia from 1996 to 2007
 #### `bulkhours.get_data("statsdata.oil")`
-- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py))
+- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py))
 - Direct source: https://www.statsmodels.org/stable/index.html
 
 ### Air pollution data
 #### `bulkhours.get_data("statsdata.air")`
-- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py))
+- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py))
 - Direct source: https://www.statsmodels.org/stable/index.html
 
 ### Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods.
 #### `bulkhours.get_data("statsdata.livestock2")`
-- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py))
+- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py))
 - Direct source: https://www.statsmodels.org/stable/index.html
 
 ### Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods. (3)
 #### `bulkhours.get_data("statsdata.livestock3")`
-- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py))
+- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py))
 - Direct source: https://www.statsmodels.org/stable/index.html
 
 ### International visitor night in Australia (millions) < 2005
 #### `bulkhours.get_data("statsdata.aust")`
-- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py))
+- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py))
 
 ### International visitor night in Australia (millions) > 2005
 #### `bulkhours.get_data("statsdata.air_passengers")`
 - Raw data: [AirPassengers.csv](https://github.com/guydegnol/bulkhours/blob/main/data/AirPassengers.csv)
-- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py))
+- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py))
 
 ### All-Transactions House Price Index for Houston
 #### `bulkhours.get_data("statsdata.hhousing")`
-- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py))
+- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py))
 - Direct source: https://fred.stlouisfed.org/series/ATNHPIUS26420Q
 
 ### Market prices of SP500 stocks
@@ -229,7 +229,7 @@ realint   - Real interest rate (tbilrate - infl)
 ### Statement of Apple stock (Quarterly)
 #### `bulkhours.get_data("trading.apple")`
 - Raw data: [APPLE_DownloadFPrepStatementQuarter.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/APPLE_DownloadFPrepStatementQuarter.tsv)
-- Enrich data: [trading.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/trading.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/trading.py))
+- Enrich data: [trading.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/trading.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/trading.py))
 
 ### Standardized country information (iso m49)
 #### `bulkhours.get_data("continent")`
@@ -343,13 +343,13 @@ bkc.al := 9.461e+15  # m
 bkc.annee_lumiere := 9.461e+15  # m
 ```
 
-* <font size='+1'>Une Unité astrononique faisant un angle d'une seconde d'arc (déprécié): $1pc \equiv \frac{180\cdot60\cdot60}{\pi} = 3.086 \cdot 10^{16}m = 3.26al$</font><br/>
+* <font size='+1'>Une Unité astrononique faisant un angle d'une seconde d'arc (ancienne déf.): $1pc \equiv \frac{180\cdot60\cdot60}{\pi} = 3.086 \cdot 10^{16}m = 3.26al$</font><br/>
 ```python
 from bulkhours import constants as bkc
 bkc.parsec := 3.086e+16  # m.pc-1
 ```
 
-* <font size='+1'>Une Unité astrononique faisant un angle d'une seconde d'arc (déprécié): $1kpc \equiv \frac{1000\cdot180\cdot60\cdot60}{\pi}$</font><br/>
+* <font size='+1'>Une Unité astrononique faisant un angle d'une seconde d'arc (ancienne déf.): $1kpc \equiv \frac{1000\cdot180\cdot60\cdot60}{\pi}$</font><br/>
 ```python
 from bulkhours import constants as bkc
 bkc.kparsec := 3.086e+19  # m.kpc-1
@@ -373,7 +373,7 @@ from bulkhours import constants as bkc
 bkc.h := 6.626e-34  # J.s
 ```
 
-* <font size='+1'>: $\bar{h} = \frac{h}{2\pi}$</font><br/>
+* <font size='+1'>Constante de Planck réduite: $\bar{h} = \frac{h}{2\pi}$</font><br/>
 ```python
 from bulkhours import constants as bkc
 bkc.hbar := 1.055e-34  # J.s
@@ -660,13 +660,13 @@ from bulkhours import constants as bkc
 bkc.A_lune := 0.11  # Sans unité (entre 0 et 1)
 ```
 
-* <font size='+1'>Distance à la lune: $d_{\mathrm{terre} \mathrm{lune}} = 3.844 \cdot 10^{8}$</font><br/>
+* <font size='+1'>Distance à la lune: $d_{\mathrm{terre} \mathrm{lune}} = 3.844 \cdot 10^{8}m$</font><br/>
 ```python
 from bulkhours import constants as bkc
-bkc.d_terre_lune := 3.844e+08  # 
+bkc.d_terre_lune := 3.844e+08  # m
 ```
 
-* <font size='+1'>: $pi = 3.141593$</font><br/>
+* <font size='+1'>Perimètre d'un cercle de rayon 1/2🙂: $pi = 3.141593$</font><br/>
 ```python
 from bulkhours import constants as bkc
 bkc.pi := 3.141593  # 
@@ -675,7 +675,7 @@ bkc.pi := 3.141593  #
 ### Quarterly sunspots activity (ssn)
 #### `bulkhours.get_data("statsdata.sunspots")`
 - Raw data: [observed-solar-cycle-indices.json](https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json)  ([raw](https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json))
-- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py))
+- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py))
 - Data source: https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
 - Direct source: https://www.swpc.noaa.gov/products/solar-cycle-progression
 > Columns: https://en.wikipedia.org/wiki/Wolf_number
@@ -714,25 +714,25 @@ The features must first be scaled to have mean zero and  variance 96 (=n) before
 ### Greenhouse effect gaz concentrations
 #### `bulkhours.get_data("co2.concentrations")`
 - Raw data: [climate-change.csv](https://github.com/guydegnol/bulkhours/blob/main/data/climate-change.csv)
-- Enrich data: [co2.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/co2.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/co2.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/atmospheric-concentrations
 
 ### Greenhouse effect gaz concentrations
 #### `bulkhours.get_data("co2.mapconcentrations")`
 - Raw data: [climate-change.csv](https://github.com/guydegnol/bulkhours/blob/main/data/climate-change.csv)
-- Enrich data: [co2.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/co2.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/co2.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/atmospheric-concentrations
 
 ### Data on CO2 and Greenhouse Gas Emissions by Our World in Data
 #### `bulkhours.get_data("co2.main")`
 - Raw data: [owid-co2-data.csv](https://github.com/owid/co2-data/master/owid-co2-data.csv)  ([raw](https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv))
-- Enrich data: [co2.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/co2.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/co2.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py))
 > Columns: https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv
 
-### Data on CO2 and Greenhouse Gas Emissions by Our World in Data
+### Data on CO2 and Greenhouse Gas Emissions by Our World in Data (with extra gpx data)
 #### `bulkhours.get_data("co2.mapmain")`
 - Raw data: [owid-co2-data.csv](https://github.com/owid/co2-data/master/owid-co2-data.csv)  ([raw](https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv))
-- Enrich data: [co2.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/co2.py)  ([raw](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/co2.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py))
 > Columns: https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv
 
 ### CO2 transportation info

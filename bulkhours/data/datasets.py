@@ -363,7 +363,7 @@ realint   - Real interest rate (tbilrate - infl)
         raw_data="climate-change.csv",
         ref_source="""https://ourworldindata.org/atmospheric-concentrations""",
         kwargs=dict(zone="World"),
-        enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/co2.py",
+        enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
     ),
     dict(label="co2.mapconcentrations", reference="co2.concentrations"),
     dict(
@@ -371,10 +371,14 @@ realint   - Real interest rate (tbilrate - infl)
         summary="Data on CO2 and Greenhouse Gas Emissions by Our World in Data",
         category="Climate_Evolution",
         raw_data="https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv",
-        enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/co2.py",
+        enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
         columns="https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv",
     ),
-    dict(label="co2.mapmain", reference="co2.main"),
+    dict(
+        label="co2.mapmain",
+        summary="Data on CO2 and Greenhouse Gas Emissions by Our World in Data (with extra gpx data)",
+        reference="co2.main",
+    ),
     dict(
         label="vaccinations",
         summary="Coronavirus Pandemic (COVID-19) data",

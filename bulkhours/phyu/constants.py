@@ -146,21 +146,21 @@ class Units:
             "parsec",
             sc.parsec,
             u="m.pc-1",
-            c="Une Unité astrononique faisant un angle d'une seconde d'arc (déprécié)",
+            c="Une Unité astrononique faisant un angle d'une seconde d'arc (ancienne déf.)",
             l=r"$1pc \equiv \frac{180\cdot60\cdot60}{\pi} = VALm = 3.26al$",
         )
         self.add_constant(
             "kparsec",
             sc.parsec * 1000,
             u="m.kpc-1",
-            c="Une Unité astrononique faisant un angle d'une seconde d'arc (déprécié)",
+            c="Une Unité astrononique faisant un angle d'une seconde d'arc (ancienne déf.)",
             l=r"$1kpc \equiv \frac{1000\cdot180\cdot60\cdot60}{\pi}$",
         )
 
         self.add_constant("G", 6.67e-11, u="N.m2.kg-2", c="Constante de la gravitation", s=sc.G, r=2)
         self.add_constant("g", 9.8, u="m.s-2", c="Acceleration standard de la gravitation", s=sc.g, r=1)
         self.add_constant("h", 6.626e-34, u="J.s", c="Constante de Planck", s=sc.h)
-        self.add_constant("hbar", sc.hbar, l=r"$\bar{h} = \frac{h}{2\pi}$", u="J.s")
+        self.add_constant("hbar", sc.hbar, l=r"$\bar{h} = \frac{h}{2\pi}$", c="Constante de Planck réduite", u="J.s")
         self.add_constant(
             "N_A",
             sc.N_A,
@@ -294,10 +294,15 @@ class Units:
         self.add_constant("R_lune", 6371, c="R_km", p="lune")
         self.add_constant("A_lune", 0.11, c="Albedo", p="lune")
         self.add_constant(
-            "d_terre_lune", 384400e3, c="Distance à la lune", l=r"$d_{\mathrm{terre} \mathrm{PAR}} = VALUNI$", p="lune"
+            "d_terre_lune",
+            384_400_000,
+            c="Distance à la lune",
+            l=r"$d_{\mathrm{terre} \mathrm{PAR}} = VALUNI$",
+            p="lune",
+            u="m",
         )
 
-        self.add_constant("pi", np.pi, r=6)
+        self.add_constant("pi", np.pi, c="Perimètre d'un cercle de rayon 1/2🙂", r=6)
 
     def __getattr__(self, name: str):
         if name in self.csts:
