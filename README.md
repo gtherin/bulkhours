@@ -1,4 +1,6 @@
-This package is a support library for different courses. 
+
+BulkHours is a solution of interactive education with real time interations.
+It facilitates the student follow-up by the teacher, and gives a platform to easily load package content to build courses.
 
 
 - [Data information page](data/README.md)

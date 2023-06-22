@@ -67,6 +67,8 @@ def build_readme(load_data=True):
                 comment += d["source"] + "\n"
             if "ref_source" in d:
                 comment += f"- Direct source: {d['ref_source']}\n"
+            if "ref_site" in d:
+                comment += f"- Reference site: {d['ref_site']}\n"
             if "columns" in d or columns is not None:
                 comment += f"- Columns:\n"
                 if "columns" in d:
