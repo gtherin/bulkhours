@@ -94,13 +94,13 @@ class Constant:
 
         if code:
             if as_str:
-                hpstr += f"\n```python\n"
+                hpstr += f"\n```python\nfrom bulkhours import constants as bkc\n"
                 for ai in [self.i] + self.a:
-                    hpstr += f"bkc.{ai}={self.fv(latex=False)}  # {self.u}\n"
+                    hpstr += f"bkc.{ai} := {self.fv(latex=False)}  # {self.u}\n"
                 hpstr += f"```\n"
             else:
                 for ai in [self.i] + self.a:
-                    print(f"bkc.{ai}={self.fv(latex=False)}  # {self.u}")
+                    print(f"bkc.{ai} := {self.fv(latex=False)}  # {self.u}")
 
         if as_str:
             return hpstr + "\n"
@@ -328,7 +328,7 @@ class Units:
         else:
             md(label, prefix="", size=f"+{size+1}" if size > 0 else str(size - 1))
             if code:
-                print(f"from bulkhours import constants as consts")
+                print(f"from bulkhours import constants as bkc")
             for k, v in self.csts.items():
                 if label.lower() in k.lower() or label.lower() in ["all"]:
                     v.help(size=tsize, code=code, markdown=markdown, latex=latex)
