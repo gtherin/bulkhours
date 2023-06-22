@@ -24,13 +24,16 @@ def get_nversion(version):
         return f"{sversion[0]}.{sversion[1]}.{int(sversion[2])+1}"
 
 
-def get_fversion(filename):
-    return os.path.abspath(os.path.dirname(__file__)) + filename
+def get_fversion(v):
+    root_dir = "/home/guydegnol/projects"
+    return f"{root_dir}/bulkhours{v}/bulkhours{v}/__version__.py"
 
 
 def git_push(argv=sys.argv[1:]):
     # Update the data doc
     from bulkhours.data import build_readme
+
+    root_dir = "/home/guydegnol/projects"
 
     parser = argparse.ArgumentParser(description="Git helper")
     parser.add_argument("-m", "--message", help="Message", default="Some changes")
@@ -40,44 +43,28 @@ def git_push(argv=sys.argv[1:]):
     if args.readme:
         build_readme()
 
-    vfile = get_fversion("/../__version__.py")
-    nversion = get_nversion(oversion := open(vfile).readline().split('"')[1])
+    ps = {"": "", "a": "_admin", "m": "_premium"}
+    ovs = {k: open(get_fversion(v)).readline().split('"')[1] for k, v in ps.items()}
+    nvs = {k: get_nversion(v) for k, v in ovs.items()}
 
-    avfile = get_fversion("/../../../bulkhours_admin/bulkhours_admin/__version__.py")
-    naversion = get_nversion(aversion := open(avfile).readline().split('"')[1])
+    for r, p in ps.items():
+        with open(get_fversion(p), "w") as the_file:
+            the_file.write(f"""__version__ = "{nvs['']}"\n""")
+            if r == "":
+                the_file.write(f"""__aversion__ = "{nvs['a']}"\n__mversion__ = "{nvs['m']}"\n""")
 
-    pvfile = get_fversion("/../../../bulkhours_premium/bulkhours_premium/__version__.py")
-    npversion = get_nversion(pversion := open(pvfile).readline().split('"')[1])
-
-    with open(vfile, "w") as the_file:
-        the_file.write(f"""__version__ = "{nversion}"\n""")
-        the_file.write(f"""__aversion__ = "{naversion}"\n""")
-        the_file.write(f"""__mversion__ = "{npversion}"\n""")
-
-    with open(avfile, "w") as the_file:
-        the_file.write(f"""__version__ = "{naversion}"\n""")
-
-    with open(pvfile, "w") as the_file:
-        the_file.write(f"""__version__ = "{npversion}"\n""")
-
-    root_dir = "/home/guydegnol/projects"
     with open("git_push.sh", "w") as f:
-        f.write(f"cp -r {root_dir}/bulkhours/README.md {root_dir}/bulkhours.wiki/Home.md\n")
-        f.write(f"cp -r {root_dir}/bulkhours/data/README.md {root_dir}/bulkhours.wiki/Data.md\n")
-        f.write(f"cp -r {root_dir}/bulkhours/bulkhours/ecox/README.md {root_dir}/bulkhours.wiki/Econometrics.md\n")
-        f.write(f"cp -r {root_dir}/bulkhours/bulkhours/hpc/README.md {root_dir}/bulkhours.wiki/HPC.md\n")
-
-        f.write(f"""python /home/guydegnol/projects/pyservice/pyservice/generate_bulkhours_keys.py\n""")
-        for p in ["", "_premium", "_admin"]:
+        f.write(f"""python {root_dir}/pyservice/pyservice/generate_bulkhours_keys.py\n""")
+        for r, p in ps.items():
             f.write(
                 f"""cd ../bulkhours{p} && git pull && git add . && git commit -m "{args.message}" && git push 2> /dev/null\n"""
             )
-        f.write(f"""python /home/guydegnol/projects/pyservice/pyservice/generate_bulkhours_keys.py\n""")
+        f.write(f"""python {root_dir}/pyservice/pyservice/generate_bulkhours_keys.py\n""")
     print(
         subprocess.run("bash git_push.sh".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True).stdout
     )
     print(
-        f"BULK Helper cOURSe: \x1b[0mversion='{oversion}=>{nversion}' \x1b[36mpversion='{pversion}=>{npversion}'\x1b[0m🚀, \x1b[31maversion='{aversion}=>{naversion}'\x1b[0m⚠️"
+        f"BULK Helper cOURSe: \x1b[0mversion='{ovs['']}=>{nvs['']}' \x1b[36mpversion='{ovs['m']}=>{nvs['m']}'\x1b[0m🚀, \x1b[31maversion='{ovs['a']}=>{nvs['a']}'\x1b[0m⚠️"
     )
 
     os.system("rm -rf git_push.sh")

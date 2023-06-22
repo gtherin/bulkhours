@@ -15,8 +15,8 @@
 #### `bulkhours.get_data("world.poverty")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv))
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
-- Data source: https://pip.worldbank.org/
 - Direct source: https://ourworldindata.org/poverty
+- Reference site: https://pip.worldbank.org/
 - Columns:
 > https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
 > country,year,reporting_level,welfare_type,ppp_version,survey_year,survey_comparability,headcount_ratio_international_povline,headcount_ratio_lower_mid_income_povline,headcount_ratio_upper_mid_income_povline,headcount_ratio_100,headcount_ratio_1000,headcount_ratio_2000,headcount_ratio_3000,headcount_ratio_4000,headcount_ratio_40_median,headcount_ratio_50_median,headcount_ratio_60_median,headcount_international_povline,headcount_lower_mid_income_povline,headcount_upper_mid_income_povline,headcount_100,headcount_1000,headcount_2000,headcount_3000,headcount_4000,headcount_40_median,headcount_50_median,headcount_60_median,avg_shortfall_international_povline,avg_shortfall_lower_mid_income_povline,avg_shortfall_upper_mid_income_povline,avg_shortfall_100,avg_shortfall_1000,avg_shortfall_2000,avg_shortfall_3000,avg_shortfall_4000,avg_shortfall_40_median,avg_shortfall_50_median,avg_shortfall_60_median,total_shortfall_international_povline,total_shortfall_lower_mid_income_povline,total_shortfall_upper_mid_income_povline,total_shortfall_100,total_shortfall_1000,total_shortfall_2000,total_shortfall_3000,total_shortfall_4000,total_shortfall_40_median,total_shortfall_50_median,total_shortfall_60_median,income_gap_ratio_international_povline,income_gap_ratio_lower_mid_income_povline,income_gap_ratio_upper_mid_income_povline,income_gap_ratio_100,income_gap_ratio_1000,income_gap_ratio_2000,income_gap_ratio_3000,income_gap_ratio_4000,income_gap_ratio_40_median,income_gap_ratio_50_median,income_gap_ratio_60_median,poverty_gap_index_international_povline,poverty_gap_index_lower_mid_income_povline,poverty_gap_index_upper_mid_income_povline,poverty_gap_index_100,poverty_gap_index_1000,poverty_gap_index_2000,poverty_gap_index_3000,poverty_gap_index_4000,mean,median,decile1_avg,decile2_avg,decile3_avg,decile4_avg,decile5_avg,decile6_avg,decile7_avg,decile8_avg,decile9_avg,decile10_avg,decile1_share,decile2_share,decile3_share,decile4_share,decile5_share,decile6_share,decile7_share,decile8_share,decile9_share,decile10_share,decile1_thr,decile2_thr,decile3_thr,decile4_thr,decile6_thr,decile7_thr,decile8_thr,decile9_thr,gini,mld,polarization,palma_ratio,s80_s20_ratio,p90_p10_ratio,p90_p50_ratio,p50_p10_ratio,index,iso,m49,region1,region2,continent
@@ -25,8 +25,8 @@
 #### `bulkhours.get_data("world.mappoverty")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv))
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
-- Data source: https://pip.worldbank.org/
 - Direct source: https://ourworldindata.org/poverty
+- Reference site: https://pip.worldbank.org/
 - Columns:
 > https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
 > pop_est,continent,name,iso_a3,gdp_md_est,geometry,year,reporting_level,welfare_type,ppp_version,survey_year,survey_comparability,headcount_ratio_international_povline,headcount_ratio_lower_mid_income_povline,headcount_ratio_upper_mid_income_povline,headcount_ratio_100,headcount_ratio_1000,headcount_ratio_2000,headcount_ratio_3000,headcount_ratio_4000,headcount_ratio_40_median,headcount_ratio_50_median,headcount_ratio_60_median,headcount_international_povline,headcount_lower_mid_income_povline,headcount_upper_mid_income_povline,headcount_100,headcount_1000,headcount_2000,headcount_3000,headcount_4000,headcount_40_median,headcount_50_median,headcount_60_median,avg_shortfall_international_povline,avg_shortfall_lower_mid_income_povline,avg_shortfall_upper_mid_income_povline,avg_shortfall_100,avg_shortfall_1000,avg_shortfall_2000,avg_shortfall_3000,avg_shortfall_4000,avg_shortfall_40_median,avg_shortfall_50_median,avg_shortfall_60_median,total_shortfall_international_povline,total_shortfall_lower_mid_income_povline,total_shortfall_upper_mid_income_povline,total_shortfall_100,total_shortfall_1000,total_shortfall_2000,total_shortfall_3000,total_shortfall_4000,total_shortfall_40_median,total_shortfall_50_median,total_shortfall_60_median,income_gap_ratio_international_povline,income_gap_ratio_lower_mid_income_povline,income_gap_ratio_upper_mid_income_povline,income_gap_ratio_100,income_gap_ratio_1000,income_gap_ratio_2000,income_gap_ratio_3000,income_gap_ratio_4000,income_gap_ratio_40_median,income_gap_ratio_50_median,income_gap_ratio_60_median,poverty_gap_index_international_povline,poverty_gap_index_lower_mid_income_povline,poverty_gap_index_upper_mid_income_povline,poverty_gap_index_100,poverty_gap_index_1000,poverty_gap_index_2000,poverty_gap_index_3000,poverty_gap_index_4000,mean,median,decile1_avg,decile2_avg,decile3_avg,decile4_avg,decile5_avg,decile6_avg,decile7_avg,decile8_avg,decile9_avg,decile10_avg,decile1_share,decile2_share,decile3_share,decile4_share,decile5_share,decile6_share,decile7_share,decile8_share,decile9_share,decile10_share,decile1_thr,decile2_thr,decile3_thr,decile4_thr,decile6_thr,decile7_thr,decile8_thr,decile9_thr,gini,mld,polarization,palma_ratio,s80_s20_ratio,p90_p10_ratio,p90_p50_ratio,p50_p10_ratio,index,iso,m49,region1,region2
@@ -35,8 +35,8 @@
 #### `bulkhours.get_data("world.gdp")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv))
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
-- Data source: https://pip.worldbank.org/
 - Direct source: https://ourworldindata.org/poverty
+- Reference site: https://pip.worldbank.org/
 - Columns:
 > https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
 > country,year,gdp,index,iso,m49,region1,region2,continent
@@ -45,8 +45,8 @@
 #### `bulkhours.get_data("world.mapgdp")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv))
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
-- Data source: https://pip.worldbank.org/
 - Direct source: https://ourworldindata.org/poverty
+- Reference site: https://pip.worldbank.org/
 - Columns:
 > https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
 > pop_est,continent,name,iso_a3,gdp_md_est,geometry,year,gdp,index,iso,m49,region1,region2
@@ -69,8 +69,8 @@
 #### `bulkhours.get_data("world.life_expectancy_vs_gdp_2018")`
 - Raw data: [life-expectancy-vs-gdp-per-capita.csv](https://github.com/guydegnol/bulkhours/blob/main/data/life-expectancy-vs-gdp-per-capita.csv)
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
-- Data source: Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)
 - Direct source: https://ourworldindata.org/grapher/life-expectancy-vs-gdp-per-capita
+- Reference site: Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)
 - Columns:
 > Country,Code,Year,Life expectancy (years),GDP per capita ($),annotations,Population,Continent
 
@@ -86,7 +86,7 @@
 - Mincer equation formula: ln(hourly_wage) = alpha_0i + alpha_1i * edu + alpha_2i * age + alpha_3i * age**2
 The results of estimation of parameters in Mincer equations in a set of countries. We
 put the point estimates, standard errors (in italics) and p-values for zero restriction test of a
-particular parameter (in square brackets)        
+particular parameter (in square brackets)
 - Direct source: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 3)
 - Columns:
 > alpha_0i,alpha_1i,alpha_2i,alpha_3i,alpha_0i_e,alpha_1i_e,alpha_2i_e,alpha_3i_e
@@ -94,7 +94,7 @@ particular parameter (in square brackets)
 ### Age de la population au 1er janvier (fin novembre 2022)
 #### `bulkhours.get_data("pyramide")`
 - Raw data: [pyramide.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/pyramide.tsv)
-- Lecture : au 1er janvier 2023, la France compte 805 914 personnes de 65 ans dont 425 143 femmes et 380 771 hommes. Champ : France
+la France compte 805 914 personnes de 65 ans dont 425 143 femmes et 380 771 hommes
 - Direct source: https://www.insee.fr/fr/statistiques/2381472#tableau-figure1
 - Columns:
 > Année de naissance,Age révolu,Nombre de femmes,Nombre d'hommes,Ensemble
@@ -130,28 +130,23 @@ pour les femmes, soit un niveau inférieur de 22 % à celui des hommes (figure 1
 Le revenu salarial médian des femmes est inférieur de 16 % à celui des hommes (figure 2).
 Cet écart s'amplifie à la fois dans les bas revenus (écart de 25 % pour le premier décile du revenu salarial) et
 dans les hauts revenus (écart de 21 % pour le neuvième décile).
-colonne 1: Revenu annuel Femmes moyen
-colonne 2: Revenu annuel Hommes moyen
-colonne 3: Revenu annuel Femmes moyen Écart relatif (en %)
-colonne 4: Salaire annuel Femmes moyen EQTP
-colonne 4: Salaire annuel Hommes moyen EQTP
-colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
 - Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
 - Columns:
+> Revenu annuel Femmes moyen, Revenu annuel Hommes moyen, Revenu annuel Femmes moyen Écart relatif (en %), Salaire annuel Femmes moyen EQTP, Salaire annuel Hommes moyen EQTP, Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
 > revenu_femme,revenu_homme,revenu_diff,salaire_ajusté_femme,salaire_ajusté_homme,salaire_ajusté_diff
 
 ### Inégalités salariales entre femmes et hommes de 1995 à 2019
 #### `bulkhours.get_data("france.histsalaires")`
 - Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
-colonne 1: Revenu annuel Femmes moyen
+- Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
+- Columns:
+> colonne 1: Revenu annuel Femmes moyen
 colonne 2: Revenu annuel Hommes moyen
 colonne 3: Revenu annuel Femmes moyen Écart relatif (en %)
 colonne 4: Salaire annuel Femmes moyen EQTP
 colonne 4: Salaire annuel Hommes moyen EQTP
 colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
     
-- Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
-- Columns:
 > écart relatif du revenu salarial moyen,écart relatif du revenu salarial moyen.1,écart relatif du salaire moyen en EQTP,écart relatif du salaire moyen en EQTP.1,écart relatif du volume de travail en EQTP moyen
 
 ### Evolution du PIB et de ses composantes par rapport au trimestre precedent en volume en %
@@ -758,8 +753,8 @@ bkc.pi := 3.141593  #
 #### `bulkhours.get_data("statsdata.sunspots")`
 - Raw data: [observed-solar-cycle-indices.json](https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json)  ([raw](https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json))
 - Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
-- Data source: https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
 - Direct source: https://www.swpc.noaa.gov/products/solar-cycle-progression
+- Reference site: https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
 - Columns:
 > https://en.wikipedia.org/wiki/Wolf_number
 > ssn,smoothed_ssn,observed_swpc_ssn,smoothed_swpc_ssn,f10.7,smoothed_f10.7
@@ -771,8 +766,8 @@ bkc.pi := 3.141593  #
 ### Coronavirus Pandemic (COVID-19) data
 #### `bulkhours.get_data("vaccinations")`
 - Raw data: [vaccinations.csv](https://github.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv)  ([raw](https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv))
-- Data source: https://covid19.who.int/data
 - Direct source: https://ourworldindata.org/coronavirus
+- Reference site: https://covid19.who.int/data
 - Columns:
 > https://github.com/owid/covid-19-data/tree/master/public/data/
 > location,iso_code,date,total_vaccinations,people_vaccinated,people_fully_vaccinated,total_boosters,daily_vaccinations_raw,daily_vaccinations,total_vaccinations_per_hundred,people_vaccinated_per_hundred,people_fully_vaccinated_per_hundred,total_boosters_per_hundred,daily_vaccinations_per_million,daily_people_vaccinated,daily_people_vaccinated_per_hundred
@@ -791,8 +786,8 @@ The features must first be scaled to have mean zero and  variance 96 (=n) before
 ### Coronavirus Pandemic (COVID-19) data
 #### `bulkhours.get_data("covid")`
 - Raw data: [owid-covid-data.csv](https://covid.ourworldindata.org/data/owid-covid-data.csv)  ([raw](https://covid.ourworldindata.org/data/owid-covid-data.csv))
-- Data source: https://covid19.who.int/data
 - Direct source: https://ourworldindata.org/coronavirus
+- Reference site: https://covid19.who.int/data
 - Columns:
 > https://github.com/owid/covid-19-data/tree/master/public/data/
 > iso_code,continent,location,date,total_cases,new_cases,new_cases_smoothed,total_deaths,new_deaths,new_deaths_smoothed,total_cases_per_million,new_cases_per_million,new_cases_smoothed_per_million,total_deaths_per_million,new_deaths_per_million,new_deaths_smoothed_per_million,reproduction_rate,icu_patients,icu_patients_per_million,hosp_patients,hosp_patients_per_million,weekly_icu_admissions,weekly_icu_admissions_per_million,weekly_hosp_admissions,weekly_hosp_admissions_per_million,total_tests,new_tests,total_tests_per_thousand,new_tests_per_thousand,new_tests_smoothed,new_tests_smoothed_per_thousand,positive_rate,tests_per_case,tests_units,total_vaccinations,people_vaccinated,people_fully_vaccinated,total_boosters,new_vaccinations,new_vaccinations_smoothed,total_vaccinations_per_hundred,people_vaccinated_per_hundred,people_fully_vaccinated_per_hundred,total_boosters_per_hundred,new_vaccinations_smoothed_per_million,new_people_vaccinated_smoothed,new_people_vaccinated_smoothed_per_hundred,stringency_index,population_density,median_age,aged_65_older,aged_70_older,gdp_per_capita,extreme_poverty,cardiovasc_death_rate,diabetes_prevalence,female_smokers,male_smokers,handwashing_facilities,hospital_beds_per_thousand,life_expectancy,human_development_index,population,excess_mortality_cumulative_absolute,excess_mortality_cumulative,excess_mortality,excess_mortality_cumulative_per_million
