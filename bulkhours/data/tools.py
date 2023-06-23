@@ -153,7 +153,10 @@ class DataParser:
         if "columns" in d or columns is not None:
             comment += f"- Columns:\n"
             if "columns" in d:
-                comment += f"> {d['columns']}\n"
+                if "|" in d["columns"]:
+                    comment += f"\n{d['columns']}\n"
+                else:
+                    comment += f"> {d['columns']}\n"
             if columns is not None:
                 cols = ",".join(columns)
                 comment += f"> {cols}\n"
