@@ -90,7 +90,6 @@ def get_data_from_file(raw_data, **kwargs):
 
 class DataParser:
     datasets = {}
-    MODELS_LIST = OrderedDict()
 
     def __init__(
         self,
@@ -114,6 +113,16 @@ class DataParser:
         self.drop = drop
         self.rename = rename
         self.is_test = is_test
+
+    @staticmethod
+    def declare_data(name, f):
+        if not hasattr(DataParser, "MODELS_LIST"):
+            DataParser.MODELS_LIST = OrderedDict()
+
+        if name not in DataParser.MODELS_LIST:
+            DataParser.MODELS_LIST[name] = f
+        else:
+            print(f"function for {name} ({f}) already defined")
 
     def get_info(self, load_columns=False, summary=False):
         columns = None
@@ -178,6 +187,9 @@ class DataParser:
                 print(
                     f"\x1b[31mBulkHours database info:\x1b[0m https://github.com/guydegnol/bulkhours/blob/main/data/README.md"
                 )
+                print(
+                    f'bulkhours.get_data("{self.label}", credit=\033[1mFalse\033[0m)  # To stop showing the previous text'
+                )
 
             else:
                 print(f"Data {self.label} is not referenced")
@@ -201,10 +213,7 @@ class DataParser:
 
 def register(name):
     def wrap(f):
-        if name not in DataParser.MODELS_LIST:
-            DataParser.MODELS_LIST[name] = f
-        else:
-            print(f"function for {name} ({f}) already defined")
+        DataParser.declare_data(name, f)
         return f
 
     return wrap

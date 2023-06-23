@@ -139,18 +139,23 @@ dans les hauts revenus (écart de 21 % pour le neuvième décile).""",
         label="france.histsalaires",
         summary="Inégalités salariales entre femmes et hommes de 1995 à 2019",
         category="Economics",
-        columns="""Revenu annuel Femmes moyen, Revenu annuel Hommes moyen, Revenu annuel Femmes moyen Écart relatif (en %), Salaire annuel Femmes moyen EQTP, Salaire annuel Hommes moyen EQTP, Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)""",
+        columns="""| Column   |      Info |
+|-----------|:-----------|
+| delta_rev_legacy   |  écart relatif du revenu salarial moyen homme/femme |         
+| delta_rev  |  écart relatif (en %) du revenu salarial moyen.1| 
+| delta_rev_eqtp_legacy   |  écart relatif du salaire moyen en EQTP	| 
+| delta_rev_eqtp  |  écart relatif du salaire moyen en EQTP| 
+| delta_vol_eqtp   |  écart relatif du volume de travail en EQTP moyen |""",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py",
         ref_source="https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805",
+        rename=["delta_rev_legacy", "delta_rev", "delta_rev_eqtp_legacy", "delta_rev_eqtp", "delta_vol_eqtp"],
     ),
     dict(
         label="gmacro.fr_qgdp",
         summary="Evolution du PIB et de ses composantes par rapport au trimestre precedent en volume en %",
         category="Economics",
-        source="""- Note : donnees revistees ; les volumes sont mesures aux prix de l'annee precedente changés et corriges des variations saisonnieres et des effets des jours ouvrables.
-- Lecture: au 4e trimestre 2022. le produit interieur brut (PIB) en volume augmente de 0.1 % par rapport au trimestre precedent.
-- Source : Insee, comptes nationaux trimestriels - base 2014.
-- Contributions Demande,Variations de stocks,Commerce exterieur""",
+        source="""- Note : données revisitées ; les volumes sont mesures aux prix de l'année précédente changés et corrigés des variations saisonnieres et des effets des jours ouvrables.
+- Lecture: au 4e trimestre 2022. le produit interieur brut (PIB) en volume augmente de 0.1 % par rapport au trimestre precedent.""",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py",
         ref_source="https://www.insee.fr/fr/statistiques/2830547#tableau-figure1",
     ),
@@ -163,34 +168,27 @@ dans les hauts revenus (écart de 21 % pour le neuvième décile).""",
     ),
     dict(
         label="gmacro.us_gdp",
-        summary="United States Macroeconomic data",
+        summary="United States Macroeconomic data (1959q1 - 2009q3)",
         category="Economics",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py",
         ref_source="https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html",
-        columns="""year      - 1959q1 - 2009q3
-quarter   - 1-4
-realgdp   - Real gross domestic product (Bil. of chained 2005 US$,
-            seasonally adjusted annual rate)
-realcons  - Real personal consumption expenditures (Bil. of chained
-            2005 US$, seasonally adjusted annual rate)
-realinv   - Real gross private domestic investment (Bil. of chained
-            2005 US$, seasonally adjusted annual rate)
-realgovt  - Real federal consumption expenditures & gross investment
-            (Bil. of chained 2005 US$, seasonally adjusted annual rate)
-realdpi   - Real private disposable income (Bil. of chained 2005
-            US$, seasonally adjusted annual rate)
-cpi       - End of the quarter consumer price index for all urban
-            consumers: all items (1982-84 = 100, seasonally adjusted).
-m1        - End of the quarter M1 nominal money stock (Seasonally
-            adjusted)
-tbilrate  - Quarterly monthly average of the monthly 3-month
-            treasury bill: secondary market rate
-unemp     - Seasonally adjusted unemployment rate (%)
-pop       - End of the quarter total population: all ages incl. armed
-            forces over seas
-infl      - Inflation rate (ln(cpi_{t}/cpi_{t-1}) * 400)
-realint   - Real interest rate (tbilrate - infl)
-        """,
+        columns="""| Column   |      Info |
+|-----------|:-----------|
+| year      |  1959q1 - 2009q3 |
+| quarter   |    1-4 |
+| realgdp   | Real gross domestic product (Bil. of chained 2005\$, seasonally adjusted annual rate) |         
+| realcons  |  Real personal consumption expenditures (Bil. of chained 2005\$, seasonally adjusted annual rate)| 
+| realinv   |  Real gross private domestic investment (Bil. of chained 2005\$, seasonally adjusted annual rate)| 
+| realgovt  |  Real federal consumption expenditures & gross investment(Bil. of chained 2005 US$, seasonally adjusted annual rate)| 
+| realdpi   |  Real private disposable income (Bil. of chained 2005 US$, seasonally adjusted annual rate)| 
+| cpi       |  End of the quarter consumer price index for all urban consumers: all items (1982-84 = 100, seasonally adjusted).| 
+| m1        |  End of the quarter M1 nominal money stock (Seasonally adjusted)| 
+| tbilrate  |  Quarterly monthly average of the monthly 3-month treasury bill: secondary market rate| 
+| unemp     |  Seasonally adjusted unemployment rate (%)| 
+| pop       |  End of the quarter total population: all ages incl. armed forces over seas| 
+| infl      |  Inflation rate (ln(cpi_{t}/cpi_{t-1}) * 400)| 
+| realint   |  Real interest rate (tbilrate - infl)| 
+""",
     ),
     dict(
         label="gmacro.fr_gdp",
