@@ -9,22 +9,6 @@ def get_readme_filename(filename="README.md"):
     return os.path.abspath(os.path.dirname(__file__) + f"../../../data/{filename}")
 
 
-def get_rdata(d, dname):
-    if dname not in d:
-        return ""
-    if "http" in d[dname]:
-        label = d[dname].split("/")[-1]
-        if "raw.githubusercontent.com" in d[dname]:
-            address = d[dname].replace("raw.githubusercontent.com", "github.com")
-            return f"[{label}]({address})  ([raw]({d[dname]}))"
-        else:
-            address = d[dname].replace("github.com", "raw.githubusercontent.com").replace("blob/", "")
-            return f"[{label}]({d[dname]})  ([raw]({address}))"
-    if type(d[dname]) in [list]:
-        return ", ".join([f"[{f}](https://github.com/guydegnol/bulkhours/blob/main/data/{f})" for f in d[dname]])
-    return f"[{d[dname]}](https://github.com/guydegnol/bulkhours/blob/main/data/{d[dname]})"
-
-
 class Script:
     def __init__(self, text="", fname="script.sh") -> None:
         self.text = text + "\n"
@@ -67,8 +51,6 @@ def build_readme(load_data=True):
 
     import pdoc
 
-    # import markdown2
-
     modules = ["bulkhours_premium.equals"]
     context = pdoc.Context()  # docformat="numpy")  # markdown restructuredtext google numpy
 
@@ -79,16 +61,15 @@ def build_readme(load_data=True):
     def recursive_htmls(mod):
         yield mod.name, mod.text()  # text html
         for submod in mod.submodules():
-            print(submod)
+            # print(submod)
             yield from recursive_htmls(submod)
 
     for mod in modules:
         for module_name, html in recursive_htmls(mod):
             with open(f"/home/guydegnol/projects/bulkhours.wiki/{module_name.replace('.', '_')}.md", "w") as ff:
                 ff.write(html)
-                print(html)
+                # print(html)
             # print(module_name, html)
-    return
 
     from ..phyu.constants import Units
 
@@ -108,42 +89,8 @@ def build_readme(load_data=True):
             ffile.write(Units().info(size="+1", code=True))
 
         for d in datasets:
-            if d["category"] != category["tag"]:
-                continue
-
-            columns = None
-            if load_data:
-                try:
-                    data = tools.DataParser(**d).get_data()
-                    columns = list(data.columns)
-                except:
-                    pass
-
-            comment = ""
-            if "summary" in d:
-                comment += f"### {d['summary']}\n"
-            comment += f'#### `bulkhours.get_data("{d["label"]}")`\n'
-            if "raw_data" in d:
-                comment += f"- Raw data: {get_rdata(d, 'raw_data')}\n"
-            if "enrich_data" in d:
-                comment += f"- Enrich data: {get_rdata(d, 'enrich_data')}\n"
-            if "source" in d:
-                comment += d["source"] + "\n"
-            if "ref_source" in d:
-                comment += f"- Direct source: {d['ref_source']}\n"
-            if "ref_site" in d:
-                comment += f"- Reference site: {d['ref_site']}\n"
-            if "columns" in d or columns is not None:
-                comment += f"- Columns:\n"
-                if "columns" in d:
-                    comment += f"> {d['columns']}\n"
-                if columns is not None:
-                    cols = ",".join(columns)
-                    comment += f"> {cols}\n"
-
-            comment += "\n"
-
-            ffile.write(comment)
+            if d["category"] == category["tag"]:
+                ffile.write(tools.DataParser(**d).get_info(load_columns=load_data))
 
     raw_files = set()
     for d in datasets:

@@ -63,8 +63,9 @@ def git_push(argv=sys.argv[1:]):
     print(
         subprocess.run("bash git_push.sh".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True).stdout
     )
+
+    os.system("rm -rf git_push.sh")
+
     print(
         f"BULK Helper cOURSe: \x1b[0mversion='{ovs['']}=>{nvs['']}' \x1b[36mpversion='{ovs['m']}=>{nvs['m']}'\x1b[0m🚀, \x1b[31maversion='{ovs['a']}=>{nvs['a']}'\x1b[0m⚠️"
     )
-
-    os.system("rm -rf git_push.sh")

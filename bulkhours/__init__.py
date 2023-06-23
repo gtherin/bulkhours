@@ -94,6 +94,9 @@ def init_env(debug=False, from_scratch=False, **kwargs):
         info = f"{info})\x1b[36m. To activate the 🚀 mode, please contact bulkhours@guydegnol.net\x1b[0m"
 
     print(f"{info}")
+    if "data_cache" in config:
+        print(f"⚠️\x1b[41m\x1b[37mDatabase is local. Persistency is not garantee outside the notebook\x1b[0m⚠️")
+
     os.environ["BLK_STATUS"] = f"INITIALIZED"
     return CellContext(), CellContext()
 
@@ -147,9 +150,6 @@ def geo_plot(data=None, timeopt="last", **kwargs):
     if type(data) is str:
         data = get_data(data, timeopt=timeopt)
     return geo.geo_plot(data, timeopt=timeopt, **kwargs)
-
-
-# init_env()
 
 
 def html(label, display=True, style="raw"):

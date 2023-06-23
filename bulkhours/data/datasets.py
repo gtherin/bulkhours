@@ -139,13 +139,7 @@ dans les hauts revenus (écart de 21 % pour le neuvième décile).""",
         label="france.histsalaires",
         summary="Inégalités salariales entre femmes et hommes de 1995 à 2019",
         category="Economics",
-        columns="""colonne 1: Revenu annuel Femmes moyen
-colonne 2: Revenu annuel Hommes moyen
-colonne 3: Revenu annuel Femmes moyen Écart relatif (en %)
-colonne 4: Salaire annuel Femmes moyen EQTP
-colonne 4: Salaire annuel Hommes moyen EQTP
-colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
-    """,
+        columns="""Revenu annuel Femmes moyen, Revenu annuel Hommes moyen, Revenu annuel Femmes moyen Écart relatif (en %), Salaire annuel Femmes moyen EQTP, Salaire annuel Hommes moyen EQTP, Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)""",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py",
         ref_source="https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805",
     ),
@@ -462,7 +456,7 @@ The features must first be scaled to have mean zero and  variance 96 (=n) before
 for f in (
     ["chose1.jpg", "chose2.jpg", "radian2.png", "README.md", "brown.gif", "gradient_descent.png", "TCL.png"]
     + ["lognormal.png", "in_trading.csv", "galton.jpg", "ffcontrol.csv", "galtonr.png"]
-    + ["exercices", "freefight.csv"]
+    + ["exercices", "freefight.csv", "cache"]
 ):
     datasets.append(dict(label=f, raw_data=f, category="Internal"))
 
