@@ -100,13 +100,13 @@
 - Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
 - Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
 - Columns:
-> colonne 1: Revenu annuel Femmes moyen
-colonne 2: Revenu annuel Hommes moyen
-colonne 3: Revenu annuel Femmes moyen Écart relatif (en %)
-colonne 4: Salaire annuel Femmes moyen EQTP
-colonne 4: Salaire annuel Hommes moyen EQTP
-colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
-    
+> | Column   |      Info |
+|-----------|:-----------|
+| delta_rev_legacy   |  écart relatif du revenu salarial moyen homme/femme |         
+| delta_rev  |  écart relatif (en %) du revenu salarial moyen.1| 
+| delta_rev_eqtp_legacy   |  écart relatif du salaire moyen en EQTP	| 
+| delta_rev_eqtp  |  écart relatif du salaire moyen en EQTP| 
+| delta_vol_eqtp   |  écart relatif du volume de travail en EQTP moyen |
 
 #### Evolution du PIB et de ses composantes par rapport au trimestre precedent en volume en %
 #### `bulkhours.get_data("gmacro.fr_qgdp")`
@@ -118,35 +118,28 @@ colonne 4: Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)
 - Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py))
 - Direct source: https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
 
-#### United States Macroeconomic data
+#### United States Macroeconomic data (1959q1 - 2009q3)
 #### `bulkhours.get_data("gmacro.us_gdp")`
 - Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py))
 - Direct source: https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html
 - Columns:
-> year      - 1959q1 - 2009q3
-quarter   - 1-4
-realgdp   - Real gross domestic product (Bil. of chained 2005 US$,
-            seasonally adjusted annual rate)
-realcons  - Real personal consumption expenditures (Bil. of chained
-            2005 US$, seasonally adjusted annual rate)
-realinv   - Real gross private domestic investment (Bil. of chained
-            2005 US$, seasonally adjusted annual rate)
-realgovt  - Real federal consumption expenditures & gross investment
-            (Bil. of chained 2005 US$, seasonally adjusted annual rate)
-realdpi   - Real private disposable income (Bil. of chained 2005
-            US$, seasonally adjusted annual rate)
-cpi       - End of the quarter consumer price index for all urban
-            consumers: all items (1982-84 = 100, seasonally adjusted).
-m1        - End of the quarter M1 nominal money stock (Seasonally
-            adjusted)
-tbilrate  - Quarterly monthly average of the monthly 3-month
-            treasury bill: secondary market rate
-unemp     - Seasonally adjusted unemployment rate (%)
-pop       - End of the quarter total population: all ages incl. armed
-            forces over seas
-infl      - Inflation rate (ln(cpi_{t}/cpi_{t-1}) * 400)
-realint   - Real interest rate (tbilrate - infl)
-        
+> | Column   |      Info |
+|-----------|:-----------|
+| year      |  1959q1 - 2009q3 |
+| quarter   |    1-4 |
+| realgdp   | Real gross domestic product (Bil. of chained 2005\$, seasonally adjusted annual rate) |         
+| realcons  |  Real personal consumption expenditures (Bil. of chained 2005\$, seasonally adjusted annual rate)| 
+| realinv   |  Real gross private domestic investment (Bil. of chained 2005\$, seasonally adjusted annual rate)| 
+| realgovt  |  Real federal consumption expenditures & gross investment(Bil. of chained 2005 US$, seasonally adjusted annual rate)| 
+| realdpi   |  Real private disposable income (Bil. of chained 2005 US$, seasonally adjusted annual rate)| 
+| cpi       |  End of the quarter consumer price index for all urban consumers: all items (1982-84 = 100, seasonally adjusted).| 
+| m1        |  End of the quarter M1 nominal money stock (Seasonally adjusted)| 
+| tbilrate  |  Quarterly monthly average of the monthly 3-month treasury bill: secondary market rate| 
+| unemp     |  Seasonally adjusted unemployment rate (%)| 
+| pop       |  End of the quarter total population: all ages incl. armed forces over seas| 
+| infl      |  Inflation rate (ln(cpi_{t}/cpi_{t-1}) * 400)| 
+| realint   |  Real interest rate (tbilrate - infl)| 
+
 
 #### France Macroeconomic data
 #### `bulkhours.get_data("gmacro.fr_gdp")`
