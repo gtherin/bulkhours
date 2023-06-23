@@ -100,6 +100,7 @@
 - Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
 - Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
 - Columns:
+
 | Column   |      Info |
 |-----------|:-----------|
 | delta_rev_legacy   |  écart relatif du revenu salarial moyen homme/femme |         
@@ -123,7 +124,8 @@
 - Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py))
 - Direct source: https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html
 - Columns:
-> | Column   |      Info |
+
+| Column   |      Info |
 |-----------|:-----------|
 | year      |  1959q1 - 2009q3 |
 | quarter   |    1-4 |
