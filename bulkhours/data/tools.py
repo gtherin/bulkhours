@@ -5,6 +5,20 @@ import numpy as np
 import pandas as pd
 
 
+def get_rdata(rdata):
+    if "http" in rdata:
+        label = rdata.split("/")[-1]
+        if "raw.githubusercontent.com" in rdata:
+            address = rdata.replace("raw.githubusercontent.com", "github.com")
+            return f"[{label}]({address})  ([raw]({rdata}))"
+        else:
+            address = rdata.replace("github.com", "raw.githubusercontent.com").replace("blob/", "")
+            return f"[{label}]({rdata})  ([raw]({address}))"
+    if type(rdata) in [list]:
+        return ", ".join([f"[{f}](https://github.com/guydegnol/bulkhours/blob/main/data/{f})" for f in rdata])
+    return f"[{rdata}](https://github.com/guydegnol/bulkhours/blob/main/data/{rdata})"
+
+
 def clean_columns(df, drop=None, rename=None, is_test=None):
     if drop is not None:
         for c in drop:
@@ -82,7 +96,7 @@ class DataParser:
         self,
         label=None,
         raw_data=None,
-        credit=False,
+        credit=True,
         source=None,
         query=None,
         index=None,
@@ -101,6 +115,43 @@ class DataParser:
         self.rename = rename
         self.is_test = is_test
 
+    def get_info(self, load_columns=False, summary=False):
+        columns = None
+        if load_columns:
+            try:
+                data = self.get_data(credit=False)
+                columns = list(data.columns)
+            except:
+                pass
+
+        d = self.data_info
+        comment = ""
+        if "summary" in d:
+            comment += f"#### {d['summary']}\n"
+
+        if not summary:
+            comment += f'#### `bulkhours.get_data("{self.label}")`\n'
+        if self.raw_data is not None:
+            comment += f"- Raw data: {get_rdata(self.raw_data)}\n"
+        if "enrich_data" in d:
+            comment += f"- Enrich data: {get_rdata(d['enrich_data'])}\n"
+        if "source" in d:
+            comment += d["source"] + "\n"
+        if "ref_source" in d:
+            comment += f"- Direct source: {d['ref_source']}\n"
+        if "ref_site" in d:
+            comment += f"- Reference site: {d['ref_site']}\n"
+        if "columns" in d or columns is not None:
+            comment += f"- Columns:\n"
+            if "columns" in d:
+                comment += f"> {d['columns']}\n"
+            if columns is not None:
+                cols = ",".join(columns)
+                comment += f"> {cols}\n"
+
+        comment += "\n"
+        return comment
+
     def read_raw_data(self, raw_data):
         if type(raw_data) == list:
             if self.on:
@@ -113,20 +164,23 @@ class DataParser:
         return get_data_from_file(raw_data, **self.data_info)
 
     def get_data(self):
-        if self.credit:
-            if self.source is not None:
-                print(
-                    f"""{self.source}
-\x1b[31mBulkHours database info:\x1b[0m https://github.com/guydegnol/bulkhours/blob/main/data/README.md
-                """
-                )
-            else:
-                print(f"Data {self.label} is not referenced")
-
         if self.label in DataParser.MODELS_LIST:
             df = DataParser.MODELS_LIST[self.label](self)
         else:
             df = self.read_raw_data(self.raw_data)
+
+        if self.credit:
+            if "summary" in self.data_info:
+                comment = self.get_info(load_columns=False, summary=True)
+                import IPython
+
+                IPython.display.display(IPython.display.Markdown(f"""{comment}"""))
+                print(
+                    f"\x1b[31mBulkHours database info:\x1b[0m https://github.com/guydegnol/bulkhours/blob/main/data/README.md"
+                )
+
+            else:
+                print(f"Data {self.label} is not referenced")
 
         if type(df) == str:
             return df
