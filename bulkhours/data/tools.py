@@ -36,7 +36,7 @@ def clean_columns(df, drop=None, rename=None, is_test=None):
 
 
 def clean_data(df, query=None, index=None, test_data=None):
-    if type(df).__module__ == "numpy" or type(df) in [list, dict]:
+    if type(df) != pd.DataFrame:
         return df
 
     if "date" in df.columns:
