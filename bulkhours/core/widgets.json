@@ -1,0 +1,15 @@
+{
+    "base": "lwsc",
+    "checkboxes": "lw|sc",
+    "bkcode": "sc",
+    "code_project": "w|tsc",
+    "codetext": "lwsc",
+    "floatslider": "lwsc",
+    "formula": "sc",
+    "intslider": "lwsc",
+    "markdown": "sc",
+    "radios": "lwsc",
+    "bkscript": "sc",
+    "table": "lw|sc",
+    "textarea": "lwsc"
+}

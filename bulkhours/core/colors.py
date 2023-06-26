@@ -45,3 +45,11 @@ buttonb {
     """
     IPython.display.display(ipywidgets.HTML(style))
     object.add_class(style)
+
+
+#    vvvv vvvv-- the code from above
+BORANGE = "\x1b[33m\x1b[1m"
+BDGRAY = "\x1b[30m\x1b[1m"
+HSTYLE = BDGRAY
+NC = "\x1b[m"  # No Color
+st = lambda x: f"{HSTYLE}{x}{NC}"

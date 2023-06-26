@@ -194,6 +194,9 @@ def main2():
 
 
 def main():
+    import os
+
+    os.environ["SDL_VIDEODRIVER"] = "dummy"
     if 1:
         main2()
         return
