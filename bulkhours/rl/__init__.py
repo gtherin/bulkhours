@@ -1,7 +1,17 @@
 import sys
+import subprocess
 import matplotlib.pyplot as plt
 from .hugs import PPOHugs  # noqa
-from ..core import runrealcmd
+
+
+def runrealcmd(command, verbose=True):
+    logfile = open("install.log", "w")
+    stdout, stderr = subprocess.PIPE, subprocess.STDOUT
+    stdout, stderr = logfile, logfile
+    process = subprocess.Popen(command, stdout=stdout, shell=True, stderr=stderr, bufsize=1, close_fds=True)
+    if verbose:
+        print(f"RUN {command}")
+    process.wait()
 
 
 def init_env(verbose=True):
