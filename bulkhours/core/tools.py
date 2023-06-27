@@ -6,9 +6,10 @@ import IPython
 
 def abspath(filename=""):
     rdir = os.path.dirname(__file__) + f"/../../../bulkhours"
-    for f in ["", rdir + "/"]:
+    for f in [rdir + "/", ""]:
         if os.path.exists(f + filename):
-            return os.path.abspath(f + filename)
+            afilename = os.path.abspath(f + filename)
+    return afilename
 
 
 def update_config(data):

@@ -53,6 +53,7 @@ def init_database(**kwargs):
     if "from_scratch" not in kwargs:
         kwargs["from_scratch"] = True
     print("AAAAAAAAAAAAAAAAAA init_database 2")
+    print(kwargs)
     config = tools.get_config(**kwargs)
     print("AAAAAAAAAAAAAAAAAA init_database 3")
 
