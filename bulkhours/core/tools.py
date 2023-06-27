@@ -80,8 +80,9 @@ def get_config(config={}, do_update=False, from_scratch=False, is_namespace=Fals
     return config
 
 
-def get_value(key):
-    config = get_config()
+def get_value(key, config=None):
+    if config is None:
+        config = get_config()
     if key in config:
         return config.get(key)
     return config["global"].get(key)
