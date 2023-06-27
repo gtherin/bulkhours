@@ -6,6 +6,7 @@ import glob
 from argparse import Namespace
 
 from . import widget_base
+from . import tools
 
 
 def get_data_from_file(cinfo, label, on=None, subdir="data", **kwargs):
@@ -16,6 +17,8 @@ def get_data_from_file(cinfo, label, on=None, subdir="data", **kwargs):
         for directory in [r, ".", "..", "../../" + r, "../../../" + r, os.environ["HOME"] + "/projects/" + r]:
             if filename is None and len((files := glob.glob(f"{directory}/{subdir}/{label}*"))):
                 filename = files[0]
+
+    print("TEST", filename, tools.abspath(f"data/exercices/{label}"))
     if not filename:
         print(f"No data available for {subdir}/{label}")
         return None
@@ -45,11 +48,13 @@ def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
     files = []
     for t, f in enumerate(filenames):
         ff = f.split(":")
+        print(f"cache/{cinfo.cell_id}_{ff[0]}")
         if not os.path.exists(cfilename := f"cache/{cinfo.cell_id}_{ff[0]}"):
-            rfilename = get_data_from_file(cinfo, f"{cinfo.cell_id}_{ff[0]}", subdir="data/exercices")
+            rfilename = get_data_from_file(cinfo, f"{cinfo.cell_id}_{ff[0]}", subdir="bulkhours/data/exercices")
             if verbose:
                 print(f"Generate {cfilename} from {rfilename}")
 
+            print(rfilename)
             # Store in files to be compiled
             data = open(rfilename).read()
             with open(cfilename, "w") as f:
