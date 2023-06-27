@@ -74,7 +74,9 @@ def init_database(**kwargs):
 
 
 def init_prems(**kwargs):
+    print("AAAAAAAAAAAAAAAAAA")
     config = init_database(**kwargs)
+    print("AAAAAAAAAAAAAAAAAA")
     db_label = config["database"].split("@")[0] + "@" if "@" in config["database"] else ""
 
     email, notebook_id = (config.get(v) for v in ["email", "notebook_id"])
