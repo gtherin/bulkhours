@@ -1,0 +1,14 @@
+pandas
+ipython
+lxml
+tensorflow
+graphviz
+bs4
+scipy
+statsmodels
+seaborn
+numba
+google-cloud-firestore
+scikit-learn
+geopandas
+descartes
