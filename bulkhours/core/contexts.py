@@ -5,6 +5,21 @@ from contextlib import redirect_stdout
 from .cell_parser import CellParser
 
 
+class CellContext:
+    """This context cell contains cell executions:
+    - Two are defined by default: 'student' or 'teacher'
+    When using the correction code, the stdout and answer are filled
+    """
+
+    @property
+    def stdout(self):
+        return False
+
+    @property
+    def answer(self):
+        return False
+
+
 def exec_code(code, debug=False):
     if debug:
         print("Run in debug mode")
