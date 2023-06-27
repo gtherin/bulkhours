@@ -20,9 +20,6 @@ tests/*
 
 **.pyc*
 requirements-dev.txt
-requirements.txt
-Makefile
-config.mk
 
 # Packages
 *.egg
