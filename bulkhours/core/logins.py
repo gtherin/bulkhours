@@ -48,9 +48,13 @@ def init_database(**kwargs):
     from . import tools
     from . import firebase
 
+    print("AAAAAAAAAAAAAAAAAA init_database 1")
+
     if "from_scratch" not in kwargs:
         kwargs["from_scratch"] = True
+    print("AAAAAAAAAAAAAAAAAA init_database 2")
     config = tools.get_config(**kwargs)
+    print("AAAAAAAAAAAAAAAAAA init_database 3")
 
     if "database" not in config:
         config["database"] = "bkache@free1"
@@ -62,6 +66,8 @@ def init_database(**kwargs):
         config["global"].update(get_tokens(config["database"]))
     config["subject"] = config["global"]["subject"]
 
+    print(config)
+    print("AAAAAAAAAAAAAAAAAA init_database 4")
     firebase.DbDocument.init_database(config)
 
     collection = firebase.DbClient().collection(f"{config.get('subject')}_info".replace("/", "_"))
@@ -74,9 +80,9 @@ def init_database(**kwargs):
 
 
 def init_prems(**kwargs):
-    print("AAAAAAAAAAAAAAAAAA")
+    print("AAAAAAAAAAAAAAAAAA init_prems")
     config = init_database(**kwargs)
-    print("AAAAAAAAAAAAAAAAAA")
+    print("AAAAAAAAAAAAAAAAAA init_prems")
     db_label = config["database"].split("@")[0] + "@" if "@" in config["database"] else ""
 
     email, notebook_id = (config.get(v) for v in ["email", "notebook_id"])
