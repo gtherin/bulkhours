@@ -48,10 +48,7 @@ def init_env(packages=None, **kwargs):
 
     from .core.logins import init_prems
 
-    print("Loading BULK Helper cOURSe... 1 ")
     info = init_prems(**kwargs)
-
-    print("Loading BULK Helper cOURSe... 2 ")
     start_time = time.time()
 
     if ipp := IPython.get_ipython():
@@ -61,15 +58,13 @@ def init_env(packages=None, **kwargs):
         ipp.register_magics(CCPPlugin(ipp))
         ipp.register_magics(Evaluation(ipp))
 
-    print("Loading BULK Helper cOURSe... 3")
     if packages is not None and "BLK_PACKAGES_STATUS" not in os.environ:
         installer.install_dependencies(packages, start_time)
         os.environ["BLK_PACKAGES_STATUS"] = f"INITIALIZED"
 
     config = core.tools.get_config()
     set_style()
-    versions = open(core.tools.abspath("bulkhours/__version__.py")).readlines()
-    version, _, _ = [versions[i].split('"')[1] for i in range(3)]
+    version = open(core.tools.abspath("bulkhours/__version__.py")).readlines()[0].split('"')[1]
 
     einfo = (
         f", ⚠️\x1b[31m\x1b[41m\x1b[37m in admin/teacher🎓 mode\x1b[0m⚠️" if core.tools.is_admin(config=config) else ""
