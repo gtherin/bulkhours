@@ -30,6 +30,25 @@ class DbDocument:
     data_base_cache = None
     data_base_info = None
 
+    compliant_fields = {
+        "bkloud": ["type", "project_id", "private_key_id", "private_key", "client_email", "client_id", "auth_uri"]
+        + [
+            "token_uri",
+            "auth_provider_x509_cert_url",
+            "client_x509_cert_url",
+            "universe_domain",
+        ],
+        "global": {
+            "admins": "",
+            "chatgpt": False,
+            "language": "fr",
+            "norm20": False,
+            "restricted": False,
+            "virtual_rooms": "room1",
+        },
+        "notebook": {"exercices": "", "evaluation": "", "page": ""},
+    }
+
     @staticmethod
     def write_cache_data() -> None:
         with open(DbDocument.data_base_info, "w", encoding="utf-8") as f:
@@ -38,12 +57,7 @@ class DbDocument:
     @staticmethod
     def init_database(config) -> None:
         if "bkloud@" in (database := config["database"]):
-            cols = ["type", "project_id", "private_key_id", "private_key", "client_email", "client_id", "auth_uri"] + [
-                "token_uri",
-                "auth_provider_x509_cert_url",
-                "client_x509_cert_url",
-                "universe_domain",
-            ]
+            cols = DbDocument.compliant_fields["bkloud"]
             with open(tools.abspath("bulkhours/bunker/pi.pyc"), "w") as f:
                 json.dump({k: v for k, v in config["global"].items() if k in cols}, f, ensure_ascii=False, indent=4)
 
@@ -219,3 +233,14 @@ def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, *
 
 def get_solution_from_corrector(question, corrector=REF_USER, cinfo=None):
     return get_document(question, corrector, cinfo=cinfo).get().to_dict()
+
+
+def save_config(label, config={}):
+    cols = DbDocument.compliant_fields["global"] if label == "global" else DbDocument.compliant_fields["notebook"]
+
+    params = {k: config[label][k] if k in config[label] else v for k, v in cols.items()}
+    if label == "global":
+        for room in params["virtual_rooms"].split(";"):
+            params[room] = config[label][room] if room in config[label] else ""
+
+    get_document("info", label, prefix=False, cinfo=Namespace(**config)).set(params)

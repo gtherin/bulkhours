@@ -53,7 +53,7 @@ def eval_code(code):
         return exec(code)
 
 
-def copy_config(e="", config={}, do_update=False, from_scratch=False, is_namespace=False, **kwargs):
+def get_config(e="", config={}, do_update=False, from_scratch=False, is_namespace=False, **kwargs):
     from argparse import Namespace
 
     """Important to copy the config"""
@@ -78,10 +78,6 @@ def copy_config(e="", config={}, do_update=False, from_scratch=False, is_namespa
         return Namespace(**config)
 
     return config
-
-
-def get_config(*kargs, **kwargs):
-    return copy_config(*kargs, **kwargs)
 
 
 def get_value(key, e=""):

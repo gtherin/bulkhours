@@ -1,22 +1,10 @@
-import IPython
+from . import firebase
 
 
-def create_new_global_params(collection, config):
-    if not (doc := collection.document("global").get()):
-        dparameters = {
-            "admins": "",
-            "chatgpt": False,
-            "norm20": False,
-            "restricted": False,
-            "language": "fr",
-            "virtual_rooms": "room1",
-        }
-        gparameters = {k: config["global"][k] if k in config["global"] else v for k, v in dparameters.items()}
-        gparameters.update({vroom: "" for vroom in gparameters["virtual_rooms"].split(";")})
-        collection.document("global").set(gparameters)
-        config["global"].update(gparameters)
-    else:
-        config["global"].update(doc.to_dict())
+def init_global_params(collection, config):
+    if not collection.document("global").get().to_dict():
+        firebase.save_config("global", config)
+    config["global"].update(collection.document("global").get().to_dict())
 
     if "notebook_id" not in config:
         config["notebook_id"] = "nob"
@@ -27,18 +15,14 @@ def create_new_global_params(collection, config):
     return config
 
 
-def create_new_nb_params(collection, config):
-    notebook_id = config.get("notebook_id")
+def init_nb_params(collection, config):
+    notebook_id = config.get("notebook_id", config)
     if notebook_id not in config:
         config[notebook_id] = {}
 
-    if not (doc := collection.document(notebook_id).get()):
-        dparameters = {"exercices": "", "evaluation": "", "page": ""}
-        gparameters = {k: config[notebook_id][k] if k in config[notebook_id] else v for k, v in dparameters.items()}
-        collection.document(notebook_id).set(gparameters)
-        config[notebook_id].update(gparameters)
-    else:
-        config[notebook_id].update(doc.to_dict())
+    if not collection.document(notebook_id).get().to_dict():
+        firebase.save_config(notebook_id, config)
+    config[notebook_id].update(collection.document(notebook_id).get().to_dict())
 
     return config
 
@@ -46,7 +30,6 @@ def create_new_nb_params(collection, config):
 def init_database(**kwargs):
     from .installer import get_tokens
     from . import tools
-    from . import firebase
 
     if "from_scratch" not in kwargs:
         kwargs["from_scratch"] = True
@@ -65,8 +48,8 @@ def init_database(**kwargs):
     firebase.DbDocument.init_database(config)
 
     collection = firebase.DbClient().collection(f"{config.get('subject')}_info".replace("/", "_"))
-    config = create_new_global_params(collection, config)
-    config = create_new_nb_params(collection, config)
+    config = init_global_params(collection, config)
+    config = init_nb_params(collection, config)
 
     tools.update_config(config)
 

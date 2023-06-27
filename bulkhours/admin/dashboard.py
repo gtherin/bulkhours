@@ -4,11 +4,11 @@ import json
 import ipywidgets
 from argparse import Namespace
 
-from .. import core as bulkhours_premium
+from .. import core
 from . import tools
 
 
-class WidgetDashboard(bulkhours_premium.WidgetTextArea):
+class WidgetDashboard(core.WidgetTextArea):
     widget_id = "dashboard"
 
     def __init__(self, config, abuttons):
@@ -32,7 +32,7 @@ class WidgetDashboard(bulkhours_premium.WidgetTextArea):
         )
         self.output = ipywidgets.Output()
 
-        config = bulkhours_premium.tools.get_config()
+        config = core.tools.get_config()
 
         virtual_room, subject, notebook_id = (config.get(v) for v in ["virtual_room", "subject", "notebook_id"])
         language, chatgpt, norm20, restricted, virtual_rooms = (
@@ -69,7 +69,7 @@ class WidgetDashboard(bulkhours_premium.WidgetTextArea):
             if language == "fr"
             else f"Course parameters (nb_id={notebook_id}, virtual classroom={virtual_room})"
         )
-        self.ws["title"] = bulkhours_premium.tools.html(label, size="5", color="green")
+        self.ws["title"] = core.tools.html(label, size="5", color="green")
 
         xwidgets = []  # self.ws["title"]]
 
@@ -81,7 +81,7 @@ class WidgetDashboard(bulkhours_premium.WidgetTextArea):
             xwidgets.append(
                 ipywidgets.Box(
                     [
-                        bulkhours_premium.tools.html(
+                        core.tools.html(
                             "Salle virtuelle active" if language == "fr" else "Active virtual classroom",
                             layout=ipywidgets.Layout(flex="1 1 0%", width="auto"),
                         ),
@@ -98,7 +98,7 @@ class WidgetDashboard(bulkhours_premium.WidgetTextArea):
             xwidgets.append(
                 ipywidgets.Box(
                     [
-                        bulkhours_premium.tools.html(vroom, layout=ipywidgets.Layout(flex="1 1 0%", width="auto")),
+                        core.tools.html(vroom, layout=ipywidgets.Layout(flex="1 1 0%", width="auto")),
                         self.ws[vroom],
                     ],
                     layout=ipywidgets.Layout(display="flex", flex_flow="row", justify_content="space-between"),
@@ -108,7 +108,7 @@ class WidgetDashboard(bulkhours_premium.WidgetTextArea):
         xwidgets.append(
             ipywidgets.Box(
                 [
-                    bulkhours_premium.tools.html("Exercices", layout=ipywidgets.Layout(flex="1 1 0%", width="auto")),
+                    core.tools.html("Exercices", layout=ipywidgets.Layout(flex="1 1 0%", width="auto")),
                     self.ws["exercices"],
                 ],
                 layout=form_item_layout,
@@ -118,9 +118,7 @@ class WidgetDashboard(bulkhours_premium.WidgetTextArea):
             xwidgets.append(
                 ipywidgets.Box(
                     [
-                        bulkhours_premium.tools.html(
-                            "Evaluation", layout=ipywidgets.Layout(flex="1 1 0%", width="auto")
-                        ),
+                        core.tools.html("Evaluation", layout=ipywidgets.Layout(flex="1 1 0%", width="auto")),
                         self.ws["evaluation"],
                     ],
                     layout=form_item_layout,
@@ -129,31 +127,30 @@ class WidgetDashboard(bulkhours_premium.WidgetTextArea):
         xwidgets.append(
             ipywidgets.Box(
                 [
-                    bulkhours_premium.tools.html("Page", layout=ipywidgets.Layout(flex="1 1 0%", width="auto")),
+                    core.tools.html("Page", layout=ipywidgets.Layout(flex="1 1 0%", width="auto")),
                     self.ws["page"],
                 ],
                 layout=form_item_layout,
             )
         )
 
-        with open(tools.get_config_file(subject=subject, cell_id="tokens")) as f:
-            tokens = json.load(f)
+        if 0:
+            with open(tools.get_config_file(subject=subject, cell_id="tokens")) as f:
+                tokens = json.load(f)
 
-            xwidgets.append(
-                ipywidgets.Box(
-                    [
-                        bulkhours_premium.tools.html(
-                            "Students tokens", layout=ipywidgets.Layout(flex="1 1 0%", width="auto")
-                        ),
-                        ipywidgets.Text(
-                            value='tokens = "%s"' % tokens[virtual_room],
-                            layout=ipywidgets.Layout(flex="4 1 0%", width="auto"),
-                            disabled=True,
-                        ),
-                    ],
-                    layout=form_item_layout,
+                xwidgets.append(
+                    ipywidgets.Box(
+                        [
+                            core.tools.html("Students tokens", layout=ipywidgets.Layout(flex="1 1 0%", width="auto")),
+                            ipywidgets.Text(
+                                value='tokens = "%s"' % tokens[virtual_room],
+                                layout=ipywidgets.Layout(flex="4 1 0%", width="auto"),
+                                disabled=True,
+                            ),
+                        ],
+                        layout=form_item_layout,
+                    )
                 )
-            )
 
         xwidgets.append(
             ipywidgets.Box(
@@ -177,12 +174,11 @@ class WidgetDashboard(bulkhours_premium.WidgetTextArea):
         )
 
     def delete_solution_on_click(self, output, update_git=True, update_db=True):
-        cinfo = bulkhours_premium.tools.get_config(is_namespace=True)
-        bulkhours_premium.firebase.delete_documents(cinfo, self.ws["exercices"].value, verbose=True)
+        cinfo = core.tools.get_config(is_namespace=True)
+        core.firebase.delete_documents(cinfo, self.ws["exercices"].value, verbose=True)
 
     def submit_on_click(self, output, update_git=True, update_db=True):
-        config = bulkhours_premium.tools.get_config()
-        cinfo = bulkhours_premium.tools.get_config(is_namespace=True)
+        config = core.tools.get_config()
         notebook_id = config["notebook_id"]
 
         if config["virtual_room"] != self.ws["virtual_room"].value:
@@ -205,14 +201,12 @@ class WidgetDashboard(bulkhours_premium.WidgetTextArea):
         )
 
         if update_db:
-            bulkhours_premium.firebase.get_document("info", "global", prefix=False, cinfo=cinfo).set(config["global"])
-            bulkhours_premium.firebase.get_document("info", notebook_id, prefix=False, cinfo=cinfo).set(
-                config[notebook_id]
-            )
+            core.firebase.save_config("global", config)
+            core.firebase.save_config(notebook_id, config)
 
         with open(tools.get_config_file(subject=config["subject"], cell_id="global"), "w", encoding="utf-8") as f:
             json.dump(config, f, ensure_ascii=False, indent=4)
-        bulkhours_premium.tools.update_config(config)
+        core.tools.update_config(config)
 
         cmd = (
             "Mise à jour des informations du dashboard"
@@ -234,7 +228,7 @@ def dashboard(update_git=True, **kwargs):
     :return: a note between the minimal note and maximal note
     """
 
-    config = bulkhours_premium.tools.get_config(**kwargs)
+    config = core.tools.get_config(**kwargs)
 
     virtual_room, notebook_id = (config.get(v) for v in ["virtual_room", "notebook_id"])
 
@@ -246,7 +240,7 @@ def dashboard(update_git=True, **kwargs):
     language = config["global"]["language"]
 
     abuttons = {
-        "delete_solution": bulkhours_premium.buttons.SwitchButton(
+        "delete_solution": core.buttons.SwitchButton(
             "delete_solution",
             width="200px",
             fr=f"Effacer les réponses ({virtual_room})",
@@ -254,7 +248,7 @@ def dashboard(update_git=True, **kwargs):
             language=language,
             sleep_on=2,
         ),
-        "save_changes": bulkhours_premium.buttons.SwitchButton(
+        "save_changes": core.buttons.SwitchButton(
             "save_changes",
             width="200px",
             fr=f"Sauver les changements",
@@ -271,14 +265,14 @@ def dashboard(update_git=True, **kwargs):
     # print(config)
 
     def func_delete_solution(b):
-        return bulkhours_premium.buttons.update_button(
+        return core.buttons.update_button(
             b, bwidgeta.cinfo.abuttons["delete_solution"], output, bwidgeta, "delete_solution_on_click"
         )
 
     bwidgeta.cinfo.abuttons["delete_solution"].b.on_click(func_delete_solution)
 
     def func_c(b):
-        return bulkhours_premium.buttons.update_button(
+        return core.buttons.update_button(
             b,
             bwidgeta.cinfo.abuttons["save_changes"],
             output,
