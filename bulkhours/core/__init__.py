@@ -32,8 +32,10 @@ def git_push(argv=sys.argv[1:]):
     parser.add_argument("-r", "--readme", action="store_true")
     args = parser.parse_args(argv)
 
-    # if args.readme:
-    #    build_readme()
+    if args.readme:
+        build_readme()
+    else:
+        print("README was not updated")
 
     root_dir = "/home/guydegnol/projects"
     ovs = open(filename := f"{root_dir}/bulkhours/bulkhours/__version__.py").readline().split('"')[1]
