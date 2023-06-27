@@ -53,3 +53,39 @@ BDGRAY = "\x1b[30m\x1b[1m"
 HSTYLE = BDGRAY
 NC = "\x1b[m"  # No Color
 st = lambda x: f"{HSTYLE}{x}{NC}"
+
+
+def set_plt_style():
+    import matplotlib.pyplot as plt
+
+    background_color = "#F0FDFA11"  # cdcdcd
+    axis_color = "#4F77AA"  # cdcdcd
+
+    def get_color(discipline):
+        colors = {"swimming": "#581845", "cycling": "#C70039", "running": "#FF5733", "axis": "#4F77AA"}
+        return colors[discipline] if discipline in colors else "black"
+
+    plt.rcParams["axes.grid"] = True
+    plt.rcParams["axes.edgecolor"] = axis_color
+    plt.rcParams["axes.labelcolor"] = axis_color
+    plt.rcParams["axes.titlecolor"] = axis_color
+    plt.rcParams["axes.facecolor"] = background_color
+    plt.rcParams["figure.edgecolor"] = axis_color
+    plt.rcParams["figure.facecolor"] = background_color
+    plt.rcParams["grid.color"] = "white"
+    plt.rcParams["legend.facecolor"] = background_color
+    plt.rcParams["legend.edgecolor"] = background_color
+    plt.rcParams["xtick.color"] = axis_color
+    plt.rcParams["ytick.color"] = axis_color
+
+    plt.rcParams["font.size"] = 14
+    plt.rcParams["lines.linewidth"] = 4
+
+    # ax.grid(True, axis="y", color="white")
+
+    from cycler import cycler
+
+    # mpl.rcParams['axes.prop_cycle'] = cycler(color='bgrcmyk')
+    plt.rcParams["axes.prop_cycle"] = cycler(
+        color=[get_color(c) for c in ["swimming", "cycling", "running", "The end"]]
+    )

@@ -94,3 +94,57 @@ def init_prems(**kwargs):
         info += f"{email}{admin}', "
 
     return info
+
+
+class CellContext:
+    """This context cell contains cell executions:
+    - Two are defined by default: 'student' or 'teacher'
+    When using the correction code, the stdout and answer are filled
+    """
+
+    @property
+    def stdout(self):
+        return False
+
+    @property
+    def answer(self):
+        return False
+
+
+import os
+import time
+
+
+def init_env(packages=None, **kwargs):
+    import IPython
+    from . import installer
+    from . import tools
+    from . import colors as c
+
+    info = init_prems(**kwargs)
+    start_time = time.time()
+
+    if ipp := IPython.get_ipython():
+        from .evaluation import Evaluation
+        from ..hpc.compiler import CCPPlugin
+
+        ipp.register_magics(CCPPlugin(ipp))
+        ipp.register_magics(Evaluation(ipp))
+
+    if packages is not None and "BLK_PACKAGES_STATUS" not in os.environ:
+        installer.install_dependencies(packages, start_time)
+        os.environ["BLK_PACKAGES_STATUS"] = f"INITIALIZED"
+
+    config = tools.get_config()
+    c.set_plt_style()
+    version = open(tools.abspath("bulkhours/__version__.py")).readlines()[0].split('"')[1]
+
+    einfo = f", ⚠️\x1b[31m\x1b[41m\x1b[37m in admin/teacher🎓 mode\x1b[0m⚠️" if tools.is_admin(config=config) else ""
+    print(f"Import BULK Helper cOURSe (\x1b[0m\x1b[36mversion='{version}'\x1b[0m🚀'{einfo}):")
+    print(f"{info})")
+    if "bkloud" not in config["database"]:
+        print(
+            f"⚠️\x1b[41m\x1b[37mDatabase is not replicated on the cloud. Persistency is not garantee outside the notebook\x1b[0m⚠️"
+        )
+
+    return CellContext(), CellContext()
