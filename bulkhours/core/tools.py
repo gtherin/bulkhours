@@ -4,12 +4,15 @@ import ipywidgets
 import IPython
 
 
-def get_json_file(e):
-    return os.path.dirname(__file__) + f"/../../../bulkhours/.safe{e}"
+def abspath(filename=""):
+    rdir = os.path.dirname(__file__) + f"/../../../bulkhours"
+    for f in ["", rdir + "/"]:
+        if os.path.exists(f + filename):
+            return os.path.abspath(f + filename)
 
 
 def update_config(data):
-    with open(get_json_file(""), "w", encoding="utf-8") as f:
+    with open(abspath(".safe"), "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
 
@@ -51,16 +54,12 @@ def eval_code(code):
         return exec(code)
 
 
-def get_json_file(e):
-    return os.path.dirname(__file__) + f"/../../.safe{e}"
-
-
 def copy_config(e="", config={}, do_update=False, from_scratch=False, is_namespace=False, **kwargs):
     from argparse import Namespace
 
     """Important to copy the config"""
     if config == {}:
-        if os.path.exists(jsonfile := get_json_file(e)) and not from_scratch:
+        if os.path.exists(jsonfile := abspath(".safe")) and not from_scratch:
             with open(jsonfile) as json_file:
                 config.update(json.load(json_file))
 
@@ -73,7 +72,7 @@ def copy_config(e="", config={}, do_update=False, from_scratch=False, is_namespa
         config["email"] = config["email"].lower()
 
     if do_update:
-        with open(get_json_file(e), "w", encoding="utf-8") as f:
+        with open(abspath(".safe"), "w", encoding="utf-8") as f:
             json.dump(config, f, ensure_ascii=False, indent=4)
 
     if is_namespace:
@@ -90,6 +89,11 @@ def get_value(key, e=""):
     return get_config(e=e).get(key)
 
 
-def is_admin(debug=False):
-    token = get_value("admin_token", e="p")
-    return token is not None
+def is_admin(config=None):
+    if config is None:
+        config = get_config()
+    return (
+        "admin_token" in config["global"]
+        and "admins" in config["global"]
+        and config["email"] in config["global"]["admins"]
+    )

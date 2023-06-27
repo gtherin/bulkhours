@@ -1,0 +1,21 @@
+{
+    "guillaume.therin@gmail.com": {
+        "update_time": "2023-06-27 14:15:09",
+        "user": "guillaume.therin@gmail.com",
+        "atype": "bkcode",
+        "main_execution": "import numpy as np \n\ndef sigmoid(x):\n    \"\"\"\n    Compute the sigmoid of x.\n\n    :param x: a scalar or numpy array of any size\n    :return: s  sigmoid(x)\n    \"\"\"\n    \n    # Fill the dots\n    s = 1/(1 + np.exp(-x))\n    \n    return s\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid([1, 2, 3])=\", sigmoid(x))\n\n#student_evaluation_function()\n",
+        "answer": "import numpy as np \n\ndef sigmoid(x):\n    \"\"\"\n    Compute the sigmoid of x.\n\n    :param x: a scalar or numpy array of any size\n    :return: s  sigmoid(x)\n    \"\"\"\n    \n    # Fill the dots\n    s = 1/(1 + np.exp(-x))\n    \n    return s\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid([1, 2, 3])=\", sigmoid(x))\n\n#student_evaluation_function()\n",
+        "note": 5.0
+    },
+    "solution": {
+        "answer": "import numpy as np \n\ndef sigmoid(x):\n    \"\"\"\n    Compute the sigmoid of x.\n\n    :param x: a scalar or numpy array of any size\n    :return: s  sigmoid(x)\n    \"\"\"\n    \n    # Fill the dots\n    s = 1/(1 + np.exp(-x))\n    \n    return s\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid([1, 2, 3])=\", sigmoid(x))\n\n#student_evaluation_function()\n",
+        "note": 5.0,
+        "atype": "bkcode",
+        "update_time": "2023-06-27 14:14:52",
+        "visible": true,
+        "explanation": "def student_explanation_function(show_code=False):\n    bulkhours.html(\"<h1>Example of a sigmoid function</h1>\")\n    x = np.linspace(-7, 7, 1000)\n    plt.plot(x, sigmoid(x), label=\"Sigmoid function\");\n    plt.legend();\n\n",
+        "main_execution": "import numpy as np \n\ndef sigmoid(x):\n    \"\"\"\n    Compute the sigmoid of x.\n\n    :param x: a scalar or numpy array of any size\n    :return: s  sigmoid(x)\n    \"\"\"\n    \n    # Fill the dots\n    s = 1/(1 + np.exp(-x))\n    \n    return s\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid([1, 2, 3])=\", sigmoid(x))\n\n#student_evaluation_function()\n",
+        "user": "solution",
+        "evaluation": "def student_evaluation_function(show_note=True):\n    return bulkhours.is_equal(data_test=student.sigmoid(student.x), max_score=5.0, policy=\"strict\", error=1e-8, data_ref=teacher.sigmoid(teacher.x), min_score=0)\n\n\n"
+    }
+}

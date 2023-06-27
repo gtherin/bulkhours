@@ -45,17 +45,14 @@ class CellContext:
         return False
 
 
-def init_env(from_scratch=False, database=None, packages=None, **kwargs):
+def init_env(packages=None, **kwargs):
     import IPython
-
-    config = core.tools.get_config(do_update=True, from_scratch=from_scratch, database=database, **kwargs)
 
     from .core.logins import init_prems
 
-    info_core = init_prems()
+    info = init_prems(**kwargs)
 
     start_time = time.time()
-    stime = datetime.datetime.now(tz=zoneinfo.ZoneInfo("Europe/Paris"))
 
     if ipp := IPython.get_ipython():
         from .core.evaluation import Evaluation
@@ -67,20 +64,18 @@ def init_env(from_scratch=False, database=None, packages=None, **kwargs):
     if packages is not None and "BLK_STATUS" not in os.environ:
         installer.install_dependencies(packages, start_time)
 
+    config = core.tools.get_config()
     set_style()
     vfile = os.path.abspath(os.path.dirname(__file__)) + "/__version__.py"
     versions = open(vfile).readlines()
     version, _, _ = [versions[i].split('"')[1] for i in range(3)]
 
-    ts = ", time='%s'" % stime.strftime("%H:%M:%S")
-    print(f"Import BULK Helper cOURSe (\x1b[0m \x1b[36mversion='{version}{ts}'\x1b[0m🚀'):")
-
-    info = info_core
-    if core.tools.is_admin(config):
-        info = f"\x1b[31m{info}⚠️\x1b[41m\x1b[37mfor teachers only🎓\x1b[0m"
-
+    einfo = (
+        f", ⚠️\x1b[31m\x1b[41m\x1b[37m in admins/teachers🎓 mode\x1b[0m⚠️" if core.tools.is_admin(config=config) else ""
+    )
+    print(f"Import BULK Helper cOURSe (\x1b[0m\x1b[36mversion='{version}'\x1b[0m🚀'{einfo}):")
     print(f"{info})")
-    if "bkloud" not in database:
+    if "bkloud" not in config["database"]:
         print(
             f"⚠️\x1b[41m\x1b[37mDatabase is not replicated on the cloud. Persistency is not garantee outside the notebook\x1b[0m⚠️"
         )

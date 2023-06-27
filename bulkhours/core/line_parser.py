@@ -26,10 +26,6 @@ def format_opts(argv):
     return [format_opt(a) for a in nargv]
 
 
-def is_admin(config):
-    return "admin_token" in config and "admins" in config["global"] and config["email"] in config["global"]["admins"]
-
-
 def get_available_widgets():
     jsonfile = os.path.dirname(__file__) + "/widgets.json"
     with open(jsonfile) as json_file:
@@ -134,6 +130,7 @@ class LineParser:
                 "virtual_room",
                 "user",
             ]
+            if hasattr(self, v)
         ]
         return ", ".join(info)
 
@@ -143,9 +140,7 @@ class LineParser:
 
         self.line, cell = line, cell_source
         config = tools.get_config()
-        self.is_admin = is_admin(config)
-
-        print(self.is_admin)
+        self.is_admin = tools.is_admin(config=config)
 
         if line != "":
             parser = get_argparser(self.is_admin)
@@ -166,13 +161,14 @@ class LineParser:
                 available_widgets[self.type] if self.type in available_widgets else available_widgets["default"]
             )
 
-        for p in ["language", "restricted", "chatgpt", "norm20"]:
-            setattr(self, p, config["global"][p])
+        for p in ["language", "restricted", "chatgpt", "norm20", "subject"]:
+            if p in config["global"]:
+                setattr(self, p, config["global"][p])
 
         if not hasattr(self, "user") or self.user is None:
             self.user = config["email"]
 
-        for p in ["notebook_id", "subject", "virtual_room"]:
+        for p in ["notebook_id", "virtual_room"]:
             setattr(self, p, config[p])
 
         if not hasattr(self, "cell_id"):
