@@ -1,5 +1,3 @@
-from . import tools  # noqa
-
 from .statsdata import *  # noqa
 from .trading import *  # noqa
 from .france import *  # noqa
@@ -12,9 +10,13 @@ from .datasets import datasets, ddatasets, datacategories  # noqa
 
 
 def get_data(label, **kwargs):
+    from .tools import DataParser  # noqa
+
     data_info = {**ddatasets[label], **kwargs} if label in ddatasets else {"raw_data": label, **kwargs}
-    return tools.DataParser(**data_info).get_data()
+    return DataParser(**data_info).get_data()
 
 
 def get_image(label, ax=None):
-    return tools.DataParser(label=label).get_image(ax=ax)
+    from .tools import DataParser  # noqa
+
+    return DataParser(label=label).get_image(ax=ax)

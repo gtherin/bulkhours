@@ -27,15 +27,7 @@ def format_opts(argv):
 
 
 def is_admin(config):
-    try:
-        import bulkhours_admin
-
-        return (
-            "admin_token" in config and "admins" in config["global"] and config["email"] in config["global"]["admins"]
-        )
-
-    except ImportError:
-        return False
+    return "admin_token" in config and "admins" in config["global"] and config["email"] in config["global"]["admins"]
 
 
 def get_available_widgets():

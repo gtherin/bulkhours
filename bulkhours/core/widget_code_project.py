@@ -10,8 +10,8 @@ from . import widget_base
 
 def get_data_from_file(cinfo, label, on=None, subdir="data", **kwargs):
     filename = None
-    for r in ["bulkhours_admin", "bulkhours"]:
-        if cinfo.user != "solution" and r == "bulkhours_admin":
+    for r in ["bulkhours"]:
+        if cinfo.user != "solution":
             continue
         for directory in [r, ".", "..", "../../" + r, "../../../" + r, os.environ["HOME"] + "/projects/" + r]:
             if filename is None and len((files := glob.glob(f"{directory}/{subdir}/{label}*"))):

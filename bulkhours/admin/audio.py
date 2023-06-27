@@ -2,11 +2,8 @@ from base64 import b64decode
 import scipy as sc
 import io
 import difflib
-import pandas as pd
-import os
 
-import bulkhours_premium
-from .tools import styles
+from .. import core
 from .summary import summary
 from . import answers
 
@@ -142,7 +139,7 @@ def get_audio(exo, output, update_git=False):
     https://air.ghost.io/recording-to-an-audio-file-using-html5-and-js/
     https://stackoverflow.com/a/49019356
     """
-    cinfo = bulkhours_premium.tools.get_config(is_namespace=True)
+    cinfo = core.tools.get_config(is_namespace=True)
 
     import IPython
     import ffmpeg

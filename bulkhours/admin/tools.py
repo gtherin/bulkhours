@@ -3,11 +3,13 @@ import subprocess
 import datetime
 import pandas as pd
 import matplotlib
-import bulkhours_premium
+from .. import core
 
 
 def get_exo_file(subject=None, virtual_room=None, cell_id="*_*", ext="json"):
-    filename = os.path.abspath(os.path.dirname(__file__) + f"/../data/{subject}/{virtual_room}/{cell_id}.{ext}")
+    filename = os.path.abspath(
+        os.path.dirname(__file__) + f"/../../data/cache/{subject}/{virtual_room}/{cell_id}.{ext}"
+    )
     if not os.path.exists(directory := os.path.dirname(filename)):
         os.system(f"mkdir -p {directory}")
 
@@ -15,7 +17,7 @@ def get_exo_file(subject=None, virtual_room=None, cell_id="*_*", ext="json"):
 
 
 def get_config_file(subject=None, cell_id="*_*", ext="json"):
-    filename = os.path.abspath(os.path.dirname(__file__) + f"/../data/{subject}/{cell_id}.{ext}")
+    filename = os.path.abspath(os.path.dirname(__file__) + f"/../../data/cache/{subject}/{cell_id}.{ext}")
     if not os.path.exists(directory := os.path.dirname(filename)):
         os.system(f"mkdir -p {directory}")
 
@@ -23,7 +25,7 @@ def get_config_file(subject=None, cell_id="*_*", ext="json"):
 
 
 def get_users_list(no_admin=True):
-    info = bulkhours_premium.tools.get_config()
+    info = core.tools.get_config()
     virtual_room = info["virtual_room"]
 
     users = [(k, 0) for k in info["global"][virtual_room].replace(",", ";").split(";")]
@@ -43,7 +45,7 @@ def get_users_list(no_admin=True):
 
 def update_github(update_git, files=".", msg="Add cache files", verbose=True):
     uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    config = bulkhours_premium.tools.get_config()
+    config = core.tools.get_config()
 
     if update_git and verbose:
         cmd = (

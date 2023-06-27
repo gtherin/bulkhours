@@ -1,21 +1,26 @@
 import os
 import json
 import ipywidgets
-from argparse import Namespace
-
-DEFAULT_TOKEN = "NO_TOKEN"
+import IPython
 
 
-def html(label, size="4", color="black"):
+def get_json_file(e):
+    return os.path.dirname(__file__) + f"/../../../bulkhours/.safe{e}"
+
+
+def update_config(data):
+    with open(get_json_file(""), "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+
+
+def html(label, size="4", color="black", layout=None):
     return ipywidgets.HTML(
         value=f"<b><font face='FiraCode Nerd Font' size={size} color='{color}'>{label}<font></b>",
-        layout=ipywidgets.Layout(height="auto", width="auto"),
+        layout=ipywidgets.Layout(height="auto", width="auto") if layout is None else layout,
     )
 
 
 def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="black", icon="📚"):
-    import IPython
-
     print("")
     if header:
         IPython.display.display(html(header + "" + icon, size="4", color=hc))
@@ -30,8 +35,20 @@ def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="blac
         if "nvcc" in codebody:
             language = "cuda"
         else:
-            language = None
+            language = "python"
         IPython.display.display(IPython.display.Code(codebody, language=language))
+
+
+def eval_code(code):
+    try:
+        from IPython import get_ipython
+
+        return get_ipython().run_cell(code)
+
+    except ImportError:
+        return exec(code)
+    except AttributeError:
+        return exec(code)
 
 
 def get_json_file(e):
@@ -39,11 +56,10 @@ def get_json_file(e):
 
 
 def copy_config(e="", config={}, do_update=False, from_scratch=False, is_namespace=False, **kwargs):
+    from argparse import Namespace
+
     """Important to copy the config"""
     if config == {}:
-        if e == "":
-            config.update(get_config(e="p"))
-
         if os.path.exists(jsonfile := get_json_file(e)) and not from_scratch:
             with open(jsonfile) as json_file:
                 config.update(json.load(json_file))
@@ -74,40 +90,6 @@ def get_value(key, e=""):
     return get_config(e=e).get(key)
 
 
-def is_premium(debug=False):
-    token = get_value("premium_token", e="p")
-
-    if token is None:
-        return False
-
-    if debug:
-        print("import bulkhours_premium")
-        import bulkhours_premium
-
-    try:
-        import bulkhours_premium
-
-        bulkhours_premium.tools.copy_config = copy_config
-        bulkhours_premium.tools.get_config = get_config
-        bulkhours_premium.tools.get_value = get_value
-
-        return True
-    except ImportError:
-        return False
-
-
 def is_admin(debug=False):
     token = get_value("admin_token", e="p")
-    if token is None:
-        return False
-
-    if debug:
-        print("import bulkhours_admin")
-        import bulkhours_admin
-
-    try:
-        import bulkhours_admin
-
-        return True
-    except ImportError:
-        return False
+    return token is not None

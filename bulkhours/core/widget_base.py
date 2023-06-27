@@ -60,21 +60,21 @@ class WidgetBase:
             print("No correction available")
             return
 
-        import bulkhours_admin
+        from .. import admin
 
-        users = bulkhours_admin.tools.get_users_list(no_admin=False)
+        users = admin.tools.get_users_list(no_admin=False)
         users[self.cinfo.cell_id + ".n"] = np.nan
         users = users.set_index("mail")[["nom", "prenom", self.cinfo.cell_id + ".n"]]
 
-        answers = bulkhours_admin.answers.get_answers(self.cinfo.cell_id, use_cache_if_possible=False, verbose=False)
+        answers = admin.answers.get_answers(self.cinfo.cell_id, use_cache_if_possible=False, verbose=False)
         for user, answer in answers.items():
             student_data = CellParser.crunch_data(self.cinfo, user=user, data=answer)
             score = equals.evaluate_student(student_data, teacher_data, raw=True)
 
             users.loc[user, self.cinfo.cell_id + ".n"] = score
-            bulkhours_admin.answers.update_note(self.cinfo.cell_id, user, score)
+            admin.answers.update_note(self.cinfo.cell_id, user, score)
 
-        IPython.display.display(bulkhours_admin.tools.styles(users))
+        IPython.display.display(admin.tools.styles(users))
 
     def submit(self, output, user=None):
         from . import firebase

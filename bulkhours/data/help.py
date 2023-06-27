@@ -44,14 +44,12 @@ def build_readme(load_data=True):
         s.add_line(f"cp -r bulkhours/ecox/README.md {tdir}/Econometrics.md")
         s.add_line(f"cp -r bulkhours/hpc/README.md {tdir}/HPC.md")
         s.add_line(f"/opt/miniconda/envs/bulkhours_py3.10/bin/pdoc bulkhours/core/tools.py --force -o {tdir}/docs")
-        s.add_line(
-            f"/opt/miniconda/envs/bulkhours_py3.10/bin/pdoc ../bulkhours_premium/bulkhours_premium/equals.py -o {tdir}/docs"
-        )
+        s.add_line(f"/opt/miniconda/envs/bulkhours_py3.10/bin/pdoc bulkhours/core/equals.py -o {tdir}/docs")
         s.execute(verbose=True)
 
     import pdoc
 
-    modules = ["bulkhours_premium.equals"]
+    modules = ["bulkhours.core.equals"]
     context = pdoc.Context()  # docformat="numpy")  # markdown restructuredtext google numpy
 
     modules = [pdoc.Module(mod, context=context) for mod in modules]

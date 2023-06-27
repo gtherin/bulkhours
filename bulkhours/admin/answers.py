@@ -2,13 +2,13 @@ import os
 import json
 
 
-from .. import core as bulkhours_premium
+from .. import core
 from . import tools
 
 
 def get_answers(cell_id, refresh=False, use_cache_if_possible=True, update_git=False, verbose=True):
-    config = bulkhours_premium.tools.get_config()
-    cinfo = bulkhours_premium.tools.get_config(is_namespace=True)
+    config = core.tools.get_config()
+    cinfo = core.tools.get_config(is_namespace=True)
     virtual_room, subject, notebook_id = (config.get(v) for v in ["virtual_room", "subject", "notebook_id"])
 
     students_list = tools.get_users_list(no_admin=False)
@@ -27,7 +27,7 @@ def get_answers(cell_id, refresh=False, use_cache_if_possible=True, update_git=F
     if (use_cache_if_possible and cdata) and not refresh:
         return cdata
 
-    docs = bulkhours_premium.firebase.get_collection(icell_id, cinfo=cinfo).stream()
+    docs = core.firebase.get_collection(icell_id, cinfo=cinfo).stream()
 
     data = {}
     for answer in docs:
@@ -59,8 +59,8 @@ def get_answers(cell_id, refresh=False, use_cache_if_possible=True, update_git=F
 def update_note(cell_id, user, note, verbose=True):
     import datetime
 
-    config = bulkhours.tools.get_config()
-    cinfo = bulkhours_premium.tools.get_config(is_namespace=True)
+    config = core.tools.get_config()
+    cinfo = core.tools.get_config(is_namespace=True)
     virtual_room, subject, notebook_id = (config.get(v) for v in ["virtual_room", "subject", "notebook_id"])
     language = config["global"].get("language")
 
@@ -98,8 +98,6 @@ def update_note(cell_id, user, note, verbose=True):
         json.dump(data, f, ensure_ascii=False, indent=4)
 
     if do_create_data:
-        return bulkhours_premium.firebase.get_document(cell_id, user, cinfo=cinfo).set(
-            {"note": note, "update_time": uptime}
-        )
+        return core.firebase.get_document(cell_id, user, cinfo=cinfo).set({"note": note, "update_time": uptime})
     else:
-        return bulkhours_premium.firebase.get_document(cell_id, user, cinfo=cinfo).update({"note": note})
+        return core.firebase.get_document(cell_id, user, cinfo=cinfo).update({"note": note})
