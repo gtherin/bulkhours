@@ -61,17 +61,17 @@ def init_env(packages=None, **kwargs):
         ipp.register_magics(CCPPlugin(ipp))
         ipp.register_magics(Evaluation(ipp))
 
-    if packages is not None and "BLK_STATUS" not in os.environ:
+    if packages is not None and "BLK_PACKAGES_STATUS" not in os.environ:
         installer.install_dependencies(packages, start_time)
+        os.environ["BLK_PACKAGES_STATUS"] = f"INITIALIZED"
 
     config = core.tools.get_config()
     set_style()
-    vfile = os.path.abspath(os.path.dirname(__file__)) + "/__version__.py"
-    versions = open(vfile).readlines()
+    versions = open(core.tools.abspath("bulkhours/__version__.py")).readlines()
     version, _, _ = [versions[i].split('"')[1] for i in range(3)]
 
     einfo = (
-        f", ⚠️\x1b[31m\x1b[41m\x1b[37m in admins/teachers🎓 mode\x1b[0m⚠️" if core.tools.is_admin(config=config) else ""
+        f", ⚠️\x1b[31m\x1b[41m\x1b[37m in admin/teacher🎓 mode\x1b[0m⚠️" if core.tools.is_admin(config=config) else ""
     )
     print(f"Import BULK Helper cOURSe (\x1b[0m\x1b[36mversion='{version}'\x1b[0m🚀'{einfo}):")
     print(f"{info})")
@@ -80,7 +80,6 @@ def init_env(packages=None, **kwargs):
             f"⚠️\x1b[41m\x1b[37mDatabase is not replicated on the cloud. Persistency is not garantee outside the notebook\x1b[0m⚠️"
         )
 
-    os.environ["BLK_STATUS"] = f"INITIALIZED"
     return CellContext(), CellContext()
 
 
