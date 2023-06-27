@@ -53,7 +53,7 @@ def eval_code(code):
         return exec(code)
 
 
-def get_config(e="", config={}, do_update=False, from_scratch=False, is_namespace=False, **kwargs):
+def get_config(config={}, do_update=False, from_scratch=False, is_namespace=False, **kwargs):
     from argparse import Namespace
 
     """Important to copy the config"""
@@ -80,8 +80,11 @@ def get_config(e="", config={}, do_update=False, from_scratch=False, is_namespac
     return config
 
 
-def get_value(key, e=""):
-    return get_config(e=e).get(key)
+def get_value(key):
+    config = get_config()
+    if key in config:
+        return config.get(key)
+    return config["global"].get(key)
 
 
 def is_admin(config=None):
