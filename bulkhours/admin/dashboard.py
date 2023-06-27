@@ -4,7 +4,7 @@ import json
 import ipywidgets
 from argparse import Namespace
 
-import bulkhours_premium
+from .. import core as bulkhours_premium
 from . import tools
 
 

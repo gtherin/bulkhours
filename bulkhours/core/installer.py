@@ -23,21 +23,19 @@ def unobscure(obscured: bytes) -> bytes:
 
 
 def get_tokens(token):
-    if "::" not in token:  # Invalid token
-        return {}
-
-    _, nb_key = token.split("::")
-
+    nb_helper, nb_key = token.split("::")
     with open(f"{bulk_dir}/bulkhours/data/radian2.png") as f:
         TOKENS = f.readline()
 
     for db_key in TOKENS.split("::"):
-        try:
-            tokens = unobscure(nb_key.encode("utf-8") + db_key.encode("utf-8"))
+        ali, baba = db_key.split("__RR__")
+        if nb_helper == ali:
+            tokens = nb_key.encode("utf-8") + baba.encode("utf-8")
+            tokens = unobscure(tokens)
             tokens = eval(tokens)
+
             return {s[0]: s[1] for s in tokens}
-        except:
-            pass
+    print(f"{nb_helper} not found")
     return {}
 
 
@@ -104,7 +102,7 @@ def install_pkg(pkg, is_colab, tokens, env_id, start_time, debug):
         )
 
 
-def install_dependencies(packages, start_time, debug):
+def install_dependencies(packages, start_time):
     if packages in [None, "None", ""]:
         return
 
@@ -169,7 +167,7 @@ def main(argv=sys.argv[1:]):
     # Install main package
     install_pkg("admin", is_colab, args.tokens, env_id, start_time, args.debug)
     install_pkg("premium", is_colab, args.tokens, env_id, start_time, args.debug)
-    install_dependencies(args.packages, start_time, args.debug)
+    install_dependencies(args.packages, start_time)
 
     # Dump env variables
     with open(f"{bulk_dir}/bulkhours/.safep", "w", encoding="utf-8") as f:

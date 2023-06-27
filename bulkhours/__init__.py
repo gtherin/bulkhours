@@ -2,24 +2,22 @@ import os
 import datetime
 import zoneinfo
 
-
-from .core.tools import is_premium, is_admin, get_config, get_value  # noqa
+from .core.tools import get_config, get_value  # noqa
 from .core.timeit import timeit  # noqa
 from .core import geo  # noqa
 from .core.geo import geo_plot_country  # noqa
-from .core import runrealcmd  # noqa
-from .core.premium_mock import PremiumMove as premium  # noqa
+from .core import tools  # noqa
 
-from . import data  # noqa
-from .data import get_data, get_image  # noqa
+# from . import data  # noqa
+# from .data import get_data, get_image  # noqa
 
-ask_chat_gpt = premium.ask_chat_gpt  # noqa
-ask_dall_e = premium.ask_dall_e  # noqa
-is_equal = premium.is_equal  # noqa
+from .core.gpt import ask_chat_gpt, ask_dall_e  # noqa
+from .core.equals import is_equal  # noqa
 
 from .core import colors as c  # noqa
-from .core.admin_mock import AdminMove as admin  # noqa
+
 from .core import installer  # noqa
+from . import admin  # noqa
 from . import rl  # noqa
 from . import hpc  # noqa
 from . import ecox  # noqa
@@ -47,55 +45,45 @@ class CellContext:
         return False
 
 
-def init_env(debug=False, from_scratch=False, **kwargs):
+def init_env(from_scratch=False, database=None, packages=None, **kwargs):
     import IPython
 
-    info = f"Import BULK Helper cOURSe ("
+    config = core.tools.get_config(do_update=True, from_scratch=from_scratch, database=database, **kwargs)
 
-    config = get_config(do_update=True, from_scratch=from_scratch, **kwargs)
+    from .core.logins import init_prems
 
-    if is_premium(debug=debug):
-        from bulkhours_premium import init_prems
+    info_core = init_prems()
 
-        info = init_prems(info)
-
+    start_time = time.time()
     stime = datetime.datetime.now(tz=zoneinfo.ZoneInfo("Europe/Paris"))
 
     if ipp := IPython.get_ipython():
+        from .core.evaluation import Evaluation
         from .hpc.compiler import CCPPlugin
 
         ipp.register_magics(CCPPlugin(ipp))
+        ipp.register_magics(Evaluation(ipp))
 
-        if is_premium():
-            from bulkhours_premium import Evaluation
-
-            ipp.register_magics(Evaluation(ipp))
-        else:
-            from .core.premium_mock import MockEvaluation
-
-            ipp.register_magics(MockEvaluation(ipp))
-
-    if "packages" in config:
-        installer.install_dependencies(config["packages"])
+    if packages is not None and "BLK_STATUS" not in os.environ:
+        installer.install_dependencies(packages, start_time)
 
     set_style()
     vfile = os.path.abspath(os.path.dirname(__file__)) + "/__version__.py"
     versions = open(vfile).readlines()
-    version, aversion, mversion = [versions[i].split('"')[1] for i in range(3)]
+    version, _, _ = [versions[i].split('"')[1] for i in range(3)]
 
-    info += f"\x1b[0mversion='{version}'"
+    ts = ", time='%s'" % stime.strftime("%H:%M:%S")
+    print(f"Import BULK Helper cOURSe (\x1b[0m \x1b[36mversion='{version}{ts}'\x1b[0m🚀'):")
 
-    info += ", time='%s'" % stime.strftime("%H:%M:%S")
-    if is_admin(debug=debug):
-        info = f"\x1b[31m{info},\x1b[0m \x1b[36mpremium='{mversion}'\x1b[0m🚀, \x1b[31madmin='{aversion}'\x1b[0m⚠️\x1b[41m\x1b[37mfor teachers only🎓\x1b[0m)"
-    elif is_premium():
-        info = f"{info}, \x1b[36mpversion='{mversion}'\x1b[0m🚀)"
-    else:
-        info = f"{info})\x1b[36m. To activate the 🚀 mode, please contact bulkhours@guydegnol.net\x1b[0m"
+    info = info_core
+    if core.tools.is_admin(config):
+        info = f"\x1b[31m{info}⚠️\x1b[41m\x1b[37mfor teachers only🎓\x1b[0m"
 
-    print(f"{info}")
-    if "data_cache" in config:
-        print(f"⚠️\x1b[41m\x1b[37mDatabase is local. Persistency is not garantee outside the notebook\x1b[0m⚠️")
+    print(f"{info})")
+    if "bkloud" not in database:
+        print(
+            f"⚠️\x1b[41m\x1b[37mDatabase is not replicated on the cloud. Persistency is not garantee outside the notebook\x1b[0m⚠️"
+        )
 
     os.environ["BLK_STATUS"] = f"INITIALIZED"
     return CellContext(), CellContext()

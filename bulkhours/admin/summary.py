@@ -1,5 +1,5 @@
 import json
-import bulkhours_premium
+from .. import core
 from .exercice import Exercices, Exercice
 from . import tools
 
@@ -26,7 +26,7 @@ def summary(
     :return: a note between the minimal note and maximal note
     """
 
-    config = bulkhours_premium.tools.get_config(**kwargs)
+    config = core.tools.get_config(**kwargs)
 
     if "help" in config and config["help"]:
         st = lambda x: f"\x1b[30m\x1b[1m{x}\x1b[m"

@@ -3,7 +3,7 @@ import IPython
 from IPython.core.magic import Magics, magics_class, line_cell_magic, needs_local_scope
 import ipywidgets
 
-import bulkhours_premium
+from .. import core as bulkhours_premium
 from . import answers
 from . import tools
 
