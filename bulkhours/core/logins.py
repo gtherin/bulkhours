@@ -1,4 +1,8 @@
+import os
+import time
+
 from . import firebase
+from . import contexts
 
 
 def init_global_params(collection, config):
@@ -96,25 +100,6 @@ def init_prems(**kwargs):
     return info
 
 
-class CellContext:
-    """This context cell contains cell executions:
-    - Two are defined by default: 'student' or 'teacher'
-    When using the correction code, the stdout and answer are filled
-    """
-
-    @property
-    def stdout(self):
-        return False
-
-    @property
-    def answer(self):
-        return False
-
-
-import os
-import time
-
-
 def init_env(packages=None, **kwargs):
     import IPython
     from . import installer
@@ -147,4 +132,4 @@ def init_env(packages=None, **kwargs):
             f"⚠️\x1b[41m\x1b[37mDatabase is not replicated on the cloud. Persistency is not garantee outside the notebook\x1b[0m⚠️"
         )
 
-    return CellContext(), CellContext()
+    return contexts.CellContext(), contexts.CellContext()
