@@ -1,105 +1,86 @@
-import os
-import json
+import IPython
 
 
-def get_cred(k="pi.pyc", d=None, config=None):
-    with open(d + k, "w") as f:
-        json.dump(
-            {
-                k: v
-                for k, v in config.items()
-                if k
-                in [
-                    "type",
-                    "project_id",
-                    "private_key_id",
-                    "private_key",
-                    "client_email",
-                    "client_id",
-                    "auth_uri",
-                    "token_uri",
-                    "auth_provider_x509_cert_url",
-                    "client_x509_cert_url",
-                    "universe_domain",
-                ]
-            },
-            f,
-            ensure_ascii=False,
-            indent=4,
-        )
-
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = d + k
-
-
-def create_new_global_params(collection, vrooms=[], admins=""):
-    collection.document("global").set(
-        gparameters := {
-            **{vroom: "" for vroom in vrooms},
-            **{
-                "admins": admins,
-                "chatgpt": False,
-                "norm20": False,
-                "restricted": False,
-                "language": "fr",
-                "virtual_rooms": ";".join(vrooms),
-            },
+def create_new_global_params(collection, config):
+    if not (doc := collection.document("global").get()):
+        dparameters = {
+            "admins": "",
+            "chatgpt": False,
+            "norm20": False,
+            "restricted": False,
+            "language": "fr",
+            "virtual_rooms": "room1",
         }
-    )
-    return gparameters
+        gparameters = {k: config["global"][k] if k in config["global"] else v for k, v in dparameters.items()}
+        gparameters.update({vroom: "" for vroom in gparameters["virtual_rooms"].split(";")})
+        collection.document("global").set(gparameters)
+        config["global"].update(gparameters)
+    else:
+        config["global"].update(doc.to_dict())
+
+    if "notebook_id" not in config:
+        config["notebook_id"] = "nob"
+
+    if "virtual_room" not in config:
+        config["virtual_room"] = config["global"]["virtual_rooms"].split(";")[0]
+
+    return config
 
 
-def create_new_nb_params(collection, notebook_id):
-    collection.document(notebook_id).set(nparameters := {"exercices": "", "evaluation": "", "page": ""})
-    return nparameters
+def create_new_nb_params(collection, config):
+    notebook_id = config.get("notebook_id")
+    if notebook_id not in config:
+        config[notebook_id] = {}
+
+    if not (doc := collection.document(notebook_id).get()):
+        dparameters = {"exercices": "", "evaluation": "", "page": ""}
+        gparameters = {k: config[notebook_id][k] if k in config[notebook_id] else v for k, v in dparameters.items()}
+        collection.document(notebook_id).set(gparameters)
+        config[notebook_id].update(gparameters)
+    else:
+        config[notebook_id].update(doc.to_dict())
+
+    return config
 
 
-def init_database(config):
+def init_database(**kwargs):
     from .installer import get_tokens
+    from . import tools
     from . import firebase
+
+    if "from_scratch" not in kwargs:
+        kwargs["from_scratch"] = True
+    config = tools.get_config(**kwargs)
 
     if "database" not in config:
         config["database"] = "bkache@free1"
 
+    if "global" not in config:
+        config["global"] = {}
+
     if "bkache@" in config["database"] or "bkloud@" in config["database"]:
-        config = {**config, **get_tokens(config["database"])}
+        config["global"].update(get_tokens(config["database"]))
+    config["subject"] = config["global"]["subject"]
 
-    print(config)
+    firebase.DbDocument.init_database(config)
 
-    if "data_cache" in config:
-        firebase.DbDocument.set_cache_data(config["data_cache"])
-    else:
-        directory = os.path.dirname(__file__) + "/../../../bulkhours/bulkhours/bunker/"
-        get_cred(d=directory, config=config)
-
-
-def init_prems():
-    from . import tools
-    from . import firebase
-
-    config = tools.get_config()
-    init_database(config)
-
-    email, subject, notebook_id = (config.get(v) for v in ["email", "subject", "notebook_id"])
-
-    collection = firebase.DbClient().collection(f"{subject}_info".replace("/", "_"))
-    if subject is not None:
-        col = collection.document("global").get().to_dict()
-        if not col:
-            col = create_new_global_params(collection, subject)
-        config["global"] = col
-
-        if "virtual_room" not in config:
-            config["virtual_room"] = config["global"]["virtual_rooms"].split(";")[0]
-
-    if notebook_id is not None:
-        col = collection.document(notebook_id).get().to_dict()
-        if not col:
-            col = create_new_nb_params(collection, notebook_id)
-        config["notebooks"] = {notebook_id: col}
+    collection = firebase.DbClient().collection(f"{config.get('subject')}_info".replace("/", "_"))
+    config = create_new_global_params(collection, config)
+    config = create_new_nb_params(collection, config)
 
     tools.update_config(config)
 
-    info = f"subject/virtualroom/nb_id/user= '{subject}/{config['virtual_room']}/{notebook_id}/"
+    return config
+
+
+def init_prems(**kwargs):
+    config = init_database(**kwargs)
+    db_label = config["database"].split("@")[0] + "@" if "@" in config["database"] else ""
+
+    email, notebook_id = (config.get(v) for v in ["email", "notebook_id"])
+    subject = config["global"].get("subject")
+
+    info = f"subject/virtualroom/nb_id/user='{db_label}{subject}/{config['virtual_room']}/{notebook_id}/"
 
     if email is None:
         info += f"None ❌\x1b[41m\x1b[37m, email not configurd, no db connection), \x1b[0m"

@@ -3,6 +3,7 @@ import json
 import datetime
 import zoneinfo
 from argparse import Namespace
+from . import tools
 
 REF_USER = "solution"
 
@@ -33,6 +34,25 @@ class DbDocument:
     def write_cache_data() -> None:
         with open(DbDocument.data_base_info, "w", encoding="utf-8") as f:
             json.dump(DbDocument.data_base_cache, f, ensure_ascii=False, indent=4)
+
+    @staticmethod
+    def init_database(config) -> None:
+        if "bkloud@" in (database := config["database"]):
+            cols = ["type", "project_id", "private_key_id", "private_key", "client_email", "client_id", "auth_uri"] + [
+                "token_uri",
+                "auth_provider_x509_cert_url",
+                "client_x509_cert_url",
+                "universe_domain",
+            ]
+            with open(tools.abspath("bulkhours/bunker/pi.pyc"), "w") as f:
+                json.dump({k: v for k, v in config["global"].items() if k in cols}, f, ensure_ascii=False, indent=4)
+
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = tools.abspath("bulkhours/bunker/pi.pyc")
+        else:
+            datafile = config["global"]["data_cache"] if "data_cache" in config["global"] else database
+            datafile = tools.abspath(datafile)
+
+            DbDocument.set_cache_data(datafile)
 
     @staticmethod
     def set_cache_data(database) -> None:
@@ -95,7 +115,6 @@ class DbClient:
     def collection(self, question, prefix=True, cinfo=None):
         question_id = get_question_id(question, prefix=prefix, cinfo=cinfo)
         if DbDocument.data_base_cache is None:
-            print("Should not be here", DbDocument.data_base_cache)
             from google.cloud import firestore
 
             return firestore.Client().collection(question_id)

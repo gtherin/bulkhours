@@ -31,8 +31,9 @@ class CellParser:
             raw_code = [cell_source[e] for e in ["main_execution"] + CellParser.meta_modes if e in cell_source]
             kwargs["cell_source"] = "\n".join(raw_code)
 
+        self.is_cell_source = "cell_source" in kwargs and type(kwargs["cell_source"]) == str
         self.minfo = kwargs
-        if parse_cell:
+        if parse_cell and self.is_cell_source:
             self.get_cell_decomposition()
 
     def store_info(self, key, val, ekey=None, verbose=False):
@@ -115,6 +116,8 @@ class CellParser:
         )
 
     def is_evaluation_visible(self):
+        if self.minfo["cell_source"] is None:
+            return False
         return "visible" not in self.minfo or not self.minfo["visible"]
 
     def is_explanation_available(self):
@@ -197,6 +200,9 @@ class CellParser:
 
         mode = "main_execution"
         self.store_info(mode, "", ekey="code", verbose=False)
+        if cell_source is None:
+            return
+
         for l in cell_source.splitlines():
             l = CellParser.c2python(l)
 
