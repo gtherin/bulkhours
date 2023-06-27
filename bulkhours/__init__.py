@@ -1,6 +1,4 @@
 import os
-import datetime
-import zoneinfo
 
 from .core.tools import get_config, get_value  # noqa
 from .core.timeit import timeit  # noqa
@@ -50,8 +48,10 @@ def init_env(packages=None, **kwargs):
 
     from .core.logins import init_prems
 
+    print("Loading BULK Helper cOURSe... 1 ")
     info = init_prems(**kwargs)
 
+    print("Loading BULK Helper cOURSe... 2 ")
     start_time = time.time()
 
     if ipp := IPython.get_ipython():
@@ -61,6 +61,7 @@ def init_env(packages=None, **kwargs):
         ipp.register_magics(CCPPlugin(ipp))
         ipp.register_magics(Evaluation(ipp))
 
+    print("Loading BULK Helper cOURSe... 3")
     if packages is not None and "BLK_PACKAGES_STATUS" not in os.environ:
         installer.install_dependencies(packages, start_time)
         os.environ["BLK_PACKAGES_STATUS"] = f"INITIALIZED"
