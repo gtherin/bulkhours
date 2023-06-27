@@ -20,3 +20,18 @@ def get_image(label, ax=None):
     from .tools import DataParser  # noqa
 
     return DataParser(label=label).get_image(ax=ax)
+
+
+def geo_plot(label=None, timeopt="last", **kwargs):
+    """
+    data: geopandas dataframe (world.mappoverty)
+    timeopt: year the estimation (last by default)
+    """
+
+    from ..core import geo  # noqa
+
+    if type(label) is str:
+        df = get_data(label, timeopt=timeopt)
+    else:
+        df = label
+    return geo.geo_plot(df, timeopt=timeopt, **kwargs)
