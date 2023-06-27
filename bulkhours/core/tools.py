@@ -4,12 +4,10 @@ import ipywidgets
 import IPython
 
 
-def abspath(filename=""):
-    rdir = os.path.dirname(__file__) + f"/../../../bulkhours"
-    for f in [rdir + "/", ""]:
-        if os.path.exists(f + filename):
-            afilename = os.path.abspath(f + filename)
-    return afilename
+def abspath(filename="", rdir=None):
+    if rdir is None:
+        rdir = os.path.dirname(__file__) + f"/../../../bulkhours/"
+    return os.path.abspath(rdir + filename)
 
 
 def update_config(data):
