@@ -34,7 +34,7 @@ def summary(
 
     virtual_room, subject, notebook_id = (config.get(v) for v in ["virtual_room", "subject", "notebook_id"])
     language = config["global"].get("language")
-    course_info = config["notebooks"][notebook_id]
+    course_info = config[notebook_id]
     exos = course_info["exercices"].split(";")
 
     if reload_cache:

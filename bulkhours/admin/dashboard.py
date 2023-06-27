@@ -40,9 +40,7 @@ class WidgetDashboard(bulkhours_premium.WidgetTextArea):
         )
 
         self.ws = {
-            k: ipywidgets.Text(
-                value=config["notebooks"][notebook_id][k], layout=ipywidgets.Layout(flex="4 1 0%", width="auto")
-            )
+            k: ipywidgets.Text(value=config[notebook_id][k], layout=ipywidgets.Layout(flex="4 1 0%", width="auto"))
             for k in ["evaluation", "exercices", "page"]
         }
 
@@ -202,14 +200,14 @@ class WidgetDashboard(bulkhours_premium.WidgetTextArea):
         virtual_rooms = config["global"]["virtual_rooms"].split(";")
         config["global"].update({vroom: self.ws[vroom].value.replace(",", ";") for vroom in virtual_rooms})
 
-        config["notebooks"][notebook_id].update(
+        config[notebook_id].update(
             {k: self.ws[k].value.replace(",", ";") for k in ["exercices", "evaluation", "page", "virtual_room"]}
         )
 
         if update_db:
             bulkhours_premium.firebase.get_document("info", "global", prefix=False, cinfo=cinfo).set(config["global"])
             bulkhours_premium.firebase.get_document("info", notebook_id, prefix=False, cinfo=cinfo).set(
-                config["notebooks"][notebook_id]
+                config[notebook_id]
             )
 
         with open(tools.get_config_file(subject=config["subject"], cell_id="global"), "w", encoding="utf-8") as f:
