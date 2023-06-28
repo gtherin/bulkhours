@@ -34,6 +34,9 @@ You have several types of cell available,
 Working with Cuda/C++ methods
 
 
+![](https://github.com/guydegnol/bulkhours/data/Evaluation.gif)
+![](https://github.com/guydegnol/bulkhours/data/Evaluation.mp4)
+
 ```console
 usage: ipykernel_launcher.py [-h] [-t] [-c {nvcc,g++,gcc}]
 

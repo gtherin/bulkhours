@@ -34,4 +34,4 @@ def geo_plot(label=None, timeopt="last", **kwargs):
         df = get_data(label, timeopt=timeopt)
     else:
         df = label
-    return geo.geo_plot(df, timeopt=timeopt, **kwargs)
+    return geo.geo_plot(data=df, timeopt=timeopt, **kwargs)

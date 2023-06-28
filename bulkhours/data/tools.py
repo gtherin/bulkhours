@@ -3,6 +3,7 @@ import os
 import glob
 import numpy as np
 import pandas as pd
+import IPython
 
 
 def get_rdata(rdata):
@@ -184,15 +185,12 @@ class DataParser:
         if self.credit:
             if "summary" in self.data_info:
                 comment = self.get_info(load_columns=False, summary=True)
-                import IPython
 
                 IPython.display.display(IPython.display.Markdown(f"""{comment}"""))
                 print(
                     f"\x1b[31mBulkHours database info:\x1b[0m https://github.com/guydegnol/bulkhours/blob/main/data/README.md"
                 )
-                print(
-                    f'bulkhours.get_data("{self.label}", credit=\033[1mFalse\033[0m)  # To stop showing the previous text'
-                )
+                print(f'bulkhours.get_data("{self.label}", credit=\033[1mFalse\033[0m)  # To stop showing this text')
 
             else:
                 print(f"Data {self.label} is not referenced")
