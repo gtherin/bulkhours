@@ -1,38 +1,23 @@
 import os
 import time
+import IPython
 
 from . import firebase
 from . import contexts
 
 
-def init_global_params(collection, config):
-    if not collection.document("global").get().to_dict():
-        firebase.save_config("global", config)
-    config["global"].update(collection.document("global").get().to_dict())
+def init_config(config_id, collection, config):
+    if config_id not in config:
+        config[config_id] = {}
 
-    if "notebook_id" not in config:
-        config["notebook_id"] = "nob"
-
-    if "virtual_room" not in config:
-        config["virtual_room"] = config["global"]["virtual_rooms"].split(";")[0]
-
-    return config
-
-
-def init_nb_params(collection, config):
-    notebook_id = config.get("notebook_id", config)
-    if notebook_id not in config:
-        config[notebook_id] = {}
-
-    if not collection.document(notebook_id).get().to_dict():
-        firebase.save_config(notebook_id, config)
-    config[notebook_id].update(collection.document(notebook_id).get().to_dict())
+    if not collection.document(config_id).get().to_dict():
+        firebase.save_config(config_id, config)
+    config[config_id].update(collection.document(config_id).get().to_dict())
 
     return config
 
 
 def init_database(**kwargs):
-    from .installer import get_tokens
     from . import tools
 
     if "from_scratch" not in kwargs:
@@ -42,22 +27,10 @@ def init_database(**kwargs):
     if "database" not in config:
         config["database"] = "bkache@free1"
 
-    if "global" not in config:
-        config["global"] = {}
+    config["notebook_id"] = "nob" if "notebook_id" not in config else config["notebook_id"]
 
-    if "bkache@" in config["database"] or "bkloud@" in config["database"]:
-        config["global"].update(get_tokens(config["database"]))
-    config["subject"] = config["global"]["subject"]
-
-    firebase.DbDocument.init_database(config)
-
-    collection = firebase.DbClient().collection(f"{config.get('subject')}_info".replace("/", "_"))
-    config = init_global_params(collection, config)
-    config = init_nb_params(collection, config)
-
-    tools.update_config(config)
-
-    return config
+    config = firebase.init_database(config)
+    return tools.update_config(config)
 
 
 def init_prems(**kwargs):
@@ -101,7 +74,6 @@ def init_prems(**kwargs):
 
 
 def init_env(packages=None, **kwargs):
-    import IPython
     from . import installer
     from . import tools
     from . import colors as c
