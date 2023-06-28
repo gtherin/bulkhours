@@ -169,11 +169,5 @@ def student_explanation_function():
 
 Test 1
 ![](https://github.com/guydegnol/bulkhours/data/Evaluation.gif)
-Test 2
-![](https://github.com/guydegnol/bulkhours/data/Evaluation.mp4)
 Test 3
 ![](data/Evaluation.gif)
-Test 4
-![](data/Evaluation.mp4)
-Test 5
-[![Watch the video](https://img.youtube.com/vi/T-D1KVIuvjA/maxresdefault.jpg)](https://youtu.be/T-D1KVIuvjA)
