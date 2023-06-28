@@ -200,26 +200,27 @@ class WidgetDashboard(core.WidgetTextArea):
         self.cinfo = Namespace(**config)
 
         cmd = (
-            "Mise à jour des informations du dashboard"
+            f"Mise à jour des informations du dashboard (et {notebook_id}/{config['virtual_room']})"
             if config["global"]["language"] == "fr"
-            else "Update dashboard information"
+            else f"Update dashboard information (and {notebook_id}/{config['virtual_room']})"
         )
 
         print(f"\x1b[32m\x1b[1m{cmd}\x1b[m")
 
 
-def dashboard():
+def dashboard(virtual_room=None):
     """La fonction dashboard permet d'éditer les options d'un cours
 
     Parameters:
-    :param no_admin: Do not show the admin in the summary
-    :param reload_cache: input data to do the test
-    :param update_git: update data on the cloud
 
     :return: a note between the minimal note and maximal note
     """
 
     config = core.tools.get_config()
+    if virtual_room is not None:
+        config["virtual_room"] = virtual_room
+        core.tools.update_config(config)
+
     virtual_room = config.get("virtual_room")
 
     if "help" in config and config["help"]:
