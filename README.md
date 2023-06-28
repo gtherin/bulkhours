@@ -1,22 +1,26 @@
 
-BulkHours is a solution of interactive education with real time interations.
-It facilitates the student follow-up by the teacher, and gives a platform to easily load package content to build courses.
+# In few lines
+
+BulkHours is a python educational helper package containing:
+- Tools to easily share information between several notebooks,
+- Facilitate the students follow-up by a teacher [evaluation_cell_id](#evaluation_cell_id),
+- Tools to automaticaly evaluate exercices,
+- Integration of a variety of useful data to feed courses,
+- Tools to develop in C/C++/CUDA within a jupyter notebook environement
 
 
-- [Data information page](data/README.md)
-- Method [evaluation_cell_id](#evaluation_cell_id)
-- Method [student_evaluation_function](#student_evaluation_function)
-- Method [is_equal](#is_equal)
-- Method [student_explanation_function](#student_explanation_function)
-- Method [compile_and_exec](#compile_and_exec)
-- [Plan of High Performance Programming on GPU course](bulkhours/hpc/README.md)
-- [Plan of the econometrics course](bulkhours/ecox/README.md)
+# Access someone else cell content
+
+A typical case is a student and a teacher who wants to share cell information:
+
+![](data/Evaluation.gif)
 
 
 ### `evaluation_cell_id` <a name="evaluation_cell_id"></a>
 
 To evaluate a notebook, you need to tag a cell using `evaluation_cell_id` magic method (lmine or cell). 
 By doing this, your cell will link several users cells (example: between one teacher with his students).
+
 
 ```console
 %%evaluation_cell_id -h 
@@ -28,6 +32,18 @@ usage: %%evaluation_cell_id -i CELL_ID
 ```
 
 You have several types of cell available, 
+
+
+
+- [Data information page](data/README.md)
+- Method [student_evaluation_function](#student_evaluation_function)
+- Method [is_equal](#is_equal)
+- Method [student_explanation_function](#student_explanation_function)
+- Method [compile_and_exec](#compile_and_exec)
+- [Plan of High Performance Programming on GPU course](bulkhours/hpc/README.md)
+- [Plan of the econometrics course](bulkhours/ecox/README.md)
+
+
 
 ### `compile_and_exec` <a name="compile_and_exec"></a>
 
@@ -167,7 +183,3 @@ def student_explanation_function():
     plt.legend()
 ```
 
-Test 1
-![](https://github.com/guydegnol/bulkhours/data/Evaluation.gif)
-Test 3
-![](data/Evaluation.gif)

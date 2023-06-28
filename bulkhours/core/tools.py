@@ -10,9 +10,10 @@ def abspath(filename="", rdir=None):
     return os.path.abspath(rdir + filename)
 
 
-def update_config(data):
+def update_config(config):
     with open(abspath(".safe"), "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
+        json.dump(config, f, ensure_ascii=False, indent=4)
+    return config
 
 
 def html2(label, display=True, style="raw"):
@@ -64,11 +65,12 @@ def eval_code(code):
         return exec(code)
 
 
-def get_config(config={}, do_update=False, from_scratch=False, is_namespace=False, **kwargs):
+def get_config(config=None, do_update=False, from_scratch=False, is_namespace=False, **kwargs):
     from argparse import Namespace
 
     """Important to copy the config"""
-    if config == {}:
+    if config is None:
+        config = {}
         if os.path.exists(jsonfile := abspath(".safe")) and not from_scratch:
             with open(jsonfile) as json_file:
                 config.update(json.load(json_file))

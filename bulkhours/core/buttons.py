@@ -177,8 +177,11 @@ def get_buttons_list(label=None, **kwargs):
     return {b.l: b for b in get_all_buttons(label, **kwargs)}
 
 
-def update_button(b, button, output, widget, funct, kwargs={}):
+def update_button(b, button, output, widget, funct, kwargs=None):
     from . import colors
+
+    if kwargs is None:
+        kwargs = {}
 
     if type(funct) == str:
         funct = getattr(widget.__class__, funct)

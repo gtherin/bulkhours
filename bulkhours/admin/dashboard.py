@@ -1,11 +1,8 @@
 import IPython
-from IPython.core.magic import Magics, magics_class, line_cell_magic, needs_local_scope
-import json
 import ipywidgets
 from argparse import Namespace
 
 from .. import core
-from . import tools
 
 
 class WidgetDashboard(core.WidgetTextArea):
@@ -134,23 +131,20 @@ class WidgetDashboard(core.WidgetTextArea):
             )
         )
 
-        if 0:
-            with open(tools.get_config_file(subject=subject, cell_id="tokens")) as f:
-                tokens = json.load(f)
-
-                xwidgets.append(
-                    ipywidgets.Box(
-                        [
-                            core.tools.html("Students tokens", layout=ipywidgets.Layout(flex="1 1 0%", width="auto")),
-                            ipywidgets.Text(
-                                value='tokens = "%s"' % tokens[virtual_room],
-                                layout=ipywidgets.Layout(flex="4 1 0%", width="auto"),
-                                disabled=True,
-                            ),
-                        ],
-                        layout=form_item_layout,
-                    )
+        if "tokens" in config["global"] and type(tokens := config["global"]["tokens"]) == dict:
+            xwidgets.append(
+                ipywidgets.Box(
+                    [
+                        core.tools.html("Students tokens", layout=ipywidgets.Layout(flex="1 1 0%", width="auto")),
+                        ipywidgets.Text(
+                            value='tokens = "%s"' % tokens[virtual_room],
+                            layout=ipywidgets.Layout(flex="4 1 0%", width="auto"),
+                            disabled=True,
+                        ),
+                    ],
+                    layout=form_item_layout,
                 )
+            )
 
         xwidgets.append(
             ipywidgets.Box(
@@ -177,7 +171,7 @@ class WidgetDashboard(core.WidgetTextArea):
         cinfo = core.tools.get_config(is_namespace=True)
         core.firebase.delete_documents(cinfo, self.ws["exercices"].value, verbose=True)
 
-    def submit_on_click(self, output, update_git=True, update_db=True):
+    def submit_on_click(self, output):
         config = core.tools.get_config()
         notebook_id = config["notebook_id"]
 
@@ -200,13 +194,10 @@ class WidgetDashboard(core.WidgetTextArea):
             {k: self.ws[k].value.replace(",", ";") for k in ["exercices", "evaluation", "page", "virtual_room"]}
         )
 
-        if update_db:
-            core.firebase.save_config("global", config)
-            core.firebase.save_config(notebook_id, config)
-
-        with open(tools.get_config_file(subject=config["subject"], cell_id="global"), "w", encoding="utf-8") as f:
-            json.dump(config, f, ensure_ascii=False, indent=4)
+        core.firebase.save_config("global", config)
+        core.firebase.save_config(notebook_id, config)
         core.tools.update_config(config)
+        self.cinfo = Namespace(**config)
 
         cmd = (
             "Mise à jour des informations du dashboard"
@@ -214,10 +205,10 @@ class WidgetDashboard(core.WidgetTextArea):
             else "Update dashboard information"
         )
 
-        # tools.update_github(update_git, files=[nfname], msg=cmd)
+        print(f"\x1b[32m\x1b[1m{cmd}\x1b[m")
 
 
-def dashboard(update_git=True, **kwargs):
+def dashboard():
     """La fonction dashboard permet d'éditer les options d'un cours
 
     Parameters:
@@ -228,9 +219,8 @@ def dashboard(update_git=True, **kwargs):
     :return: a note between the minimal note and maximal note
     """
 
-    config = core.tools.get_config(**kwargs)
-
-    virtual_room, notebook_id = (config.get(v) for v in ["virtual_room", "notebook_id"])
+    config = core.tools.get_config()
+    virtual_room = config.get("virtual_room")
 
     if "help" in config and config["help"]:
         st = lambda x: f"\x1b[30m\x1b[1m{x}\x1b[m"
@@ -273,12 +263,7 @@ def dashboard(update_git=True, **kwargs):
 
     def func_c(b):
         return core.buttons.update_button(
-            b,
-            bwidgeta.cinfo.abuttons["save_changes"],
-            output,
-            bwidgeta,
-            "submit_on_click",
-            kwargs=dict(update_git=update_git),
+            b, bwidgeta.cinfo.abuttons["save_changes"], output, bwidgeta, "submit_on_click", kwargs=dict()
         )
 
     bwidgeta.cinfo.abuttons["save_changes"].b.on_click(func_c)

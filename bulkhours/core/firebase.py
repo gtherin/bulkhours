@@ -55,20 +55,6 @@ class DbDocument:
             json.dump(DbDocument.data_base_cache, f, ensure_ascii=False, indent=4)
 
     @staticmethod
-    def init_database(config) -> None:
-        if "bkloud@" in (database := config["database"]):
-            cols = DbDocument.compliant_fields["bkloud"]
-            with open(tools.abspath("bulkhours/bunker/pi.pyc"), "w") as f:
-                json.dump({k: v for k, v in config["global"].items() if k in cols}, f, ensure_ascii=False, indent=4)
-
-            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = tools.abspath("bulkhours/bunker/pi.pyc")
-        else:
-            datafile = config["global"]["data_cache"] if "data_cache" in config["global"] else database
-            datafile = tools.abspath(datafile)
-
-            DbDocument.set_cache_data(datafile)
-
-    @staticmethod
     def set_cache_data(database) -> None:
         DbDocument.data_base_cache = {}
         if type(database) == dict:
@@ -134,6 +120,53 @@ class DbClient:
             return firestore.Client().collection(question_id)
         else:
             return DbCollection(question_id)
+
+
+def init_config(config_id, config):
+    collection = DbClient().collection(f"{config.get('subject')}_info".replace("/", "_"))
+    if config_id not in config:
+        config[config_id] = {}
+
+    if not collection.document(config_id).get().to_dict():
+        save_config(config_id, config)
+    config[config_id].update(collection.document(config_id).get().to_dict())
+
+    return config
+
+
+def init_database(config) -> None:
+    from .installer import get_tokens
+
+    if "global" not in config:
+        config["global"] = {}
+    if "bkache@" in config["database"] or "bkloud@" in config["database"]:
+        config["global"].update(get_tokens(config["database"]))
+    config["subject"] = config["global"]["subject"]
+
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (cfilename := tools.abspath("bulkhours/bunker/pi.pyc"))
+    if type(database := config["database"]) == dict:
+        with open(cfilename, "w") as f:
+            json.dump(database, f, ensure_ascii=False, indent=4)
+    elif "bkloud@" in database:
+        with open(cfilename, "w") as f:
+            cols = DbDocument.compliant_fields["bkloud"]
+            json.dump({k: v for k, v in config["global"].items() if k in cols}, f, ensure_ascii=False, indent=4)
+
+    else:
+        datafile = config["global"]["data_cache"] if "data_cache" in config["global"] else database
+        datafile = tools.abspath(datafile)
+
+        DbDocument.set_cache_data(datafile)
+
+    config = init_config("global", config)
+
+    if "virtual_room" not in config:
+        config["virtual_room"] = config["global"]["virtual_rooms"].split(";")[0]
+
+    if "notebook_id" in config:
+        config = init_config(config["notebook_id"], config)
+
+    return config
 
 
 def get_collection(question, prefix=True, cinfo=None):
@@ -235,7 +268,7 @@ def get_solution_from_corrector(question, corrector=REF_USER, cinfo=None):
     return get_document(question, corrector, cinfo=cinfo).get().to_dict()
 
 
-def save_config(label, config={}):
+def save_config(label, config, verbose=False):
     cols = DbDocument.compliant_fields["global"] if label == "global" else DbDocument.compliant_fields["notebook"]
 
     params = {k: config[label][k] if k in config[label] else v for k, v in cols.items()}
@@ -244,3 +277,12 @@ def save_config(label, config={}):
             params[room] = config[label][room] if room in config[label] else ""
 
     get_document("info", label, prefix=False, cinfo=Namespace(**config)).set(params)
+
+    if verbose:
+        cmd = (
+            f"Mise à jour des informations des parametres {label}"
+            if config["global"]["language"] == "fr"
+            else f"Update {label} parameters "
+        )
+
+        print(f"\x1b[32m\x1b[1m{cmd}\x1b[m")
