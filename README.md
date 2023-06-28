@@ -34,13 +34,6 @@ You have several types of cell available,
 Working with Cuda/C++ methods
 
 
-![](https://github.com/guydegnol/bulkhours/data/Evaluation.gif)
-![](https://github.com/guydegnol/bulkhours/data/Evaluation.mp4)
-
-
-![](data/Evaluation.gif)
-![](data/Evaluation.mp4)
-
 
 ```console
 usage: ipykernel_launcher.py [-h] [-t] [-c {nvcc,g++,gcc}]
@@ -174,3 +167,13 @@ def student_explanation_function():
     plt.legend()
 ```
 
+Test 1
+![](https://github.com/guydegnol/bulkhours/data/Evaluation.gif)
+Test 2
+![](https://github.com/guydegnol/bulkhours/data/Evaluation.mp4)
+Test 3
+![](data/Evaluation.gif)
+Test 4
+![](data/Evaluation.mp4)
+Test 5
+[![Watch the video](https://img.youtube.com/vi/T-D1KVIuvjA/maxresdefault.jpg)](https://youtu.be/T-D1KVIuvjA)
