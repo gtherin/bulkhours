@@ -47,6 +47,7 @@ class DbDocument:
             "virtual_rooms": "room1",
         },
         "notebook": {"exercices": "", "evaluation": "", "page": ""},
+        "session": dict(email="john.doe@un.known", notebook_id="", database="data/cache/free1.json", subject=""),
     }
 
     @staticmethod
@@ -60,12 +61,11 @@ class DbDocument:
         if type(database) == dict:
             DbDocument.data_base_cache = database
         elif type(database) == str:
-            if not os.path.exists(jsonfile := database):
+            if not os.path.exists(os.path.dirname(database)):
                 database = os.path.abspath(os.path.dirname(__file__) + f"/../../{database}")
-
-            if os.path.exists(jsonfile := database):
-                DbDocument.data_base_info = database
-                with open(jsonfile) as json_file:
+            DbDocument.data_base_info = database
+            if os.path.exists(database):
+                with open(database) as json_file:
                     DbDocument.data_base_cache = json.load(json_file)
         else:
             print("Fuck")
@@ -137,11 +137,20 @@ def init_config(config_id, config):
 def init_database(config) -> None:
     from .installer import get_tokens
 
+    config = tools.get_config(**config)
+
+    for k, v in DbDocument.compliant_fields["session"].items():
+        if k not in config:
+            config[k] = v
+
     if "global" not in config:
         config["global"] = {}
     if "bkache@" in config["database"] or "bkloud@" in config["database"]:
         config["global"].update(get_tokens(config["database"]))
-    config["subject"] = config["global"]["subject"]
+    if "subject" in config["global"]:
+        config["subject"] = config["global"]["subject"]
+    else:
+        config["global"]["subject"] = config["subject"]
 
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (cfilename := tools.abspath("bulkhours/bunker/pi.pyc"))
     if type(database := config["database"]) == dict:
@@ -163,10 +172,9 @@ def init_database(config) -> None:
     if "virtual_room" not in config:
         config["virtual_room"] = config["global"]["virtual_rooms"].split(";")[0]
 
-    if "notebook_id" in config:
-        config = init_config(config["notebook_id"], config)
+    config = init_config(config["notebook_id"], config)
 
-    return config
+    return tools.update_config(config)
 
 
 def get_collection(question, prefix=True, cinfo=None):
@@ -270,6 +278,8 @@ def get_solution_from_corrector(question, corrector=REF_USER, cinfo=None):
 
 def save_config(label, config, verbose=False):
     cols = DbDocument.compliant_fields["global"] if label == "global" else DbDocument.compliant_fields["notebook"]
+
+    print("KKKKKKKKKKKKKKKKK", label, config)
 
     params = {k: config[label][k] if k in config[label] else v for k, v in cols.items()}
     if label == "global":

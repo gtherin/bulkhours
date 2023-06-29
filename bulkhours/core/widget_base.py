@@ -7,6 +7,7 @@ from .cell_parser import CellParser
 from .line_parser import LineParser
 from . import buttons
 from . import equals
+from . import contexts
 
 
 class WidgetBase:
@@ -110,12 +111,9 @@ class WidgetBase:
         bbox = bbox[0] if len(bbox) == 1 else ipywidgets.VBox(bbox)
 
         configs = vars(self.cinfo)
-        IPython.get_ipython().run_cell(
-            f"from argparse import Namespace\nteacher.{self.cinfo.cell_id} = Namespace(**{configs})"
-        )
-        IPython.get_ipython().run_cell(
-            f"from argparse import Namespace\nstudent.{self.cinfo.cell_id} = Namespace(**{configs})"
-        )
+
+        contexts.add_variables_in_contexts(self.cinfo.cell_id, configs)
+
         IPython.display.display(bbox, output)
 
     def display_correction(self, student_data, teacher_data, output=None, score=""):

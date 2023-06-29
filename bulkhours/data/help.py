@@ -2,11 +2,12 @@ import glob
 import os
 
 from . import tools
+from ..core.tools import abspath
 from .datasets import datasets, ddatasets, datacategories  # noqa
 
 
 def get_readme_filename(filename="README.md"):
-    return os.path.abspath(os.path.dirname(__file__) + f"../../../data/{filename}")
+    return abspath(f"../bulkhours/data/{filename}")
 
 
 class Script:

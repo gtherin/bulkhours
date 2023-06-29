@@ -19,6 +19,19 @@ class CellContext:
     def answer(self):
         return False
 
+    @property
+    def data(self):
+        return 3
+
+    @property
+    def stdout2(self):
+        return True
+
+    # def __getattr__(cls, key, *kargs, **kwargs):
+    #    if key == "error":
+    #        print("Yes bon del")
+    #    return None
+
 
 def exec_code(code, debug=False):
     if debug:
@@ -33,24 +46,30 @@ def exec_code(code, debug=False):
 
 
 def generate_empty_context(context):
-    return f"""
-class EmptyEnv:
-
+    IPython.get_ipython().run_cell(
+        f"""class CellContext:
     @property
-    def data(self):
-        return 3
-
-    @property
-    def stdout2(self):
-        return True
-
-    #def __getattr__(cls, key, *kargs, **kwargs):
-    #    if key == "error":
-    #        print("Yes bon del")
-    #    return None
-
-{context} = EmptyEnv()
+    def stdout(self):
+        return False
+                                   
+{context} = CellContext()
 """
+    )
+
+
+def add_variables_in_contexts(cell_id, configs):
+    for context in ["student", "teacher"]:
+        IPython.get_ipython().run_cell(f"from argparse import Namespace\n{context}.{cell_id} = Namespace(**{configs})")
+
+
+def generate_context_code(code, context):
+    code = CellParser.remove_meta_functions_execution(code)
+    ncode = f"\n\nclass C{context}:\n"
+    for l in code.splitlines():
+        ncode += f"    {l}\n"
+
+    ncode += f"{context.lower()} = C{context}\n"
+    return ncode
 
 
 def generate_context_code(code, context):
