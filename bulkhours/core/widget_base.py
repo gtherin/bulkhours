@@ -56,6 +56,7 @@ class WidgetBase:
 
     def autocorrect(self, output):
         teacher_data = CellParser.crunch_data(self.cinfo, user="solution")
+        print(teacher_data)
 
         if teacher_data.get_code("evaluation") == "":
             print("No correction available")
