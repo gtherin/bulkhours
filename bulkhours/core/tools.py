@@ -104,6 +104,8 @@ def get_value(key, config=None):
 def is_admin(config=None):
     if config is None:
         config = get_config()
+    if "is_demo_admin" in config and config["is_demo_admin"]:
+        return True
     return (
         "admin_token" in config["global"]
         and "admins" in config["global"]

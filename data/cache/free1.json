@@ -1,0 +1,59 @@
+{
+    "S_info": {
+        "global": {
+            "admins": "john.doe@bulkhours.org",
+            "chatgpt": false,
+            "language": "fr",
+            "norm20": false,
+            "restricted": false,
+            "virtual_rooms": "room1",
+            "room1": ""
+        },
+        "N": {
+            "exercices": "",
+            "evaluation": "",
+            "page": ""
+        }
+    },
+    "S_room1_N_sigbase": {
+        "john.doe@bulkhours.org": {
+            "main_execution": "\ndef basic_sigmoid(x):\n    return x\n\n\nprint(\"My first notebook\")\n",
+            "answer": "\ndef basic_sigmoid(x):\n    return x\n\n\nprint(\"My first notebook\")\n",
+            "atype": "bkcode",
+            "user": "john.doe@bulkhours.org",
+            "update_time": "2023-06-29 12:32:34"
+        }
+    },
+    "_info": {
+        "global": {
+            "admins": "",
+            "chatgpt": false,
+            "language": "fr",
+            "norm20": false,
+            "restricted": false,
+            "virtual_rooms": "room1",
+            "room1": ""
+        },
+        "": {
+            "exercices": "",
+            "evaluation": "",
+            "page": ""
+        }
+    },
+    "_room1__sigbase": {
+        "egzaegze": {
+            "main_execution": "\ndef basic_sigmoid(x):\n    return x\n\nprint(\"My first notebook\")\n",
+            "answer": "\ndef basic_sigmoid(x):\n    return x\n\nprint(\"My first notebook\")\n",
+            "atype": "bkcode",
+            "user": "egzaegze",
+            "update_time": "2023-06-29 13:25:08"
+        },
+        "guillaume.therin@gmail.com": {
+            "main_execution": "\ndef basic_sigmoid(x):\n    return x\n\nprint(\"My first notebook\")\n",
+            "answer": "\ndef basic_sigmoid(x):\n    return x\n\nprint(\"My first notebook\")\n",
+            "atype": "bkcode",
+            "user": "guillaume.therin@gmail.com",
+            "update_time": "2023-06-29 13:53:21"
+        }
+    }
+}

@@ -139,6 +139,9 @@ def init_database(config) -> None:
 
     config = tools.get_config(**config)
 
+    if "is_admin" in config:
+        config["is_demo_admin"] = config["is_admin"]
+
     for k, v in DbDocument.compliant_fields["session"].items():
         if k not in config:
             config[k] = v
@@ -278,8 +281,6 @@ def get_solution_from_corrector(question, corrector=REF_USER, cinfo=None):
 
 def save_config(label, config, verbose=False):
     cols = DbDocument.compliant_fields["global"] if label == "global" else DbDocument.compliant_fields["notebook"]
-
-    print("KKKKKKKKKKKKKKKKK", label, config)
 
     params = {k: config[label][k] if k in config[label] else v for k, v in cols.items()}
     if label == "global":
