@@ -141,6 +141,7 @@ class LineParser:
         self.line, cell = line, cell_source
         config = tools.get_config()
         self.is_admin = tools.is_admin(config=config)
+        print("is_admin", self.is_admin)
 
         if line != "":
             parser = get_argparser(self.is_admin)
