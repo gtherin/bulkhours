@@ -114,6 +114,7 @@ class DbCollection:
         return DbDocument(self.question, user)
 
     def stream(self):
+        DbDocument.read_cache_data()
         return [DbDocument(self.question, user) for user in DbDocument.data_base_cache[self.question]]
 
 

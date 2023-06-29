@@ -38,5 +38,5 @@ lib64
 
 abc.py
 .safe*
-data/cache/*/admin_*.json
+#data/cache/*/admin_*.json
 git_push.sh
