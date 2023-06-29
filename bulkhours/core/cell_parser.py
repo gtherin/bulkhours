@@ -98,13 +98,7 @@ class CellParser:
             from . import firebase
 
             data = firebase.get_solution_from_corrector(cinfo.icell_id, corrector=user, cinfo=cinfo)
-            if data is not None:
-                comment = "cloud.solution"
-            else:
-                comment = f"local[no cloud.{user}]"
-        else:
-            comment = "local"
-        return cls(cinfo=cinfo, parse_cell=True, cell_source=data, user=user, source=comment)
+        return cls(cinfo=cinfo, parse_cell=True, cell_source=data, user=user, source="")
 
     def is_evaluation_available(self):
         return "evaluation" in self.minfo and self.minfo["evaluation"] != ""

@@ -6,7 +6,7 @@ from .. import core
 from . import tools
 
 
-def get_answers(cell_id, refresh=False, use_cache_if_possible=True, update_git=False, verbose=True):
+def get_answers(cell_id, refresh=True, update_git=False, verbose=True):
     config = core.tools.get_config()
     cinfo = core.tools.get_config(is_namespace=True)
     virtual_room, subject, notebook_id = (config.get(v) for v in ["virtual_room", "subject", "notebook_id"])
@@ -17,15 +17,12 @@ def get_answers(cell_id, refresh=False, use_cache_if_possible=True, update_git=F
 
     icell_id = notebook_id + "_" + cell_id
 
-    if (
-        os.path.exists(filename := tools.get_exo_file(cell_id=icell_id, subject=subject, virtual_room=virtual_room))
-        and 0  # not refresh
-    ):
+    filename = core.tools.abspath(
+        f"data/cache/{subject}/{virtual_room}/admin_{notebook_id}_{cell_id}.json", create_dir=True
+    )
+    if os.path.exists(filename) and not refresh:
         with open(filename) as json_file:
             cdata = json.load(json_file)
-
-    if (use_cache_if_possible and cdata) and not refresh:
-        return cdata
 
     docs = core.firebase.get_collection(icell_id, cinfo=cinfo).stream()
 
@@ -64,10 +61,12 @@ def update_note(cell_id, user, note, verbose=True):
     virtual_room, subject, notebook_id = (config.get(v) for v in ["virtual_room", "subject", "notebook_id"])
     language = config["global"].get("language")
 
-    icell_id = notebook_id + "_" + cell_id if notebook_id not in cell_id else cell_id
-
     data = {}
-    if os.path.exists(filename := tools.get_exo_file(cell_id=icell_id, subject=subject, virtual_room=virtual_room)):
+    filename = core.tools.abspath(
+        f"data/cache/{subject}/{virtual_room}/admin_{notebook_id}_{cell_id}.json", create_dir=True
+    )
+
+    if os.path.exists(filename):
         with open(filename) as json_file:
             data = json.load(json_file)
 

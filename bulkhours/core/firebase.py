@@ -83,6 +83,9 @@ class DbDocument:
 
     def set(self, data) -> None:
         DbDocument.read_cache_data()
+        if self.question not in DbDocument.data_base_cache:
+            DbDocument.data_base_cache[self.question] = {}
+
         DbDocument.data_base_cache[self.question][self.user] = data
         DbDocument.write_cache_data()
 
@@ -111,9 +114,6 @@ class DbCollection:
         return DbDocument(self.question, user)
 
     def stream(self):
-        print(self.question)
-        print("AQAAA")
-
         return [DbDocument(self.question, user) for user in DbDocument.data_base_cache[self.question]]
 
 

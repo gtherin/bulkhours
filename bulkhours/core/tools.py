@@ -4,9 +4,13 @@ import ipywidgets
 import IPython
 
 
-def abspath(filename="", rdir=None):
+def abspath(filename="", rdir=None, create_dir=True):
     if rdir is None:
         rdir = os.path.dirname(__file__) + f"/../../../bulkhours/"
+
+    if create_dir and not os.path.exists(directory := os.path.dirname(rdir + filename)):
+        os.system(f"mkdir -p {directory}")
+
     return os.path.abspath(rdir + filename)
 
 

@@ -19,4 +19,4 @@ def cache_answers(cell_ids, update_git=False, verbose=True):
 
 
 def cache_answer(cell_id, **kwargs):
-    answers.get_answers(cell_id, use_cache_if_possible=False, **kwargs)
+    answers.get_answers(cell_id, **kwargs)
