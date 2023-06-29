@@ -85,7 +85,7 @@ def explain_student(student_data, teacher_data, raw=False):
     string
         a value in a string
     """
-    if "def student_evaluation" in (explanation_code := teacher_data.get_code("explanation")):
+    if "def student_explanation" in (explanation_code := teacher_data.get_code("explanation")):
         if "show_code=true" in explanation_code.replace(" ", "").lower():
             print(explanation_code)
         IPython.get_ipython().run_cell(explanation_code)
@@ -148,6 +148,7 @@ def evaluate_student(student_data, teacher_data, raw=False, use_student_context=
 
     if "show_code=true" in teacher_data.get_code("evaluation").replace(" ", "").lower():
         print(evaluation_code)
+
     out = contexts.exec_code(evaluation_code, do_debug)
     scores = [a.replace("FINAL_SCORE=", "") for a in out if "FINAL_SCORE=" in a]
     if do_debug:

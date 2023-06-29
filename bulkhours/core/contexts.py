@@ -88,7 +88,8 @@ def build_context(data, code_label, context, do_evaluate, do_debug=False, use_co
         return output
 
     code = CellParser.remove_meta_functions_execution(data.get_code(code_label))
-    IPython.get_ipython().run_cell(generate_empty_context(context))
+
+    generate_empty_context(context)
     if not (code is None or len(code.replace("\n", "").replace(" ", "")) == 0):
         fcode = code if not use_context or "compile_and_exec" in code else generate_context_code(code, context)
 
