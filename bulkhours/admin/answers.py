@@ -15,7 +15,7 @@ def get_answers(cell_id, refresh=False, use_cache_if_possible=True, update_git=F
 
     cdata = {}
 
-    icell_id = notebook_id + "_" + cell_id if notebook_id not in cell_id else cell_id
+    icell_id = notebook_id + "_" + cell_id
 
     if (
         os.path.exists(filename := tools.get_exo_file(cell_id=icell_id, subject=subject, virtual_room=virtual_room))

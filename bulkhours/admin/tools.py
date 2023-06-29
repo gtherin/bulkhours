@@ -31,9 +31,10 @@ def get_users_list(no_admin=True):
     info = core.tools.get_config()
     virtual_room = info["virtual_room"]
 
-    users = [(k, 0) for k in info["global"][virtual_room].replace(",", ";").split(";")]
+    users = [(k, 0) for k in info["global"][virtual_room].replace(",", ";").split(";") if k != ""]
     if not no_admin:
-        users += [(k, 1) for k in info["global"]["admins"].replace(",", ";").split(";")]
+        users += [(k, 1) for k in info["global"]["admins"].replace(",", ";").split(";") if k != ""]
+
     users = pd.DataFrame(users, columns=["mail", "is_admin"])
 
     new = users["mail"].str.split("@", n=1, expand=True)[0].str.split(".", n=1, expand=True)

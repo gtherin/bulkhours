@@ -83,6 +83,7 @@ def init_env(packages=None, **kwargs):
     """
 
     config = firebase.init_database(kwargs)
+
     info = init_prems(config)
     start_time = time.time()
 
@@ -97,7 +98,7 @@ def init_env(packages=None, **kwargs):
     print(f"Import BULK Helper cOURSe (\x1b[0m\x1b[36mversion='{version}'\x1b[0m🚀'{einfo}):", end="")
     if "bkloud" not in config["database"]:
         print(
-            f"⚠️\x1b[31mDatabase is local. Export your config file if you need persistency.\x1b[0m⚠️",
+            f"⚠️\x1b[31mDatabase is local (security_level={config['security_level']}). Export your config file if you need persistency.\x1b[0m⚠️",
             end="",
         )
     print("\n" + info)

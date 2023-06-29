@@ -56,6 +56,12 @@ class DbDocument:
             json.dump(DbDocument.data_base_cache, f, ensure_ascii=False, indent=4)
 
     @staticmethod
+    def read_cache_data() -> None:
+        if os.path.exists(DbDocument.data_base_info):
+            with open(DbDocument.data_base_info) as json_file:
+                DbDocument.data_base_cache = json.load(json_file)
+
+    @staticmethod
     def set_cache_data(database) -> None:
         DbDocument.data_base_cache = {}
         if type(database) == dict:
@@ -64,9 +70,7 @@ class DbDocument:
             if not os.path.exists(os.path.dirname(database)):
                 database = os.path.abspath(os.path.dirname(__file__) + f"/../../{database}")
             DbDocument.data_base_info = database
-            if os.path.exists(database):
-                with open(database) as json_file:
-                    DbDocument.data_base_cache = json.load(json_file)
+            DbDocument.read_cache_data()
         else:
             print("Fuck")
 
@@ -78,6 +82,7 @@ class DbDocument:
         return self.user
 
     def set(self, data) -> None:
+        DbDocument.read_cache_data()
         DbDocument.data_base_cache[self.question][self.user] = data
         DbDocument.write_cache_data()
 
@@ -88,6 +93,7 @@ class DbDocument:
         return DbDocument.data_base_cache[self.question][self.user]
 
     def update(self, data) -> None:
+        DbDocument.read_cache_data()
         DbDocument.data_base_cache[self.question][self.user].update(data)
         DbDocument.write_cache_data()
 
@@ -105,6 +111,9 @@ class DbCollection:
         return DbDocument(self.question, user)
 
     def stream(self):
+        print(self.question)
+        print("AQAAA")
+
         return [DbDocument(self.question, user) for user in DbDocument.data_base_cache[self.question]]
 
 
@@ -176,6 +185,14 @@ def init_database(config) -> None:
         config["virtual_room"] = config["global"]["virtual_rooms"].split(";")[0]
 
     config = init_config(config["notebook_id"], config)
+    if "security_level" not in config:
+        config["security_level"] = 0
+
+    if config["security_level"] == 0:
+        if "is_demo_admin" in config and config["email"] not in config["global"]["admins"]:
+            config["global"]["admins"] += config["email"] + ";"
+        if "is_demo_admin" not in config and config["email"] not in config["virtual_room"]:
+            config["global"][config["virtual_room"]] += config["email"] + ";"
 
     return tools.update_config(config)
 
