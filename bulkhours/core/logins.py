@@ -1,8 +1,10 @@
 import os
 import time
-import IPython
 
 from . import firebase
+from . import installer
+from . import tools
+from . import colors
 from . import contexts
 
 
@@ -17,24 +19,7 @@ def init_config(config_id, collection, config):
     return config
 
 
-def init_database(**kwargs):
-    from . import tools
-
-    if "from_scratch" not in kwargs:
-        kwargs["from_scratch"] = True
-    config = tools.get_config(**kwargs)
-
-    if "database" not in config:
-        config["database"] = "bkache@free1"
-
-    config["notebook_id"] = "nob" if "notebook_id" not in config else config["notebook_id"]
-
-    config = firebase.init_database(config)
-    return tools.update_config(config)
-
-
-def init_prems(**kwargs):
-    config = init_database(**kwargs)
+def init_prems(config):
     db_label = config["database"].split("@")[0] + "@" if "@" in config["database"] else ""
 
     email, notebook_id = (config.get(v) for v in ["email", "notebook_id"])
@@ -52,6 +37,8 @@ def init_prems(**kwargs):
         or email == "solution"
     )
     language = config["global"].get("language")
+    if config["global"]["admins"] == "":
+        is_known_student = True
 
     config["eparams"] = False
     if not is_known_student:
@@ -74,33 +61,37 @@ def init_prems(**kwargs):
 
 
 def init_env(packages=None, **kwargs):
-    from . import installer
-    from . import tools
-    from . import colors as c
+    """
+    Initialize the environment for the notebook
+    email: email of the student
+    from_scratch: if True, local variables is reinitialized
+    packages:= to install packages from pip or apt-get
+    database: database to use
 
-    info = init_prems(**kwargs)
+    """
+
+    config = firebase.init_database(kwargs)
+
+    info = init_prems(config)
     start_time = time.time()
-
-    if ipp := IPython.get_ipython():
-        from .evaluation import Evaluation
-        from ..hpc.compiler import CCPPlugin
-
-        ipp.register_magics(CCPPlugin(ipp))
-        ipp.register_magics(Evaluation(ipp))
 
     if packages is not None and "BLK_PACKAGES_STATUS" not in os.environ:
         installer.install_dependencies(packages, start_time)
         os.environ["BLK_PACKAGES_STATUS"] = f"INITIALIZED"
 
     config = tools.get_config()
-    c.set_plt_style()
+    colors.set_plt_style()
     version = open(tools.abspath("bulkhours/__version__.py")).readlines()[0].split('"')[1]
 
     einfo = f", ⚠️\x1b[31m\x1b[41m\x1b[37m in admin/teacher🎓 mode\x1b[0m⚠️" if tools.is_admin(config=config) else ""
-    print(f"Import BULK Helper cOURSe (\x1b[0m\x1b[36mversion='{version}'\x1b[0m🚀'{einfo}):\n{info})")
+    print(f"Import BULK Helper cOURSe (\x1b[0m\x1b[36mversion='{version}'\x1b[0m🚀'{einfo}):", end="")
     if "bkloud" not in config["database"]:
         print(
-            f"⚠️\x1b[41m\x1b[37mDatabase is not replicated on the cloud. Persistency is not garantee outside the notebook\x1b[0m⚠️"
+            f"⚠️\x1b[31mDatabase is local. Export your config file if you need persistency.\x1b[0m⚠️",
+            end="",
         )
+    print("\n" + info)
 
-    return contexts.CellContext(), contexts.CellContext()
+    contexts.generate_empty_context("student")
+    contexts.generate_empty_context("teacher")
+    os.environ["BLK_GLOBAL_STATUS"] = f"INITIALIZED"

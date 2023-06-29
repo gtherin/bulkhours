@@ -57,7 +57,6 @@ class CCPPlugin(Magics):
             return
 
         params = self.get_cell_decomposition(code=cell)
-        # print(params["main_execution"])
 
         with tempfile.TemporaryDirectory() as tmp_dir:
             try:

@@ -1,3 +1,6 @@
+import sys, inspect
+import json
+
 from IPython.core.magic import Magics, cell_magic, magics_class, line_cell_magic, needs_local_scope
 
 from .widget_base import WidgetBase  # noqa
@@ -9,14 +12,11 @@ from .widget_selectors import WidgetCheckboxes, WidgetRadios  # noqa
 from .widget_cells import WidgetCode, WidgetMarkdown, WidgetFormula, WidgetScript  # noqa
 
 from .line_parser import LineParser
+from . import tools
 
 
 def enumerate_widgets():
-    import sys, inspect
-    import json
-    import os
-
-    jsonfile = os.path.dirname(__file__) + "/widgets.json"
+    jsonfile = tools.abspath("bulkhours/core/widgets.json")
     with open(jsonfile, "w", encoding="utf-8") as f:
         json.dump(
             {
@@ -31,9 +31,18 @@ def enumerate_widgets():
 
 
 def evaluate_cell(line, cell):
-    linfo = LineParser(line, cell)
+    if not (config := tools.get_config()) or config.get("email") == "john.doe@un.known":
+        print(
+            f"""# To be able to use your the evaluation tools, you need to identify yourself with the following command:
+bulkhours.init_env(\033[1memail\033[0m="name@institute.ac")  # To be run in an initisalization cell
 
-    import sys, inspect
+# You can also use the following command to get more information:
+\033[1mhelp(bulkhours.init_env)\033[0m
+    """
+        )
+        return
+
+    linfo = LineParser(line, cell)
 
     wclass = WidgetBase
     for _, obj in inspect.getmembers(sys.modules[__name__]):
