@@ -6,27 +6,6 @@ import matplotlib
 from .. import core
 
 
-def get_exo_file(subject=None, virtual_room=None, cell_id="*_*", ext="json"):
-    filename = core.tools.abspath(f"data/cache/{subject}/{virtual_room}/{cell_id}.{ext}")
-
-    filename = os.path.abspath(
-        os.path.dirname(__file__) + f"/../../data/cache/{subject}/{virtual_room}/{cell_id}.{ext}"
-    )
-    if not os.path.exists(directory := os.path.dirname(filename)):
-        os.system(f"mkdir -p {directory}")
-
-    return filename
-
-
-def get_config_file(subject=None, cell_id="*_*", ext="json"):
-    filename = core.tools.abspath(f"data/cache/{subject}/{cell_id}.{ext}")
-    filename = os.path.abspath(os.path.dirname(__file__) + f"/../../data/cache/{subject}/{cell_id}.{ext}")
-    if not os.path.exists(directory := os.path.dirname(filename)):
-        os.system(f"mkdir -p {directory}")
-
-    return filename
-
-
 def get_users_list(no_admin=True):
     info = core.tools.get_config()
     virtual_room = info["virtual_room"]

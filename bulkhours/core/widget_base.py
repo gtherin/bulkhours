@@ -64,10 +64,11 @@ class WidgetBase:
         from .. import admin
 
         users = admin.tools.get_users_list(no_admin=False)
+
         users[self.cinfo.cell_id + ".n"] = np.nan
         users = users.set_index("mail")[["nom", "prenom", self.cinfo.cell_id + ".n"]]
 
-        answers = admin.answers.get_answers(self.cinfo.cell_id, use_cache_if_possible=False, verbose=False)
+        answers = admin.answers.get_answers(self.cinfo.cell_id, verbose=False)
         for user, answer in answers.items():
             student_data = CellParser.crunch_data(self.cinfo, user=user, data=answer)
             score = equals.evaluate_student(student_data, teacher_data, raw=True)

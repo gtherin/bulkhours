@@ -46,7 +46,9 @@ def summary(
     exercices = Exercices(users := list(data.mail.unique()), exos, course_info, config)
 
     for exo in exos:
-        filename = tools.get_exo_file(cell_id=notebook_id + "_" + exo, subject=subject, virtual_room=virtual_room)
+        filename = core.tools.abspath(
+            f"data/cache/{subject}/{virtual_room}/admin_{notebook_id}_{exo}.json", create_dir=True
+        )
 
         with open(filename) as json_file:
             answers = json.load(json_file)
