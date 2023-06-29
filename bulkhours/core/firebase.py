@@ -294,6 +294,7 @@ def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, *
 
 
 def get_solution_from_corrector(question, corrector=REF_USER, cinfo=None):
+    DbDocument.read_cache_data()
     return get_document(question, corrector, cinfo=cinfo).get().to_dict()
 
 
