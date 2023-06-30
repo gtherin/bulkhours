@@ -1,5 +1,7 @@
 import glob
 import os
+import IPython
+
 
 from . import tools
 from ..core.tools import abspath
@@ -35,14 +37,21 @@ class Script:
         os.system(f"rm -rf {self.fname}")
 
 
-def get_header_links(filename):
-    return f"""[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/guydegnol/bulkhours/blob/main/{filename}) [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/guydegnol/bulkhours/blob/main/{filename}) [![GitHub](https://badgen.net/badge/icon/Open%20in%20Github?icon=github&label)](https://github.com/guydegnol/bulkhours/blob/main/{filename}) [![Open in Visual Studio Code](https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio&labelColor=2c2c32&color=007acc&logoColor=007acc)](https://vscode.dev/github/guydegnol/bulkhours/blob/main/{filename}) [![CC-0 license](https://img.shields.io/badge/License-CC--0-blue.svg)](https://creativecommons.org/licenses/by-nd/4.0)"""
+def get_header_links(filename, licence=True, github=True):
+    links = f"[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/guydegnol/bulkhours/blob/main/{filename}) "
+
+    links += f"[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/guydegnol/bulkhours/blob/main/{filename}) "
+    if github:
+        links += f"[![GitHub](https://badgen.net/badge/icon/Open%20in%20Github?icon=github&label)](https://github.com/guydegnol/bulkhours/blob/main/{filename}) "
+    links += f"[![Open in Visual Studio Code](https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio&labelColor=2c2c32&color=007acc&logoColor=007acc)](https://vscode.dev/github/guydegnol/bulkhours/blob/main/{filename}) "
+    if licence:
+        links += f"[![CC-0 license](https://img.shields.io/badge/License-CC--0-blue.svg)](https://creativecommons.org/licenses/by-nd/4.0)"
+
+    return links + "\n"
 
 
-def generate_header_links(filename):
-    import IPython
-
-    IPython.display.display(IPython.display.Markdown(get_header_links(filename)))
+def generate_header_links(filename, **kwargs):
+    IPython.display.display(IPython.display.Markdown(get_header_links(filename, **kwargs)))
 
 
 def build_readme(load_data=True):
@@ -54,10 +63,9 @@ def build_readme(load_data=True):
             example_label = example.split("/")[-1].split(".")[0]
             filename = "examples/" + example.split("/")[-1]
             line = f"- [**`{example_label}`**](https://github.com/guydegnol/bulkhours/blob/main/{filename}) "
-            line += get_header_links(filename) + "\n"
+            line += get_header_links(filename, licence=False, github=False) + "\n"
             ff.write(line)
 
-    return
     if 0:
         s = Script("cd /home/guydegnol/projects/bulkhours")
         tdir = "../bulkhours.wiki"
@@ -111,6 +119,7 @@ def build_readme(load_data=True):
 
         for d in datasets:
             if d["category"] == category["tag"]:
+                # print(d["name"])
                 ffile.write(tools.DataParser(**d).get_info(load_columns=load_data))
 
     raw_files = set()

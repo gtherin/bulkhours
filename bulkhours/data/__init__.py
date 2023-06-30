@@ -5,7 +5,7 @@ from .gmacro import *  # noqa
 from .mincer import *  # noqa
 from .world import *  # noqa
 
-from .help import build_readme, help  # noqa
+from .help import build_readme, help, generate_header_links  # noqa
 from .datasets import datasets, ddatasets, datacategories  # noqa
 
 
