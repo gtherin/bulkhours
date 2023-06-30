@@ -6,7 +6,7 @@ from .. import core
 from . import tools
 
 
-def get_answers(cell_id, refresh=True, update_git=False, verbose=True):
+def get_answers(cell_id, refresh=True, update_git=False, verbose=False):
     config = core.tools.get_config()
     cinfo = core.tools.get_config(is_namespace=True)
     virtual_room, subject, notebook_id = (config.get(v) for v in ["virtual_room", "subject", "notebook_id"])

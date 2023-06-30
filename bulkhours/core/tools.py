@@ -17,8 +17,10 @@ def abspath(filename="", rdir=None, create_dir=True):
 
 
 def update_config(config):
+    data = config.data if hasattr(config, "data") else config
+
     with open(abspath(".safe"), "w", encoding="utf-8") as f:
-        json.dump(config, f, ensure_ascii=False, indent=4)
+        json.dump(data, f, ensure_ascii=False, indent=4)
     return config
 
 
