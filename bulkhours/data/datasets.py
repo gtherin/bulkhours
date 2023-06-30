@@ -448,8 +448,37 @@ The features must first be scaled to have mean zero and  variance 96 (=n) before
         category="Predictive_Maintenance",
         raw_data="https://raw.githubusercontent.com/shadgriffin/machine_failure/master/equipment_failure_data_2.csv",
     ),
+    dict(
+        label="hpc.transistor_count",
+        summary="transistor_count",
+        category="Computing",
+        ref_site="https://en.wikipedia.org/wiki/Transistor_count",
+    ),
+    dict(
+        label="hpc.engraving_scale",
+        summary="Semiconductor device fabrication: MOSFET scaling",
+        category="Computing",
+        ref_site="https://en.wikipedia.org/wiki/Transistor_count",
+    ),
+    dict(
+        label="hpc.FLOPS_units",
+        summary="FLOPS sub-units",
+        category="Computing",
+        ref_site="https://en.wikipedia.org/wiki/FLOPS",
+    ),
+    dict(
+        label="hpc.FLOPS_gpus",
+        summary="FLOPS for gpus",
+        category="Computing",
+        ref_site="https://en.wikipedia.org/wiki/FLOPS",
+    ),
+    dict(
+        label="hpc.FLOPS_cpus",
+        summary="FLOPS for cpus",
+        category="Computing",
+        ref_site="https://en.wikipedia.org/wiki/FLOPS",
+    ),
 ]
-
 
 for f in (
     ["chose1.jpg", "chose2.jpg", "radian2.png", "README.md", "brown.gif", "gradient_descent.png", "TCL.png"]
