@@ -119,7 +119,7 @@ class DbClient:
         if DbDocument.data_base_cache is None:
             from google.cloud import firestore
 
-            return firestore.Client().collection(question_id=question_id)
+            return firestore.Client().collection(question_id)
         else:
             return DbCollection(question_id)
 
