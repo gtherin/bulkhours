@@ -1,12 +1,19 @@
 
 # In few lines
 
-BulkHours is a python educational helper package containing:
+BulkHours was started as a standalone project:
+- To build a real interactivity between students and a teacher (through Jupyter notebooks).
+- To serve as as data provider, to support courses.
+
+After a successful use of the package in several courses, I have decided to share it with you.
+The industrialization of the package is still on-going and the aim reamains the same as before:
 - Tools to easily share information between several notebooks,
 - Facilitate the students follow-up by a teacher [evaluation_cell_id](#evaluation_cell_id),
 - Tools to automaticaly evaluate exercices,
 - Integration of a variety of useful data to feed courses,
 - Tools to develop in C/C++/CUDA within a jupyter notebook environement
+
+![](data/BulkHours.png)
 
 
 # Access someone else cell content

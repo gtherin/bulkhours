@@ -55,16 +55,18 @@ def generate_header_links(filename, **kwargs):
 
 
 def build_readme(load_data=True):
-    examples = sorted(glob.glob(abspath("examples/*.ipynb")))
+    examples = sorted(glob.glob(abspath("examples/*")))
 
     with open(f"/home/guydegnol/projects/bulkhours/examples/README.md", "w") as ff:
         ff.write("""Here is the list of the examples:\n\n""")
         for example in examples:
-            example_label = example.split("/")[-1].split(".")[0]
-            filename = "examples/" + example.split("/")[-1]
-            line = f"- [**`{example_label}`**](https://github.com/guydegnol/bulkhours/blob/main/{filename}) "
-            line += get_header_links(filename, licence=False, github=False) + "\n"
-            ff.write(line)
+            if ".ipynb" in example or ".md" in example:
+                example_label = example.split("/")[-1].split(".")[0]
+                filename = "examples/" + example.split("/")[-1]
+                line = f"- [**`{example_label}`**](https://github.com/guydegnol/bulkhours/blob/main/{filename}) "
+                if ".ipynb" in example:
+                    line += get_header_links(filename, licence=False, github=False)
+                ff.write(line + "\n")
 
     if 0:
         s = Script("cd /home/guydegnol/projects/bulkhours")

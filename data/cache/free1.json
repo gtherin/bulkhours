@@ -1,0 +1,27 @@
+{
+    "_info": {
+        "global": {
+            "admins": "johnny.cash@bulkhours.org;dave.gahan2@bulkhours.org;",
+            "chatgpt": false,
+            "language": "fr",
+            "norm20": false,
+            "restricted": false,
+            "virtual_rooms": "room1",
+            "room1": "johnny.cash@bulkhours.org;"
+        },
+        "": {
+            "exercices": "my_first_exercice;",
+            "evaluation": "",
+            "page": ""
+        }
+    },
+    "_room1__my_first_exercice": {
+        "dave.gahan2@bulkhours.org": {
+            "main_execution": "import numpy as np\n\ndef sigmoid(z):\n  s = 1 / (1 + np.exp(-z))\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n",
+            "answer": "import numpy as np\n\ndef sigmoid(z):\n  s = 1 / (1 + np.exp(-z))\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n",
+            "atype": "bkcode",
+            "user": "dave.gahan2@bulkhours.org",
+            "update_time": "2023-06-30 19:20:50"
+        }
+    }
+}
