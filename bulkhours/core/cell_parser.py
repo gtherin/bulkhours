@@ -97,7 +97,7 @@ class CellParser:
         if data is None:
             from . import firebase
 
-            data = firebase.get_solution_from_corrector(cinfo.icell_id, corrector=user, cinfo=cinfo)
+            data = firebase.get_solution_from_corrector(cinfo.cell_id, corrector=user, cinfo=cinfo)
         return cls(cinfo=cinfo, parse_cell=True, cell_source=data, user=user, source="")
 
     def is_evaluation_available(self):

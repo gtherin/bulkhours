@@ -12,10 +12,7 @@ def get_answers(cell_id, refresh=True, update_git=False, verbose=True):
     virtual_room, subject, notebook_id = (config.get(v) for v in ["virtual_room", "subject", "notebook_id"])
 
     students_list = tools.get_users_list(no_admin=False)
-
     cdata = {}
-
-    icell_id = notebook_id + "_" + cell_id
 
     filename = core.tools.abspath(
         f"data/cache/{subject}/{virtual_room}/admin_{notebook_id}_{cell_id}.json", create_dir=True
@@ -24,7 +21,7 @@ def get_answers(cell_id, refresh=True, update_git=False, verbose=True):
         with open(filename) as json_file:
             cdata = json.load(json_file)
 
-    docs = core.firebase.get_collection(icell_id, cinfo=cinfo).stream()
+    docs = core.firebase.get_collection(cell_id, cinfo=cinfo).stream()
 
     data = {}
     for answer in docs:
@@ -97,6 +94,8 @@ def update_note(cell_id, user, note, verbose=True):
         json.dump(data, f, ensure_ascii=False, indent=4)
 
     if do_create_data:
-        return core.firebase.get_document(cell_id, user, cinfo=cinfo).set({"note": note, "update_time": uptime})
+        return core.firebase.get_document(question=cell_id, user=user, cinfo=cinfo).set(
+            {"note": note, "update_time": uptime}
+        )
     else:
-        return core.firebase.get_document(cell_id, user, cinfo=cinfo).update({"note": note})
+        return core.firebase.get_document(question=cell_id, user=user, cinfo=cinfo).update({"note": note})

@@ -174,8 +174,6 @@ class LineParser:
         if not hasattr(self, "cell_id"):
             return
 
-        self.icell_id = self.notebook_id + "_" + self.cell_id
-
         for a in ["student", "teacher"]:
             o = f"{a}.{self.cell_id}"
             if o not in CacheManager.objects:
@@ -199,4 +197,4 @@ class LineParser:
 
         if is_cell:
             CacheManager.objects["current_cell"] = self.cell_id
-            os.environ["BLK_CELL_ID"] = self.icell_id
+            os.environ["BLK_CELL_ID"] = self.cell_id

@@ -196,7 +196,6 @@ class WidgetDashboard(core.WidgetTextArea):
 
         core.firebase.save_config("global", config)
         core.firebase.save_config(notebook_id, config)
-        core.tools.update_config(config)
         self.cinfo = Namespace(**config)
 
         cmd = (
