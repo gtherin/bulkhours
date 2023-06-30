@@ -237,7 +237,6 @@ def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, *
     if config["security_level"] == 0:
         if cinfo.cell_id not in config[config["notebook_id"]]["exercices"]:
             config[config["notebook_id"]]["exercices"] += cinfo.cell_id + ";"
-            print("AAAAAAAAAAAAAAAAa", config["notebook_id"], "GGGGGGGGGGG")
             save_config(config["notebook_id"], config)
 
     if cinfo.restricted:
