@@ -1,6 +1,11 @@
 
 
-| [**`Simple Exercice`**](https://github.com/guydegnol/bulkhours/blob/main/examples/1_Simple_Exercice_Automation.ipynb) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/guydegnol/bulkhours/blob/main/examples/1_Simple_Exercice_Automation.ipynb)
+| [**`Simple Exercice`**](https://github.com/guydegnol/bulkhours/blob/main/examples/1_Simple_Exercice_Automation.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/guydegnol/bulkhours/blob/main/examples/1_Simple_Exercice_Automation.ipynb) [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/guydegnol/bulkhours/blob/main/examples/1_Simple_Exercice_Automation.ipynb)
+
+
+        echo ' <a href="https://colab.research.google.com/drive/' . $github . '" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/  height="30px"></a>';
+https://kaggle.com/kernels/welcome?src=https://colab.research.google.com/drive/' . $github . '"><img src=""  height="30px" /></a>';
+
 
 
 | Task | Example datasets | Trainer support | 🤗 Accelerate | 🤗 Datasets | Colab
