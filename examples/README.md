@@ -1,6 +1,6 @@
 
 
-| [**`Simple Exercice`**](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/examples/1_Simple_Exercice_Automation.ipynb) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/guydegnol/bulkhours/blob/main/bulkhours/examples/1_Simple_Exercice_Automation.ipynb)
+| [**`Simple Exercice`**](https://github.com/guydegnol/bulkhours/blob/main/examples/1_Simple_Exercice_Automation.ipynb) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/guydegnol/bulkhours/blob/main/examples/1_Simple_Exercice_Automation.ipynb)
 
 
 | Task | Example datasets | Trainer support | 🤗 Accelerate | 🤗 Datasets | Colab
