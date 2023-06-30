@@ -1,11 +1,11 @@
 import sys
 import IPython
-from IPython.core.magic import Magics, magics_class, line_cell_magic, needs_local_scope
 import ipywidgets
 
-from .. import core as bulkhours_premium
+from .. import core
 from . import answers
-from . import tools
+
+DEFAULT_NOTE = -1
 
 
 def get_alias_name(cuser):
@@ -21,20 +21,20 @@ def show_answer(cuser, answer, style=None):
     cuser = get_alias_name(cuser)
 
     # Show code
-    bulkhours_premium.tools.md(header=f"Code ({cuser})", hc=hc)
-    bulkhours_premium.tools.md(**{"codebody" if codebody else "rawbody": answer["answer"]})
+    core.tools.md(header=f"Code ({cuser})", hc=hc)
+    core.tools.md(**{"codebody" if codebody else "rawbody": answer["answer"]})
 
     # Execute code
-    bulkhours_premium.tools.md(header=f"Execution ({cuser})", hc=hc, icon="💻")
-    bulkhours_premium.tools.eval_code(answer["answer"])
+    core.tools.md(header=f"Execution ({cuser})", hc=hc, icon="💻")
+    core.tools.eval_code(answer["answer"])
 
 
 def create_evaluation_buttonanswer(cell_id, cuser, answer):
-    config = bulkhours_premium.tools.get_config()
+    config = core.tools.get_config()
 
     language = config["global"]["language"]
-    label = bulkhours_premium.tools.html(get_alias_name(cuser), size="6", color="#4F4F4F")
-    abuttons = bulkhours_premium.buttons.get_buttons_list(label="", language=language, user="solution")
+    label = core.tools.html(get_alias_name(cuser), size="6", color="#4F4F4F")
+    abuttons = core.buttons.get_buttons_list(label="", language=language, user="solution")
     output = ipywidgets.Output()
 
     default_note = answer["note"]
@@ -57,7 +57,7 @@ def create_evaluation_buttonanswer(cell_id, cuser, answer):
             answers.update_note(cell_id, cuser, widget.value)
 
     def sevaluate2(b):
-        return bulkhours_premium.buttons.update_button(b, abuttons["e"], output, None, sevaluate)
+        return core.buttons.update_button(b, abuttons["e"], output, None, sevaluate)
 
     abuttons["e"].b.on_click(sevaluate2)
 
@@ -66,8 +66,12 @@ def create_evaluation_buttonanswer(cell_id, cuser, answer):
 
 def evaluate(cell_id, user="NEXT", show_correction=False, style=None, **kwargs):
     cell_answers = answers.get_answers(cell_id, **kwargs)
+    config = core.tools.get_config(is_new_format=True)
+
+    nuser, did_find_answer = user, False
     for cuser, answer in cell_answers.items():
-        if (user == "NEXT" and answer["note"] == 1) or user == cuser:
+        if (user == "NEXT" and answer["note"] == DEFAULT_NOTE) or user == cuser:
+            nuser, did_find_answer = cuser, True
             if show_correction and "solution" in cell_answers:
                 out1 = ipywidgets.Output(layout={"width": "50%"})
                 out2 = ipywidgets.Output(layout={"width": "50%"})
@@ -89,3 +93,10 @@ def evaluate(cell_id, user="NEXT", show_correction=False, style=None, **kwargs):
             else:
                 show_answer(cuser, answer)
                 create_evaluation_buttonanswer(cell_id, cuser, answer)
+
+    if not did_find_answer:
+        core.tools.md(
+            mdbody=f"Pas de réponse disponible pour {nuser}"
+            if config.language == "fr"
+            else f"{nuser} answer is not available"
+        )

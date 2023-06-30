@@ -9,6 +9,9 @@ class Config:
         self.data = vars(config) if type(config) != dict else config
 
     def __getattr__(self, k):
+        if k in ["g", "global"]:
+            return self.data["global"]
+
         if k in self.data:
             return self.data[k]
 

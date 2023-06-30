@@ -106,6 +106,8 @@ class DbCollection:
 
     def stream(self):
         DbDocument.read_cache_data()
+        if self.question not in DbDocument.data_base_cache:
+            return []
         return [DbDocument(self.question, user) for user in DbDocument.data_base_cache[self.question]]
 
 
@@ -181,13 +183,19 @@ def init_database(config) -> None:
     if "security_level" not in config:
         config["security_level"] = 0
 
-    if config["security_level"] == 0:
-        if "is_demo_admin" in config and config["email"] not in config["global"]["admins"]:
-            config["global"]["admins"] += config["email"] + ";"
-        if "is_demo_admin" not in config and config["email"] not in config["virtual_room"]:
-            config["global"][config["virtual_room"]] += config["email"] + ";"
+    if config["security_level"] == 0 and config["email"] != REF_USER:
+        config = add_user_to_virtual_room(config["email"], config)
 
     return tools.update_config(config)
+
+
+def add_user_to_virtual_room(user, config):
+    if "is_demo_admin" in config and user not in config["global"]["admins"]:
+        config["global"]["admins"] += user + ";"
+    if "is_demo_admin" not in config and user not in config["virtual_room"]:
+        config["global"][config["virtual_room"]] += user + ";"
+    save_config("global", config)
+    return config
 
 
 def get_collection(question=None, question_id=None, cinfo=None):
@@ -226,7 +234,7 @@ def delete_documents(cinfo, questions, user=REF_USER, verbose=False):
 def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, **kwargs):
     source = "local@" if DbDocument.data_base_info is not None else "cloud@"
     question_alias = source + get_question_id(cinfo.cell_id, sep="/", cinfo=cinfo)
-    config = tools.get_config()
+    config = tools.get_config(is_new_format=True)
 
     user = kwargs["user"] if "user" in kwargs else cinfo.user
     alias = user.split("@")[0]
@@ -234,10 +242,13 @@ def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, *
         alias = alias.split(".")
         alias = alias[0] + "." + alias[1][0]
 
-    if config["security_level"] == 0:
-        if cinfo.cell_id not in config[config["notebook_id"]]["exercices"]:
+    if config.security_level == 0:
+        if cinfo.cell_id not in config[config.notebook_id]["exercices"]:
             config[config["notebook_id"]]["exercices"] += cinfo.cell_id + ";"
-            save_config(config["notebook_id"], config)
+            save_config(config.notebook_id, config)
+
+        if user not in config.g[config.virtual_room] and user != REF_USER:
+            config = add_user_to_virtual_room(config["email"], config)
 
     if cinfo.restricted:
         corr = get_solution_from_corrector(cinfo.cell_id, corrector=REF_USER, cinfo=cinfo)

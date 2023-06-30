@@ -7,12 +7,14 @@ from .. import core
 
 
 def get_users_list(no_admin=True):
-    info = core.tools.get_config()
+    info = core.tools.get_config(is_new_format=True)
     virtual_room = info["virtual_room"]
 
-    users = [(k, 0) for k in info["global"][virtual_room].replace(",", ";").split(";") if k != ""]
+    users = [
+        (k, 0) for k in info.g[virtual_room].replace(",", ";").split(";") if k != "" and k not in info.g["admins"]
+    ]
     if not no_admin:
-        users += [(k, 1) for k in info["global"]["admins"].replace(",", ";").split(";") if k != ""]
+        users += [(k, 1) for k in info.g["admins"].replace(",", ";").split(";") if k != ""]
 
     users = pd.DataFrame(users, columns=["mail", "is_admin"])
 
