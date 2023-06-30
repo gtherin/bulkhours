@@ -296,6 +296,26 @@
 - Columns:
 > The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year
 
+#### transistor_count
+#### `bulkhours.get_data("hpc.transistor_count")`
+- Reference site: https://en.wikipedia.org/wiki/Transistor_count
+
+#### Semiconductor device fabrication: MOSFET scaling
+#### `bulkhours.get_data("hpc.engraving_scale")`
+- Reference site: https://en.wikipedia.org/wiki/Transistor_count
+
+#### FLOPS sub-units
+#### `bulkhours.get_data("hpc.FLOPS_units")`
+- Reference site: https://en.wikipedia.org/wiki/FLOPS
+
+#### FLOPS for gpus
+#### `bulkhours.get_data("hpc.FLOPS_gpus")`
+- Reference site: https://en.wikipedia.org/wiki/FLOPS
+
+#### FLOPS for cpus
+#### `bulkhours.get_data("hpc.FLOPS_cpus")`
+- Reference site: https://en.wikipedia.org/wiki/FLOPS
+
 
 
 ## Physics 
