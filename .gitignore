@@ -16,7 +16,6 @@ docs/_build
 notebooks/.ipynb_checkpoints/*
 .vscode/*
 data/main/*
-tests/*
 
 **.pyc*
 requirements-dev.txt

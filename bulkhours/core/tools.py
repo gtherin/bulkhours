@@ -2,30 +2,8 @@ import os
 import json
 import ipywidgets
 import IPython
-from collections import OrderedDict
 from argparse import Namespace
-
-
-# class Config(OrderedDict):
-class Config(dict):
-    def __init__(self, config={}):
-        # Convert from Namespace
-        if type(config) != dict:
-            config = vars(config)
-
-        self.update(config)
-
-    def __getattr__(self, k):
-        return self.get(k)
-
-    def get(self, k):
-        if k in self.keys():
-            return self[k]
-
-        if "global" in self.keys() and k in self["global"]:
-            return self["global"][k]
-
-        return None
+from .config import Config
 
 
 def abspath(filename="", rdir=None, create_dir=True):
@@ -93,7 +71,7 @@ def eval_code(code):
         return exec(code)
 
 
-def get_config(config=None, do_update=False, from_scratch=False, is_namespace=False, **kwargs):
+def get_config(config=None, do_update=False, from_scratch=False, is_namespace=False, is_new_format=False, **kwargs):
     """Important to copy the config"""
     if config is None:
         config = {}  # Config()
@@ -115,6 +93,8 @@ def get_config(config=None, do_update=False, from_scratch=False, is_namespace=Fa
 
     if is_namespace:
         return Namespace(**config)
+    if is_new_format:
+        return Config(config)
 
     return config
 

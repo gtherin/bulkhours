@@ -49,6 +49,7 @@ def build_readme(load_data=True):
     examples = sorted(glob.glob(abspath("examples/*.ipynb")))
 
     with open(f"/home/guydegnol/projects/bulkhours/examples/README.md", "w") as ff:
+        ff.write("""Here is the list of the examples:\n\n""")
         for example in examples:
             example_label = example.split("/")[-1].split(".")[0]
             filename = "examples/" + example.split("/")[-1]
