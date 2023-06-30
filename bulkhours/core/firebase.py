@@ -8,22 +8,13 @@ from . import tools
 REF_USER = "solution"
 
 
-def get_question_id(question, sep="_", prefix=True, cinfo=None):
+def get_question_id(question, sep="_", cinfo=None):
     if cinfo is None:
         return question
     if type(cinfo) == dict:
         cinfo = Namespace(**cinfo)
 
-    if not prefix:
-        return cinfo.subject + "_" + question
-
-    if cinfo.notebook_id not in question:
-        question = cinfo.notebook_id + "_" + question
-
-    if cinfo.subject not in question or cinfo.virtual_room not in question:
-        return cinfo.subject + sep + cinfo.virtual_room + sep + question
-
-    return question
+    return cinfo.subject + sep + cinfo.virtual_room + sep + cinfo.notebook_id + sep + question
 
 
 class DbDocument:
@@ -122,18 +113,19 @@ class DbClient:
     def __init__(self) -> None:
         pass
 
-    def collection(self, question, prefix=True, cinfo=None):
-        question_id = get_question_id(question, prefix=prefix, cinfo=cinfo)
+    def collection(self, question=None, question_id=None, cinfo=None):
+        if question_id is None:
+            question_id = get_question_id(question, cinfo=cinfo)
         if DbDocument.data_base_cache is None:
             from google.cloud import firestore
 
-            return firestore.Client().collection(question_id)
+            return firestore.Client().collection(question_id=question_id)
         else:
             return DbCollection(question_id)
 
 
 def init_config(config_id, config):
-    collection = DbClient().collection(f"{config.get('subject')}_info".replace("/", "_"))
+    collection = DbClient().collection(question_id=f"{config.get('subject')}_info".replace("/", "_"))
     if config_id not in config:
         config[config_id] = {}
 
@@ -198,12 +190,17 @@ def init_database(config) -> None:
     return tools.update_config(config)
 
 
-def get_collection(question, prefix=True, cinfo=None):
-    return DbClient().collection(get_question_id(question, prefix=prefix, cinfo=cinfo))
+def get_collection(question=None, question_id=None, cinfo=None):
+    if question_id is None:
+        question_id = get_question_id(question, cinfo=cinfo)
+
+    return DbClient().collection(question_id=question_id)
 
 
-def get_document(question, user, prefix=True, cinfo=None):
-    return get_collection(question, prefix=prefix, cinfo=cinfo).document(user)
+def get_document(question=None, question_id=None, user=None, cinfo=None):
+    if question_id is None:
+        question_id = get_question_id(question, cinfo=cinfo)
+    return get_collection(question_id=question_id, cinfo=cinfo).document(user)
 
 
 def get_questions_ids(questions, cinfo=None):
@@ -223,13 +220,13 @@ def delete_documents(cinfo, questions, user=REF_USER, verbose=False):
         if verbose:
             print(f"\x1b[31m\x1b[1mDelete anwser for {question_id}/{user} (cloud)\x1b[m")
 
-        get_document(question_id, user, cinfo=cinfo).delete()
+        get_document(question_id=question_id, user=user, cinfo=cinfo).delete()
 
 
 def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, **kwargs):
-    question_alias = get_question_id(cinfo.notebook_id + "/" + cinfo.cell_id, sep="/", cinfo=cinfo)
     source = "local@" if DbDocument.data_base_info is not None else "cloud@"
-    question_alias = source + question_alias
+    question_alias = source + get_question_id(cinfo.cell_id, sep="/", cinfo=cinfo)
+    config = tools.get_config()
 
     user = kwargs["user"] if "user" in kwargs else cinfo.user
     alias = user.split("@")[0]
@@ -237,8 +234,14 @@ def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, *
         alias = alias.split(".")
         alias = alias[0] + "." + alias[1][0]
 
+    if config["security_level"] == 0:
+        if cinfo.cell_id not in config[config["notebook_id"]]["exercices"]:
+            config[config["notebook_id"]]["exercices"] += cinfo.cell_id + ";"
+            print("AAAAAAAAAAAAAAAAa", config["notebook_id"], "GGGGGGGGGGG")
+            save_config(config["notebook_id"], config)
+
     if cinfo.restricted:
-        corr = get_solution_from_corrector(cinfo.icell_id, corrector=REF_USER, cinfo=cinfo)
+        corr = get_solution_from_corrector(cinfo.cell_id, corrector=REF_USER, cinfo=cinfo)
         if corr is not None and user != REF_USER:
             if cinfo.language == "fr":
                 print(
@@ -259,10 +262,10 @@ def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, *
     else:
         kwargs = {k: v for k, v in kwargs.items() if k not in ["evaluation", "explanation", "visible"]}
 
-    if update and get_document(cinfo.icell_id, user, cinfo=cinfo).get().to_dict():
-        get_document(cinfo.icell_id, user, cinfo=cinfo).update(kwargs)
+    if update and get_document(question=cinfo.cell_id, user=user, cinfo=cinfo).get().to_dict():
+        get_document(question=cinfo.cell_id, user=user, cinfo=cinfo).update(kwargs)
     else:
-        get_document(cinfo.icell_id, user, cinfo=cinfo).set(kwargs)
+        get_document(question=cinfo.cell_id, user=user, cinfo=cinfo).set(kwargs)
 
     if user == REF_USER:
         if cinfo.language == "fr":
@@ -295,18 +298,20 @@ def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, *
 
 def get_solution_from_corrector(question, corrector=REF_USER, cinfo=None):
     DbDocument.read_cache_data()
-    return get_document(question, corrector, cinfo=cinfo).get().to_dict()
+    return get_document(question=question, user=corrector, cinfo=cinfo).get().to_dict()
 
 
 def save_config(label, config, verbose=False):
     cols = DbDocument.compliant_fields["global"] if label == "global" else DbDocument.compliant_fields["notebook"]
+    cinfo = Namespace(**config)
 
     params = {k: config[label][k] if k in config[label] else v for k, v in cols.items()}
     if label == "global":
         for room in params["virtual_rooms"].split(";"):
             params[room] = config[label][room] if room in config[label] else ""
 
-    get_document("info", label, prefix=False, cinfo=Namespace(**config)).set(params)
+    get_document(question_id=cinfo.subject + "_info", user=label, cinfo=Namespace(**config)).set(params)
+    tools.update_config(config)
 
     if verbose:
         cmd = (

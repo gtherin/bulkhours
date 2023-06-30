@@ -56,7 +56,6 @@ class WidgetBase:
 
     def autocorrect(self, output):
         teacher_data = CellParser.crunch_data(self.cinfo, user="solution")
-        print(teacher_data)
 
         if teacher_data.get_code("evaluation") == "":
             print("No correction available")
@@ -100,7 +99,7 @@ class WidgetBase:
         from . import firebase
         from .colors import md
 
-        data = firebase.get_solution_from_corrector(self.cinfo.icell_id, corrector="solution")
+        data = firebase.get_solution_from_corrector(self.cinfo.cell_id, corrector="solution")
         if (user := self.cinfo.user) in data or (user := "all") in data:
             md(
                 header=f"Message ({self.cinfo.cell_id}, {user}) du correcteur"

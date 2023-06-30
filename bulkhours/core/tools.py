@@ -2,6 +2,30 @@ import os
 import json
 import ipywidgets
 import IPython
+from collections import OrderedDict
+from argparse import Namespace
+
+
+# class Config(OrderedDict):
+class Config(dict):
+    def __init__(self, config={}):
+        # Convert from Namespace
+        if type(config) != dict:
+            config = vars(config)
+
+        self.update(config)
+
+    def __getattr__(self, k):
+        return self.get(k)
+
+    def get(self, k):
+        if k in self.keys():
+            return self[k]
+
+        if "global" in self.keys() and k in self["global"]:
+            return self["global"][k]
+
+        return None
 
 
 def abspath(filename="", rdir=None, create_dir=True):
@@ -70,11 +94,9 @@ def eval_code(code):
 
 
 def get_config(config=None, do_update=False, from_scratch=False, is_namespace=False, **kwargs):
-    from argparse import Namespace
-
     """Important to copy the config"""
     if config is None:
-        config = {}
+        config = {}  # Config()
         if os.path.exists(jsonfile := abspath(".safe")) and not from_scratch:
             with open(jsonfile) as json_file:
                 config.update(json.load(json_file))
@@ -100,6 +122,7 @@ def get_config(config=None, do_update=False, from_scratch=False, is_namespace=Fa
 def get_value(key, config=None):
     if config is None:
         config = get_config()
+    # return config.get(key)
     if key in config:
         return config.get(key)
     return config["global"].get(key)

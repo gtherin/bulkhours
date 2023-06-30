@@ -26,7 +26,7 @@ def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
     os.system("mkdir -p cache")
 
     if show_solution:
-        solution = firebase.get_solution_from_corrector(cinfo.icell_id, corrector="solution", cinfo=cinfo)
+        solution = firebase.get_solution_from_corrector(cinfo.cell_id, corrector="solution", cinfo=cinfo)
         solution = {k.replace("_dot_", "."): v for k, v in solution.items()}
 
     files = []
