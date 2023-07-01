@@ -72,7 +72,6 @@ def build_readme(load_data=True):
         s = Script("cd /home/guydegnol/projects/bulkhours")
         tdir = "../bulkhours.wiki"
         s.add_line(f"/opt/miniconda/condabin/conda activate bulkhours_py3.10")
-        s.add_line(f"cp -r README.md {tdir}/Home.md")
         s.add_line(f"cp -r data/README.md {tdir}/Data.md")
         s.add_line(f"cp -r bulkhours/ecox/README.md {tdir}/Econometrics.md")
         s.add_line(f"cp -r bulkhours/hpc/README.md {tdir}/HPC.md")
