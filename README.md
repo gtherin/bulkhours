@@ -3,7 +3,7 @@
 ![](data/BulkHours.png)
 
 ### 🛠️The aim of the package:
-- 🔗Have a tool which brings a real interactivity between 🧑‍🎓students and a 👨‍🏫teacher (through Jupyter notebooks).
+- 🔗Have a tool which brings a real interactivity between 🧑‍🎓students and 👨‍🏫teachers (through Jupyter notebooks).
 - 📈 Serve as as data provider for practical case studies to support courses.
 - 🤖 Automatic evaluation of students,
 - 👨‍💻 Tools to develop in C/C++/CUDA within a jupyter notebook environement (with a python kernel)
