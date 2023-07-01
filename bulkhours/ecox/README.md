@@ -1,37 +1,37 @@
-## Plan of econometrics course <a name="planeco"></a>
+# Plan of econometrics course
 
-```
-# 1/4 (4h): Mar-01/14:00
-01 Descriptive statistics 
+### Session 1 (4h): Descriptive statistics 
 - Characteristics of random variables
 - Standard distributions
 - Cross sectional data
 
-# 2/4 (4h): Mar-03/14:00
-02 Regressions
+### Session 2 (4h): Regressions
 - Fitting a model to a dataset
 - Regressions techniques
 - Linear regression
 - Goodness of fit
 
-# 3/4 (4h): Mar-08/14:00
-03 Time-series predictions
+## Session 3 (4h): Time-series predictions
 - Time-series characteristics
 - Exponential smoothing
 - Trends and Seasonal components
 - Holt models
 
-# 4/4 (4h): Mar-10/14:00
-04 Econometrics models
+## Session 4 (4h): Econometrics models
 - Moving Average model
 - AutoRegressive model
 - ARMA model
 - ARIMA model
 
-Exercices: 
-- investigating the French retraites system, predict APPLE revenues, fit the volatility smile, regress life expectency per country, Inequalities in salaries investigations, relationship between GDP and unemployement
+## Some emblematic exercices: 
+- investigating the French retraites system,
+- predict APPLE revenues,
+- fit the volatility smile,
+- regress life expectency per country,
+- Inequalities in salaries investigations,
+- relationship between GDP and unemployement
 
-Not presented
+## Not presented
     Financial instruments
     Risk estimations
     Price anomalies
