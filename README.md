@@ -1,8 +1,8 @@
-# Welcome to BulkHours, a package dedicated to be a Helper for tutorial cOURSes
+# Welcome to BulkHours, a Helper to tutorial cOURSes
 
 ![](data/BulkHours.png)
 
-### 🛠️The aim of the package:
+### 🛠️The aim of the package (tailored to data science and IT courses):
 - 🔗Have a tool which brings a real interactivity between 🧑‍🎓students and 👨‍🏫teachers (through Jupyter notebooks).
 - 📈 Serve as as data provider for practical case studies to support courses.
 - 🤖 Automatic evaluation of students,
