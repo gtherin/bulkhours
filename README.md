@@ -9,8 +9,6 @@
 - 👨‍💻 Tools to develop in C/C++/CUDA within a jupyter notebook environement (with a python kernel)
 - 🧠 Simple Interfaces with new machine learning trends packages🤗
 
-##### 📚 **Documentation with practical examples is available here [wiki](https://github.com/guydegnol/bulkhours/wiki)**
+##### 📚 **Documentation with practical examples is available here [wiki](https://github.com/guydegnol/bulkhours/wiki) (📧 [contact](mailto:bulkhours@guydegnol.net).**
 
-##### 📧 **[In case of question, contact me here](mailto:bulkhours@guydegnol.net).**
-
-With great feed-back from its users, there is an on-going effort to industrialize the package.
+With great feed-back 🚀🏆🎯 from users, there is an on-going effort to industrialize the package.
