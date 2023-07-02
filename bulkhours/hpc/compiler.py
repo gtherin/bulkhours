@@ -50,6 +50,10 @@ class CCPPlugin(Magics):
 
     @line_cell_magic
     def compile_and_exec(self, line, cell="", local_ns=None):
+        """
+        Some documentation about this magic
+
+        """
         try:
             self.cinfo = self.argparser.parse_args(line.split())
         except SystemExit as e:

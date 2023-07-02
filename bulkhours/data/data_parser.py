@@ -216,7 +216,7 @@ class DataParser:
                 )
                 print(f'bulkhours.get_data("{self.label}", credit=\033[1mFalse\033[0m)  # To stop showing this text')
 
-            elif ".gif" not in self.label and ".png" not in self.label:
+            elif not (".gif" in self.label or ".png" in self.label):
                 print(f"Data {self.label} is not referenced")
 
         if type(df) == str:
