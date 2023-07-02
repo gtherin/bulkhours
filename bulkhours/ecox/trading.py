@@ -2,11 +2,11 @@ import pandas as pd
 import numpy as np
 import time
 
-from ..data import tools
+from ..data.data_parser import DataParser
 
 
 def get_test_data():
-    return tools.get_data_from_file("freefight.csv")
+    return DataParser.get_data_from_file("freefight.csv")
 
 
 class Sampler:
@@ -53,7 +53,7 @@ def check_outsample(my_trading_algo):
         )
     )
 
-    gdf = tools.get_data_from_file("ffcontrol.csv")
+    gdf = DataParser.get_data_from_file("ffcontrol.csv")
     pos = my_trading_algo(gdf)
     pnls = get_pnls(gdf, pos)
 

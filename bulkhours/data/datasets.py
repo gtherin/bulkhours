@@ -17,7 +17,7 @@ datasets = [
         ref_source="https://ourworldindata.org/poverty",
         ref_site="""https://pip.worldbank.org/""",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
-        columns="https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv",
+        columns_info="https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv",
     ),
     dict(
         label="world.mappoverty",
@@ -33,7 +33,7 @@ datasets = [
         ref_site="""https://pip.worldbank.org/""",
         # drop=["Country Code", "Indicator Name", "Indicator Code", "Unnamed: 66"]
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
-        columns="https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv",
+        columns_info="https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv",
     ),
     dict(label="world.mapgdp", summary="World Bank Gdp data (with gpx extra info)", reference="world.gdp"),
     dict(
@@ -126,7 +126,14 @@ de contrats de professionnalisation ; hors apprentis, stagiaires, salariés agri
         label="france.salaires",
         summary="Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019",
         category="Economics",
-        columns="""Revenu annuel Femmes moyen, Revenu annuel Hommes moyen, Revenu annuel Femmes moyen Écart relatif (en %), Salaire annuel Femmes moyen EQTP, Salaire annuel Hommes moyen EQTP, Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)""",
+        columns_description="""| Column   |      Info |
+|-----------|:-----------|
+| Revenu annuel Femmes moyen   |  Revenu annuel Femmes moyen |         
+| Revenu annuel Hommes moyen  |  Revenu annuel Hommes moyen | 
+| Revenu annuel Femmes moyen Écart relatif (en %)   |   Revenu annuel Femmes moyen Écart relatif (en %)	| 
+| Salaire annuel Femmes moyen EQTP  |  Salaire annuel Femmes moyen EQTP | 
+| Salaire annuel Hommes moyen EQTP   |  Salaire annuel Hommes moyen EQTP |
+| Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)   |  Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP) |""",
         source="""En 2019, le revenu salarial annuel moyen dans le secteur privé et la fonction publique s'élève à 18_970 euros
 pour les femmes, soit un niveau inférieur de 22 % à celui des hommes (figure 1).
 Le revenu salarial médian des femmes est inférieur de 16 % à celui des hommes (figure 2).
@@ -139,7 +146,7 @@ dans les hauts revenus (écart de 21 % pour le neuvième décile).""",
         label="france.histsalaires",
         summary="Inégalités salariales entre femmes et hommes de 1995 à 2019",
         category="Economics",
-        columns="""| Column   |      Info |
+        columns_description="""| Column   |      Info |
 |-----------|:-----------|
 | delta_rev_legacy   |  écart relatif du revenu salarial moyen homme/femme |         
 | delta_rev  |  écart relatif (en %) du revenu salarial moyen.1| 
@@ -172,7 +179,7 @@ dans les hauts revenus (écart de 21 % pour le neuvième décile).""",
         category="Economics",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py",
         ref_source="https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html",
-        columns="""| Column   |      Info |
+        columns_description="""| Column   |      Info |
 |-----------|:-----------|
 | year      |  1959q1 - 2009q3 |
 | quarter   |    1-4 |
@@ -197,7 +204,7 @@ dans les hauts revenus (écart de 21 % pour le neuvième décile).""",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py",
     ),
     dict(
-        label="statsdata.scipy_distributions_list",
+        label="scipy_distributions_list",
         summary="Scipy list of available distributions",
         category="Economics",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
@@ -295,28 +302,36 @@ dans les hauts revenus (écart de 21 % pour le neuvième décile).""",
         summary="Cost of living",
         category="Economics",
         raw_data="cost_of_living.csv",
-        columns="country,cost_index,monthly_income,purchasing_power_index",
+        columns_description="""| Column   |      Info |
+|-----------|:-----------|
+| country   |   |         
+| cost_index  |   | 
+| monthly_income   |  	| 
+| purchasing_power_index  |  |
+""",
     ),
     dict(
         label="richest_countries",
         summary="GDP per capita per country",
         category="Economics",
         raw_data="richest_countries.csv",
-        columns="country,gdp_per_capita",
+        columns_description="""| Column   |      Info |
+|-----------|:-----------|
+| country   |   |         
+| gdp_per_capita  |   | 
+""",
     ),
     dict(
         label="tourism",
         summary="Tourism information per country",
         category="Economics",
         raw_data="tourism.csv",
-        columns="country,gdp_per_capita",
     ),
     dict(
         label="unemployment",
         summary="Unemployemnt rates per country",
         category="Economics",
         raw_data="unemployment.csv",
-        columns="country,gdp_per_capita",
     ),
     dict(
         label="wages",
@@ -341,7 +356,7 @@ dans les hauts revenus (écart de 21 % pour le neuvième décile).""",
         category="Computing",
         raw_data="https://raw.githubusercontent.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv",
         ref_source="""https://ourworldindata.org/grapher/supercomputer-power-flops""",
-        columns="The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year",
+        columns_info="The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year",
     ),
     dict(
         label="co2.concentrations",
@@ -359,7 +374,7 @@ dans les hauts revenus (écart de 21 % pour le neuvième décile).""",
         category="Climate_Evolution",
         raw_data="https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
-        columns="https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv",
+        columns_info="https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv",
     ),
     dict(
         label="co2.mapmain",
@@ -373,7 +388,7 @@ dans les hauts revenus (écart de 21 % pour le neuvième décile).""",
         raw_data="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv",
         ref_site="""https://covid19.who.int/data""",
         ref_source="""https://ourworldindata.org/coronavirus""",
-        columns="https://github.com/owid/covid-19-data/tree/master/public/data/",
+        columns_info="https://github.com/owid/covid-19-data/tree/master/public/data/",
     ),
     dict(
         label="prostate",
@@ -384,7 +399,17 @@ dans les hauts revenus (écart de 21 % pour le neuvième décile).""",
 There was an error in these data in the first edition of this book. Subject 32 had a value of 6.1 for lweight, which translates to a 449 gm prostate! The correct value is 44.9 gm. We are grateful to Prof. Stephen W. Link for alerting us to this error.
 The features must first be scaled to have mean zero and  variance 96 (=n) before the analyses in Tables 3.1 and beyond.  That is, if x is the  96 by 8 matrix of features, we compute xp <- scale(x,TRUE,TRUE)""",
         ref_source="https://hastie.su.domains/ElemStatLearn/data.html",
-        columns="lcavol, lweight, age, lbph, svi, lcp, gleason, pgg45, [outcome]",
+        columns_description="""| Column   |      Info |
+|-----------|:-----------|
+| lcavol   |  |         
+| lweight  | | 
+| lbph   | 	| 
+| svi  |  | 
+| lcp   |   |
+| gleason   |  |
+| pgg45   |   |
+| [outcome]   |   |
+""",
     ),
     dict(
         label="covid",
@@ -393,7 +418,7 @@ The features must first be scaled to have mean zero and  variance 96 (=n) before
         raw_data="https://covid.ourworldindata.org/data/owid-covid-data.csv",
         ref_site="""https://covid19.who.int/data""",
         ref_source="https://ourworldindata.org/coronavirus",
-        columns="https://github.com/owid/covid-19-data/tree/master/public/data/",
+        columns_info="https://github.com/owid/covid-19-data/tree/master/public/data/",
     ),
     dict(
         label="statsdata.sunspots",
@@ -403,7 +428,7 @@ The features must first be scaled to have mean zero and  variance 96 (=n) before
         raw_data="https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json",
         enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
         ref_source="https://www.swpc.noaa.gov/products/solar-cycle-progression",
-        columns="https://en.wikipedia.org/wiki/Wolf_number",
+        columns_info="https://en.wikipedia.org/wiki/Wolf_number",
     ),
     dict(
         label="co2.travel_mode",

@@ -1,10 +1,10 @@
 from io import StringIO
 import pandas as pd
 
-from . import tools
+from .data_parser import register_dataset
 
 
-@tools.register("gmacro.fr_qgdp")
+@register_dataset("gmacro.fr_qgdp")
 def get_fr_qgdp(self):
     data = StringIO(
         """quarter;gdp;Importations;consommation_menages;consommation_APU1;capital_fixe;capital_fixe_non_financieres;menages;APU1;Exportations;demande_interieure;Variations de stocks;Commerce exterieur
@@ -316,7 +316,7 @@ def get_fr_qgdp(self):
     return df.sort_values("date")
 
 
-@tools.register("gmacro.fr_unemployement")
+@register_dataset("gmacro.fr_unemployement")
 def get_fr_unemployement(self):
     data = StringIO(
         """quarter,1975-T1,1975-T2,1975-T3,1975-T4,1976-T1,1976-T2,1976-T3,1976-T4,1977-T1,1977-T2,1977-T3,1977-T4,1978-T1,1978-T2,1978-T3,1978-T4,1979-T1,1979-T2,1979-T3,1979-T4,1980-T1,1980-T2,1980-T3,1980-T4,1981-T1,1981-T2,1981-T3,1981-T4,1982-T1,1982-T2,1982-T3,1982-T4,1983-T1,1983-T2,1983-T3,1983-T4,1984-T1,1984-T2,1984-T3,1984-T4,1985-T1,1985-T2,1985-T3,1985-T4,1986-T1,1986-T2,1986-T3,1986-T4,1987-T1,1987-T2,1987-T3,1987-T4,1988-T1,1988-T2,1988-T3,1988-T4,1989-T1,1989-T2,1989-T3,1989-T4,1990-T1,1990-T2,1990-T3,1990-T4,1991-T1,1991-T2,1991-T3,1991-T4,1992-T1,1992-T2,1992-T3,1992-T4,1993-T1,1993-T2,1993-T3,1993-T4,1994-T1,1994-T2,1994-T3,1994-T4,1995-T1,1995-T2,1995-T3,1995-T4,1996-T1,1996-T2,1996-T3,1996-T4,1997-T1,1997-T2,1997-T3,1997-T4,1998-T1,1998-T2,1998-T3,1998-T4,1999-T1,1999-T2,1999-T3,1999-T4,2000-T1,2000-T2,2000-T3,2000-T4,2001-T1,2001-T2,2001-T3,2001-T4,2002-T1,2002-T2,2002-T3,2002-T4,2003-T1,2003-T2,2003-T3,2003-T4,2004-T1,2004-T2,2004-T3,2004-T4,2005-T1,2005-T2,2005-T3,2005-T4,2006-T1,2006-T2,2006-T3,2006-T4,2007-T1,2007-T2,2007-T3,2007-T4,2008-T1,2008-T2,2008-T3,2008-T4,2009-T1,2009-T2,2009-T3,2009-T4,2010-T1,2010-T2,2010-T3,2010-T4,2011-T1,2011-T2,2011-T3,2011-T4,2012-T1,2012-T2,2012-T3,2012-T4,2013-T1,2013-T2,2013-T3,2013-T4,2014-T1,2014-T2,2014-T3,2014-T4,2015-T1,2015-T2,2015-T3,2015-T4,2016-T1,2016-T2,2016-T3,2016-T4,2017-T1,2017-T2,2017-T3,2017-T4,2018-T1,2018-T2,2018-T3,2018-T4,2019-T1,2019-T2,2019-T3,2019-T4,2020-T1,2020-T2,2020-T3,2020-T4,2021-T1,2021-T2,2021-T3,2021-T4,2022-T1,2022-T2,2022-T3
@@ -347,7 +347,7 @@ Longue_duree,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,n
     return df.sort_values("date")
 
 
-@tools.register("gmacro.us_gdp")
+@register_dataset("gmacro.us_gdp")
 def get_us_gdp(self, simplify=True):
     import statsmodels.api as sm  # Statistical models
 
@@ -365,7 +365,7 @@ def get_us_gdp(self, simplify=True):
     return us_okun.set_index("quarter")
 
 
-@tools.register("gmacro.fr_gdp")
+@register_dataset("gmacro.fr_gdp")
 def get_fr_gdp(self, simplify=True):
     gdp = get_fr_qgdp(self).reset_index()
     une = get_fr_unemployement(self).reset_index()

@@ -1,6 +1,6 @@
 import numpy as np
 
-from . import tools
+from .data_parser import DataParser, register_dataset
 
 
 def get_mapgeneric(df):
@@ -20,7 +20,7 @@ def get_mapgeneric(df):
 
 
 def geo_format(df, timeopt):
-    cont = tools.get_data_from_file("continent.tsv")
+    cont = DataParser.get_data_from_file("continent.tsv")
     df = df.merge(cont, how="left", on="country")
 
     df["country"] = df["country"].str.replace("United States", "United States of America")
@@ -38,19 +38,19 @@ def geo_format(df, timeopt):
     return df
 
 
-@tools.register("world.poverty")
+@register_dataset("world.poverty")
 def get_poverty(self, timeopt=None):
     timeopt = self.data_info["timeopt"] if "timeopt" in self.data_info else None
     df = self.read_raw_data(self.raw_data)
     return geo_format(df, timeopt)
 
 
-@tools.register("world.mappoverty")
+@register_dataset("world.mappoverty")
 def get_mappoverty(self, **kwargs):
     return get_mapgeneric(get_poverty(self, **kwargs))
 
 
-@tools.register("world.gdp")
+@register_dataset("world.gdp")
 def get_gdp(self, timeopt=None, **data_info):
     timeopt = self.data_info["timeopt"] if "timeopt" in self.data_info else None
     df = self.read_raw_data(self.raw_data)
@@ -60,23 +60,23 @@ def get_gdp(self, timeopt=None, **data_info):
     return geo_format(df, timeopt)
 
 
-@tools.register("world.mapgdp")
+@register_dataset("world.mapgdp")
 def get_mapgdp(self, **kwargs):
     return get_mapgeneric(get_gdp(self, **kwargs))
 
 
-@tools.register("world.macro")
+@register_dataset("world.macro")
 def get_macro(self, **data_info):
     df = self.read_raw_data(self.raw_data)
     return geo_format(df, None)
 
 
-@tools.register("world.mapmacro")
+@register_dataset("world.mapmacro")
 def get_mapmacro(self, **kwargs):
     return get_mapgeneric(get_macro(self, **kwargs))
 
 
-@tools.register("world.corruption")
+@register_dataset("world.corruption")
 def get_corruption(self, show_truth=False, **data_info):
     show_truth = self.data_info["show_truth"] if "show_truth" in self.data_info else False
     df = self.read_raw_data(self.raw_data)
@@ -91,12 +91,12 @@ def get_corruption(self, show_truth=False, **data_info):
     return geo_format(df, None)
 
 
-@tools.register("world.life_expectancy_vs_gdp_2018")
+@register_dataset("world.life_expectancy_vs_gdp_2018")
 def get_life_expectancy_vs_gdp_2018(self, **data_info):
     return self.read_raw_data(self.raw_data).dropna()
 
 
-@tools.register("co2.concentrations")
+@register_dataset("co2.concentrations")
 def get_concentrations(self, zone="World", **data_info):
     df = self.read_raw_data(self.raw_data)
 
@@ -107,6 +107,6 @@ def get_concentrations(self, zone="World", **data_info):
     return df
 
 
-@tools.register("co2.mapconcentrations")
+@register_dataset("co2.mapconcentrations")
 def get_mapconcentrations(self, **kwargs):
     return get_mapgeneric(get_concentrations(self, **kwargs))
