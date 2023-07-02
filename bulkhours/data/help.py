@@ -45,7 +45,6 @@ def get_header_links(filename, licence=True, github=True):
         links += f"[![GitHub](https://badgen.net/badge/icon/Open%20in%20Github?icon=github&label)](https://github.com/guydegnol/bulkhours/blob/main/{filename}) "
     links += f"[![Open in Visual Studio Code](https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio&labelColor=2c2c32&color=007acc&logoColor=007acc)](https://vscode.dev/github/guydegnol/bulkhours/blob/main/{filename}) "
     if licence:
-        # links += f"[![CC-0 license](https://img.shields.io/badge/License-CC--0-blue.svg)](https://creativecommons.org/licenses/by-nd/4.0)"
         links += f"[![CC-by-nc-sa license](https://badgen.net/badge/icon/CC%20by-nc-sa?label=Licence)](https://creativecommons.org/licenses/by-nc-sa/4.0)"
 
     return links + "\n"
@@ -80,27 +79,25 @@ def build_readme(load_data=True):
         s.add_line(f"/opt/miniconda/envs/bulkhours_py3.10/bin/pdoc bulkhours/core/equals.py -o {tdir}/docs")
         s.execute(verbose=True)
 
-    import pdoc
+    if 0:
+        import pdoc
 
-    modules = ["bulkhours.core.equals", "bulkhours.__init__", "bulkhours.core.evaluation", "bulkhours.hpc.compiler"]
-    context = pdoc.Context()  # docformat="numpy")  # markdown restructuredtext google numpy
+        modules = ["bulkhours.core.equals", "bulkhours.__init__", "bulkhours.core.evaluation"]
+        context = pdoc.Context()  # docformat="numpy")  # markdown restructuredtext google numpy
 
-    modules = [pdoc.Module(mod, context=context) for mod in modules]
+        modules = [pdoc.Module(mod, context=context) for mod in modules]
 
-    pdoc.link_inheritance(context)
+        pdoc.link_inheritance(context)
 
-    def recursive_htmls(mod):
-        yield mod.name, mod.text()  # text html
-        for submod in mod.submodules():
-            # print(submod)
-            yield from recursive_htmls(submod)
+        def recursive_htmls(mod):
+            yield mod.name, mod.text()  # text html
+            for submod in mod.submodules():
+                yield from recursive_htmls(submod)
 
-    for mod in modules:
-        for module_name, html in recursive_htmls(mod):
-            with open(f"/home/guydegnol/projects/bulkhours.wiki/{module_name.replace('.', '_')}.md", "w") as ff:
-                ff.write(html)
-                # print(html)
-            # print(module_name, html)
+        for mod in modules:
+            for module_name, html in recursive_htmls(mod):
+                with open(f"/home/guydegnol/projects/bulkhours.wiki/{module_name.replace('.', '_')}.md", "w") as ff:
+                    ff.write(html)
 
     from ..phyu.constants import Units
 
@@ -111,9 +108,6 @@ def build_readme(load_data=True):
         ffile.write(f'- [{c+1}. {category["label"]}](#{category["tag"]}) \n')
 
     for c, category in enumerate(datacategories):
-        # ffile.write(f'\n\n## [{c+1}. {category["label"]}](#{category["tag"]})\n\n')
-        # ffile.write(f'\n\n## {c+1}. {category["label"]} <a name="{category["tag"]}"></a> \n\n')
-        # ffile.write(f'\n\n## {category["label"]} <a name="# {category["tag"]}"></a> \n\n')
         ffile.write(f'\n\n## {category["tag"]} \n\n')
 
         if category["label"] == "Physics":
