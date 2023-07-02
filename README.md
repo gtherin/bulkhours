@@ -10,6 +10,6 @@
 - 🧠 Simple Interfaces with new machine learning trends packages🤗.
 
 ### 📚 **Documentation (with practical examples) is available here [wiki](https://github.com/guydegnol/bulkhours/wiki) (📧 [contact](mailto:bulkhours@guydegnol.net))**.
-With great feed-back 🚀🏆🎯 from users, there is an on-going effort to industrialize the package.
+With great feed-backs 🚀🏆🎯 from users, there is an on-going effort to industrialize the package.
 
 [![CC-by-nc-sa license](https://badgen.net/badge/icon/CC%20by-nc-sa?label=Licence)](https://creativecommons.org/licenses/by-nc-sa/4.0)
