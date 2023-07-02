@@ -3,7 +3,7 @@ import os
 import IPython
 
 
-from . import tools
+from .data_parser import DataParser
 from ..core.tools import abspath
 from .datasets import datasets, ddatasets, datacategories  # noqa
 
@@ -45,7 +45,8 @@ def get_header_links(filename, licence=True, github=True):
         links += f"[![GitHub](https://badgen.net/badge/icon/Open%20in%20Github?icon=github&label)](https://github.com/guydegnol/bulkhours/blob/main/{filename}) "
     links += f"[![Open in Visual Studio Code](https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio&labelColor=2c2c32&color=007acc&logoColor=007acc)](https://vscode.dev/github/guydegnol/bulkhours/blob/main/{filename}) "
     if licence:
-        links += f"[![CC-0 license](https://img.shields.io/badge/License-CC--0-blue.svg)](https://creativecommons.org/licenses/by-nd/4.0)"
+        # links += f"[![CC-0 license](https://img.shields.io/badge/License-CC--0-blue.svg)](https://creativecommons.org/licenses/by-nd/4.0)"
+        links += f"[![CC-by-nc-sa license](https://badgen.net/badge/icon/CC%20by-nc-sa?label=Licence)](https://creativecommons.org/licenses/by-nc-sa/4.0)"
 
     return links + "\n"
 
@@ -71,10 +72,10 @@ def build_readme(load_data=True):
     if 0:
         s = Script("cd /home/guydegnol/projects/bulkhours")
         tdir = "../bulkhours.wiki"
-        s.add_line(f"/opt/miniconda/condabin/conda activate bulkhours_py3.10")
+        s.add_line(f"/opt/miniconda/conda/bin/conda activate bulkhours_py3.10")
         s.add_line(f"cp -r data/README.md {tdir}/Data.md")
-        s.add_line(f"cp -r bulkhours/ecox/README.md {tdir}/Econometrics.md")
-        s.add_line(f"cp -r bulkhours/hpc/README.md {tdir}/HPC.md")
+        # s.add_line(f"cp -r bulkhours/ecox/README.md {tdir}/Econometrics.md")
+        # s.add_line(f"cp -r bulkhours/hpc/README.md {tdir}/HPC.md")
         s.add_line(f"/opt/miniconda/envs/bulkhours_py3.10/bin/pdoc bulkhours/core/tools.py --force -o {tdir}/docs")
         s.add_line(f"/opt/miniconda/envs/bulkhours_py3.10/bin/pdoc bulkhours/core/equals.py -o {tdir}/docs")
         s.execute(verbose=True)
@@ -121,7 +122,7 @@ def build_readme(load_data=True):
         for d in datasets:
             if d["category"] == category["tag"]:
                 # print(d["name"])
-                ffile.write(tools.DataParser(**d).get_info(load_columns=load_data))
+                ffile.write(DataParser(**d).get_info(load_columns=load_data))
 
     raw_files = set()
     for d in datasets:

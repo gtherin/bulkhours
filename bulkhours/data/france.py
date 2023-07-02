@@ -1,10 +1,10 @@
 from io import StringIO
 import pandas as pd
 
-from . import tools
+from .data_parser import register_dataset
 
 
-@tools.register("france.retraites")
+@register_dataset("france.retraites")
 def get_retraites(self):
     return (
         pd.read_csv(
@@ -35,7 +35,7 @@ year	active	retired	rapport
     )
 
 
-@tools.register("france.income")
+@register_dataset("france.income")
 def get_income(self):
     data = StringIO(
         """income	population
@@ -143,7 +143,7 @@ Plus de 9_000	183_314
 # OECD (2023), Adult education level (indicator). doi: 10.1787/36bce3fe-en (Accessed on 24 January 2023)
 
 
-@tools.register("france.salaires")
+@register_dataset("france.salaires")
 def get_salaires(self):
     data = StringIO(
         """
@@ -173,7 +173,7 @@ Secteur: Ensemble	18 970	24 420	22,3	26 430	31 510	16,1
     return df
 
 
-@tools.register("france.histsalaires")
+@register_dataset("france.histsalaires")
 def get_histsalaires(self):
     data = StringIO(
         """

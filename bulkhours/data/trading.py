@@ -2,11 +2,12 @@ import pandas as pd
 import numpy as np
 import time
 
-from . import tools
+from .data_parser import DataParser
+from .data_parser import register_dataset
 
 
 def get_test_data():
-    return tools.get_data_from_file("freefight.csv")
+    return DataParser.get_data_from_file("freefight.csv")
 
 
 class Sampler:
@@ -16,7 +17,7 @@ class Sampler:
 Sampler.outsample_dt = time.time() - 300
 
 
-@tools.register("statsdata.apple")
+@register_dataset("statsdata.apple")
 def get_apple(self):
     apple = self.read_raw_data(self.raw_data).iloc[-4 * 5 :]
 
@@ -65,7 +66,7 @@ def check_outsample(my_trading_algo):
         )
     )
 
-    gdf = tools.get_data_from_file("ffcontrol.csv")
+    gdf = DataParser.get_data_from_file("ffcontrol.csv")
     pos = my_trading_algo(gdf)
     pnls = get_pnls(gdf, pos)
 

@@ -1,10 +1,10 @@
 from io import StringIO
 import pandas as pd
 
-from . import tools
+from .data_parser import register_dataset
 
 
-@tools.register("mincer.stats")
+@register_dataset("mincer.stats")
 def get_stats(self):
     return pd.read_csv(
         StringIO(
@@ -37,7 +37,7 @@ United Kingdom 16.368 7.590 36.390 53.933 0.4487
     ).set_index("Country")
 
 
-@tools.register("mincer.params")
+@register_dataset("mincer.params")
 def get_params(self):
     return pd.read_csv(
         StringIO(

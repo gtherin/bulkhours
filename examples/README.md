@@ -12,3 +12,5 @@ Here is the list of the examples:
 
 - [**`6_Predict_Covid_Cases`**](https://github.com/guydegnol/bulkhours/blob/main/examples/6_Predict_Covid_Cases.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/guydegnol/bulkhours/blob/main/examples/6_Predict_Covid_Cases.ipynb) [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/guydegnol/bulkhours/blob/main/examples/6_Predict_Covid_Cases.ipynb) [![Open in Visual Studio Code](https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio&labelColor=2c2c32&color=007acc&logoColor=007acc)](https://vscode.dev/github/guydegnol/bulkhours/blob/main/examples/6_Predict_Covid_Cases.ipynb) 
 
+- [**`7_Add_new_dataset`**](https://github.com/guydegnol/bulkhours/blob/main/examples/7_Add_new_dataset.md) 
+- [**`README`**](https://github.com/guydegnol/bulkhours/blob/main/examples/README.md) 

@@ -1,18 +1,17 @@
-import numpy as np
 import pandas as pd
 
 
-from . import tools
+from .data_parser import register_dataset
 
 
-@tools.register("statsdata.scipy_distributions_list")
+@register_dataset("scipy_distributions_list")
 def get_scipy_distributions_list(self):
     import scipy as sp
 
     return [d for d in dir(sp.stats._continuous_distns) if not d in ["levy_stable", "studentized_range"]]
 
 
-@tools.register("statsdata.oil")
+@register_dataset("statsdata.oil")
 def get_oil(self):
     return pd.Series(
         [
@@ -33,7 +32,7 @@ def get_oil(self):
     ).to_frame("oil")
 
 
-@tools.register("statsdata.air")
+@register_dataset("statsdata.air")
 def get_air(self):
     air = pd.Series(
         [
@@ -58,7 +57,7 @@ def get_air(self):
     return air.to_frame("air")
 
 
-@tools.register("statsdata.livestock2")
+@register_dataset("statsdata.livestock2")
 def get_livestock2(self):
     index = pd.date_range(start="1970", end="2001", freq="A")
     return pd.Series(
@@ -99,13 +98,13 @@ def get_livestock2(self):
     ).to_frame("livestock2")
 
 
-@tools.register("statsdata.livestock3")
+@register_dataset("statsdata.livestock3")
 def get_livestock3(self):
     data = [407.9979, 403.4608, 413.8249, 428.105, 445.3387, 452.9942, 455.7402]
     return pd.Series(data, pd.date_range(start="2001", end="2008", freq="A")).to_frame("livestock3")
 
 
-@tools.register("statsdata.aust")
+@register_dataset("statsdata.aust")
 def get_aust(self):
     data = [
         41.7275,
@@ -136,7 +135,7 @@ def get_aust(self):
     return pd.Series(data, pd.date_range(start="2005", end="2010-Q4", freq="QS-OCT")).to_frame("aust")
 
 
-@tools.register("statsdata.air_passengers")
+@register_dataset("statsdata.air_passengers")
 def get_air_passengers(self):
     df = self.read_raw_data(self.raw_data).set_index("Month")
 
@@ -147,7 +146,7 @@ def get_air_passengers(self):
     return df
 
 
-@tools.register("statsdata.sunspots")
+@register_dataset("statsdata.sunspots")
 def get_sunspots(self):
     dta = pd.read_json(self.raw_data)
     sunspots = dta.set_index("time-tag")
@@ -160,7 +159,7 @@ def get_sunspots(self):
     return sunspots
 
 
-@tools.register("statsdata.hhousing")
+@register_dataset("statsdata.hhousing")
 def get_hhousing(self):
     from pandas_datareader import data as pdr  # To get data
 

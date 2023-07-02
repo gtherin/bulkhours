@@ -73,7 +73,9 @@ def get_data_from_file(raw_data, **kwargs):
 
     ext = filename.split(".")[-1]
     if ext == "xlsx":
-        return pd.read_excel(filename, **kwargs)
+        kwargs = {k: v for k, v in kwargs.items() if k not in ["summary", "category"]}
+        print(kwargs)
+        return pd.read_excel(filename)  # , **kwargs)
     elif ext == "tsv":
         return pd.read_csv(filename, sep="\t")
     elif ext in ["csv"]:
@@ -91,6 +93,10 @@ def get_data_from_file(raw_data, **kwargs):
 
 class DataParser:
     datasets = {}
+
+    @staticmethod
+    def get_data_from_file(raw_data, **kwargs):
+        return get_data_from_file(raw_data, **kwargs)
 
     def __init__(
         self,
@@ -151,18 +157,34 @@ class DataParser:
             comment += f"- Direct source: {d['ref_source']}\n"
         if "ref_site" in d:
             comment += f"- Reference site: {d['ref_site']}\n"
-        if "columns" in d or columns is not None:
-            comment += f"- Columns:\n"
-            if "columns" in d:
-                if "|" in d["columns"]:
-                    comment += f"\n{d['columns']}\n"
-                else:
-                    comment += f"> {d['columns']}\n"
-            if columns is not None:
-                cols = ",".join(columns)
-                comment += f"> {cols}\n"
 
-        comment += "\n"
+        if 1:
+            cols = ""
+            if "columns_info" in d:
+                cols = f"> {d['columns_info']}\n"
+
+            if "columns_description" in d:
+                cols += f"\n{d['columns_description']}\n"
+            else:
+                if columns is None:
+                    try:
+                        data = self.get_data(credit=False)
+                        columns = list(data.columns)
+                    except:
+                        pass
+                if columns is not None:
+                    cols += """| Column   |      Info |\n|-----------|:-----------|\n"""
+                    for c in columns:
+                        cols += f"| {c} |  |\n"
+
+            if cols != "":
+                comment += f"""
+<details>
+  <summary>Show columns</summary>
+{cols}
+</details>
+         
+"""
         return comment
 
     def read_raw_data(self, raw_data):
@@ -176,13 +198,15 @@ class DataParser:
 
         return get_data_from_file(raw_data, **self.data_info)
 
-    def get_data(self):
+    def get_data(self, credit=None):
         if self.label in DataParser.MODELS_LIST:
             df = DataParser.MODELS_LIST[self.label](self)
         else:
             df = self.read_raw_data(self.raw_data)
 
-        if self.credit:
+        credit = credit if credit is not None else self.credit
+
+        if credit:
             if "summary" in self.data_info:
                 comment = self.get_info(load_columns=False, summary=True)
 
@@ -192,7 +216,7 @@ class DataParser:
                 )
                 print(f'bulkhours.get_data("{self.label}", credit=\033[1mFalse\033[0m)  # To stop showing this text')
 
-            else:
+            elif ".gif" not in self.label and ".png" not in self.label:
                 print(f"Data {self.label} is not referenced")
 
         if type(df) == str:
@@ -212,7 +236,7 @@ class DataParser:
         ax.set_axis_off()
 
 
-def register(name):
+def register_dataset(name):
     def wrap(f):
         DataParser.declare_data(name, f)
         return f
