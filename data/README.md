@@ -19,8 +19,9 @@
 - Reference site: https://pip.worldbank.org/
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
 > https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
+
 | Column   |      Info |
 |-----------|:-----------|
 | country |  |
@@ -148,8 +149,9 @@
 - Reference site: https://pip.worldbank.org/
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
 > https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
+
 | Column   |      Info |
 |-----------|:-----------|
 | pop_est |  |
@@ -281,8 +283,9 @@
 - Reference site: https://pip.worldbank.org/
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
 > https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
+
 | Column   |      Info |
 |-----------|:-----------|
 | country |  |
@@ -305,8 +308,9 @@
 - Reference site: https://pip.worldbank.org/
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
 > https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
+
 | Column   |      Info |
 |-----------|:-----------|
 | pop_est |  |
@@ -331,7 +335,8 @@
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | country |  |
@@ -367,7 +372,8 @@
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | pop_est |  |
@@ -410,7 +416,8 @@
 - Reference site: Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | Country |  |
@@ -429,7 +436,8 @@
 - Direct source: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 2)
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | Mean |  |
@@ -448,7 +456,8 @@
 - Direct source: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 3)
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | alpha_0i |  |
@@ -468,7 +477,8 @@
 - Direct source: https://www.insee.fr/fr/statistiques/2381472#tableau-figure1
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | Année de naissance |  |
@@ -485,7 +495,8 @@
 - Direct source: https://www.insee.fr/fr/statistiques/2415121#tableau-figure1
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | active |  |
@@ -500,7 +511,8 @@
 - Direct source: https://www.insee.fr/fr/statistiques/6436313#tableau-figure2
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | index |  |
@@ -518,7 +530,7 @@
 - Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -537,7 +549,7 @@
 - Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -555,7 +567,8 @@
 - Direct source: https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | gdp |  |
@@ -580,7 +593,8 @@
 - Direct source: https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | Femmes |  |
@@ -606,7 +620,7 @@
 - Direct source: https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -633,7 +647,8 @@
 - Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py))
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | yquarter |  |
@@ -651,7 +666,8 @@
 - Direct source: https://www.statsmodels.org/stable/index.html
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | oil |  |
@@ -664,7 +680,8 @@
 - Direct source: https://www.statsmodels.org/stable/index.html
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | air |  |
@@ -677,7 +694,8 @@
 - Direct source: https://www.statsmodels.org/stable/index.html
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | livestock2 |  |
@@ -690,7 +708,8 @@
 - Direct source: https://www.statsmodels.org/stable/index.html
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | livestock3 |  |
@@ -702,7 +721,8 @@
 - Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | aust |  |
@@ -715,7 +735,8 @@
 - Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | #Passengers |  |
@@ -729,7 +750,8 @@
 - Direct source: https://fred.stlouisfed.org/series/ATNHPIUS26420Q
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | HOUSTNSA |  |
@@ -742,7 +764,8 @@
 - Direct source: https://github.com/kyi3081/stock-analysis
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | date |  |
@@ -761,7 +784,8 @@
 - Direct source: https://github.com/kyi3081/stock-analysis
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | Unnamed: 0 |  |
@@ -852,7 +876,8 @@
 - Direct source: https://github.com/kyi3081/stock-analysis
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | Ticker symbol |  |
@@ -872,7 +897,8 @@
 - Enrich data: [trading.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/trading.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/trading.py))
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | date |  |
@@ -921,7 +947,8 @@
 - Raw data: [continent.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/continent.tsv)
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | index |  |
@@ -939,7 +966,8 @@
 - Raw data: [corruption.csv](https://github.com/guydegnol/bulkhours/blob/main/data/corruption.csv)
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | country |  |
@@ -953,7 +981,7 @@
 - Raw data: [cost_of_living.csv](https://github.com/guydegnol/bulkhours/blob/main/data/cost_of_living.csv)
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -970,7 +998,7 @@
 - Raw data: [richest_countries.csv](https://github.com/guydegnol/bulkhours/blob/main/data/richest_countries.csv)
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -985,7 +1013,8 @@
 - Raw data: [tourism.csv](https://github.com/guydegnol/bulkhours/blob/main/data/tourism.csv)
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | country |  |
@@ -1001,7 +1030,8 @@
 - Raw data: [unemployment.csv](https://github.com/guydegnol/bulkhours/blob/main/data/unemployment.csv)
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | country |  |
@@ -1014,7 +1044,8 @@
 - Raw data: [wages.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/wages.tsv)
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | wage |  |
@@ -1028,7 +1059,8 @@
 - Raw data: [Données septembre partie 1.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données septembre partie 1.xlsx)
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | Unnamed: 0 |  |
@@ -1040,7 +1072,8 @@
 - Raw data: [Données_RA2022_P2.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données_RA2022_P2.xlsx)
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | Sommaire |  |
@@ -1052,7 +1085,8 @@
 - Raw data: [Données complémentaires partie 2 RA 2022.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données complémentaires partie 2 RA 2022.xlsx)
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | Figure 2.1 – PIB observé et projeté |  |
@@ -1137,7 +1171,8 @@
 - Raw data: [Données septembre 2022 - partie 3.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données septembre 2022 - partie 3.xlsx)
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | Partie 3. Les résultats : les évolutions du système de retraite au regard de l'objectif d'un niveau de vie satisfaisant pour les retraités |  |
@@ -1149,7 +1184,8 @@
 - Raw data: [Données_RA2022_P4.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données_RA2022_P4.xlsx)
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | Partie 4. Les résultats : les évolutions du système de retraite au regard de l'objectif d'équité entre les assurés |  |
@@ -1161,7 +1197,8 @@
 - Raw data: [Données septembre 2022 - partie 5.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données septembre 2022 - partie 5.xlsx)
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | Partie 5. Les âges et les conditions de départ à la retraite |  |
@@ -1177,7 +1214,8 @@
 - Raw data: [fe_equipment_failure_data_1.csv](https://github.com/shadgriffin/feature_engineering_equipment_failure/main/fe_equipment_failure_data_1.csv)  ([raw](https://raw.githubusercontent.com/shadgriffin/feature_engineering_equipment_failure/main/fe_equipment_failure_data_1.csv))
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | ID |  |
@@ -1193,7 +1231,8 @@
 - Raw data: [fe_equipment_failure_data_2.csv](https://github.com/shadgriffin/feature_engineering_equipment_failure/main/fe_equipment_failure_data_2.csv)  ([raw](https://raw.githubusercontent.com/shadgriffin/feature_engineering_equipment_failure/main/fe_equipment_failure_data_2.csv))
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | ID |  |
@@ -1209,7 +1248,8 @@
 - Raw data: [equipment_failure_data_1.csv](https://github.com/shadgriffin/machine_failure/master/equipment_failure_data_1.csv)  ([raw](https://raw.githubusercontent.com/shadgriffin/machine_failure/master/equipment_failure_data_1.csv))
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | ID |  |
@@ -1236,7 +1276,8 @@
 - Raw data: [equipment_failure_data_2.csv](https://github.com/shadgriffin/machine_failure/master/equipment_failure_data_2.csv)  ([raw](https://raw.githubusercontent.com/shadgriffin/machine_failure/master/equipment_failure_data_2.csv))
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | ID |  |
@@ -1268,8 +1309,9 @@
 - Direct source: https://ourworldindata.org/grapher/supercomputer-power-flops
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
 > The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year
+
 | Column   |      Info |
 |-----------|:-----------|
 | Entity |  |
@@ -1283,7 +1325,8 @@
 - Reference site: https://en.wikipedia.org/wiki/Transistor_count
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | processor |  |
@@ -1303,7 +1346,8 @@
 - Reference site: https://en.wikipedia.org/wiki/Transistor_count
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | year |  |
@@ -1316,7 +1360,8 @@
 - Reference site: https://en.wikipedia.org/wiki/FLOPS
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | Name |  |
@@ -1330,7 +1375,8 @@
 - Reference site: https://en.wikipedia.org/wiki/FLOPS
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | date |  |
@@ -1346,7 +1392,8 @@
 - Reference site: https://en.wikipedia.org/wiki/FLOPS
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | processor |  |
@@ -1724,8 +1771,9 @@ bkc.pi := 3.141593  #
 - Reference site: https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
 > https://en.wikipedia.org/wiki/Wolf_number
+
 | Column   |      Info |
 |-----------|:-----------|
 | ssn |  |
@@ -1748,8 +1796,9 @@ bkc.pi := 3.141593  #
 - Reference site: https://covid19.who.int/data
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
 > https://github.com/owid/covid-19-data/tree/master/public/data/
+
 | Column   |      Info |
 |-----------|:-----------|
 | location |  |
@@ -1777,7 +1826,7 @@ bkc.pi := 3.141593  #
 - Direct source: https://hastie.su.domains/ElemStatLearn/data.html
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1800,8 +1849,9 @@ bkc.pi := 3.141593  #
 - Reference site: https://covid19.who.int/data
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
 > https://github.com/owid/covid-19-data/tree/master/public/data/
+
 | Column   |      Info |
 |-----------|:-----------|
 | iso_code |  |
@@ -1885,7 +1935,8 @@ bkc.pi := 3.141593  #
 - Direct source: https://ourworldindata.org/atmospheric-concentrations
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | country |  |
@@ -1919,7 +1970,8 @@ bkc.pi := 3.141593  #
 - Direct source: https://ourworldindata.org/atmospheric-concentrations
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | pop_est |  |
@@ -1957,8 +2009,9 @@ bkc.pi := 3.141593  #
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
 > https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv
+
 | Column   |      Info |
 |-----------|:-----------|
 | country |  |
@@ -2049,8 +2102,9 @@ bkc.pi := 3.141593  #
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
 > https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv
+
 | Column   |      Info |
 |-----------|:-----------|
 | country |  |
@@ -2141,7 +2195,8 @@ bkc.pi := 3.141593  #
 - Direct source: https://ourworldindata.org/grapher/carbon-footprint-travel-mode
 
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
+
 | Column   |      Info |
 |-----------|:-----------|
 | Entity |  |
