@@ -173,14 +173,14 @@ class DataParser:
                     except:
                         pass
                 if columns is not None:
-                    cols += """| Column   |      Info |\n|-----------|:-----------|\n"""
+                    cols += """\n| Column   |      Info |\n|-----------|:-----------|\n"""
                     for c in columns:
                         cols += f"| {c} |  |\n"
 
             if cols != "":
                 comment += f"""
 <details>
-  <summary>Show columns</summary>
+  <summary>Show columns info</summary>
 {cols}
 </details>
          
