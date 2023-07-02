@@ -82,7 +82,7 @@ def build_readme(load_data=True):
 
     import pdoc
 
-    modules = ["bulkhours.core.equals"]
+    modules = ["bulkhours.core.equals", "bulkhours.__init__", "bulkhours.core.evaluation", "bulkhours.hpc.compiler"]
     context = pdoc.Context()  # docformat="numpy")  # markdown restructuredtext google numpy
 
     modules = [pdoc.Module(mod, context=context) for mod in modules]

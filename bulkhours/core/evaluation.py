@@ -63,4 +63,7 @@ class Evaluation(Magics):
     @line_cell_magic
     @needs_local_scope
     def evaluation_cell_id(self, line, cell="", local_ns=None):
+        """
+        my doc string
+        """
         evaluate_cell(line, cell)
