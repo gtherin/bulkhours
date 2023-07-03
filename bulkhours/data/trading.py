@@ -3,7 +3,6 @@ import numpy as np
 import time
 
 from .data_parser import DataParser
-from .data_parser import register_dataset
 
 
 def get_test_data():
@@ -17,7 +16,13 @@ class Sampler:
 Sampler.outsample_dt = time.time() - 300
 
 
-@register_dataset("statsdata.apple")
+@DataParser.register_dataset(
+    label="trading.apple",
+    summary="Statement of Apple stock (Quarterly)",
+    category="Economics",
+    raw_data="APPLE_DownloadFPrepStatementQuarter.tsv",
+    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/trading.py",
+)
 def get_apple(self):
     apple = self.read_raw_data(self.raw_data).iloc[-4 * 5 :]
 

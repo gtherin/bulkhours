@@ -1,32 +1,57 @@
 import pandas as pd
 
 from ..hpc import flops
-from .data_parser import register_dataset
+from .data_parser import DataParser
 
 
-@register_dataset("hpc.transistor_count")
+@DataParser.register_dataset(
+    label="hpc.transistor_count",
+    summary="transistor_count",
+    category="Computing",
+    ref_site="https://en.wikipedia.org/wiki/Transistor_count",
+)
 def get_dfistor_count(self):
     columns = ["processor", "count", "date", "designer", "manufacturer", "engraving_scale", "area", "density", "ref"]
     df = flops.get_table_from_wiki(wpage="Transistor_count", in_table="Voodoo Graphics", columns=columns)
     return df.iloc[:-1]
 
 
-@register_dataset("hpc.engraving_scale")
+@DataParser.register_dataset(
+    label="hpc.engraving_scale",
+    summary="Semiconductor device fabrication: MOSFET scaling",
+    category="Computing",
+    ref_site="https://en.wikipedia.org/wiki/Transistor_count",
+)
 def get_engraving_scale(self):
     return flops.get_engraving_scale(verbose=True)
 
 
-@register_dataset("hpc.FLOPS_units")
+@DataParser.register_dataset(
+    label="hpc.FLOPS_units",
+    summary="FLOPS sub-units",
+    category="Computing",
+    ref_site="https://en.wikipedia.org/wiki/FLOPS",
+)
 def get_FLOPS(self):
     return flops.get_table_from_wiki("FLOPS", "Computer performance")
 
 
-@register_dataset("hpc.FLOPS_gpus")
+@DataParser.register_dataset(
+    label="hpc.FLOPS_gpus",
+    summary="FLOPS for gpus",
+    category="Computing",
+    ref_site="https://en.wikipedia.org/wiki/FLOPS",
+)
 def get_FLOPS(self):
     return flops.get_table_from_wiki("FLOPS", "NVIDIA", columns=["date", "un_costs", "costs", "platform", "comments"])
 
 
-@register_dataset("hpc.FLOPS_cpus")
+@DataParser.register_dataset(
+    label="hpc.FLOPS_cpus",
+    summary="FLOPS for cpus",
+    category="Computing",
+    ref_site="https://en.wikipedia.org/wiki/FLOPS",
+)
 def get_cpus(self):
     columns = ["processor", "count", "date", "designer", "engraving_scale", "area", "density"]
     df = flops.get_table_from_wiki(

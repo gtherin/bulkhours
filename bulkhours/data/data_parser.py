@@ -74,7 +74,6 @@ def get_data_from_file(raw_data, **kwargs):
     ext = filename.split(".")[-1]
     if ext == "xlsx":
         kwargs = {k: v for k, v in kwargs.items() if k not in ["summary", "category"]}
-        print(kwargs)
         return pd.read_excel(filename)  # , **kwargs)
     elif ext == "tsv":
         return pd.read_csv(filename, sep="\t")
@@ -92,7 +91,8 @@ def get_data_from_file(raw_data, **kwargs):
 
 
 class DataParser:
-    datasets = {}
+    datasets = OrderedDict()
+    clean_datasets = OrderedDict()
 
     @staticmethod
     def get_data_from_file(raw_data, **kwargs):
@@ -111,6 +111,7 @@ class DataParser:
         rename=None,
         on=None,
         is_test=None,
+        func=None,
         **data_info,
     ) -> None:
         self.label, self.raw_data, self.credit = label, raw_data, credit
@@ -120,16 +121,21 @@ class DataParser:
         self.drop = drop
         self.rename = rename
         self.is_test = is_test
+        self.func = func
 
     @staticmethod
-    def declare_data(name, f):
-        if not hasattr(DataParser, "MODELS_LIST"):
-            DataParser.MODELS_LIST = OrderedDict()
+    def declare_data(func=None, label=None, **info):
+        DataParser.datasets[label] = dict(label=label, func=func, **info)
 
-        if name not in DataParser.MODELS_LIST:
-            DataParser.MODELS_LIST[name] = f
-        else:
-            print(f"function for {name} ({f}) already defined")
+    @staticmethod
+    def register_dataset(**info):
+        DataParser.declare_data(**info)
+
+        def wrap(f):
+            DataParser.declare_data(func=f, **info)
+            return f
+
+        return wrap
 
     def get_info(self, load_columns=False, summary=False):
         columns = None
@@ -199,8 +205,8 @@ class DataParser:
         return get_data_from_file(raw_data, **self.data_info)
 
     def get_data(self, credit=None):
-        if self.label in DataParser.MODELS_LIST:
-            df = DataParser.MODELS_LIST[self.label](self)
+        if self.func is not None:
+            df = self.func(self)
         else:
             df = self.read_raw_data(self.raw_data)
 
@@ -235,10 +241,13 @@ class DataParser:
         ax.imshow(img)
         ax.set_axis_off()
 
-
-def register_dataset(name):
-    def wrap(f):
-        DataParser.declare_data(name, f)
-        return f
-
-    return wrap
+    @staticmethod
+    def build_clean_datasets():
+        if len(DataParser.clean_datasets) == 0:
+            datasets2 = {}
+            for k, data_info in DataParser.datasets.items():
+                if "reference" in data_info and (lr := data_info["reference"]) in DataParser.datasets:
+                    datasets2[k] = {**DataParser.datasets[lr], **data_info}
+                else:
+                    datasets2[k] = data_info
+            DataParser.clean_datasets = datasets2

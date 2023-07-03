@@ -1,12 +1,13 @@
 import glob
 import os
 import IPython
-import sys
 
 
 from .data_parser import DataParser
 from ..core.tools import abspath
-from .datasets import datasets, ddatasets, datacategories  # noqa
+
+# from .datasets import datasets, ddatasets, datacategories  # noqa
+from .datasets import datacategories  # noqa
 
 
 def get_readme_filename(filename="README.md"):
@@ -69,38 +70,16 @@ def build_readme(load_data=True):
                     line += get_header_links(filename, licence=False, github=False)
                 ff.write(line + "\n")
 
-    sys.command(f"cp -r data/README.md {tdir}/data.md")
-    if 0:
-        s = Script("cd /home/guydegnol/projects/bulkhours")
-        tdir = "../bulkhours.wiki"
-        s.add_line(f"/opt/miniconda/conda/bin/conda activate bulkhours_py3.10")
-        s.add_line(f"cp -r data/README.md {tdir}/Data.md")
-        s.execute(verbose=True)
-
-    if 0:
-        import pdoc
-
-        modules = ["bulkhours.core.equals", "bulkhours.__init__", "bulkhours.core.evaluation"]
-        context = pdoc.Context()  # docformat="numpy")  # markdown restructuredtext google numpy
-
-        modules = [pdoc.Module(mod, context=context) for mod in modules]
-
-        pdoc.link_inheritance(context)
-
-        def recursive_htmls(mod):
-            yield mod.name, mod.text()  # text html
-            for submod in mod.submodules():
-                yield from recursive_htmls(submod)
-
-        for mod in modules:
-            for module_name, html in recursive_htmls(mod):
-                with open(f"/home/guydegnol/projects/bulkhours.wiki/{module_name.replace('.', '_')}.md", "w") as ff:
-                    ff.write(html)
+    os.system(
+        f"cp -r /home/guydegnol/projects/bulkhours/data/README.md /home/guydegnol/projects/bulkhours.wiki/data.md"
+    )
 
     from ..phyu.constants import Units
 
     ffile = open(get_readme_filename(), "w")
     ffile.write("# Data\n\n")
+
+    DataParser.build_clean_datasets()
 
     for c, category in enumerate(datacategories):
         ffile.write(f'- [{c+1}. {category["label"]}](#{category["tag"]}) \n')
@@ -111,13 +90,12 @@ def build_readme(load_data=True):
         if category["label"] == "Physics":
             ffile.write(Units().info(size="+1", code=True))
 
-        for d in datasets:
+        for k, d in DataParser.clean_datasets.items():
             if d["category"] == category["tag"]:
-                # print(d["name"])
                 ffile.write(DataParser(**d).get_info(load_columns=load_data))
 
     raw_files = set()
-    for d in datasets:
+    for k, d in DataParser.clean_datasets.items():
         if "raw_data" in d and type(d["raw_data"]) == str:
             raw_files.add(d["raw_data"])
 
