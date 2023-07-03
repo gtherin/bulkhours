@@ -1,10 +1,15 @@
 from io import StringIO
 import pandas as pd
 
-from .data_parser import register_dataset
+from .data_parser import DataParser
 
 
-@register_dataset("mincer.stats")
+@DataParser.register_dataset(
+    label="mincer.stats",
+    summary="Descriptive statistics of hourly wages in selected EU countries in 2010 (in PPS)",
+    category="Economics",
+    ref_source="https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 2)",
+)
 def get_stats(self):
     return pd.read_csv(
         StringIO(
@@ -37,7 +42,17 @@ United Kingdom 16.368 7.590 36.390 53.933 0.4487
     ).set_index("Country")
 
 
-@register_dataset("mincer.params")
+@DataParser.register_dataset(
+    label="mincer.params",
+    summary="Mincer equation parameters per country",
+    category="Economics",
+    ref_source="https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 3)",
+    source="""- Mincer equation formula: ln(hourly_wage) = alpha_0i + alpha_1i * edu + alpha_2i * age + alpha_3i * age**2
+The results of estimation of parameters in Mincer equations in a set of countries. We
+put the point estimates, standard errors (in italics) and p-values for zero restriction test of a
+particular parameter (in square brackets)""",
+    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/mincer.py",
+)
 def get_params(self):
     return pd.read_csv(
         StringIO(

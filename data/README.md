@@ -408,6 +408,9 @@
 
 </details>
          
+#### Corruption index per country
+#### `bulkhours.get_data("world.corruption")`
+- Raw data: [corruption.csv](https://github.com/guydegnol/bulkhours/blob/main/data/corruption.csv)
 #### Life expectancy versus GDP/capita per country
 #### `bulkhours.get_data("world.life_expectancy_vs_gdp_2018")`
 - Raw data: [life-expectancy-vs-gdp-per-capita.csv](https://github.com/guydegnol/bulkhours/blob/main/data/life-expectancy-vs-gdp-per-capita.csv)
@@ -428,136 +431,6 @@
 | annotations |  |
 | Population |  |
 | Continent |  |
-
-</details>
-         
-#### Descriptive statistics of hourly wages in selected EU countries in 2010 (in PPS)
-#### `bulkhours.get_data("mincer.stats")`
-- Direct source: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 2)
-
-<details>
-  <summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| Mean |  |
-| Minimum |  |
-| Maximum |  |
-| Variance |  |
-| Coefficient |  |
-| of |  |
-| variation |  |
-
-</details>
-         
-#### Mincer equation parameters per country
-#### `bulkhours.get_data("mincer.params")`
-- Enrich data: [mincer.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/mincer.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/mincer.py))
-- Direct source: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 3)
-
-<details>
-  <summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| alpha_0i |  |
-| alpha_1i |  |
-| alpha_2i |  |
-| alpha_3i |  |
-| alpha_0i_e |  |
-| alpha_1i_e |  |
-| alpha_2i_e |  |
-| alpha_3i_e |  |
-
-</details>
-         
-#### Age de la population au 1er janvier (fin novembre 2022)
-#### `bulkhours.get_data("pyramide")`
-- Raw data: [pyramide.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/pyramide.tsv)
-- Direct source: https://www.insee.fr/fr/statistiques/2381472#tableau-figure1
-
-<details>
-  <summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| Année de naissance |  |
-| Age révolu |  |
-| Nombre de femmes |  |
-| Nombre d'hommes |  |
-| Ensemble |  |
-
-</details>
-         
-#### Cotisants, retraités et rapport démographique tous régimes en 2020
-#### `bulkhours.get_data("france.retraites")`
-- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
-- Direct source: https://www.insee.fr/fr/statistiques/2415121#tableau-figure1
-
-<details>
-  <summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| active |  |
-| retired |  |
-| rapport |  |
-
-</details>
-         
-#### Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020
-#### `bulkhours.get_data("france.income")`
-- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
-- Direct source: https://www.insee.fr/fr/statistiques/6436313#tableau-figure2
-
-<details>
-  <summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| index |  |
-| income |  |
-| population |  |
-| xmin |  |
-| xmax |  |
-| is_valid |  |
-
-</details>
-         
-#### Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019
-#### `bulkhours.get_data("france.salaires")`
-- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
-- Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
-
-<details>
-  <summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| Revenu annuel Femmes moyen   |  Revenu annuel Femmes moyen |         
-| Revenu annuel Hommes moyen  |  Revenu annuel Hommes moyen | 
-| Revenu annuel Femmes moyen Écart relatif (en %)   |   Revenu annuel Femmes moyen Écart relatif (en %)	| 
-| Salaire annuel Femmes moyen EQTP  |  Salaire annuel Femmes moyen EQTP | 
-| Salaire annuel Hommes moyen EQTP   |  Salaire annuel Hommes moyen EQTP |
-| Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)   |  Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP) |
-
-</details>
-         
-#### Inégalités salariales entre femmes et hommes de 1995 à 2019
-#### `bulkhours.get_data("france.histsalaires")`
-- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
-- Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
-
-<details>
-  <summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| delta_rev_legacy   |  écart relatif du revenu salarial moyen homme/femme |         
-| delta_rev  |  écart relatif (en %) du revenu salarial moyen.1| 
-| delta_rev_eqtp_legacy   |  écart relatif du salaire moyen en EQTP	| 
-| delta_rev_eqtp  |  écart relatif du salaire moyen en EQTP| 
-| delta_vol_eqtp   |  écart relatif du volume de travail en EQTP moyen |
 
 </details>
          
@@ -654,6 +527,114 @@
 | yquarter |  |
 | diff(gdp) |  |
 | diff(unemployement) |  |
+
+</details>
+         
+#### Cotisants, retraités et rapport démographique tous régimes en 2020
+#### `bulkhours.get_data("france.retraites")`
+- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
+- Direct source: https://www.insee.fr/fr/statistiques/2415121#tableau-figure1
+
+<details>
+  <summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| active |  |
+| retired |  |
+| rapport |  |
+
+</details>
+         
+#### Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020
+#### `bulkhours.get_data("france.income")`
+- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
+- Direct source: https://www.insee.fr/fr/statistiques/6436313#tableau-figure2
+
+<details>
+  <summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| index |  |
+| income |  |
+| population |  |
+| xmin |  |
+| xmax |  |
+| is_valid |  |
+
+</details>
+         
+#### Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019
+#### `bulkhours.get_data("france.salaires")`
+- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
+- Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
+
+<details>
+  <summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| Revenu annuel Femmes moyen   |  Revenu annuel Femmes moyen |         
+| Revenu annuel Hommes moyen  |  Revenu annuel Hommes moyen | 
+| Revenu annuel Femmes moyen Écart relatif (en %)   |   Revenu annuel Femmes moyen Écart relatif (en %)	| 
+| Salaire annuel Femmes moyen EQTP  |  Salaire annuel Femmes moyen EQTP | 
+| Salaire annuel Hommes moyen EQTP   |  Salaire annuel Hommes moyen EQTP |
+| Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)   |  Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP) |
+
+</details>
+         
+#### Inégalités salariales entre femmes et hommes de 1995 à 2019
+#### `bulkhours.get_data("france.histsalaires")`
+- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
+- Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
+
+<details>
+  <summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| delta_rev_legacy   |  écart relatif du revenu salarial moyen homme/femme |         
+| delta_rev  |  écart relatif (en %) du revenu salarial moyen.1| 
+| delta_rev_eqtp_legacy   |  écart relatif du salaire moyen en EQTP	| 
+| delta_rev_eqtp  |  écart relatif du salaire moyen en EQTP| 
+| delta_vol_eqtp   |  écart relatif du volume de travail en EQTP moyen |
+
+</details>
+         
+#### Age de la population au 1er janvier (fin novembre 2022)
+#### `bulkhours.get_data("pyramide")`
+- Raw data: [pyramide.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/pyramide.tsv)
+- Direct source: https://www.insee.fr/fr/statistiques/2381472#tableau-figure1
+
+<details>
+  <summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| Année de naissance |  |
+| Age révolu |  |
+| Nombre de femmes |  |
+| Nombre d'hommes |  |
+| Ensemble |  |
+
+</details>
+         
+#### Statement of Apple stock (Quarterly)
+#### `bulkhours.get_data("trading.apple")`
+- Raw data: [APPLE_DownloadFPrepStatementQuarter.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/APPLE_DownloadFPrepStatementQuarter.tsv)
+- Enrich data: [trading.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/trading.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/trading.py))
+
+<details>
+  <summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| revenue |  |
+| grossProfit |  |
+| ebitda |  |
+| netIncome |  |
+| eps |  |
 
 </details>
          
@@ -755,6 +736,46 @@
 | Column   |      Info |
 |-----------|:-----------|
 | HOUSTNSA |  |
+
+</details>
+         
+#### Descriptive statistics of hourly wages in selected EU countries in 2010 (in PPS)
+#### `bulkhours.get_data("mincer.stats")`
+- Direct source: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 2)
+
+<details>
+  <summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| Mean |  |
+| Minimum |  |
+| Maximum |  |
+| Variance |  |
+| Coefficient |  |
+| of |  |
+| variation |  |
+
+</details>
+         
+#### Mincer equation parameters per country
+#### `bulkhours.get_data("mincer.params")`
+- Enrich data: [mincer.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/mincer.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/mincer.py))
+- Direct source: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 3)
+
+<details>
+  <summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| alpha_0i |  |
+| alpha_1i |  |
+| alpha_2i |  |
+| alpha_3i |  |
+| alpha_0i_e |  |
+| alpha_1i_e |  |
+| alpha_2i_e |  |
+| alpha_3i_e |  |
 
 </details>
          
@@ -888,57 +909,6 @@
 | Address of Headquarters |  |
 | Date first added |  |
 | CIK |  |
-
-</details>
-         
-#### Statement of Apple stock (Quarterly)
-#### `bulkhours.get_data("trading.apple")`
-- Raw data: [APPLE_DownloadFPrepStatementQuarter.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/APPLE_DownloadFPrepStatementQuarter.tsv)
-- Enrich data: [trading.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/trading.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/trading.py))
-
-<details>
-  <summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| date |  |
-| symbol |  |
-| reportedCurrency |  |
-| cik |  |
-| fillingDate |  |
-| acceptedDate |  |
-| calendarYear |  |
-| period |  |
-| revenue |  |
-| costOfRevenue |  |
-| grossProfit |  |
-| grossProfitRatio |  |
-| researchAndDevelopmentExpenses |  |
-| generalAndAdministrativeExpenses |  |
-| sellingAndMarketingExpenses |  |
-| sellingGeneralAndAdministrativeExpenses |  |
-| otherExpenses |  |
-| operatingExpenses |  |
-| costAndExpenses |  |
-| interestIncome |  |
-| interestExpense |  |
-| depreciationAndAmortization |  |
-| ebitda |  |
-| ebitdaratio |  |
-| operatingIncome |  |
-| operatingIncomeRatio |  |
-| totalOtherIncomeExpensesNet |  |
-| incomeBeforeTax |  |
-| incomeBeforeTaxRatio |  |
-| incomeTaxExpense |  |
-| netIncome |  |
-| netIncomeRatio |  |
-| eps |  |
-| epsdiluted |  |
-| weightedAverageShsOut |  |
-| weightedAverageShsOutDil |  |
-| link |  |
-| finalLink |  |
 
 </details>
          
@@ -1303,23 +1273,6 @@
 
 ## Computing 
 
-#### Computational capacity of the fastest supercomputers
-#### `bulkhours.get_data("supercomputers")`
-- Raw data: [Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv](https://github.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv)  ([raw](https://raw.githubusercontent.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv))
-- Direct source: https://ourworldindata.org/grapher/supercomputer-power-flops
-
-<details>
-  <summary>Show columns info</summary>
-> The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year
-
-| Column   |      Info |
-|-----------|:-----------|
-| Entity |  |
-| Year |  |
-| Floating-Point Operations per Second |  |
-
-</details>
-         
 #### transistor_count
 #### `bulkhours.get_data("hpc.transistor_count")`
 - Reference site: https://en.wikipedia.org/wiki/Transistor_count
@@ -1405,6 +1358,23 @@
 | density |  |
 | engraving_scale2 |  |
 | engraving_scale3 |  |
+
+</details>
+         
+#### Computational capacity of the fastest supercomputers
+#### `bulkhours.get_data("supercomputers")`
+- Raw data: [Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv](https://github.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv)  ([raw](https://raw.githubusercontent.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv))
+- Direct source: https://ourworldindata.org/grapher/supercomputer-power-flops
+
+<details>
+  <summary>Show columns info</summary>
+> The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year
+
+| Column   |      Info |
+|-----------|:-----------|
+| Entity |  |
+| Year |  |
+| Floating-Point Operations per Second |  |
 
 </details>
          

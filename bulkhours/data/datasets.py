@@ -8,7 +8,7 @@ datacategories = [
     dict(label="Machine learning data", tag="Machine_learning"),
 ]
 
-datasets = [
+datasets2 = [
     dict(
         label="world.poverty",
         summary="World Bank Poverty and Inequality data",
@@ -98,49 +98,6 @@ particular parameter (in square brackets)""",
         raw_data="pyramide.tsv",
         source="""la France compte 805 914 personnes de 65 ans dont 425 143 femmes et 380 771 hommes""",
         ref_source="https://www.insee.fr/fr/statistiques/2381472#tableau-figure1",
-    ),
-    dict(
-        label="france.retraites",
-        summary="Cotisants, retraités et rapport démographique tous régimes en 2020",
-        category="Economics",
-        source="""- Note: certains salaires en EQTP sont inférieurs au Smic ; ceci est en effet permis par certains statuts. Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d’incohérences entre salaires et durées travaillées dans les déclarations administratives, qui ne peuvent être toutes redressées.
-- Lecture: en 2020, en EQTP, 50 % des salariés gagnent plus de 2 005 euros.
-- Champ: France hors Mayotte, salariés du privé et des entreprises publiques, y compris bénéficiaires de contrats aidés et de contrats de professionnalisation ; hors apprentis, stagiaires, salariés agricoles et salariés des particuliers employeurs.""",
-        enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py",
-        ref_source="https://www.insee.fr/fr/statistiques/2415121#tableau-figure1",
-    ),
-    dict(
-        label="france.income",
-        summary="Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020",
-        category="Economics",
-        source="""- Note : certains salaires en EQTP sont inférieurs au Smic ; ceci est en effet permis par certains statuts.
-Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d'incohérences entre salaires et durées travaillées dans
-les déclarations administratives, qui ne peuvent être toutes redressées.
-- Lecture : en 2020, en EQTP, 50 % des salariés gagnent plus de 2 005 euros.
-- Champ : France hors Mayotte, salariés du privé et des entreprises publiques, y compris bénéficiaires de contrats aidés et
-de contrats de professionnalisation ; hors apprentis, stagiaires, salariés agricoles et salariés des particuliers employeurs.""",
-        enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py",
-        ref_source="https://www.insee.fr/fr/statistiques/6436313#tableau-figure2",
-    ),
-    dict(
-        label="france.salaires",
-        summary="Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019",
-        category="Economics",
-        columns_description="""| Column   |      Info |
-|-----------|:-----------|
-| Revenu annuel Femmes moyen   |  Revenu annuel Femmes moyen |         
-| Revenu annuel Hommes moyen  |  Revenu annuel Hommes moyen | 
-| Revenu annuel Femmes moyen Écart relatif (en %)   |   Revenu annuel Femmes moyen Écart relatif (en %)	| 
-| Salaire annuel Femmes moyen EQTP  |  Salaire annuel Femmes moyen EQTP | 
-| Salaire annuel Hommes moyen EQTP   |  Salaire annuel Hommes moyen EQTP |
-| Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)   |  Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP) |""",
-        source="""En 2019, le revenu salarial annuel moyen dans le secteur privé et la fonction publique s'élève à 18_970 euros
-pour les femmes, soit un niveau inférieur de 22 % à celui des hommes (figure 1).
-Le revenu salarial médian des femmes est inférieur de 16 % à celui des hommes (figure 2).
-Cet écart s'amplifie à la fois dans les bas revenus (écart de 25 % pour le premier décile du revenu salarial) et
-dans les hauts revenus (écart de 21 % pour le neuvième décile).""",
-        enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py",
-        ref_source="https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805",
     ),
     dict(
         label="france.histsalaires",
@@ -510,12 +467,12 @@ for f in (
     + ["lognormal.png", "in_trading.csv", "galton.jpg", "ffcontrol.csv", "galtonr.png"]
     + ["exercices", "freefight.csv", "cache"]
 ):
-    datasets.append(dict(label=f, raw_data=f, category="Internal"))
+    datasets2.append(dict(label=f, raw_data=f, category="Internal"))
 
-ddatasets = {v["label"]: v for v in datasets}
+ddatasets2 = {v["label"]: v for v in datasets2}
 
 
-for d in range(len(datasets)):
-    if "reference" in datasets[d] and (lr := datasets[d]["reference"]) in ddatasets:
-        datasets[d] = {**ddatasets[lr], **datasets[d]}
-        ddatasets[datasets[d]["label"]] = datasets[d]
+for d in range(len(datasets2)):
+    if "reference" in datasets2[d] and (lr := datasets2[d]["reference"]) in ddatasets2:
+        datasets2[d] = {**ddatasets2[lr], **datasets2[d]}
+        ddatasets2[datasets2[d]["label"]] = datasets2[d]

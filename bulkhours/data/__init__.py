@@ -1,18 +1,28 @@
-from .statsdata import *  # noqa
-from .trading import *  # noqa
-from .france import *  # noqa
-from .gmacro import *  # noqa
-from .mincer import *  # noqa
-from .world import *  # noqa
-from .hpc import *  # noqa
+from os.path import dirname, basename, isfile, join
+import glob
+
+modules = glob.glob(join(dirname(__file__), "*.py"))
+modules = [
+    basename(f)[:-3]
+    for f in modules
+    if isfile(f) and basename(f)[:-3] not in ["data_parser", "__init__", "help", "datasets"]
+]
+__all__ = modules
+from . import *
 from .help import build_readme, help, generate_header_links  # noqa
-from .datasets import datasets, ddatasets, datacategories  # noqa
 
 
 def get_data(label, **kwargs):
     from .data_parser import DataParser  # noqa
 
-    data_info = {**ddatasets[label], **kwargs} if label in ddatasets else {"raw_data": label, **kwargs}
+    DataParser.build_clean_datasets()
+
+    data_info = (
+        {**DataParser.clean_datasets[label], **kwargs}
+        if label in DataParser.clean_datasets
+        else {"raw_data": label, **kwargs}
+    )
+
     return DataParser(**data_info).get_data()
 
 

@@ -1,17 +1,28 @@
 import pandas as pd
 
 
-from .data_parser import register_dataset
+from .data_parser import DataParser
 
 
-@register_dataset("scipy_distributions_list")
+@DataParser.register_dataset(
+    label="scipy_distributions_list",
+    summary="Scipy list of available distributions",
+    category="Economics",
+    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
+)
 def get_scipy_distributions_list(self):
     import scipy as sp
 
     return [d for d in dir(sp.stats._continuous_distns) if not d in ["levy_stable", "studentized_range"]]
 
 
-@register_dataset("statsdata.oil")
+@DataParser.register_dataset(
+    label="statsdata.oil",
+    summary="Oil production in Saudi Arabia from 1996 to 2007",
+    category="Economics",
+    ref_source="""https://www.statsmodels.org/stable/index.html""",
+    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
+)
 def get_oil(self):
     return pd.Series(
         [
@@ -32,7 +43,13 @@ def get_oil(self):
     ).to_frame("oil")
 
 
-@register_dataset("statsdata.air")
+@DataParser.register_dataset(
+    label="statsdata.air",
+    summary="Air pollution data",
+    category="Economics",
+    ref_source="""https://www.statsmodels.org/stable/index.html""",
+    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
+)
 def get_air(self):
     air = pd.Series(
         [
@@ -57,7 +74,13 @@ def get_air(self):
     return air.to_frame("air")
 
 
-@register_dataset("statsdata.livestock2")
+@DataParser.register_dataset(
+    label="statsdata.livestock2",
+    summary="Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods.",
+    category="Economics",
+    ref_source="""https://www.statsmodels.org/stable/index.html""",
+    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
+)
 def get_livestock2(self):
     index = pd.date_range(start="1970", end="2001", freq="A")
     return pd.Series(
@@ -98,13 +121,24 @@ def get_livestock2(self):
     ).to_frame("livestock2")
 
 
-@register_dataset("statsdata.livestock3")
+@DataParser.register_dataset(
+    label="statsdata.livestock3",
+    summary="Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods. (3)",
+    category="Economics",
+    ref_source="""https://www.statsmodels.org/stable/index.html""",
+    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
+)
 def get_livestock3(self):
     data = [407.9979, 403.4608, 413.8249, 428.105, 445.3387, 452.9942, 455.7402]
     return pd.Series(data, pd.date_range(start="2001", end="2008", freq="A")).to_frame("livestock3")
 
 
-@register_dataset("statsdata.aust")
+@DataParser.register_dataset(
+    label="statsdata.aust",
+    summary="International visitor night in Australia (millions) < 2005",
+    category="Economics",
+    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
+)
 def get_aust(self):
     data = [
         41.7275,
@@ -135,7 +169,13 @@ def get_aust(self):
     return pd.Series(data, pd.date_range(start="2005", end="2010-Q4", freq="QS-OCT")).to_frame("aust")
 
 
-@register_dataset("statsdata.air_passengers")
+@DataParser.register_dataset(
+    label="statsdata.air_passengers",
+    summary="International visitor night in Australia (millions) > 2005",
+    category="Economics",
+    raw_data="AirPassengers.csv",
+    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
+)
 def get_air_passengers(self):
     df = self.read_raw_data(self.raw_data).set_index("Month")
 
@@ -146,7 +186,16 @@ def get_air_passengers(self):
     return df
 
 
-@register_dataset("statsdata.sunspots")
+@DataParser.register_dataset(
+    label="statsdata.sunspots",
+    summary="Quarterly sunspots activity (ssn)",
+    category="Physics",
+    ref_site="""https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json""",
+    raw_data="https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json",
+    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
+    ref_source="https://www.swpc.noaa.gov/products/solar-cycle-progression",
+    columns_info="https://en.wikipedia.org/wiki/Wolf_number",
+)
 def get_sunspots(self):
     dta = pd.read_json(self.raw_data)
     sunspots = dta.set_index("time-tag")
@@ -159,7 +208,13 @@ def get_sunspots(self):
     return sunspots
 
 
-@register_dataset("statsdata.hhousing")
+@DataParser.register_dataset(
+    label="statsdata.hhousing",
+    summary="All-Transactions House Price Index for Houston",
+    category="Economics",
+    ref_source="""https://fred.stlouisfed.org/series/ATNHPIUS26420Q""",
+    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
+)
 def get_hhousing(self):
     from pandas_datareader import data as pdr  # To get data
 

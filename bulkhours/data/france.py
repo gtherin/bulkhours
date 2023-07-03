@@ -1,10 +1,19 @@
 from io import StringIO
 import pandas as pd
 
-from .data_parser import register_dataset
+from .data_parser import DataParser
 
 
-@register_dataset("france.retraites")
+@DataParser.register_dataset(
+    label="france.retraites",
+    summary="Cotisants, retraités et rapport démographique tous régimes en 2020",
+    category="Economics",
+    source="""- Note: certains salaires en EQTP sont inférieurs au Smic ; ceci est en effet permis par certains statuts. Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d’incohérences entre salaires et durées travaillées dans les déclarations administratives, qui ne peuvent être toutes redressées.
+- Lecture: en 2020, en EQTP, 50 % des salariés gagnent plus de 2 005 euros.
+- Champ: France hors Mayotte, salariés du privé et des entreprises publiques, y compris bénéficiaires de contrats aidés et de contrats de professionnalisation ; hors apprentis, stagiaires, salariés agricoles et salariés des particuliers employeurs.""",
+    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py",
+    ref_source="https://www.insee.fr/fr/statistiques/2415121#tableau-figure1",
+)
 def get_retraites(self):
     return (
         pd.read_csv(
@@ -35,7 +44,19 @@ year	active	retired	rapport
     )
 
 
-@register_dataset("france.income")
+@DataParser.register_dataset(
+    label="france.income",
+    summary="Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020",
+    category="Economics",
+    source="""- Note : certains salaires en EQTP sont inférieurs au Smic ; ceci est en effet permis par certains statuts.
+Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d'incohérences entre salaires et durées travaillées dans
+les déclarations administratives, qui ne peuvent être toutes redressées.
+- Lecture : en 2020, en EQTP, 50 % des salariés gagnent plus de 2 005 euros.
+- Champ : France hors Mayotte, salariés du privé et des entreprises publiques, y compris bénéficiaires de contrats aidés et
+de contrats de professionnalisation ; hors apprentis, stagiaires, salariés agricoles et salariés des particuliers employeurs.""",
+    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py",
+    ref_source="https://www.insee.fr/fr/statistiques/6436313#tableau-figure2",
+)
 def get_income(self):
     data = StringIO(
         """income	population
@@ -143,7 +164,26 @@ Plus de 9_000	183_314
 # OECD (2023), Adult education level (indicator). doi: 10.1787/36bce3fe-en (Accessed on 24 January 2023)
 
 
-@register_dataset("france.salaires")
+@DataParser.register_dataset(
+    label="france.salaires",
+    summary="Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019",
+    category="Economics",
+    columns_description="""| Column   |      Info |
+|-----------|:-----------|
+| Revenu annuel Femmes moyen   |  Revenu annuel Femmes moyen |         
+| Revenu annuel Hommes moyen  |  Revenu annuel Hommes moyen | 
+| Revenu annuel Femmes moyen Écart relatif (en %)   |   Revenu annuel Femmes moyen Écart relatif (en %)	| 
+| Salaire annuel Femmes moyen EQTP  |  Salaire annuel Femmes moyen EQTP | 
+| Salaire annuel Hommes moyen EQTP   |  Salaire annuel Hommes moyen EQTP |
+| Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)   |  Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP) |""",
+    source="""En 2019, le revenu salarial annuel moyen dans le secteur privé et la fonction publique s'élève à 18_970 euros
+pour les femmes, soit un niveau inférieur de 22 % à celui des hommes (figure 1).
+Le revenu salarial médian des femmes est inférieur de 16 % à celui des hommes (figure 2).
+Cet écart s'amplifie à la fois dans les bas revenus (écart de 25 % pour le premier décile du revenu salarial) et
+dans les hauts revenus (écart de 21 % pour le neuvième décile).""",
+    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py",
+    ref_source="https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805",
+)
 def get_salaires(self):
     data = StringIO(
         """
@@ -173,7 +213,21 @@ Secteur: Ensemble	18 970	24 420	22,3	26 430	31 510	16,1
     return df
 
 
-@register_dataset("france.histsalaires")
+@DataParser.register_dataset(
+    label="france.histsalaires",
+    summary="Inégalités salariales entre femmes et hommes de 1995 à 2019",
+    category="Economics",
+    columns_description="""| Column   |      Info |
+|-----------|:-----------|
+| delta_rev_legacy   |  écart relatif du revenu salarial moyen homme/femme |         
+| delta_rev  |  écart relatif (en %) du revenu salarial moyen.1| 
+| delta_rev_eqtp_legacy   |  écart relatif du salaire moyen en EQTP	| 
+| delta_rev_eqtp  |  écart relatif du salaire moyen en EQTP| 
+| delta_vol_eqtp   |  écart relatif du volume de travail en EQTP moyen |""",
+    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py",
+    ref_source="https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805",
+    rename=["delta_rev_legacy", "delta_rev", "delta_rev_eqtp_legacy", "delta_rev_eqtp", "delta_vol_eqtp"],
+)
 def get_histsalaires(self):
     data = StringIO(
         """
@@ -210,3 +264,13 @@ Année	écart relatif du revenu salarial moyen	écart relatif du revenu salarial
         df[c] = df[c].str.replace(" ", "").str.replace(",", ".").astype(float)
 
     return df
+
+
+DataParser.register_dataset(
+    label="pyramide",
+    summary="Age de la population au 1er janvier (fin novembre 2022)",
+    category="Economics",
+    raw_data="pyramide.tsv",
+    source="""la France compte 805 914 personnes de 65 ans dont 425 143 femmes et 380 771 hommes""",
+    ref_source="https://www.insee.fr/fr/statistiques/2381472#tableau-figure1",
+)
