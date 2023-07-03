@@ -1,6 +1,7 @@
 import glob
 import os
 import IPython
+import sys
 
 
 from .data_parser import DataParser
@@ -68,15 +69,12 @@ def build_readme(load_data=True):
                     line += get_header_links(filename, licence=False, github=False)
                 ff.write(line + "\n")
 
+    sys.command(f"cp -r data/README.md {tdir}/data.md")
     if 0:
         s = Script("cd /home/guydegnol/projects/bulkhours")
         tdir = "../bulkhours.wiki"
         s.add_line(f"/opt/miniconda/conda/bin/conda activate bulkhours_py3.10")
         s.add_line(f"cp -r data/README.md {tdir}/Data.md")
-        # s.add_line(f"cp -r bulkhours/ecox/README.md {tdir}/Econometrics.md")
-        # s.add_line(f"cp -r bulkhours/hpc/README.md {tdir}/HPC.md")
-        s.add_line(f"/opt/miniconda/envs/bulkhours_py3.10/bin/pdoc bulkhours/core/tools.py --force -o {tdir}/docs")
-        s.add_line(f"/opt/miniconda/envs/bulkhours_py3.10/bin/pdoc bulkhours/core/equals.py -o {tdir}/docs")
         s.execute(verbose=True)
 
     if 0:
