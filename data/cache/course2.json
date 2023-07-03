@@ -1,0 +1,63 @@
+{
+    "_info": {
+        "global": {
+            "admins": "thelord.oflight@got.grrmthe.lordoflight@got.grrm;",
+            "chatgpt": false,
+            "language": "fr",
+            "norm20": true,
+            "restricted": false,
+            "virtual_rooms": "winterfell;casterlyrock;stormlands",
+            "winterfell": "john.snow@got.grrm;robb.stark@got.grrm;sansa.stark@got.grrm;arya.stark@got.grrm;bran.stark@got.grrm;rickon.stark@got.grrm",
+            "casterlyrock": "jamie.lannister@got.grrm;cersei.lannister@got.grrm;tyrion.lannister@got.grrm",
+            "stormlands": ""
+        },
+        "": {
+            "exercices": "exo1;exo2",
+            "evaluation": "",
+            "page": ""
+        },
+        "cadmin": {
+            "exercices": "exo1",
+            "evaluation": "",
+            "page": ""
+        }
+    },
+    "_casterlyrock_cadmin_exo1": {
+        "jamie.lannister@got.grrm": {
+            "answer": "a=1",
+            "note": 10,
+            "update_time": "2023-06-30 19:20:50"
+        }
+    },
+    "_casterlyrock_cadmin_exo2": {
+        "jamie.lannister@got.grrm": {
+            "answer": "a=1",
+            "note": 10,
+            "update_time": "2023-06-30 19:20:50"
+        }
+    },
+    "_winterfell_cadmin_exo1": {
+        "arya.stark@got.grrm": {
+            "answer": "a=1",
+            "note": 10,
+            "update_time": "2023-06-30 19:20:50"
+        },
+        "bran.stark@got.grrm": {
+            "answer": "a=1",
+            "note": 10,
+            "update_time": "2023-06-30 19:20:50"
+        }
+    },
+    "_winterfell_cadmin_exo2": {
+        "arya.stark@got.grrm": {
+            "answer": "a=1",
+            "note": 15,
+            "update_time": "2023-06-30 19:20:50"
+        },
+        "bran.stark@got.grrm": {
+            "answer": "a=1",
+            "note": 13,
+            "update_time": "2023-06-30 19:20:50"
+        }
+    }
+}

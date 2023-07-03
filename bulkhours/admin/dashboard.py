@@ -2,14 +2,16 @@ import IPython
 import ipywidgets
 from argparse import Namespace
 
+from . import tools
 from .. import core
 
 
 class WidgetDashboard(core.WidgetTextArea):
     widget_id = "dashboard"
 
-    def __init__(self, config, abuttons):
-        self.cinfo = Namespace(**config)
+    def __init__(self, cfg, abuttons):
+        self.cfg = cfg
+        self.cinfo = Namespace(**cfg.data)
         self.cinfo.abuttons = abuttons
         self.widget = self.init_widget()
 
@@ -29,12 +31,12 @@ class WidgetDashboard(core.WidgetTextArea):
         )
         self.output = ipywidgets.Output()
 
+        cfg = core.tools.get_config(is_new_format=True)
         config = core.tools.get_config()
 
-        virtual_room, subject, notebook_id = (config.get(v) for v in ["virtual_room", "subject", "notebook_id"])
-        language, chatgpt, norm20, restricted, virtual_rooms = (
-            config["global"].get(v) for v in ["language", "chatgpt", "norm20", "restricted", "virtual_rooms"]
-        )
+        virtual_rooms = config["global"].get("virtual_rooms")
+        virtual_room = config.get("virtual_room")
+        notebook_id = config.get("notebook_id")
 
         self.ws = {
             k: ipywidgets.Text(value=config[notebook_id][k], layout=ipywidgets.Layout(flex="4 1 0%", width="auto"))
@@ -42,20 +44,21 @@ class WidgetDashboard(core.WidgetTextArea):
         }
 
         self.ws["chatgpt"] = ipywidgets.Checkbox(
-            value=chatgpt,
-            description="🤖Autoriser ChatGpt" if language == "fr" else "🤖Allow ChatGpt",
+            value=cfg.chatgpt,
+            description="🤖Autoriser ChatGpt" if cfg.isfr else "🤖Allow ChatGpt",
             indent=False,
             layout=ipywidgets.Layout(width="auto", flex_flow="row", display="flex"),
+            disabled=cfg.openai_token is None,
         )
         self.ws["norm20"] = ipywidgets.Checkbox(
-            value=norm20,
-            description="📜Norme à 20" if language == "fr" else "📜Norm to 20",
+            value=cfg.norm20,
+            description="📜Norme à 20" if cfg.isfr else "📜Norm to 20",
             indent=False,
             layout=ipywidgets.Layout(width="auto", flex_flow="row", display="flex"),
         )
         self.ws["restricted"] = ipywidgets.Checkbox(
-            value=restricted,
-            description="🔒Acces restreint" if language == "fr" else "🔒Restrict access",
+            value=cfg.restricted,
+            description="🔒Acces restreint" if cfg.isfr else "🔒Restrict access",
             indent=False,
             layout=ipywidgets.Layout(width="auto", flex_flow="row", display="flex"),
         )
@@ -63,7 +66,7 @@ class WidgetDashboard(core.WidgetTextArea):
 
         label = (
             f"Paramètres du cours (nb_id={notebook_id}, salle virtuelle={virtual_room})"
-            if language == "fr"
+            if cfg.isfr
             else f"Course parameters (nb_id={notebook_id}, virtual classroom={virtual_room})"
         )
         self.ws["title"] = core.tools.html(label, size="5", color="green")
@@ -72,14 +75,14 @@ class WidgetDashboard(core.WidgetTextArea):
 
         self.ws["virtual_room"] = ipywidgets.RadioButtons(value=virtual_room, options=virtual_rooms.split(";"))
 
-        self.ws["language"] = ipywidgets.RadioButtons(value=language, options=["fr", "en"])
+        self.ws["language"] = ipywidgets.RadioButtons(value=cfg.language, options=["fr", "en"])
 
         if 0:
             xwidgets.append(
                 ipywidgets.Box(
                     [
                         core.tools.html(
-                            "Salle virtuelle active" if language == "fr" else "Active virtual classroom",
+                            "Salle virtuelle active" if cfg.isfr else "Active virtual classroom",
                             layout=ipywidgets.Layout(flex="1 1 0%", width="auto"),
                         ),
                         self.ws["virtual_room"],
@@ -207,7 +210,7 @@ class WidgetDashboard(core.WidgetTextArea):
         print(f"\x1b[32m\x1b[1m{cmd}\x1b[m")
 
 
-def dashboard(virtual_room=None):
+def dashboard(virtual_room=None, verbose=True):
     """La fonction dashboard permet d'éditer les options d'un cours
 
     Parameters:
@@ -215,19 +218,13 @@ def dashboard(virtual_room=None):
     :return: a note between the minimal note and maximal note
     """
 
-    config = core.tools.get_config()
-    if virtual_room is not None:
-        config["virtual_room"] = virtual_room
-        core.tools.update_config(config)
+    cfg = tools.switch_classroom(virtual_room, verbose=verbose)
 
-    virtual_room = config.get("virtual_room")
-
-    if "help" in config and config["help"]:
+    if "help" in cfg and cfg.help:
         st = lambda x: f"\x1b[30m\x1b[1m{x}\x1b[m"
         print(st(dashboard.__doc__))
 
     output = ipywidgets.Output()
-    language = config["global"]["language"]
 
     abuttons = {
         "delete_solution": core.buttons.SwitchButton(
@@ -235,7 +232,7 @@ def dashboard(virtual_room=None):
             width="200px",
             fr=f"Effacer les réponses ({virtual_room})",
             en=f"Delete answers ({virtual_room})",
-            language=language,
+            language=cfg.language,
             sleep_on=2,
         ),
         "save_changes": core.buttons.SwitchButton(
@@ -243,16 +240,12 @@ def dashboard(virtual_room=None):
             width="200px",
             fr=f"Sauver les changements",
             en=f"Save changes",
-            language=language,
+            language=cfg.language,
             sleep_on=2,
         ),
     }
 
-    bwidgeta = WidgetDashboard(config, abuttons)
-
-    # bwidgeta = WidgetDashboard(dict(nbid=notebook_id, abuttons=abuttons))
-    # bwidgeta = WidgetDashboard(dict(nbid=notebook_id, abuttons=abuttons))
-    # print(config)
+    bwidgeta = WidgetDashboard(cfg, abuttons)
 
     def func_delete_solution(b):
         return core.buttons.update_button(
