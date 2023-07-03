@@ -7,10 +7,15 @@
             "norm20": false,
             "restricted": false,
             "virtual_rooms": "room1",
-            "room1": "johnny.cash@bulkhours.org;"
+            "room1": "johnny.cash@bulkhours.org;john.doe@un.known;john.doe@un.known;"
         },
         "": {
             "exercices": "my_first_exercice;",
+            "evaluation": "",
+            "page": ""
+        },
+        "covid": {
+            "exercices": "",
             "evaluation": "",
             "page": ""
         }

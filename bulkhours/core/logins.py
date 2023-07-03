@@ -125,6 +125,13 @@ def init_env(packages=None, **kwargs):
             f"⚠️\x1b[31mDatabase is local (security_level={config['security_level']}). Export your config file if you need persistency.\x1b[0m⚠️",
             end="",
         )
+    if ipp := IPython.get_ipython():
+        ipp.run_cell(
+            """import IPython
+import ipywidgets
+        """
+        )
+
     print("\n" + info)
     if tools.get_value("openai_token") is not None:
         if ipp := IPython.get_ipython():
