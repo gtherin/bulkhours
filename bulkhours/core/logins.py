@@ -73,13 +73,36 @@ def init_prems(config):
 
 
 def init_env(packages=None, **kwargs):
-    """
-    Initialize the environment for the notebook
-    email: email of the student
-    from_scratch: if True, local variables is reinitialized
-    packages:= to install packages from pip or apt-get
-    database: database to use
+    """Initialize the environment of the user
 
+    Parameters:
+    :param email: email of the student/teacher
+    :param subject: subject of the course. Recommended to be unique for one entire subject
+    :param notebook_id: id of the current notenook. Recommended to be unique per notebook
+    :param database: database config can be:
+ - A simple string pointing to a file. With this solution, users should deal with separating informations between students and teachers
+Examples:
+database ="data/cache/course2.json"
+database ="/content/mydatabase.json"
+ - A string with an identifier token. This token gives you access to: a real-time database (with id check), api to openai, huggingface, etc.
+ As this solution might generate reasonable costs, you should contact bulkhours@guydegnol.net to get a token.
+database = "bkloud@SUBJECT/teacher::eNq-XXXXXXXXXXXHXXXXX-L29tB"
+database = "bkloud@SUBJECT/CLASSROOM_student::eNq-XXXXXXXXXXXHXXXXX-9tB"
+ - A dict of config information. Only firestore config are functional for the moment. Examples:
+database = {"type": "service_account", ..., "universe_domain": "googleapis.com"}
+
+    :param openai_token: to activate openai functionalities [chatgpt, dall-e]
+    :param huggingface_token: to activate huggingface functionalities [chatgpt, dall-e]
+    :param packages: packages to be installed from pip or apt-get
+
+    
+Examples:
+    bulkhours.init_env(
+        email="the.lordoflight@got.grrm",  # Email of the teacher
+        subject="bulkhours_sessions",      # Recommended to be unique for one entire subject
+        notebook_id="course_edition_nb",   # Recommended to be unique per notebook (id of the current notenook)
+        database="data/cache/course2.json" # Database file
+                      )
     """
 
     config = firebase.init_database(kwargs)
@@ -94,7 +117,8 @@ def init_env(packages=None, **kwargs):
     colors.set_plt_style()
     version = open(tools.abspath("bulkhours/__version__.py")).readlines()[0].split('"')[1]
 
-    einfo = f", ⚠️\x1b[31m\x1b[41m\x1b[37m in admin/teacher🎓 mode\x1b[0m⚠️" if tools.is_admin(config=config) else ""
+    einfo = 
+    }f", ⚠️\x1b[31m\x1b[41m\x1b[37m in admin/teacher🎓 mode\x1b[0m⚠️" if tools.is_admin(config=config) else ""
     print(f"Import BULK Helper cOURSe (\x1b[0m\x1b[36mversion='{version}'\x1b[0m🚀'{einfo}):", end="")
     if "bkloud" not in config["database"]:
         print(
