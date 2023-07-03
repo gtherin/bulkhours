@@ -4,6 +4,7 @@ import glob
 import numpy as np
 import pandas as pd
 import IPython
+import inspect
 
 
 def get_rdata(rdata):
@@ -133,6 +134,23 @@ class DataParser:
 
         def wrap(f):
             DataParser.declare_data(func=f, **info)
+            return f
+
+        return wrap
+
+    @staticmethod
+    def save_dataset(**info):
+        def wrap(f):
+            # TODO: finish the saving function
+            # Parse the filename file:
+            #   - Extract the dict with label and func_names
+            # Check if the new function is not in the list
+            #   - If no, add it to the list
+            #   - If yes, don't add it
+            lines = "\n".join(inspect.getsource(f).splitlines()[1:])
+            func_name = lines.split("def ")[1].split("(")[0]
+            label = lines.split("label=")[1].split(",")[0]
+            # print(func_name, label)
             return f
 
         return wrap
