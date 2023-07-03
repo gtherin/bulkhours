@@ -1,5 +1,6 @@
 import os
 import time
+import IPython
 
 from . import firebase
 from . import installer
@@ -125,6 +126,18 @@ def init_env(packages=None, **kwargs):
             end="",
         )
     print("\n" + info)
+    if tools.get_value("openai_token") is not None:
+        if ipp := IPython.get_ipython():
+            ipp.run_cell(
+                """ try:
+    import openai
+
+    openai.api_key = "%s"
+except ModuleNotFoundError:
+    print("LOG import of openai failed 💥")
+"""
+                % tools.get_value("openai_token")
+            )
 
     contexts.generate_empty_context("student")
     contexts.generate_empty_context("teacher")
