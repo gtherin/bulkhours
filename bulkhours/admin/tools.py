@@ -6,6 +6,17 @@ import matplotlib
 from .. import core
 
 
+def switch_classroom(virtual_room, verbose=True):
+    info = core.tools.get_config(is_new_format=True)
+    if virtual_room is not None and virtual_room != info.virtual_room:
+        if verbose:
+            print(f"\x1b[35m\x1b[1mSwitching from {info.virtual_room} to {virtual_room}\x1b[m")
+
+        info["virtual_room"] = virtual_room
+        core.tools.update_config(info)
+    return info
+
+
 def get_users_list(no_admin=True):
     info = core.tools.get_config(is_new_format=True)
     virtual_room = info["virtual_room"]
