@@ -10,11 +10,10 @@ modules = [
 __all__ = modules
 from . import *
 from .help import build_readme, help, generate_header_links  # noqa
+from .data_parser import DataParser  # noqa
 
 
 def get_data(label, **kwargs):
-    from .data_parser import DataParser  # noqa
-
     DataParser.build_clean_datasets()
 
     data_info = (
@@ -27,8 +26,6 @@ def get_data(label, **kwargs):
 
 
 def get_image(label, ax=None):
-    from .data_parser import DataParser  # noqa
-
     return DataParser(label=label).get_image(ax=ax)
 
 

@@ -7,7 +7,7 @@ from .core import tools  # noqa
 from .core.tools import html2 as html  # noqa
 
 # from . import data  # noqa
-from .data import get_data, get_image, geo_plot, generate_header_links  # noqa
+from .data import get_data, get_image, geo_plot, generate_header_links, DataParser  # noqa
 
 from .core.gpt import ask_chat_gpt, ask_dall_e  # noqa
 from .core.equals import is_equal  # noqa
@@ -38,13 +38,10 @@ if ipp := IPython.get_ipython():
 
 
 def student_evaluation_function():
-    """
-    
-    """
+    """ """
     pass
 
+
 def student_explanation_function():
-    """
-    
-    """
+    """ """
     pass
