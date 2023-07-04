@@ -133,8 +133,9 @@ class DataParser:
         DataParser.declare_data(**info)
 
         def wrap(f):
-            lines = "\n".join(inspect.getsource(f).splitlines()[1:])
-            DataParser.declare_data(func=f, func_code=lines, **info)
+            lines = "\n".join(inspect.getsource(f).splitlines())
+            func_code = "def " + lines.split("def ")[1]
+            DataParser.declare_data(func=f, func_code=func_code, **info)
             return f
 
         return wrap
@@ -211,12 +212,11 @@ class DataParser:
          
 """
         if "func_code" in d:
-            comment += f"""
+            print(d["func_code"])
+            comment += f"""\n
 <details>
   <summary>Show code</summary>
-```python
-{d["func_code"]}
-```
+```python\n\n{d["func_code"]}\n```
 </details>
          
 """
