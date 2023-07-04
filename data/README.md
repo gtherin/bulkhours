@@ -19,8 +19,8 @@
 - Reference site: https://pip.worldbank.org/
 
 <details>
-  <summary>Show columns info</summary>
-> https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
+<summary>Show columns info</summary>
+> <a href="https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv">https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv</a>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -140,7 +140,7 @@
 | continent |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -160,8 +160,8 @@ def get_poverty(self, timeopt=None):
 - Reference site: https://pip.worldbank.org/
 
 <details>
-  <summary>Show columns info</summary>
-> https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
+<summary>Show columns info</summary>
+> <a href="https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv">https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv</a>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -285,7 +285,7 @@ def get_poverty(self, timeopt=None):
 | region2 |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -303,8 +303,8 @@ def get_mappoverty(self, **kwargs):
 - Reference site: https://pip.worldbank.org/
 
 <details>
-  <summary>Show columns info</summary>
-> https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
+<summary>Show columns info</summary>
+> <a href="https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv">https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv</a>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -319,7 +319,7 @@ def get_mappoverty(self, **kwargs):
 | continent |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -342,8 +342,8 @@ def get_gdp(self, timeopt=None, **data_info):
 - Reference site: https://pip.worldbank.org/
 
 <details>
-  <summary>Show columns info</summary>
-> https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv
+<summary>Show columns info</summary>
+> <a href="https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv">https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv</a>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -362,7 +362,7 @@ def get_gdp(self, timeopt=None, **data_info):
 | region2 |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -378,7 +378,7 @@ def get_mapgdp(self, **kwargs):
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -408,7 +408,7 @@ def get_mapgdp(self, **kwargs):
 | continent_y |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -425,7 +425,7 @@ def get_macro(self, **data_info):
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -460,7 +460,7 @@ def get_macro(self, **data_info):
 | continent_y |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -500,7 +500,7 @@ def get_corruption(self, show_truth=False, **data_info):
 - Reference site: Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -514,7 +514,7 @@ def get_corruption(self, show_truth=False, **data_info):
 | Continent |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -530,7 +530,7 @@ def get_life_expectancy_vs_gdp_2018(self, **data_info):
 - Direct source: https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -549,7 +549,7 @@ def get_life_expectancy_vs_gdp_2018(self, **data_info):
 | date |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -872,7 +872,7 @@ def get_fr_qgdp(self):
 - Direct source: https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -892,7 +892,7 @@ def get_fr_qgdp(self):
 | date |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -934,7 +934,7 @@ Longue_duree,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,n
 - Direct source: https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -955,7 +955,7 @@ Longue_duree,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,n
 
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -983,7 +983,7 @@ def get_us_gdp(self, simplify=True):
 - Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py))
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -992,7 +992,7 @@ def get_us_gdp(self, simplify=True):
 | diff(unemployement) |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -1022,7 +1022,7 @@ def get_fr_gdp(self, simplify=True):
 - Direct source: https://www.insee.fr/fr/statistiques/2415121#tableau-figure1
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1031,7 +1031,7 @@ def get_fr_gdp(self, simplify=True):
 | rapport |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -1073,7 +1073,7 @@ year	active	retired	rapport
 - Direct source: https://www.insee.fr/fr/statistiques/6436313#tableau-figure2
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1085,7 +1085,7 @@ year	active	retired	rapport
 | is_valid |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -1201,7 +1201,7 @@ Plus de 9_000	183_314
 - Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1213,7 +1213,7 @@ Plus de 9_000	183_314
 | Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)   |  Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP) |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -1254,7 +1254,7 @@ Secteur: Ensemble	18 970	24 420	22,3	26 430	31 510	16,1
 - Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1265,7 +1265,7 @@ Secteur: Ensemble	18 970	24 420	22,3	26 430	31 510	16,1
 | delta_vol_eqtp   |  écart relatif du volume de travail en EQTP moyen |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -1315,7 +1315,7 @@ Année	écart relatif du revenu salarial moyen	écart relatif du revenu salarial
 - Direct source: https://www.insee.fr/fr/statistiques/2381472#tableau-figure1
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1326,14 +1326,14 @@ Année	écart relatif du revenu salarial moyen	écart relatif du revenu salarial
 | Ensemble |  |
 
 </details>
-         
+
 #### Statement of Apple stock (Quarterly)
 #### `bulkhours.get_data("trading.apple")`
 - Raw data: [APPLE_DownloadFPrepStatementQuarter.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/APPLE_DownloadFPrepStatementQuarter.tsv)
 - Enrich data: [trading.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/trading.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/trading.py))
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1344,7 +1344,7 @@ Année	écart relatif du revenu salarial moyen	écart relatif du revenu salarial
 | eps |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -1381,14 +1381,14 @@ def get_scipy_distributions_list(self):
 - Direct source: https://www.statsmodels.org/stable/index.html
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
 | oil |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -1420,14 +1420,14 @@ def get_oil(self):
 - Direct source: https://www.statsmodels.org/stable/index.html
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
 | air |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -1463,14 +1463,14 @@ def get_air(self):
 - Direct source: https://www.statsmodels.org/stable/index.html
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
 | livestock2 |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -1522,14 +1522,14 @@ def get_livestock2(self):
 - Direct source: https://www.statsmodels.org/stable/index.html
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
 | livestock3 |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -1545,14 +1545,14 @@ def get_livestock3(self):
 - Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
 | aust |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -1594,7 +1594,7 @@ def get_aust(self):
 - Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1602,7 +1602,7 @@ def get_aust(self):
 | is_test |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -1624,14 +1624,14 @@ def get_air_passengers(self):
 - Direct source: https://fred.stlouisfed.org/series/ATNHPIUS26420Q
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
 | HOUSTNSA |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -1652,7 +1652,7 @@ def get_hhousing(self):
 - Direct source: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 2)
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1665,7 +1665,7 @@ def get_hhousing(self):
 | variation |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -1709,7 +1709,7 @@ United Kingdom 16.368 7.590 36.390 53.933 0.4487
 - Direct source: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 3)
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1723,7 +1723,7 @@ United Kingdom 16.368 7.590 36.390 53.933 0.4487
 | alpha_3i_e |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -1766,7 +1766,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 - Direct source: https://github.com/kyi3081/stock-analysis
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1779,14 +1779,14 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 | volume |  |
 
 </details>
-         
+
 #### Market fundamentals of SP500 stocks
 #### `bulkhours.get_data("fundamentals")`
 - Raw data: [fundamentals.csv](https://github.com/kyi3081/stock-analysis/master/fundamentals.csv)  ([raw](https://raw.githubusercontent.com/kyi3081/stock-analysis/master/fundamentals.csv))
 - Direct source: https://github.com/kyi3081/stock-analysis
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1871,14 +1871,14 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 | Estimated Shares Outstanding |  |
 
 </details>
-         
+
 #### Stocks information for SP500
 #### `bulkhours.get_data("securities")`
 - Raw data: [securities.csv](https://github.com/kyi3081/stock-analysis/master/securities.csv)  ([raw](https://raw.githubusercontent.com/kyi3081/stock-analysis/master/securities.csv))
 - Direct source: https://github.com/kyi3081/stock-analysis
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1892,13 +1892,13 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 | CIK |  |
 
 </details>
-         
+
 #### Standardized country information (iso m49)
 #### `bulkhours.get_data("continent")`
 - Raw data: [continent.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/continent.tsv)
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1911,13 +1911,13 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 | continent |  |
 
 </details>
-         
+
 #### Corruption index per country
 #### `bulkhours.get_data("corruption")`
 - Raw data: [corruption.csv](https://github.com/guydegnol/bulkhours/blob/main/data/corruption.csv)
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1926,13 +1926,13 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 | corruption_index |  |
 
 </details>
-         
+
 #### Cost of living
 #### `bulkhours.get_data("cost_of_living")`
 - Raw data: [cost_of_living.csv](https://github.com/guydegnol/bulkhours/blob/main/data/cost_of_living.csv)
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1943,13 +1943,13 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 
 </details>
-         
+
 #### GDP per capita per country
 #### `bulkhours.get_data("richest_countries")`
 - Raw data: [richest_countries.csv](https://github.com/guydegnol/bulkhours/blob/main/data/richest_countries.csv)
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1958,13 +1958,13 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 
 </details>
-         
+
 #### Tourism information per country
 #### `bulkhours.get_data("tourism")`
 - Raw data: [tourism.csv](https://github.com/guydegnol/bulkhours/blob/main/data/tourism.csv)
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1975,13 +1975,13 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 | percentage_of_gdp |  |
 
 </details>
-         
+
 #### Unemployemnt rates per country
 #### `bulkhours.get_data("unemployment")`
 - Raw data: [unemployment.csv](https://github.com/guydegnol/bulkhours/blob/main/data/unemployment.csv)
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -1989,13 +1989,13 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 | unemployment_rate |  |
 
 </details>
-         
+
 #### Simple synthetic data for exercice
 #### `bulkhours.get_data("wages")`
 - Raw data: [wages.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/wages.tsv)
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -2004,39 +2004,39 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 | studies |  |
 
 </details>
-         
+
 #### COR data
 #### `bulkhours.get_data("COR_1")`
 - Raw data: [Données septembre partie 1.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données septembre partie 1.xlsx)
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
 | Unnamed: 0 |  |
 
 </details>
-         
+
 #### COR data
 #### `bulkhours.get_data("COR_2")`
 - Raw data: [Données_RA2022_P2.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données_RA2022_P2.xlsx)
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
 | Sommaire |  |
 
 </details>
-         
+
 #### COR data
 #### `bulkhours.get_data("COR_2bis")`
 - Raw data: [Données complémentaires partie 2 RA 2022.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données complémentaires partie 2 RA 2022.xlsx)
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -2116,46 +2116,46 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 | Unnamed: 73 |  |
 
 </details>
-         
+
 #### COR data
 #### `bulkhours.get_data("COR_3")`
 - Raw data: [Données septembre 2022 - partie 3.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données septembre 2022 - partie 3.xlsx)
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
 | Partie 3. Les résultats : les évolutions du système de retraite au regard de l'objectif d'un niveau de vie satisfaisant pour les retraités |  |
 
 </details>
-         
+
 #### COR data
 #### `bulkhours.get_data("COR_4")`
 - Raw data: [Données_RA2022_P4.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données_RA2022_P4.xlsx)
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
 | Partie 4. Les résultats : les évolutions du système de retraite au regard de l'objectif d'équité entre les assurés |  |
 
 </details>
-         
+
 #### COR data
 #### `bulkhours.get_data("COR_5")`
 - Raw data: [Données septembre 2022 - partie 5.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données septembre 2022 - partie 5.xlsx)
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
 | Partie 5. Les âges et les conditions de départ à la retraite |  |
 
 </details>
-         
+
 
 
 ## Predictive_Maintenance 
@@ -2165,7 +2165,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 - Raw data: [fe_equipment_failure_data_1.csv](https://github.com/shadgriffin/feature_engineering_equipment_failure/main/fe_equipment_failure_data_1.csv)  ([raw](https://raw.githubusercontent.com/shadgriffin/feature_engineering_equipment_failure/main/fe_equipment_failure_data_1.csv))
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -2176,13 +2176,13 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 | EQUIPMENT_FAILURE |  |
 
 </details>
-         
+
 #### Synthetic data for machine failure data (2)
 #### `bulkhours.get_data("maintenance2")`
 - Raw data: [fe_equipment_failure_data_2.csv](https://github.com/shadgriffin/feature_engineering_equipment_failure/main/fe_equipment_failure_data_2.csv)  ([raw](https://raw.githubusercontent.com/shadgriffin/feature_engineering_equipment_failure/main/fe_equipment_failure_data_2.csv))
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -2193,13 +2193,13 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 | EQUIPMENT_FAILURE |  |
 
 </details>
-         
+
 #### Synthetic data for machine failure data (3)
 #### `bulkhours.get_data("maintenance3")`
 - Raw data: [equipment_failure_data_1.csv](https://github.com/shadgriffin/machine_failure/master/equipment_failure_data_1.csv)  ([raw](https://raw.githubusercontent.com/shadgriffin/machine_failure/master/equipment_failure_data_1.csv))
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -2221,13 +2221,13 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 | AGE_OF_EQUIPMENT |  |
 
 </details>
-         
+
 #### Synthetic data for machine failure data (4)
 #### `bulkhours.get_data("maintenance4")`
 - Raw data: [equipment_failure_data_2.csv](https://github.com/shadgriffin/machine_failure/master/equipment_failure_data_2.csv)  ([raw](https://raw.githubusercontent.com/shadgriffin/machine_failure/master/equipment_failure_data_2.csv))
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -2249,7 +2249,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 | AGE_OF_EQUIPMENT |  |
 
 </details>
-         
+
 
 
 ## Computing 
@@ -2259,7 +2259,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 - Reference site: https://en.wikipedia.org/wiki/Transistor_count
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -2274,7 +2274,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 | ref |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -2291,7 +2291,7 @@ def get_dfistor_count(self):
 - Reference site: https://en.wikipedia.org/wiki/Transistor_count
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -2299,7 +2299,7 @@ def get_dfistor_count(self):
 | scale |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -2314,7 +2314,7 @@ def get_engraving_scale(self):
 - Reference site: https://en.wikipedia.org/wiki/FLOPS
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -2323,7 +2323,7 @@ def get_engraving_scale(self):
 | Value |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -2338,7 +2338,7 @@ def get_FLOPS(self):
 - Reference site: https://en.wikipedia.org/wiki/FLOPS
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -2349,7 +2349,7 @@ def get_FLOPS(self):
 | comments |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -2364,7 +2364,7 @@ def get_FLOPS(self):
 - Reference site: https://en.wikipedia.org/wiki/FLOPS
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -2379,7 +2379,7 @@ def get_FLOPS(self):
 | engraving_scale3 |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -2424,17 +2424,16 @@ def get_cpus(self):
 - Direct source: https://ourworldindata.org/grapher/supercomputer-power-flops
 
 <details>
-  <summary>Show columns info</summary>
-> The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year
+<summary>Show columns info</summary>
+> <a href="The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year">The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year</a>
 
 | Column   |      Info |
 |-----------|:-----------|
-| Entity |  |
-| Year |  |
-| Floating-Point Operations per Second |  |
+| Entity   | The number of GigaFLOP/S by the fastest supercomputer in any given year |         
+
 
 </details>
-         
+
 
 
 ## Physics 
@@ -2798,20 +2797,19 @@ bkc.pi := 3.141593  #
 - Reference site: https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
 
 <details>
-  <summary>Show columns info</summary>
-> https://en.wikipedia.org/wiki/Wolf_number
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
-| ssn |  |
-| smoothed_ssn |  |
-| observed_swpc_ssn |  |
-| smoothed_swpc_ssn |  |
-| f10.7 |  |
-| smoothed_f10.7 |  |
+| ssn | SunSpot Number (aka Wolf Number or Zürich number): number of sunspots and groups of sunspots present on the surface of the Sun (source: S.I.D.C. Brussels International Sunspot Number) |
+| smoothed_ssn | smoothed ssn (source: S.I.D.C. Brussels International Sunspot Number) |
+| observed_swpc_ssn | mean monthly SWPC/SWO ssn (source: SWPC Space Weather Operations) |
+| smoothed_swpc_ssn | smoothed ssn (source: SWPC Space Weather Operations) |
+| f10.7 | mean monthly  flux values (sfu) (source: Penticton, B.C. 10.7cm radio) |
+| smoothed_f10.7 | smoothed radio flux values (source: Penticton, B.C. 10.7cm radio) |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -2840,8 +2838,8 @@ def get_sunspots(self):
 - Reference site: https://covid19.who.int/data
 
 <details>
-  <summary>Show columns info</summary>
-> https://github.com/owid/covid-19-data/tree/master/public/data/
+<summary>Show columns info</summary>
+> <a href="https://github.com/owid/covid-19-data/tree/master/public/data/">https://github.com/owid/covid-19-data/tree/master/public/data/</a>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -2863,14 +2861,14 @@ def get_sunspots(self):
 | daily_people_vaccinated_per_hundred |  |
 
 </details>
-         
+
 #### Prostate cancer data
 #### `bulkhours.get_data("prostate")`
 - Raw data: [prostate.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/prostate.tsv)
 - Direct source: https://hastie.su.domains/ElemStatLearn/data.html
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -2885,7 +2883,7 @@ def get_sunspots(self):
 
 
 </details>
-         
+
 #### Coronavirus Pandemic (COVID-19) data
 #### `bulkhours.get_data("covid")`
 - Raw data: [owid-covid-data.csv](https://covid.ourworldindata.org/data/owid-covid-data.csv)  ([raw](https://covid.ourworldindata.org/data/owid-covid-data.csv))
@@ -2893,8 +2891,8 @@ def get_sunspots(self):
 - Reference site: https://covid19.who.int/data
 
 <details>
-  <summary>Show columns info</summary>
-> https://github.com/owid/covid-19-data/tree/master/public/data/
+<summary>Show columns info</summary>
+> <a href="https://github.com/owid/covid-19-data/tree/master/public/data/">https://github.com/owid/covid-19-data/tree/master/public/data/</a>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -2967,7 +2965,7 @@ def get_sunspots(self):
 | excess_mortality_cumulative_per_million |  |
 
 </details>
-         
+
 
 
 ## Climate_Evolution 
@@ -2979,7 +2977,7 @@ def get_sunspots(self):
 - Direct source: https://ourworldindata.org/atmospheric-concentrations
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -3006,7 +3004,7 @@ def get_sunspots(self):
 | September.1 |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -3029,7 +3027,7 @@ def get_concentrations(self, zone="World", **data_info):
 - Direct source: https://ourworldindata.org/atmospheric-concentrations
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -3061,7 +3059,7 @@ def get_concentrations(self, zone="World", **data_info):
 | September.1 |  |
 
 </details>
-         
+
 
 <details>
 <summary>Show code</summary>
@@ -3077,8 +3075,8 @@ def get_mapconcentrations(self, **kwargs):
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 
 <details>
-  <summary>Show columns info</summary>
-> https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv
+<summary>Show columns info</summary>
+> <a href="https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv">https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv</a>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -3163,15 +3161,15 @@ def get_mapconcentrations(self, **kwargs):
 | trade_co2_share |  |
 
 </details>
-         
+
 #### Data on CO2 and Greenhouse Gas Emissions by Our World in Data (with extra gpx data)
 #### `bulkhours.get_data("co2.mapmain")`
 - Raw data: [owid-co2-data.csv](https://github.com/owid/co2-data/master/owid-co2-data.csv)  ([raw](https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv))
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 
 <details>
-  <summary>Show columns info</summary>
-> https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv
+<summary>Show columns info</summary>
+> <a href="https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv">https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv</a>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -3256,14 +3254,14 @@ def get_mapconcentrations(self, **kwargs):
 | trade_co2_share |  |
 
 </details>
-         
+
 #### CO2 transportation info
 #### `bulkhours.get_data("co2.travel_mode")`
 - Raw data: [carbon-footprint-travel-mode.csv](https://github.com/guydegnol/bulkhours/blob/main/data/carbon-footprint-travel-mode.csv)
 - Direct source: https://ourworldindata.org/grapher/carbon-footprint-travel-mode
 
 <details>
-  <summary>Show columns info</summary>
+<summary>Show columns info</summary>
 
 | Column   |      Info |
 |-----------|:-----------|
@@ -3273,7 +3271,7 @@ def get_mapconcentrations(self, **kwargs):
 | GHG emissions (gCO2e/km) |  |
 
 </details>
-         
+
 
 
 ## Machine_learning 
