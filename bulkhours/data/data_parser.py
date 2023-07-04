@@ -204,22 +204,12 @@ class DataParser:
                         cols += f"| {c} |  |\n"
 
             if cols != "":
-                comment += f"""
-<details>
-  <summary>Show columns info</summary>
-{cols}
-</details>
-         
-"""
-        if "func_code" in d:
-            func_code = d["func_code"].replace("\n", "\n\n")
-            comment += f"""
-<details>
-  <summary>Show code</summary>
-```python\n\n{func_code}\n```\n
-</details>
+                comment += f"""\n<details>\n<summary>Show columns info</summary>\n{cols}\n</details>\n\n"""
 
-"""
+        if "func_code" in d:
+            comment += (
+                f"""\n<details>\n<summary>Show code</summary>\n<code>\n{d["func_code"]}\n</code>\n</details>\n\n"""
+            )
         return comment
 
     def read_raw_data(self, raw_data):
