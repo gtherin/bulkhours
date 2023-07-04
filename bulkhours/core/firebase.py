@@ -38,17 +38,18 @@ class DbDocument:
             "virtual_rooms": "room1",
         },
         "notebook": {"exercices": "", "evaluation": "", "page": ""},
-        "session": dict(email="john.doe@un.known", notebook_id="", database="data/cache/free1.json", subject=""),
+        "session": dict(email="john.doe@un.known", notebook_id="n", database="data/cache/free1.json", subject="s"),
     }
 
     @staticmethod
     def write_cache_data() -> None:
-        with open(DbDocument.data_base_info, "w", encoding="utf-8") as f:
-            json.dump(DbDocument.data_base_cache, f, ensure_ascii=False, indent=4)
+        if DbDocument.data_base_info is not None:
+            with open(DbDocument.data_base_info, "w", encoding="utf-8") as f:
+                json.dump(DbDocument.data_base_cache, f, ensure_ascii=False, indent=4)
 
     @staticmethod
     def read_cache_data() -> None:
-        if os.path.exists(DbDocument.data_base_info):
+        if DbDocument.data_base_info is not None and os.path.exists(DbDocument.data_base_info):
             with open(DbDocument.data_base_info) as json_file:
                 DbDocument.data_base_cache = json.load(json_file)
 
@@ -163,12 +164,13 @@ Check that your token is still valid (contact: bulkhours@guydegnol.net).
 The database has been reset to the local file '{cfg["database"]}'.
 """
             )
-
-        cfg["global"].update(tokens)
-    if "subject" in cfg["global"]:
-        cfg["subject"] = cfg["global"]["subject"]
-    else:
+        else:
+            tokens.update(cfg.data["global"])
+            cfg["global"] = tokens
+    if "subject" in cfg:
         cfg["global"]["subject"] = cfg["subject"]
+    else:
+        cfg["subject"] = cfg["global"]["subject"]
 
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (cfilename := tools.abspath("bulkhours/bunker/pi.pyc"))
     if type(cfg.database) == dict:
@@ -178,7 +180,6 @@ The database has been reset to the local file '{cfg["database"]}'.
         with open(cfilename, "w") as f:
             cols = DbDocument.compliant_fields["bkloud"]
             json.dump({k: v for k, v in cfg["global"].items() if k in cols}, f, ensure_ascii=False, indent=4)
-
     else:
         datafile = cfg["global"]["data_cache"] if "data_cache" in cfg["global"] else cfg.database
         datafile = tools.abspath(datafile)
