@@ -22,7 +22,12 @@ def unobscure(obscured: bytes) -> bytes:
     return zlib.decompress(b64d(obscured)).decode("utf-8")
 
 
-def get_tokens(token):
+def get_tokens(token, raise_error=False, verbose=True):
+    def unobscure_token(tokens):
+        tokens = unobscure(tokens)
+        tokens = eval(tokens)
+        return {s[0]: s[1] for s in tokens}
+
     nb_helper, nb_key = token.split("::")
     with open(f"{bulk_dir}/bulkhours/data/radian2.png") as f:
         TOKENS = f.readline()
@@ -31,11 +36,18 @@ def get_tokens(token):
         ali, baba = db_key.split("__RR__")
         if nb_helper == ali:
             tokens = nb_key.encode("utf-8") + baba.encode("utf-8")
-            tokens = unobscure(tokens)
-            tokens = eval(tokens)
+            if raise_error:
+                return unobscure_token(tokens)
+            else:
+                try:
+                    return unobscure_token(tokens)
+                except:
+                    pass
+    if verbose:
+        print(
+            f"""⚠️\x1b[41m\x1b[37mYour token was not found. Check that your token is still valid (contact: bulkhours@guydegnol.net)\x1b[0m⚠️"""
+        )
 
-            return {s[0]: s[1] for s in tokens}
-    print(f"{nb_helper} not found")
     return {}
 
 

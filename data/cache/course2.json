@@ -54,5 +54,21 @@
             "note": 13,
             "update_time": "2023-06-30 19:20:50"
         }
+    },
+    "course2_info": {
+        "global": {
+            "admins": "the.lordoflight@got.grrm;",
+            "chatgpt": false,
+            "language": "fr",
+            "norm20": false,
+            "restricted": false,
+            "virtual_rooms": "room1",
+            "room1": ""
+        },
+        "course_edition_nb": {
+            "exercices": "",
+            "evaluation": "",
+            "page": ""
+        }
     }
 }

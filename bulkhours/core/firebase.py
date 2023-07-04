@@ -138,10 +138,10 @@ def init_config(config_id, cfg):
     return cfg
 
 
-def init_database(config2) -> None:
+def init_database(config) -> None:
     from .installer import get_tokens
 
-    cfg = tools.get_config(is_new_format=True, **config2)
+    cfg = tools.get_config(is_new_format=True, **config)
 
     if "is_admin" in cfg:
         cfg["is_demo_admin"] = cfg["is_admin"]
@@ -153,7 +153,18 @@ def init_database(config2) -> None:
     if "global" not in cfg:
         cfg["global"] = {}
     if "bkache@" in cfg["database"] or "bkloud@" in cfg["database"]:
-        cfg["global"].update(get_tokens(cfg["database"]))
+        tokens = get_tokens(cfg["database"], verbose=False)
+        if len(tokens) == 0:
+            cfg["database"] = DbDocument.compliant_fields["session"]["database"]
+
+            print(
+                f"""⚠️\x1b[41m\x1b[37mYour token does not seem to be valid anymore.\x1b[0m⚠️ 
+Check that your token is still valid (contact: bulkhours@guydegnol.net).
+The database has been reset to the local file '{cfg["database"]}'.
+"""
+            )
+
+        cfg["global"].update(tokens)
     if "subject" in cfg["global"]:
         cfg["subject"] = cfg["global"]["subject"]
     else:
@@ -192,9 +203,9 @@ def init_database(config2) -> None:
 
 def add_user_to_virtual_room(user, config):
     if "is_demo_admin" in config and user not in config["global"]["admins"]:
-        config["global"]["admins"] += user + ";"
+        config["global"]["admins"] += ";" + user
     if "is_demo_admin" not in config and user not in config["virtual_room"]:
-        config["global"][config["virtual_room"]] += user + ";"
+        config["global"][config["virtual_room"]] += ";" + user
     save_config("global", config)
     return config
 
@@ -245,7 +256,7 @@ def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, *
 
     if config.security_level == 0:
         if cinfo.cell_id not in config[config.notebook_id]["exercices"]:
-            config[config["notebook_id"]]["exercices"] += cinfo.cell_id + ";"
+            config[config["notebook_id"]]["exercices"] += ";" + cinfo.cell_id
             save_config(config.notebook_id, config)
 
         if user not in config.g[config.virtual_room] and user != REF_USER:

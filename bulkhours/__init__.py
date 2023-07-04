@@ -35,13 +35,3 @@ if ipp := IPython.get_ipython():
 
     ipp.register_magics(CCPPlugin(ipp))
     ipp.register_magics(Evaluation(ipp))
-
-
-def student_evaluation_function():
-    """ """
-    pass
-
-
-def student_explanation_function():
-    """ """
-    pass
