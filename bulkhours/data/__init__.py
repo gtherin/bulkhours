@@ -37,8 +37,5 @@ def geo_plot(label=None, timeopt="last", **kwargs):
 
     from ..core import geo  # noqa
 
-    if type(label) is str:
-        df = get_data(label, timeopt=timeopt)
-    else:
-        df = label
+    df = get_data(label, timeopt=timeopt) if type(label) is str else label
     return geo.geo_plot(data=df, timeopt=timeopt, **kwargs)
