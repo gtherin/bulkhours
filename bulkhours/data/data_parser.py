@@ -212,13 +212,13 @@ class DataParser:
          
 """
         if "func_code" in d:
-            print(d["func_code"])
-            comment += f"""\n
+            func_code = d["func_code"].replace("\n", "\n\n")
+            comment += f"""
 <details>
   <summary>Show code</summary>
-```python\n\n{d["func_code"]}\n```
+```python\n\n{func_code}\n```\n
 </details>
-         
+
 """
         return comment
 
