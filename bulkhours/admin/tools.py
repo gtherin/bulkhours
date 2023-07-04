@@ -21,13 +21,12 @@ def get_users_list(no_admin=True):
     info = core.tools.get_config(is_new_format=True)
     virtual_room = info["virtual_room"]
 
-    users = [
-        (k, 0) for k in info.g[virtual_room].replace(",", ";").split(";") if k != "" and k not in info.g["admins"]
-    ]
+    users = []
     if not no_admin:
         users += [(k, 1) for k in info.g["admins"].replace(",", ";").split(";") if k != ""]
+    users += [(k, 0) for k in info.g[virtual_room].replace(",", ";").split(";") if k != ""]
 
-    users = pd.DataFrame(users, columns=["mail", "is_admin"])
+    users = pd.DataFrame(users, columns=["mail", "is_admin"]).drop_duplicates(subset=["mail"])
 
     new = users["mail"].str.split("@", n=1, expand=True)[0].str.split(".", n=1, expand=True)
     users["prenom"] = new[0].str.capitalize()
