@@ -187,7 +187,7 @@ def get_air_passengers(self):
 
 
 @DataParser.register_dataset(
-    label="statsdata.sunspots",
+    label="sunspots",
     summary="Quarterly sunspots activity (ssn)",
     category="Physics",
     ref_site="""https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json""",
