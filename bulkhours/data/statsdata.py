@@ -194,7 +194,14 @@ def get_air_passengers(self):
     raw_data="https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json",
     enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
     ref_source="https://www.swpc.noaa.gov/products/solar-cycle-progression",
-    columns_info="https://en.wikipedia.org/wiki/Wolf_number",
+    columns_description="""| Column   |      Info |
+|-----------|:-----------|
+| ssn | SunSpot Number (aka Wolf Number or Zürich number): number of sunspots and groups of sunspots present on the surface of the Sun (source: S.I.D.C. Brussels International Sunspot Number) |
+| smoothed_ssn | smoothed ssn (source: S.I.D.C. Brussels International Sunspot Number) |
+| observed_swpc_ssn | mean monthly SWPC/SWO ssn (source: SWPC Space Weather Operations) |
+| smoothed_swpc_ssn | smoothed ssn (source: SWPC Space Weather Operations) |
+| f10.7 | mean monthly  flux values (sfu) (source: Penticton, B.C. 10.7cm radio) |
+| smoothed_f10.7 | smoothed radio flux values (source: Penticton, B.C. 10.7cm radio) |""",
 )
 def get_sunspots(self):
     dta = pd.read_json(self.raw_data)

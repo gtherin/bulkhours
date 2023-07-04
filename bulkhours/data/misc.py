@@ -94,6 +94,10 @@ DataParser.register_dataset(
     raw_data="https://raw.githubusercontent.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv",
     ref_source="""https://ourworldindata.org/grapher/supercomputer-power-flops""",
     columns_info="The number of floating-point operations per second (GigaFLOPS) by the fastest supercomputer in any given year",
+    columns_description="""| Column   |      Info |
+|-----------|:-----------|
+| Entity   | The number of GigaFLOP/S by the fastest supercomputer in any given year |         
+""",
 )
 DataParser.register_dataset(
     label="co2.main",

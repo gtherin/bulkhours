@@ -184,27 +184,26 @@ class DataParser:
         if "ref_site" in d:
             comment += f"- Reference site: {d['ref_site']}\n"
 
-        if 1:
-            cols = ""
-            if "columns_info" in d:
-                cols = f"> {d['columns_info']}\n"
+        cols = ""
+        if "columns_info" in d:
+            cols = f"""> <a href="{d['columns_info']}">{d['columns_info']}</a>\n"""
 
-            if "columns_description" in d:
-                cols += f"\n{d['columns_description']}\n"
-            else:
-                if columns is None:
-                    try:
-                        data = self.get_data(credit=False)
-                        columns = list(data.columns)
-                    except:
-                        pass
-                if columns is not None:
-                    cols += """\n| Column   |      Info |\n|-----------|:-----------|\n"""
-                    for c in columns:
-                        cols += f"| {c} |  |\n"
+        if "columns_description" in d:
+            cols += f"\n{d['columns_description']}\n"
+        else:
+            if columns is None:
+                try:
+                    data = self.get_data(credit=False)
+                    columns = list(data.columns)
+                except:
+                    pass
+            if columns is not None:
+                cols += """\n| Column   |      Info |\n|-----------|:-----------|\n"""
+                for c in columns:
+                    cols += f"| {c} |  |\n"
 
-            if cols != "":
-                comment += f"""\n<details>\n<summary>Show columns info</summary>\n{cols}\n</details>\n\n"""
+        if cols != "":
+            comment += f"""\n<details>\n<summary>Show columns info</summary>\n{cols}\n</details>\n\n"""
 
         if "func_code" in d:
             comment += (
