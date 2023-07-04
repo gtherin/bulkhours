@@ -7,7 +7,9 @@ class Config:
     def __init__(self, config={}):
         # Convert from Namespace
         self.data = vars(config) if type(config) != dict else config
-        self.data["isfr"] = self.data["global"]["language"] == "fr"
+        self.data["isfr"] = True
+        if "global" in self.data and "language" in self.data["global"] and self.data["global"]["language"] != "fr":
+            self.data["isfr"] = False
 
     def __getattr__(self, k):
         if k in ["g", "global"]:

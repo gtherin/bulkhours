@@ -126,67 +126,68 @@ class DbClient:
             return DbCollection(question_id)
 
 
-def init_config(config_id, config):
-    collection = DbClient().collection(question_id=f"{config.get('subject')}_info".replace("/", "_"))
-    if config_id not in config:
-        config[config_id] = {}
+def init_config(config_id, cfg):
+    collection = DbClient().collection(question_id=f"{cfg.subject}_info".replace("/", "_"))
+    if config_id not in cfg:
+        cfg[config_id] = {}
 
     if not collection.document(config_id).get().to_dict():
-        save_config(config_id, config)
-    config[config_id].update(collection.document(config_id).get().to_dict())
+        save_config(config_id, cfg)
+    cfg[config_id].update(collection.document(config_id).get().to_dict())
 
-    return config
+    return cfg
 
 
-def init_database(config) -> None:
+def init_database(config2) -> None:
     from .installer import get_tokens
 
-    config = tools.get_config(**config)
+    cfg = tools.get_config(is_new_format=True, **config2)
 
-    if "is_admin" in config:
-        config["is_demo_admin"] = config["is_admin"]
+    if "is_admin" in cfg:
+        cfg["is_demo_admin"] = cfg["is_admin"]
 
     for k, v in DbDocument.compliant_fields["session"].items():
-        if k not in config:
-            config[k] = v
+        if k not in cfg:
+            cfg[k] = v
 
-    if "global" not in config:
-        config["global"] = {}
-    if "bkache@" in config["database"] or "bkloud@" in config["database"]:
-        config["global"].update(get_tokens(config["database"]))
-    if "subject" in config["global"]:
-        config["subject"] = config["global"]["subject"]
+    if "global" not in cfg:
+        cfg["global"] = {}
+    if "bkache@" in cfg["database"] or "bkloud@" in cfg["database"]:
+        cfg["global"].update(get_tokens(cfg["database"]))
+    if "subject" in cfg["global"]:
+        cfg["subject"] = cfg["global"]["subject"]
     else:
-        config["global"]["subject"] = config["subject"]
+        cfg["global"]["subject"] = cfg["subject"]
 
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (cfilename := tools.abspath("bulkhours/bunker/pi.pyc"))
-    if type(database := config["database"]) == dict:
+    if type(cfg.database) == dict:
         with open(cfilename, "w") as f:
-            json.dump(database, f, ensure_ascii=False, indent=4)
-    elif "bkloud@" in database:
+            json.dump(cfg.database, f, ensure_ascii=False, indent=4)
+    elif "bkloud@" in cfg.database:
         with open(cfilename, "w") as f:
             cols = DbDocument.compliant_fields["bkloud"]
-            json.dump({k: v for k, v in config["global"].items() if k in cols}, f, ensure_ascii=False, indent=4)
+            json.dump({k: v for k, v in cfg["global"].items() if k in cols}, f, ensure_ascii=False, indent=4)
 
     else:
-        datafile = config["global"]["data_cache"] if "data_cache" in config["global"] else database
+        datafile = cfg["global"]["data_cache"] if "data_cache" in cfg["global"] else cfg.database
         datafile = tools.abspath(datafile)
 
         DbDocument.set_cache_data(datafile)
 
-    config = init_config("global", config)
+    cfg = init_config("global", cfg)
 
-    if "virtual_room" not in config:
-        config["virtual_room"] = config["global"]["virtual_rooms"].split(";")[0]
+    if "virtual_room" not in cfg:
+        cfg["virtual_room"] = cfg["global"]["virtual_rooms"].split(";")[0]
 
-    config = init_config(config["notebook_id"], config)
-    if "security_level" not in config:
-        config["security_level"] = 0
+    if cfg.notebook_id:
+        cfg = init_config(cfg.notebook_id, cfg)
+    if "security_level" not in cfg:
+        cfg["security_level"] = 0
 
-    if config["security_level"] == 0 and config["email"] != REF_USER:
-        config = add_user_to_virtual_room(config["email"], config)
+    if cfg["security_level"] == 0 and cfg["email"] != REF_USER:
+        cfg = add_user_to_virtual_room(cfg["email"], cfg)
 
-    return tools.update_config(config)
+    return tools.update_config(cfg)
 
 
 def add_user_to_virtual_room(user, config):

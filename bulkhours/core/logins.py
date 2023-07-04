@@ -133,6 +133,7 @@ import ipywidgets
         )
 
     print("\n" + info)
+    print("AAAAAAAAAAA", tools.get_value("openai_token"))
     if tools.get_value("openai_token") is not None:
         if ipp := IPython.get_ipython():
             ipp.run_cell(
