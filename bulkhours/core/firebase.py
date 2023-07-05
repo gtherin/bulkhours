@@ -150,6 +150,9 @@ def init_database(config) -> None:
     if "global" not in cfg:
         cfg["global"] = {}
 
+    if "database" not in cfg["global"]:
+        cfg["database"] = DbDocument.compliant_fields["session"]["database"]
+
     if "bkache@" in cfg["database"] or "bkloud@" in cfg["database"]:
         tokens = get_tokens(cfg["database"], verbose=False)
         if len(tokens) == 0:
