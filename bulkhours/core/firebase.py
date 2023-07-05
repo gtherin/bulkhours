@@ -165,8 +165,7 @@ The database has been reset to the local file '{cfg["database"]}'.
 """
             )
         else:
-            tokens.update(cfg.data["global"])
-            cfg["global"] = tokens
+            cfg.data["global"].update(tokens)
     if "subject" in cfg:
         cfg["global"]["subject"] = cfg["subject"]
     else:
