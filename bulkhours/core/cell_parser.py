@@ -15,7 +15,7 @@ def get_equals_args(code, func_id="bulkhours.is_equal"):
         if i == 0 and "=" not in a:
             fargs["data_test"] = a
         elif i == 1 and "=" not in a:
-            fargs["data_ref"] = a
+            fargs["data_ref"] = a.replace("student.", "teacher.")
         elif "=" in a:
             fargs[a.split("=")[0]] = a.split("=")[1]
 
