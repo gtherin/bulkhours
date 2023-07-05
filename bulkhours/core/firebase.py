@@ -202,10 +202,13 @@ The database has been reset to the local file '{cfg["database"]}'.
 
 
 def add_user_to_virtual_room(user, config):
+    def get_users(user, vroom):
+        return user if vroom == "" else vroom + ";" + user
+
     if "is_demo_admin" in config and user not in config["global"]["admins"]:
-        config["global"]["admins"] += ";" + user
-    if "is_demo_admin" not in config and user not in config["virtual_room"]:
-        config["global"][config["virtual_room"]] += ";" + user
+        config["global"]["admins"] = get_users(user, config["global"]["admins"])
+    if "is_demo_admin" not in config and user not in config["global"][config["virtual_room"]]:
+        config["global"][config["virtual_room"]] = get_users(user, config["global"][config["virtual_room"]])
     save_config("global", config)
     return config
 
