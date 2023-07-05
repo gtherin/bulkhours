@@ -174,6 +174,9 @@ The database has been reset to the local file '{cfg["database"]}'.
             else:
                 cfg[k] = v
 
+    if "subject" not in cfg["global"]:
+        cfg["global"]["subject"] = cfg["subject"]
+
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (cfilename := tools.abspath("bulkhours/bunker/pi.pyc"))
     if type(cfg.database) == dict:
         with open(cfilename, "w") as f:
