@@ -147,12 +147,9 @@ def init_database(config) -> None:
     if "is_admin" in cfg:
         cfg["is_demo_admin"] = cfg["is_admin"]
 
-    for k, v in DbDocument.compliant_fields["session"].items():
-        if k not in cfg:
-            cfg[k] = v
-
     if "global" not in cfg:
         cfg["global"] = {}
+
     if "bkache@" in cfg["database"] or "bkloud@" in cfg["database"]:
         tokens = get_tokens(cfg["database"], verbose=False)
         if len(tokens) == 0:
@@ -166,10 +163,13 @@ The database has been reset to the local file '{cfg["database"]}'.
             )
         else:
             cfg.data["global"].update(tokens)
-    if "subject" in cfg:
-        cfg["global"]["subject"] = cfg["subject"]
-    else:
-        cfg["subject"] = cfg["global"]["subject"]
+
+    for k, v in DbDocument.compliant_fields["session"].items():
+        if k not in cfg:
+            if k in cfg["global"]:
+                cfg[k] = cfg["global"][k]
+            else:
+                cfg[k] = v
 
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (cfilename := tools.abspath("bulkhours/bunker/pi.pyc"))
     if type(cfg.database) == dict:
