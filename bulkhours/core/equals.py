@@ -2,6 +2,7 @@ import IPython
 import difflib
 from . import contexts
 import numpy as np
+import pandas as pd
 
 
 def is_equal(data_test, data_ref, norm="Linf-norm", error=1e-8, policy="strict", min_score=0, max_score=10):
@@ -49,6 +50,9 @@ def is_equal(data_test, data_ref, norm="Linf-norm", error=1e-8, policy="strict",
         )
     else:
         estimation_error = np.abs(data_test - data_ref)
+
+    if type(estimation_error) == pd.DataFrame:
+        estimation_error = estimation_error.values
 
     if norm in ["L1-norm", "L1norm"]:
         distance = np.sum(estimation_error)
