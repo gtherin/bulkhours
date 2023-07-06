@@ -1,0 +1,225 @@
+{
+    "s_info": {
+        "course_edition_nb": {
+            "page": "https://colab.research.google.com/github/guydegnol/bulkhours/blob/main/examples/2_Course_Edition_student.ipynb",
+            "evaluation": "",
+            "exercices": "exo1;exo2"
+        },
+        "cpp": {
+            "evaluation": "",
+            "exercices": ";cpp;quadri",
+            "page": ""
+        },
+        "data": {
+            "exercices": ";serre;global_warming",
+            "evaluation": "",
+            "page": ""
+        },
+        "dscience": {
+            "evaluation": "",
+            "page": "https://colab.research.google.com/github/guydegnol/bulkhours/blob/main/examples/6_Predict_Covid_Cases_student.ipynb",
+            "exercices": "gini;covidf;sunspots;moore"
+        },
+        "global": {
+            "virtual_rooms": "light_side;dark_side",
+            "dark_side": "darth.vador@sith.com;darth.sidious@sith.com",
+            "language": "fr",
+            "light_side": "luke.skywalker@jedi.com;obiwan.kenobi@jedi.com",
+            "restricted": false,
+            "admins": "yoda@jedi.com",
+            "norm20": false,
+            "chatgpt": false
+        },
+        "ml": {
+            "page": "https://colab.research.google.com/github/guydegnol/bulkhours/blob/main/examples/5_Machine_Learning_reinforcment_Learning_student.ipynb",
+            "evaluation": "",
+            "exercices": "cpp;aimg;moon"
+        },
+        "n": {
+            "page": "",
+            "evaluation": "",
+            "exercices": ";my_first_exercice"
+        }
+    },
+    "s_light_side_course_edition_nb_exo1": {
+        "yoda@jedi.com": {
+            "atype": "bkcode",
+            "main_execution": "print(\"exo1 solution\")\n",
+            "user": "yoda@jedi.com",
+            "update_time": "2023-07-06 15:26:05",
+            "answer": "print(\"exo1 solution\")\n"
+        }
+    },
+    "s_light_side_cpp_cpp": {
+        "luke.skywalker@jedi.com": {
+            "main_execution": "%%compile_and_exec -c g++\n#include <iostream>\n\nint main() {\n    int pow2 = 1;\n    // Display the values for pow2 = 2 to pow2=1024, using std::cout function\n    // ...\n}\n",
+            "answer": "%%compile_and_exec -c g++\n#include <iostream>\n\nint main() {\n    int pow2 = 1;\n    // Display the values for pow2 = 2 to pow2=1024, using std::cout function\n    // ...\n}\n",
+            "user": "luke.skywalker@jedi.com",
+            "update_time": "2023-07-06 16:45:44",
+            "atype": "bkcode",
+            "note": 0.0
+        },
+        "solution": {
+            "update_time": "2023-07-06 16:47:05",
+            "evaluation": "def student_evaluation_function(debug=False, run=False, show_code=False) :\n    return bulkhours.is_equal(data_test=student.stdout, data_ref=teacher.stdout, policy=\"gaussian\", error=0.1, min_score=0, max_score=10)\n\n",
+            "explanation": "",
+            "user": "solution",
+            "atype": "bkcode",
+            "main_execution": "%%compile_and_exec -c g++\n#include <iostream>\n\nint main() {\n    int pow2 = 1;\n    for (int i = 1; i < 10; ++i)\n    {\n      pow2 *= 2;\n      std::cout << pow2 << \" \";\n    }\n}\n\n\n",
+            "answer": "%%compile_and_exec -c g++\n#include <iostream>\n\nint main() {\n    int pow2 = 1;\n    for (int i = 1; i < 10; ++i)\n    {\n      pow2 *= 2;\n      std::cout << pow2 << \" \";\n    }\n}\n\n\n",
+            "note": 10.0,
+            "visible": true
+        },
+        "yoda@jedi.com": {
+            "note": 10.0,
+            "atype": "bkcode",
+            "main_execution": "%%compile_and_exec -c g++\n#include <iostream>\n\nint main() {\n    int pow2 = 1;\n    for (int i = 1; i < 10; ++i)\n    {\n      pow2 *= 2;\n      std::cout << pow2 << \" \";\n    }\n}\n\n\n",
+            "answer": "%%compile_and_exec -c g++\n#include <iostream>\n\nint main() {\n    int pow2 = 1;\n    for (int i = 1; i < 10; ++i)\n    {\n      pow2 *= 2;\n      std::cout << pow2 << \" \";\n    }\n}\n\n\n",
+            "user": "yoda@jedi.com",
+            "update_time": "2023-07-06 16:47:01"
+        }
+    },
+    "s_light_side_cpp_quadri": {
+        "luke.skywalker@jedi.com": {
+            "update_time": "2023-07-06 16:45:55",
+            "atype": "code_project",
+            "Makefile": "quadrilater.o: quadrilater.h quadrilater.cpp\n\t@g++ -c quadrilater.cpp\n\nall: quadrilater.o\n\t@echo \"- Compile and execute:\"\n\t@/usr/bin/g++ -o main quadrilater.o\n",
+            "quadrilater_dot_cpp": "#include \"quadrilater.h\"\n    \nint main() {\n  Quadrilateral().properties();\n  //Trapezoid().properties();\n  //Rectangle().properties();\n  //Square().properties();\n}\n",
+            "quadrilater_dot_h": "#include <iostream>\n#include <string>\nusing namespace std;\n\n\nclass Quadrilateral {\n  public: \n    void properties() {\n      cout << \"Quadrilateral: sides are \" << SideProperties() <<\" and angles are \" << AnglesProperties() << endl;\n    }\n  string SideProperties() {return \"ordinary\";}\n  string AnglesProperties() {return \"ordinary\";}\n};\n"
+        },
+        "solution": {
+            "Makefile": "quadrilater.o: quadrilater.h quadrilater.cpp\n\t@g++ -c quadrilater.cpp\n\nall: quadrilater.o\n\t@echo \"- Compile and execute:\"\n\t@/usr/bin/g++ -o main quadrilater.o\n",
+            "note": 10,
+            "quadrilater_dot_cpp": "#include \"quadrilater.h\"\n    \nint main() {\n  Quadrilateral().properties();\n  //Trapezoid().properties();\n  //Rectangle().properties();\n  //Square().properties();\n}\n",
+            "quadrilater_dot_h": "#include <iostream>\n#include <string>\nusing namespace std;\n\n\nclass Quadrilateral {\n  public: \n    void properties() {\n      cout << \"Quadrilateral: sides are \" << SideProperties() <<\" and angles are \" << AnglesProperties() << endl;\n    }\n  string SideProperties() {return \"ordinary\";}\n  string AnglesProperties() {return \"ordinary\";}\n};\n",
+            "atype": "code_project",
+            "update_time": "2023-07-06 16:49:05"
+        },
+        "yoda@jedi.com": {
+            "update_time": "2023-07-06 16:49:00",
+            "quadrilater_dot_h": "#include <iostream>\n#include <string>\nusing namespace std;\n\n\nclass Quadrilateral {\n  public: \n    void properties() {\n      cout << \"Quadrilateral: sides are \" << SideProperties() <<\" and angles are \" << AnglesProperties() << endl;\n    }\n  string SideProperties() {return \"ordinary\";}\n  string AnglesProperties() {return \"ordinary\";}\n};\n",
+            "atype": "code_project",
+            "Makefile": "quadrilater.o: quadrilater.h quadrilater.cpp\n\t@g++ -c quadrilater.cpp\n\nall: quadrilater.o\n\t@echo \"- Compile and execute:\"\n\t@/usr/bin/g++ -o main quadrilater.o\n",
+            "quadrilater_dot_cpp": "#include \"quadrilater.h\"\n    \nint main() {\n  Quadrilateral().properties();\n  //Trapezoid().properties();\n  //Rectangle().properties();\n  //Square().properties();\n}\n"
+        }
+    },
+    "s_light_side_data_global_warming": {
+        "yoda@jedi.com": {
+            "atype": "bkcode",
+            "answer": "# Affichage de quelques scenarios\nfig, ax = plt.subplots(1, ncols=2, figsize=(12, 4))\ndef calculate_T(ppm):\n    F = bkc.sigma * bkc.S_terre *(bkc.T_terre + bkc.c2k)**4\n    F_prime = F * np.log(ppm) / np.log(280)\n    T_prime = ( (1-bkc.S_terre) * (bkc.T_terre + bkc.c2k)**4 + F_prime / bkc.sigma)**0.25 - bkc.c2k\n    return T_prime-15\n\nco2 = bulkhours.get_data(\"co2.concentrations\", index=\"year\").loc[1900:].ffill()[\"CO2 concentrations\"]\nco2.plot(legend=True, ax=ax[0])\ncalculate_T(co2).plot(legend=True, ax=ax[1], label=\"Anomalie de Temperature °C (Holocène)\")\ndef scenario(label, damping_trend):\n    with ipywidgets.Output():\n        y_pred = smtsa.ExponentialSmoothing(co2, initialization_method='legacy-heuristic', damped_trend=True,\n                                            trend=\"mul\").fit(smoothing_trend=30, damping_trend=damping_trend).forecast(77); y_pred.index += 1900\n    y_pred.plot(legend=True, ax=ax[0], label=label)\n    calculate_T(y_pred).plot(legend=True, ax=ax[1], label=label)\n\nscenario(\"Scenario 1\", 0.987)\nscenario(\"Scenario 2\", 0.97)\nscenario(\"Scenario 3\", 0.95)\n",
+            "main_execution": "# Affichage de quelques scenarios\nfig, ax = plt.subplots(1, ncols=2, figsize=(12, 4))\ndef calculate_T(ppm):\n    F = bkc.sigma * bkc.S_terre *(bkc.T_terre + bkc.c2k)**4\n    F_prime = F * np.log(ppm) / np.log(280)\n    T_prime = ( (1-bkc.S_terre) * (bkc.T_terre + bkc.c2k)**4 + F_prime / bkc.sigma)**0.25 - bkc.c2k\n    return T_prime-15\n\nco2 = bulkhours.get_data(\"co2.concentrations\", index=\"year\").loc[1900:].ffill()[\"CO2 concentrations\"]\nco2.plot(legend=True, ax=ax[0])\ncalculate_T(co2).plot(legend=True, ax=ax[1], label=\"Anomalie de Temperature °C (Holocène)\")\ndef scenario(label, damping_trend):\n    with ipywidgets.Output():\n        y_pred = smtsa.ExponentialSmoothing(co2, initialization_method='legacy-heuristic', damped_trend=True,\n                                            trend=\"mul\").fit(smoothing_trend=30, damping_trend=damping_trend).forecast(77); y_pred.index += 1900\n    y_pred.plot(legend=True, ax=ax[0], label=label)\n    calculate_T(y_pred).plot(legend=True, ax=ax[1], label=label)\n\nscenario(\"Scenario 1\", 0.987)\nscenario(\"Scenario 2\", 0.97)\nscenario(\"Scenario 3\", 0.95)\n",
+            "user": "yoda@jedi.com",
+            "update_time": "2023-07-06 16:20:15"
+        }
+    },
+    "s_light_side_data_serre": {
+        "luke.skywalker@jedi.com": {
+            "atype": "bkcode",
+            "answer": "from bulkhours import constants as bkc\n\nplanetes = bkc.DataFrame(index=[\"mercure\", \"venus\", \"terre\", \"mars\"], columns=[\"Albedo\", \"d_ua\", \"T_C\"])\nbkc.print(r\"Equilibre thermique: $(1-A)\\frac{ L_\\odot R^2}{4 d^2} \\equiv (1-S) 4 \\pi R^2 \\sigma T^4$\", size=\"+1\")\n\n# Calcul de la temperature d'equilibre attendues d'une planete en cas d'absence d'atmosphere:\nplanetes[\"T_C/no atmo.\"] = 0 # ...\n\n# Calcul de la temperature d'equilibre attendues d'une planete en cas d'absence d'atmosphere:\nplanetes[\"Effet de serre\"] = 0 # ...\n\nbkc.print(r\"Forcage radiatif: $F = S\\cdot \\sigma \\cdot T^4$\", size=\"+1\")\n# Calcul le forcage radiatif des 4 planetes précédentes\n\nplanetes[\"Forcage radiatif (W/m2)\"] = 0 # ...\n",
+            "user": "luke.skywalker@jedi.com",
+            "update_time": "2023-07-06 16:06:53",
+            "note": 0.0,
+            "main_execution": "from bulkhours import constants as bkc\n\nplanetes = bkc.DataFrame(index=[\"mercure\", \"venus\", \"terre\", \"mars\"], columns=[\"Albedo\", \"d_ua\", \"T_C\"])\nbkc.print(r\"Equilibre thermique: $(1-A)\\frac{ L_\\odot R^2}{4 d^2} \\equiv (1-S) 4 \\pi R^2 \\sigma T^4$\", size=\"+1\")\n\n# Calcul de la temperature d'equilibre attendues d'une planete en cas d'absence d'atmosphere:\nplanetes[\"T_C/no atmo.\"] = 0 # ...\n\n# Calcul de la temperature d'equilibre attendues d'une planete en cas d'absence d'atmosphere:\nplanetes[\"Effet de serre\"] = 0 # ...\n\nbkc.print(r\"Forcage radiatif: $F = S\\cdot \\sigma \\cdot T^4$\", size=\"+1\")\n# Calcul le forcage radiatif des 4 planetes précédentes\n\nplanetes[\"Forcage radiatif (W/m2)\"] = 0 # ...\n"
+        },
+        "solution": {
+            "update_time": "2023-07-06 16:19:56",
+            "evaluation": "def student_evaluation_function():\n    return bulkhours.is_equal(data_test=student.planetes, data_ref=teacher.planetes, min_score=0, max_score=10)\n\n",
+            "note": 10.0,
+            "explanation": "",
+            "main_execution": "from bulkhours import constants as bkc\n\nplanetes = bkc.DataFrame(index=[\"mercure\", \"venus\", \"terre\", \"mars\"], columns=[\"Albedo\", \"d_ua\", \"T_C\"])\nbkc.print(r\"Equilibre thermique: $(1-A)\\frac{ L_\\odot R^2}{4 d^2} \\equiv (1-S) 4 \\pi R^2 \\sigma T^4$\", size=\"+1\")\n\n# Calcul de la temperature d'equilibre attendues d'une planete en cas d'absence d'atmosphere:\nplanetes[\"T_C/no atmo.\"] = (((1-planetes.Albedo) * bkc.L_soleil / (16 * np.pi * (planetes.d_ua * bkc.d_terresoleil)**2 * bkc.sigma))**0.25-bkc.c2k).round()\n\n# Calcul de la temperature d'equilibre attendues d'une planete en cas d'absence d'atmosphere:\nplanetes[\"Effet de serre\"] = (1-( (1 - planetes.Albedo) * bkc.L_soleil / (planetes.T_C + bkc.c2k)**4 / (16 * bkc.pi * (planetes.d_ua * bkc.d_terresoleil)**2 * bkc.sigma))).round(3)\n\nbkc.print(r\"Forcage radiatif: $F = S\\cdot \\sigma \\cdot T^4$\", size=\"+1\")\nplanetes[\"Forcage radiatif (W/m2)\"] = (planetes[\"Effet de serre\"] * bkc.sigma * (planetes.T_C + bkc.c2k)**4).round(3)\ndisplay(planetes)\n\n\n",
+            "user": "solution",
+            "answer": "from bulkhours import constants as bkc\n\nplanetes = bkc.DataFrame(index=[\"mercure\", \"venus\", \"terre\", \"mars\"], columns=[\"Albedo\", \"d_ua\", \"T_C\"])\nbkc.print(r\"Equilibre thermique: $(1-A)\\frac{ L_\\odot R^2}{4 d^2} \\equiv (1-S) 4 \\pi R^2 \\sigma T^4$\", size=\"+1\")\n\n# Calcul de la temperature d'equilibre attendues d'une planete en cas d'absence d'atmosphere:\nplanetes[\"T_C/no atmo.\"] = (((1-planetes.Albedo) * bkc.L_soleil / (16 * np.pi * (planetes.d_ua * bkc.d_terresoleil)**2 * bkc.sigma))**0.25-bkc.c2k).round()\n\n# Calcul de la temperature d'equilibre attendues d'une planete en cas d'absence d'atmosphere:\nplanetes[\"Effet de serre\"] = (1-( (1 - planetes.Albedo) * bkc.L_soleil / (planetes.T_C + bkc.c2k)**4 / (16 * bkc.pi * (planetes.d_ua * bkc.d_terresoleil)**2 * bkc.sigma))).round(3)\n\nbkc.print(r\"Forcage radiatif: $F = S\\cdot \\sigma \\cdot T^4$\", size=\"+1\")\nplanetes[\"Forcage radiatif (W/m2)\"] = (planetes[\"Effet de serre\"] * bkc.sigma * (planetes.T_C + bkc.c2k)**4).round(3)\ndisplay(planetes)\n\n\n",
+            "visible": true,
+            "atype": "bkcode"
+        },
+        "yoda@jedi.com": {
+            "note": 10.0,
+            "main_execution": "from bulkhours import constants as bkc\n\nplanetes = bkc.DataFrame(index=[\"mercure\", \"venus\", \"terre\", \"mars\"], columns=[\"Albedo\", \"d_ua\", \"T_C\"])\nbkc.print(r\"Equilibre thermique: $(1-A)\\frac{ L_\\odot R^2}{4 d^2} \\equiv (1-S) 4 \\pi R^2 \\sigma T^4$\", size=\"+1\")\n\n# Calcul de la temperature d'equilibre attendues d'une planete en cas d'absence d'atmosphere:\nplanetes[\"T_C/no atmo.\"] = (((1-planetes.Albedo) * bkc.L_soleil / (16 * np.pi * (planetes.d_ua * bkc.d_terresoleil)**2 * bkc.sigma))**0.25-bkc.c2k).round()\n\n# Calcul de la temperature d'equilibre attendues d'une planete en cas d'absence d'atmosphere:\nplanetes[\"Effet de serre\"] = (1-( (1 - planetes.Albedo) * bkc.L_soleil / (planetes.T_C + bkc.c2k)**4 / (16 * bkc.pi * (planetes.d_ua * bkc.d_terresoleil)**2 * bkc.sigma))).round(3)\n\nbkc.print(r\"Forcage radiatif: $F = S\\cdot \\sigma \\cdot T^4$\", size=\"+1\")\nplanetes[\"Forcage radiatif (W/m2)\"] = (planetes[\"Effet de serre\"] * bkc.sigma * (planetes.T_C + bkc.c2k)**4).round(3)\ndisplay(planetes)\n\n\n",
+            "user": "yoda@jedi.com",
+            "update_time": "2023-07-06 16:09:51",
+            "answer": "from bulkhours import constants as bkc\n\nplanetes = bkc.DataFrame(index=[\"mercure\", \"venus\", \"terre\", \"mars\"], columns=[\"Albedo\", \"d_ua\", \"T_C\"])\nbkc.print(r\"Equilibre thermique: $(1-A)\\frac{ L_\\odot R^2}{4 d^2} \\equiv (1-S) 4 \\pi R^2 \\sigma T^4$\", size=\"+1\")\n\n# Calcul de la temperature d'equilibre attendues d'une planete en cas d'absence d'atmosphere:\nplanetes[\"T_C/no atmo.\"] = (((1-planetes.Albedo) * bkc.L_soleil / (16 * np.pi * (planetes.d_ua * bkc.d_terresoleil)**2 * bkc.sigma))**0.25-bkc.c2k).round()\n\n# Calcul de la temperature d'equilibre attendues d'une planete en cas d'absence d'atmosphere:\nplanetes[\"Effet de serre\"] = (1-( (1 - planetes.Albedo) * bkc.L_soleil / (planetes.T_C + bkc.c2k)**4 / (16 * bkc.pi * (planetes.d_ua * bkc.d_terresoleil)**2 * bkc.sigma))).round(3)\n\nbkc.print(r\"Forcage radiatif: $F = S\\cdot \\sigma \\cdot T^4$\", size=\"+1\")\nplanetes[\"Forcage radiatif (W/m2)\"] = (planetes[\"Effet de serre\"] * bkc.sigma * (planetes.T_C + bkc.c2k)**4).round(3)\ndisplay(planetes)\n\n\n",
+            "atype": "bkcode"
+        }
+    },
+    "s_light_side_dscience_moore": {
+        "solution": {
+            "note": 10,
+            "main_execution": "bulkhours.get_data(\"supercomputers\", credit=True, index=\"Year\")[\"Floating-Point Operations per Second\"].plot(marker='X', linestyle='None', figsize=(12, 4))\nplt.yscale(\"log\");\n",
+            "visible": true,
+            "atype": "bkcode",
+            "evaluation": "",
+            "update_time": "2023-07-06 17:48:03",
+            "explanation": "",
+            "user": "solution",
+            "answer": "bulkhours.get_data(\"supercomputers\", credit=True, index=\"Year\")[\"Floating-Point Operations per Second\"].plot(marker='X', linestyle='None', figsize=(12, 4))\nplt.yscale(\"log\");\n"
+        }
+    },
+    "s_light_side_dscience_sunspots": {
+        "solution": {
+            "atype": "bkcode",
+            "evaluation": "",
+            "explanation": "",
+            "user": "solution",
+            "answer": "\n# Get and fit the data\nsun_data = bulkhours.get_data(\"sunspots\", credit=True)[\"ssn\"]\nsun_model = smtsa.SARIMAX(sun_data, order=(3, 0, 10), seasonal_order=(1, 1, 0, 44)).fit() # Sun cycles: 11 years\n\n# Plot the data\nfig, ax = plt.subplots(figsize=(12, 4))\nsun_data[\"1990\":].plot(ax=ax, zorder=100, legend=True, label='actual Wolf number', alpha=1, lw=5)\nsm.graphics.tsa.plot_predict(sun_model, start=\"1990\", end=\"2035\", plot_insample=True, ax=ax, alpha=0.001, lw=2)\nax.vlines(sun_model.forecast(10).idxmax(), 0, 160, color=\"green\", ls=\"dashed\", lw=20, alpha=0.3, zorder=110.1)\n\n# Conclude\nIPython.display.Markdown(f\"<h3>Le meilleure période pour aller voir 😎 les aurores boreales 🌌 sera autour du {sun_model.forecast(10).idxmax().date()}</h3>\")\n",
+            "main_execution": "\n# Get and fit the data\nsun_data = bulkhours.get_data(\"sunspots\", credit=True)[\"ssn\"]\nsun_model = smtsa.SARIMAX(sun_data, order=(3, 0, 10), seasonal_order=(1, 1, 0, 44)).fit() # Sun cycles: 11 years\n\n# Plot the data\nfig, ax = plt.subplots(figsize=(12, 4))\nsun_data[\"1990\":].plot(ax=ax, zorder=100, legend=True, label='actual Wolf number', alpha=1, lw=5)\nsm.graphics.tsa.plot_predict(sun_model, start=\"1990\", end=\"2035\", plot_insample=True, ax=ax, alpha=0.001, lw=2)\nax.vlines(sun_model.forecast(10).idxmax(), 0, 160, color=\"green\", ls=\"dashed\", lw=20, alpha=0.3, zorder=110.1)\n\n# Conclude\nIPython.display.Markdown(f\"<h3>Le meilleure période pour aller voir 😎 les aurores boreales 🌌 sera autour du {sun_model.forecast(10).idxmax().date()}</h3>\")\n",
+            "visible": true,
+            "note": 10,
+            "update_time": "2023-07-06 17:48:29"
+        }
+    },
+    "s_light_side_ml_aimg": {
+        "solution": {
+            "main_execution": "\ndef get_predictions():\n\n    # Get and format image\n    img = image.load_img(bulkhours.get_data(\"chose1.jpg\"), target_size=(224, 224))\n\n    # Display image\n    IPython.display.display(img)\n\n    # Format the image\n    rimg = np.expand_dims(image.img_to_array(img), axis=0)\n\n    # Use ResNet50 from tensorflow\n    model = bulkhours.hpc.get_tf_model(\"ResNet50\");\n\n    # Get prediction\n    preds = model.predict(preprocess_input(rimg))\n\n    # Print classification\n    return pd.DataFrame(decode_predictions(preds, top=3)[0], columns=[\"idx\", \"Evaluation\", \"Probabilité\"]).drop(columns=[\"idx\"])\n\nget_predictions()\n",
+            "update_time": "2023-07-06 17:24:31",
+            "note": 10,
+            "evaluation": "",
+            "atype": "bkcode",
+            "answer": "\ndef get_predictions():\n\n    # Get and format image\n    img = image.load_img(bulkhours.get_data(\"chose1.jpg\"), target_size=(224, 224))\n\n    # Display image\n    IPython.display.display(img)\n\n    # Format the image\n    rimg = np.expand_dims(image.img_to_array(img), axis=0)\n\n    # Use ResNet50 from tensorflow\n    model = bulkhours.hpc.get_tf_model(\"ResNet50\");\n\n    # Get prediction\n    preds = model.predict(preprocess_input(rimg))\n\n    # Print classification\n    return pd.DataFrame(decode_predictions(preds, top=3)[0], columns=[\"idx\", \"Evaluation\", \"Probabilité\"]).drop(columns=[\"idx\"])\n\nget_predictions()\n",
+            "user": "solution",
+            "visible": true,
+            "explanation": ""
+        }
+    },
+    "s_light_side_ml_cpp": {
+        "solution": {
+            "answer": "%%compile_and_exec -c g++\n#include <stdio.h>\n\nint main() {\n    int res = 1;\n    for (int i = 1; i <= 10; ++i)\n    {\n      res *= 2;\n      printf(\"%d \", res);\n    }\n}\n\n\n",
+            "update_time": "2023-07-06 17:24:19",
+            "explanation": "",
+            "evaluation": "def student_evaluation_function(debug=False, run=False, show_code=False) :\n    return bulkhours.is_equal(data_test=student.stdout, data_ref=teacher.stdout, policy=\"gaussian\", error=0.1, min_score=0, max_score=10)\n\n",
+            "visible": true,
+            "note": 10,
+            "atype": "bkcode",
+            "main_execution": "%%compile_and_exec -c g++\n#include <stdio.h>\n\nint main() {\n    int res = 1;\n    for (int i = 1; i <= 10; ++i)\n    {\n      res *= 2;\n      printf(\"%d \", res);\n    }\n}\n\n\n",
+            "user": "solution"
+        }
+    },
+    "s_light_side_n_my_first_exercice": {
+        "luke.skywalker@jedi.com": {
+            "note": 0.0,
+            "user": "luke.skywalker@jedi.com",
+            "answer": "\ndef sigmoid(z):\n  # Implement the sigmoid function\n  s = z # ...\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n",
+            "main_execution": "\ndef sigmoid(z):\n  # Implement the sigmoid function\n  s = z # ...\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n",
+            "atype": "bkcode",
+            "update_time": "2023-07-06 18:23:28"
+        },
+        "solution": {
+            "main_execution": "import numpy as np\n\ndef sigmoid(z):\n  s = 1 / (1 + np.exp(-z))\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n\n",
+            "update_time": "2023-07-06 14:49:52",
+            "answer": "import numpy as np\n\ndef sigmoid(z):\n  s = 1 / (1 + np.exp(-z))\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n\n",
+            "user": "solution",
+            "explanation": "",
+            "visible": true,
+            "atype": "bkcode",
+            "note": 10.0,
+            "evaluation": "def student_evaluation_function():\n    score = 0\n    score += bulkhours.is_equal(data_test=student.sigmoid(np.array([1,3,7])), max_score=5.0, data_ref=teacher.sigmoid(np.array([1,3,7])), min_score=0)\n\n    score += 2.5 * (student.sigmoid(3) == teacher.sigmoid(3))\n    score += bulkhours.is_equal(data_test=student.sigmoid(4), data_ref=teacher.sigmoid(4), max_score=2.5, min_score=0)\n\n    return score\n"
+        },
+        "yoda@jedi.com": {
+            "note": 10.0,
+            "user": "yoda@jedi.com",
+            "main_execution": "import numpy as np\n\ndef sigmoid(z):\n  s = 1 / (1 + np.exp(-z))\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n\n",
+            "update_time": "2023-07-06 14:50:10",
+            "atype": "bkcode",
+            "answer": "import numpy as np\n\ndef sigmoid(z):\n  s = 1 / (1 + np.exp(-z))\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n\n"
+        }
+    }
+}
