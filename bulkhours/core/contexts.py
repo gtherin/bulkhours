@@ -27,26 +27,27 @@ class CellContext:
     def stdout2(self):
         return True
 
-    # def __getattr__(cls, key, *kargs, **kwargs):
-    #    if key == "error":
-    #        print("Yes bon del")
-    #    return None
+
+def run_cell(code):
+    if (ipp := IPython.get_ipython()) is None:
+        print(f"No IPython instance found:\n{code}")
+        return
+    ipp.run_cell(code)
 
 
 def exec_code(code, debug=False):
     if debug:
         print("Run in debug mode")
-
-        IPython.get_ipython().run_cell(code)
+        run_cell(code)
         return ["FINAL_SCORE=-9999/10"]
     else:
         with redirect_stdout(f := io.StringIO()):
-            IPython.get_ipython().run_cell(code)
+            run_cell(code)
             return f.getvalue().split()
 
 
 def generate_empty_context(context):
-    IPython.get_ipython().run_cell(
+    run_cell(
         f"""class CellContext:
     @property
     def stdout(self):
@@ -59,7 +60,7 @@ def generate_empty_context(context):
 
 def add_variables_in_contexts(cell_id, configs):
     for context in ["student", "teacher"]:
-        IPython.get_ipython().run_cell(f"from argparse import Namespace\n{context}.{cell_id} = Namespace(**{configs})")
+        run_cell(f"from argparse import Namespace\n{context}.{cell_id} = Namespace(**{configs})")
 
 
 def generate_context_code(code, context):
@@ -95,14 +96,14 @@ def build_context(data, code_label, context, do_evaluate, do_debug=False, use_co
 
         if do_debug:
             print(f"Execute context {context}/{code_label}/{data.minfo['source']}")
-            IPython.get_ipython().run_cell(fcode)
+            run_cell(fcode)
         else:
             with output:
                 if do_evaluate:
                     with redirect_stdout(f := io.StringIO()):
-                        IPython.get_ipython().run_cell(fcode)
-                        IPython.get_ipython().run_cell(f'{context}.stdout="""{f.getvalue()}"""')
+                        run_cell(fcode)
+                        run_cell(f'{context}.stdout="""{f.getvalue()}"""')
 
     if data.is_cell_type():
-        IPython.get_ipython().run_cell(f'{context}.answer={data["answer"]}')
+        run_cell(f'{context}.answer={data["answer"]}')
     return output

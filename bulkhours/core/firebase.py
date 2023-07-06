@@ -165,7 +165,7 @@ The database has been reset to the local file '{cfg["database"]}'.
 """
             )
         else:
-            cfg.data["global"].update(tokens)
+            cfg.data["global"].update(**tokens)
 
     for k, v in DbDocument.compliant_fields["session"].items():
         if k not in cfg:
@@ -201,22 +201,24 @@ The database has been reset to the local file '{cfg["database"]}'.
     if "security_level" not in cfg:
         cfg["security_level"] = 0
 
-    if cfg["security_level"] == 0 and cfg["email"] != REF_USER:
-        cfg = add_user_to_virtual_room(cfg["email"], cfg)
-
+    cfg = add_user_to_virtual_room(cfg["email"], cfg)
     return tools.update_config(cfg)
 
 
-def add_user_to_virtual_room(user, config):
+def add_user_to_virtual_room(user, cfg):
+    if cfg["security_level"] == 0 or user == REF_USER:
+        return cfg
+
     def get_users(user, vroom):
         return user if vroom == "" else vroom + ";" + user
 
-    if "is_demo_admin" in config and user not in config["global"]["admins"]:
-        config["global"]["admins"] = get_users(user, config["global"]["admins"])
-    if "is_demo_admin" not in config and user not in config["global"][config["virtual_room"]]:
-        config["global"][config["virtual_room"]] = get_users(user, config["global"][config["virtual_room"]])
-    save_config("global", config)
-    return config
+    if "is_demo_admin" in cfg and user not in cfg.g["admins"]:
+        cfg["global"]["admins"] = get_users(user, cfg.g["admins"])
+    if "is_demo_admin" not in cfg and user not in cfg.g[cfg.virtual_room]:
+        cfg["global"][cfg.virtual_room] = get_users(user, cfg.g[cfg.virtual_room])
+
+    save_config("global", cfg)
+    return cfg
 
 
 def get_collection(question=None, question_id=None, cinfo=None):
@@ -263,13 +265,11 @@ def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, *
         alias = alias.split(".")
         alias = alias[0] + "." + alias[1][0]
 
-    if config.security_level == 0:
-        if cinfo.cell_id not in config[config.notebook_id]["exercices"]:
-            config[config["notebook_id"]]["exercices"] += ";" + cinfo.cell_id
-            save_config(config.notebook_id, config)
+    if config.security_level == 0 and cinfo.cell_id not in config[config.notebook_id]["exercices"]:
+        config[config["notebook_id"]]["exercices"] += ";" + cinfo.cell_id
+        save_config(config.notebook_id, config)
 
-        if user not in config.g[config.virtual_room] and user != REF_USER:
-            config = add_user_to_virtual_room(config["email"], config)
+    config = add_user_to_virtual_room(config["email"], config)
 
     if cinfo.restricted:
         corr = get_solution_from_corrector(cinfo.cell_id, corrector=REF_USER, cinfo=cinfo)

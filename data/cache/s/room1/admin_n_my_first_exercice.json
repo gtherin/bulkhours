@@ -1,0 +1,29 @@
+{
+    "solution": {
+        "main_execution": "import numpy as np\n\ndef sigmoid(z):\n  s = 1 / (1 + np.exp(-z))\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n\n",
+        "explanation": "",
+        "evaluation": "def student_evaluation_function():\n    score = 0\n    score += bulkhours.is_equal(data_test=student.sigmoid(np.array([1,3,7])), max_score=5.0, data_ref=teacher.sigmoid(np.array([1,3,7])), min_score=0)\n\n    score += bulkhours.is_equal(data_test=student.sigmoid(3), data_ref=teacher.sigmoid(3), max_score=2.5, min_score=0)\n\n    score += bulkhours.is_equal(data_test=student.sigmoid(4), data_ref=teacher.sigmoid(4), max_score=2.5, min_score=0)\n\n    return score\n",
+        "answer": "import numpy as np\n\ndef sigmoid(z):\n  s = 1 / (1 + np.exp(-z))\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n\n",
+        "atype": "bkcode",
+        "visible": true,
+        "user": "solution",
+        "update_time": "2023-07-05 18:21:07",
+        "note": 10.0
+    },
+    "yoda@jedi.com": {
+        "main_execution": "\ndef sigmoid(z):\n  # Implement the sigmoid function\n  s = z # ...\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n",
+        "answer": "\ndef sigmoid(z):\n  # Implement the sigmoid function\n  s = z # ...\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n",
+        "atype": "bkcode",
+        "user": "yoda@jedi.com",
+        "update_time": "2023-07-05 18:20:49",
+        "note": 0.0
+    },
+    "luke.skywalker@jedi.com": {
+        "main_execution": "\ndef sigmoid(z):\n  # Implement the sigmoid function\n  s = z # ...\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n",
+        "answer": "\ndef sigmoid(z):\n  # Implement the sigmoid function\n  s = z # ...\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n",
+        "atype": "bkcode",
+        "user": "luke.skywalker@jedi.com",
+        "update_time": "2023-07-05 17:38:58",
+        "note": 0.0
+    }
+}
