@@ -50,7 +50,7 @@ def generate_empty_context(context):
     run_cell(
         f"""class CellContext:
     @property
-    def stdout(self):
+    def stdout2(self):
         return False
                                    
 {context} = CellContext()
@@ -94,6 +94,7 @@ def build_context(data, code_label, context, do_evaluate, do_debug=False, use_co
     if not (code is None or len(code.replace("\n", "").replace(" ", "")) == 0):
         fcode = code if not use_context or "compile_and_exec" in code else generate_context_code(code, context)
 
+        output_return = "None"
         if do_debug:
             print(f"Execute context {context}/{code_label}/{data.minfo['source']}")
             run_cell(fcode)
@@ -102,7 +103,9 @@ def build_context(data, code_label, context, do_evaluate, do_debug=False, use_co
                 if do_evaluate:
                     with redirect_stdout(f := io.StringIO()):
                         run_cell(fcode)
-                        run_cell(f'{context}.stdout="""{f.getvalue()}"""')
+                        output_return = f.getvalue()
+
+    run_cell(f'{context}.stdout="""{output_return}"""')
 
     if data.is_cell_type():
         run_cell(f'{context}.answer={data["answer"]}')
