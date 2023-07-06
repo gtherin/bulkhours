@@ -150,7 +150,7 @@ def init_database(config) -> None:
     if "global" not in cfg:
         cfg["global"] = {}
 
-    if "database" not in cfg:
+    if "database" not in cfg or cfg["database"] is None:
         cfg["database"] = DbDocument.compliant_fields["session"]["database"]
 
     if "bkache@" in cfg["database"] or "bkloud@" in cfg["database"]:
