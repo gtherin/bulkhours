@@ -1,6 +1,14 @@
 import os
 
 
+def is_huggingface_installed(verbose=False):
+    if "BLK_HUGGINGFACE_TOKEN" in os.environ:
+        return True
+    if verbose:
+        print("\x1b[31m⚠️Please install HUGGING_FACE libraries first\x1b[0m)")
+    return False
+
+
 class PPOHugs:
     def login(self, pass_code=None) -> None:
         import huggingface_hub
@@ -37,15 +45,13 @@ class PPOHugs:
         self.model_architecture = model_architecture  # Define the model architecture we used
         self.repo_id = f"guydegnol/{self.model_name}"  # Change with your repo id, you can't push with mine 😄
 
-        if "BLK_HUGGINGFACE_TOKEN" in os.environ:
+        if is_huggingface_installed(verbose=True):
             self.login(pass_code=os.environ["BLK_HUGGINGFACE_TOKEN"] if pass_code is None else pass_code)
             # self.env = self.make_vec_env()
             if type(init) == str:
                 self.pull(init)
             elif init:
                 self.create_from_scratch()
-        else:
-            print("\x1b[31m⚠️Please install HUGGING_FACE libraries first\x1b[0m)")
 
     def create_from_scratch(self) -> None:
         import stable_baselines3
@@ -104,6 +110,9 @@ class PPOHugs:
         return self.model
 
     def train(self, pull=True, push=True, timesteps=1_000_000):
+        if not is_huggingface_installed(verbose=False):
+            return
+
         if pull:
             self.pull(pull)
         if timesteps:
