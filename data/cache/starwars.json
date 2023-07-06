@@ -1,6 +1,6 @@
 {
     "s_info": {
-        "course_edition_nb": {
+        "course_edition": {
             "page": "https://colab.research.google.com/github/guydegnol/bulkhours/blob/main/examples/2_Course_Edition_student.ipynb",
             "evaluation": "",
             "exercices": "exo1;exo2"
@@ -8,12 +8,12 @@
         "cpp": {
             "evaluation": "",
             "exercices": ";cpp;quadri",
-            "page": ""
+            "page": "https://colab.research.google.com/github/guydegnol/bulkhours/blob/main/examples/3_Simple_Cpp_Course_student.ipynb"
         },
         "data": {
-            "exercices": ";serre;global_warming",
+            "exercices": "serre;global_warming",
             "evaluation": "",
-            "page": ""
+            "page": "https://colab.research.google.com/github/guydegnol/bulkhours/blob/main/examples/7_Add_new_dataset_student.ipynb"
         },
         "dscience": {
             "evaluation": "",
@@ -36,9 +36,9 @@
             "exercices": "cpp;aimg;moon"
         },
         "n": {
-            "page": "",
+            "page": "https://colab.research.google.com/github/guydegnol/bulkhours/blob/main/examples/1_Simple_Exercice_Automation_student.ipynb",
             "evaluation": "",
-            "exercices": ";my_first_exercice"
+            "exercices": "my_first_exercice"
         }
     },
     "s_light_side_course_edition_nb_exo1": {
