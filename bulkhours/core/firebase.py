@@ -38,7 +38,7 @@ class DbDocument:
             "virtual_rooms": "room1",
         },
         "notebook": {"exercices": "", "evaluation": "", "page": ""},
-        "session": dict(email="john.doe@un.known", notebook_id="n", database="data/cache/free1.json", subject="s"),
+        "session": dict(email="john.doe@un.known", notebook_id="n", database="data/cache/starwars.json", subject="s"),
     }
 
     @staticmethod
