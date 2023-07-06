@@ -39,3 +39,4 @@ abc.py
 .safe*
 #data/cache/*/admin_*.json
 git_push.sh
+tests/test_init_env.py
