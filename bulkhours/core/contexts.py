@@ -28,22 +28,17 @@ class CellContext:
         return True
 
 
-def run_cell(code):
+def run_cell(code, stdout=True):
     if (ipp := IPython.get_ipython()) is None:
         print(f"No IPython instance found:\n{code}")
         return
-    ipp.run_cell(code)
 
-
-def exec_code(code, debug=False):
-    if debug:
-        print("Run in debug mode")
-        run_cell(code)
-        return ["FINAL_SCORE=-9999/10"]
-    else:
+    if not stdout:
         with redirect_stdout(f := io.StringIO()):
             run_cell(code)
             return f.getvalue().split()
+
+    ipp.run_cell(code)
 
 
 def generate_empty_context(context):

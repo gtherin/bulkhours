@@ -139,17 +139,14 @@ os.environ['FINAL_SCORE'] = str(eresult)
     if "show_code=true" in teacher_data.get_code("evaluation").replace(" ", "").lower():
         print(evaluation_code)
 
-    contexts.exec_code(evaluation_code, do_debug)
+    contexts.run_cell(evaluation_code, do_debug)
 
     score = float(os.environ["FINAL_SCORE"])
-
-    if do_debug:
-        print("SCORE:", score)
 
     if raw:
         return score
 
-    contexts.exec_code(evaluation_code.replace("student.", "teacher."), do_debug)
+    contexts.run_cell(evaluation_code.replace("student.", "teacher."), stdout=False)
     max_score = float(os.environ["FINAL_SCORE"])
 
     return f"{score}/{max_score}"
