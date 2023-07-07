@@ -16,6 +16,7 @@ from .core import colors as c  # noqa
 
 from .core import installer  # noqa
 from . import admin  # noqa
+from . import ml  # noqa
 from . import rl  # noqa
 from . import hpc  # noqa
 from . import ecox  # noqa
