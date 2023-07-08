@@ -99,19 +99,6 @@ DataParser.register_dataset(
 | Entity   | The number of GigaFLOP/S by the fastest supercomputer in any given year |         
 """,
 )
-DataParser.register_dataset(
-    label="co2.main",
-    summary="Data on CO2 and Greenhouse Gas Emissions by Our World in Data",
-    category="Climate_Evolution",
-    raw_data="https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
-    columns_info="https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv",
-)
-DataParser.register_dataset(
-    label="co2.mapmain",
-    summary="Data on CO2 and Greenhouse Gas Emissions by Our World in Data (with extra gpx data)",
-    reference="co2.main",
-)
 
 DataParser.register_dataset(
     label="vaccinations",
@@ -151,13 +138,6 @@ DataParser.register_dataset(
     ref_site="""https://covid19.who.int/data""",
     ref_source="https://ourworldindata.org/coronavirus",
     columns_info="https://github.com/owid/covid-19-data/tree/master/public/data/",
-)
-DataParser.register_dataset(
-    label="co2.travel_mode",
-    summary="CO2 transportation info",
-    category="Climate_Evolution",
-    ref_source="""https://ourworldindata.org/grapher/carbon-footprint-travel-mode""",
-    raw_data="carbon-footprint-travel-mode.csv",
 )
 DataParser.register_dataset(
     label="train_catvnoncat",
