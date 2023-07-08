@@ -158,27 +158,3 @@ def get_corruption(self, show_truth=False, **data_info):
 )
 def get_life_expectancy_vs_gdp_2018(self, **data_info):
     return self.read_raw_data(self.raw_data).dropna()
-
-
-@DataParser.register_dataset(
-    label="co2.concentrations",
-    summary="Greenhouse effect gaz concentrations",
-    category="Climate_Evolution",
-    raw_data="climate-change.csv",
-    ref_source="""https://ourworldindata.org/atmospheric-concentrations""",
-    kwargs=dict(zone="World"),
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
-)
-def get_concentrations(self, zone="World", **data_info):
-    df = self.read_raw_data(self.raw_data)
-
-    df = df.rename(columns={"Entity": "country", "Year": "year"})
-
-    if zone is not None:
-        df = df.query(f"country == '{zone}'")
-    return df
-
-
-@DataParser.register_dataset(label="co2.mapconcentrations", reference="co2.concentrations")
-def get_mapconcentrations(self, **kwargs):
-    return get_mapgeneric(get_concentrations(self, **kwargs))
