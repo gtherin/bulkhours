@@ -102,8 +102,9 @@ def explain_student(student_data, teacher_data, raw=False):
 
 def evaluate_student(student_data, teacher_data, raw=False, use_student_context=True):
     """
-    This is a reST style.
+    This function is used to evaluate the student code.
 
+    
     :param debug: this is a first param
     :returns: this is a description of what is returned
     """

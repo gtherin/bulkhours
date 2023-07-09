@@ -19,7 +19,7 @@ def get_data(label, **kwargs):
     data_info = (
         {**DataParser.clean_datasets[label], **kwargs}
         if label in DataParser.clean_datasets
-        else {"raw_data": label, **kwargs}
+        else {"label": label, "raw_data": label, **kwargs}
     )
 
     return DataParser(**data_info).get_data()
