@@ -13,7 +13,7 @@
 
 #### World Bank Poverty and Inequality data
 #### `bulkhours.get_data("world.poverty")`
-- Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv))
+- Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)🔄)
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/poverty
 - Reference site: https://pip.worldbank.org/
@@ -154,7 +154,7 @@ def get_poverty(self, timeopt=None):
 
 #### World Bank Poverty and Inequality data (with gpx extra info)
 #### `bulkhours.get_data("world.mappoverty")`
-- Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv))
+- Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)🔄)
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/poverty
 - Reference site: https://pip.worldbank.org/
@@ -297,7 +297,7 @@ def get_mappoverty(self, **kwargs):
 
 #### World Bank Gdp data
 #### `bulkhours.get_data("world.gdp")`
-- Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv))
+- Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)🔄)
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/poverty
 - Reference site: https://pip.worldbank.org/
@@ -336,7 +336,7 @@ def get_gdp(self, timeopt=None, **data_info):
 
 #### World Bank Gdp data (with gpx extra info)
 #### `bulkhours.get_data("world.mapgdp")`
-- Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv))
+- Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)🔄)
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/poverty
 - Reference site: https://pip.worldbank.org/
@@ -494,7 +494,7 @@ def get_corruption(self, show_truth=False, **data_info):
 
 #### Life expectancy versus GDP/capita per country
 #### `bulkhours.get_data("world.life_expectancy_vs_gdp_2018")`
-- Raw data: [life-expectancy-vs-gdp-per-capita.csv](https://github.com/guydegnol/bulkhours/main/data/life-expectancy-vs-gdp-per-capita.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/life-expectancy-vs-gdp-per-capita.csv))
+- Raw data: [life-expectancy-vs-gdp-per-capita.csv](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/life-expectancy-vs-gdp-per-capita.csv)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/life-expectancy-vs-gdp-per-capita.csv)🤗)
 - Enrich data: [world.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/grapher/life-expectancy-vs-gdp-per-capita
 - Reference site: Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)
@@ -520,7 +520,7 @@ def get_corruption(self, show_truth=False, **data_info):
 <summary>Show code</summary>
 <code>
 def get_life_expectancy_vs_gdp_2018(self, **data_info):
-    return self.read_raw_data(self.raw_data).dropna()
+    return self.read_raw_data(self.raw_data)  # .dropna()
 </code>
 </details>
 
@@ -1329,7 +1329,7 @@ Année	écart relatif du revenu salarial moyen	écart relatif du revenu salarial
 
 #### Statement of Apple stock (Quarterly)
 #### `bulkhours.get_data("trading.apple")`
-- Raw data: [APPLE_DownloadFPrepStatementQuarter.tsv](https://github.com/guydegnol/bulkhours/main/data/APPLE_DownloadFPrepStatementQuarter.tsv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/APPLE_DownloadFPrepStatementQuarter.tsv))
+- Raw data: [APPLE_DownloadFPrepStatementQuarter.tsv](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/APPLE_DownloadFPrepStatementQuarter.tsv)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/APPLE_DownloadFPrepStatementQuarter.tsv)🤗)
 - Enrich data: [trading.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/trading.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/trading.py))
 
 <details>
@@ -2007,155 +2007,22 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### COR data
 #### `bulkhours.get_data("COR_1")`
-- Raw data: [Données septembre partie 1.xlsx](https://github.com/guydegnol/bulkhours/main/data/Données septembre partie 1.xlsx)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/Données septembre partie 1.xlsx))
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| Unnamed: 0 |  |
-
-</details>
-
+- Raw data: [Données septembre partie 1.xlsx](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/Données septembre partie 1.xlsx)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/Données septembre partie 1.xlsx)🤗)
 #### COR data
 #### `bulkhours.get_data("COR_2")`
-- Raw data: [Données_RA2022_P2.xlsx](https://github.com/guydegnol/bulkhours/main/data/Données_RA2022_P2.xlsx)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/Données_RA2022_P2.xlsx))
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| Sommaire |  |
-
-</details>
-
+- Raw data: [Données_RA2022_P2.xlsx](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/Données_RA2022_P2.xlsx)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/Données_RA2022_P2.xlsx)🤗)
 #### COR data
 #### `bulkhours.get_data("COR_2bis")`
-- Raw data: [Données complémentaires partie 2 RA 2022.xlsx](https://github.com/guydegnol/bulkhours/main/data/Données complémentaires partie 2 RA 2022.xlsx)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/Données complémentaires partie 2 RA 2022.xlsx))
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| Figure 2.1 – PIB observé et projeté |  |
-| Unnamed: 1 |  |
-| Unnamed: 2 |  |
-| Unnamed: 3 |  |
-| Unnamed: 4 |  |
-| Unnamed: 5 |  |
-| Unnamed: 6 |  |
-| Unnamed: 7 |  |
-| Unnamed: 8 |  |
-| Unnamed: 9 |  |
-| Unnamed: 10 |  |
-| Unnamed: 11 |  |
-| Unnamed: 12 |  |
-| Unnamed: 13 |  |
-| Unnamed: 14 |  |
-| Unnamed: 15 |  |
-| Unnamed: 16 |  |
-| Unnamed: 17 |  |
-| Unnamed: 18 |  |
-| Unnamed: 19 |  |
-| Unnamed: 20 |  |
-| Unnamed: 21 |  |
-| Unnamed: 22 |  |
-| Unnamed: 23 |  |
-| Unnamed: 24 |  |
-| Unnamed: 25 |  |
-| Unnamed: 26 |  |
-| Unnamed: 27 |  |
-| Unnamed: 28 |  |
-| Unnamed: 29 |  |
-| Unnamed: 30 |  |
-| Unnamed: 31 |  |
-| Unnamed: 32 |  |
-| Unnamed: 33 |  |
-| Unnamed: 34 |  |
-| Unnamed: 35 |  |
-| Unnamed: 36 |  |
-| Unnamed: 37 |  |
-| Unnamed: 38 |  |
-| Unnamed: 39 |  |
-| Unnamed: 40 |  |
-| Unnamed: 41 |  |
-| Unnamed: 42 |  |
-| Unnamed: 43 |  |
-| Unnamed: 44 |  |
-| Unnamed: 45 |  |
-| Unnamed: 46 |  |
-| Unnamed: 47 |  |
-| Unnamed: 48 |  |
-| Unnamed: 49 |  |
-| Unnamed: 50 |  |
-| Unnamed: 51 |  |
-| Unnamed: 52 |  |
-| Unnamed: 53 |  |
-| Unnamed: 54 |  |
-| Unnamed: 55 |  |
-| Unnamed: 56 |  |
-| Unnamed: 57 |  |
-| Unnamed: 58 |  |
-| Unnamed: 59 |  |
-| Unnamed: 60 |  |
-| Unnamed: 61 |  |
-| Unnamed: 62 |  |
-| Unnamed: 63 |  |
-| Unnamed: 64 |  |
-| Unnamed: 65 |  |
-| Unnamed: 66 |  |
-| Unnamed: 67 |  |
-| Unnamed: 68 |  |
-| Unnamed: 69 |  |
-| Unnamed: 70 |  |
-| Unnamed: 71 |  |
-| Unnamed: 72 |  |
-| Unnamed: 73 |  |
-
-</details>
-
+- Raw data: [Données complémentaires partie 2 RA 2022.xlsx](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/Données complémentaires partie 2 RA 2022.xlsx)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/Données complémentaires partie 2 RA 2022.xlsx)🤗)
 #### COR data
 #### `bulkhours.get_data("COR_3")`
-- Raw data: [Données septembre 2022 - partie 3.xlsx](https://github.com/guydegnol/bulkhours/main/data/Données septembre 2022 - partie 3.xlsx)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/Données septembre 2022 - partie 3.xlsx))
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| Partie 3. Les résultats : les évolutions du système de retraite au regard de l'objectif d'un niveau de vie satisfaisant pour les retraités |  |
-
-</details>
-
+- Raw data: [Données septembre 2022 - partie 3.xlsx](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/Données septembre 2022 - partie 3.xlsx)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/Données septembre 2022 - partie 3.xlsx)🤗)
 #### COR data
 #### `bulkhours.get_data("COR_4")`
-- Raw data: [Données_RA2022_P4.xlsx](https://github.com/guydegnol/bulkhours/main/data/Données_RA2022_P4.xlsx)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/Données_RA2022_P4.xlsx))
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| Partie 4. Les résultats : les évolutions du système de retraite au regard de l'objectif d'équité entre les assurés |  |
-
-</details>
-
+- Raw data: [Données_RA2022_P4.xlsx](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/Données_RA2022_P4.xlsx)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/Données_RA2022_P4.xlsx)🤗)
 #### COR data
 #### `bulkhours.get_data("COR_5")`
-- Raw data: [Données septembre 2022 - partie 5.xlsx](https://github.com/guydegnol/bulkhours/main/data/Données septembre 2022 - partie 5.xlsx)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/Données septembre 2022 - partie 5.xlsx))
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| Partie 5. Les âges et les conditions de départ à la retraite |  |
-
-</details>
-
+- Raw data: [Données septembre 2022 - partie 5.xlsx](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/Données septembre 2022 - partie 5.xlsx)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/Données septembre 2022 - partie 5.xlsx)🤗)
 
 
 ## Predictive_Maintenance 
@@ -2791,7 +2658,7 @@ bkc.pi := 3.141593  #
 
 #### Quarterly sunspots activity (ssn)
 #### `bulkhours.get_data("sunspots")`
-- Raw data: [observed-solar-cycle-indices.json](https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json)  ([raw](https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json))
+- Raw data: [observed-solar-cycle-indices.json](https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json)  ([raw](https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json)🔄)
 - Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
 - Direct source: https://www.swpc.noaa.gov/products/solar-cycle-progression
 - Reference site: https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
@@ -2886,7 +2753,7 @@ def get_sunspots(self):
 
 #### Coronavirus Pandemic (COVID-19) data
 #### `bulkhours.get_data("covid")`
-- Raw data: [owid-covid-data.csv](https://covid.ourworldindata.org/data/owid-covid-data.csv)  ([raw](https://covid.ourworldindata.org/data/owid-covid-data.csv))
+- Raw data: [owid-covid-data.csv](https://covid.ourworldindata.org/data/owid-covid-data.csv)  ([raw](https://covid.ourworldindata.org/data/owid-covid-data.csv)🔄)
 - Direct source: https://ourworldindata.org/coronavirus
 - Reference site: https://covid19.who.int/data
 
@@ -3158,7 +3025,7 @@ def get_sunspots(self):
 
 #### CO2 transportation info
 #### `bulkhours.get_data("co2.travel_mode")`
-- Raw data: [carbon-footprint-travel-mode.csv](https://github.com/guydegnol/bulkhours/main/data/carbon-footprint-travel-mode.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/carbon-footprint-travel-mode.csv))
+- Raw data: [carbon-footprint-travel-mode.csv](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/carbon-footprint-travel-mode.csv)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/carbon-footprint-travel-mode.csv)🤗)
 - Direct source: https://ourworldindata.org/grapher/carbon-footprint-travel-mode
 
 <details>
@@ -3274,17 +3141,17 @@ def get_mapconcentrations(self, **kwargs):
 
 #### Les incidences économique de l'action pour le climat
 #### `bulkhours.get_data("climate.pisaniferry")`
-- Raw data: [2023-incidences-economiques-transition-climat-rapport-de-synthese_0.pdf](https://www.strategie.gouv.fr/sites/strategie.gouv.fr/files/atoms/files/2023-incidences-economiques-transition-climat-rapport-de-synthese_0.pdf)  ([raw](https://www.strategie.gouv.fr/sites/strategie.gouv.fr/files/atoms/files/2023-incidences-economiques-transition-climat-rapport-de-synthese_0.pdf))
+- Raw data: [2023-incidences-economiques-transition-climat-rapport-de-synthese_0.pdf](https://www.strategie.gouv.fr/sites/strategie.gouv.fr/files/atoms/files/2023-incidences-economiques-transition-climat-rapport-de-synthese_0.pdf)  ([raw](https://www.strategie.gouv.fr/sites/strategie.gouv.fr/files/atoms/files/2023-incidences-economiques-transition-climat-rapport-de-synthese_0.pdf)🔄)
 #### La contribution des émissions importées à l'empreinte carbone de la France
 #### `bulkhours.get_data("climate.francecarbone")`
-- Raw data: [Rapport-OFCE-HCC-2020.pdf](https://www.ofce.sciences-po.fr/pdf-articles/actu/Rapport-OFCE-HCC-2020.pdf)  ([raw](https://www.ofce.sciences-po.fr/pdf-articles/actu/Rapport-OFCE-HCC-2020.pdf))
+- Raw data: [Rapport-OFCE-HCC-2020.pdf](https://www.ofce.sciences-po.fr/pdf-articles/actu/Rapport-OFCE-HCC-2020.pdf)  ([raw](https://www.ofce.sciences-po.fr/pdf-articles/actu/Rapport-OFCE-HCC-2020.pdf)🔄)
 
 
 ## Machine_learning 
 
-#### Cat or not training data
+#### Cat or not training data: keys=[train_set_x, train_set_y]
 #### `bulkhours.get_data("train_catvnoncat")`
 - Raw data: [train_catvnoncat.h5](https://github.com/guydegnol/bulkhours/main/data/train_catvnoncat.h5)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/train_catvnoncat.h5))
-#### Cat or not test data
+#### Cat or not test data: keys=[test_set_x, test_set_y, list_classes]
 #### `bulkhours.get_data("test_catvnoncat")`
 - Raw data: [test_catvnoncat.h5](https://github.com/guydegnol/bulkhours/main/data/test_catvnoncat.h5)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/test_catvnoncat.h5))
