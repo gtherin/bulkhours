@@ -1,3 +1,5 @@
+# Functions to compare student results to teacher results
+
 import IPython
 import difflib
 import numpy as np
@@ -77,10 +79,7 @@ def is_equal(
 
 
 def explain_student(student_data, teacher_data, raw=False):
-    """
-    Execute the evaluation code
-    My numpydoc description of a kind
-    of very exhautive numpydoc format docstring.
+    """Function to explain the answer to the student
 
     Parameters
     ----------
