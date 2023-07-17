@@ -1,4 +1,5 @@
 import numpy as np
+from . import lxmert  # noqa: F401
 
 
 def linear_forward_test():
