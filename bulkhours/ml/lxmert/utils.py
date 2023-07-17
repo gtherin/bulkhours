@@ -19,7 +19,6 @@ from zipfile import ZipFile, is_zipfile
 import cv2
 import numpy as np
 import requests
-import wget
 from filelock import FileLock
 from PIL import Image
 from tqdm.auto import tqdm
@@ -499,6 +498,8 @@ def get_image_from_url(url):
 
 # to load legacy frcnn checkpoint from detectron
 def load_frcnn_pkl_from_url(url):
+    import wget
+
     fn = url.split("/")[-1]
     if fn not in os.listdir(os.getcwd()):
         wget.download(url)
