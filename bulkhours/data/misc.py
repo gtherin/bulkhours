@@ -143,13 +143,15 @@ DataParser.register_dataset(
     label="train_catvnoncat",
     summary="Cat or not training data: keys=[train_set_x, train_set_y]",
     category="Machine_learning",
-    raw_data="https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/train_catvnoncat.h5",
+    # raw_data="https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/train_catvnoncat.h5",
+    raw_data="train_catvnoncat.h5",
 )
 DataParser.register_dataset(
     label="test_catvnoncat",
     summary="Cat or not test data: keys=[test_set_x, test_set_y, list_classes]",
     category="Machine_learning",
-    raw_data="https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/test_catvnoncat.h5",
+    # raw_data="https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/test_catvnoncat.h5",
+    raw_data="test_catvnoncat.h5",
 )
 
 
