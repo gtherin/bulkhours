@@ -24,7 +24,7 @@ def get_rdata(rdata):
         address = rdata.replace("/raw/", "/blob/")
         return f"[{label}]({address})  ([raw]({rdata})🤗)"
     else:
-        return f"[{label}]({rdata})  ([raw]({rdata}))"
+        return f"[{label}]({rdata})  ([raw]({rdata})🔄)"
 
 
 def clean_columns(df, drop=None, rename=None, is_test=None):
@@ -67,12 +67,14 @@ def clean_data(df, query=None, index=None, test_data=None):
 def get_data_from_file(raw_data, **kwargs):
     if "http" in raw_data:
         filename = raw_data
-        import urllib.request
 
         nfilename = filename.split("/")[-1]
-        urllib.request.urlretrieve(filename, nfilename)
+
+        if os.path.exists(nfilename):
+            import urllib.request
+
+            urllib.request.urlretrieve(filename, nfilename)
         filename = nfilename
-        print(f"Downloaded {filename}")
 
     else:
         filename = None

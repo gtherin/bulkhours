@@ -78,15 +78,38 @@ DataParser.register_dataset(
     label="wages", summary="Simple synthetic data for exercice", category="Economics", raw_data="wages.tsv"
 )
 DataParser.register_dataset(
-    label="COR_1", summary="COR data", category="Economics", raw_data="Données septembre partie 1.xlsx"
+    label="COR_1",
+    summary="COR data",
+    category="Economics",
+    raw_data="https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/Données septembre partie 1.xlsx",
 )
-DataParser.register_dataset(label="COR_2", reference="COR_1", raw_data="Données_RA2022_P2.xlsx")
+
+
 DataParser.register_dataset(
-    label="COR_2bis", reference="COR_1", raw_data="Données complémentaires partie 2 RA 2022.xlsx"
+    label="COR_2",
+    reference="COR_1",
+    raw_data="https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/Données_RA2022_P2.xlsx",
 )
-DataParser.register_dataset(label="COR_3", reference="COR_1", raw_data="Données septembre 2022 - partie 3.xlsx")
-DataParser.register_dataset(label="COR_4", reference="COR_1", raw_data="Données_RA2022_P4.xlsx")
-DataParser.register_dataset(label="COR_5", reference="COR_1", raw_data="Données septembre 2022 - partie 5.xlsx")
+DataParser.register_dataset(
+    label="COR_2bis",
+    reference="COR_1",
+    raw_data="https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/Données complémentaires partie 2 RA 2022.xlsx",
+)
+DataParser.register_dataset(
+    label="COR_3",
+    reference="COR_1",
+    raw_data="https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/Données septembre 2022 - partie 3.xlsx",
+)
+DataParser.register_dataset(
+    label="COR_4",
+    reference="COR_1",
+    raw_data="https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/Données_RA2022_P4.xlsx",
+)
+DataParser.register_dataset(
+    label="COR_5",
+    reference="COR_1",
+    raw_data="https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/Données septembre 2022 - partie 5.xlsx",
+)
 DataParser.register_dataset(
     label="supercomputers",
     summary="Computational capacity of the fastest supercomputers",
@@ -181,8 +204,8 @@ DataParser.register_dataset(
 )
 
 for f in (
-    ["chose1.jpg", "chose2.jpg", "radian2.png", "README.md", "brown.gif", "gradient_descent.png", "TCL.png"]
-    + ["lognormal.png", "in_trading.csv", "galton.jpg", "ffcontrol.csv", "galtonr.png"]
+    ["chose1.jpg", "chose2.jpg", "radian2.png", "README.md", "gradient_descent.png", "TCL.png"]
+    + ["lognormal.png", "in_trading.csv", "ffcontrol.csv", "galton.jpg", "galtonr.png"]
     + ["exercices", "freefight.csv", "cache"]
 ):
     DataParser.register_dataset(label=f, raw_data=f, category="Internal")
