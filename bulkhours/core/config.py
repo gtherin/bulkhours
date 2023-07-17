@@ -1,5 +1,4 @@
 from collections import OrderedDict
-from argparse import Namespace
 
 
 # class Config(OrderedDict):

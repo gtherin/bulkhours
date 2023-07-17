@@ -146,6 +146,10 @@ except ModuleNotFoundError:
                 % tools.get_value("openai_token")
             )
 
+    if tools.get_value("huggingface_token") is not None:
+        os.environ["BLK_HUGGINGFACE_TOKEN"] = tools.get_value("huggingface_token")
+
+
     contexts.generate_empty_context("student")
     contexts.generate_empty_context("teacher")
     os.environ["BLK_GLOBAL_STATUS"] = f"INITIALIZED"

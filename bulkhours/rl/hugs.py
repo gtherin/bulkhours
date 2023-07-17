@@ -5,7 +5,7 @@ def is_huggingface_installed(verbose=False):
     if "BLK_HUGGINGFACE_TOKEN" in os.environ:
         return True
     if verbose:
-        print("\x1b[31m⚠️Please install HUGGING_FACE libraries first\x1b[0m)")
+        print('\x1b[31m⚠️Please install HUGGING_FACE libraries first\x1b[0m (packages="...,HUGGING_FACE")')
     return False
 
 
