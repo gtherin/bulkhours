@@ -147,7 +147,7 @@ def install_dependencies(packages, start_time):
             os.system(
                 f"pip install -r https://raw.githubusercontent.com/huggingface/deep-rl-class/main/notebooks/unit1/requirements-unit1.txt > /dev/null 2>&1"
             )
-        elif package not in "wkhtmltopdf,swig,cmake,python-opengl,ffmpeg,xvfb".split(","):
+        elif package not in "wkhtmltopdf,swig,cmake,python-opengl,ffmpeg,xvfb,git-lfs".split(","):
             os.system(f"pip install {package} > /dev/null 2>&1")
         else:
             os.system(f"apt install {package} > /dev/null 2>&1")
