@@ -21,7 +21,7 @@ DataParser.register_dataset(
     summary="CO2 transportation info",
     category="Climate_Evolution",
     ref_source="""https://ourworldindata.org/grapher/carbon-footprint-travel-mode""",
-    raw_data="carbon-footprint-travel-mode.csv",
+    raw_data="https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/carbon-footprint-travel-mode.csv",
 )
 
 

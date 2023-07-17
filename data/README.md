@@ -14,7 +14,7 @@
 #### World Bank Poverty and Inequality data
 #### `bulkhours.get_data("world.poverty")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv))
-- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/poverty
 - Reference site: https://pip.worldbank.org/
 
@@ -155,7 +155,7 @@ def get_poverty(self, timeopt=None):
 #### World Bank Poverty and Inequality data (with gpx extra info)
 #### `bulkhours.get_data("world.mappoverty")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv))
-- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/poverty
 - Reference site: https://pip.worldbank.org/
 
@@ -298,7 +298,7 @@ def get_mappoverty(self, **kwargs):
 #### World Bank Gdp data
 #### `bulkhours.get_data("world.gdp")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv))
-- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/poverty
 - Reference site: https://pip.worldbank.org/
 
@@ -337,7 +337,7 @@ def get_gdp(self, timeopt=None, **data_info):
 #### World Bank Gdp data (with gpx extra info)
 #### `bulkhours.get_data("world.mapgdp")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv))
-- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/poverty
 - Reference site: https://pip.worldbank.org/
 
@@ -375,7 +375,7 @@ def get_mapgdp(self, **kwargs):
 #### Global economic data
 #### `bulkhours.get_data("world.macro")`
 - Raw data: [corruption.csv](https://github.com/guydegnol/bulkhours/blob/main/data/corruption.csv), [cost_of_living.csv](https://github.com/guydegnol/bulkhours/blob/main/data/cost_of_living.csv), [richest_countries.csv](https://github.com/guydegnol/bulkhours/blob/main/data/richest_countries.csv), [unemployment.csv](https://github.com/guydegnol/bulkhours/blob/main/data/unemployment.csv), [tourism.csv](https://github.com/guydegnol/bulkhours/blob/main/data/tourism.csv), [continent.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/continent.tsv)
-- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 
 <details>
 <summary>Show columns info</summary>
@@ -422,7 +422,7 @@ def get_macro(self, **data_info):
 #### Global economic data (with gpx extra info)
 #### `bulkhours.get_data("world.mapmacro")`
 - Raw data: [corruption.csv](https://github.com/guydegnol/bulkhours/blob/main/data/corruption.csv), [cost_of_living.csv](https://github.com/guydegnol/bulkhours/blob/main/data/cost_of_living.csv), [richest_countries.csv](https://github.com/guydegnol/bulkhours/blob/main/data/richest_countries.csv), [unemployment.csv](https://github.com/guydegnol/bulkhours/blob/main/data/unemployment.csv), [tourism.csv](https://github.com/guydegnol/bulkhours/blob/main/data/tourism.csv), [continent.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/continent.tsv)
-- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 
 <details>
 <summary>Show columns info</summary>
@@ -472,7 +472,7 @@ def get_mapmacro(self, **kwargs):
 
 #### Corruption index per country
 #### `bulkhours.get_data("world.corruption")`
-- Raw data: [corruption.csv](https://github.com/guydegnol/bulkhours/blob/main/data/corruption.csv)
+- Raw data: [corruption.csv](https://github.com/guydegnol/bulkhours/main/data/corruption.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/corruption.csv))
 
 <details>
 <summary>Show code</summary>
@@ -494,8 +494,8 @@ def get_corruption(self, show_truth=False, **data_info):
 
 #### Life expectancy versus GDP/capita per country
 #### `bulkhours.get_data("world.life_expectancy_vs_gdp_2018")`
-- Raw data: [life-expectancy-vs-gdp-per-capita.csv](https://github.com/guydegnol/bulkhours/blob/main/data/life-expectancy-vs-gdp-per-capita.csv)
-- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Raw data: [life-expectancy-vs-gdp-per-capita.csv](https://github.com/guydegnol/bulkhours/main/data/life-expectancy-vs-gdp-per-capita.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/life-expectancy-vs-gdp-per-capita.csv))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/grapher/life-expectancy-vs-gdp-per-capita
 - Reference site: Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)
 
@@ -526,7 +526,7 @@ def get_life_expectancy_vs_gdp_2018(self, **data_info):
 
 #### Evolution du PIB et de ses composantes par rapport au trimestre precedent en volume en %
 #### `bulkhours.get_data("gmacro.fr_qgdp")`
-- Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py))
+- Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py))
 - Direct source: https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
 
 <details>
@@ -868,7 +868,7 @@ def get_fr_qgdp(self):
 
 #### Évolution du produit intérieur brut et de ses composantes
 #### `bulkhours.get_data("gmacro.fr_unemployement")`
-- Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py))
+- Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py))
 - Direct source: https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
 
 <details>
@@ -930,7 +930,7 @@ Longue_duree,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,n
 
 #### United States Macroeconomic data (1959q1 - 2009q3)
 #### `bulkhours.get_data("gmacro.us_gdp")`
-- Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py))
+- Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py))
 - Direct source: https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html
 
 <details>
@@ -980,7 +980,7 @@ def get_us_gdp(self, simplify=True):
 
 #### France Macroeconomic data
 #### `bulkhours.get_data("gmacro.fr_gdp")`
-- Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py))
+- Enrich data: [gmacro.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py))
 
 <details>
 <summary>Show columns info</summary>
@@ -1018,7 +1018,7 @@ def get_fr_gdp(self, simplify=True):
 
 #### Cotisants, retraités et rapport démographique tous régimes en 2020
 #### `bulkhours.get_data("france.retraites")`
-- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
+- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
 - Direct source: https://www.insee.fr/fr/statistiques/2415121#tableau-figure1
 
 <details>
@@ -1069,7 +1069,7 @@ year	active	retired	rapport
 
 #### Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020
 #### `bulkhours.get_data("france.income")`
-- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
+- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
 - Direct source: https://www.insee.fr/fr/statistiques/6436313#tableau-figure2
 
 <details>
@@ -1197,7 +1197,7 @@ Plus de 9_000	183_314
 
 #### Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019
 #### `bulkhours.get_data("france.salaires")`
-- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
+- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
 - Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
 
 <details>
@@ -1250,7 +1250,7 @@ Secteur: Ensemble	18 970	24 420	22,3	26 430	31 510	16,1
 
 #### Inégalités salariales entre femmes et hommes de 1995 à 2019
 #### `bulkhours.get_data("france.histsalaires")`
-- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
+- Enrich data: [france.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
 - Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
 
 <details>
@@ -1311,7 +1311,7 @@ Année	écart relatif du revenu salarial moyen	écart relatif du revenu salarial
 
 #### Age de la population au 1er janvier (fin novembre 2022)
 #### `bulkhours.get_data("pyramide")`
-- Raw data: [pyramide.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/pyramide.tsv)
+- Raw data: [pyramide.tsv](https://github.com/guydegnol/bulkhours/main/data/pyramide.tsv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/pyramide.tsv))
 - Direct source: https://www.insee.fr/fr/statistiques/2381472#tableau-figure1
 
 <details>
@@ -1329,8 +1329,8 @@ Année	écart relatif du revenu salarial moyen	écart relatif du revenu salarial
 
 #### Statement of Apple stock (Quarterly)
 #### `bulkhours.get_data("trading.apple")`
-- Raw data: [APPLE_DownloadFPrepStatementQuarter.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/APPLE_DownloadFPrepStatementQuarter.tsv)
-- Enrich data: [trading.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/trading.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/trading.py))
+- Raw data: [APPLE_DownloadFPrepStatementQuarter.tsv](https://github.com/guydegnol/bulkhours/main/data/APPLE_DownloadFPrepStatementQuarter.tsv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/APPLE_DownloadFPrepStatementQuarter.tsv))
+- Enrich data: [trading.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/trading.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/trading.py))
 
 <details>
 <summary>Show columns info</summary>
@@ -1363,7 +1363,7 @@ def get_apple(self):
 
 #### Scipy list of available distributions
 #### `bulkhours.get_data("scipy_distributions_list")`
-- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
+- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
 
 <details>
 <summary>Show code</summary>
@@ -1377,7 +1377,7 @@ def get_scipy_distributions_list(self):
 
 #### Oil production in Saudi Arabia from 1996 to 2007
 #### `bulkhours.get_data("statsdata.oil")`
-- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
+- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
 - Direct source: https://www.statsmodels.org/stable/index.html
 
 <details>
@@ -1416,7 +1416,7 @@ def get_oil(self):
 
 #### Air pollution data
 #### `bulkhours.get_data("statsdata.air")`
-- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
+- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
 - Direct source: https://www.statsmodels.org/stable/index.html
 
 <details>
@@ -1459,7 +1459,7 @@ def get_air(self):
 
 #### Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods.
 #### `bulkhours.get_data("statsdata.livestock2")`
-- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
+- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
 - Direct source: https://www.statsmodels.org/stable/index.html
 
 <details>
@@ -1518,7 +1518,7 @@ def get_livestock2(self):
 
 #### Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods. (3)
 #### `bulkhours.get_data("statsdata.livestock3")`
-- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
+- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
 - Direct source: https://www.statsmodels.org/stable/index.html
 
 <details>
@@ -1542,7 +1542,7 @@ def get_livestock3(self):
 
 #### International visitor night in Australia (millions) < 2005
 #### `bulkhours.get_data("statsdata.aust")`
-- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
+- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
 
 <details>
 <summary>Show columns info</summary>
@@ -1589,9 +1589,9 @@ def get_aust(self):
 </details>
 
 #### International visitor night in Australia (millions) > 2005
-#### `bulkhours.get_data("statsdata.air_passengers")`
-- Raw data: [AirPassengers.csv](https://github.com/guydegnol/bulkhours/blob/main/data/AirPassengers.csv)
-- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
+#### `bulkhours.get_data("air_passengers")`
+- Raw data: [AirPassengers.csv](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/AirPassengers.csv)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/AirPassengers.csv)🤗)
+- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
 
 <details>
 <summary>Show columns info</summary>
@@ -1620,7 +1620,7 @@ def get_air_passengers(self):
 
 #### All-Transactions House Price Index for Houston
 #### `bulkhours.get_data("statsdata.hhousing")`
-- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
+- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
 - Direct source: https://fred.stlouisfed.org/series/ATNHPIUS26420Q
 
 <details>
@@ -1705,7 +1705,7 @@ United Kingdom 16.368 7.590 36.390 53.933 0.4487
 
 #### Mincer equation parameters per country
 #### `bulkhours.get_data("mincer.params")`
-- Enrich data: [mincer.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/mincer.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/mincer.py))
+- Enrich data: [mincer.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/mincer.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/mincer.py))
 - Direct source: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 3)
 
 <details>
@@ -1895,7 +1895,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### Standardized country information (iso m49)
 #### `bulkhours.get_data("continent")`
-- Raw data: [continent.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/continent.tsv)
+- Raw data: [continent.tsv](https://github.com/guydegnol/bulkhours/main/data/continent.tsv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/continent.tsv))
 
 <details>
 <summary>Show columns info</summary>
@@ -1914,7 +1914,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### Corruption index per country
 #### `bulkhours.get_data("corruption")`
-- Raw data: [corruption.csv](https://github.com/guydegnol/bulkhours/blob/main/data/corruption.csv)
+- Raw data: [corruption.csv](https://github.com/guydegnol/bulkhours/main/data/corruption.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/corruption.csv))
 
 <details>
 <summary>Show columns info</summary>
@@ -1929,7 +1929,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### Cost of living
 #### `bulkhours.get_data("cost_of_living")`
-- Raw data: [cost_of_living.csv](https://github.com/guydegnol/bulkhours/blob/main/data/cost_of_living.csv)
+- Raw data: [cost_of_living.csv](https://github.com/guydegnol/bulkhours/main/data/cost_of_living.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/cost_of_living.csv))
 
 <details>
 <summary>Show columns info</summary>
@@ -1946,7 +1946,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### GDP per capita per country
 #### `bulkhours.get_data("richest_countries")`
-- Raw data: [richest_countries.csv](https://github.com/guydegnol/bulkhours/blob/main/data/richest_countries.csv)
+- Raw data: [richest_countries.csv](https://github.com/guydegnol/bulkhours/main/data/richest_countries.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/richest_countries.csv))
 
 <details>
 <summary>Show columns info</summary>
@@ -1961,7 +1961,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### Tourism information per country
 #### `bulkhours.get_data("tourism")`
-- Raw data: [tourism.csv](https://github.com/guydegnol/bulkhours/blob/main/data/tourism.csv)
+- Raw data: [tourism.csv](https://github.com/guydegnol/bulkhours/main/data/tourism.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/tourism.csv))
 
 <details>
 <summary>Show columns info</summary>
@@ -1978,7 +1978,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### Unemployemnt rates per country
 #### `bulkhours.get_data("unemployment")`
-- Raw data: [unemployment.csv](https://github.com/guydegnol/bulkhours/blob/main/data/unemployment.csv)
+- Raw data: [unemployment.csv](https://github.com/guydegnol/bulkhours/main/data/unemployment.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/unemployment.csv))
 
 <details>
 <summary>Show columns info</summary>
@@ -1992,7 +1992,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### Simple synthetic data for exercice
 #### `bulkhours.get_data("wages")`
-- Raw data: [wages.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/wages.tsv)
+- Raw data: [wages.tsv](https://github.com/guydegnol/bulkhours/main/data/wages.tsv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/wages.tsv))
 
 <details>
 <summary>Show columns info</summary>
@@ -2007,7 +2007,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### COR data
 #### `bulkhours.get_data("COR_1")`
-- Raw data: [Données septembre partie 1.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données septembre partie 1.xlsx)
+- Raw data: [Données septembre partie 1.xlsx](https://github.com/guydegnol/bulkhours/main/data/Données septembre partie 1.xlsx)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/Données septembre partie 1.xlsx))
 
 <details>
 <summary>Show columns info</summary>
@@ -2020,7 +2020,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### COR data
 #### `bulkhours.get_data("COR_2")`
-- Raw data: [Données_RA2022_P2.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données_RA2022_P2.xlsx)
+- Raw data: [Données_RA2022_P2.xlsx](https://github.com/guydegnol/bulkhours/main/data/Données_RA2022_P2.xlsx)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/Données_RA2022_P2.xlsx))
 
 <details>
 <summary>Show columns info</summary>
@@ -2033,7 +2033,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### COR data
 #### `bulkhours.get_data("COR_2bis")`
-- Raw data: [Données complémentaires partie 2 RA 2022.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données complémentaires partie 2 RA 2022.xlsx)
+- Raw data: [Données complémentaires partie 2 RA 2022.xlsx](https://github.com/guydegnol/bulkhours/main/data/Données complémentaires partie 2 RA 2022.xlsx)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/Données complémentaires partie 2 RA 2022.xlsx))
 
 <details>
 <summary>Show columns info</summary>
@@ -2119,7 +2119,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### COR data
 #### `bulkhours.get_data("COR_3")`
-- Raw data: [Données septembre 2022 - partie 3.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données septembre 2022 - partie 3.xlsx)
+- Raw data: [Données septembre 2022 - partie 3.xlsx](https://github.com/guydegnol/bulkhours/main/data/Données septembre 2022 - partie 3.xlsx)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/Données septembre 2022 - partie 3.xlsx))
 
 <details>
 <summary>Show columns info</summary>
@@ -2132,7 +2132,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### COR data
 #### `bulkhours.get_data("COR_4")`
-- Raw data: [Données_RA2022_P4.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données_RA2022_P4.xlsx)
+- Raw data: [Données_RA2022_P4.xlsx](https://github.com/guydegnol/bulkhours/main/data/Données_RA2022_P4.xlsx)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/Données_RA2022_P4.xlsx))
 
 <details>
 <summary>Show columns info</summary>
@@ -2145,7 +2145,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### COR data
 #### `bulkhours.get_data("COR_5")`
-- Raw data: [Données septembre 2022 - partie 5.xlsx](https://github.com/guydegnol/bulkhours/blob/main/data/Données septembre 2022 - partie 5.xlsx)
+- Raw data: [Données septembre 2022 - partie 5.xlsx](https://github.com/guydegnol/bulkhours/main/data/Données septembre 2022 - partie 5.xlsx)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/Données septembre 2022 - partie 5.xlsx))
 
 <details>
 <summary>Show columns info</summary>
@@ -2792,7 +2792,7 @@ bkc.pi := 3.141593  #
 #### Quarterly sunspots activity (ssn)
 #### `bulkhours.get_data("sunspots")`
 - Raw data: [observed-solar-cycle-indices.json](https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json)  ([raw](https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json))
-- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
+- Enrich data: [statsdata.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
 - Direct source: https://www.swpc.noaa.gov/products/solar-cycle-progression
 - Reference site: https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
 
@@ -2864,7 +2864,7 @@ def get_sunspots(self):
 
 #### Prostate cancer data
 #### `bulkhours.get_data("prostate")`
-- Raw data: [prostate.tsv](https://github.com/guydegnol/bulkhours/blob/main/data/prostate.tsv)
+- Raw data: [prostate.tsv](https://github.com/guydegnol/bulkhours/main/data/prostate.tsv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/prostate.tsv))
 - Direct source: https://hastie.su.domains/ElemStatLearn/data.html
 
 <details>
@@ -2973,7 +2973,7 @@ def get_sunspots(self):
 #### Data on CO2 and Greenhouse Gas Emissions by Our World in Data
 #### `bulkhours.get_data("co2.main")`
 - Raw data: [owid-co2-data.csv](https://github.com/owid/co2-data/master/owid-co2-data.csv)  ([raw](https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv))
-- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 
 <details>
 <summary>Show columns info</summary>
@@ -3066,7 +3066,7 @@ def get_sunspots(self):
 #### Data on CO2 and Greenhouse Gas Emissions by Our World in Data (with extra gpx data)
 #### `bulkhours.get_data("co2.mapmain")`
 - Raw data: [owid-co2-data.csv](https://github.com/owid/co2-data/master/owid-co2-data.csv)  ([raw](https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv))
-- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 
 <details>
 <summary>Show columns info</summary>
@@ -3158,7 +3158,7 @@ def get_sunspots(self):
 
 #### CO2 transportation info
 #### `bulkhours.get_data("co2.travel_mode")`
-- Raw data: [carbon-footprint-travel-mode.csv](https://github.com/guydegnol/bulkhours/blob/main/data/carbon-footprint-travel-mode.csv)
+- Raw data: [carbon-footprint-travel-mode.csv](https://github.com/guydegnol/bulkhours/main/data/carbon-footprint-travel-mode.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/carbon-footprint-travel-mode.csv))
 - Direct source: https://ourworldindata.org/grapher/carbon-footprint-travel-mode
 
 <details>
@@ -3175,8 +3175,8 @@ def get_sunspots(self):
 
 #### Greenhouse effect gaz concentrations
 #### `bulkhours.get_data("co2.concentrations")`
-- Raw data: [climate-change.csv](https://github.com/guydegnol/bulkhours/blob/main/data/climate-change.csv)
-- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Raw data: [climate-change.csv](https://github.com/guydegnol/bulkhours/main/data/climate-change.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/climate-change.csv))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/atmospheric-concentrations
 
 <details>
@@ -3225,8 +3225,8 @@ def get_concentrations(self, zone="World", **data_info):
 
 #### Greenhouse effect gaz concentrations
 #### `bulkhours.get_data("co2.mapconcentrations")`
-- Raw data: [climate-change.csv](https://github.com/guydegnol/bulkhours/blob/main/data/climate-change.csv)
-- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Raw data: [climate-change.csv](https://github.com/guydegnol/bulkhours/main/data/climate-change.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/climate-change.csv))
+- Enrich data: [world.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/atmospheric-concentrations
 
 <details>
@@ -3284,7 +3284,7 @@ def get_mapconcentrations(self, **kwargs):
 
 #### Cat or not training data
 #### `bulkhours.get_data("train_catvnoncat")`
-- Raw data: [train_catvnoncat.h5](https://github.com/guydegnol/bulkhours/blob/main/data/train_catvnoncat.h5)
+- Raw data: [train_catvnoncat.h5](https://github.com/guydegnol/bulkhours/main/data/train_catvnoncat.h5)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/train_catvnoncat.h5))
 #### Cat or not test data
 #### `bulkhours.get_data("test_catvnoncat")`
-- Raw data: [test_catvnoncat.h5](https://github.com/guydegnol/bulkhours/blob/main/data/test_catvnoncat.h5)
+- Raw data: [test_catvnoncat.h5](https://github.com/guydegnol/bulkhours/main/data/test_catvnoncat.h5)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/test_catvnoncat.h5))

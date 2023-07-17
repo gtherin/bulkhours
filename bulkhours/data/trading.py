@@ -20,7 +20,7 @@ Sampler.outsample_dt = time.time() - 300
     label="trading.apple",
     summary="Statement of Apple stock (Quarterly)",
     category="Economics",
-    raw_data="APPLE_DownloadFPrepStatementQuarter.tsv",
+    raw_data="https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/APPLE_DownloadFPrepStatementQuarter.tsv",
     enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/trading.py",
 )
 def get_apple(self):

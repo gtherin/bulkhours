@@ -8,17 +8,23 @@ import inspect
 
 
 def get_rdata(rdata):
-    if "http" in rdata:
-        label = rdata.split("/")[-1]
-        if "raw.githubusercontent.com" in rdata:
-            address = rdata.replace("raw.githubusercontent.com", "github.com")
-            return f"[{label}]({address})  ([raw]({rdata}))"
-        else:
-            address = rdata.replace("github.com", "raw.githubusercontent.com").replace("blob/", "")
-            return f"[{label}]({rdata})  ([raw]({address}))"
     if type(rdata) in [list]:
         return ", ".join([f"[{f}](https://github.com/guydegnol/bulkhours/blob/main/data/{f})" for f in rdata])
-    return f"[{rdata}](https://github.com/guydegnol/bulkhours/blob/main/data/{rdata})"
+
+    if "http" not in rdata:
+        rdata = f"https://github.com/guydegnol/bulkhours/blob/main/data/{rdata}"
+
+    label = rdata.split("/")[-1]
+    if "raw.githubusercontent.com" in rdata or "github.com" in rdata:
+        rdata = rdata.replace("github.com", "raw.githubusercontent.com").replace("blob/", "")
+        address = rdata.replace("raw.githubusercontent.com", "github.com")
+        return f"[{label}]({address})  ([raw]({rdata}))"
+    elif "huggingface.co/datasets" in rdata:
+        rdata = rdata.replace("/blob/", "/raw/")
+        address = rdata.replace("/raw/", "/blob/")
+        return f"[{label}]({address})  ([raw]({rdata})🤗)"
+    else:
+        return f"[{label}]({rdata})  ([raw]({rdata}))"
 
 
 def clean_columns(df, drop=None, rename=None, is_test=None):
@@ -61,11 +67,22 @@ def clean_data(df, query=None, index=None, test_data=None):
 def get_data_from_file(raw_data, **kwargs):
     if "http" in raw_data:
         filename = raw_data
+        import urllib.request
+
+        nfilename = filename.split("/")[-1]
+        urllib.request.urlretrieve(filename, nfilename)
+        filename = nfilename
+        print(f"Downloaded {filename}")
+
     else:
         filename = None
         directory = os.path.abspath(os.path.dirname(__file__) + "../../../data")
+        hf_files = ["brown.gif", "Evaluation.gif"]
+
         if len((files := glob.glob(gfile := f"{directory}/{raw_data}*"))):
             filename = files[0]
+        elif raw_data in hf_files:
+            filename = f"https://huggingface.co/datasets/guydegnol/bulkhours/resolve/main/{raw_data}"
         else:
             print(f"No data available for {raw_data} ({gfile})")
             return None
@@ -253,6 +270,13 @@ class DataParser:
         from PIL import Image
 
         filename = self.read_raw_data(self.label)
+        if "http" in filename:
+            import urllib.request
+
+            nfilename = filename.split("/")[-1]
+            urllib.request.urlretrieve(filename, nfilename)
+            filename = nfilename
+
         img = Image.open(filename)
         if not ax:
             return img
