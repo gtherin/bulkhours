@@ -6,8 +6,7 @@ import torch
 from PIL import Image
 from torch import nn
 
-from transformers.image_utils import PILImageResampling
-from utils import img_tensorize
+from .utils import img_tensorize
 
 
 class ResizeShortestEdge:
@@ -22,6 +21,8 @@ class ResizeShortestEdge:
         self.short_edge_length = short_edge_length
 
     def __call__(self, imgs):
+        from transformers.image_utils import PILImageResampling
+
         img_augs = []
         for img in imgs:
             h, w = img.shape[:2]

@@ -12,7 +12,7 @@ from torch.nn.modules.batchnorm import BatchNorm2d
 from torchvision.ops import RoIPool
 from torchvision.ops.boxes import batched_nms, nms
 
-from utils import WEIGHTS_NAME, Config, cached_path, hf_bucket_url, is_remote_url, load_checkpoint
+from .utils import WEIGHTS_NAME, Config, cached_path, hf_bucket_url, is_remote_url, load_checkpoint
 
 
 # other:
