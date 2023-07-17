@@ -9,7 +9,7 @@ import numpy as np
 import torch
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 
-from utils import img_tensorize
+from .utils import img_tensorize
 
 
 _SMALL_OBJ = 1000

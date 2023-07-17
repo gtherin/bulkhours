@@ -46,15 +46,24 @@ class Script:
         os.system(f"rm -rf {self.fname}")
 
 
-def get_header_links(filename, licence=True, github=True):
-    links = f"[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/guydegnol/bulkhours/blob/main/{filename}) "
+def get_header_links(filename, licence=True, github=True, sagemaker=True, kaggle=False, vstudio=True):
+    afilename = f"guydegnol/bulkhours/blob/main/{filename}"
+    links = f"[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/{afilename}) "
 
-    links += f"[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/guydegnol/bulkhours/blob/main/{filename}) "
     if github:
-        links += f"[![GitHub](https://badgen.net/badge/icon/Open%20in%20Github?icon=github&label)](https://github.com/guydegnol/bulkhours/blob/main/{filename}) "
-    links += f"[![Open in Visual Studio Code](https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio&labelColor=2c2c32&color=007acc&logoColor=007acc)](https://vscode.dev/github/guydegnol/bulkhours/blob/main/{filename}) "
+        links += f"[![GitHub](https://badgen.net/badge/icon/Open%20in%20Github?icon=github&label)](https://github.com/{afilename}) "
+
+    if sagemaker:
+        links += f"[![Open in AWS Studio](https://studiolab.sagemaker.aws/studiolab.svg)](https://studiolab.sagemaker.aws/import/github/{afilename}) "
+
+    if vstudio:
+        links += f"[![Open in Visual Studio Code](https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio&labelColor=2c2c32&color=007acc&logoColor=007acc)](https://vscode.dev/github/{afilename}) "
+
+    if kaggle:
+        links += f"[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/{afilename}) "
+
     if licence:
-        links += f"[![CC-by-nc-sa license](https://badgen.net/badge/icon/CC%20by-nc-sa?label=Licence)](https://creativecommons.org/licenses/by-nc-sa/4.0)"
+        links += f"[![CC-by-nc-sa license](https://badgen.net/badge/icon/CC%20by-nc-sa?label=Licence)](https://creativecommons.org/licenses/by-nc-sa/4.0) "
 
     return links + "\n"
 
