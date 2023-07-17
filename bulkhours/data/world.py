@@ -138,7 +138,7 @@ def get_corruption(self, show_truth=False, **data_info):
     label="world.life_expectancy_vs_gdp_2018",
     summary="Life expectancy versus GDP/capita per country",
     category="Economics",
-    raw_data="life-expectancy-vs-gdp-per-capita.csv",
+    raw_data="https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/life-expectancy-vs-gdp-per-capita.csv",
     info="GDP per capita is measured in 2011 international dollars, which corrects for inflation and cross-country price differences",
     ref_source="https://ourworldindata.org/grapher/life-expectancy-vs-gdp-per-capita",
     ref_site="""Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)""",
@@ -157,4 +157,4 @@ def get_corruption(self, show_truth=False, **data_info):
     query="Year == 2018 and Population > 1e7",
 )
 def get_life_expectancy_vs_gdp_2018(self, **data_info):
-    return self.read_raw_data(self.raw_data).dropna()
+    return self.read_raw_data(self.raw_data)  # .dropna()

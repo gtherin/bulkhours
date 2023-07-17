@@ -170,10 +170,10 @@ def get_aust(self):
 
 
 @DataParser.register_dataset(
-    label="statsdata.air_passengers",
+    label="air_passengers",
     summary="International visitor night in Australia (millions) > 2005",
     category="Economics",
-    raw_data="AirPassengers.csv",
+    raw_data="https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/AirPassengers.csv",
     enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
 )
 def get_air_passengers(self):
