@@ -147,8 +147,9 @@ except ModuleNotFoundError:
             )
 
     if tools.get_value("huggingface_token") is not None:
+        from .. import rl
         os.environ["BLK_HUGGINGFACE_TOKEN"] = tools.get_value("huggingface_token")
-
+        rl.PPOHugs()
 
     contexts.generate_empty_context("student")
     contexts.generate_empty_context("teacher")
