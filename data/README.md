@@ -3151,7 +3151,7 @@ def get_mapconcentrations(self, **kwargs):
 
 #### Cat or not training data: keys=[train_set_x, train_set_y]
 #### `bulkhours.get_data("train_catvnoncat")`
-- Raw data: [train_catvnoncat.h5](https://github.com/guydegnol/bulkhours/main/data/train_catvnoncat.h5)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/train_catvnoncat.h5))
+- Raw data: [train_catvnoncat.h5](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/train_catvnoncat.h5)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/resolve/main/train_catvnoncat.h5)🤗)
 #### Cat or not test data: keys=[test_set_x, test_set_y, list_classes]
 #### `bulkhours.get_data("test_catvnoncat")`
-- Raw data: [test_catvnoncat.h5](https://github.com/guydegnol/bulkhours/main/data/test_catvnoncat.h5)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/test_catvnoncat.h5))
+- Raw data: [test_catvnoncat.h5](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/test_catvnoncat.h5)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/resolve/main/test_catvnoncat.h5)🤗)

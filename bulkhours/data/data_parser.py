@@ -21,7 +21,7 @@ def get_rdata(rdata):
         return f"[{label}]({address})  ([raw]({rdata}))"
     elif "huggingface.co/datasets" in rdata:
         rdata = rdata.replace("/blob/", "/raw/")
-        address = rdata.replace("/raw/", "/blob/")
+        address = rdata.replace("/raw/", "/blob/").replace("/resolve/", "/blob/")
         return f"[{label}]({address})  ([raw]({rdata})🤗)"
     else:
         return f"[{label}]({rdata})  ([raw]({rdata})🔄)"
@@ -70,7 +70,7 @@ def get_data_from_file(raw_data, **kwargs):
 
         nfilename = filename.split("/")[-1]
 
-        if os.path.exists(nfilename):
+        if 1:  # os.path.exists(nfilename):
             import urllib.request
 
             urllib.request.urlretrieve(filename, nfilename)
