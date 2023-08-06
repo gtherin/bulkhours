@@ -92,8 +92,8 @@ def get_data_from_file(raw_data, **kwargs):
     import h5py
 
     ext = filename.split(".")[-1]
-    if ext == "xlsx":
-        kwargs = {k: v for k, v in kwargs.items() if k not in ["summary", "category"]}
+    if ext in ["xlsx", "xls"]:
+        # kwargs = {k: v for k, v in kwargs.items() if k not in ["summary", "category"]}
         return pd.read_excel(filename)  # , **kwargs)
     elif ext == "tsv":
         return pd.read_csv(filename, sep="\t")

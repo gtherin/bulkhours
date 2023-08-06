@@ -424,3 +424,27 @@ def get_fr_gdp(self, simplify=True):
         fr_okun["quarter"] = pd.PeriodIndex(fr_okun["yquarter"], freq="Q").to_timestamp()
 
     return fr_okun.set_index("quarter")
+
+
+@DataParser.register_dataset(
+    label="world.happiness",
+    summary="World happiness report data (2015-2020)",
+    category="Economics",
+    raw_data="https://happiness-report.s3.amazonaws.com/2023/DataForFigure2.1WHR2023.xls",
+    ref_source="""https://worldhappiness.report/data/""",
+)
+def get_happiness(self, **data_info):
+    df = self.read_raw_data(self.raw_data)
+
+    return df.sort_values("Ladder score", ascending=False)[
+        [
+            "Country name",
+            "Ladder score",
+            "Logged GDP per capita",
+            "Social support",
+            "Healthy life expectancy",
+            "Freedom to make life choices",
+            "Generosity",
+            "Perceptions of corruption",
+        ]
+    ]
