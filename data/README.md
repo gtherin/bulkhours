@@ -1016,6 +1016,49 @@ def get_fr_gdp(self, simplify=True):
 </code>
 </details>
 
+#### World happiness report data (2015-2020)
+#### `bulkhours.get_data("world.happiness")`
+- Raw data: [DataForFigure2.1WHR2023.xls](https://happiness-report.s3.amazonaws.com/2023/DataForFigure2.1WHR2023.xls)  ([raw](https://happiness-report.s3.amazonaws.com/2023/DataForFigure2.1WHR2023.xls)🔄)
+- Direct source: https://worldhappiness.report/data/
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| Country name |  |
+| Ladder score |  |
+| Logged GDP per capita |  |
+| Social support |  |
+| Healthy life expectancy |  |
+| Freedom to make life choices |  |
+| Generosity |  |
+| Perceptions of corruption |  |
+
+</details>
+
+
+<details>
+<summary>Show code</summary>
+<code>
+def get_happiness(self, **data_info):
+    df = self.read_raw_data(self.raw_data)
+
+    return df.sort_values("Ladder score", ascending=False)[
+        [
+            "Country name",
+            "Ladder score",
+            "Logged GDP per capita",
+            "Social support",
+            "Healthy life expectancy",
+            "Freedom to make life choices",
+            "Generosity",
+            "Perceptions of corruption",
+        ]
+    ]
+</code>
+</details>
+
 #### Cotisants, retraités et rapport démographique tous régimes en 2020
 #### `bulkhours.get_data("france.retraites")`
 - Enrich data: [france.py](https://github.com/guydegnol/bulkhours/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
