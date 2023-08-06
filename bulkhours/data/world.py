@@ -9,6 +9,9 @@ def get_mapgeneric(df):
     if "continent" in df.columns:
         del df["continent"]
 
+    df["country"] = df["country"].str.replace("United States", "United States of America")
+    df["country"] = df["country"].str.replace("Democratic Republic of Congo", "Dem. Rep. Congo")
+
     filepath = gpd.datasets.get_path("naturalearth_lowres")
     world = gpd.read_file(filepath)
 

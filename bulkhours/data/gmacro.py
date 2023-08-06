@@ -2,6 +2,7 @@ from io import StringIO
 import pandas as pd
 
 from .data_parser import DataParser
+from .world import get_mapgeneric
 
 
 @DataParser.register_dataset(
@@ -447,4 +448,13 @@ def get_happiness(self, **data_info):
             "Generosity",
             "Perceptions of corruption",
         ]
-    ]
+    ].rename(columns={"Country name": "country"})
+
+
+@DataParser.register_dataset(
+    label="world.maphappiness",
+    summary="World Bank Poverty and Inequality data (with gpx extra info)",
+    reference="world.happiness",
+)
+def get_mappoverty(self, **kwargs):
+    return get_mapgeneric(get_happiness(self, **kwargs))
