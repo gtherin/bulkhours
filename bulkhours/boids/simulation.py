@@ -1,3 +1,4 @@
+import argparse
 import pygame
 import random
 
@@ -196,14 +197,15 @@ def main2():
 def main():
     import os
 
-    os.environ["SDL_VIDEODRIVER"] = "dummy"
-    if 1:
+    if 0:
         main2()
         return
     rendering = PyGameRendering()
-    rendering.add_boids("boid_list", 70, obstacle_avoidance_weight=15, goal_weight=0, field_of_view=70)
-    rendering.add_boids(
-        "predator_list", 5, obstacle_avoidance_weight=0, goal_weight=50, field_of_view=70, max_speed=8.5
+    rendering.add_boids("boid_list", 70, obstacle_avoidance_weight=15, goal_weight=0, field_of_view=70, max_speed=88 )
+    rend
+    ering.add_boids(
+
+        "predator_list", 5, obstacle_avoidance_weight=0, goal_weight=50, field_of_view=70, max_speed=88
     )
     rendering.add_obstacle(3)
 
@@ -247,7 +249,7 @@ def main():
             if avoid:
                 boid.flee(predator)
             else:
-                # boid.goal(*pos)
+                #boid.goal(*pos)
                 boid.go_to_middle()
             boid.update(True)
 
