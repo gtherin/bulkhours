@@ -148,13 +148,13 @@ except ModuleNotFoundError:
 
     if tools.get_value("huggingface_token") is not None:
         import ipywidgets
-        from .. import rl
+        from .. import ml
 
         os.environ["BLK_HUGGINGFACE_TOKEN"] = tools.get_value("huggingface_token")
         print("Connection to huggingface 🤗 hub")
 
         with ipywidgets.Output():
-            rl.PPOHugs()
+            ml.PPOHugs()
 
     contexts.generate_empty_context("student")
     contexts.generate_empty_context("teacher")

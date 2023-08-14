@@ -1,0 +1,6 @@
+robot-hat @ git+https://github.com/sunfounder/robot-hat.git
+vilib @ git+https://github.com/sunfounder/vilib.git
+picar-x @ git+https://github.com/sunfounder/picar-x.git@2.0
+pandas
+opencv-python
+face_recognition

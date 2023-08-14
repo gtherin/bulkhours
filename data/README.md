@@ -1026,7 +1026,7 @@ def get_fr_gdp(self, simplify=True):
 
 | Column   |      Info |
 |-----------|:-----------|
-| Country name |  |
+| country |  |
 | Ladder score |  |
 | Logged GDP per capita |  |
 | Social support |  |
@@ -1055,7 +1055,42 @@ def get_happiness(self, **data_info):
             "Generosity",
             "Perceptions of corruption",
         ]
-    ]
+    ].rename(columns={"Country name": "country"})
+</code>
+</details>
+
+#### World Bank Poverty and Inequality data (with gpx extra info)
+#### `bulkhours.get_data("world.maphappiness")`
+- Raw data: [DataForFigure2.1WHR2023.xls](https://happiness-report.s3.amazonaws.com/2023/DataForFigure2.1WHR2023.xls)  ([raw](https://happiness-report.s3.amazonaws.com/2023/DataForFigure2.1WHR2023.xls)🔄)
+- Direct source: https://worldhappiness.report/data/
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| pop_est |  |
+| continent |  |
+| name |  |
+| iso_a3 |  |
+| gdp_md_est |  |
+| geometry |  |
+| Ladder score |  |
+| Logged GDP per capita |  |
+| Social support |  |
+| Healthy life expectancy |  |
+| Freedom to make life choices |  |
+| Generosity |  |
+| Perceptions of corruption |  |
+
+</details>
+
+
+<details>
+<summary>Show code</summary>
+<code>
+def get_mappoverty(self, **kwargs):
+    return get_mapgeneric(get_happiness(self, **kwargs))
 </code>
 </details>
 
