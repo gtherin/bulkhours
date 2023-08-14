@@ -19,8 +19,9 @@ from . import admin  # noqa
 from . import ml  # noqa
 from . import hpc  # noqa
 from . import ecox  # noqa
-from . import beaut  # noqa
-from . import boids  # noqa
+from . import bots  # noqa
+from .bots import beaut  # noqa
+from .bots import boids  # noqa
 from . import phyu  # noqa
 from .phyu.constants import constants  # noqa
 from .phyu.formulas import formulas  # noqa
