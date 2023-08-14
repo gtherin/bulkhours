@@ -2,8 +2,18 @@ import os
 
 
 def is_huggingface_installed(verbose=False):
-    if "BLK_HUGGINGFACE_TOKEN" in os.environ:
+    if "BLK_HUGGINGFACE_TOKEN" not in os.environ:
+        return False
+    try:
+        import huggingface_hub
+        import gymnasium as gym
+        import huggingface_sb3
+        import stable_baselines3
+
         return True
+    except ModuleNotFoundError:
+        pass
+
     if verbose:
         print('\x1b[31m⚠️Please install HUGGING_FACE libraries first\x1b[0m (packages="...,HUGGING_FACE")')
     return False
