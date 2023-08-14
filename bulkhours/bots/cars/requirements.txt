@@ -4,3 +4,4 @@ picar-x @ git+https://github.com/sunfounder/picar-x.git@2.0
 pandas
 opencv-python
 face_recognition
+scikit-learn
