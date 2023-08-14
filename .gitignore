@@ -7,18 +7,15 @@ docs/_build
 
 # Virtual env
 *env
-
 .ipynb_checkpoints/*
-
 *.py[cod]
 .cookiecutter
-#*.ipynb
-notebooks/.ipynb_checkpoints/*
 .vscode/*
 data/main/*
 
 **.pyc*
 requirements-dev.txt
+bulkhours/bots/cars/data/*
 
 # Packages
 *.egg
