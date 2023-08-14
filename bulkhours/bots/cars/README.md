@@ -1,9 +1,27 @@
+# Image processings
+
+- **Face recognition**
+ - face_reco_knn.py
+ - face_reco.py
+ - https://github.com/ageitgey/face_recognition
 
 
+- **Object detection refs**
+ - object_detection.py
+ - https://www.youtube.com/watch?v=HXDD7-EnGBY
+ - https://huggingface.co/docs/transformers/tasks/object_detection
 
-# Face recognitation:
+- **Object classifications**
+ - https://huggingface.co/models?pipeline_tag=image-classification&sort=downloads
+ - https://huggingface.co/nateraw/vit-age-classifier
 
-- https://github.com/ageitgey/face_recognition
+- **Image 2 image**
+ - https://platform.stability.ai/
+
+- **Text 2 speech**
+ - Turtoise-tts: https://medium.com/@gpj/making-your-ai-sound-like-you-a-guide-to-creating-custom-text-to-speech-8b595d5cf259  (too slow for raspy)
+ - Turtoise-tts: https://www.youtube.com/watch?v=Ci8NaeFCUz4 (too slow for raspy)
+
 
 # Picar-x
 
