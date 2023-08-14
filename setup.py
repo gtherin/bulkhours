@@ -6,6 +6,10 @@ import codecs
 import os.path
 
 
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
+
+
 def read(rel_path):
     here = os.path.abspath(os.path.dirname(__file__))
     with codecs.open(os.path.join(here, rel_path), "r") as fp:
@@ -47,9 +51,18 @@ setup(
     packages=find_packages(),
     author="Guillaume Therin",
     author_email="guillaume.therin@gmail.com",
+    description="BULK Helper for cOURSes",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     license="https://github.com/guydegnol/guydegnol-privacy/blob/main/privacy-policy.md",
     # Dependencies
     install_requires=["pandas"],
     # Script info
     entry_points={"console_scripts": get_console_scripts()},
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: Other/Proprietary License",
+        "Operating System :: OS Independent",
+    ],
+    python_requires=">=3.8",
 )
