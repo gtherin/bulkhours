@@ -177,7 +177,7 @@ The database has been reset to the local file '{cfg["database"]}'.
     if "subject" not in cfg["global"]:
         cfg["global"]["subject"] = cfg["subject"]
 
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (cfilename := tools.abspath("bulkhours/bunker/pi.pyc"))
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (cfilename := tools.abspath(".safe.pyc"))
     if type(cfg.database) == dict:
         with open(cfilename, "w") as f:
             json.dump(cfg.database, f, ensure_ascii=False, indent=4)
