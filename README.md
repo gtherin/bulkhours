@@ -2,9 +2,9 @@
 
 ![](data/BulkHours.png)
 
-### 🛠️The aim of the package (tailored to data science and IT courses):
+### 🛠️The aim of the package:
 - 🔗 Create a real-time interactivity between 🧑‍🎓students and 👨‍🏫teachers (through Jupyter notebooks),
-- 📈 Serve as as data provider for practical case studies to support courses,
+- 📈 Serve as as data provider for practical case studies to support courses (**data science, physics and IT for now**),
 - 🤖 Automatic evaluation of students,
 - 👨‍💻 Tools to develop in C/C++/CUDA within a jupyter notebook environement (with a python kernel),
 - 🧠 Simple Interfaces with new machine learning trends packages🤗.
