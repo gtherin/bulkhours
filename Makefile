@@ -6,18 +6,9 @@ SHELL=/bin/bash
 CONDA=source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate ; conda
 
 # Get versions
-include config.mk
-PYTHON_VERSION = $(shell echo ${ENV_NAME} | tail -c 5)
-PACKAGE_NAME = $(shell basename ${PWD})
-ONLINE_CONNECT = $(shell cat ~/.ssh/onl)
-LOCAL_DEPENDENCIES = $(shell grep LOCAL_DEPENDENCIES config.mk | cut -c 20-)
-
-
-nstopv:
-	$(CONDA) activate ${ENV_NAME}; cd ../nstopv && pip install develop -e .;
-
-dapir:
-	$(CONDA) activate ${ENV_NAME}; cd ../dapir && pip install develop -e .;
+PACKAGE_NAME=$(shell python3 -c "from configparser import ConfigParser; p = ConfigParser(); p.read('setup.cfg'); print(p['metadata']['name'])")
+PYTHON_VERSION=$(shell python3 -c "from configparser import ConfigParser; p = ConfigParser(); p.read('setup.cfg'); print(p['options']['recommended_python'])")
+ENV_NAME=${PACKAGE_NAME}_py${PYTHON_VERSION}
 
 create:
 	$(CONDA) create -n ${ENV_NAME} python=$(PYTHON_VERSION) -y;
@@ -28,7 +19,7 @@ requirements:
 kernel:
 	$(CONDA) activate ${ENV_NAME}; ipython3 kernel install --user --name=${ENV_NAME};
 
-install: $(LOCAL_DEPENDENCIES)
+install:
 	($(CONDA) activate ${ENV_NAME} ; python setup.py develop)
 
 clean: clean-pyc
@@ -47,4 +38,4 @@ test: clean-pyc
 	pytest --verbose --color=yes tests;
 
 web:
-	/home/guydegnol/projects/web/deploy2online.sh
+	~/projects/web/deploy2online.sh

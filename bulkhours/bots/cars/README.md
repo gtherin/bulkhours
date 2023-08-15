@@ -10,6 +10,7 @@
  - object_detection.py
  - https://www.youtube.com/watch?v=HXDD7-EnGBY
  - https://huggingface.co/docs/transformers/tasks/object_detection
+ - https://github.com/murtazahassan/OpenCV-Python-Tutorials-and-Projects
 
 - **Object classifications**
  - https://huggingface.co/models?pipeline_tag=image-classification&sort=downloads
@@ -21,7 +22,9 @@
 - **Text 2 speech**
  - Turtoise-tts: https://medium.com/@gpj/making-your-ai-sound-like-you-a-guide-to-creating-custom-text-to-speech-8b595d5cf259  (too slow for raspy)
  - Turtoise-tts: https://www.youtube.com/watch?v=Ci8NaeFCUz4 (too slow for raspy)
-
+ - Use windows audacity to record sound
+ - Piper-tts https://www.youtube.com/watch?v=rjq5eZoWWSo (fast)
+ - https://colab.research.google.com/drive/1Ymy1FD9Q21N08Dgfclr5WuB8W2DNIb2o#scrollTo=X4zbSjXg2J3N
 
 # Picar-x
 
