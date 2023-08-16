@@ -6,6 +6,17 @@ from argparse import Namespace
 from .config import Config
 
 
+def get_platform():
+    if os.path.exists("/content"):
+        return "colab"
+    elif os.path.exists("/home/studio-lab-user"):
+        return "sagemaker"
+    elif os.path.exists("/kaggle/working"):
+        return "kaggle"
+    else:
+        return "local"
+
+
 def abspath(filename="", rdir=None, create_dir=True):
     if rdir is None:
         rdir = os.path.dirname(__file__) + f"/../../../bulkhours/"

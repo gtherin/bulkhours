@@ -1,11 +1,19 @@
 import os
 import json
 import datetime
-import zoneinfo
 from argparse import Namespace
 from . import tools
 
 REF_USER = "solution"
+
+
+def get_paris_time():
+    if tools.get_platform() == "sagemaker":
+        return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    import zoneinfo
+
+    return datetime.datetime.now(tz=zoneinfo.ZoneInfo("Europe/Paris")).strftime("%Y-%m-%d %H:%M:%S")
 
 
 def get_question_id(question, sep="_", cinfo=None):
@@ -284,7 +292,7 @@ def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, *
                 )
             return
 
-    uptime = datetime.datetime.now(tz=zoneinfo.ZoneInfo("Europe/Paris")).strftime("%Y-%m-%d %H:%M:%S")
+    uptime = get_paris_time()
 
     if update_time:
         kwargs.update({"update_time": uptime})
