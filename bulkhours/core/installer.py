@@ -57,14 +57,16 @@ def install_dependencies(packages, start_time):
     if start_time is None:
         start_time = time.time()
 
-    if (
-        get_platform() == "sagemaker"
-        and "CONDA_PREFIX" in os.environ
-        and "sagemaker-distribution" not in os.environ["CONDA_PREFIX"]
-    ):
-        print(
-            f"""⚠️\x1b[33mFor sagemaker, please use the \033[1msagemaker-distribution:Python\x1b[0m\x1b[33m kernel (data science libraries are already installed) \x1b[0m"""
-        )
+    if get_platform() == "sagemaker":
+        if "CONDA_PREFIX" in os.environ and "sagemaker-distribution" not in os.environ["CONDA_PREFIX"]:
+            print(
+                f"""⚠️\x1b[33mFor sagemaker, please use the \033[1msagemaker-distribution:Python\x1b[0m\x1b[33m kernel (data science libraries are already installed) \x1b[0m"""
+            )
+        packages = "graphviz," + packages
+
+    packages = packages.replace(
+        "HUGGING_FACE", "swig,cmake,HF_UNIT1,apt-get,python-opengl,ffmpeg,xvfb,pyvirtualdisplay,shimmy>=0.2.1"
+    )
 
     # Update pip
     print("\x1b[37mRUN pip/apt install [%s]: " % (get_platform()), end="", flush=True)
