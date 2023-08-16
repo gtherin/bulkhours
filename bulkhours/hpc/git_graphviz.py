@@ -1,6 +1,3 @@
-import graphviz
-
-
 class Node:
     def __init__(self, label="", branch="master", origin=None, destination=None, style="", pos=None):
         self.label, self.branch, self.origin, self.destination, self.style, self.pos = (
@@ -34,7 +31,6 @@ class Nodes:
     def update_with_style(self):
         range = self.get_range()
         for i in range:
-
             dpos = 0.5 if "<" in self.nodes[i].style else -0.5
 
             if "<" in self.nodes[i].style or ">" in self.nodes[i].style:
