@@ -1,5 +1,3 @@
-import graphviz
-
 from .git_graphviz import Node, Nodes, Branch
 
 
@@ -72,6 +70,7 @@ def get_nodes(name):
 
 
 def get_git_graph(nodes, branches=None, title=None, active=None):
+    import graphviz
 
     if type(nodes) == str:
         nodes = get_nodes(nodes)
