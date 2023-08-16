@@ -1,10 +1,12 @@
 import os
 import time
 import zlib
+import subprocess
 from base64 import urlsafe_b64encode as b64e, urlsafe_b64decode as b64d
 from .tools import get_platform
 
 DEFAULT_TOKEN = "NO_TOKEN"
+
 
 # Set up the package directory
 bulk_dir = os.path.abspath(os.path.dirname(__file__) + f"/../../..")
@@ -51,9 +53,6 @@ def get_tokens(token, raise_error=False, verbose=True):
 
 
 def install_dependencies(packages, start_time):
-    if packages in [None, "None", ""]:
-        return
-
     if start_time is None:
         start_time = time.time()
 
@@ -68,6 +67,9 @@ def install_dependencies(packages, start_time):
         "HUGGING_FACE", "swig,cmake,HF_UNIT1,apt-get,python-opengl,ffmpeg,xvfb,pyvirtualdisplay,shimmy>=0.2.1"
     )
 
+    if packages in [None, "None", ""]:
+        return
+
     # Update pip
     print("\x1b[37mRUN pip/apt install [%s]: " % (get_platform()), end="", flush=True)
 
@@ -80,20 +82,34 @@ def install_dependencies(packages, start_time):
 
     # Install packages
     for package in packages.split(","):
-        print("%s [%.0fs]," % (package, time.time() - start_time), end="", flush=True)
-        if get_platform() == "local":
+        if package == "":
             continue
 
-        if package == "pip":
+        status = "0"
+        print(package, end="", flush=True)
+        if get_platform() == "local":
+            status = "0"
+        elif package == "pip":
             os.system(f"pip install --upgrade pip > /dev/null 2>&1")
+            status = "U"
         elif package == "apt-get":
             os.system(f"sudo apt-get update > /dev/null 2>&1")
+            status = "U"
         elif package == "HF_UNIT1":  # stable-baselines3==2.0.0a5,gymnasium[box2d],huggingface_sb3
             os.system(
                 f"pip install -r https://raw.githubusercontent.com/huggingface/deep-rl-class/main/notebooks/unit1/requirements-unit1.txt > /dev/null 2>&1"
             )
+            status = "M"
         elif package not in "wkhtmltopdf,swig,cmake,python-opengl,ffmpeg,xvfb,git-lfs".split(","):
-            os.system(f"pip install {package} > /dev/null 2>&1")
+            res = subprocess.run(
+                f"pip show {package}".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+            ).stdout
+            if "not found" in res:
+                os.system(f"pip install {package} > /dev/null 2>&1")
+                status = "I"
         else:
             os.system(f"apt install {package} > /dev/null 2>&1")
+            status = "A"
+        print(" [%s,%.0fs]," % (status, time.time() - start_time), end="", flush=True)
+
     print("\x1b[0m")
