@@ -69,6 +69,12 @@ cd /home/pi/picar-x
 sudo bash i2samp.sh
 ```
 
+Calibration:
+Steer 7
+Pan -2
+Tilt 8
+
+
 ## Configure camera
 
 ```bash
