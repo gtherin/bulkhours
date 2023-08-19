@@ -13,3 +13,5 @@
 [With great feed-backs 🚀🏆🎯 from users](https://github.com/guydegnol/bulkhours/wiki/feedbacks), there is an on-going effort to industrialize the package.
 
 [![CC-by-nc-sa license](https://badgen.net/badge/icon/CC%20by-nc-sa?label=Licence)](https://creativecommons.org/licenses/by-nc-sa/4.0)
+
+https://github.com/guydegnol/wildcamp/assets/82407580/46f7f587-d588-44a3-9700-81f76dad3a7e
