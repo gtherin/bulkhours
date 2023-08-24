@@ -28,15 +28,37 @@
 
 # Picar-x
 
+Actual calibration values
+
+|Servo|Bias|
+---
+|Steer |7|
+|Pan |-2|
+|Tilt |8|
+
+
+sudo service ezblock stop
+bash /home/pi/bulkhours/bulkhours/bots/cars/run.sh
+
+tail -f /opt/ezblock/log
+
+http://192.168.0.44:9000/mjpg
+http://192.168.86.41:9000/mjpg
+
+
 https://docs.sunfounder.com/projects/picar-x/en/latest/python/python_start/install_all_modules.html
 
-## Update os
 
-```bash
-sudo apt update
-sudo apt upgrade
-sudo apt install git python3-pip python3-setuptools python3-smbus
-```
+"""
+wget https://www.python.org/ftp/python/3.10.12/Python-3.10.12.tgz
+tar -zxvf Python-3.10.12.tgz Python-3.10.12/
+cd Python-3.10.12
+./configure --enable-optimizations
+
+pip3 install transformers
+"""
+
+
 
 ## Install robot-hat
 
@@ -54,6 +76,11 @@ cd /home/pi/
 git clone https://github.com/sunfounder/vilib.git
 cd vilib
 sudo python3 install.py
+
+pip3 install streamlit==0.62.0
+pip3 install matplotlib
+
+http://192.168.0.44:9000/mjpg
 ```
 
 
@@ -69,10 +96,6 @@ cd /home/pi/picar-x
 sudo bash i2samp.sh
 ```
 
-Calibration:
-Steer 7
-Pan -2
-Tilt 8
 
 
 ## Configure camera
