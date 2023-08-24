@@ -53,6 +53,7 @@ stroke = 2
 stream = cv2.VideoCapture(0)
 
 
+
 while(True):
     # Capture frame-by-frame
     (grabbed, frame) = stream.read()

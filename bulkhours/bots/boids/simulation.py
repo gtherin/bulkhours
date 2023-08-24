@@ -202,11 +202,7 @@ def main():
         return
     rendering = PyGameRendering()
     rendering.add_boids("boid_list", 70, obstacle_avoidance_weight=15, goal_weight=0, field_of_view=70, max_speed=88 )
-    rend
-    ering.add_boids(
-
-        "predator_list", 5, obstacle_avoidance_weight=0, goal_weight=50, field_of_view=70, max_speed=88
-    )
+    rendering.add_boids("predator_list", 5, obstacle_avoidance_weight=0, goal_weight=50, field_of_view=70, max_speed=88)
     rendering.add_obstacle(3)
 
     but = Button("Yo man", rendering.screen)
