@@ -63,7 +63,7 @@ def get_header_links(filename, licence=True, github=True, sagemaker=True, kaggle
         links += f"[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/{afilename}) "
 
     if jupyter:
-        links += f"[![Open In Jupyter](https://img.shields.io/static/v1?logo=jupyter&label=&message=Open%20in%20Jupyter&labelColor=636363&color=007acc&logoColor=F37726)](http://jupyter.localhost/notebooks/web/bulkhours/notebooks/{filename}) "
+        links += f"[![Open In Jupyter](https://img.shields.io/static/v1?logo=jupyter&label=&message=Open%20in%20Jupyter&labelColor=636363&color=F37726&logoColor=F37726)](http://jupyter.localhost/notebooks/web/bulkhours/notebooks/{filename}) "
 
     if licence:
         links += f"[![CC-by-nc-sa license](https://badgen.net/badge/icon/CC%20by-nc-sa?label=Licence)](https://creativecommons.org/licenses/by-nc-sa/4.0) "
