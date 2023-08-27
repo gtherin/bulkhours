@@ -46,7 +46,7 @@ class Script:
         os.system(f"rm -rf {self.fname}")
 
 
-def get_header_links(filename, licence=True, github=True, sagemaker=True, kaggle=False, vstudio=True):
+def get_header_links(filename, licence=True, github=True, sagemaker=True, kaggle=False, vstudio=True, jupyter=False):
     afilename = f"guydegnol/bulkhours/blob/main/{filename}"
     links = f"[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/{afilename}) "
 
@@ -61,6 +61,9 @@ def get_header_links(filename, licence=True, github=True, sagemaker=True, kaggle
 
     if kaggle:
         links += f"[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/{afilename}) "
+
+    if jupyter:
+        links += f"[![Open In Jupyter](https://img.shields.io/static/v1?logo=jupyter&label=&message=Open%20in%20Jupyter&labelColor=636363&color=007acc&logoColor=F37726)](http://jupyter.localhost/notebooks/web/bulkhours/notebooks/{filename}) "
 
     if licence:
         links += f"[![CC-by-nc-sa license](https://badgen.net/badge/icon/CC%20by-nc-sa?label=Licence)](https://creativecommons.org/licenses/by-nc-sa/4.0) "
