@@ -67,23 +67,21 @@ def code(codebody, raw=False, display=False, style=None):
         else:
             language = "python"
 
+        w = IPython.display.Code(codebody, language=language)
         if style is not None:
             import pygments
 
-            """
-# To list styles
-from pygments.styles import get_all_styles
-list(get_all_styles())
-            """
+            available_styles = list(pygments.styles.get_all_styles())
+
+            if style not in available_styles:
+                print(f"Style is unknown. Available styles: {available_styles}")
             w = IPython.display.HTML(
                 pygments.highlight(
                     codebody,
                     pygments.lexers.PythonLexer(),
-                    pygments.formatters.HtmlFormatter(full=True, style="gruvbox-dark"),
+                    pygments.formatters.HtmlFormatter(full=True, style=style),
                 )
             )
-        else:
-            w = IPython.display.Code(codebody, language=language)
         if display:
             IPython.display.display(w)
         else:
