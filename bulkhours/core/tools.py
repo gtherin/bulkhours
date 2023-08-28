@@ -60,12 +60,14 @@ def html(label, size="4", color="black", layout=None):
 def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="black", icon="📚"):
     print("")
     if header:
-        IPython.display.display(html(header + "" + icon, size="4", color=hc))
-        print("")
+        # IPython.display.display(html(header + "" + icon, size="4", color=hc))
+        IPython.display.display(header + "" + icon)
+        # print("")
 
     if mdbody and (type(mdbody) in [int, float, str] or len(mdbody) > 1):
-        IPython.display.display(html(mdbody, size="4", color=bc))
-        print("")
+        IPython.display.display(mdbody)
+        # IPython.display.display(html(mdbody, size="4", color=bc))
+        # print("")
     if rawbody and len(rawbody) > 1:
         print(rawbody)
     if codebody and len(codebody) > 1:
@@ -76,7 +78,7 @@ def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="blac
         else:
             language = "python"
         IPython.display.display(IPython.display.Code(codebody, language=language))
-        print("")
+        # print("")
 
 
 def eval_code(code):
