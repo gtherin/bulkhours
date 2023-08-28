@@ -46,14 +46,28 @@ def html2(label, display=True, style="raw"):
         IPython.display.display(data)
 
 
-def html(label, size="4", color="black", layout=None):
+def html(label, size="4", color="black", use_ipywidgets=False):
     html_code = f"<b><font face='FiraCode Nerd Font' size={size} color='{color}'>{label}<font></b><br/>"
     # TODO: ipywidgets.HTML DISPLAY is BUGGY, use IPython.display.HTML when possible
-    return IPython.display.HTML(html_code) if layout is None else ipywidgets.HTML(value=html_code, layout=layout)
+    if use_ipywidgets:
+        return ipywidgets.HTML(value=html_code)
+    return IPython.display.HTML(html_code)
+
+
+def code(codebody, raw=False):
+    if raw:
+        print(codebody)
+    elif codebody and len(codebody) > 1:
+        if "g++" in codebody:
+            language = "cpp"
+        if "nvcc" in codebody:
+            language = "cuda"
+        else:
+            language = "python"
+        IPython.display.display(IPython.display.Code(codebody, language=language))
 
 
 def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="black", icon="📚"):
-    print("")
     if header:
         IPython.display.display(html(header + "" + icon, size="4", color=hc))
 
