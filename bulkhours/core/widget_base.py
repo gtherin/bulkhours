@@ -43,9 +43,9 @@ class WidgetBase:
         if not teacher_data.is_evaluation_visible():
             with output:
                 md(
-                    mdbody=f"*La solution n'est pas disponible (pour le moment 😕)*"
+                    mdbody=f"La solution n'est pas disponible (pour le moment 😕)"
                     if self.cinfo.language == "fr"
-                    else f"*Solution is not available (yet 😕)*"
+                    else f"Solution is not available (yet 😕)"
                 )
                 return
 
@@ -137,9 +137,10 @@ class WidgetBase:
         comment = (
             "" if self.cinfo.type in ["bkcode", "bkscript"] else f": {teacher_data['answer']} VS {self.get_answer()}"
         )
-        sources = f", {student_data.minfo['source']} VS {teacher_data.minfo['source']}"
-        md(header=f"Correction ({self.cinfo.cell_id}{note_auto}{sources}) {comment}", **kwargs)
+        sources = ""  # f", {student_data.minfo['source']} VS {teacher_data.minfo['source']}"
+        md(header=f"Correction ({self.cinfo.cell_id}{note_auto}) {comment}", **kwargs)
 
+        print("Correction info:\n", teacher_data.minfo)
         if (
             self.cinfo.type in ["bkcode", "bkscript"]
             and teacher_data is not None
