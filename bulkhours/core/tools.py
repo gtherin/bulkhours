@@ -47,6 +47,9 @@ def html2(label, display=True, style="raw"):
 
 
 def html(label, size="4", color="black", layout=None):
+    return IPython.display.HTML(
+        f"<b><font face='FiraCode Nerd Font' size={size} color='{color}'>{label}<font></b><br/>"
+    )
     return ipywidgets.HTML(
         value=f"<b><font face='FiraCode Nerd Font' size={size} color='{color}'>{label}<font></b><br/>"
     )
@@ -65,8 +68,8 @@ def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="blac
         # print("")
 
     if mdbody and (type(mdbody) in [int, float, str] or len(mdbody) > 1):
-        IPython.display.display(mdbody)
-        # IPython.display.display(html(mdbody, size="4", color=bc))
+        # IPython.display.display(mdbody)
+        IPython.display.display(html(mdbody, size="4", color=bc))
         # print("")
     if rawbody and len(rawbody) > 1:
         print(rawbody)
