@@ -49,7 +49,6 @@ class WidgetBase:
                     display=True,
                     style="body",
                 )
-        return
 
         self.display_correction(student_data, teacher_data, output=output, score=score)
 
@@ -144,15 +143,18 @@ class WidgetBase:
         )
         sources = ""  # f", {student_data.minfo['source']} VS {teacher_data.minfo['source']}"
 
-        tools.html(f"Correction ({self.cinfo.cell_id}{note_auto}) {comment}", style="title", display=True, color=color)
-        tools.code(teacher_data.get_code("main_execution"), display=True)
+        with output:
+            output.clear_output()
+            tools.html(
+                f"Correction ({self.cinfo.cell_id}{note_auto}) {comment}", style="title", display=True, color=color
+            )
+            tools.code(teacher_data.get_code("main_execution"), display=True)
 
-        if (
-            self.cinfo.type in ["bkcode", "bkscript"]
-            and teacher_data is not None
-            and "main_execution" in teacher_data.minfo
-        ):
-            with output:
+            if (
+                self.cinfo.type in ["bkcode", "bkscript"]
+                and teacher_data is not None
+                and "main_execution" in teacher_data.minfo
+            ):
                 tools.html(
                     f"""Execution du code ({self.cinfo.cell_id}{note_auto}{sources}) 💻"""
                     if self.cinfo.language == "fr"
