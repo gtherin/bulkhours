@@ -119,7 +119,7 @@ def init_env(packages=None, **kwargs):
     version = open(tools.abspath("bulkhours/__version__.py")).readlines()[0].split('"')[1]
 
     einfo = f", ⚠️\x1b[31m\x1b[41m\x1b[37m in admin/teacher🎓 mode\x1b[0m⚠️" if tools.is_admin(config=config) else ""
-    print(f"Import BULK Helper cOURSe (\x1b[0m\x1b[36mversion='{version}'\x1b[0m🚀'{einfo}):", end="")
+    print(f"Import BULK Helper cOURSe (\x1b[0m\x1b[36mversion='{version}'\x1b[0m🚀{einfo}):", end="")
     if "bkloud" not in config["database"]:
         print(
             f"⚠️\x1b[31mDatabase is local (security_level={config['security_level']}). Export your config file if you need persistency.\x1b[0m⚠️",
@@ -132,8 +132,12 @@ import ipywidgets
         """
         )
 
-    print("\n" + info)
+    print("\n- session-info: " + info)
+
+    if tools.get_value("openai_token") is not None or tools.get_value("huggingface_token") is not None:
+        external_services = "- extra-services:"
     if tools.get_value("openai_token") is not None:
+        external_services += " openai 🤖, "
         if ipp := IPython.get_ipython():
             ipp.run_cell(
                 """ try:
@@ -151,11 +155,13 @@ except ModuleNotFoundError:
         from .. import ml
 
         os.environ["BLK_HUGGINGFACE_TOKEN"] = tools.get_value("huggingface_token")
-        print("Connection to huggingface 🤗 hub")
+        external_services += "huggingface 🤗"
 
         with ipywidgets.Output():
             ml.PPOHugs()
 
+    if tools.get_value("openai_token") is not None or tools.get_value("huggingface_token") is not None:
+        print(external_services)
     contexts.generate_empty_context("student")
     contexts.generate_empty_context("teacher")
     os.environ["BLK_GLOBAL_STATUS"] = f"INITIALIZED"

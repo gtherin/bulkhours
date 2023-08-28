@@ -118,7 +118,7 @@ class WidgetBase:
         IPython.display.display(bbox, output)
 
     def display_correction(self, student_data, teacher_data, output=None, score=""):
-        codebody = True  # "google.colab" in sys.modules and self.cinfo.user != "solution"
+        codebody = "google.colab" in sys.modules and self.cinfo.user != "solution"
         kwargs = (
             {"codebody" if codebody else "rawbody": teacher_data.get_code("main_execution")}
             if "main_execution" in teacher_data.minfo
