@@ -140,20 +140,20 @@ class WidgetBase:
         sources = ""  # f", {student_data.minfo['source']} VS {teacher_data.minfo['source']}"
         md(header=f"Correction ({self.cinfo.cell_id}{note_auto}) {comment}", **kwargs)
 
-        print("Correction info:\n", teacher_data.minfo)
         if (
             self.cinfo.type in ["bkcode", "bkscript"]
             and teacher_data is not None
             and "main_execution" in teacher_data.minfo
         ):
-            md(
-                header=f"""Execution du code ({self.cinfo.cell_id}{note_auto}{sources}) 💻"""
-                if self.cinfo.language == "fr"
-                else f"""Let's execute the code ({self.cinfo.cell_id}{note_auto}{sources}) 💻""",
-                bc="black",
-            )
+            with output:
+                md(
+                    header=f"""Execution du code ({self.cinfo.cell_id}{note_auto}{sources}) 💻"""
+                    if self.cinfo.language == "fr"
+                    else f"""Let's execute the code ({self.cinfo.cell_id}{note_auto}{sources}) 💻""",
+                    bc="black",
+                )
 
-            IPython.get_ipython().run_cell(teacher_data.get_code("main_execution"))
+                IPython.get_ipython().run_cell(teacher_data.get_code("main_execution"))
 
     def ask_chat_gpt(self, output):
         from .gpt import ask_chat_gpt
