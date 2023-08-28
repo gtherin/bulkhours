@@ -47,14 +47,9 @@ def html2(label, display=True, style="raw"):
 
 
 def html(label, size="4", color="black", layout=None):
-    return IPython.display.HTML(
-        f"<b><font face='FiraCode Nerd Font' size={size} color='{color}'>{label}<font></b><br/>"
-    )
-    return ipywidgets.HTML(  # TODO: DISPLAY MIGHT BE BUGGY
-        # value=f"<b><font face='FiraCode Nerd Font' size={size} color='{color}'>{label}<font></b><br/>",
-        value=f"<b><font face='FiraCode Nerd Font' size={size} color='{color}'>{label}<font></b><br/>",
-        layout=ipywidgets.Layout(height="auto", width="auto") if layout is None else layout,
-    )
+    html_code = f"<b><font face='FiraCode Nerd Font' size={size} color='{color}'>{label}<font></b><br/>"
+    # TODO: ipywidgets.HTML DISPLAY is BUGGY, use IPython.display.HTML when possible
+    return IPython.display.HTML(html_code) if layout is None else ipywidgets.HTML(value=html_code, layout=layout)
 
 
 def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="black", icon="📚"):
