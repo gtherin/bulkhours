@@ -23,7 +23,7 @@ def show_answer(out, cuser, answer, style=None):
     with out:
         # Show code
         core.tools.html(f"Code ({cuser})", size="4", color=color, use_ipywidgets=True, display=True)
-        core.tools.code(answer["answer"], raw=show_raw_code, display=True)
+        core.tools.code(answer["answer"], display=True, style=style)  # , raw=show_raw_code
 
         # Execute code
         core.tools.html(f"Execution ({cuser})💻", size="4", color=color, use_ipywidgets=True, display=True)
