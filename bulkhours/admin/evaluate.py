@@ -16,16 +16,16 @@ def get_alias_name(cuser):
 
 
 def show_answer(cuser, answer, style=None):
-    hc = "green" if cuser == "solution" else "red"
-    codebody = "google.colab" in sys.modules and style != "dark"
+    color = "green" if cuser == "solution" else "red"
     cuser = get_alias_name(cuser)
+    show_raw_code = not ("google.colab" in sys.modules and style != "dark")
 
     # Show code
-    core.tools.md(header=f"Code ({cuser})", hc=hc)
-    core.tools.md(**{"codebody" if codebody else "rawbody": answer["answer"]})
+    core.tools.html(f"Code ({cuser})", size="4", color=color, use_ipywidgets=True)
+    core.tools.code(answer["answer"], raw=show_raw_code)
 
     # Execute code
-    core.tools.md(header=f"Execution ({cuser})", hc=hc, icon="💻")
+    core.tools.html(f"Execution ({cuser})💻", size="4", color=color, use_ipywidgets=True)
     core.tools.eval_code(answer["answer"])
 
 
@@ -33,7 +33,7 @@ def create_evaluation_buttonanswer(cell_id, cuser, answer):
     config = core.tools.get_config()
 
     language = config["global"]["language"]
-    label = core.tools.html(get_alias_name(cuser), size="6", color="#4F4F4F")
+    label = core.tools.html(get_alias_name(cuser), size="6", color="#4F4F4F", use_ipywidgets=True)
     abuttons = core.buttons.get_buttons_list(label="", language=language, user="solution")
     output = ipywidgets.Output()
 
@@ -91,12 +91,17 @@ def evaluate(cell_id, user="NEXT", show_correction=False, style=None, **kwargs):
                 IPython.display.display(ipywidgets.VBox([tabs, out]))
 
             else:
-                show_answer(cuser, answer)
-                create_evaluation_buttonanswer(cell_id, cuser, answer)
+                out = ipywidgets.Output(layout={"width": "100%"})
+                with out:
+                    show_answer(cuser, answer)
+                    create_evaluation_buttonanswer(cell_id, cuser, answer)
+                return out
+                # IPython.display.display(ipywidgets.VBox([out]))
 
     if not did_find_answer:
-        core.tools.md(
-            mdbody=f"Pas de réponse disponible pour {nuser}"
+        core.tools.html(
+            f"Pas de réponse disponible pour {nuser}"
             if config.language == "fr"
-            else f"{nuser} answer is not available"
+            else f"{nuser} answer is not available",
+            use_ipywidgets=True,
         )
