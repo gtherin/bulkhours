@@ -56,7 +56,7 @@ def html(label, size="4", color="black", use_ipywidgets=False, display=False, st
         return w
 
 
-def code(codebody, raw=False, display=False):
+def code(codebody, raw=False, display=False, style=None):
     if raw:
         print(codebody)
     elif codebody and len(codebody) > 1:
@@ -66,7 +66,24 @@ def code(codebody, raw=False, display=False):
             language = "cuda"
         else:
             language = "python"
-        w = IPython.display.Code(codebody, language=language)
+
+        if style is not None:
+            import pygments
+
+            """
+# To list styles
+from pygments.styles import get_all_styles
+list(get_all_styles())
+            """
+            w = IPython.display.HTML(
+                pygments.highlight(
+                    codebody,
+                    pygments.lexers.PythonLexer(),
+                    pygments.formatters.HtmlFormatter(full=True, style="gruvbox-dark"),
+                )
+            )
+        else:
+            w = IPython.display.Code(codebody, language=language)
         if display:
             IPython.display.display(w)
         else:
