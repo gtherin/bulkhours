@@ -1,6 +1,6 @@
 import IPython
 import ipywidgets
-from .tools import md
+from . import tools
 import numpy as np
 import sys
 from .cell_parser import CellParser
@@ -42,12 +42,14 @@ class WidgetBase:
 
         if not teacher_data.is_evaluation_visible():
             with output:
-                md(
-                    mdbody=f"La solution n'est pas disponible (pour le moment 😕)"
+                tools.html(
+                    f"La solution n'est pas disponible (pour le moment 😕)"
                     if self.cinfo.language == "fr"
-                    else f"Solution is not available (yet 😕)"
+                    else f"Solution is not available (yet 😕)",
+                    display=True,
+                    style="body",
                 )
-                return
+        return
 
         self.display_correction(student_data, teacher_data, output=output, score=score)
 
@@ -85,7 +87,7 @@ class WidgetBase:
         if answer == "":
             with output:
                 output.clear_output()
-                md(mdbody=f"Nothing to send 🙈🙉🙊")
+                tools.html(f"Nothing to send 🙈🙉🙊", display=True, style="body")
             return
         if user is None:
             user = self.cinfo.user
@@ -97,16 +99,17 @@ class WidgetBase:
 
     def send_message(self, output):
         from . import firebase
-        from .colors import md
 
         data = firebase.get_solution_from_corrector(self.cinfo.cell_id, corrector="solution")
         if (user := self.cinfo.user) in data or (user := "all") in data:
-            md(
-                header=f"Message ({self.cinfo.cell_id}, {user}) du correcteur"
+            tools.html(
+                f"Message ({self.cinfo.cell_id}, {user}) du correcteur"
                 if self.cinfo.language == "fr"
                 else f"Message ({self.cinfo.cell_id}, {user}) from corrector",
-                rawbody=data[user],
+                display=True,
+                style="rheader",
             )
+            tools.html(data[user], display=True, style="raw")
 
     def execute_raw_cell(self, bbox, output):
         bbox = bbox[0] if len(bbox) == 1 else ipywidgets.VBox(bbox)
@@ -124,21 +127,25 @@ class WidgetBase:
             if "main_execution" in teacher_data.minfo
             else {}
         )
+        color = "black"
+        kwargs = {}
 
         if score == "":
             note_auto = score
         else:
             score, max_score = score.split("/")
             if float(score) > 0.6 * float(max_score):
-                note_auto, kwargs["bc"] = f", note={score}🥳", "green"
+                note_auto, color = f", note={score}🥳", "green"
             else:
-                note_auto, kwargs["bc"] = f", note={score}😔", "red"
+                note_auto, color = f", note={score}😔", "red"
 
         comment = (
             "" if self.cinfo.type in ["bkcode", "bkscript"] else f": {teacher_data['answer']} VS {self.get_answer()}"
         )
         sources = ""  # f", {student_data.minfo['source']} VS {teacher_data.minfo['source']}"
-        md(header=f"Correction ({self.cinfo.cell_id}{note_auto}) {comment}", **kwargs)
+
+        tools.html(f"Correction ({self.cinfo.cell_id}{note_auto}) {comment}", style="title", display=True, color=color)
+        tools.code(teacher_data.get_code("main_execution"), display=True)
 
         if (
             self.cinfo.type in ["bkcode", "bkscript"]
@@ -146,11 +153,13 @@ class WidgetBase:
             and "main_execution" in teacher_data.minfo
         ):
             with output:
-                md(
-                    header=f"""Execution du code ({self.cinfo.cell_id}{note_auto}{sources}) 💻"""
+                tools.html(
+                    f"""Execution du code ({self.cinfo.cell_id}{note_auto}{sources}) 💻"""
                     if self.cinfo.language == "fr"
                     else f"""Let's execute the code ({self.cinfo.cell_id}{note_auto}{sources}) 💻""",
-                    bc="black",
+                    style="title",
+                    display=True,
+                    color=color,
                 )
 
                 IPython.get_ipython().run_cell(teacher_data.get_code("main_execution"))

@@ -35,30 +35,22 @@ def update_config(config):
     return config
 
 
-def html2(label, display=True, style="raw"):
-    import IPython
-
-    if style == "title":
-        data = IPython.display.HTML(f"<b><font face='FiraCode Nerd Font' size=6 color='black'>{label}<font></b>")
-    else:
-        data = IPython.display.HTML(label)
-    if display:
-        IPython.display.display(data)
-
-
 def html(label, size="4", color="black", use_ipywidgets=False, display=False, style="raw", font="FiraCode Nerd Font"):
-    if style == "header":
+    if style in ["header", "title"]:
         html_code = f"<b><font face='{font}' size=4 color='{color}'>{label}<font></b><br/>"
     elif style == "rheader":
         html_code = f"<b><font face='{font}' size=4 color='red'>{label}<font></b><br/>"
     elif style == "bheader":
         html_code = f"<b><font face='{font}' size=4 color='black'>{label}<font></b><br/>"
+    elif style == "raw":
+        html_code = label
     else:
         html_code = f"<b><font face='{font}' size={size} color='{color}'>{label}<font></b><br/>"
 
     # TODO: ipywidgets.HTML DISPLAY is BUGGY, use IPython.display.HTML when possible
     w = ipywidgets.HTML(value=html_code) if use_ipywidgets else IPython.display.HTML(html_code)
     if display:
+        print(" ", end="")
         IPython.display.display(w)
     else:
         return w

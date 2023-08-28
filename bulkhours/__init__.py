@@ -4,7 +4,7 @@ from . import core  # noqa
 from .core.tools import get_config, get_value  # noqa
 from .core.timeit import timeit  # noqa
 from .core import tools  # noqa
-from .core.tools import html2 as html  # noqa
+from .core.tools import html  # noqa
 
 # from . import data  # noqa
 from .data import get_data, get_image, geo_plot, generate_header_links, DataParser  # noqa
