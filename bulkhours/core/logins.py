@@ -135,7 +135,7 @@ import ipywidgets
     print("\n- session-info: " + info)
 
     if tools.get_value("openai_token") is not None or tools.get_value("huggingface_token") is not None:
-        external_services = "- extra-services:"
+        external_services = "- extra-services:\033[92m"
     if tools.get_value("openai_token") is not None:
         external_services += " openai 🤖, "
         if ipp := IPython.get_ipython() and False:  # Deactivate warning for the moment
@@ -161,7 +161,7 @@ except ModuleNotFoundError:
             ml.PPOHugs()
 
     if tools.get_value("openai_token") is not None or tools.get_value("huggingface_token") is not None:
-        print(external_services)
+        print(external_services + "\033[00m")
     contexts.generate_empty_context("student")
     contexts.generate_empty_context("teacher")
     os.environ["BLK_GLOBAL_STATUS"] = f"INITIALIZED"
