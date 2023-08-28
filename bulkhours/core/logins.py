@@ -25,10 +25,10 @@ def init_prems(config):
 
     path = OrderedDict()
 
-    def get_path():
-        info = "(%s)" % str(", ".join(path.keys()))
+    def get_path(join=", "):
+        info = "%s" % str(join.join(path.keys()))
         vals = [v if v != "" else "''" for v in path.values()]
-        info += " = (%s)" % str(", ".join(vals))
+        info += " = %s" % str(join.join(vals))
         return info
 
     path["db"] = (
@@ -70,7 +70,7 @@ def init_prems(config):
     else:
         path["user"] += "🎓" if email in config["global"]["admins"] or tools.is_admin(config) else "✅"
 
-    return get_path()
+    return get_path(join="/")
 
 
 def init_env(packages=None, **kwargs):
@@ -138,7 +138,7 @@ import ipywidgets
         external_services = "- extra-services:"
     if tools.get_value("openai_token") is not None:
         external_services += " openai 🤖, "
-        if ipp := IPython.get_ipython():
+        if ipp := IPython.get_ipython() and False:  # Deactivate warning for the moment
             ipp.run_cell(
                 """ try:
     import openai
