@@ -1,6 +1,6 @@
 import IPython
 
-from .tools import md
+from . import tools
 from .widget_base import WidgetBase
 from .cell_parser import CellParser
 from . import equals
@@ -64,7 +64,8 @@ class WidgetMarkdown(WidgetCode):
     widget_id = "markdown"
 
     def display_correction(self, student_data, teacher_data, output=None):
-        md(header=f"Correction ({self.cinfo.cell_id})", mdbody=teacher_data["answer"])
+        tools.html(f"Correction ({self.cinfo.cell_id})", display=True, style="rheader")
+        tools.html(teacher_data["answer"], display=True, style="body")
 
     def execute_raw_cell(self, bbox, output):
         IPython.display.display(IPython.display.Markdown(self.cell_source))
@@ -76,7 +77,7 @@ class WidgetFormula(WidgetCode):
 
     def display_correction(self, student_data, teacher_data, output=None):
         with output:
-            md(header=f"Correction ({self.cinfo.cell_id})")
+            tools.html(f"Correction ({self.cinfo.cell_id})", display=True, style="rheader")
         IPython.display.display(IPython.display.Markdown("$" + teacher_data["answer"] + "$"))
 
     def execute_raw_cell(self, bbox, output):

@@ -2,7 +2,7 @@ import ipywidgets
 import numpy as np
 
 from . import widget_base
-from .tools import md
+from . import tools
 
 
 class WidgetTable(widget_base.WidgetBase):
@@ -63,8 +63,7 @@ class WidgetTable(widget_base.WidgetBase):
     def display_correction(self, student_data, teacher_data, output=None):
         import IPython
 
-        print("")
-        md(header=f"Correction ({self.cinfo.cell_id})")
+        tools.html(f"Correction ({self.cinfo.cell_id})", display=True, style="rheader")
         IPython.display.display(
             ipywidgets.HBox(
                 [
