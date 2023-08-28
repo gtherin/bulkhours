@@ -49,6 +49,7 @@ class WidgetBase:
                     display=True,
                     style="body",
                 )
+                return
 
         self.display_correction(student_data, teacher_data, output=output, score=score)
 
