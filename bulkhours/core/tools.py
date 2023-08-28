@@ -46,15 +46,25 @@ def html2(label, display=True, style="raw"):
         IPython.display.display(data)
 
 
-def html(label, size="4", color="black", use_ipywidgets=False):
-    html_code = f"<b><font face='FiraCode Nerd Font' size={size} color='{color}'>{label}<font></b><br/>"
+def html(label, size="4", color="black", use_ipywidgets=False, display=False, style="raw", font="FiraCode Nerd Font"):
+    if style == "header":
+        html_code = f"<b><font face='{font}' size=4 color='{color}'>{label}<font></b><br/>"
+    elif style == "rheader":
+        html_code = f"<b><font face='{font}' size=4 color='red'>{label}<font></b><br/>"
+    elif style == "bheader":
+        html_code = f"<b><font face='{font}' size=4 color='black'>{label}<font></b><br/>"
+    else:
+        html_code = f"<b><font face='{font}' size={size} color='{color}'>{label}<font></b><br/>"
+
     # TODO: ipywidgets.HTML DISPLAY is BUGGY, use IPython.display.HTML when possible
-    if use_ipywidgets:
-        return ipywidgets.HTML(value=html_code)
-    return IPython.display.HTML(html_code)
+    w = ipywidgets.HTML(value=html_code) if use_ipywidgets else IPython.display.HTML(html_code)
+    if display:
+        IPython.display.display(w)
+    else:
+        return w
 
 
-def code(codebody, raw=False):
+def code(codebody, raw=False, display=False):
     if raw:
         print(codebody)
     elif codebody and len(codebody) > 1:
@@ -64,25 +74,24 @@ def code(codebody, raw=False):
             language = "cuda"
         else:
             language = "python"
-        IPython.display.display(IPython.display.Code(codebody, language=language))
+        w = IPython.display.Code(codebody, language=language)
+        if display:
+            IPython.display.display(w)
+        else:
+            return w
 
 
 def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="black", icon="📚"):
     if header:
-        IPython.display.display(html(header + "" + icon, size="4", color=hc))
+        html(header + "" + icon, size="4", color=hc, display=True)
 
     if mdbody and (type(mdbody) in [int, float, str] or len(mdbody) > 1):
-        IPython.display.display(html(mdbody, size="4", color=bc))
+        html(mdbody, size="4", color=bc, display=True)
     if rawbody and len(rawbody) > 1:
-        print(rawbody)
+        code(rawbody, raw=True, display=True)
+
     if codebody and len(codebody) > 1:
-        if "g++" in codebody:
-            language = "cpp"
-        if "nvcc" in codebody:
-            language = "cuda"
-        else:
-            language = "python"
-        IPython.display.display(IPython.display.Code(codebody, language=language))
+        code(codebody, raw=False, display=True)
 
 
 def eval_code(code):

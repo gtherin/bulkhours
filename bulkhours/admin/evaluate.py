@@ -15,18 +15,19 @@ def get_alias_name(cuser):
     return cuser
 
 
-def show_answer(cuser, answer, style=None):
+def show_answer(out, cuser, answer, style=None):
     color = "green" if cuser == "solution" else "red"
     cuser = get_alias_name(cuser)
-    show_raw_code = not ("google.colab" in sys.modules and style != "dark")
+    show_raw_code = style == "dark"  # not ("google.colab" in sys.modules and style != "dark")
 
-    # Show code
-    core.tools.html(f"Code ({cuser})", size="4", color=color, use_ipywidgets=True)
-    core.tools.code(answer["answer"], raw=show_raw_code)
+    with out:
+        # Show code
+        core.tools.html(f"Code ({cuser})", size="4", color=color, use_ipywidgets=True, display=True)
+        core.tools.code(answer["answer"], raw=show_raw_code, display=True)
 
-    # Execute code
-    core.tools.html(f"Execution ({cuser})💻", size="4", color=color, use_ipywidgets=True)
-    core.tools.eval_code(answer["answer"])
+        # Execute code
+        core.tools.html(f"Execution ({cuser})💻", size="4", color=color, use_ipywidgets=True, display=True)
+        core.tools.eval_code(answer["answer"])
 
 
 def create_evaluation_buttonanswer(cell_id, cuser, answer):
@@ -77,26 +78,20 @@ def evaluate(cell_id, user="NEXT", show_correction=False, style=None, **kwargs):
                 out2 = ipywidgets.Output(layout={"width": "50%"})
                 tabs = ipywidgets.HBox([out1, out2])
 
-                with out1:
-                    show_answer(cuser, answer, style=style)
-                with out2:
-                    # bulkhours.c.set_style(out2, "sol_background")
-                    show_answer("solution", cell_answers["solution"], style=style)
-
-                out = ipywidgets.Output(layout={"border": "1px solid #CFCFCF", "width": "100%"})
-                # bulkhours.c.set_style(out, "cell_background")
-                with out:
-                    create_evaluation_buttonanswer(cell_id, cuser, answer)
-
-                IPython.display.display(ipywidgets.VBox([tabs, out]))
+                show_answer(out1, cuser, answer, style=style)
+                # bulkhours.c.set_style(out2, "sol_background")
+                show_answer(out2, "solution", cell_answers["solution"], style=style)
 
             else:
-                out = ipywidgets.Output(layout={"width": "100%"})
-                with out:
-                    show_answer(cuser, answer)
-                    create_evaluation_buttonanswer(cell_id, cuser, answer)
-                return out
-                # IPython.display.display(ipywidgets.VBox([out]))
+                tabs = ipywidgets.Output(layout={"width": "100%"})
+                show_answer(tabs, cuser, answer, style=style)
+
+            out = ipywidgets.Output(layout={"border": "1px solid #CFCFCF", "width": "100%"})
+            # bulkhours.c.set_style(out, "cell_background")
+            with out:
+                create_evaluation_buttonanswer(cell_id, cuser, answer)
+
+            IPython.display.display(ipywidgets.VBox([tabs, out]))
 
     if not did_find_answer:
         core.tools.html(
