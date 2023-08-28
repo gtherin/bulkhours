@@ -43,7 +43,7 @@ buttonb {
 .button2 {background-color:#eaeaea ; color:red}
         </style>
     """
-    IPython.display.display(ipywidgets.HTML(style))
+    IPython.display.display(IPython.display.HTML(style))
     object.add_class(style)
 
 
