@@ -1,17 +1,21 @@
 #!/usr/bin/python3
+
+
+import os
+os.environ['PICARX_ROGUE_MODE'] = "True"
+
 from Music import *
 from ezblock import TTS
 from vilib import Vilib
 from ezblock import Remote
 from picarx import PiCarX
-px = PiCarX()
+#import picarx
+#px = picarx.PiCarX()
 from ezblock import mapping
 import cv2
 import pygame
 
-import os
 #os.environ["SDL_VIDEODRIVER"] = "dummy"
-#os.environ["DISPLAY"] = "192.168.0.28:0.0"
 
 
 panAngle = None
@@ -23,11 +27,15 @@ x = None
 tts = TTS()
 tts.lang('fr-FR')
 
+
+
 def main():
 
     music_set_volume(100)
     tts.say('Bienvenue Sylvia')
+
     Vilib.camera_start(True)
+    #picarx.start_px_server()
 
     while True:
         if cv2.waitKey(1) & 0xFF == ord('q'):
