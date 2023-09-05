@@ -63,7 +63,7 @@ class Poly2dr:
 
     def get_various_forms(self):
         md(f"(a) Forme canonique: %s=0, %s=0" % (self.get_basic(), self.get_canonical()), style="header")
-        if self.delta < 0:
+        if self.delta > 0:
             md(f"(a) Forme factorisée: %s=0" % self.get_factorized(), style="header")
 
     def get_sign_table(self):
