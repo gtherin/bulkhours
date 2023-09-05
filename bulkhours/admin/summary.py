@@ -11,6 +11,7 @@ def summary(
     update_git=False,
     columns=None,
     cmap="RdBu",  # bwr_r RdBu
+    export_notes=True,
     **kwargs,
 ):
     """Permet de faire un point sur
@@ -70,4 +71,34 @@ def summary(
 
     data = data.set_index("mail")
     data = data[["nom", "prenom", "all"] + exos] if columns is None else data[columns]
+
+    if export_notes:
+        import base64
+        import IPython
+
+        res = data.to_csv(index=False)
+
+        # FILE
+        filename = "notes.csv"
+        b64 = base64.b64encode(res.encode())
+        payload = b64.decode()
+
+        # BUTTONS
+        html_buttons = """<html>
+        <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        </head>
+        <body>
+        <a download="{filename}" href="data:text/csv;base64,{payload}" download>
+        <button class="p-Widget jupyter-widgets jupyter-button widget-button mod-info">Export notes</button>
+        </a>
+        </body>
+        </html>
+        """
+
+        html_button = html_buttons.format(payload=payload, filename=filename)
+        IPython.display.display(tools.styles(data, cmap=cmap) if cmap is not None else data)
+        IPython.display.display(IPython.display.HTML(html_button))
+        return
+
     return tools.styles(data, cmap=cmap) if cmap is not None else data
