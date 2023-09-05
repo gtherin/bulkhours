@@ -89,3 +89,121 @@ def set_plt_style():
     plt.rcParams["axes.prop_cycle"] = cycler(
         color=[get_color(c) for c in ["swimming", "cycling", "running", "The end"]]
     )
+
+
+def get_html_buttons_styles_code():
+    return """
+    <style>
+    body {
+    .button {
+    align-items: flex-start;
+    appearance: button;
+    border-bottom-color: rgb(255, 255, 255);
+    border-bottom-style: none;
+    border-bottom-width: 0px
+    border-image-outset: 0;
+    border-image-repeat: stretch;
+    border-image-slice: 100%;
+    border-image-source: none;
+    border-image-width: 1;
+    border-left-color: rgb(255, 255, 255);
+    border-left-style: none;
+    border-left-width: 0px;
+    border-right-color: rgb(255, 255, 255);
+    border-right-style: none;
+    border-right-width: 0px;
+    border-top-color: rgb(255, 255, 255);
+    border-top-style: none;
+    border-top-width: 0px;
+    box-shadow: none;
+    box-sizing: border-box;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-feature-settings: normal;
+    font-kerning: auto;
+    font-optical-sizing: auto;
+    font-size: 13px;
+    font-stretch: 100%;
+    font-style: normal;
+    font-variant-alternates: normal;
+    font-variant-caps: normal;
+    font-variant-east-asian: normal;
+    font-variant-ligatures: normal;
+    font-variant-numeric: normal;
+    font-variation-settings: normal;
+    font-weight: 400;
+    height: 28px;
+    letter-spacing: normal;
+    line-height: 28px;
+    margin-bottom: 2px;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding-block-end: 0px;
+    padding-block-start: 0px;
+    padding-bottom: 0px;
+    padding-inline-end: 10px;
+    padding-inline-start: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 0px;
+    position: relative;
+    text-align: center;
+    text-indent: 0px;
+    text-overflow: ellipsis;
+    text-rendering: auto;
+    text-shadow: none;
+    text-size-adjust: 100%;
+    text-transform: none;
+    text-wrap: nowrap;
+    user-select: none;
+    white-space-collapse: collapse;
+    width: 148px;
+    word-spacing: 0px;
+    writing-mode: horizontal-tb;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-border-image: none;
+    }
+
+    .button.bk_primary{
+    background-color: rgb(33, 150, 243);
+    }
+    .button.bk_secondary{
+    background-color:#6C757D;
+    }
+    .button.bk_success{
+    background-color:#28A745;
+    }
+    .button.bk_danger{
+    background-color:#DC3545;
+    }
+    .button.bk_warning{
+    background-color:#FFC107;
+    color: #212529;
+    }
+    .button.bk_info{
+    background-color:#17A2B8;
+    }
+    .button.bk_light{
+    background-color:#F8F9FA;
+    color: #212529;
+    }
+    .button.bk_dark{
+    background-color:#343A40;
+    }
+    .button.bk_link{
+    background-color:#FFFFFF;
+    color: #1D8AFF;
+    }
+    </style>"""
+
+
+def set_html_buttons_styles():
+    import IPython
+
+    html_buttons_styles = f"""<html><head>{get_html_buttons_styles_code()}</head></html>"""
+    IPython.display.display(IPython.display.HTML(html_buttons_styles))

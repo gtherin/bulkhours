@@ -78,25 +78,15 @@ def summary(
 
         res = data.to_csv(index=False)
 
-        # FILE
         filename = f"notes_{subject}_{virtual_room}_{notebook_id}.csv"
         b64 = base64.b64encode(res.encode())
         payload = b64.decode()
+        btn_label, btn_style = "Export notes", "bk_secondary"
 
-        # BUTTONS
-        html_buttons = """<html>
-        <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        </head>
-        <body>
-        <a download="{filename}" href="data:text/csv;base64,{payload}" download>
-        <button class="p-Widget jupyter-widgets jupyter-button widget-button mod-primary">Export notes</button>
-        </a>
-        </body>
-        </html>
-        """
-
-        html_button = html_buttons.format(payload=payload, filename=filename)
+        button_styles = core.c.get_html_buttons_styles_code()
+        html_button = f"""<html><head><meta name="viewport" content="width=device-width, initial-scale=1">{button_styles}</head>
+        <body><a download="{filename}" href="data:text/csv;base64,{payload}" download>
+        <button class="button {btn_style}">{btn_label}</button></a></body></html>"""
         IPython.display.display(tools.styles(data, cmap=cmap) if cmap is not None else data)
         IPython.display.display(IPython.display.HTML(html_button))
         return
