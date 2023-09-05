@@ -77,14 +77,15 @@ class WidgetDashboard(core.WidgetTextArea):
 
         self.ws["language"] = ipywidgets.RadioButtons(value=cfg.language, options=["fr", "en"])
 
+        def get_html(label):
+            html_code = f"<b><font face='FiraCode Nerd Font' size=4 color='#888888'>{label}<font></b><br/>"
+            return ipywidgets.HTML(value=html_code, layout=ipywidgets.Layout(flex="1 1 0%", width="auto"))
+
         if 0:
             xwidgets.append(
                 ipywidgets.Box(
                     [
-                        core.tools.html(
-                            "Salle virtuelle active" if cfg.isfr else "Active virtual classroom",
-                            layout=ipywidgets.Layout(flex="1 1 0%", width="auto"),
-                        ),
+                        get_html("Salle virtuelle active" if cfg.isfr else "Active virtual classroom"),
                         self.ws["virtual_room"],
                     ],
                     layout=form_item_layout,
@@ -97,39 +98,27 @@ class WidgetDashboard(core.WidgetTextArea):
             )
             xwidgets.append(
                 ipywidgets.Box(
-                    [
-                        core.tools.html(vroom, layout=ipywidgets.Layout(flex="1 1 0%", width="auto")),
-                        self.ws[vroom],
-                    ],
+                    [get_html(vroom), self.ws[vroom]],
                     layout=ipywidgets.Layout(display="flex", flex_flow="row", justify_content="space-between"),
                 )
             )
 
         xwidgets.append(
             ipywidgets.Box(
-                [
-                    core.tools.html("Exercices", layout=ipywidgets.Layout(flex="1 1 0%", width="auto")),
-                    self.ws["exercices"],
-                ],
+                [get_html("Exercices"), self.ws["exercices"]],
                 layout=form_item_layout,
             )
         )
         if 0:
             xwidgets.append(
                 ipywidgets.Box(
-                    [
-                        core.tools.html("Evaluation", layout=ipywidgets.Layout(flex="1 1 0%", width="auto")),
-                        self.ws["evaluation"],
-                    ],
+                    [get_html("Evaluation"), self.ws["evaluation"]],
                     layout=form_item_layout,
                 )
             )
         xwidgets.append(
             ipywidgets.Box(
-                [
-                    core.tools.html("Page", layout=ipywidgets.Layout(flex="1 1 0%", width="auto")),
-                    self.ws["page"],
-                ],
+                [get_html("Page"), self.ws["page"]],
                 layout=form_item_layout,
             )
         )
@@ -138,7 +127,7 @@ class WidgetDashboard(core.WidgetTextArea):
             xwidgets.append(
                 ipywidgets.Box(
                     [
-                        core.tools.html("Students tokens", layout=ipywidgets.Layout(flex="1 1 0%", width="auto")),
+                        get_html("Students tokens"),
                         ipywidgets.Text(
                             value='tokens = "%s"' % tokens[virtual_room],
                             layout=ipywidgets.Layout(flex="4 1 0%", width="auto"),
