@@ -25,6 +25,7 @@ from .bots import boids  # noqa
 from . import phyu  # noqa
 from .phyu.constants import constants  # noqa
 from .phyu.formulas import formulas  # noqa
+from . import math  # noqa
 
 from .ecox.trading import *  # noqa
 
