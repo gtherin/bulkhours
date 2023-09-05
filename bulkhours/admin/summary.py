@@ -79,7 +79,7 @@ def summary(
         res = data.to_csv(index=False)
 
         # FILE
-        filename = "notes.csv"
+        filename = f"notes_{subject}_{virtual_room}_{notebook_id}.csv"
         b64 = base64.b64encode(res.encode())
         payload = b64.decode()
 
@@ -90,7 +90,7 @@ def summary(
         </head>
         <body>
         <a download="{filename}" href="data:text/csv;base64,{payload}" download>
-        <button class="p-Widget jupyter-widgets jupyter-button widget-button mod-info">Export notes</button>
+        <button class="p-Widget jupyter-widgets jupyter-button widget-button mod-primary">Export notes</button>
         </a>
         </body>
         </html>
