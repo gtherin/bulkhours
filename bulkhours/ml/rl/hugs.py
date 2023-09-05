@@ -42,7 +42,7 @@ class PPOHugs:
         return stable_baselines3.common.env_util.make_vec_env(self.env_id, n_envs=n_envs)
 
     def __init__(
-        self, pass_code=None, env_id="LunarLander-v2", model_architecture="PPO", init=None, verbose=True
+        self, pass_code=None, env_id="LunarLander-v2", model_architecture="PPO", init=None, verbose=False
     ) -> None:
         """
         # MountainCar-v0, Pendulum-v1, CarRacing-v2, Blackjack-v1
@@ -56,6 +56,8 @@ class PPOHugs:
         self.model_name = f"ppo-{self.env_id}"
         self.model_architecture = model_architecture  # Define the model architecture we used
         self.repo_id = f"guydegnol/{self.model_name}"  # Change with your repo id, you can't push with mine 😄
+
+        print("\033[92mConnexion opened to huggingface 🤗 hub\033[00m")
 
         if is_huggingface_installed(verbose=verbose):
             self.login(pass_code=os.environ["BLK_HUGGINGFACE_TOKEN"] if pass_code is None else pass_code)
