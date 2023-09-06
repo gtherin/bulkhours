@@ -81,13 +81,13 @@ def commercial(language="en", **kwargs):
     IPython.display.display(
         IPython.display.HTML(
             f"""
-<table>
+<table style="opacity:0.8;">
     <tr>
       <td style="background-color: white;"><a href="https://github.com/guydegnol/bulkhours"><img style="background-color: white;" src="https://github.com/guydegnol/bulkhours/blob/ce2ce67a250b396b7341becf7deb09da961f2698/data/BulkHours.png?raw=true" width="100"></a></td>
-      <td style="background-color: white; text-align:left">{text1}</td>
+      <td style="background-color: white; text-align:left; color:black">{text1}</td>
       <td style="background-color: white;"><a href="https://github.com/guydegnol/bulkhours">
       <img style="background-color: white;" src="https://github.com/guydegnol/bulkhours/blob/main/data/github.png?raw=true" width="30"></a></td>
-      <td style="background-color: white;"><a href="https://github.com/guydegnol/bulkhours"><img style="background-color: white;" src="https://github.com/guydegnol/bulkhours/blob/main/data/like.gif?raw=true" width="150"></a></td>
+      <td style="background-color: white;"><a href="https://github.com/guydegnol/bulkhours"><img style="background-color: white;margin-top: 0.5em;" src="https://github.com/guydegnol/bulkhours/blob/main/data/like.gif?raw=true" width="150"></a></td>
 
 </tr></table>
 """
@@ -95,7 +95,7 @@ def commercial(language="en", **kwargs):
     )
 
 
-def init_env(packages=None, github_link=False, quiet_mode=False, **kwargs):
+def init_env(packages=None, github_link=False, **kwargs):
     """Initialize the environment of the user
 
         Parameters:
@@ -127,13 +127,17 @@ def init_env(packages=None, github_link=False, quiet_mode=False, **kwargs):
             database="data/cache/course2.json" # Database file
                           )
     """
+
+    mode = "production" if "mode" not in kwargs else kwargs["mode"]
+
+    quiet_mode = mode == "passive"
+
     if github_link:
         # commercial(language="fr")
         # commercial(language="en")
         commercial(**kwargs)
 
     config = firebase.init_database(kwargs)
-
     info = init_prems(config)
     start_time = time.time()
 

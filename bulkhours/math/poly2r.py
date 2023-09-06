@@ -200,22 +200,3 @@ class Poly2dr:
             return "%s\\frac{%s}{%s}" % (sign, np.abs(fraction[0]), np.abs(fraction[1]))
         else:
             return f"{x:+.2f}"
-
-
-"""
-Augmenter definition video
-Mettre emoji ✅ à la place du 0 patr defaut
-mode productio,: enlever boutoons bleus
-pause pour montrer les infos bulles sur les boutons
-enlever affichage note coté etudiant
-
-
-
-Bk sols
-- button Autenti
-- 
-
-Sharing content between notebooks
-
-
-"""
