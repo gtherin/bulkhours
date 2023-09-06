@@ -86,7 +86,9 @@ def summary(
         button_styles = core.c.get_html_buttons_styles_code()
         html_button = f"""<html><head><meta name="viewport" content="width=device-width, initial-scale=1">{button_styles}</head>
         <body><a download="{filename}" href="data:text/csv;base64,{payload}" download>
-        <button class="button {btn_style}">{btn_label}</button></a></body></html>"""
+        <button title="⚠️Seulement disponible à l'évaluateur⚠️.
+💾Envoi de la réponse (contenu de la cellule actuelle) comme solution officielle.
+" class="button {btn_style}">{btn_label}</button></a></body></html>"""
         IPython.display.display(tools.styles(data, cmap=cmap) if cmap is not None else data)
         IPython.display.display(IPython.display.HTML(html_button))
         return
