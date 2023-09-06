@@ -171,6 +171,12 @@ class LineParser:
         for p in ["notebook_id", "virtual_room"]:
             setattr(self, p, config[p])
 
+        mode = "production" if "mode" not in config else config["mode"]
+        if mode == "passive":
+            self.widgets = self.widgets.replace("s", "")
+        if mode == "production" and self.is_admin:
+            self.widgets = self.widgets.replace("s", "").replace("c", "")
+
         if not hasattr(self, "cell_id"):
             return
 

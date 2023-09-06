@@ -130,14 +130,16 @@ class WidgetBase:
         color = "black"
         kwargs = {}
 
-        if score == "":
-            note_auto = score
-        else:
-            score, max_score = score.split("/")
-            if float(score) > 0.6 * float(max_score):
-                note_auto, color = f", note={score}🥳", "green"
+        if 0:
+            if score == "":
+                note_auto = score
             else:
-                note_auto, color = f", note={score}😔", "red"
+                score, max_score = score.split("/")
+                if float(score) > 0.6 * float(max_score):
+                    note_auto, color = f", note={score}🥳", "green"
+                else:
+                    note_auto, color = f", note={score}😔", "red"
+        note_auto = ""
 
         comment = (
             "" if self.cinfo.type in ["bkcode", "bkscript"] else f": {teacher_data['answer']} VS {self.get_answer()}"

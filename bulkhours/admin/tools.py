@@ -88,21 +88,26 @@ git pull 2> /dev/null
 def styles(data, cmap="RdBu"):
     import numpy as np
 
-    maxcolor = matplotlib.colors.rgb2hex(matplotlib.cm.get_cmap(cmap)(1.0))
+    mincolor = matplotlib.colors.rgb2hex(matplotlib.cm.get_cmap(cmap)(0.0))
 
     def interpret(v):
-        if v != v or v == -1:
+        if type(v) == str:
+            return None
+        if v == -10 or v == -1:
             return "color:#FF3B52;background-color:#FF3B52;opacity: 20%;"
-        # if np.abs(v) < 0.1:
-        #    return f"color:{maxcolor};background-color:{maxcolor};"
-        if np.abs(v + 2) < 0.1:  # Failure of automatic corrections
-            return f"color:red;background-color:red;"
+        if v != v or np.abs(v) < 0.1:  # Failure of automatic corrections
+            return f"color:{mincolor};background-color:{mincolor};"
         return None
 
     fcolumns = [c.replace(".n", "") for c in data.columns if c not in ["nom", "prenom"]]
     nacolumns = [c for c in fcolumns if "all" not in c]
-
     sdata = data.sort_values(["nom", "prenom"]).rename(columns={c + ".n": c for c in fcolumns})
+
+    for c in nacolumns:
+        if c in sdata.columns:
+            sdata[c] = sdata[c].fillna(-10)
+            sdata[c] = sdata[c].replace(0, np.nan)
+
     stylish = sdata.style.hide(axis="index").format(precision=1, subset=list(fcolumns))
     stylish = (
         stylish.hide(axis="index")
@@ -113,4 +118,6 @@ def styles(data, cmap="RdBu"):
     if "all" in sdata.columns:
         stylish = stylish.background_gradient(cmap=cmap, subset=["all"], vmin=0, vmax=10.0)
 
-    return stylish.set_properties(**{"opacity": "70%"}, subset=nacolumns)
+    return stylish.set_properties(**{"opacity": "70%"}, subset=nacolumns).format(
+        "{:.1f}", na_rep="✅", subset=nacolumns
+    )
