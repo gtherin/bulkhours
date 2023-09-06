@@ -13,65 +13,24 @@ def md(data, style="raw"):
     IPython.display.display(IPython.display.Markdown(r"%s" % data))
 
 
-class Poly2dr:
-    def __init__(self, a, b, c, numbers="float2", constraint="=0"):
-        self.a, self.b, self.c, self.numbers, self.constraint = a, b, c, numbers, constraint
+class Poly1dr:
+    def __init__(self, a, b, numbers="float2", constraint="=0"):
+        self.a, self.b, self.numbers, self.constraint = a, b, numbers, constraint
 
         if a == 0:
-            raise ValueError("a cannot be zero, otherwise it is not a second degree polynomial")
+            raise ValueError("a cannot be zero, otherwise it is a constant")
 
-        # Calculate basic quantities
-        self.alpha, self.beta, self.delta = -b / 2 / a, self.f(-b / 2 / a), b**2 - 4 * a * c
-        self.x1, self.x2 = self.alpha - np.sqrt(np.abs(self.beta / a)), self.alpha + np.sqrt(
-            np.abs(self.beta / self.a)
-        )
-
-    def f(self, x):
-        return self.a * x**2 + self.b * x + self.c
+    @staticmethod
+    def from_points(x1, y1, x2, y2, numbers="float2", constraint="=0"):
+        a = (y2 - y1) / (x2 - x1)
+        b = y1 - a * x1
+        return Poly1dr(a, b, numbers=numbers, constraint=constraint)
 
     def get_basic(self):
-        return r"""${}x^2{}x{}{}$""".format(self.sa, self.sb, self.sc, self.sconstraint)
+        return r"""${}x{}$""".format(self.sa, self.sb)
 
-    def get_canonical(self):
-        if self.delta == 0:
-            return r"""${}(x{})^2{}$""".format(self.sa, self.msalpha, self.sconstraint)
-        else:
-            return r"""${}(x{})^2{}{}$""".format(self.sa, self.msalpha, self.sbeta, self.sconstraint)
-
-    def get_factorized(self):
-        if self.delta == 0:
-            return r"""$(x{})^2{}$""".format(self.msx1, self.sconstraint)
-        else:
-            return r"""$(x{})(x{}){}$""".format(self.msx1, self.msx2, self.sconstraint)
-
-    def get_various_forms(self):
-        md(f"(a) Forme canonique: %s, %s" % (self.get_basic(), self.get_canonical()), style="header")
-        if self.delta > 0:
-            md(f"(a) Forme factorisée: %s" % self.get_factorized(), style="header")
-
-    def get_sign_table(self):
-        s = "+" if self.a > 0 else "-"
-        ms = "-" if self.a > 0 else "+"
-
-        text = f"""### (b) Tableau de signes:\n"""
-
-        labels = "|$x$|$-\infty$| |"
-        signs = "|$f(x)$| |"
-
-        if self.delta >= 0:
-            labels += f"{self.sx1}| |"
-            signs += f"{s}|0|"
-
-        if self.delta > 0:
-            labels += f"{self.sx2}| |"
-            signs += f"{ms}|0|"
-
-        labels += "$+\infty$|"
-        signs += f"{s}| |"
-
-        separators = "---".join(["|"] * labels.count("|"))
-
-        md(f"{text}\n{labels}\n{separators}\n{signs}\n")
+    def f(self, x):
+        return self.a * x + self.b
 
     def get_xrange(self):
         minx, maxx = self.alpha - 2 * np.sqrt(np.abs(self.beta / self.a)), self.alpha + 2 * np.sqrt(
@@ -112,16 +71,7 @@ class Poly2dr:
         else:
             ax.plot([self.x1], [0], "x", markersize=20, color="red")
             ax.plot([self.x2], [0], "x", markersize=20, color="red")
-
-        # ax.set_ylim(ymin, ymax)
-        # ax.set_xlim(minx, maxx)
         return ax
-
-        self.get_sign_table()
-
-        if self.delta > 0:
-            ax.plot([self.x1], [0], "X", markersize=20, color="green")
-            ax.plot([self.x2], [0], "X", markersize=20, color="green")
 
     def get_graph(self, show_solutions=True):
         minx, maxx = self.get_xrange()
@@ -200,22 +150,3 @@ class Poly2dr:
             return "%s\\frac{%s}{%s}" % (sign, np.abs(fraction[0]), np.abs(fraction[1]))
         else:
             return f"{x:+.2f}"
-
-
-"""
-Augmenter definition video
-Mettre emoji ✅ à la place du 0 patr defaut
-mode productio,: enlever boutoons bleus
-pause pour montrer les infos bulles sur les boutons
-enlever affichage note coté etudiant
-
-
-
-Bk sols
-- button Autenti
-- 
-
-Sharing content between notebooks
-
-
-"""
