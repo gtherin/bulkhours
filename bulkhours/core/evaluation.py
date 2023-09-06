@@ -34,7 +34,7 @@ def evaluate_cell(line, cell):
     if not (config := tools.get_config()) or config.get("email") == "john.doe@un.known":
         print(
             f"""# To be able to use your the evaluation tools, you need to identify yourself with the following command:
-bulkhours.init_env(\033[1memail\033[0m="name@institute.ac")  # To be run in an initisalization cell
+bulkhours.init_env(\033[1memail\033[0m="name@institute.ac")  # To be run in an initialization cell
 
 # You can also use the following command to get more information:
 \033[1mhelp(bulkhours.init_env)\033[0m
