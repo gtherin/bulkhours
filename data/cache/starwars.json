@@ -26,7 +26,7 @@
             "language": "fr",
             "light_side": "luke.skywalker@jedi.com;obiwan.kenobi@jedi.com",
             "restricted": false,
-            "admins": "yoda@jedi.com",
+            "admins": "yo.da@jedi.com",
             "norm20": false,
             "chatgpt": false
         },
@@ -42,10 +42,10 @@
         }
     },
     "s_light_side_course_edition_nb_exo1": {
-        "yoda@jedi.com": {
+        "yo.da@jedi.com": {
             "atype": "bkcode",
             "main_execution": "print(\"exo1 solution\")\n",
-            "user": "yoda@jedi.com",
+            "user": "yo.da@jedi.com",
             "update_time": "2023-07-06 15:26:05",
             "answer": "print(\"exo1 solution\")\n"
         }
@@ -70,12 +70,12 @@
             "note": 10.0,
             "visible": true
         },
-        "yoda@jedi.com": {
+        "yo.da@jedi.com": {
             "note": 10.0,
             "atype": "bkcode",
             "main_execution": "%%compile_and_exec -c g++\n#include <iostream>\n\nint main() {\n    int pow2 = 1;\n    for (int i = 1; i < 10; ++i)\n    {\n      pow2 *= 2;\n      std::cout << pow2 << \" \";\n    }\n}\n\n\n",
             "answer": "%%compile_and_exec -c g++\n#include <iostream>\n\nint main() {\n    int pow2 = 1;\n    for (int i = 1; i < 10; ++i)\n    {\n      pow2 *= 2;\n      std::cout << pow2 << \" \";\n    }\n}\n\n\n",
-            "user": "yoda@jedi.com",
+            "user": "yo.da@jedi.com",
             "update_time": "2023-07-06 16:47:01"
         }
     },
@@ -95,7 +95,7 @@
             "atype": "code_project",
             "update_time": "2023-07-06 16:49:05"
         },
-        "yoda@jedi.com": {
+        "yo.da@jedi.com": {
             "update_time": "2023-07-06 16:49:00",
             "quadrilater_dot_h": "#include <iostream>\n#include <string>\nusing namespace std;\n\n\nclass Quadrilateral {\n  public: \n    void properties() {\n      cout << \"Quadrilateral: sides are \" << SideProperties() <<\" and angles are \" << AnglesProperties() << endl;\n    }\n  string SideProperties() {return \"ordinary\";}\n  string AnglesProperties() {return \"ordinary\";}\n};\n",
             "atype": "code_project",
@@ -104,11 +104,11 @@
         }
     },
     "s_light_side_data_global_warming": {
-        "yoda@jedi.com": {
+        "yo.da@jedi.com": {
             "atype": "bkcode",
             "answer": "# Affichage de quelques scenarios\nfig, ax = plt.subplots(1, ncols=2, figsize=(12, 4))\ndef calculate_T(ppm):\n    F = bkc.sigma * bkc.S_terre *(bkc.T_terre + bkc.c2k)**4\n    F_prime = F * np.log(ppm) / np.log(280)\n    T_prime = ( (1-bkc.S_terre) * (bkc.T_terre + bkc.c2k)**4 + F_prime / bkc.sigma)**0.25 - bkc.c2k\n    return T_prime-15\n\nco2 = bulkhours.get_data(\"co2.concentrations\", index=\"year\").loc[1900:].ffill()[\"CO2 concentrations\"]\nco2.plot(legend=True, ax=ax[0])\ncalculate_T(co2).plot(legend=True, ax=ax[1], label=\"Anomalie de Temperature °C (Holocène)\")\ndef scenario(label, damping_trend):\n    with ipywidgets.Output():\n        y_pred = smtsa.ExponentialSmoothing(co2, initialization_method='legacy-heuristic', damped_trend=True,\n                                            trend=\"mul\").fit(smoothing_trend=30, damping_trend=damping_trend).forecast(77); y_pred.index += 1900\n    y_pred.plot(legend=True, ax=ax[0], label=label)\n    calculate_T(y_pred).plot(legend=True, ax=ax[1], label=label)\n\nscenario(\"Scenario 1\", 0.987)\nscenario(\"Scenario 2\", 0.97)\nscenario(\"Scenario 3\", 0.95)\n",
             "main_execution": "# Affichage de quelques scenarios\nfig, ax = plt.subplots(1, ncols=2, figsize=(12, 4))\ndef calculate_T(ppm):\n    F = bkc.sigma * bkc.S_terre *(bkc.T_terre + bkc.c2k)**4\n    F_prime = F * np.log(ppm) / np.log(280)\n    T_prime = ( (1-bkc.S_terre) * (bkc.T_terre + bkc.c2k)**4 + F_prime / bkc.sigma)**0.25 - bkc.c2k\n    return T_prime-15\n\nco2 = bulkhours.get_data(\"co2.concentrations\", index=\"year\").loc[1900:].ffill()[\"CO2 concentrations\"]\nco2.plot(legend=True, ax=ax[0])\ncalculate_T(co2).plot(legend=True, ax=ax[1], label=\"Anomalie de Temperature °C (Holocène)\")\ndef scenario(label, damping_trend):\n    with ipywidgets.Output():\n        y_pred = smtsa.ExponentialSmoothing(co2, initialization_method='legacy-heuristic', damped_trend=True,\n                                            trend=\"mul\").fit(smoothing_trend=30, damping_trend=damping_trend).forecast(77); y_pred.index += 1900\n    y_pred.plot(legend=True, ax=ax[0], label=label)\n    calculate_T(y_pred).plot(legend=True, ax=ax[1], label=label)\n\nscenario(\"Scenario 1\", 0.987)\nscenario(\"Scenario 2\", 0.97)\nscenario(\"Scenario 3\", 0.95)\n",
-            "user": "yoda@jedi.com",
+            "user": "yo.da@jedi.com",
             "update_time": "2023-07-06 16:20:15"
         }
     },
@@ -132,10 +132,10 @@
             "visible": true,
             "atype": "bkcode"
         },
-        "yoda@jedi.com": {
+        "yo.da@jedi.com": {
             "note": 10.0,
             "main_execution": "from bulkhours import constants as bkc\n\nplanetes = bkc.DataFrame(index=[\"mercure\", \"venus\", \"terre\", \"mars\"], columns=[\"Albedo\", \"d_ua\", \"T_C\"])\nbkc.print(r\"Equilibre thermique: $(1-A)\\frac{ L_\\odot R^2}{4 d^2} \\equiv (1-S) 4 \\pi R^2 \\sigma T^4$\", size=\"+1\")\n\n# Calcul de la temperature d'equilibre attendues d'une planete en cas d'absence d'atmosphere:\nplanetes[\"T_C/no atmo.\"] = (((1-planetes.Albedo) * bkc.L_soleil / (16 * np.pi * (planetes.d_ua * bkc.d_terresoleil)**2 * bkc.sigma))**0.25-bkc.c2k).round()\n\n# Calcul de la temperature d'equilibre attendues d'une planete en cas d'absence d'atmosphere:\nplanetes[\"Effet de serre\"] = (1-( (1 - planetes.Albedo) * bkc.L_soleil / (planetes.T_C + bkc.c2k)**4 / (16 * bkc.pi * (planetes.d_ua * bkc.d_terresoleil)**2 * bkc.sigma))).round(3)\n\nbkc.print(r\"Forcage radiatif: $F = S\\cdot \\sigma \\cdot T^4$\", size=\"+1\")\nplanetes[\"Forcage radiatif (W/m2)\"] = (planetes[\"Effet de serre\"] * bkc.sigma * (planetes.T_C + bkc.c2k)**4).round(3)\ndisplay(planetes)\n\n\n",
-            "user": "yoda@jedi.com",
+            "user": "yo.da@jedi.com",
             "update_time": "2023-07-06 16:09:51",
             "answer": "from bulkhours import constants as bkc\n\nplanetes = bkc.DataFrame(index=[\"mercure\", \"venus\", \"terre\", \"mars\"], columns=[\"Albedo\", \"d_ua\", \"T_C\"])\nbkc.print(r\"Equilibre thermique: $(1-A)\\frac{ L_\\odot R^2}{4 d^2} \\equiv (1-S) 4 \\pi R^2 \\sigma T^4$\", size=\"+1\")\n\n# Calcul de la temperature d'equilibre attendues d'une planete en cas d'absence d'atmosphere:\nplanetes[\"T_C/no atmo.\"] = (((1-planetes.Albedo) * bkc.L_soleil / (16 * np.pi * (planetes.d_ua * bkc.d_terresoleil)**2 * bkc.sigma))**0.25-bkc.c2k).round()\n\n# Calcul de la temperature d'equilibre attendues d'une planete en cas d'absence d'atmosphere:\nplanetes[\"Effet de serre\"] = (1-( (1 - planetes.Albedo) * bkc.L_soleil / (planetes.T_C + bkc.c2k)**4 / (16 * bkc.pi * (planetes.d_ua * bkc.d_terresoleil)**2 * bkc.sigma))).round(3)\n\nbkc.print(r\"Forcage radiatif: $F = S\\cdot \\sigma \\cdot T^4$\", size=\"+1\")\nplanetes[\"Forcage radiatif (W/m2)\"] = (planetes[\"Effet de serre\"] * bkc.sigma * (planetes.T_C + bkc.c2k)**4).round(3)\ndisplay(planetes)\n\n\n",
             "atype": "bkcode"
@@ -213,9 +213,9 @@
             "note": 10.0,
             "evaluation": "def student_evaluation_function():\n    score = 0\n    score += bulkhours.is_equal(data_test=student.sigmoid(np.array([1,3,7])), max_score=5.0, data_ref=teacher.sigmoid(np.array([1,3,7])), min_score=0)\n\n    score += 2.5 * (student.sigmoid(3) == teacher.sigmoid(3))\n    score += bulkhours.is_equal(data_test=student.sigmoid(4), data_ref=teacher.sigmoid(4), max_score=2.5, min_score=0)\n\n    return score\n"
         },
-        "yoda@jedi.com": {
+        "yo.da@jedi.com": {
             "note": 10.0,
-            "user": "yoda@jedi.com",
+            "user": "yo.da@jedi.com",
             "main_execution": "import numpy as np\n\ndef sigmoid(z):\n  s = 1 / (1 + np.exp(-z))\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n\n",
             "update_time": "2023-07-06 14:50:10",
             "atype": "bkcode",
