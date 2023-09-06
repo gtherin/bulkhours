@@ -1,13 +1,13 @@
 {
     "s_info": {
         "global": {
-            "admins": ";yoda@jedi.com",
+            "admins": ";yo.da@jedi.com",
             "chatgpt": false,
             "language": "fr",
             "norm20": false,
             "restricted": false,
             "virtual_rooms": "room1",
-            "room1": ";omar.al-hammal@ipsa.fr;yoda@jedi.com;luke.skywalker@jedi.com;omar.al-hammal2@ipsa.fr"
+            "room1": ";omar.al-hammal@ipsa.fr;yo.da@jedi.com;luke.skywalker@jedi.com;omar.al-hammal2@ipsa.fr"
         },
         "n": {
             "exercices": ";my_first_exercice",
@@ -37,11 +37,11 @@
             "update_time": "2023-07-05 18:21:29",
             "note": 10
         },
-        "yoda@jedi.com": {
+        "yo.da@jedi.com": {
             "main_execution": "\ndef sigmoid(z):\n  # Implement the sigmoid function\n  s = z # ...\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n",
             "answer": "\ndef sigmoid(z):\n  # Implement the sigmoid function\n  s = z # ...\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n",
             "atype": "bkcode",
-            "user": "yoda@jedi.com",
+            "user": "yo.da@jedi.com",
             "update_time": "2023-07-05 18:20:49",
             "note": 0.0
         },
@@ -56,7 +56,7 @@
     },
     "prems_info": {
         "global": {
-            "admins": "guillaume.therin@gmail.com;yoda@jedi.com",
+            "admins": "guillaume.therin@gmail.com;yo.da@jedi.com",
             "chatgpt": false,
             "language": "fr",
             "norm20": false,
@@ -73,11 +73,11 @@
         }
     },
     "prems_winterfell_n_my_first_exercice": {
-        "yoda@jedi.com": {
+        "yo.da@jedi.com": {
             "main_execution": "import numpy as np\n\ndef sigmoid(z):\n  s = 1 / (1 + np.exp(-z))\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n\n",
             "answer": "import numpy as np\n\ndef sigmoid(z):\n  s = 1 / (1 + np.exp(-z))\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n\n",
             "atype": "bkcode",
-            "user": "yoda@jedi.com",
+            "user": "yo.da@jedi.com",
             "update_time": "2023-07-04 21:25:51"
         },
         "solution": {

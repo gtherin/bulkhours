@@ -1,0 +1,21 @@
+{
+    "luke.skywalker@jedi.com": {
+        "update_time": "2023-08-28 19:08:45",
+        "note": 8.5,
+        "user": "luke.skywalker@jedi.com",
+        "atype": "bkcode",
+        "main_execution": "\ndef sigmoid(z):\n  # Implement the sigmoid function\n  s = 1 / (1 + np.exp(-z))\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n",
+        "answer": "\ndef sigmoid(z):\n  # Implement the sigmoid function\n  s = 1 / (1 + np.exp(-z))\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n"
+    },
+    "solution": {
+        "update_time": "2023-08-28 19:09:01",
+        "explanation": "",
+        "atype": "bkcode",
+        "answer": "import numpy as np\n\ndef sigmoid(z):\n  s = 1 / (1 + np.exp(-z))\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n\n",
+        "main_execution": "import numpy as np\n\ndef sigmoid(z):\n  s = 1 / (1 + np.exp(-z))\n  return s\n\nfor z in [1, 3, 7]:\n  print(f\"sigmoid({z})={sigmoid(z)}\")\n\n",
+        "note": 10.0,
+        "user": "solution",
+        "evaluation": "def student_evaluation_function():\n    return bulkhours.is_equal(data_test=student.sigmoid(np.array([1,3,7])), data_ref=teacher.sigmoid(np.array([1,3,7])), min_score=0, max_score=10)\n\n",
+        "visible": true
+    }
+}
