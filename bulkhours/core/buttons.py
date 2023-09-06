@@ -16,8 +16,8 @@ all_labels = {
     "submit_o_fr": "Envoyer au correcteur",
     "submit_f_en": "Answer sent to corrector",
     "submit_f_fr": "Correction envoyée",
-    # "submit_d_en": """Envoi de la réponse (contenu de la cellule actuelle) sur le serveur de correction.\nLa réponse pourra être utilisée pour evaluation""",
-    "submit_d_fr": """Envoi de la réponse (contenu de la cellule actuelle) au correcteur.\nLa réponse pourra être utilisée pour évaluation
+    # "submit_d_en": """📤Envoi de la réponse (contenu de la cellule actuelle) sur le serveur de correction.\n💡La réponse pourra être utilisée pour evaluation""",
+    "submit_d_fr": """📤Envoi de la réponse (contenu de la cellule actuelle) au correcteur.\n💡La réponse pourra être utilisée pour évaluation
 """,
     "autocorrect_o_en": "Correct students     ",
     "autocorrect_o_fr": "Corriger les étudiants ",
@@ -25,7 +25,7 @@ all_labels = {
     "autocorrect_f_fr": "Solution publiée",
     # "autocorrect_d_en": """Envoi de la réponse (contenu de la cellule actuelle) sur le serveur de correction.\nLa réponse pourra être utilisée pour evaluation""",
     "autocorrect_d_fr": """⚠️Seulement disponible à l'évaluateur⚠️.
-Utilise le code de la fonction 'student_evaluation_function' pour évaluer tous les étudiants de la classe virtuelle.
+📝Utilise le code de la fonction 'student_evaluation_function' pour évaluer tous les étudiants de la classe virtuelle.
 """,
     "solution_o_en": "Publish solution     ",
     "solution_o_fr": "Publier la solution ",
@@ -33,8 +33,8 @@ Utilise le code de la fonction 'student_evaluation_function' pour évaluer tous 
     "solution_f_fr": "Solution publiée",
     # "solution_d_en": """Envoi de la réponse (contenu de la cellule actuelle) sur le serveur de correction.\nLa réponse pourra être utilisée pour evaluation""",
     "solution_d_fr": """⚠️Seulement disponible à l'évaluateur⚠️.
-Envoi de la réponse (contenu de la cellule actuelle) comme solution officielle.
-Si la fonction 'student_evaluation_function' est diponible, elle pourra être utilisée pour évaluer les étudiants.
+📤Envoi de la réponse (contenu de la cellule actuelle) comme solution officielle.
+💡Si la fonction 'student_evaluation_function' est disponible, elle pourra être utilisée pour évaluer les étudiants.
 """,
     "Student_o_en": "Save parameters",
     "Student_o_fr": "Sauvegarder les parametres",
@@ -45,9 +45,9 @@ Si la fonction 'student_evaluation_function' est diponible, elle pourra être ut
     "correct_f_en": "Hide correction",
     "correct_f_fr": "Cacher la correction",
     # "solution_d_en": """Envoi de la réponse (contenu de la cellule actuelle) sur le serveur de correction.\nLa réponse pourra être utilisée pour evaluation""",
-    "correct_d_fr": """Récupération de la solution du correcteur. Si la solution est disponible, 
-- Elle est affichée  
-- Elle peut-etre comparée avec le code de la cellule actuelle
+    "correct_d_fr": """📥Récupération de la solution du correcteur. Si la solution est disponible, 
+- 🎺Elle est affichée, 
+- 🎯Elle peut-etre comparée avec le code de la cellule actuelle
 """,
     "message_o_en": "Message from corrector",
     "message_o_fr": "Message au correcteur",
