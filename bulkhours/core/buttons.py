@@ -167,7 +167,7 @@ def get_all_buttons(label, **kwargs):
         SwitchButton("message", l="m", bso="info", bsf="danger", width="150px", **kwargs),
         SwitchButton("solution", l="o", sleep_on=2, width="150px", bso="warning", **kwargs),
         SwitchButton("Student", l="S", sleep_on=2, width="200px", **kwargs),
-        SwitchButton("submit", l="s", sleep_on=2, width="150px", **kwargs),
+        SwitchButton("submit", l="s", sleep_on=2, width="200px", **kwargs),
         SwitchButton("test", l="t", is_button=True, **kwargs),
         SwitchButton("user", bso="info", bsf="danger", width="150px", **kwargs),
     ]
