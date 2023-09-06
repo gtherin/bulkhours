@@ -93,7 +93,7 @@ def commercial(language="en", **kwargs):
     )
 
 
-def init_env(packages=None, github_link=False, no_login=False, **kwargs):
+def init_env(packages=None, github_link=False, quiet_mode=False, **kwargs):
     """Initialize the environment of the user
 
         Parameters:
@@ -130,9 +130,6 @@ def init_env(packages=None, github_link=False, no_login=False, **kwargs):
         # commercial(language="en")
         commercial(**kwargs)
 
-    if no_login:
-        return
-
     config = firebase.init_database(kwargs)
 
     info = init_prems(config)
@@ -146,12 +143,14 @@ def init_env(packages=None, github_link=False, no_login=False, **kwargs):
     version = open(tools.abspath("bulkhours/__version__.py")).readlines()[0].split('"')[1]
 
     einfo = f", ⚠️\x1b[31m\x1b[41m\x1b[37m in admin/teacher🎓 mode\x1b[0m⚠️" if tools.is_admin(config=config) else ""
-    print(f"Import BULK Helper cOURSe (\x1b[0m\x1b[36mversion='{version}'\x1b[0m🚀{einfo}):", end="")
+    if not quiet_mode:
+        print(f"Import BULK Helper cOURSe (\x1b[0m\x1b[36mversion='{version}'\x1b[0m🚀{einfo}):", end="")
     if "bkloud" not in config["database"]:
-        print(
-            f"⚠️\x1b[31mDatabase is local (security_level={config['security_level']}). Export your config file if you need persistency.\x1b[0m⚠️",
-            end="",
-        )
+        if not quiet_mode:
+            print(
+                f"⚠️\x1b[31mDatabase is local (security_level={config['security_level']}). Export your config file if you need persistency.\x1b[0m⚠️",
+                end="",
+            )
     if ipp := IPython.get_ipython():
         ipp.run_cell(
             """import IPython
@@ -159,7 +158,8 @@ import ipywidgets
         """
         )
 
-    print("\n- session-info: " + info)
+    if not quiet_mode:
+        print("\n- session-info: " + info)
 
     if tools.get_value("openai_token") is not None or tools.get_value("huggingface_token") is not None:
         external_services = "- extra-services:\033[92m"
@@ -187,8 +187,9 @@ except ModuleNotFoundError:
         with ipywidgets.Output():
             ml.PPOHugs()
 
-    if tools.get_value("openai_token") is not None or tools.get_value("huggingface_token") is not None:
-        print(external_services + "\033[00m")
+    if not quiet_mode:
+        if tools.get_value("openai_token") is not None or tools.get_value("huggingface_token") is not None:
+            print(external_services + "\033[00m")
     contexts.generate_empty_context("student")
     contexts.generate_empty_context("teacher")
     os.environ["BLK_GLOBAL_STATUS"] = f"INITIALIZED"
