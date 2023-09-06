@@ -73,7 +73,27 @@ def init_prems(config):
     return get_path(join="/")
 
 
-def init_env(packages=None, **kwargs):
+def commercial(language="en", **kwargs):
+    if language == "fr":
+        text1 = 'Cette page utilise (<i>Package de support de cours interactif</i>). Si vous aimez cette approche🚀🏆🎯, <br/>vous pouvez supporter le projet sur <a href="https://github.com/guydegnol/bulkhours">github</a> en donnant quelques etoiles.'
+    else:
+        text1 = 'This page is using (<i>A Support course package</i>). If you like this approach🚀🏆🎯, <br/>please support the project on <a href="https://github.com/guydegnol/bulkhours">github</a> with some stars.'
+    IPython.display.display(
+        IPython.display.HTML(
+            f"""
+<table>
+    <tr>
+      <td style="background-color: white;"><a href="https://github.com/guydegnol/bulkhours"><img style="background-color: white;" src="https://github.com/guydegnol/bulkhours/blob/ce2ce67a250b396b7341becf7deb09da961f2698/data/BulkHours.png?raw=true" width="100"></a></td>
+      <td style="background-color: white; text-align:left">{text1}</td>
+      <td style="background-color: white;"><a href="https://github.com/guydegnol/bulkhours"><img style="background-color: white;" src="https://github.com/guydegnol/bulkhours/blob/main/data/like.gif?raw=true" width="150"></a></td>
+
+</tr></table>
+"""
+        )
+    )
+
+
+def init_env(packages=None, github_link=False, no_login=False, **kwargs):
     """Initialize the environment of the user
 
         Parameters:
@@ -105,6 +125,13 @@ def init_env(packages=None, **kwargs):
             database="data/cache/course2.json" # Database file
                           )
     """
+    if github_link:
+        # commercial(language="fr")
+        # commercial(language="en")
+        commercial(**kwargs)
+
+    if no_login:
+        return
 
     config = firebase.init_database(kwargs)
 
