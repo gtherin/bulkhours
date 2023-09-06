@@ -85,6 +85,8 @@ def commercial(language="en", **kwargs):
     <tr>
       <td style="background-color: white;"><a href="https://github.com/guydegnol/bulkhours"><img style="background-color: white;" src="https://github.com/guydegnol/bulkhours/blob/ce2ce67a250b396b7341becf7deb09da961f2698/data/BulkHours.png?raw=true" width="100"></a></td>
       <td style="background-color: white; text-align:left">{text1}</td>
+      <td style="background-color: white;"><a href="https://github.com/guydegnol/bulkhours">
+      <img style="background-color: white;" src="https://github.com/guydegnol/bulkhours/blob/main/data/github.png?raw=true" width="30"></a></td>
       <td style="background-color: white;"><a href="https://github.com/guydegnol/bulkhours"><img style="background-color: white;" src="https://github.com/guydegnol/bulkhours/blob/main/data/like.gif?raw=true" width="150"></a></td>
 
 </tr></table>
