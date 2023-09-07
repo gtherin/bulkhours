@@ -22,20 +22,48 @@ class MathTable:
         self.crow, self.ccol = row, col
         self.data.loc[row, col] = val
 
-    def to_markdown(self, size=4):
-        md = "|" * (self.cols + 1)
-        md += "\n"
-        md += (
-            ":-------------------------------------------------------------------------------------------------".join(
-                ["|"] * (self.cols + 1)
-            )
-        )
-        md += "\n"
+    def to_markdown(self, size=4, display=False):
+        header = "|" * (self.cols + 1) + "\n" + (":---:".join(["|"] * (self.cols + 1)))
 
-        for col in range(self.cols):
+        md = "\n"
+
+        for row in range(self.rows):
             md += "| "
-            for row in range(self.rows):
-                md += r"<font size = '%s'>%s</font> | " % (size, self.data.loc[row, col])
+            for col in range(self.cols):
+                md += r"<font size = '%s'>$%s$</font> | " % (size, self.data.loc[row, col])
             md += "\n"
 
-        return "\n\n%s\n" % (md)
+        md = "\n\n%s%s\n" % (header, md)
+
+        import IPython
+
+        if display:
+            IPython.display.display(IPython.display.Markdown(md))
+        else:
+            return md
+
+    def to_latex(self, size=4, display=False):
+        sizes = {1: "\small", 2: "\normalsize", 3: "\large", 4: "\Large", 5: "\LARGE", 6: "\huge"}
+
+        md = """{%s \displaystyle \\\\
+  \\begin{array}{%s}
+  \hline \\\\
+""" % (
+            sizes[size],
+            "c".join(["|"] * (self.cols + 1)),
+        )
+
+        for row in range(self.rows):
+            md += ""
+            for col in range(self.cols):
+                md += r"%s & " % (self.data.loc[row, col].replace("$", ""))
+            md = md[:-2]
+            md += " \\\\ \\\\ \hline  \n"
+
+        md += "\end{array}\\\\ \n}"
+        import IPython
+
+        if display:
+            IPython.display.display(IPython.display.Math(md))
+        else:
+            return md
