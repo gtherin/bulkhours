@@ -91,44 +91,56 @@ class Poly2dr:
         self.get_sign_table()
         self.get_graph()
 
-    def get_solution2(self):
+    def get_solution2(self, x2=None, y2=None):
         ax = self.get_graph(show_solutions=False)
         minx, maxx = self.get_xrange()
         x = np.linspace(minx, maxx, 100)
         df = pd.DataFrame([np.linspace(minx, maxx, 100)], index=["x"]).T
         df["y"] = self.f(x)
-
         ymin, ymax = ax.get_ylim()
-        if self.constraint in ["<0", "<=0"]:
-            negc, posc = colors["is_in"], colors["is_out"]
-            ax.plot(df[df["y"] < 0]["x"], df[df["y"] < 0]["y"] * 0, color=negc)
-            ax.plot(df[df["y"] > 0]["x"], df[df["y"] > 0]["y"] * 0, color=posc)
-        elif self.constraint in [">=0", ">0"]:
-            negc, posc = colors["is_in"], colors["is_out"]
 
-            ax.plot(df[df["x"] < self.x1]["x"], df[df["x"] < self.x1]["y"] * 0, color=negc)
-            ax.plot(df[df["x"] > self.x2]["x"], df[df["x"] > self.x2]["y"] * 0, color=negc)
-            ax.plot(df[df["y"] < 0]["x"], df[df["y"] < 0]["y"] * 0, color=posc)
+        # By default, no solution on the axis
+        tail_color, middle_color = colors["is_out"], colors["is_out"]
+        from matplotlib.lines import Line2D
 
-        if "=0" in self.constraint:
+        gleg, lleg = None, None
+
+        # Tails point are solutions
+        if (">" in self.constraint and self.a > 0) or ("<" in self.constraint and self.a < 0):
+            tail_color, middle_color = colors["is_in"], colors["is_out"]
+            gleg, lleg = Line2D([0], [0], color=colors["is_in"]), "$x<%s$ ou $x>%s$" % (self.sx1, self.sx2)
+
+        # Center points are solutions
+        if (">" in self.constraint and self.a < 0) or ("<" in self.constraint and self.a > 0):
+            tail_color, middle_color = colors["is_out"], colors["is_in"]
+            gleg, lleg = Line2D([0], [0], color=colors["is_in"]), "$x \> %s$ et $x < %s$" % (self.sx1, self.sx2)
+
+        ax.plot(df[df["x"] < self.x1]["x"], df[df["x"] < self.x1]["y"] * 0, color=tail_color)
+        ax.plot(df[self.a * df["y"] < 0]["x"], df[self.a * df["y"] < 0]["y"] * 0, color=middle_color)
+        ax.plot(df[df["x"] > self.x2]["x"], df[df["x"] > self.x2]["y"] * 0, color=tail_color)
+
+        if "=" in self.constraint:
             ax.plot([self.x1], [0], "o", markersize=20, color=colors["is_in"])
             ax.plot([self.x2], [0], "o", markersize=20, color=colors["is_in"])
-            print(self.x1, self.x2)
+            if gleg is None:
+                gleg, lleg = Line2D([], [], color=colors["is_in"]), "$x=%s$ ou $x=%s$" % (self.sx1, self.sx2)
+            else:
+                gleg, lleg = Line2D([0], [0], color=colors["is_in"], marker="o", markersize=20), lleg.replace(
+                    "<", " <= "
+                ).replace(">", " >= ")
         else:
             ax.plot([self.x1], [0], "X", markersize=15, color=colors["is_out"])
             ax.plot([self.x2], [0], "X", markersize=15, color=colors["is_out"])
 
         ax.set_ylim(ymin, ymax)
         ax.set_xlim(minx, maxx)
-        self.get_sign_table()
+        # self.get_sign_table()
+        if gleg is not None:
+            ax.legend([gleg], [lleg], loc="upper left")
 
-        from matplotlib.lines import Line2D
+        if y2 is not None:
+            ax.plot(x2, y2, color=colors["secondary"])
 
-        ax.legend(
-            [Line2D([0], [0], color=colors["is_in"]), Line2D([0], [0], color=colors["is_out"])],
-            ["Is solution", "Is not solution"],
-            loc="upper left",
-        )
         return ax
 
     def get_graph(self, show_solutions=True):
