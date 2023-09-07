@@ -18,7 +18,7 @@ colors = {"is_in": "#4F77AA", "is_out": "#C70039", "is_neutral": "#581845", "sec
 
 
 class Poly2dr:
-    def __init__(self, a, b, c, numbers="float2", constraint="=0"):
+    def __init__(self, a, b, c, numbers="fraction", constraint="=0"):
         self.a, self.b, self.c, self.numbers, self.constraint = a, b, c, numbers, constraint
 
         if a == 0:
@@ -64,11 +64,11 @@ class Poly2dr:
         signs = "|$f(x)$| |"
 
         if self.delta >= 0:
-            labels += f"{self.sx1}| |"
+            labels += f"${self.sx1}$| |"
             signs += f"{s}|0|"
 
         if self.delta > 0:
-            labels += f"{self.sx2}| |"
+            labels += f"${self.sx2}$| |"
             signs += f"{ms}|0|"
 
         labels += "$+\infty$|"
@@ -158,23 +158,22 @@ class Poly2dr:
         else:
             ax.plot(df["x"], df["y"], color=colors["is_neutral"])
 
-        from matplotlib.lines import Line2D
-
         if show_solutions:
-            if self.delta > 0:
-                ax.plot([self.x1], [0], "s", color=colors["is_out"], markersize=15)
-                ax.plot([self.x2], [0], "s", color=colors["is_in"], markersize=15)
-            ax.plot([self.alpha], [self.f(self.alpha)], "d", color=colors["secondary"], markersize=15)
-
-            ax.legend(
-                [
-                    Line2D([], [], color=colors["is_out"], marker="s", markersize=15, lw=0.1),
-                    Line2D([], [], color=colors["is_in"], marker="s", markersize=15, lw=0.1),
-                    Line2D([], [], color=colors["secondary"], marker="d", markersize=15, lw=0.1),
-                ],
-                [f"x1={self.sx1}", f"x2={self.sx2}", r"($\alpha, \beta$)=(%s, %s)" % (self.salpha, self.sbeta)],
-                loc="upper left",
+            (pab,) = ax.plot(
+                [self.alpha],
+                [self.f(self.alpha)],
+                "d",
+                color=colors["secondary"],
+                markersize=15,
+                label=r"$(\alpha, \beta)=(%s, %s)$" % (self.salpha, self.sbeta),
             )
+
+            if self.delta > 0:
+                (px1,) = ax.plot([self.x1], [0], "s", color=colors["is_out"], markersize=15, label=f"$x1={self.sx1}$")
+                (px2,) = ax.plot([self.x2], [0], "s", color=colors["is_in"], markersize=15, label=f"$x2={self.sx2}$")
+                ax.legend(handles=[px1, px2, pab], loc="upper left")
+            else:
+                ax.legend(handles=[pab], loc="upper left")
 
         ax.set_title(
             r"""${}x²{}x{}{}, \ \ \  \Delta={}$""".format(self.sa, self.sb, self.sc, self.sconstraint, self.sdelta)
