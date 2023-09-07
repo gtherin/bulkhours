@@ -132,7 +132,7 @@ def init_env(packages=None, github_link=False, **kwargs):
 
     quiet_mode = mode == "passive"
 
-    if github_link:
+    if quiet_mode:
         # commercial(language="fr")
         # commercial(language="en")
         commercial(**kwargs)
