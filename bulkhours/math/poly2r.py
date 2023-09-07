@@ -13,6 +13,10 @@ def md(data, style="raw"):
     IPython.display.display(IPython.display.Markdown(r"%s" % data))
 
 
+colors = {"purple": "#581845", "red": "#C70039", "orange": "#FF5733", "blue": "#4F77AA"}
+colors = {"is_in": "#4F77AA", "is_out": "#C70039", "is_neutral": "#581845", "secondary": "#FF5733"}
+
+
 class Poly2dr:
     def __init__(self, a, b, c, numbers="float2", constraint="=0"):
         self.a, self.b, self.c, self.numbers, self.constraint = a, b, c, numbers, constraint
@@ -95,33 +99,36 @@ class Poly2dr:
 
         ymin, ymax = ax.get_ylim()
         if self.constraint in ["<0", "<=0"]:
-            negc, posc = "green", "red"
+            negc, posc = colors["is_in"], colors["is_out"]
             ax.plot(df[df["y"] < 0]["x"], df[df["y"] < 0]["y"] * 0, color=negc)
             ax.plot(df[df["y"] > 0]["x"], df[df["y"] > 0]["y"] * 0, color=posc)
         elif self.constraint in [">=0", ">0"]:
-            negc, posc = "green", "red"
+            negc, posc = colors["is_in"], colors["is_out"]
 
             ax.plot(df[df["x"] < self.x1]["x"], df[df["x"] < self.x1]["y"] * 0, color=negc)
             ax.plot(df[df["x"] > self.x2]["x"], df[df["x"] > self.x2]["y"] * 0, color=negc)
             ax.plot(df[df["y"] < 0]["x"], df[df["y"] < 0]["y"] * 0, color=posc)
 
         if "=0" in self.constraint:
-            ax.plot([self.x1], [0], "o", markersize=20, color="green")
-            ax.plot([self.x2], [0], "o", markersize=20, color="green")
+            ax.plot([self.x1], [0], "o", markersize=20, color=colors["is_in"])
+            ax.plot([self.x2], [0], "o", markersize=20, color=colors["is_in"])
             print(self.x1, self.x2)
         else:
-            ax.plot([self.x1], [0], "x", markersize=20, color="red")
-            ax.plot([self.x2], [0], "x", markersize=20, color="red")
+            ax.plot([self.x1], [0], "X", markersize=15, color=colors["is_out"])
+            ax.plot([self.x2], [0], "X", markersize=15, color=colors["is_out"])
 
-        # ax.set_ylim(ymin, ymax)
-        # ax.set_xlim(minx, maxx)
-        return ax
-
+        ax.set_ylim(ymin, ymax)
+        ax.set_xlim(minx, maxx)
         self.get_sign_table()
 
-        if self.delta > 0:
-            ax.plot([self.x1], [0], "X", markersize=20, color="green")
-            ax.plot([self.x2], [0], "X", markersize=20, color="green")
+        from matplotlib.lines import Line2D
+
+        ax.legend(
+            [Line2D([0], [0], color=colors["is_in"]), Line2D([0], [0], color=colors["is_out"])],
+            ["Is solution", "Is not solution"],
+            loc="upper left",
+        )
+        return ax
 
     def get_graph(self, show_solutions=True):
         minx, maxx = self.get_xrange()
@@ -133,22 +140,22 @@ class Poly2dr:
         fig = plt.figure()
         ax = fig.add_subplot(1, 1, 1)
 
-        ax.axhline(y=0, color="k")
-        ax.axvline(x=0, color="k")
+        ax.axhline(y=0, color=colors["secondary"], alpha=0.6)
+        ax.axvline(x=0, color=colors["secondary"], alpha=0.6)
         ax.set_xticks(np.arange(int(np.min(x)), int(np.max(x))))
 
-        ax.grid(which="both")
-        ax.grid(which="major", alpha=0.5)
+        ax.grid(which="both", color=colors["secondary"], linestyle=":", linewidth=1, alpha=0.5)
+        ax.grid(which="major", color=colors["secondary"], linestyle=":", linewidth=1, alpha=0.5)
 
         if show_solutions:
             if self.delta > 0:
-                ax.plot(df["x"], df["y"], color="red")
-                ax.plot(df[df["x"] < self.x1]["x"], df[df["x"] < self.x1]["y"], color="green")
-                ax.plot(df[df["x"] > self.x2]["x"], df[df["x"] > self.x2]["y"], color="green")
+                ax.plot(df["x"], df["y"], color=colors["is_out"])
+                ax.plot(df[df["x"] < self.x1]["x"], df[df["x"] < self.x1]["y"], color=colors["is_in"])
+                ax.plot(df[df["x"] > self.x2]["x"], df[df["x"] > self.x2]["y"], color=colors["is_in"])
             else:
-                ax.plot(df["x"], df["y"], color="green")
+                ax.plot(df["x"], df["y"], color=colors["is_in"])
         else:
-            ax.plot(df["x"], df["y"], color="grey")
+            ax.plot(df["x"], df["y"], color=colors["is_neutral"])
 
         if show_solutions:
             if self.delta > 0:
