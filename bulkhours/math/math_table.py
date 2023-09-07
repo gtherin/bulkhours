@@ -2,11 +2,12 @@ import pandas as pd
 
 
 class MathTable:
-    def __init__(self, rows, cols):
+    def __init__(self, rows, cols, header=None):
         self.rows, self.cols = rows, cols
         self.data = [["<font size = '2'>$e^0 =1$</font>"] * self.cols] * self.rows
         self.data = pd.DataFrame(self.data)
         self.crow, self.ccol = 0, -1
+        self.header = header
 
     def increment_cursor(self):
         self.ccol += 1
@@ -22,8 +23,18 @@ class MathTable:
         self.crow, self.ccol = row, col
         self.data.loc[row, col] = val
 
-    def to_markdown(self, size=4, display=False):
-        header = "|" * (self.cols + 1) + "\n" + (":---:".join(["|"] * (self.cols + 1)))
+    def to_markdown(self, size=4, display=False, col_width=15):
+        if self.header is None:
+            header = (
+                ("&nbsp; " * col_width).join(["|"] * (self.cols + 1)) + "\n" + (":---:".join(["|"] * (self.cols + 1)))
+            )
+        else:
+            header = (
+                "|"
+                + "|".join([h + (" &nbsp; " * col_width) for h in self.header])
+                + " |\n"
+                + (":---:".join(["|"] * (self.cols + 1)))
+            )
 
         md = "\n"
 
@@ -52,6 +63,12 @@ class MathTable:
             sizes[size],
             "c".join(["|"] * (self.cols + 1)),
         )
+
+        if self.header is not None:
+            for col in range(self.cols):
+                md += r"%s & " % (self.header[col])
+            md = md[:-2]
+            md += " \\\\ \\\\ \hline  \n"
 
         for row in range(self.rows):
             md += ""
