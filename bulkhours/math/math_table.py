@@ -4,8 +4,7 @@ import pandas as pd
 class MathTable:
     def __init__(self, rows, cols, header=None):
         self.rows, self.cols = rows, cols
-        self.data = [["<font size = '2'>$e^0 =1$</font>"] * self.cols] * self.rows
-        self.data = pd.DataFrame(self.data)
+        self.data = pd.DataFrame([["$e^0 =1$"] * self.cols] * self.rows)
         self.crow, self.ccol = 0, -1
         self.header = header
 
