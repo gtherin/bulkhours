@@ -8,7 +8,7 @@ def md(data, style="raw"):
     import IPython
 
     if style == "header":
-        data = r"<font size='+3'>%s</font>" % (data)
+        data = r"<font size='+2'>%s</font>" % (data)
 
     IPython.display.display(IPython.display.Markdown(r"%s" % data))
 
@@ -49,15 +49,16 @@ class Poly2dr:
             return r"""$(x{})(x{}){}$""".format(self.msx1, self.msx2, self.sconstraint)
 
     def get_various_forms(self):
-        md(f"(a) Forme canonique: %s, %s" % (self.get_basic(), self.get_canonical()), style="header")
+        md(f"Forme standardisée: %s" % (self.get_basic()), style="header")
+        md(f"Forme canonique: %s" % (self.get_canonical()), style="header")
         if self.delta > 0:
-            md(f"(a) Forme factorisée: %s" % self.get_factorized(), style="header")
+            md(f"Forme factorisée: %s" % self.get_factorized(), style="header")
 
     def get_sign_table(self):
         s = "+" if self.a > 0 else "-"
         ms = "-" if self.a > 0 else "+"
 
-        text = f"""### (b) Tableau de signes:\n"""
+        text = f"""### Tableau de signes:\n"""
 
         labels = "|$x$|$-\infty$| |"
         signs = "|$f(x)$| |"
@@ -157,14 +158,23 @@ class Poly2dr:
         else:
             ax.plot(df["x"], df["y"], color=colors["is_neutral"])
 
+        from matplotlib.lines import Line2D
+
         if show_solutions:
             if self.delta > 0:
-                ax.plot([self.x1], [0], "o")
-                ax.annotate("(x1, 0)", [self.x1, 0])
-                ax.plot([self.x2], [0], "o")
-                ax.annotate("(x2, 0)", [self.x2, 0])
-            ax.plot([self.alpha], [self.f(self.alpha)], "o")
-            ax.annotate(r"($\alpha, \beta$)", [self.alpha, self.f(self.alpha)])
+                ax.plot([self.x1], [0], "s", color=colors["is_out"], markersize=15)
+                ax.plot([self.x2], [0], "s", color=colors["is_in"], markersize=15)
+            ax.plot([self.alpha], [self.f(self.alpha)], "d", color=colors["secondary"], markersize=15)
+
+            ax.legend(
+                [
+                    Line2D([], [], color=colors["is_out"], marker="s", markersize=15, lw=0.1),
+                    Line2D([], [], color=colors["is_in"], marker="s", markersize=15, lw=0.1),
+                    Line2D([], [], color=colors["secondary"], marker="d", markersize=15, lw=0.1),
+                ],
+                [f"x1={self.sx1}", f"x2={self.sx2}", r"($\alpha, \beta$)=(%s, %s)" % (self.salpha, self.sbeta)],
+                loc="upper left",
+            )
 
         ax.set_title(
             r"""${}x²{}x{}{}, \ \ \  \Delta={}$""".format(self.sa, self.sb, self.sc, self.sconstraint, self.sdelta)
