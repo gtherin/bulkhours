@@ -146,8 +146,6 @@ class Poly2dr:
         if y2 is not None:
             ax.plot(x2, y2, color=colors["secondary"])
 
-        return ax
-
     def get_graph(self, show_solutions=True):
         minx, maxx = self.get_xrange()
 
