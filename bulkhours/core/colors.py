@@ -1,4 +1,39 @@
-def colors(cmap):
+caliases = dict(
+    zip(
+        ["purple", "red", "orange", "blue", "green", "yellow", "black"],
+        ["#581845", "#C70039", "#FF5733", "#4F77AA", "#52DE97", "#FBE555", "black"],
+    )
+)
+
+
+def vizualize(colors=None, ncols=4):
+    import matplotlib.pyplot as plt
+    from matplotlib.patches import Rectangle
+    import math
+
+    if colors is None:
+        colors = caliases
+    cell_width, cell_height, swatch_width, margin, dpi = 212, 22, 48, 12, 72
+    nrows = math.ceil(len(colors) / ncols)
+    width, height = cell_width * 4 + 2 * margin, cell_height * nrows + 2 * margin
+
+    fig, ax = plt.subplots(figsize=(width / dpi, height / dpi), dpi=dpi)
+    fig.subplots_adjust(margin / width, margin / height, (width - margin) / width, (height - margin) / height)
+    ax.set_xlim(0, cell_width * 4)
+    ax.set_ylim(cell_height * (nrows - 0.5), -cell_height / 2.0)
+    ax.set_axis_off()
+
+    for i, name in enumerate(list(caliases.keys())):
+        row, col = i % nrows, i // nrows
+        ax.text(cell_width * col + swatch_width + 7, row * cell_height, name)
+        ax.add_patch(
+            Rectangle(
+                xy=(cell_width * col, row * cell_height - 9), width=swatch_width, height=18, facecolor=colors[name]
+            )
+        )
+
+
+def color_maps(cmap):
     import matplotlib.colors as mcolors
 
     if cmap == "b":
@@ -10,19 +45,20 @@ def colors(cmap):
     elif cmap == "x":
         return list(mcolors.XKCD_COLORS.values())
     else:
-        return ["#581845", "#C70039", "#FF5733", "#4F77AA", "black"]
+        return list(caliases.values())
 
 
-g = lambda i: colors("d")[i % len(colors("d"))]
-bg = lambda i: colors("b")[i % len(colors("b"))]
-cg = lambda i: colors("c")[i % len(colors("c"))]
-tg = lambda i: colors("t")[i % len(colors("t"))]
-xg = lambda i: colors("x")[i % len(colors("x"))]
+# Define shortcuts to color maps
+# example bulkhours.c.x gives you xkcd colors wheel
+g = lambda i: color_maps("d")[i % len(color_maps("d"))]
+bg = lambda i: color_maps("b")[i % len(color_maps("b"))]
+cg = lambda i: color_maps("c")[i % len(color_maps("c"))]
+tg = lambda i: color_maps("t")[i % len(color_maps("t"))]
+xg = lambda i: color_maps("x")[i % len(color_maps("x"))]
 
 
 def set_style(object, style):
     import IPython
-    import ipywidgets
 
     style = """<style>
             .sol_background {background-color:#f7d1d1}
@@ -55,40 +91,39 @@ NC = "\x1b[m"  # No Color
 st = lambda x: f"{HSTYLE}{x}{NC}"
 
 
-def set_plt_style():
+def set_plt_style(style="default", cmap="default"):
     import matplotlib.pyplot as plt
+    from cycler import cycler
 
-    background_color = "#F0FDFA11"  # cdcdcd
-    axis_color = "#4F77AA"  # cdcdcd
+    background_color = "#F0FDFA11"
 
-    def get_color(discipline):
-        colors = {"swimming": "#581845", "cycling": "#C70039", "running": "#FF5733", "axis": "#4F77AA"}
-        return colors[discipline] if discipline in colors else "black"
+    if style == "math":
+        axis_color = caliases["orange"]
+        plt.rcParams["grid.color"] = axis_color
+        plt.rcParams["grid.linestyle"] = ":"
+        plt.rcParams["grid.linewidth"] = 0.8
+        plt.rcParams["lines.linewidth"] = 3
+        plt.rcParams["font.size"] = 10
+    else:
+        axis_color = caliases["blue"]
+        plt.rcParams["grid.color"] = "white"
+        plt.rcParams["lines.linewidth"] = 4
+        plt.rcParams["font.size"] = 14
 
     plt.rcParams["axes.grid"] = True
     plt.rcParams["axes.edgecolor"] = axis_color
     plt.rcParams["axes.labelcolor"] = axis_color
     plt.rcParams["axes.titlecolor"] = axis_color
-    plt.rcParams["axes.facecolor"] = background_color
     plt.rcParams["figure.edgecolor"] = axis_color
-    plt.rcParams["figure.facecolor"] = background_color
-    plt.rcParams["grid.color"] = "white"
-    plt.rcParams["legend.facecolor"] = background_color
-    plt.rcParams["legend.edgecolor"] = background_color
     plt.rcParams["xtick.color"] = axis_color
     plt.rcParams["ytick.color"] = axis_color
 
-    plt.rcParams["font.size"] = 14
-    plt.rcParams["lines.linewidth"] = 4
+    plt.rcParams["axes.facecolor"] = background_color
+    plt.rcParams["figure.facecolor"] = background_color
+    plt.rcParams["legend.facecolor"] = background_color
+    plt.rcParams["legend.edgecolor"] = background_color
 
-    # ax.grid(True, axis="y", color="white")
-
-    from cycler import cycler
-
-    # mpl.rcParams['axes.prop_cycle'] = cycler(color='bgrcmyk')
-    plt.rcParams["axes.prop_cycle"] = cycler(
-        color=[get_color(c) for c in ["swimming", "cycling", "running", "The end"]]
-    )
+    plt.rcParams["axes.prop_cycle"] = cycler(color=color_maps(cmap))
 
 
 def get_html_buttons_styles_code():
