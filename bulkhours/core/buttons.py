@@ -4,6 +4,7 @@ import time
 import multiprocessing
 import numpy as np
 from . import tools
+from . import colors
 
 all_labels = {
     "transition_en": "Operation in progress",
@@ -211,3 +212,23 @@ def update_button(b, button, output, widget, funct, kwargs=None):
             button.is_on = button.wait(button.is_on, b)
 
         button.update_style(b, style="o" if button.is_on else "f")
+
+
+def get_export_button(filename, data=None, label="Download file", tooltip=None, style="bk_secondary", width="150px"):
+    import base64
+
+    if data is None:
+        with open(filename) as f:
+            data = f.readline()
+
+    if tooltip is None:
+        tooltip = f"💾Download the file '{filename}'"
+
+    b64 = base64.b64encode(data.encode())
+    payload = b64.decode()
+    button_styles = colors.get_html_buttons_styles_code()
+
+    html_button = f"""<html><head><meta name="viewport" content="width=device-width, initial-scale=1">{button_styles}</head>
+    <body><a download="{filename}" href="data:text/csv;base64,{payload}" download>
+    <button title="{tooltip}" class="button {style}" style="width: {width};">{label}</button></a></body></html>"""
+    IPython.display.display(IPython.display.HTML(html_button))

@@ -95,7 +95,7 @@ def commercial(language="en", **kwargs):
     )
 
 
-def init_env(packages=None, github_link=False, **kwargs):
+def init_env(packages=None, plt_style="default", **kwargs):
     """Initialize the environment of the user
 
         Parameters:
@@ -133,8 +133,6 @@ def init_env(packages=None, github_link=False, **kwargs):
     quiet_mode = mode == "passive"
 
     if quiet_mode:
-        # commercial(language="fr")
-        # commercial(language="en")
         commercial(**kwargs)
 
     config = firebase.init_database(kwargs)
@@ -145,7 +143,7 @@ def init_env(packages=None, github_link=False, **kwargs):
         installer.install_dependencies(packages, start_time)
         os.environ["BLK_PACKAGES_STATUS"] = f"INITIALIZED"
 
-    colors.set_plt_style()
+    colors.set_plt_style(plt_style)
     version = open(tools.abspath("bulkhours/__version__.py")).readlines()[0].split('"')[1]
 
     einfo = f", ⚠️\x1b[31m\x1b[41m\x1b[37m in admin/teacher🎓 mode\x1b[0m⚠️" if tools.is_admin(config=config) else ""

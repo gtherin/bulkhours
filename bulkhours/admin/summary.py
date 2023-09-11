@@ -73,24 +73,12 @@ def summary(
     data = data[["nom", "prenom", "all"] + exos] if columns is None else data[columns]
 
     if export_notes:
-        import base64
-        import IPython
-
-        res = data.to_csv(index=False)
-
-        filename = f"notes_{subject}_{virtual_room}_{notebook_id}.csv"
-        b64 = base64.b64encode(res.encode())
-        payload = b64.decode()
-        btn_label, btn_style = "Export notes", "bk_secondary"
-
-        button_styles = core.c.get_html_buttons_styles_code()
-        html_button = f"""<html><head><meta name="viewport" content="width=device-width, initial-scale=1">{button_styles}</head>
-        <body><a download="{filename}" href="data:text/csv;base64,{payload}" download>
-        <button title="⚠️Seulement disponible à l'évaluateur⚠️.
-💾Envoi de la réponse (contenu de la cellule actuelle) comme solution officielle.
-" class="button {btn_style}">{btn_label}</button></a></body></html>"""
-        IPython.display.display(tools.styles(data, cmap=cmap) if cmap is not None else data)
-        IPython.display.display(IPython.display.HTML(html_button))
-        return
+        return core.buttons.get_export_button(
+            f"notes_{subject}_{virtual_room}_{notebook_id}.csv",
+            data=data.to_csv(index=False),
+            label="Export notes📝",
+            tooltip="""⚠️Seulement disponible à l'évaluateur⚠️.
+💾Envoi de la réponse (contenu de la cellule actuelle) comme solution officielle.""",
+        )
 
     return tools.styles(data, cmap=cmap) if cmap is not None else data

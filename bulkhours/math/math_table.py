@@ -1,51 +1,47 @@
 import pandas as pd
+import IPython
 
 
 class MathTable:
-    def __init__(self, rows, cols, header=None):
-        self.rows, self.cols = rows, cols
-        self.data = pd.DataFrame([["$e^0 =1$"] * self.cols] * self.rows)
-        self.crow, self.ccol = 0, -1
+    def __init__(self, header=None, col_width=15):
         self.header = header
+        if type(header) == list:
+            self.cols = len(header)
+            self.has_header = True
+        elif type(header) == int:
+            self.cols = header
+            self.has_header = False
+        else:
+            raise ValueError("header must be a list or an integer")
 
-    def increment_cursor(self):
-        self.ccol += 1
-        if self.ccol >= self.cols - 1:
-            self.crow += 1
-            self.ccol = 0
+        self.col_width = col_width
+        self.index, self.header = -1, header
+        self.data = pd.DataFrame([["$e^0 =1$"] * self.cols])
 
     def push(self, val):
-        self.increment_cursor()
-        self.add(self.crow, self.ccol, val)
-
-    def add(self, row, col, val):
-        self.crow, self.ccol = row, col
+        self.index += 1
+        col = self.index % self.cols
+        row = self.index // self.cols
         self.data.loc[row, col] = val
 
-    def to_markdown(self, size=4, display=False, col_width=15):
-        if self.header is None:
-            header = (
-                ("&nbsp; " * col_width).join(["|"] * (self.cols + 1)) + "\n" + (":---:".join(["|"] * (self.cols + 1)))
+    def to_markdown(self, size=3, display=False):
+        header = ""
+        for col in range(self.cols):
+            label = self.header[col] if type(self.header) == list else ""
+            xtra_col_width = (
+                " &nbsp; " * self.col_width[col] if type(self.col_width) == list else " &nbsp; " * self.col_width
             )
-        else:
-            header = (
-                "|"
-                + "|".join([h + (" &nbsp; " * col_width) for h in self.header])
-                + " |\n"
-                + (":---:".join(["|"] * (self.cols + 1)))
-            )
-
+            header += "|%s %s" % (label, xtra_col_width)
+        header += "|\n" + ":---:".join(["|"] * (self.cols + 1))
         md = "\n"
 
-        for row in range(self.rows):
+        for row in range(len(self.data)):
             md += "| "
             for col in range(self.cols):
                 md += r"<font size = '%s'>$%s$</font> | " % (size, self.data.loc[row, col])
             md += "\n"
 
         md = "\n\n%s%s\n" % (header, md)
-
-        import IPython
 
         if display:
             IPython.display.display(IPython.display.Markdown(md))
@@ -69,7 +65,7 @@ class MathTable:
             md = md[:-2]
             md += " \\\\ \\\\ \hline  \n"
 
-        for row in range(self.rows):
+        for row in range(len(self.data)):
             md += ""
             for col in range(self.cols):
                 md += r"%s & " % (self.data.loc[row, col].replace("$", ""))
@@ -77,7 +73,6 @@ class MathTable:
             md += " \\\\ \\\\ \hline  \n"
 
         md += "\end{array}\\\\ \n}"
-        import IPython
 
         if display:
             IPython.display.display(IPython.display.Math(md))
