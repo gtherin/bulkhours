@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from fractions import Fraction
+from .. import core
 
 
 def md(data, style="raw"):
@@ -13,8 +14,12 @@ def md(data, style="raw"):
     IPython.display.display(IPython.display.Markdown(r"%s" % data))
 
 
-colors = {"purple": "#581845", "red": "#C70039", "orange": "#FF5733", "blue": "#4F77AA"}
-colors = {"is_in": "#4F77AA", "is_out": "#C70039", "is_neutral": "#581845", "secondary": "#FF5733"}
+colors = {
+    "is_in": core.c.caliases["blue"],
+    "is_out": core.c.caliases["red"],
+    "is_neutral": core.c.caliases["purple"],
+    "secondary": core.c.caliases["orange"],
+}
 
 
 class Poly2dr:
@@ -140,8 +145,6 @@ class Poly2dr:
 
         if y2 is not None:
             ax.plot(x2, y2, color=colors["secondary"])
-
-        return ax
 
     def get_graph(self, show_solutions=True):
         minx, maxx = self.get_xrange()
