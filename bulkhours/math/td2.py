@@ -87,3 +87,74 @@ def solution_table1(light=True, hide=None):
     push_row(9, "\sin(x)", "\cos(x)")
 
     mt.to_markdown(display=True)
+
+
+def solution_table2(light=True, hide=None):
+
+    if light:
+        mt = MathTable(header=[r"Fonction $f(x)$", "Dérivée $f'(x)$"])
+
+        def push_row(r, func, dfunc):
+            mt.push("$%s$" % func)
+            if hide < r+1:
+                mt.push("$(%s)'=?$" % (func))
+            else:
+                mt.push("$(%s)'=%s$" % (func, dfunc))
+    else:
+        mt = MathTable(header=[r"Fonction $f(x)$", "Dérivée $f'(x)$", "Notation différentielle", "Différentielle"], col_width=15)
+
+        def push_row(r, func, dfunc):
+            mt.push("$%s$" % func)
+            if hide < r+1:
+                mt.push("$(%s)'=?$" % (func))
+                mt.push("$\\frac{d(%s)}{dx}=?$" % (func))
+                mt.push("$d(%s)=?$" % (func))
+            else:
+                mt.push("$(%s)'=%s$" % (func, dfunc))
+                mt.push("$\\frac{d(%s)}{dx}=%s$" % (func, dfunc))
+                mt.push("$d(%s)=(%s) \cdot dx$" % (func, dfunc))
+
+
+    push_row(0, "k\cdot u", "k\cdot u'")
+    push_row(1, "u+v", "u'+v'")
+    push_row(2, "u\cdot v", "u'\cdot v + u\cdot v'")
+    push_row(3, "\\frac{u}{v}", "\\frac{u'\cdot v - u\cdot v'}{v^2}")
+    push_row(4, "u^n", "nu'u^{n-1}")
+
+    mt.to_markdown(display=True)
+
+
+def solution_table3(light=True, hide=None):
+
+    if light:
+        mt = MathTable(header=[r"Fonction $f(x)$", "Dérivée $f'(x)$"])
+
+        def push_row(r, func, dfunc):
+            mt.push("$%s$" % func)
+            if hide < r+1:
+                mt.push("$(%s)'=?$" % (func))
+            else:
+                mt.push("$(%s)'=%s$" % (func, dfunc))
+    else:
+        mt = MathTable(header=[r"Fonction composée", "Dérivée", "Notation différentielle"], col_width=15)
+
+        def push_row(r, func, dfunc):
+            mt.push("$%s$" % func)
+            if hide < r+1:
+                mt.push("$(%s)'=?$" % (func))
+                mt.push("$\\frac{d(%s)}{dx}=?$" % (func))
+            else:
+                mt.push("$(%s)'=%s$" % (func, dfunc))
+                mt.push("$\\frac{d(%s)}{dx}=%s$" % (func, dfunc))
+
+
+    push_row(0, "f \circ u(x)", "(f' \circ u(x)) \cdot u'(x))")
+    push_row(1, "\cos(u(x))", "-u'\sin(u)")
+    push_row(2, "\sin(u(x))", "u'\cos(u)")
+    push_row(3, "e^{u(x)}", "u'e^{u}")
+    push_row(4, "\ln(u(x))", "\\frac{u'}{u}")
+    push_row(5, "f(g(h(x)))", "")
+
+    mt.to_markdown(display=True)
+
+
