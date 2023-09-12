@@ -4,22 +4,22 @@ import matplotlib.pyplot as plt
 from .poly1r import Poly1dr
 from .math_table import MathTable
 
-
 def solution_exo1(f, title, xmin, xmax, fprime, titleprime, 
-                  ymin=None, ymax=None, xy_eqscale=False, show_line=False, show_tangent=False, show_fprime=False):
+                  ymin=None, ymax=None, xy_eqscale=False, show_line=False, show_tangent=False, show_fprime=False,
+                  is_exo1=True, tanx=1):
     x = np.linspace(xmin, xmax, 100)
 
-    A, B = [1, f(1)], [2, f(2)]
-
     fig, ax = plt.subplots()#figsize=(5, 5))
-
-    d = Poly1dr.from_points(1, f(1), 2, f(2), numbers="fraction")
     ax.plot(x, f(x), label=title)
-    if show_line:
-        ax.plot(x, d.f(x), label=r"Droite$_{AB}(x)=%.2f x + %.2f$" % (d.a, d.b))
 
-    ax.plot([1], [f(1)], "X", markersize=15, label="$A(1, %.2f)$" % f(1))
-    ax.plot([2], [f(2)], "X", markersize=15, label="$B(2, %.2f)$" % f(2))
+    if is_exo1:
+        A, B = [1, f(1)], [2, f(2)]
+        d = Poly1dr.from_points(A[0], A[1], B[0], B[1], numbers="fraction")
+        if show_line:
+            ax.plot(x, d.f(x), label=r"Droite$_{AB}(x)=%.2f x + %.2f$" % (d.a, d.b))
+        ax.plot([1], [f(1)], "X", markersize=15, label="$A(1, %.2f)$" % f(1))
+        ax.plot([2], [f(2)], "X", markersize=15, label="$B(2, %.2f)$" % f(2))
+
 
     if ymax is not None:
       ax.set_ylim([ymin, ymax])
@@ -31,18 +31,16 @@ def solution_exo1(f, title, xmin, xmax, fprime, titleprime,
         ax.set_title("%s (%s)" % (title, titleprime))
         if show_fprime:
             ax.plot(x, fprime(x), label=titleprime)
-        t = Poly1dr.from_tangent(1, 1, fprime, numbers="fraction")
+        t = Poly1dr.from_tangent(tanx, f(tanx), fprime, numbers="fraction")
         ax.plot(x, t.f(x), label=r"Tangente$_{A}(x)=%.2f x + %.2f$" % (t.a, t.b), ls="dotted")
     else:
         ax.set_title(title)
-
 
     ax.set_xticks(np.arange(xmin, xmax, 1))
     ax.set_yticks(np.arange(ymin, ymax, 1))
     if xy_eqscale:
         ax.set_aspect('equal', adjustable='box')
     ax.legend();
-
 
 
 def solution_table1(light=True, hide=None):
@@ -153,7 +151,7 @@ def solution_table3(light=True, hide=None):
     push_row(2, "\sin(u(x))", "u'\cos(u)")
     push_row(3, "e^{u(x)}", "u'e^{u}")
     push_row(4, "\ln(u(x))", "\\frac{u'}{u}")
-    push_row(5, "f(g(h(x)))", "")
+    push_row(5, "f(g(h(x)))", "f'(g(h(x))) \cdot g'(h(x)) \cdot h'(x)")
 
     mt.to_markdown(display=True)
 
