@@ -26,11 +26,17 @@ class Poly1dr:
         b = y1 - a * x1
         return Poly1dr(a, b, numbers=numbers, constraint=constraint)
 
-    def get_basic(self):
-        return r"""${}x{}$""".format(self.sa, self.sb)
+    @staticmethod
+    def from_tangent(x1, y1, fprime, numbers="float2"):
+        a = fprime(x1)
+        b = (y1 - a * x1)
+        return Poly1dr(a, b, numbers=numbers)
 
     def f(self, x):
         return self.a * x + self.b
+
+    def get_basic(self):
+        return r"""${}x{}$""".format(self.sa, self.sb)
 
     def get_xrange(self):
         minx, maxx = self.alpha - 2 * np.sqrt(np.abs(self.beta / self.a)), self.alpha + 2 * np.sqrt(
