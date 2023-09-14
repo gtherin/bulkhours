@@ -45,7 +45,10 @@ def get_solution2(self, x2=None, y2=None):
         ax.plot([self.x1], [0], "o", markersize=20, color=colors["is_in"])
         ax.plot([self.x2], [0], "o", markersize=20, color=colors["is_in"])
         if gleg is None:
-            gleg, lleg = Line2D([], [], color=colors["is_in"]), "$x \in \{%s, %s\}$" % (self.sx1, self.sx2)
+            if self.sx1 == self.sx2:
+                gleg, lleg = Line2D([], [], color=colors["is_in"]), "$x \in \{%s\}$" % (self.sx1)
+            else:
+                gleg, lleg = Line2D([], [], color=colors["is_in"]), "$x \in \{%s, %s\}$" % (self.sx1, self.sx2)
         else:
             gleg, lleg = Line2D([0], [0], color=colors["is_in"], marker="o", markersize=20), lleg.replace(
                 "<", " <= "
