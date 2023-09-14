@@ -77,7 +77,7 @@ def solution_table1(light=True, hide=None):
     push_row(1, "x", "1")
     push_row(2, "x^2", "2x")
     push_row(3, "x^n", "nx^{n-1}", defi="∀x, n\in\mathbb{R}", der="\mathbb{R}^{+*}")
-    push_row(4, "\sqrt{x}", "\\frac{1}{2\sqrt{x}}", defi="x ≥ 0", der="\mathbb{R}^{+*}")
+    push_row(4, "\sqrt{x}", "\\frac{1}{2\sqrt{x}}", defi="x ≥ 0", der="\mathbb{R}^{+}")
     push_row(5, "\\frac{1}{x}", "-\\frac{1}{x^2}", defi="x \\neq 0", der="\mathbb{R}^{*}")
     push_row(6, "e^x", "e^x")
     push_row(7, "\\ln(x)", "\\frac{1}{x}", defi="x > 0", der="\mathbb{R}^{+*}")
