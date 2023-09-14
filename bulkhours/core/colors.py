@@ -6,6 +6,10 @@ caliases = dict(
 )
 
 
+for name, value in caliases.items():
+    globals()[name] = value
+
+
 def vizualize(colors=None, ncols=4):
     import matplotlib.pyplot as plt
     from matplotlib.patches import Rectangle
@@ -55,6 +59,7 @@ bg = lambda i: color_maps("b")[i % len(color_maps("b"))]
 cg = lambda i: color_maps("c")[i % len(color_maps("c"))]
 tg = lambda i: color_maps("t")[i % len(color_maps("t"))]
 xg = lambda i: color_maps("x")[i % len(color_maps("x"))]
+
 
 
 def set_style(object, style):
