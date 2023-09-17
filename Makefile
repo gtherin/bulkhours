@@ -15,12 +15,13 @@ create:
 
 requirements:
 	($(CONDA) activate ${ENV_NAME}; pip install -r requirements.txt; pip install -r requirements-dev.txt;)
+	[[ -f requirements-dev.txt ]] && echo "This file exists!"
 
 kernel:
 	$(CONDA) activate ${ENV_NAME}; ipython3 kernel install --user --name=${ENV_NAME};
 
 install:
-	($(CONDA) activate ${ENV_NAME} ; python setup.py develop)
+	$(CONDA) activate ${ENV_NAME} ; python setup.py develop
 
 clean: clean-pyc
 	@echo clean ${ENV_NAME};

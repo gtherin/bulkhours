@@ -45,12 +45,12 @@ def git_push(argv=sys.argv[1:]):
         the_file.write(f"""__version__ = "{nvs}"\n""")
 
     with open("git_push.sh", "w") as f:
-        f.write(f"""python {root_dir}/pyservice/pyservice/generate_bulkhours_keys.py\n""")
+        f.write(f"""python {root_dir}/puppeteer/puppeteer/generate_bulkhours_keys.py\n""")
         for p in [""]:  # , ".wiki"]:
             f.write(
                 f"""cd ../bulkhours{p} && git pull && git add . && git commit -m "{args.message}" && git push 2> /dev/null\n"""
             )
-        f.write(f"""python {root_dir}/pyservice/pyservice/generate_bulkhours_keys.py\n""")
+        f.write(f"""python {root_dir}/puppeteer/puppeteer/generate_bulkhours_keys.py\n""")
     print(
         subprocess.run("bash git_push.sh".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True).stdout
     )
