@@ -4,3 +4,4 @@ from .tools import md
 from .math_table import MathTable
 from . import td1
 from . import td2
+from .vector import Vector, VectorGrid
