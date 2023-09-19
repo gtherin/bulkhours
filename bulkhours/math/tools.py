@@ -11,3 +11,7 @@ def md(data, style="raw"):
         data = r"<font size='+3'>%s</font>" % (data)
 
     IPython.display.display(IPython.display.Markdown(r"%s" % data))
+
+def html(data):
+    import IPython
+    IPython.display.display(IPython.display.HTML(r"%s" % data))
