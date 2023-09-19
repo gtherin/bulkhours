@@ -4,5 +4,5 @@ from .tools import md, html
 from .math_table import MathTable
 from . import td1
 from . import td2
-from .vector import Vector, VectorGrid
+from .vector import Vector, VectorGrid, from_vector
     
