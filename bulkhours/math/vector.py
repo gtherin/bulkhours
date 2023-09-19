@@ -7,13 +7,14 @@ from .. import core
 
 
 class Vector:
-    def __init__(self, x_a, y_a, x_b=None, y_b=None):
+    def __init__(self, x_a, y_a, x_b=None, y_b=None, xoffset=0, yoffset=0):
         self.x_a, self.y_a, self.x_b, self.y_b = x_a, y_a, x_b, y_b
         if x_b is None:
             self.x_b = self.x_a
         if y_b is None:
             self.y_b = self.y_a
 
+        self.add_offset(xoffset=xoffset, yoffset=yoffset)
         self.dx, self.dy = self.x_b - self.x_a, self.y_b - self.y_a
 
     def add_offset(self, xoffset=0, yoffset=0):
@@ -21,8 +22,6 @@ class Vector:
         self.x_b += xoffset
         self.y_a += yoffset
         self.y_b += yoffset
-        self.dx, self.dy = self.x_b - self.x_a, self.y_b - self.y_a
-        return self
 
     def draw(self, ax, xoffset=0, yoffset=0, text=None, vname=None, color="blue"):
         self.color = core.c.get(color)
