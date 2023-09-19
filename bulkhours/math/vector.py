@@ -21,6 +21,11 @@ class Vector:
     def norm(self):
         return np.sqrt(np.dot(self.v, self.v))
 
+    def normalize(self):
+        norm = self.norm()
+        self.dx, self.dy = self.dx / norm, self.dy / norm
+        self.x_b, self.y_b = self.x_a + self.dx, self.y_a + self.dy
+
     def dot(self, b):
         return np.dot(self.v, b.v)
 
