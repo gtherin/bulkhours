@@ -1,5 +1,7 @@
 import pandas as pd
 import IPython
+from . import core
+import matplotlib.pyplot as plt
 
 
 class Vector:
@@ -13,7 +15,7 @@ class Vector:
         self.dx, self.dy = self.x_b - self.x_a, self.y_b - self.y_a
 
     def draw(self, ax, xoffset=0, yoffset=0, text=None, vname=None, color="blue"):
-        self.color = color
+        self.color = core.c.get(color)
         if vname is not None:
             self.text = r"$\overrightarrow{%s}$" % vname
         elif text is not None:
@@ -53,6 +55,7 @@ class VectorGrid:
         self.ax.grid(which="major", color="grey", linestyle=":", linewidth=1, alpha=0.4)
 
     def draw_point(self, x, y, xoffset=0, yoffset=0, text=None, vname=None, color="blue"):
+        color = core.c.get(color)
         self.ax.scatter([x], [y], color=color)
         self.ax.text(x+xoffset, y+yoffset, text, size=16, ha='center', va='center', color=color)
 

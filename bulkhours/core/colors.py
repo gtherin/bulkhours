@@ -5,6 +5,8 @@ caliases = dict(
     )
 )
 
+def get(color):
+    return caliases[color] if color in caliases else color
 
 for name, value in caliases.items():
     globals()[name] = value
