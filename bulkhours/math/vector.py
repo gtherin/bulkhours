@@ -16,6 +16,17 @@ class Vector:
 
         self.add_offset(xoffset=xoffset, yoffset=yoffset)
         self.dx, self.dy = self.x_b - self.x_a, self.y_b - self.y_a
+        self.v = np.array([self.dx, self.dy])
+
+    def norm(self):
+        return np.sqrt(np.dot(self.v, self.v))
+
+    def dot(self, b):
+        return np.dot(self.v, b.v)
+
+    def cross(self, b):
+        # Vectorial product
+        return np.cross(self.v, b.v)
 
     def add_offset(self, xoffset=0, yoffset=0):
         self.x_a += xoffset
