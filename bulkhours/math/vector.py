@@ -1,7 +1,9 @@
 import pandas as pd
 import IPython
-from .. import core
 import matplotlib.pyplot as plt
+import numpy as np
+
+from .. import core
 
 
 class Vector:
