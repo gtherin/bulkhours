@@ -16,6 +16,14 @@ class Vector:
 
         self.dx, self.dy = self.x_b - self.x_a, self.y_b - self.y_a
 
+    def add_offset(self, xoffset=0, yoffset=0):
+        self.x_a += xoffset
+        self.x_b += xoffset
+        self.y_a += yoffset
+        self.y_b += yoffset
+        self.dx, self.dy = self.x_b - self.x_a, self.y_b - self.y_a
+        return self
+
     def draw(self, ax, xoffset=0, yoffset=0, text=None, vname=None, color="blue"):
         self.color = core.c.get(color)
         if vname is not None:
@@ -38,6 +46,10 @@ class Vector:
       else:
           a, cst = a1, a2
       return Vector(a.x_a, a.y_a, a.x_a+cst*a.dx, a.y_a+cst*a.dy)
+
+
+def from_vector(vector, xoffset=0, yoffset):
+    return vector.add_offset(xoffset=xoffset, yoffset=yoffset):
 
 
 class VectorGrid:
