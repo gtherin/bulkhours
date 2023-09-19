@@ -48,7 +48,7 @@ class Vector:
       return Vector(a.x_a, a.y_a, a.x_a+cst*a.dx, a.y_a+cst*a.dy)
 
 
-def from_vector(vector, xoffset=0, yoffset):
+def from_vector(vector, xoffset=0, yoffset=0):
     return vector.add_offset(xoffset=xoffset, yoffset=yoffset):
 
 
