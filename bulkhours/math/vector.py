@@ -58,4 +58,3 @@ class VectorGrid:
 
     def draw_vector(self, vector, **kwargs):
         vector.draw(self.ax, **kwargs)
-        00eafa45-7964-4a0f-993f-4d05e0d4bcf4
