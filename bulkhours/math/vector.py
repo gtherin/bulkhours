@@ -12,7 +12,7 @@ class Vector:
 
         self.dx, self.dy = self.x_b - self.x_a, self.y_b - self.y_a
 
-    def draw(self, ax, xoffset=0, yoffset=0, text=None, vname=None, color=bulkhours.c.blue):
+    def draw(self, ax, xoffset=0, yoffset=0, text=None, vname=None, color="blue"):
         self.color = color
         if vname is not None:
             self.text = r"$\overrightarrow{%s}$" % vname
