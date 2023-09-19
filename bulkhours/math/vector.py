@@ -49,7 +49,7 @@ class Vector:
 
 
 def from_vector(vector, xoffset=0, yoffset=0):
-    return vector.add_offset(xoffset=xoffset, yoffset=yoffset):
+    return vector.add_offset(xoffset=xoffset, yoffset=yoffset)
 
 
 class VectorGrid:
