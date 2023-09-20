@@ -6,18 +6,18 @@ import numpy as np
 from .. import core
 
 
-class Vector2:
+class Vector:
     def __init__(self, data, x0=0, y0=0):
 
         if "Vector" in str(type(data)):
             self.v = data.v
         else:
-            self.v = np.array(data, dtype=float)
+            self.v = np.array(data)
         self.x0, self.y0 = x0, y0
 
     @staticmethod
     def from_points(x_a, y_a, x_b, y_b):
-        return Vector2([x_b-x_a, y_b-y_a], x0=x_a, y0=y_a)
+        return Vector([x_b-x_a, y_b-y_a], x0=x_a, y0=y_a)
 
     def norm(self):
         return np.sqrt(np.dot(self.v, self.v))
@@ -26,7 +26,7 @@ class Vector2:
         return f"{self.v}"
 
     def normalize(self):
-        return Vector2(np.array(self.v, dtype=float) / self.norm(), x0=self.x0, y0=self.y0)
+        return Vector(np.array(self.v, dtype=float) / self.norm(), x0=self.x0, y0=self.y0)
 
     def dot(self, b):
         return np.dot(self.v, b.v)
@@ -45,19 +45,19 @@ class Vector2:
         ax.text(self.x0+0.5*self.v[0]+xoffset, self.y0+0.5*self.v[1]+yoffset, self.text, size=16, ha='center', va='center', color=self.color)
 
     def __add__(a, b):
-        return Vector2(a.v+b.v, x0=a.x0, y0=a.y0)
+        return Vector(a.v+b.v, x0=a.x0, y0=a.y0)
 
     def __sub__(a, b):
-        return Vector2(a.v-b.v, x0=a.x0, y0=a.y0)
+        return Vector(a.v-b.v, x0=a.x0, y0=a.y0)
 
     def __mul__(a1, a2):
         if type(a1) in [int, float]:
             cst, a = a1, a2
         else:
             a, cst = a1, a2
-        return Vector2(a.v*cst, x0=a.x0, y0=a.y0)
+        return Vector(a.v*cst, x0=a.x0, y0=a.y0)
 
-class Vector:
+class VectorO:
     def __init__(self, x_a, y_a, x_b=None, y_b=None, xoffset=0, yoffset=0):
         self.x_a, self.y_a, self.x_b, self.y_b = x_a, y_a, x_b, y_b
         if x_b is None:
@@ -84,12 +84,6 @@ class Vector:
         # Vectorial product
         return np.cross(self.v, b.v)
 
-    def add_offset(self, xoffset=0, yoffset=0):
-        self.x_a += xoffset
-        self.x_b += xoffset
-        self.y_a += yoffset
-        self.y_b += yoffset
-
     def draw(self, ax, xoffset=0, yoffset=0, text=None, vname=None, color="blue"):
         self.color = core.c.get(color)
         if vname is not None:
@@ -101,10 +95,10 @@ class Vector:
         ax.text(self.x_a+0.5*self.dx+xoffset, self.y_a+0.5*self.dy+yoffset, self.text, size=16, ha='center', va='center', color=self.color)
 
     def __add__(a, b):
-      return Vector(a.x_a, a.y_a, a.x_b+b.dx, a.y_b+b.dy)
+      return VectorO(a.x_a, a.y_a, a.x_b+b.dx, a.y_b+b.dy)
 
     def __sub__(a, b):
-      return Vector(a.x_a, a.y_a, a.x_b-b.dx, a.y_b-b.dy)
+      return VectorO(a.x_a, a.y_a, a.x_b-b.dx, a.y_b-b.dy)
 
     def __mul__(a1, a2):
       if type(a1) in [int, float]:
@@ -113,9 +107,6 @@ class Vector:
           a, cst = a1, a2
       return Vector(a.x_a, a.y_a, a.x_a+cst*a.dx, a.y_a+cst*a.dy)
 
-
-def from_vector(vector, xoffset=0, yoffset=0):
-    return vector.add_offset(xoffset=xoffset, yoffset=yoffset)
 
 
 class VectorGrid:
