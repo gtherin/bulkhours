@@ -4,7 +4,7 @@ from .tools import md, html
 from .math_table import MathTable
 from . import td1
 from . import td2
-from .vector import Vector, VectorGrid, from_vector
+from .vector import Vector, Vector2, VectorGrid
 
 def display_warning():
     html("""🚧🚧🚧🚧<font color="red">Cette page est un brouillon de correction. 
