@@ -26,8 +26,7 @@ class Vector2:
         return f"{self.v}"
 
     def normalize(self):
-        self.v = np.array(self.v, dtype=float) / self.norm()
-        return self
+        return Vector2(np.array(self.v, dtype=float) / self.norm(), x0=self.x0, y0=self.y0)
 
     def dot(self, b):
         return np.dot(self.v, b.v)
@@ -52,11 +51,11 @@ class Vector2:
         return Vector2(a.v-b.v, x0=a.x0, y0=a.y0)
 
     def __mul__(a1, a2):
-      if type(a1) in [int, float]:
-          cst, a = a1, a2
-      else:
-          a, cst = a1, a2
-      return Vector2(a.x_a, a.y_a, a.x_a+cst*a.dx, a.y_a+cst*a.dy)
+        if type(a1) in [int, float]:
+            cst, a = a1, a2
+        else:
+            a, cst = a1, a2
+        return Vector2(a.v*cst, x0=a.x0, y0=a.y0)
 
 class Vector:
     def __init__(self, x_a, y_a, x_b=None, y_b=None, xoffset=0, yoffset=0):
