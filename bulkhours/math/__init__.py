@@ -12,6 +12,15 @@ def display_warning(language = "fr"):
     else:
         text1 = 'This page is using (<i>A Support course package</i>). If you like this approach🚀🏆🎯, <br/>please support the project on <a href="https://github.com/guydegnol/bulkhours">github</a> with some stars.'
 
+    text2 = """🚧🚧🚧🚧<b>Attention!</b> Cette page est un <font color="red"><b> brouillon de correction</b></font>:🚧🚧🚧🚧<ol>
+<li><b>Il y a donc beaucoup encore d'erreurs</b>. Je n'ai pas encore eu le temps de tout corriger.
+Merci beaucoup de reporter les erreurs à <A HREF="mailto:guillaume.therin@ipsa.fr">guillaume.therin@ipsa.fr</A></li>
+<li>Quelques exercices n'ont pas du tout de correction.</li>
+<li>La mise à jour doit encore etre ajustée.</li>
+</ol>
+⚠️Si vous voulez quand même continuer, allez dans l'onglet <b>"Execution"</b> et cliquez sur <b>"Redémarrer et tout exécuter"</b>⚠️
+"""
+
     html(
             f"""
 <table style="opacity:0.8;">
@@ -20,20 +29,15 @@ def display_warning(language = "fr"):
       <td style="background-color: white; text-align:left; color:black">{text1}</td>
       <td style="background-color: white;"><a href="https://github.com/guydegnol/bulkhours">
       <img style="background-color: white;" src="https://github.com/guydegnol/bulkhours/blob/main/data/github.png?raw=true" width="30"></a></td>
-      <td style="background-color: white;"><a href="https://github.com/guydegnol/bulkhours"><img style="background-color: white;margin-top: 0.5em;" src="https://github.com/guydegnol/bulkhours/blob/main/data/like.gif?raw=true" width="150"></a></td>
-
-</tr></table>
+      <td style="background-color: white;">
+      <a href="https://github.com/guydegnol/bulkhours">
+      <img style="background-color: white;margin-top: 0.5em;" src="https://github.com/guydegnol/bulkhours/blob/main/data/like.gif?raw=true" width="150">
+      </a>      
+      </td>
+</tr>
+    <tr>
+      <td colspan="4"style="background-color: white; text-align:left; color:black">{text2}</td>
+</tr>
+</table>
 """
         )
-
-
-    html("""🚧🚧🚧🚧Cette page est un <font color="red"> brouillon de correction</font>:
-* <b>Il y a donc beaucoup encore d'erreurs</b>. Je n'ai pas encore eu le temps de tout corriger.
-Merci beaucoup de reporter les erreurs à guillaume.therin@ipsa.fr
-* Quelques exercices n'ont pas du tout de correction.
-* La mise à jour doit encore etre ajustée.
-
-Si vous voulez quand même continuer, vous pouvez suivre les instructions suivantes:
-🚧🚧🚧🚧<br/><br/>
-
-⚠️⚠️⚠️⚠️<b>ATTENTION DE BIEN EXECUTER LA PREMIERE CELLULE POUR QUE LA PAGE S'EXECUTE</b>⚠️⚠️⚠️⚠️""")
