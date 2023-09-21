@@ -18,8 +18,6 @@ Merci beaucoup de reporter les erreurs à <A HREF="mailto:guillaume.therin@ipsa.
   <li>Quelques exercices n'ont pas encore une correction complete.</li>
   <li>La mise à jour doit encore etre ajustée.</li>
 </ol>
-⚠️Si vous voulez quand même continuer, allez dans l'onglet <b>"Execution"</b> et cliquez sur <b>"Tout exécuter"</b>, avant de pouvoir parcourir cette page.⚠️
-<img style="background-color: white; border: 5px solid #4F77AA; text-align: center; display: block; margin-left: auto; margin-right: auto;" src="https://github.com/guydegnol/bulkhours/blob/main/data/passive_menu.png?raw=true" width="500">
 """
 
     html(
@@ -42,7 +40,7 @@ Merci beaucoup de reporter les erreurs à <A HREF="mailto:guillaume.therin@ipsa.
     <tr>
       <td style="background-color: white; text-align:left; color:black">⚠️Si vous voulez quand même continuer, allez dans l'onglet <b>"Execution"</b> et cliquez sur <b>"Tout exécuter"</b>, avant de pouvoir parcourir cette page.⚠️</td>
       <td colspan="3" style="background-color: white; text-align:left; color:black">
-<img style="background-color: white; border: 5px solid #4F77AA; text-align: center;" src="https://github.com/guydegnol/bulkhours/blob/main/data/passive_menu.png?raw=true" width="800">
+<img style="background-color: white; border: 5px solid #4F77AA; text-align: center;" src="https://github.com/guydegnol/bulkhours/blob/main/data/passive_menu.png?raw=true" width="600">
       </td>
 </tr>
 </table>
