@@ -22,23 +22,25 @@ Merci beaucoup de reporter les erreurs à <A HREF="mailto:guillaume.therin@ipsa.
 
     html(
             f"""
-<table style="opacity:0.8;">
-    <tr>
+<table style="opacity:0.8; margin:0; padding:0;">
+    <tr style="background-color: white; margin:0; padding:0;">
       <td style="background-color: white;"><a href="https://github.com/guydegnol/bulkhours"><img style="background-color: white;" src="https://github.com/guydegnol/bulkhours/blob/ce2ce67a250b396b7341becf7deb09da961f2698/data/BulkHours.png?raw=true" width="100"></a></td>
       <td style="background-color: white; text-align:left; color:black">{text1}</td>
       <td style="background-color: white;"><a href="https://github.com/guydegnol/bulkhours">
       <img style="background-color: white;" src="https://github.com/guydegnol/bulkhours/blob/main/data/github.png?raw=true" width="30"></a></td>
-      <td style="background-color: white;">
+      <td style="background-color: white; margin:0; padding:0;">
       <a href="https://github.com/guydegnol/bulkhours">
       <img style="background-color: white;margin-top: 0.5em;" src="https://github.com/guydegnol/bulkhours/blob/main/data/like.gif?raw=true" width="150">
       </a>      
       </td>
 </tr>
-    <tr>
-      <td colspan="4"style="background-color: white; text-align:left; color:black">{text2}</td>
+    <tr style="margin:0; padding:0;">
+      <td colspan="4" style="background-color: white; text-align:left; color:black">{text2}</td>
 </tr>
-    <tr>
-      <td style="background-color: white; text-align:left; color:black">⚠️Si vous voulez quand même continuer, allez dans l'onglet <b>"Execution"</b> et cliquez sur <b>"Tout exécuter"</b>, avant de pouvoir parcourir cette page.⚠️</td>
+</table>
+<table style="opacity:0.8; margin:0; padding:0;">
+    <tr style="margin:0; padding:0;">
+      <td style="background-color: white; text-align:left; margin:0; padding:0;">⚠️Si vous voulez quand même continuer, allez dans l'onglet <b>"Execution"</b> et cliquez sur <b>"Tout exécuter"</b>, avant de pouvoir parcourir cette page.⚠️</td>
       <td colspan="3" style="background-color: white; text-align:left; color:black">
 <img style="background-color: white; border: 5px solid #4F77AA; text-align: center;" src="https://github.com/guydegnol/bulkhours/blob/main/data/passive_menu.png?raw=true" width="600">
       </td>
