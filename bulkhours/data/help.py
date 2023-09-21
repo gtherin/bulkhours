@@ -54,7 +54,7 @@ def get_header_links(
     kaggle=False,
     vstudio=True,
     jupyter=True,
-    jupyter_server="http://localhost:8000",
+    jupyter_server="http://jupyter.bulkhours.eu",
 ):
     afilename = f"guydegnol/bulkhours/blob/main/{filename}"
     links = f"[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/{afilename}) "
