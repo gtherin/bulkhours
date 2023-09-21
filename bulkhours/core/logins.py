@@ -132,8 +132,8 @@ def init_env(packages=None, plt_style="default", **kwargs):
 
     quiet_mode = mode == "passive"
 
-    if quiet_mode:
-        commercial(**kwargs)
+    #if quiet_mode:
+    #    commercial(**kwargs)
 
     config = firebase.init_database(kwargs)
     info = init_prems(config)
