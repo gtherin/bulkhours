@@ -14,5 +14,6 @@
 
 [![CC-by-nc-sa license](https://badgen.net/badge/icon/CC%20by-nc-sa?label=Licence)](https://creativecommons.org/licenses/by-nc-sa/4.0)
 
-https://github.com/gtherin/bulkhours/assets/82407580/a37265fe-7d71-48f6-b605-e8b3cbe461e7
+https://github.com/gtherin/bulkhours/assets/82407580/9dfdac41-bc9d-466f-ad44-b26c9c0c089c
+
 
