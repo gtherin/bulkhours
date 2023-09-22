@@ -1,7 +1,6 @@
 import ipywidgets
 
 from .widget_base import WidgetBase
-from .cell_parser import CellParser
 
 
 class WidgetIntSlider(WidgetBase):
@@ -15,9 +14,10 @@ class WidgetIntSlider(WidgetBase):
         cell_checks = self.cinfo.options.split(";")
 
         kwargs = dict(min=self.format(cell_checks[0]), max=self.format(cell_checks[1]))
-        if self.cinfo.answer != "":
+
+        if hasattr(self.cinfo, "answer") and self.cinfo.answer != "":
             kwargs["value"] = self.format(self.cinfo.answer)
-        elif self.cinfo.answer != "":
+        elif hasattr(self.cinfo, "default") and self.cinfo.default != "":
             kwargs["value"] = self.format(self.cinfo.default)
         else:
             kwargs["value"] = kwargs["min"]

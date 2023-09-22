@@ -10,10 +10,13 @@ class WidgetCodeText(WidgetBase):
     widget_comp = "lwsc"
 
     def init_widget(self):
-        if self.cinfo.answer != "":
+        if hasattr(self.cinfo, "answer") and self.cinfo.answer != "":
             kwargs = dict(value=self.cinfo.answer)
-        else:
+        elif hasattr(self.cinfo, "default") and self.cinfo.default != "":
             kwargs = dict(value=self.cinfo.default)
+        else:
+            kwargs = {}
+
         return ipywidgets.Text(**kwargs)
 
     def get_answer(self):
@@ -33,12 +36,13 @@ class WidgetTextArea(WidgetIntSlider):
     widget_comp = "lwsc"
 
     def init_widget(self):
-        if self.cinfo.answer != "":
-            kwargs = dict(value=self.cinfo.answer)
+        if hasattr(self.cinfo, "answer") and self.cinfo.answer != "":
+            kwargs = dict(placeholder=self.cinfo.answer)
         elif hasattr(self.cinfo, "default") and self.cinfo.default != "":
             kwargs = dict(placeholder=self.cinfo.default)
         else:
             kwargs = dict(placeholder="Je ne sais pas" if self.cinfo.language == "fr" else "I don't know")
+
         return ipywidgets.Textarea(**kwargs)
 
     def get_answer(self):
