@@ -3,14 +3,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 from .poly1r import Poly1dr
 from .math_table import MathTable
+from .. import core
 
 def solution_exo1(f, title, xmin, xmax, fprime, titleprime, 
                   ymin=None, ymax=None, xy_eqscale=False, show_line=False, show_tangent=False, show_fprime=False,
-                  is_exo1=True, tanx=1):
+                  is_exo1=True, tanx=1, color="blue", return_ax=False):
     x = np.linspace(xmin, xmax, 100)
 
+    color = core.c.get(color)
+
     fig, ax = plt.subplots()#figsize=(5, 5))
-    ax.plot(x, f(x), label=title)
+    ax.plot(x, f(x), label=title, color=color)
 
     if is_exo1:
         A, B = [1, f(1)], [2, f(2)]
@@ -40,7 +43,10 @@ def solution_exo1(f, title, xmin, xmax, fprime, titleprime,
     ax.set_yticks(np.arange(ymin, ymax, 1))
     if xy_eqscale:
         ax.set_aspect('equal', adjustable='box')
-    ax.legend();
+    ax.legend()
+
+    if return_ax:
+        return ax
 
 
 def solution_table1(light=True, hide=None):
