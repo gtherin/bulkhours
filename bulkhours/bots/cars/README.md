@@ -1,16 +1,16 @@
 
 
-bash /home/pi/bulkhours/bulkhours/bots/cars/run.sh
+bash /home/pi/bulkhours/gtherin/bots/cars/run.sh
 
-git clone https://github.com/guydegnol/bulkhours
+git clone https://github.com/gtherin/bulkhours
 
-git clone https://github.com/guydegnol/ezb-pi ezb-pi.tmp && rm -rf ezb-pi/.git
+git clone https://github.com/gtherin/ezb-pi ezb-pi.tmp && rm -rf ezb-pi/.git
 mv ezb-pi.tmp/.git ezb-pi/ && mv ezb-pi.tmp/.gitignore ezb-pi/ && rm -rf ezb-pi.tmp
 
-git clone https://github.com/guydegnol/x-sense-hat sensor_hat.tmp && rm -rf sensor_hat/.git
+git clone https://github.com/gtherin/x-sense-hat sensor_hat.tmp && rm -rf sensor_hat/.git
 mv sensor_hat.tmp/.git sensor_hat/ && mv sensor_hat.tmp/.gitignore sensor_hat/ && rm -rf sensor_hat.tmp
 
-git config --global user.email "gt@guydegnol.net" && git config --global user.name "guydegnol"
+git config --global user.email "gt@guydegnol.net" && git config --global user.name "gtherin"
 
 
 picar-x
@@ -58,8 +58,8 @@ sudo service ezblock stop
 
 tail -f /opt/ezblock/log
 
-http://192.168.0.44:9000/mjpg
-http://192.168.86.41:9000/mjpg
+http://192.168.1.122:9000/mjpg
+http://192.168.1.122:9000/mjpg
 
 
 https://docs.sunfounder.com/projects/picar-x/en/latest/python/python_start/install_all_modules.html

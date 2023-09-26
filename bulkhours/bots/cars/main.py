@@ -3,6 +3,7 @@
 
 import os
 os.environ['PICARX_ROGUE_MODE'] = "True"
+os.environ['PICARX_PX_ADDRESS'] = "192.168.1.122"
 
 import Music as music
 from vilib import Vilib
