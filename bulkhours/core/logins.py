@@ -108,7 +108,7 @@ def init_env(packages=None, plt_style="default", **kwargs):
     database ="data/cache/course2.json"
     database ="/content/mydatabase.json"
      - A string with an identifier token. This token gives you access to: a real-time database (with id check), api to openai, huggingface, etc.
-     As this solution might generate reasonable costs, you should contact bulkhours@guydegnol.net to get a token.
+     As this solution might generate reasonable costs, you should contact contact@bulkhours.eu to get a token.
     database = "bkloud@SUBJECT/teacher::eNq-XXXXXXXXXXXHXXXXX-L29tB"
     database = "bkloud@SUBJECT/CLASSROOM_student::eNq-XXXXXXXXXXXHXXXXX-9tB"
      - A dict of config information. Only firestore config are functional for the moment. Examples:
