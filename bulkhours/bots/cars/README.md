@@ -10,7 +10,7 @@ mv ezb-pi.tmp/.git ezb-pi/ && mv ezb-pi.tmp/.gitignore ezb-pi/ && rm -rf ezb-pi.
 git clone https://github.com/gtherin/x-sense-hat sensor_hat.tmp && rm -rf sensor_hat/.git
 mv sensor_hat.tmp/.git sensor_hat/ && mv sensor_hat.tmp/.gitignore sensor_hat/ && rm -rf sensor_hat.tmp
 
-git config --global user.email "gt@guydegnol.net" && git config --global user.name "gtherin"
+git config --global user.email "contact@bulkhours.eu" && git config --global user.name "bulkhours.eu"
 
 
 picar-x
