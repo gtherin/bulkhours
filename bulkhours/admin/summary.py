@@ -2,6 +2,7 @@ import json
 from .. import core
 from .exercice import Exercices, Exercice
 from . import tools
+import IPython
 
 
 def summary(
@@ -72,7 +73,10 @@ def summary(
     data = data.set_index("mail")
     data = data[["nom", "prenom", "all"] + exos] if columns is None else data[columns]
 
+    sdata = tools.styles(data, cmap=cmap) if cmap is not None else data
+
     if export_notes:
+        IPython.display.display(sdata)
         return core.buttons.get_export_button(
             f"notes_{subject}_{virtual_room}_{notebook_id}.csv",
             data=data.to_csv(index=False),
@@ -81,4 +85,4 @@ def summary(
 💾Envoi de la réponse (contenu de la cellule actuelle) comme solution officielle.""",
         )
 
-    return tools.styles(data, cmap=cmap) if cmap is not None else data
+    return sdata
