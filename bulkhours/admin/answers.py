@@ -28,9 +28,9 @@ def get_answers(cell_id, refresh=True, update_git=False, verbose=False):
         student_id = answer.id
         if students_list.query(f"mail == '{student_id}'").empty:
             print(
-                f"\x1b[41mL'étudiant \033[1m{student_id}\033[0m\x1b[41m est inconnu. Régularisez la situation depuis le menu dashboard: 'bulkhours.admin.dashboard()'\x1b[0m"
+                f"\x1b[41m\x1B[37mL'étudiant \033[1m{student_id}\033[0m\x1b[41m\x1B[37m est inconnu. Régularisez la situation depuis le menu dashboard: 'bulkhours.admin.dashboard()'\x1b[0m"
                 if config["global"]["language"] == "fr"
-                else f"\x1b[41mStudent \033[1m{student_id}\033[0m\x1b[41m is unknown. Please fix the situation in the dashboard: 'bulkhours.admin.dashboard()'\x1b[0m"
+                else f"\x1b[41m\x1B[37mStudent \033[1m{student_id}\033[0m\x1b[41m\x1B[37m is unknown. Please fix the situation in the dashboard: 'bulkhours.admin.dashboard()'\x1b[0m"
             )
 
         if student_id in cdata:
