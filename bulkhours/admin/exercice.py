@@ -27,6 +27,8 @@ class Exercices:
         self.exercices = {u: {e: Exercice(u, e) for e in exos} for u in users}
 
     def update_data(self, user, exo, adata) -> None:
+        if user not in self.exercices:
+            self.exercices[user] = {e: Exercice(user, e) for e in self.exos}
         self.exercices[user][exo].update_data(adata)
 
     def get_dataframe(self, field, suffix=""):
