@@ -112,7 +112,7 @@ def styles(data, cmap="RdBu"):
     stylish = (
         stylish.hide(axis="index")
         .background_gradient(cmap=cmap, vmin=0, vmax=10)
-        .applymap(interpret, subset=list(fcolumns))
+        .map(interpret, subset=list(fcolumns))
     )
 
     if "all" in sdata.columns:
