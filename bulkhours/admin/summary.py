@@ -56,12 +56,6 @@ def summary(
             answers = json.load(json_file)
 
             for user, adata in answers.items():
-                if user not in users:
-                    print(
-                        f"\x1b[41mL'étudiant {user} est inconnu. Ajouter le depuis le menu dashboard:\nbulkhours.admin.dashboard()\x1b[0m"
-                        if language == "fr"
-                        else f"\x1b[41mStudent {user} is unknown. Please declare it in the dashboard: bulkhours.admin.dashboard()\x1b[0m"
-                    )
                 exercices.update_data(user, exo, adata)
 
     if cinfo in ["", "A"]:

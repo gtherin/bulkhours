@@ -27,12 +27,11 @@ def get_answers(cell_id, refresh=True, update_git=False, verbose=False):
     for answer in docs:
         student_id = answer.id
         if students_list.query(f"mail == '{student_id}'").empty:
-            if verbose:
-                print(
-                    f"'\x1b[41mL'étudiant {student_id} est inconnu. Ajouter le depuis le menu dashboard:\nbulkhours.admin.dashboard()\x1b[0m"
-                    if config["global"]["language"] == "fr"
-                    else f"'{student_id}' is unknown. Please add her/him in the dashboard:\nbulkhours.admin.dashboard()"
-                )
+            print(
+                f"\x1b[41mL'étudiant \033[1m{student_id}\033[0m\x1b[41m est inconnu. Régularisez la situation depuis le menu dashboard: 'bulkhours.admin.dashboard()'\x1b[0m"
+                if config["global"]["language"] == "fr"
+                else f"\x1b[41mStudent \033[1m{student_id}\033[0m\x1b[41m is unknown. Please fix the situation in the dashboard: 'bulkhours.admin.dashboard()'\x1b[0m"
+            )
 
         if student_id in cdata:
             cdata[student_id].update(answer.to_dict())
