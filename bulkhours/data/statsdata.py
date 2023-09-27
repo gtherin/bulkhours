@@ -8,7 +8,7 @@ from .data_parser import DataParser
     label="scipy_distributions_list",
     summary="Scipy list of available distributions",
     category="Economics",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
 )
 def get_scipy_distributions_list(self):
     import scipy as sp
@@ -21,7 +21,7 @@ def get_scipy_distributions_list(self):
     summary="Oil production in Saudi Arabia from 1996 to 2007",
     category="Economics",
     ref_source="""https://www.statsmodels.org/stable/index.html""",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
 )
 def get_oil(self):
     return pd.Series(
@@ -48,7 +48,7 @@ def get_oil(self):
     summary="Air pollution data",
     category="Economics",
     ref_source="""https://www.statsmodels.org/stable/index.html""",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
 )
 def get_air(self):
     air = pd.Series(
@@ -79,7 +79,7 @@ def get_air(self):
     summary="Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods.",
     category="Economics",
     ref_source="""https://www.statsmodels.org/stable/index.html""",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
 )
 def get_livestock2(self):
     index = pd.date_range(start="1970", end="2001", freq="A")
@@ -126,7 +126,7 @@ def get_livestock2(self):
     summary="Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods. (3)",
     category="Economics",
     ref_source="""https://www.statsmodels.org/stable/index.html""",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
 )
 def get_livestock3(self):
     data = [407.9979, 403.4608, 413.8249, 428.105, 445.3387, 452.9942, 455.7402]
@@ -137,7 +137,7 @@ def get_livestock3(self):
     label="statsdata.aust",
     summary="International visitor night in Australia (millions) < 2005",
     category="Economics",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
 )
 def get_aust(self):
     data = [
@@ -174,7 +174,7 @@ def get_aust(self):
     summary="International visitor night in Australia (millions) > 2005",
     category="Economics",
     raw_data="https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/AirPassengers.csv",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
 )
 def get_air_passengers(self):
     df = self.read_raw_data(self.raw_data).set_index("Month")
@@ -192,7 +192,7 @@ def get_air_passengers(self):
     category="Physics",
     ref_site="""https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json""",
     raw_data="https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
     ref_source="https://www.swpc.noaa.gov/products/solar-cycle-progression",
     columns_description="""| Column   |      Info |
 |-----------|:-----------|
@@ -220,7 +220,7 @@ def get_sunspots(self):
     summary="All-Transactions House Price Index for Houston",
     category="Economics",
     ref_source="""https://fred.stlouisfed.org/series/ATNHPIUS26420Q""",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/statsdata.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
 )
 def get_hhousing(self):
     from pandas_datareader import data as pdr  # To get data

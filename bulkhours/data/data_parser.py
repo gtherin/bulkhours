@@ -9,10 +9,10 @@ import inspect
 
 def get_rdata(rdata):
     if type(rdata) in [list]:
-        return ", ".join([f"[{f}](https://github.com/guydegnol/bulkhours/blob/main/data/{f})" for f in rdata])
+        return ", ".join([f"[{f}](https://github.com/gtherin/bulkhours/blob/main/data/{f})" for f in rdata])
 
     if "http" not in rdata:
-        rdata = f"https://github.com/guydegnol/bulkhours/blob/main/data/{rdata}"
+        rdata = f"https://github.com/gtherin/bulkhours/blob/main/data/{rdata}"
 
     label = rdata.split("/")[-1]
     if "raw.githubusercontent.com" in rdata or "github.com" in rdata:
@@ -255,7 +255,7 @@ class DataParser:
 
                 IPython.display.display(IPython.display.Markdown(f"""{comment}"""))
                 print(
-                    f"\x1b[31mBulkHours database info:\x1b[0m https://github.com/guydegnol/bulkhours/blob/main/data/README.md"
+                    f"\x1b[31mBulkHours database info:\x1b[0m https://github.com/gtherin/bulkhours/blob/main/data/README.md"
                 )
                 print(f'bulkhours.get_data("{self.label}", credit=\033[1mFalse\033[0m)  # To stop showing this text')
 

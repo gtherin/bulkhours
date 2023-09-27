@@ -11,7 +11,7 @@ from .world import get_mapgeneric
     category="Economics",
     source="""- Note : données revisitées ; les volumes sont mesures aux prix de l'année précédente changés et corrigés des variations saisonnieres et des effets des jours ouvrables.
 - Lecture: au 4e trimestre 2022. le produit interieur brut (PIB) en volume augmente de 0.1 % par rapport au trimestre precedent.""",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/gmacro.py",
     ref_source="https://www.insee.fr/fr/statistiques/2830547#tableau-figure1",
 )
 def get_fr_qgdp(self):
@@ -329,7 +329,7 @@ def get_fr_qgdp(self):
     label="gmacro.fr_unemployement",
     summary="Évolution du produit intérieur brut et de ses composantes",
     category="Economics",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/gmacro.py",
     ref_source="https://www.insee.fr/fr/statistiques/2830547#tableau-figure1",
 )
 def get_fr_unemployement(self):
@@ -366,7 +366,7 @@ Longue_duree,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,n
     label="gmacro.us_gdp",
     summary="United States Macroeconomic data (1959q1 - 2009q3)",
     category="Economics",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/gmacro.py",
     ref_source="https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html",
     columns_description="""| Column   |      Info |
 |-----------|:-----------|
@@ -407,7 +407,7 @@ def get_us_gdp(self, simplify=True):
     label="gmacro.fr_gdp",
     summary="France Macroeconomic data",
     category="Economics",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/gmacro.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/gmacro.py",
 )
 def get_fr_gdp(self, simplify=True):
     gdp = get_fr_qgdp(self).reset_index()
