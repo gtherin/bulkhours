@@ -94,7 +94,7 @@ def build_readme(category=None, load_data=True, save_datasets=True, save_example
                 if ".ipynb" in example or ".md" in example:
                     example_label = example.split("/")[-1].split(".")[0]
                     filename = "examples/" + example.split("/")[-1]
-                    line = f"- [**`{example_label}`**](https://github.com/guydegnol/bulkhours/blob/main/{filename}) "
+                    line = f"- [**`{example_label}`**](https://github.com/gtherin/bulkhours/blob/main/{filename}) "
                     if ".ipynb" in example:
                         line += get_header_links(filename, licence=False, github=False)
                     ff.write(line + "\n")

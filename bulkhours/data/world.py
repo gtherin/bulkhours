@@ -48,7 +48,7 @@ def geo_format(df, timeopt):
     raw_data="https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv",
     ref_source="https://ourworldindata.org/poverty",
     ref_site="""https://pip.worldbank.org/""",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/world.py",
     columns_info="https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv",
 )
 def get_poverty(self, timeopt=None):
@@ -74,7 +74,7 @@ def get_mappoverty(self, **kwargs):
     ref_source="https://ourworldindata.org/poverty",
     ref_site="""https://pip.worldbank.org/""",
     # drop=["Country Code", "Indicator Name", "Indicator Code", "Unnamed: 66"]
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/world.py",
     columns_info="https://github.com/owid/poverty-data/blob/main/datasets/pip_codebook.csv",
 )
 def get_gdp(self, timeopt=None, **data_info):
@@ -106,7 +106,7 @@ def get_mapgdp(self, **kwargs):
         "continent.tsv",
     ],
     on="country",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/world.py",
 )
 def get_macro(self, **data_info):
     df = self.read_raw_data(self.raw_data)
@@ -156,7 +156,7 @@ def get_corruption(self, show_truth=False, **data_info):
         "Continent",
     ],
     # drop=["annotations", "Continent"],
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/world.py",
     query="Year == 2018 and Population > 1e7",
 )
 def get_life_expectancy_vs_gdp_2018(self, **data_info):

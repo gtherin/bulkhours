@@ -11,7 +11,7 @@ from .data_parser import DataParser
     source="""- Note: certains salaires en EQTP sont inférieurs au Smic ; ceci est en effet permis par certains statuts. Cependant, l'existence de rémunérations inférieures au Smic peut aussi provenir d’incohérences entre salaires et durées travaillées dans les déclarations administratives, qui ne peuvent être toutes redressées.
 - Lecture: en 2020, en EQTP, 50 % des salariés gagnent plus de 2 005 euros.
 - Champ: France hors Mayotte, salariés du privé et des entreprises publiques, y compris bénéficiaires de contrats aidés et de contrats de professionnalisation ; hors apprentis, stagiaires, salariés agricoles et salariés des particuliers employeurs.""",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/france.py",
     ref_source="https://www.insee.fr/fr/statistiques/2415121#tableau-figure1",
 )
 def get_retraites(self):
@@ -54,7 +54,7 @@ les déclarations administratives, qui ne peuvent être toutes redressées.
 - Lecture : en 2020, en EQTP, 50 % des salariés gagnent plus de 2 005 euros.
 - Champ : France hors Mayotte, salariés du privé et des entreprises publiques, y compris bénéficiaires de contrats aidés et
 de contrats de professionnalisation ; hors apprentis, stagiaires, salariés agricoles et salariés des particuliers employeurs.""",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/france.py",
     ref_source="https://www.insee.fr/fr/statistiques/6436313#tableau-figure2",
 )
 def get_income(self):
@@ -181,7 +181,7 @@ pour les femmes, soit un niveau inférieur de 22 % à celui des hommes (figure 1
 Le revenu salarial médian des femmes est inférieur de 16 % à celui des hommes (figure 2).
 Cet écart s'amplifie à la fois dans les bas revenus (écart de 25 % pour le premier décile du revenu salarial) et
 dans les hauts revenus (écart de 21 % pour le neuvième décile).""",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/france.py",
     ref_source="https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805",
 )
 def get_salaires(self):
@@ -224,7 +224,7 @@ Secteur: Ensemble	18 970	24 420	22,3	26 430	31 510	16,1
 | delta_rev_eqtp_legacy   |  écart relatif du salaire moyen en EQTP	| 
 | delta_rev_eqtp  |  écart relatif du salaire moyen en EQTP| 
 | delta_vol_eqtp   |  écart relatif du volume de travail en EQTP moyen |""",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/france.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/france.py",
     ref_source="https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805",
     rename=["delta_rev_legacy", "delta_rev", "delta_rev_eqtp_legacy", "delta_rev_eqtp", "delta_vol_eqtp"],
 )
