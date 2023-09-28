@@ -199,6 +199,7 @@ The database has been reset to the local file '{cfg["database"]}'.
 
         DbDocument.set_cache_data(datafile)
 
+
     cfg = init_config("global", cfg)
 
     if "virtual_room" not in cfg:
@@ -279,7 +280,7 @@ def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, *
 
     config = add_user_to_virtual_room(config["email"], config)
 
-    if cinfo.restricted:
+    if 1: # cinfo.restricted:
         corr = get_solution_from_corrector(cinfo.cell_id, corrector=REF_USER, cinfo=cinfo)
         if corr is not None and user != REF_USER:
             if cinfo.language == "fr":
