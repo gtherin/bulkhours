@@ -14,6 +14,7 @@ from .gpt import *  # noqa
 from .equals import is_equal  # noqa
 from .cache_manager import CacheManager  # noqa
 from .widget_texts import WidgetTextArea  # noqa
+from .keywords import get_wordscloud  # noqa
 
 
 def git_push(argv=sys.argv[1:]):
