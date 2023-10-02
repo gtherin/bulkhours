@@ -168,7 +168,7 @@ def init_database(config) -> None:
 
             print(
                 f"""⚠️\x1b[41m\x1b[37mYour token does not seem to be valid anymore.\x1b[0m⚠️ 
-Check that your token is still valid (contact: bulkhours@guydegnol.net).
+Check that your token is still valid (contact: contact@bulkhours.eu).
 The database has been reset to the local file '{cfg["database"]}'.
 """
             )
@@ -198,6 +198,7 @@ The database has been reset to the local file '{cfg["database"]}'.
         datafile = tools.abspath(datafile)
 
         DbDocument.set_cache_data(datafile)
+
 
     cfg = init_config("global", cfg)
 
@@ -279,7 +280,7 @@ def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, *
 
     config = add_user_to_virtual_room(config["email"], config)
 
-    if cinfo.restricted:
+    if 1: # cinfo.restricted:
         corr = get_solution_from_corrector(cinfo.cell_id, corrector=REF_USER, cinfo=cinfo)
         if corr is not None and user != REF_USER:
             if cinfo.language == "fr":

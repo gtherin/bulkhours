@@ -57,7 +57,9 @@ class WidgetBase:
             equals.explain_student(student_data, teacher_data, raw=False)
 
     def autocorrect(self, output):
-        teacher_data = CellParser.crunch_data(self.cinfo, user="solution")
+
+        #teacher_data = CellParser.crunch_data(self.cinfo, user="solution", data=None) # Get data from database
+        teacher_data = CellParser.crunch_data(self.cinfo, user=self.cinfo.user, data=self.cell_source) # Get data from cell
 
         if teacher_data.get_code("evaluation") == "":
             print("No correction available")

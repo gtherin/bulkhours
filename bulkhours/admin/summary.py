@@ -2,6 +2,7 @@ import json
 from .. import core
 from .exercice import Exercices, Exercice
 from . import tools
+import IPython
 
 
 def summary(
@@ -55,12 +56,6 @@ def summary(
             answers = json.load(json_file)
 
             for user, adata in answers.items():
-                if user not in users:
-                    print(
-                        f"\x1b[41mL'étudiant {user} est inconnu. Ajouter le depuis le menu dashboard:\nbulkhours.admin.dashboard()\x1b[0m"
-                        if language == "fr"
-                        else f"\x1b[41mStudent {user} is unknown. Please declare it in the dashboard: bulkhours.admin.dashboard()\x1b[0m"
-                    )
                 exercices.update_data(user, exo, adata)
 
     if cinfo in ["", "A"]:
@@ -72,7 +67,10 @@ def summary(
     data = data.set_index("mail")
     data = data[["nom", "prenom", "all"] + exos] if columns is None else data[columns]
 
+    sdata = tools.styles(data, cmap=cmap) if cmap is not None else data
+
     if export_notes:
+        IPython.display.display(sdata)
         return core.buttons.get_export_button(
             f"notes_{subject}_{virtual_room}_{notebook_id}.csv",
             data=data.to_csv(index=False),
@@ -81,4 +79,4 @@ def summary(
 💾Envoi de la réponse (contenu de la cellule actuelle) comme solution officielle.""",
         )
 
-    return tools.styles(data, cmap=cmap) if cmap is not None else data
+    return sdata

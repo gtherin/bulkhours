@@ -56,7 +56,7 @@ def update_github(update_git, files=".", msg="Add cache files", verbose=True):
         f.write(
             f"""cd {directory}
 # Configure git config info to avoid errors
-git config --global user.email "bulkhours@guydegnol.net" && git config --global user.name "guydegnol" 2> /dev/null
+git config --global user.email "contact@bulkhours.eu" && git config --global user.name "bulkhours.eu" 2> /dev/null
 git pull 2> /dev/null
 """
         )
