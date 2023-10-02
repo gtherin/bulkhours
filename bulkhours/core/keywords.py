@@ -5,36 +5,47 @@ import random as rd
 from PIL import Image
 
 from . import tools
-from .colors import caliases
+
+
+def get_caliases():
+    from .colors import caliases
+    ccaliases = caliases
+    #ccaliases["courses"] = "#585858"
+    return ccaliases
 
 
 def keywords():
-    return {"edtech": 2, 
-        "veille pédagogique": 2,
-        "cas pratiques": 1,
-        "génération d'énoncés'automatisés": 1, 
-        "interactivité": 5, 
-        "ML support": 4,
-        "various data API": 4,
-        "évaluations automatiques": 4,
-        "fabrication de cours": 2, 
-        "enseignement": 3, 
-        "science des données": 3, 
-        "plateforme dynamique": 1,
-        "outils d'évaluation": 2, 
-        "ocr": 2,
-        "enseignement à distance": 3,
-        "excellence pédagogique": 3,
-        "apprentissage par renforcement": 1,
-        "open source": 1,
-        "mathsématiques": 1,
-        "physique": 1,
-        "statistiques": 1,
-        "machine_learning": 1,
-        "jupyter": 1,
-        "python": 1,
-        "C++": 1,
+    return {"edtech": [2, None], 
+        "veille pédagogique": [2, None],
+        "cas pratiques": [1, None],
+        "génération d'énoncés automatisés": [1, None],
+        "interactivité": [5, None], 
+        "fournisseurs de données": [4, None],
+        "évaluations automatiques": [4, None],
+        "fabrication de cours": [2, None], 
+        "inovation pédagogique": [2, None],
+        "enseignement": [3, None],
+        "science des données": [3, None],
+        "plateforme réactive": [1, None],
+        "outils d'évaluation": [2, None],
+        "ocr": [2, None],
+        "enseignement à distance": [3, None],
+        "excellence pédagogique": [3, None],
+        "apprentissage par renforcement": [1, None],
+        "open source": [1, None],
+        "mathématiques": [1, None],
+        "physique": [1, None],
+        "statistiques": [1, None],
+        "machine learning": [4, None],
+        "jupyter": [1, None],
+        "automatisation": [1, None],
+        "robotique": [1, "courses"],
+        "python": [1, "courses"],
+        "c++": [1, "courses"],
+        "c": [1, "courses"],
+        "cuda": [1, "courses"],
 }
+
 
 
 def get_keywords():
@@ -42,13 +53,17 @@ def get_keywords():
 
     words = []
     for k, v in keywords().items():
-        words += [k] * v
+        words += [k] * v[0]
 
     rd.shuffle(words)
     return words
 
 def get_colors(word, font_size, position, orientation, random_state=None, **kwargs):
-    return rd.choice(list(caliases.values()))
+    wparams = keywords()[word]
+
+    if wparams[1] is not None and wparams[1] in get_caliases():
+        return get_caliases()[wparams[1]]
+    return rd.choice(list(get_caliases().values()))
 
 
 def get_wordscloud(default="brain"):
