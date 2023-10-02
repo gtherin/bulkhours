@@ -4,9 +4,9 @@ from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 
 
-def send_mail(me="guydegnol@gmail.com", you="guillaume.therin@guydegnol.net"):
+def send_mail(me="g*@gmail.com", you="contact@bulkhours.eu"):
     """Example:
-    admin.send_mail(me="guydegnol@gmail.com", you="sylvia.rdzzo@gmail.com") # sylvia.rdzzo@gmail.com guillaume.therin@gmail.com
+    admin.send_mail(me="g*@gmail.com", you="s*@gmail.com")
     """
 
     html = """

@@ -51,7 +51,7 @@ United Kingdom 16.368 7.590 36.390 53.933 0.4487
 The results of estimation of parameters in Mincer equations in a set of countries. We
 put the point estimates, standard errors (in italics) and p-values for zero restriction test of a
 particular parameter (in square brackets)""",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/mincer.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/mincer.py",
 )
 def get_params(self):
     return pd.read_csv(

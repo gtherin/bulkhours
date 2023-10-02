@@ -7,7 +7,7 @@ DataParser.register_dataset(
     summary="Data on CO2 and Greenhouse Gas Emissions by Our World in Data",
     category="Climate_Evolution",
     raw_data="https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv",
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/world.py",
     columns_info="https://github.com/owid/co2-data/blob/master/owid-co2-codebook.csv",
 )
 DataParser.register_dataset(
@@ -32,7 +32,7 @@ DataParser.register_dataset(
     raw_data="climate-change.csv",
     ref_source="""https://ourworldindata.org/atmospheric-concentrations""",
     kwargs=dict(zone="World"),
-    enrich_data="https://github.com/guydegnol/bulkhours/blob/main/bulkhours/data/world.py",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/world.py",
 )
 def get_concentrations(self, zone="World", **data_info):
     df = self.read_raw_data(self.raw_data)

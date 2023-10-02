@@ -75,19 +75,19 @@ def init_prems(config):
 
 def commercial(language="en", **kwargs):
     if language == "fr":
-        text1 = 'Cette page utilise (<i>Package de support de cours interactif</i>). Si vous aimez cette approche🚀🏆🎯, <br/>vous pouvez supporter le projet sur <a href="https://github.com/guydegnol/bulkhours">github</a> en donnant quelques etoiles.'
+        text1 = 'Cette page utilise (<i>Package de support de cours interactif</i>). Si vous aimez cette approche🚀🏆🎯, <br/>vous pouvez supporter le projet sur <a href="https://github.com/gtherin/bulkhours">github</a> en donnant quelques etoiles.'
     else:
-        text1 = 'This page is using (<i>A Support course package</i>). If you like this approach🚀🏆🎯, <br/>please support the project on <a href="https://github.com/guydegnol/bulkhours">github</a> with some stars.'
+        text1 = 'This page is using (<i>A Support course package</i>). If you like this approach🚀🏆🎯, <br/>please support the project on <a href="https://github.com/gtherin/bulkhours">github</a> with some stars.'
     IPython.display.display(
         IPython.display.HTML(
             f"""
 <table style="opacity:0.8;">
     <tr>
-      <td style="background-color: white;"><a href="https://github.com/guydegnol/bulkhours"><img style="background-color: white;" src="https://github.com/guydegnol/bulkhours/blob/ce2ce67a250b396b7341becf7deb09da961f2698/data/BulkHours.png?raw=true" width="100"></a></td>
+      <td style="background-color: white;"><a href="https://github.com/gtherin/bulkhours"><img style="background-color: white;" src="https://github.com/gtherin/bulkhours/blob/ce2ce67a250b396b7341becf7deb09da961f2698/data/BulkHours.png?raw=true" width="100"></a></td>
       <td style="background-color: white; text-align:left; color:black">{text1}</td>
-      <td style="background-color: white;"><a href="https://github.com/guydegnol/bulkhours">
-      <img style="background-color: white;" src="https://github.com/guydegnol/bulkhours/blob/main/data/github.png?raw=true" width="30"></a></td>
-      <td style="background-color: white;"><a href="https://github.com/guydegnol/bulkhours"><img style="background-color: white;margin-top: 0.5em;" src="https://github.com/guydegnol/bulkhours/blob/main/data/like.gif?raw=true" width="150"></a></td>
+      <td style="background-color: white;"><a href="https://github.com/gtherin/bulkhours">
+      <img style="background-color: white;" src="https://github.com/gtherin/bulkhours/blob/main/data/github.png?raw=true" width="30"></a></td>
+      <td style="background-color: white;"><a href="https://github.com/gtherin/bulkhours"><img style="background-color: white;margin-top: 0.5em;" src="https://github.com/gtherin/bulkhours/blob/main/data/like.gif?raw=true" width="150"></a></td>
 
 </tr></table>
 """
@@ -108,7 +108,7 @@ def init_env(packages=None, plt_style="default", **kwargs):
     database ="data/cache/course2.json"
     database ="/content/mydatabase.json"
      - A string with an identifier token. This token gives you access to: a real-time database (with id check), api to openai, huggingface, etc.
-     As this solution might generate reasonable costs, you should contact bulkhours@guydegnol.net to get a token.
+     As this solution might generate reasonable costs, you should contact contact@bulkhours.eu to get a token.
     database = "bkloud@SUBJECT/teacher::eNq-XXXXXXXXXXXHXXXXX-L29tB"
     database = "bkloud@SUBJECT/CLASSROOM_student::eNq-XXXXXXXXXXXHXXXXX-9tB"
      - A dict of config information. Only firestore config are functional for the moment. Examples:
