@@ -1,6 +1,6 @@
 
 
-bash /home/pi/bulkhours/gtherin/bots/cars/run.sh
+bash /home/pi/bulkhours/bulkhours/bots/cars/run.sh
 
 git clone https://github.com/gtherin/bulkhours
 
