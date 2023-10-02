@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-
 import os
 os.environ['PICARX_ROGUE_MODE'] = "True"
 os.environ['PICARX_PX_ADDRESS'] = "192.168.1.122"
@@ -8,16 +7,10 @@ os.environ['PICARX_PX_ADDRESS'] = "192.168.1.122"
 import Music as music
 from vilib import Vilib
 import ezblock
-
-
 import picar
 import picappx
 px = picappx.px
-import cv2
-import pygame
-from sensor_hat.joystick_module import Joystick_Module
 
-jy = Joystick_Module()
 
 def main():
 
@@ -30,26 +23,26 @@ def main():
         return
 
     if 1:
-        picappx.start_px_server()
-
-    if 1:
         Vilib.camera_start(True)
         Vilib.human_detect_switch(True)
         #Vilib.detect_color_name('red')
 
-    __RM_OBJECT__ = ezblock.Remote()
+    if 1:
+        picappx.start_px_server()
 
 
-    while True:
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-          print("YOYO")
     print("AAAAAAAAAAAAA")
     return
+
+    from sensor_hat.joystick_module import Joystick_Module
+
+    jy = Joystick_Module()
 
     Ref1 = 30
     Ref2 = 10
     panAngle = 0
 
+    __RM_OBJECT__ = ezblock.Remote()
     def move_joystick():
         px.forward(__RM_OBJECT__.get_joystick_value("B", "Y"))
         px.set_steering_angle((ezblock.mapping(__RM_OBJECT__.get_joystick_value("B", "X"), (-100), 100, (-45), 45)))
