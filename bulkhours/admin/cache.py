@@ -3,9 +3,9 @@ from . import tools
 from . import answers
 
 
-def cache_answers(cell_ids, update_git=False, verbose=True):
+def cache_answers(cell_ids, update_git=False, verbose=True, **kwargs):
     for cell_id in cell_ids:
-        cache_answer(cell_id, update_git=False, verbose=verbose)
+        cache_answer(cell_id, update_git=False, verbose=verbose, **kwargs)
 
     config = core.tools.get_config()
 
