@@ -23,8 +23,8 @@ def get_users_list(no_admin=True):
 
     users = []
     if not no_admin:
-        users += [(k, 1) for k in info.g["admins"].replace(",", ";").split(";") if k != ""]
-    users += [(k, 0) for k in info.g[virtual_room].replace(",", ";").split(";") if k != ""]
+        users += [(k, 1) for k in info.g["admins"].replace(",", ";").replace(" ", "").replace(" ", "").split(";") if k != ""]
+    users += [(k, 0) for k in info.g[virtual_room].replace(",", ";").replace(" ", "").replace(" ", "").split(";") if k != ""]
 
     users = pd.DataFrame(users, columns=["mail", "is_admin"]).drop_duplicates(subset=["mail"])
 
@@ -35,6 +35,9 @@ def get_users_list(no_admin=True):
     users = pd.concat(
         [users, pd.DataFrame.from_records([{"mail": "solution", "is_admin": 1, "prenom": "Sol", "nom": "Ution"}])]
     )
+    for c in ["prenom", "nom", "mail"]:
+        users[c] = users[c].astype(str)
+
     return users[["prenom", "nom", "mail", "is_admin"]]
 
 
