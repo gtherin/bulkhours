@@ -13,6 +13,7 @@ def summary(
     columns=None,
     cmap="RdBu",  # bwr_r RdBu
     export_notes=True,
+    aliases = {},
     **kwargs,
 ):
     """Permet de faire un point sur
@@ -34,7 +35,7 @@ def summary(
         st = lambda x: f"\x1b[30m\x1b[1m{x}\x1b[m"
         print(st(summary.__doc__))
 
-    virtual_room, subject, notebook_id = (config.get(v) for v in ["virtual_room", "subject", "notebook_id"])
+    virtual_room, subject, notebook_id = (config.get(v) for v in ["virtual_room", "subject", "notebook_id"], aliases=aliases)
     language = config["global"].get("language")
     course_info = config[notebook_id]
     exos = course_info["exercices"].split(";")

@@ -6,7 +6,7 @@ from .. import core
 from . import tools
 
 
-def get_answers(cell_id, refresh=True, update_git=False, verbose=False):
+def get_answers(cell_id, refresh=True, update_git=False, verbose=False, aliases = {}):
     config = core.tools.get_config()
     cinfo = core.tools.get_config(is_namespace=True)
     virtual_room, subject, notebook_id = (config.get(v) for v in ["virtual_room", "subject", "notebook_id"])
@@ -25,12 +25,12 @@ def get_answers(cell_id, refresh=True, update_git=False, verbose=False):
 
     data = {}
     for answer in docs:
-        student_id = answer.id
+        student_id = str(answer.id).replace(" ", "")
         if students_list.query(f"mail == '{student_id}'").empty:
             print(
-                f"\x1b[41m\x1B[37mL'étudiant \033[1m{student_id}\033[0m\x1b[41m\x1B[37m est inconnu. Régularisez la situation depuis le menu dashboard: 'bulkhours.admin.dashboard()'\x1b[0m"
+                f"\x1b[41m\x1B[37mL'étudiant \033[1m'{student_id}'\033[0m\x1b[41m\x1B[37m est inconnu. Régularisez la situation depuis le menu dashboard: 'bulkhours.admin.dashboard()'\x1b[0m"
                 if config["global"]["language"] == "fr"
-                else f"\x1b[41m\x1B[37mStudent \033[1m{student_id}\033[0m\x1b[41m\x1B[37m is unknown. Please fix the situation in the dashboard: 'bulkhours.admin.dashboard()'\x1b[0m"
+                else f"\x1b[41m\x1B[37mStudent \033[1m'{student_id}'\033[0m\x1b[41m\x1B[37m is unknown. Please fix the situation in the dashboard: 'bulkhours.admin.dashboard()'\x1b[0m"
             )
 
         if student_id in cdata:
