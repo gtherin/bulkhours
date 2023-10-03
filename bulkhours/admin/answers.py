@@ -25,7 +25,12 @@ def get_answers(cell_id, refresh=True, update_git=False, verbose=False, aliases 
 
     data = {}
     for answer in docs:
+
+        # Find the right name if typo in the db name
         student_id = str(answer.id).replace(" ", "")
+        if student_id in aliases:
+            student_id = aliases[student_id]
+
         if students_list.query(f"mail == '{student_id}'").empty:
             print(
                 f"\x1b[41m\x1B[37mL'étudiant \033[1m'{student_id}'\033[0m\x1b[41m\x1B[37m est inconnu. Régularisez la situation depuis le menu dashboard: 'bulkhours.admin.dashboard()'\x1b[0m"

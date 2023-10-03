@@ -35,7 +35,7 @@ def summary(
         st = lambda x: f"\x1b[30m\x1b[1m{x}\x1b[m"
         print(st(summary.__doc__))
 
-    virtual_room, subject, notebook_id = (config.get(v) for v in ["virtual_room", "subject", "notebook_id"], aliases=aliases)
+    virtual_room, subject, notebook_id = (config.get(v) for v in ["virtual_room", "subject", "notebook_id"])
     language = config["global"].get("language")
     course_info = config[notebook_id]
     exos = course_info["exercices"].split(";")
@@ -43,7 +43,7 @@ def summary(
     if reload_cache:
         from .cache import cache_answers
 
-        cache_answers(reload_cache if type(reload_cache) == list else exos, update_git=update_git, verbose=False)
+        cache_answers(reload_cache if type(reload_cache) == list else exos, update_git=update_git, verbose=False, aliases=aliases)
 
     data = tools.get_users_list(no_admin=no_admin)
     exercices = Exercices(users := list(data.mail.unique()), exos, course_info, config)
