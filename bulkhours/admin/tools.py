@@ -17,7 +17,7 @@ def switch_classroom(virtual_room, verbose=True):
 
     if verbose:
         if "is_locked" in cfg[cfg.notebook_id] and (cfg.virtual_room + ";") in cfg[cfg.notebook_id]["is_locked"]:
-            print(f"⚠️\x1b[31m\x1b[41m\x1b[37mStudents ca not submit answers '{cfg.notebook_id}/{cfg['virtual_room']}'\x1b[m⚠️")
+            print(f"⚠️\x1b[31m\x1b[41m\x1b[37mStudents can not submit answers '{cfg.notebook_id}/{cfg['virtual_room']}'\x1b[m⚠️")
         elif "is_locked" in cfg[cfg.notebook_id] and (cfg.virtual_room + ";") not in cfg[cfg.notebook_id]["is_locked"]:
             print(f"\x1b[32m\x1b[1mStudents can submit answers for '{cfg.notebook_id}/{cfg['virtual_room']}'\x1b[m")
 
