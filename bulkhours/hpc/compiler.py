@@ -32,10 +32,10 @@ class CCPPlugin(Magics):
         info = {}
         rawdata = self.cell_source if code is None else code
         if rawdata != "":
-            info.update({"main_execution": "", "evaluation": "", "explanation": ""})
+            info.update({"main_execution": "", "evaluation": "", "explanation": "", "hint": ""})
             mode = "main_execution"
             for l in rawdata.splitlines():
-                for tmode in ["evaluation", "explanation"]:
+                for tmode in ["evaluation", "explanation", "hint"]:
                     # Switch modes
                     if f"def student_{tmode}_function(" in l or f"float student_{tmode}_function(" in l:
                         mode = tmode

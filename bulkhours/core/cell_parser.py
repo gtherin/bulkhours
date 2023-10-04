@@ -23,7 +23,7 @@ def get_equals_args(code, func_id="bulkhours.is_equal"):
 
 
 class CellParser:
-    meta_modes = ["evaluation", "explanation"]
+    meta_modes = ["evaluation", "explanation", "hint"]
 
     def __init__(self, parse_cell=False, **kwargs):
         # Reformat db info to cell format
@@ -117,6 +117,9 @@ class CellParser:
     def is_explanation_available(self):
         return "explanation" in self.minfo and self.minfo["explanation"] != ""
 
+    def is_hint_available(self):
+        return "hint" in self.minfo and self.minfo["hint"] != ""
+
     def block_is_start(self, l, func_id):
         return f"def {func_id}(" in l or f"float {func_id}(" in l or f"int {func_id}(" in l
 
@@ -177,6 +180,7 @@ class CellParser:
         info = {
             "main_execution": self.get_code("main_execution"),
             "explanation": self.get_code("explanation"),
+            "hint": self.get_code("hint"),
             "evaluation": self.get_code("evaluation"),
             "answer": self.minfo["answer"],
         }

@@ -98,6 +98,26 @@ def explain_student(student_data, teacher_data, raw=False):
             print(explanation_code)
         IPython.get_ipython().run_cell(explanation_code)
 
+def hint_student(student_data, teacher_data, raw=False):
+    """Function to hint the answer to the student
+
+    Parameters
+    ----------
+    first : array_like
+        the 1st param name `first`
+    second : {'value', 'other'}, optional
+        the 3rd param, by default 'value'
+
+    Returns
+    -------
+    string
+        a value in a string
+    """
+    if "def student_hint" in (hint_code := teacher_data.get_code("hint")):
+        if "show_code=true" in hint_code.replace(" ", "").lower():
+            print(hint_code)
+        IPython.get_ipython().run_cell(hint_code)
+
 
 def evaluate_student(student_data, teacher_data, raw=False, use_student_context=True):
     """
