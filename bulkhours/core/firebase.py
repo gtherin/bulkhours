@@ -45,7 +45,7 @@ class DbDocument:
             "restricted": False,
             "virtual_rooms": "room1",
         },
-        "notebook": {"exercices": "", "evaluation": "", "page": ""},
+        "notebook": {"exercices": "", "evaluation": "", "page": "", "is_locked": ""},
         "session": dict(email="john.doe@un.known", notebook_id="n", database="data/cache/starwars.json", subject="s"),
     }
 
@@ -199,11 +199,12 @@ The database has been reset to the local file '{cfg["database"]}'.
 
         DbDocument.set_cache_data(datafile)
 
-
     cfg = init_config("global", cfg)
-
     if "virtual_room" not in cfg:
-        cfg["virtual_room"] = cfg["global"]["virtual_rooms"].split(";")[0]
+        if "virtual_room" in cfg["global"]:
+            cfg["virtual_room"] = cfg["global"]["virtual_room"]
+        else:
+            cfg["virtual_room"] = cfg["global"]["virtual_rooms"].split(";")[0]
 
     if cfg.notebook_id:
         cfg = init_config(cfg.notebook_id, cfg)
@@ -256,11 +257,16 @@ def delete_documents(cinfo, questions, user=REF_USER, verbose=False):
     # Split questions
     questions_ids = get_questions_ids(questions, cinfo=cinfo)
 
+    if verbose:
+        print(f"\x1b[31m\x1b[1mDelete answer for {user}: \x1b[m", end="")
+
     for question_id in questions_ids:
         if verbose:
-            print(f"\x1b[31m\x1b[1mDelete anwser for {question_id}/{user} (cloud)\x1b[m")
+            print(f"\x1b[31m\x1b[1m{question_id},\x1b[m", end="")
 
         get_document(question_id=question_id, user=user, cinfo=cinfo).delete()
+
+    print(f"\x1b[31m\x1b[1m (cloud)\x1b[m")
 
 
 def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, **kwargs):
@@ -279,6 +285,13 @@ def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, *
         save_config(config.notebook_id, config)
 
     config = add_user_to_virtual_room(config["email"], config)
+
+    if "is_locked" in config[config.notebook_id] and (config.virtual_room + ";") in config[config.notebook_id]["is_locked"]:
+        if cinfo.language == "fr":
+            print("⚠️\x1b[31m\x1b[1mLes réponses ne peuvent plus être soumise dans ce notebook.\x1b[m")
+        else:
+            print("⚠️\x1b[31m\x1b[1mThe answers can not be submitted anymore for this notebook.\x1b[m")
+        return
 
     if 1: # cinfo.restricted:
         corr = get_solution_from_corrector(cinfo.cell_id, corrector=REF_USER, cinfo=cinfo)
