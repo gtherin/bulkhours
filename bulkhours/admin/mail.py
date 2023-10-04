@@ -16,9 +16,7 @@ def send_mail(me="g*@gmail.com", you="contact@bulkhours.eu"):
         table, th, td {{ border: 1px solid black; border-collapse: collapse; }} th, td {{ padding: 5px; }}
         </style>
     </head>
-    <body><p>Salut bébé.</p>
-        <p>Ca boome ?</p>
-    P.S.: tu te fais draguer par un robot 🍆.
+    <body><p>Hello</p>
     </body>
     </html> """
 
