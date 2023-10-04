@@ -30,6 +30,8 @@ def summary(
     """
 
     config = core.tools.get_config(**kwargs)
+    if not core.tools.is_admin(config=config):
+        raise Exception("Only available for the admins🎓")
 
     if "help" in config and config["help"]:
         st = lambda x: f"\x1b[30m\x1b[1m{x}\x1b[m"
