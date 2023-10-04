@@ -123,6 +123,7 @@ class LineParser:
                 "options",
                 "language",
                 "restricted",
+                "is_locked",
                 "chatgpt",
                 "norm20",
                 "notebook_id",

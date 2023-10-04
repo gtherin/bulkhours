@@ -62,6 +62,21 @@ class WidgetDashboard(core.WidgetTextArea):
             indent=False,
             layout=ipywidgets.Layout(width="auto", flex_flow="row", display="flex"),
         )
+
+        if "is_locked" not in cfg:
+            cfg["is_locked"] = ""
+
+        is_locked = virtual_room in cfg.is_locked
+        self.ws["is_locked"] = ipywidgets.Checkbox(
+            value=is_locked,
+            description="Soumissions authorisée🟢/✔️interdite⛔" if cfg.isfr else "Submissions allowed🟢/✔️forbidden⛔",
+            indent=False,
+            tooltip="""The checkbox is used to control the global access to the notebooks:
+- If not checked🟢, students can still commit answers if the solution is not available,
+- If checked⛔, <b>students can not commit answers for this notebook anymore.</b>
+""",
+            layout=ipywidgets.Layout(width="auto", flex_flow="row", display="flex"),
+        )
         form_item_layout = ipywidgets.Layout(display="flex", flex_flow="row", justify_content="space-between")
 
         label = (
@@ -80,17 +95,6 @@ class WidgetDashboard(core.WidgetTextArea):
         def get_html(label):
             html_code = f"<b><font face='FiraCode Nerd Font' size=4 color='#888888'>{label}<font></b><br/>"
             return ipywidgets.HTML(value=html_code, layout=ipywidgets.Layout(flex="1 1 0%", width="auto"))
-
-        if 0:
-            xwidgets.append(
-                ipywidgets.Box(
-                    [
-                        get_html("Salle virtuelle active" if cfg.isfr else "Active virtual classroom"),
-                        self.ws["virtual_room"],
-                    ],
-                    layout=form_item_layout,
-                )
-            )
 
         for vroom in virtual_rooms.split(";") + ["admins"]:
             self.ws[vroom] = ipywidgets.Text(
@@ -144,6 +148,7 @@ class WidgetDashboard(core.WidgetTextArea):
                     self.ws["chatgpt"],
                     self.ws["norm20"],
                     self.ws["restricted"],
+                    self.ws["is_locked"],
                     self.ws["language"],
                     self.cinfo.abuttons["delete_solution"].b,
                     self.cinfo.abuttons["save_changes"].b,
@@ -181,6 +186,16 @@ class WidgetDashboard(core.WidgetTextArea):
 
         virtual_rooms = config["global"]["virtual_rooms"].split(";")
         config["global"].update({vroom: self.ws[vroom].value.replace(",", ";") for vroom in virtual_rooms})
+
+        if "is_locked" not in config[notebook_id]:
+            config[notebook_id]["is_locked"] = ""
+
+        if self.ws["is_locked"].value and config["virtual_room"] not in config[notebook_id]["is_locked"]:
+            print(f"⚠️\x1b[31m\x1b[41m\x1b[37mStudents won't be able to submit answers anymore for '{notebook_id}/{config['virtual_room']}'\x1b[m⚠️")
+            config[notebook_id]["is_locked"] += config["virtual_room"] + ";"
+        elif not self.ws["is_locked"].value and (config["virtual_room"] + ";") in config[notebook_id]["is_locked"]:
+            print(f"⚠️\x1b[32m\x1b[1mStudents can submit answers for '{notebook_id}/{config['virtual_room']}'\x1b[m⚠️")
+            config[notebook_id]["is_locked"] = config[notebook_id]["is_locked"].replace(config["virtual_room"] + ";", "")
 
         config[notebook_id].update(
             {k: self.ws[k].value.replace(",", ";") for k in ["exercices", "evaluation", "page", "virtual_room"]}

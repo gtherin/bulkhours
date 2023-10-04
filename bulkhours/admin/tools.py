@@ -7,14 +7,21 @@ from .. import core
 
 
 def switch_classroom(virtual_room, verbose=True):
-    info = core.tools.get_config(is_new_format=True)
-    if virtual_room is not None and virtual_room != info.virtual_room:
+    cfg = core.tools.get_config(is_new_format=True)
+    if virtual_room is not None and virtual_room != cfg.virtual_room:
         if verbose:
-            print(f"\x1b[35m\x1b[1mSwitching from {info.virtual_room} to {virtual_room}\x1b[m")
+            print(f"\x1b[35m\x1b[1mSwitching from {cfg.virtual_room} to {virtual_room}\x1b[m")
 
-        info["virtual_room"] = virtual_room
-        core.tools.update_config(info)
-    return info
+        cfg["virtual_room"] = virtual_room
+        core.tools.update_config(cfg)
+
+    if verbose:
+        if "is_locked" in cfg[cfg.notebook_id] and (cfg.virtual_room + ";") in cfg[cfg.notebook_id]["is_locked"]:
+            print(f"⚠️\x1b[31m\x1b[41m\x1b[37mStudents ca not submit answers '{cfg.notebook_id}/{cfg['virtual_room']}'\x1b[m⚠️")
+        elif "is_locked" in cfg[cfg.notebook_id] and (cfg.virtual_room + ";") not in cfg[cfg.notebook_id]["is_locked"]:
+            print(f"\x1b[32m\x1b[1mStudents can submit answers for '{cfg.notebook_id}/{cfg['virtual_room']}'\x1b[m")
+
+    return cfg
 
 
 def get_users_list(no_admin=True):
