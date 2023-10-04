@@ -56,6 +56,9 @@ class WidgetBase:
         if teacher_data.is_explanation_available():
             equals.explain_student(student_data, teacher_data, raw=False)
 
+        if teacher_data.is_hint_available():
+            equals.hint_student(student_data, teacher_data, raw=False)
+
     def autocorrect(self, output):
 
         #teacher_data = CellParser.crunch_data(self.cinfo, user="solution", data=None) # Get data from database

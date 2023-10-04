@@ -313,7 +313,7 @@ def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, *
     if user == REF_USER and "note" not in kwargs:
         kwargs.update({"note": 10})
     else:
-        kwargs = {k: v for k, v in kwargs.items() if k not in ["evaluation", "explanation", "visible"]}
+        kwargs = {k: v for k, v in kwargs.items() if k not in ["evaluation", "explanation", "hint", "visible"]}
 
     if update and get_document(question=cinfo.cell_id, user=user, cinfo=cinfo).get().to_dict():
         get_document(question=cinfo.cell_id, user=user, cinfo=cinfo).update(kwargs)
