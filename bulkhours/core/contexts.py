@@ -88,20 +88,25 @@ def build_context(data, code_label, context, do_evaluate, do_debug=False, use_co
     if not (code is None or len(code.replace("\n", "").replace(" ", "")) == 0):
         fcode = code if not use_context or "compile_and_exec" in code else generate_context_code(code, context)
 
-        output_return = "None"
-        if do_debug:
-            if user != "":
-                user = f" ({user})"
-            print(f"Execute context {context}/{code_label}/{data.minfo['source']}{user}")
-            run_cell(fcode)
-        else:
-            if do_evaluate:
+        #print(fcode)
+        IPython.get_ipython().run_cell(fcode)
+        return output
+
+        if 0:
+            output_return = "None"
+            if do_debug:
+                if user != "":
+                    user = f" ({user})"
+                print(f"Execute context {context}/{code_label}/{data.minfo['source']}{user}")
                 run_cell(fcode, stdout=True)
-                    #with redirect_stdout(f := io.StringIO()):
-                    #    with redirect_stderr(fe := io.StringIO()):
-                    #        run_cell(fcode)
-                    #        outpute_return = fe.getvalue()
-                    #        output_return = f.getvalue()
+            else:
+                if do_evaluate:
+                    run_cell(fcode, stdout=True)
+                        #with redirect_stdout(f := io.StringIO()):
+                        #    with redirect_stderr(fe := io.StringIO()):
+                        #        run_cell(fcode)
+                        #        outpute_return = fe.getvalue()
+                        #        output_return = f.getvalue()
 
     #run_cell(f'{context}.stderr="""{outpute_return}"""')
     #run_cell(f'{context}.stdout="""{output_return}"""')
