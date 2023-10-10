@@ -1,8 +1,6 @@
 import numpy as np
 import pandas as pd
-
-from . import tools
-
+import datetime
 
 class Exercice:
     fields = ["count", "time", "note"]
@@ -12,7 +10,8 @@ class Exercice:
         self.utime, self.note, self.count = np.nan, np.nan, np.nan
 
     def update_data(self, adata) -> None:
-        self.utime, self.note, self.count = adata["update_time"], adata["note"], 1
+        self.note, self.count = adata["note"], 1
+        self.utime = adata["update_time"] if "update_time" in adata else datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if self.note is None:  # Failure of automatic grades
             self.note = -2
         else:

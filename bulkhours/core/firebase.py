@@ -286,7 +286,7 @@ def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, *
 
     config = add_user_to_virtual_room(config["email"], config)
 
-    if "is_locked" in config[config.notebook_id] and (config.virtual_room + ";") in config[config.notebook_id]["is_locked"]:
+    if user != REF_USER and "is_locked" in config[config.notebook_id] and (config.virtual_room + ";") in config[config.notebook_id]["is_locked"]:
         if cinfo.language == "fr":
             print("⚠️\x1b[31m\x1b[1mLes réponses ne peuvent plus être soumise dans ce notebook.\x1b[m")
         else:
