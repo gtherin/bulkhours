@@ -1,7 +1,7 @@
 import IPython
 import io
 import ipywidgets
-from contextlib import redirect_stdout
+from contextlib import redirect_stdout, redirect_stderr
 from .cell_parser import CellParser
 
 
@@ -11,9 +11,8 @@ class CellContext:
     When using the correction code, the stdout and answer are filled
     """
 
-    @property
-    def stdout(self):
-        return False
+    stdout = io.StringIO()
+    stderr = io.StringIO()
 
     @property
     def answer(self):
@@ -78,7 +77,7 @@ def generate_context_code(code, context):
     return ncode
 
 
-def build_context(data, code_label, context, do_evaluate, do_debug=False, use_context=True):
+def build_context(data, code_label, context, do_evaluate, do_debug=False, use_context=True, user=""):
     output = ipywidgets.Output()
     if code_label not in data.minfo:
         return output
@@ -91,17 +90,23 @@ def build_context(data, code_label, context, do_evaluate, do_debug=False, use_co
 
         output_return = "None"
         if do_debug:
-            print(f"Execute context {context}/{code_label}/{data.minfo['source']}")
+            if user != "":
+                user = f" ({user})"
+            print(f"Execute context {context}/{code_label}/{data.minfo['source']}{user}")
             run_cell(fcode)
         else:
-            with output:
-                if do_evaluate:
-                    with redirect_stdout(f := io.StringIO()):
-                        run_cell(fcode)
-                        output_return = f.getvalue()
+            if do_evaluate:
+                run_cell(fcode, stdout=True)
+                    #with redirect_stdout(f := io.StringIO()):
+                    #    with redirect_stderr(fe := io.StringIO()):
+                    #        run_cell(fcode)
+                    #        outpute_return = fe.getvalue()
+                    #        output_return = f.getvalue()
 
-    run_cell(f'{context}.stdout="""{output_return}"""')
+    #run_cell(f'{context}.stderr="""{outpute_return}"""')
+    #run_cell(f'{context}.stdout="""{output_return}"""')
 
     if data.is_cell_type():
         run_cell(f'{context}.answer={data["answer"]}')
+
     return output

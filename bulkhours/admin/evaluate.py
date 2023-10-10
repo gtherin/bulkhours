@@ -4,6 +4,7 @@ import ipywidgets
 
 from .. import core
 from . import answers
+from . import tools
 
 DEFAULT_NOTE = -1
 
@@ -23,11 +24,13 @@ def show_answer(out, cuser, answer, style=None):
     with out:
         # Show code
         core.tools.html(f"Code ({cuser})", size="4", color=color, use_ipywidgets=True, display=True)
-        core.tools.code(answer["answer"], display=True, style=style)  # , raw=show_raw_code
+        if "answer" in answer:
+            core.tools.code(answer["answer"], display=True, style=style)  # , raw=show_raw_code
 
         # Execute code
         core.tools.html(f"Execution ({cuser})💻", size="4", color=color, use_ipywidgets=True, display=True)
-        core.tools.eval_code(answer["answer"])
+        if "answer" in answer:
+            core.tools.eval_code(answer["answer"])
 
 
 def create_evaluation_buttonanswer(cell_id, cuser, answer):
@@ -55,7 +58,7 @@ def create_evaluation_buttonanswer(cell_id, cuser, answer):
     def sevaluate(data, output):
         with output:
             output.clear_output()
-            answers.update_note(cell_id, cuser, widget.value)
+            answers.update_note(cell_id, cuser, widget.value, is_manual=True)
 
     def sevaluate2(b):
         return core.buttons.update_button(b, abuttons["e"], output, None, sevaluate)
@@ -69,9 +72,13 @@ def evaluate(cell_id, user="NEXT", show_correction=False, style=None, **kwargs):
     cell_answers = answers.get_answers(cell_id, **kwargs)
     config = core.tools.get_config(is_new_format=True)
 
+    users = tools.get_users_list(no_admin=False)
+    ausers = users.set_index("auser")["mail"].to_dict()
+
     nuser, did_find_answer = user, False
     for cuser, answer in cell_answers.items():
-        if (user == "NEXT" and answer["note"] == DEFAULT_NOTE) or user == cuser:
+
+        if (user == "NEXT" and answer["note"] == DEFAULT_NOTE) or user == cuser or (user in ausers and ausers[user] == cuser):
             nuser, did_find_answer = cuser, True
             if show_correction and "solution" in cell_answers:
                 out1 = ipywidgets.Output(layout={"width": "50%"})

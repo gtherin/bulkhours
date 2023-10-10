@@ -57,6 +57,10 @@ class CellParser:
         self.get_cell_decomposition()
         return self.minfo[c]["code"] if c in self.minfo and "code" in self.minfo[c] else ""
 
+    def is_manual_note(self):
+        return "note_src" in self.minfo and self.minfo["note_src"] in "manual"
+        
+
     @property
     def max_score(self):
         return (

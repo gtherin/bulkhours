@@ -2,6 +2,7 @@ import os
 import subprocess
 import datetime
 import pandas as pd
+import numpy as np
 import matplotlib
 from .. import core
 
@@ -24,7 +25,7 @@ def switch_classroom(virtual_room, verbose=True):
     return cfg
 
 
-def get_users_list(no_admin=True):
+def get_users_list(no_admin=True, sort_by=None):
     info = core.tools.get_config(is_new_format=True)
     virtual_room = info["virtual_room"]
 
@@ -42,10 +43,20 @@ def get_users_list(no_admin=True):
     users = pd.concat(
         [users, pd.DataFrame.from_records([{"mail": "solution", "is_admin": 1, "prenom": "Sol", "nom": "Ution"}])]
     )
-    for c in ["prenom", "nom", "mail"]:
+
+    users['auser'] = users["prenom"] + "." + users["nom"].str[0]
+    users["auser"] = users['auser'].where(~users['auser'].duplicated(), other=users["prenom"] + "." + users["nom"])
+
+    for c in ["prenom", "nom", "mail", "auser"]:
         users[c] = users[c].astype(str)
 
-    return users[["prenom", "nom", "mail", "is_admin"]]
+    users = users[['auser', "prenom", "nom", "mail", "is_admin"]]
+    if sort_by is not None:
+        users = users.sort_by(sort_by)
+
+    users.index = range(len(users))
+
+    return users
 
 
 def update_github(update_git, files=".", msg="Add cache files", verbose=True):
@@ -95,30 +106,35 @@ git pull 2> /dev/null
         print(f"\x1b[32m\x1b[1m{msg}{cmd}\x1b[m")
 
 
-def styles(data, cmap="RdBu"):
-    import numpy as np
+def styles(sdata, cmap="RdBu", icolumns=["nom", "prenom"], sorted_by=True):
 
     mincolor = matplotlib.colors.rgb2hex(matplotlib.cm.get_cmap(cmap)(0.0))
 
     def interpret(v):
         if type(v) == str:
             return None
-        if v == -10 or v == -1:
+        if v == core.tools.GradesErr.GRADE_IS_NAN or v == -1:
             return "color:#FF3B52;background-color:#FF3B52;opacity: 20%;"
         if v != v or np.abs(v) < 0.1:  # Failure of automatic corrections
             return f"color:{mincolor};background-color:{mincolor};"
         return None
 
-    fcolumns = [c.replace(".n", "") for c in data.columns if c not in ["nom", "prenom"]]
+    fcolumns = [c.replace(".n", "") for c in sdata.columns if c not in icolumns]
     nacolumns = [c for c in fcolumns if "all" not in c]
-    sdata = data.sort_values(["nom", "prenom"]).rename(columns={c + ".n": c for c in fcolumns})
+
+    if sorted_by:
+        sdata = sdata.sort_values(icolumns)
+
+    sdata = sdata.rename(columns={c + ".n": c for c in fcolumns})
 
     for c in nacolumns:
         if c in sdata.columns:
-            sdata[c] = sdata[c].fillna(-10)
+            sdata[c] = sdata[c].fillna(core.tools.GradesErr.GRADE_IS_NAN)
             sdata[c] = sdata[c].replace(0, np.nan)
 
+
     stylish = sdata.style.hide(axis="index").format(precision=1, subset=list(fcolumns))
+
     stylish = (
         stylish.hide(axis="index")
         .background_gradient(cmap=cmap, vmin=0, vmax=10)
