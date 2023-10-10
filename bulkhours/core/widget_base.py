@@ -2,6 +2,7 @@ import IPython
 import ipywidgets
 from . import tools
 import numpy as np
+import pandas as pd
 import sys
 from .cell_parser import CellParser
 from .line_parser import LineParser
@@ -36,7 +37,7 @@ class WidgetBase:
         student_data = CellParser.crunch_data(self.cinfo, user=self.cinfo.user, data=self.cell_source)
 
         if teacher_data.is_evaluation_available():
-            score = equals.evaluate_student(student_data, teacher_data, raw=False)
+            score = equals.evaluate_student(student_data, teacher_data, raw=False, user=self.cinfo.user)
         else:
             score = ""
 
@@ -70,20 +71,66 @@ class WidgetBase:
 
         from .. import admin
 
-        users = admin.tools.get_users_list(no_admin=False)
+        grades = admin.tools.get_users_list(no_admin=False)#, sort_by="nom")
 
-        users[self.cinfo.cell_id + ".n"] = np.nan
-        users = users.set_index("mail")[["nom", "prenom", self.cinfo.cell_id + ".n"]]
+        grades[self.cinfo.cell_id + ".n"] = np.nan
+        grades = grades[["auser", "mail", self.cinfo.cell_id + ".n"]]
 
-        answers = admin.answers.get_answers(self.cinfo.cell_id, verbose=False)
-        for user, answer in answers.items():
-            student_data = CellParser.crunch_data(self.cinfo, user=user, data=answer)
-            score = equals.evaluate_student(student_data, teacher_data, raw=True)
+        print(f"\x1b[35m\x1b[1mNotes for {self.cinfo.cell_id}: \x1b[m", end="")
 
-            users.loc[user, self.cinfo.cell_id + ".n"] = score
-            admin.answers.update_note(self.cinfo.cell_id, user, score)
+        max_score = equals.get_max_score(teacher_data)
 
-        IPython.display.display(admin.tools.styles(users))
+        answers = admin.answers.get_answers(self.cinfo.cell_id, verbose=False, refresh=False)
+        for u in grades.index:
+
+            mail, auser = grades["mail"][u], grades["auser"][u]
+            if type(mail) == pd.Series:
+                mail, auser = mail.iloc[0], auser.iloc[0]
+
+            #if auser != "Yann-loic-atasse.A":
+            #    continue
+
+            print(f"\x1b[35m\x1b[1m{auser}, \x1b[m", end="")
+
+            if mail not in answers:
+                print(f"\x1b[35m\x1b[1m(nan), \x1b[m", end="")
+                continue
+
+            # Get student data
+            student_data = CellParser.crunch_data(self.cinfo, user=mail, data=answers[mail])
+
+            # Don't perform autocorrection if no data is available 
+            if student_data.is_manual_note():
+                print(f"\x1b[35m\x1b[1m({student_data.minfo['note']} [MAN]), \x1b[m", end="")
+                continue
+
+            #try:
+            score = equals.evaluate_student(student_data, teacher_data, raw=True, user=auser)
+            print(f"\x1b[35m\x1b[1m({score}), \x1b[m", end="")
+            #except:
+            #    print(f"\x1b[35m\x1b[1m(SHIT), \x1b[m", end="")
+
+            grades.loc[u, self.cinfo.cell_id + ".n"] = score
+            #print(f"GGGGG {user}, H{student_data.get_code('main_execution')}H")
+
+        admin.answers.update_notes(self.cinfo.cell_id, grades)
+        grades = grades.drop(columns=["mail"]).set_index("auser").T
+
+        import matplotlib
+        cmap = "RdBu"
+        mincolor = matplotlib.colors.rgb2hex(matplotlib.cm.get_cmap(cmap)(0.0))
+
+        def interpret(v):
+            if type(v) == str:
+                return None
+            if v == tools.GradesErr.GRADE_IS_NAN or v == -1:
+                return "color:#FF3B52;background-color:#FF3B52;opacity: 20%;"
+            if v != v or np.abs(v) < 0.1:  # Failure of automatic corrections
+                return f"color:{mincolor};background-color:{mincolor};"
+            return None
+
+        grades = grades.style.format(precision=1).applymap(interpret).background_gradient(cmap=cmap, vmin=0, vmax=max_score)
+        IPython.display.display(grades)
 
     def submit(self, output, user=None):
         from . import firebase

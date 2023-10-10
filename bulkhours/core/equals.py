@@ -7,6 +7,7 @@ import pandas as pd
 import os
 
 from . import contexts
+from . import tools
 
 
 def is_equal(
@@ -119,14 +120,7 @@ def hint_student(student_data, teacher_data, raw=False):
         IPython.get_ipython().run_cell(hint_code)
 
 
-def evaluate_student(student_data, teacher_data, raw=False, use_student_context=True):
-    """
-    This function is used to evaluate the student code.
-
-    
-    :param debug: this is a first param
-    :returns: this is a description of what is returned
-    """
+def get_max_score(teacher_data):
     # Get the formatted evaluation code
     evaluation_code = (
         teacher_data.get_code("evaluation")
@@ -140,18 +134,53 @@ os.environ['FINAL_SCORE'] = str(eresult)
     do_debug = "debug=true" in evaluation_code.replace(" ", "").lower()
 
     # Run the teacher code if needed
-    out1 = contexts.build_context(
+    outt = contexts.build_context(
         teacher_data, "main_execution", "teacher", f"teacher." in evaluation_code, do_debug=do_debug
     )
 
+    try:
+        contexts.run_cell(evaluation_code.replace("student.", "teacher."), stdout=False)
+        return float(os.environ["FINAL_SCORE"])
+    except:
+        return tools.GradesErr.MAX_SCORE_NOT_AVAILABLE
+
+
+def evaluate_student(student_data, teacher_data, raw=False, use_student_context=True, user=""):
+    """
+    This function is used to evaluate the student code.
+
+    
+    :param debug: this is a first param
+    :returns: this is a description of what is returned
+    """
+
+    student_code = student_data.get_code("main_execution")
+    if student_code == "":
+        return np.nan
+
+    # Get the formatted evaluation code
+    evaluation_code = (
+        teacher_data.get_code("evaluation")
+        + """global eresult
+eresult = student_evaluation_function()
+import os
+os.environ['FINAL_SCORE'] = str(eresult)
+"""
+    )
+
+    do_debug = "debug=true" in evaluation_code.replace(" ", "").lower()
+
+    # Run the teacher code and get max_score from it
+    max_score = get_max_score(teacher_data)
+
     # Run the student code if needed
-    out2 = contexts.build_context(
+    outs = contexts.build_context(
         student_data,
         "main_execution",
         "student",
         f"student." in evaluation_code,
         do_debug=do_debug,
-        use_context=use_student_context,
+        use_context=use_student_context, user=user
     )
     if not use_student_context:
         evaluation_code = evaluation_code.replace("student.", "")
@@ -159,14 +188,13 @@ os.environ['FINAL_SCORE'] = str(eresult)
     if "show_code=true" in teacher_data.get_code("evaluation").replace(" ", "").lower():
         print(evaluation_code)
 
-    contexts.run_cell(evaluation_code, do_debug)
-
-    score = float(os.environ["FINAL_SCORE"])
+    try:
+        contexts.run_cell(evaluation_code, do_debug)
+        score = float(os.environ["FINAL_SCORE"])
+    except:
+        score = tools.GradesErr.EVALUTATION_CRASHED
 
     if raw:
         return score
-
-    contexts.run_cell(evaluation_code.replace("student.", "teacher."), stdout=False)
-    max_score = float(os.environ["FINAL_SCORE"])
 
     return f"{score}/{max_score}"

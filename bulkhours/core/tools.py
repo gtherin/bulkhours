@@ -5,6 +5,11 @@ import IPython
 from argparse import Namespace
 from .config import Config
 
+class GradesErr:
+    EVALUTATION_CRASHED = -11
+    GRADE_IS_NAN = -12
+    MAX_SCORE_NOT_AVAILABLE = -13
+
 
 def get_platform():
     if os.path.exists("/content"):

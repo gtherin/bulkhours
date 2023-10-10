@@ -17,12 +17,13 @@ class WidgetCode(WidgetBase):
         return self.cell_source
 
     def execute_raw_cell(self, bbox, output):
+
         student_data = CellParser.crunch_data(cinfo=self.cinfo, user=self.cinfo.user, data=self.cell_source)
 
         if student_data.do_run_evaluation():
             teacher_data = student_data
             # teacher_data = CellParser.crunch_data(self.cinfo, user="solution", data=None)
-            score = equals.evaluate_student(student_data, teacher_data, raw=False)
+            score = equals.evaluate_student(student_data, teacher_data, raw=False, user=self.cinfo.user)
             print(f"Estimated score: {score}")
         else:
             with output:
@@ -52,7 +53,7 @@ class WidgetScript(WidgetCode):
             # teacher_data = CellParser.crunch_data(self.cinfo, user="solution", data=None)
             # student_data = CellParser.crunch_data(self.cinfo, user=self.cinfo.user, data=self.cell_source)
 
-            score = equals.evaluate_student(student_data, teacher_data, raw=False)
+            score = equals.evaluate_student(student_data, teacher_data, raw=False, user=self.cinfo.user)
             print(f"Estimated score: {score}")
         else:
             with output:
