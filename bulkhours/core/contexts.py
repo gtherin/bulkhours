@@ -1,31 +1,8 @@
 import IPython
-import io
 import ipywidgets
-from contextlib import redirect_stdout, redirect_stderr
+import io
+from contextlib import redirect_stdout
 from .cell_parser import CellParser
-
-
-class CellContext:
-    """This context cell contains cell executions:
-    - Two are defined by default: 'student' or 'teacher'
-    When using the correction code, the stdout and answer are filled
-    """
-
-    stdout = io.StringIO()
-    stderr = io.StringIO()
-
-    @property
-    def answer(self):
-        return False
-
-    @property
-    def data(self):
-        return 3
-
-    @property
-    def stdout2(self):
-        return True
-
 
 def run_cell(code, stdout=True):
     if (ipp := IPython.get_ipython()) is None:
@@ -42,11 +19,14 @@ def run_cell(code, stdout=True):
 
 def generate_empty_context(context):
     run_cell(
-        f"""class CellContext:
-    @property
-    def stdout2(self):
-        return False
-                                   
+        f"""
+import io
+from contextlib import redirect_stdout
+
+class CellContext:
+    stdout = io.StringIO()
+    stderr = io.StringIO()
+                                           
 {context} = CellContext()
 """
     )
@@ -59,21 +39,25 @@ def add_variables_in_contexts(cell_id, configs):
 
 def generate_context_code(code, context):
     code = CellParser.remove_meta_functions_execution(code)
-    ncode = f"\n\nclass C{context}:\n"
+    def tab(t):
+        return "    " * t
+    ncode = f"""\n
+class C{context}:
+{tab(1)}def __init__(self):
+{tab(2)}self.stderr, self.stdout = "", ""
+{tab(2)}with redirect_stdout(stdout := io.StringIO()):
+{tab(3)}try:
+\n\n"""
     for l in code.splitlines():
-        ncode += f"    {l}\n"
+        ncode += f"{tab(4)}{l}\n"
+    ncode += f"""
+{tab(3)}except Exception as e:
+{tab(4)}self.stderr = e
+"""
 
-    ncode += f"{context.lower()} = C{context}\n"
-    return ncode
-
-
-def generate_context_code(code, context):
-    code = CellParser.remove_meta_functions_execution(code)
-    ncode = f"\n\nclass C{context}:\n"
-    for l in code.splitlines():
-        ncode += f"    {l}\n"
-
-    ncode += f"{context.lower()} = C{context}\n"
+    ncode += f"{tab(3)}for k, v in locals().items(): setattr(self, k, v)\n"
+    ncode += f"{tab(3)}self.stdout = stdout.getvalue()\n"
+    ncode += f"{context.lower()} = C{context}()\n"
     return ncode
 
 
@@ -90,28 +74,6 @@ def build_context(data, code_label, context, do_evaluate, do_debug=False, use_co
 
         #print(fcode)
         IPython.get_ipython().run_cell(fcode)
-        return output
-
-        if 0:
-            output_return = "None"
-            if do_debug:
-                if user != "":
-                    user = f" ({user})"
-                print(f"Execute context {context}/{code_label}/{data.minfo['source']}{user}")
-                run_cell(fcode, stdout=True)
-            else:
-                if do_evaluate:
-                    run_cell(fcode, stdout=True)
-                        #with redirect_stdout(f := io.StringIO()):
-                        #    with redirect_stderr(fe := io.StringIO()):
-                        #        run_cell(fcode)
-                        #        outpute_return = fe.getvalue()
-                        #        output_return = f.getvalue()
-
-    #run_cell(f'{context}.stderr="""{outpute_return}"""')
-    #run_cell(f'{context}.stdout="""{output_return}"""')
-
-    if data.is_cell_type():
-        run_cell(f'{context}.answer={data["answer"]}')
-
-    return output
+        
+    #if data.is_cell_type():
+    #    run_cell(f'{context}.answer={data["answer"]}')

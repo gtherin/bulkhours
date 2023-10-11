@@ -116,20 +116,8 @@ class WidgetBase:
         admin.answers.update_notes(self.cinfo.cell_id, grades)
         grades = grades.drop(columns=["mail"]).set_index("auser").T
 
-        import matplotlib
-        cmap = "RdBu"
-        mincolor = matplotlib.colors.rgb2hex(matplotlib.cm.get_cmap(cmap)(0.0))
-
-        def interpret(v):
-            if type(v) == str:
-                return None
-            if v == tools.GradesErr.GRADE_IS_NAN or v == -1:
-                return "color:#FF3B52;background-color:#FF3B52;opacity: 20%;"
-            if v != v or np.abs(v) < 0.1:  # Failure of automatic corrections
-                return f"color:{mincolor};background-color:{mincolor};"
-            return None
-
-        grades = grades.style.format(precision=1).applymap(interpret).background_gradient(cmap=cmap, vmin=0, vmax=max_score)
+        tools.GradesErr.set_min_color(minvalue=0.0, cmap=(cmap:="RdBu"))
+        grades = grades.style.format(precision=1).applymap(tools.GradesErr.interpret).background_gradient(cmap=cmap, vmin=0, vmax=max_score)
         IPython.display.display(grades)
 
     def submit(self, output, user=None):
