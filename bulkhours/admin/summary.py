@@ -16,6 +16,7 @@ def summary(
     cmap="RdBu",  # bwr_r RdBu
     export_notes=True,
     aliases = {},
+    hide_grades = False,
     **kwargs,
 ):
     """Permet de faire un point sur
@@ -70,7 +71,7 @@ def summary(
     data = data.set_index("mail")
     data = data[["nom", "prenom", "all"] + exos] if columns is None else data[columns]
 
-    sdata = tools.styles(data, cmap=cmap) if cmap is not None else data
+    sdata = tools.styles(data, cmap=cmap, hide_grades=hide_grades) if cmap is not None else data
 
     if export_notes:
         IPython.display.display(sdata)
