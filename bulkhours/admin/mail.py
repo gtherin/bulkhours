@@ -34,7 +34,7 @@ def prepare_mail(label=None, default_student="john.doe@bulkhours.eu", signature=
 
 {end},<br/><br/>
 
-{signature}
+{signature}</b>
 <img alt="" src="https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/BulkHours.png" width=100 />
 
 </body>
