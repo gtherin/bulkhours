@@ -135,8 +135,9 @@ def init_env(packages=None, plt_style="default", **kwargs):
     #if quiet_mode:
     #    commercial(**kwargs)
 
-    config = firebase.init_database(kwargs)
-    info = init_prems(config)
+    cfg = firebase.init_database(kwargs)
+    
+    info = init_prems(cfg)
     start_time = time.time()
 
     if packages is not None and "BLK_PACKAGES_STATUS" not in os.environ:
@@ -146,13 +147,13 @@ def init_env(packages=None, plt_style="default", **kwargs):
     colors.set_plt_style(plt_style)
     version = open(tools.abspath("bulkhours/__version__.py")).readlines()[0].split('"')[1]
 
-    einfo = f", ⚠️\x1b[31m\x1b[41m\x1b[37m in admin/teacher🎓 mode\x1b[0m⚠️" if tools.is_admin(config=config) else ""
+    einfo = f", ⚠️\x1b[31m\x1b[41m\x1b[37m in admin/teacher🎓 mode\x1b[0m⚠️" if tools.is_admin(cfg=cfg) else ""
     if not quiet_mode:
         print(f"Import BULK Helper cOURSe (\x1b[0m\x1b[36mversion='{version}'\x1b[0m🚀{einfo}):", end="")
-    if "bkloud" not in config["database"]:
+    if "bkloud" not in cfg["database"]:
         if not quiet_mode:
             print(
-                f"⚠️\x1b[31mDatabase is local (security_level={config['security_level']}). Export your config file if you need persistency.\x1b[0m⚠️",
+                f"⚠️\x1b[31mDatabase is local (security_level={cfg['security_level']}). Export your config file if you need persistency.\x1b[0m⚠️",
                 end="",
             )
     if ipp := IPython.get_ipython():

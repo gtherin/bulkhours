@@ -60,12 +60,20 @@ def create_evaluation_buttonanswer(cell_id, cuser, answer):
             output.clear_output()
             answers.update_note(cell_id, cuser, widget.value, is_manual=True)
 
+    def sautocorrect(data, output):
+        with output:
+            print("🚧Need to implement autocorrect here")
+
     def sevaluate2(b):
         return core.buttons.update_button(b, abuttons["e"], output, None, sevaluate)
 
-    abuttons["e"].b.on_click(sevaluate2)
+    def autocorrect(b):
+        return core.buttons.update_button(b, abuttons["e"], output, None, sautocorrect)
 
-    IPython.display.display(ipywidgets.HBox([label, widget, abuttons["e"].b]), output)
+    abuttons["e"].b.on_click(sevaluate2)
+    abuttons["a"].b.on_click(autocorrect)
+
+    IPython.display.display(ipywidgets.HBox([label, widget, abuttons["e"].b, abuttons["a"].b]), output)
 
 
 def evaluate(cell_id, user="NEXT", show_correction=False, style=None, **kwargs):

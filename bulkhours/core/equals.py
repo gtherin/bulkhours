@@ -121,12 +121,14 @@ def hint_student(student_data, teacher_data, raw=False):
 
 
 def get_evaluation_code(teacher_data):
-    return teacher_data.get_code("evaluation") + """
+    return f""" 
+import os
+os.environ['FINAL_SCORE'] = "0"
+%s
 global eresult
 eresult = student_evaluation_function()
-import os
 os.environ['FINAL_SCORE'] = str(eresult)
-"""
+""" % teacher_data.get_code("evaluation")
 
 
 def get_max_score(teacher_data):
@@ -144,7 +146,7 @@ def get_max_score(teacher_data):
         return tools.GradesErr.MAX_SCORE_NOT_AVAILABLE
 
 
-def evaluate_student(student_data, teacher_data, raw=False, use_student_context=True, user=""):
+def evaluate_student(student_data, teacher_data, raw=False, use_student_context=True, user="", verbose=False):
     """
     This function is used to evaluate the student code.
 
@@ -154,7 +156,7 @@ def evaluate_student(student_data, teacher_data, raw=False, use_student_context=
 
     student_code = student_data.get_code("main_execution")
     if student_code == "":
-        return np.nan # tools.GradesErr.NO_ANSWER_FOUND
+        return tools.GradesErr.NO_ANSWER_FOUND
 
     # Get the formatted evaluation code
     evaluation_code = get_evaluation_code(teacher_data)
@@ -164,7 +166,7 @@ def evaluate_student(student_data, teacher_data, raw=False, use_student_context=
     max_score = get_max_score(teacher_data)
 
     # Run the student code if needed
-    outs = contexts.build_context(
+    contexts.build_context(
         student_data,
         "main_execution",
         "student",
@@ -182,7 +184,7 @@ def evaluate_student(student_data, teacher_data, raw=False, use_student_context=
         contexts.run_cell(evaluation_code, do_debug)
         score = float(os.environ["FINAL_SCORE"])
     except:
-        score = tools.GradesErr.EVALUTATION_CRASHED
+        score = tools.GradesErr.EVALUATION_CRASHED
 
     if raw:
         return score

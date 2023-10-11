@@ -5,28 +5,32 @@ import IPython
 from argparse import Namespace
 from .config import Config
 import matplotlib
-import numpy as np
 
 class GradesErr:
+    DEFAULT_GRADE = -9
     NO_ANSWER_FOUND = -10
-    EVALUTATION_CRASHED = -11
-    GRADE_IS_NAN = -12
+    EVALUATION_CRASHED = -11
+    ANSWER_FOUND = -12
     MAX_SCORE_NOT_AVAILABLE = -13
 
-    def is_missing_grade(v):
-        return v == GradesErr.GRADE_IS_NAN or v == -1
-
+    @staticmethod
     def set_min_color(minvalue=0.0, cmap="RdBu"):
         GradesErr.mincolor = matplotlib.colors.rgb2hex(matplotlib.cm.get_cmap(cmap)(minvalue))
 
+    @staticmethod
     def interpret(v):
         if type(v) == str:
             return None
-        if GradesErr.is_missing_grade(v):
+        elif v in [GradesErr.DEFAULT_GRADE, GradesErr.EVALUATION_CRASHED, GradesErr.ANSWER_FOUND]:
             return "color:#FF3B52;background-color:#FF3B52;opacity: 20%;"
-        if v != v or np.abs(v) < 0.1:  # Failure of automatic corrections
+        elif v != v:  # Failure of automatic corrections
             return f"color:{GradesErr.mincolor};background-color:{GradesErr.mincolor};"
-        return None
+        else:
+            return None
+
+    @staticmethod
+    def is_valid(note):
+        return note >= 0
 
 
 def get_platform():
@@ -50,12 +54,12 @@ def abspath(filename="", rdir=None, create_dir=True):
     return os.path.abspath(rdir + filename)
 
 
-def update_config(config):
-    data = config.data if hasattr(config, "data") else config
+def update_config(cfg):
+    data = cfg.data if hasattr(cfg, "data") else cfg
 
     with open(abspath(".safe"), "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
-    return config
+    return cfg
 
 
 def html(label, size="4", color="black", use_ipywidgets=False, display=False, style="raw", font="FiraCode Nerd Font"):
@@ -173,14 +177,14 @@ def get_value(key, config=None):
     return config["global"].get(key)
 
 
-def is_admin(config=None):
-    if config is None:
-        config = get_config()
+def is_admin(cfg=None):
+    if cfg is None:
+        cfg = get_config(is_new_format=True)
 
-    if "is_demo_admin" in config and config["is_demo_admin"]:
+    if "is_demo_admin" in cfg.data and cfg.data["is_demo_admin"]:
         return True
     return (
-        "admin_token" in config["global"]
-        and "admins" in config["global"]
-        and config["email"] in config["global"]["admins"]
+        "admin_token" in cfg.data["global"]
+        and "admins" in cfg.data["global"]
+        and cfg.data["email"] in cfg.data["global"]["admins"]
     )

@@ -10,9 +10,15 @@ class Config:
         if "global" in self.data and "language" in self.data["global"] and self.data["global"]["language"] != "fr":
             self.data["isfr"] = False
 
+    @property
+    def show_help(self):
+        return "help" in self.data and self.data["help"]
+
     def __getattr__(self, k):
         if k in ["g", "global"]:
             return self.data["global"]
+        if k in ["n"]:
+            return self.data[self.data["notebook_id"]]
 
         if k in self.data:
             return self.data[k]

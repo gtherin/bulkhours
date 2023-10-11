@@ -6,22 +6,25 @@ from .. import core
 from . import tools
 
 
-def get_answers(cell_id, refresh=True, update_git=False, verbose=False, aliases = {}):
-    config = core.tools.get_config()
-    cinfo = core.tools.get_config(is_namespace=True)
-    virtual_room, subject, notebook_id = (config.get(v) for v in ["virtual_room", "subject", "notebook_id"])
-
-    students_list = tools.get_users_list(no_admin=False)
-    cdata = {}
-
-    filename = core.tools.abspath(
-        f"data/cache/{subject}/{virtual_room}/admin_{notebook_id}_{cell_id}.json", create_dir=True
+def get_cfilename(cfg, cell_id):
+    return core.tools.abspath(
+        f"data/cache/{cfg.subject}/{cfg.virtual_room}/admin_{cfg.notebook_id}_{cell_id}.json", create_dir=True
     )
-    if os.path.exists(filename) and not refresh:
-        with open(filename) as json_file:
-            cdata = json.load(json_file)
 
-    docs = core.firebase.get_collection(cell_id, cinfo=cinfo).stream()
+def get_cdata(cfg, cell_id):
+    if os.path.exists(filename:= get_cfilename(cfg, cell_id)):
+        with open(filename) as json_file:
+            return json.load(json_file)
+    return {}
+
+
+def get_answers(cell_id, refresh=True, update_git=False, verbose=False, aliases={}):
+    cfg = core.tools.get_config(is_new_format=True)
+    students_list = tools.get_users_list(no_admin=False)
+
+    cdata = get_cdata(cfg, cell_id)
+
+    docs = core.firebase.get_collection(cell_id, cinfo=cfg).stream()
 
     data = {}
     for answer in docs:
@@ -34,7 +37,7 @@ def get_answers(cell_id, refresh=True, update_git=False, verbose=False, aliases 
         if students_list.query(f"mail == '{student_id}'").empty:
             print(
                 f"\x1b[41m\x1B[37mL'étudiant \033[1m'{student_id}'\033[0m\x1b[41m\x1B[37m est inconnu. Régularisez la situation depuis le menu dashboard: 'bulkhours.admin.dashboard()'\x1b[0m"
-                if config["global"]["language"] == "fr"
+                if cfg.language == "fr"
                 else f"\x1b[41m\x1B[37mStudent \033[1m'{student_id}'\033[0m\x1b[41m\x1B[37m is unknown. Please fix the situation in the dashboard: 'bulkhours.admin.dashboard()'\x1b[0m"
             )
 
@@ -43,12 +46,9 @@ def get_answers(cell_id, refresh=True, update_git=False, verbose=False, aliases 
         else:
             cdata[student_id] = answer.to_dict()
 
-        if "note" not in cdata[student_id]:
-            cdata[student_id]["note"] = 0
-
         data[student_id] = cdata[student_id]
 
-    with open(filename, "w", encoding="utf-8") as f:
+    with open(filename:= get_cfilename(cfg, cell_id), "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
     tools.update_github(update_git, msg=f"Cache file ({filename}) of {cell_id}", verbose=verbose)
 
@@ -60,11 +60,13 @@ def update_notes(cell_id, grades):
 
     uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     for k in grades.index:
-        #print(k, grades["mail"][k], grades[cell_id + ".n"][k])
         update_note_in_db(cell_id, grades["mail"][k], grades[cell_id + ".n"][k], uptime, cfg=cfg)
 
 
 def update_note_in_db(cell_id, user, note, uptime, is_manual=False, cfg=None):
+
+    if not core.tools.GradesErr.is_valid(note):
+        return
 
     info = {"note": note, "note_upd": uptime}
 
@@ -82,13 +84,7 @@ def update_note(cell_id, user, note, verbose=True, is_manual=False):
     cfg = core.tools.get_config(is_new_format=True)
 
     # Get grades
-    data = {}
-    filename = core.tools.abspath(
-        f"data/cache/{cfg.subject}/{cfg.virtual_room}/admin_{cfg.notebook_id}_{cell_id}.json", create_dir=True
-    )
-    if os.path.exists(filename):
-        with open(filename) as json_file:
-            data = json.load(json_file)
+    data = get_cdata(cfg, cell_id)
     if user not in data:
         data[user] = {}
 
@@ -111,7 +107,7 @@ def update_note(cell_id, user, note, verbose=True, is_manual=False):
 
     # Set grades
     data[user]["note"] = note
-    with open(filename, "w", encoding="utf-8") as f:
+    with open(get_cfilename(cfg, cell_id), "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
     update_note_in_db(cell_id, user, note, uptime, is_manual=is_manual, cfg=cfg)

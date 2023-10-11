@@ -62,8 +62,15 @@ class WidgetBase:
 
     def autocorrect(self, output):
 
-        #teacher_data = CellParser.crunch_data(self.cinfo, user="solution", data=None) # Get data from database
-        teacher_data = CellParser.crunch_data(self.cinfo, user=self.cinfo.user, data=self.cell_source) # Get data from cell
+        if 0:
+            teacher_is_local, sort_by, verbose, duser = True, None, True, "Guillaume.T"
+        else:
+            teacher_is_local, sort_by, verbose, duser = True, None, False, None
+
+        if teacher_is_local:
+            teacher_data = CellParser.crunch_data(self.cinfo, user=self.cinfo.user, data=self.cell_source) # Get data from cell
+        else:
+            teacher_data = CellParser.crunch_data(self.cinfo, user="solution", data=None) # Get data from database
 
         if teacher_data.get_code("evaluation") == "":
             print("No correction available")
@@ -71,7 +78,7 @@ class WidgetBase:
 
         from .. import admin
 
-        grades = admin.tools.get_users_list(no_admin=False)#, sort_by="nom")
+        grades = admin.tools.get_users_list(no_admin=False, sort_by=sort_by)
 
         grades[self.cinfo.cell_id + ".n"] = np.nan
         grades = grades[["auser", "mail", self.cinfo.cell_id + ".n"]]
@@ -80,15 +87,15 @@ class WidgetBase:
 
         max_score = equals.get_max_score(teacher_data)
 
-        answers = admin.answers.get_answers(self.cinfo.cell_id, verbose=False, refresh=False)
+        answers = admin.answers.get_answers(self.cinfo.cell_id, verbose=False, refresh=True)
         for u in grades.index:
 
             mail, auser = grades["mail"][u], grades["auser"][u]
             if type(mail) == pd.Series:
                 mail, auser = mail.iloc[0], auser.iloc[0]
 
-            #if auser != "Yann-loic-atasse.A":
-            #    continue
+            if duser is not None and auser != duser:
+                continue
 
             print(f"\x1b[35m\x1b[1m{auser}, \x1b[m", end="")
 
@@ -104,14 +111,9 @@ class WidgetBase:
                 print(f"\x1b[35m\x1b[1m({student_data.minfo['note']} [MAN]), \x1b[m", end="")
                 continue
 
-            #try:
-            score = equals.evaluate_student(student_data, teacher_data, raw=True, user=auser)
-            print(f"\x1b[35m\x1b[1m({score}), \x1b[m", end="")
-            #except:
-            #    print(f"\x1b[35m\x1b[1m(SHIT), \x1b[m", end="")
-
+            score = equals.evaluate_student(student_data, teacher_data, raw=True, user=auser, verbose=verbose)
             grades.loc[u, self.cinfo.cell_id + ".n"] = score
-            #print(f"GGGGG {user}, H{student_data.get_code('main_execution')}H")
+            print(f"\x1b[35m\x1b[1m({score}), \x1b[m", end="")
 
         admin.answers.update_notes(self.cinfo.cell_id, grades)
         grades = grades.drop(columns=["mail"]).set_index("auser").T

@@ -140,8 +140,9 @@ class LineParser:
             line = line.split("evaluation_cell_id ")[-1]
 
         self.line, cell = line, cell_source
+        cfg = tools.get_config(is_new_format=True)
         config = tools.get_config()
-        self.is_admin = tools.is_admin(config=config)
+        self.is_admin = tools.is_admin(cfg=cfg)
 
         if line != "":
             parser = get_argparser(self.is_admin)
