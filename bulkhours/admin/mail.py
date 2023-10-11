@@ -13,7 +13,7 @@ def prepare_mail(label=None, default_student="john.doe@bulkhours.eu", signature=
     intro = f"Dear all,<br/><br/>Here is the practical course of the day. Remember to write your email address to replace"
     end = f"Best regards"
 
-    if cfg.language == "en":
+    if cfg.language == "fr":
         intro = f"Bonjour à toutes et à tous,<br/><br/>Voici le lien vers le cours du jour.<br/>💡Rappelez-vous bien de mettre votre adresse mail à la place de"
         end = f"Cordialement"
 
