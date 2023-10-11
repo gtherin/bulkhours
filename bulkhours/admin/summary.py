@@ -1,8 +1,10 @@
 import json
+import IPython
+
 from .. import core
 from .exercice import Exercices, Exercice
+from . import answers as aanswers
 from . import tools
-import IPython
 
 
 def summary(
@@ -29,18 +31,15 @@ def summary(
     :return: a note between the minimal note and maximal note
     """
 
-    config = core.tools.get_config(**kwargs)
-    if not core.tools.is_admin(config=config):
+    cfg = core.tools.get_config(is_new_format=True, **kwargs)
+    if not core.tools.is_admin(cfg=cfg):
         raise Exception("Only available for the admins🎓")
 
-    if "help" in config and config["help"]:
+    if cfg.show_help:
         st = lambda x: f"\x1b[30m\x1b[1m{x}\x1b[m"
         print(st(summary.__doc__))
 
-    virtual_room, subject, notebook_id = (config.get(v) for v in ["virtual_room", "subject", "notebook_id"])
-    language = config["global"].get("language")
-    course_info = config[notebook_id]
-    exos = course_info["exercices"].split(";")
+    exos = cfg.n["exercices"].split(";")
 
     if reload_cache:
         from .cache import cache_answers
@@ -48,12 +47,13 @@ def summary(
         cache_answers(reload_cache if type(reload_cache) == list else exos, update_git=update_git, verbose=False, aliases=aliases)
 
     data = tools.get_users_list(no_admin=no_admin)
-    exercices = Exercices(users := list(data.mail.unique()), exos, course_info, config)
+
+    IPython.display.display(IPython.display.Markdown(f"## {cfg.virtual_room}: {(1-data['is_admin']).sum()} students"))
+
+    exercices = Exercices(users := list(data.mail.unique()), exos, cfg)
 
     for exo in exos:
-        filename = core.tools.abspath(
-            f"data/cache/{subject}/{virtual_room}/admin_{notebook_id}_{exo}.json", create_dir=True
-        )
+        filename = aanswers.get_cfilename(cfg, exo)
 
         with open(filename) as json_file:
             answers = json.load(json_file)
@@ -75,7 +75,7 @@ def summary(
     if export_notes:
         IPython.display.display(sdata)
         return core.buttons.get_export_button(
-            f"notes_{subject}_{virtual_room}_{notebook_id}.csv",
+            f"notes_{cfg.subject}_{cfg.virtual_room}_{cfg.notebook_id}.csv",
             data=data.to_csv(index=False),
             label="Export notes📝",
             tooltip="""⚠️Seulement disponible à l'évaluateur⚠️.

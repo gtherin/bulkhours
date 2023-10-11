@@ -223,7 +223,7 @@ def dashboard(virtual_room=None, verbose=True):
     """
 
     cfg = tools.switch_classroom(virtual_room, verbose=verbose)
-    if not core.tools.is_admin(config=cfg):
+    if not core.tools.is_admin(cfg=cfg):
         raise Exception("Only available for the admins🎓")
 
     if "help" in cfg and cfg.help:

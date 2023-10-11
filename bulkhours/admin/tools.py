@@ -3,7 +3,6 @@ import subprocess
 import datetime
 import pandas as pd
 import numpy as np
-import matplotlib
 from .. import core
 
 
@@ -120,9 +119,7 @@ def styles(sdata, cmap="RdBu", icolumns=["nom", "prenom"], sorted_by=True):
 
     for c in nacolumns:
         if c in sdata.columns:
-            sdata[c] = sdata[c].fillna(core.tools.GradesErr.GRADE_IS_NAN)
-            sdata[c] = sdata[c].replace(0, np.nan)
-
+            sdata[c] = sdata[c].replace(core.tools.GradesErr.ANSWER_FOUND, np.nan)
 
     stylish = sdata.style.hide(axis="index").format(precision=1, subset=list(fcolumns))
 

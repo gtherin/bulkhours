@@ -6,23 +6,27 @@ class Exercice:
     fields = ["count", "time", "note"]
 
     def __init__(self, user, exo) -> None:
+        from .. import core
         self.user, self.exo, self.answer = user, exo, ""
-        self.utime, self.note, self.count = np.nan, np.nan, np.nan
+        self.utime, self.note, self.count = np.nan, core.tools.GradesErr.DEFAULT_GRADE, np.nan
 
     def update_data(self, adata) -> None:
-        self.note, self.count = adata["note"], 1
+        from .. import core
+
+        self.count = 1
         self.utime = adata["update_time"] if "update_time" in adata else datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        if self.note is None:  # Failure of automatic grades
-            self.note = -2
+        if "note" not in adata:  # Failure of automatic grades
+            self.note = core.tools.GradesErr.ANSWER_FOUND
+        elif adata["note"] is None:  # Failure of automatic grades
+            self.note = core.tools.GradesErr.EVALUATION_CRASHED
         else:
-            self.note = float(self.note)
+            self.note = float(adata["note"])
 
 
 class Exercices:
-    def __init__(self, users, exos, course_info, config) -> None:
+    def __init__(self, users, exos, cfg) -> None:
         self.users, self.exos = list(users), exos
-        self.course_info = course_info
-        self.config = config
+        self.cfg = cfg
         self.exercices = {u: {e: Exercice(u, e) for e in exos} for u in users}
 
     def update_data(self, user, exo, adata) -> None:
@@ -44,10 +48,10 @@ class Exercices:
         if field == "count":
             data["all.c"] = data[[e + ".c" for e in self.exos]].count(axis=1)
         if field == "note":
-            ceval = self.course_info["evaluation"]
+            ceval = self.cfg.n["evaluation"]
 
             data["all"] = np.round(data.fillna(0.0).clip(0).sum(axis=1), 1)
-            if "norm20" in self.config["global"] and self.config["global"]["norm20"]:
+            if "norm20" in self.cfg["global"] and self.cfg["global"]["norm20"]:
                 data["all"] = data["all"] * 20 / data["all"].max()
 
             if 0:
