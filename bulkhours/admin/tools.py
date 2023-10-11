@@ -105,9 +105,12 @@ git pull 2> /dev/null
         print(f"\x1b[32m\x1b[1m{msg}{cmd}\x1b[m")
 
 
-def styles(sdata, cmap="RdBu", icolumns=["nom", "prenom"], sorted_by=True):
+def styles(sdata, cmap="RdBu", icolumns=["nom", "prenom"], sorted_by=True, hide_grades=False):
 
     core.tools.GradesErr.set_min_color(minvalue=0.0, cmap=cmap)
+
+    if hide_grades:
+        sdata = sdata.drop(columns=["all"])
 
     fcolumns = [c.replace(".n", "") for c in sdata.columns if c not in icolumns]
     nacolumns = [c for c in fcolumns if "all" not in c]
@@ -120,6 +123,8 @@ def styles(sdata, cmap="RdBu", icolumns=["nom", "prenom"], sorted_by=True):
     for c in nacolumns:
         if c in sdata.columns:
             sdata[c] = sdata[c].replace(core.tools.GradesErr.ANSWER_FOUND, np.nan)
+            if hide_grades:
+                sdata[c] = sdata[c].where(sdata[c] < 0, other=np.nan)
 
     stylish = sdata.style.hide(axis="index").format(precision=1, subset=list(fcolumns))
 
