@@ -120,23 +120,22 @@ def hint_student(student_data, teacher_data, raw=False):
         IPython.get_ipython().run_cell(hint_code)
 
 
-def get_max_score(teacher_data):
-    # Get the formatted evaluation code
-    evaluation_code = (
-        teacher_data.get_code("evaluation")
-        + """global eresult
+def get_evaluation_code(teacher_data):
+    return teacher_data.get_code("evaluation") + """
+global eresult
 eresult = student_evaluation_function()
 import os
 os.environ['FINAL_SCORE'] = str(eresult)
 """
-    )
 
+
+def get_max_score(teacher_data):
+    # Get the formatted evaluation code
+    evaluation_code = get_evaluation_code(teacher_data)
     do_debug = "debug=true" in evaluation_code.replace(" ", "").lower()
 
     # Run the teacher code if needed
-    outt = contexts.build_context(
-        teacher_data, "main_execution", "teacher", f"teacher." in evaluation_code, do_debug=do_debug
-    )
+    contexts.build_context(teacher_data, "main_execution", "teacher", f"teacher." in evaluation_code, do_debug=do_debug)
 
     try:
         contexts.run_cell(evaluation_code.replace("student.", "teacher."), stdout=False)
@@ -149,25 +148,16 @@ def evaluate_student(student_data, teacher_data, raw=False, use_student_context=
     """
     This function is used to evaluate the student code.
 
-    
     :param debug: this is a first param
     :returns: this is a description of what is returned
     """
 
     student_code = student_data.get_code("main_execution")
     if student_code == "":
-        return np.nan
+        return np.nan # tools.GradesErr.NO_ANSWER_FOUND
 
     # Get the formatted evaluation code
-    evaluation_code = (
-        teacher_data.get_code("evaluation")
-        + """global eresult
-eresult = student_evaluation_function()
-import os
-os.environ['FINAL_SCORE'] = str(eresult)
-"""
-    )
-
+    evaluation_code = get_evaluation_code(teacher_data)
     do_debug = "debug=true" in evaluation_code.replace(" ", "").lower()
 
     # Run the teacher code and get max_score from it

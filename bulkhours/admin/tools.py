@@ -108,16 +108,7 @@ git pull 2> /dev/null
 
 def styles(sdata, cmap="RdBu", icolumns=["nom", "prenom"], sorted_by=True):
 
-    mincolor = matplotlib.colors.rgb2hex(matplotlib.cm.get_cmap(cmap)(0.0))
-
-    def interpret(v):
-        if type(v) == str:
-            return None
-        if v == core.tools.GradesErr.GRADE_IS_NAN or v == -1:
-            return "color:#FF3B52;background-color:#FF3B52;opacity: 20%;"
-        if v != v or np.abs(v) < 0.1:  # Failure of automatic corrections
-            return f"color:{mincolor};background-color:{mincolor};"
-        return None
+    core.tools.GradesErr.set_min_color(minvalue=0.0, cmap=cmap)
 
     fcolumns = [c.replace(".n", "") for c in sdata.columns if c not in icolumns]
     nacolumns = [c for c in fcolumns if "all" not in c]
@@ -138,7 +129,7 @@ def styles(sdata, cmap="RdBu", icolumns=["nom", "prenom"], sorted_by=True):
     stylish = (
         stylish.hide(axis="index")
         .background_gradient(cmap=cmap, vmin=0, vmax=10)
-        .applymap(interpret, subset=list(fcolumns))
+        .applymap(core.tools.GradesErr.interpret, subset=list(fcolumns))
     )
 
     if "all" in sdata.columns:

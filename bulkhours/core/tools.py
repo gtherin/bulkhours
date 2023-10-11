@@ -4,11 +4,29 @@ import ipywidgets
 import IPython
 from argparse import Namespace
 from .config import Config
+import matplotlib
+import numpy as np
 
 class GradesErr:
+    NO_ANSWER_FOUND = -10
     EVALUTATION_CRASHED = -11
     GRADE_IS_NAN = -12
     MAX_SCORE_NOT_AVAILABLE = -13
+
+    def is_missing_grade(v):
+        return v == GradesErr.GRADE_IS_NAN or v == -1
+
+    def set_min_color(minvalue=0.0, cmap="RdBu"):
+        GradesErr.mincolor = matplotlib.colors.rgb2hex(matplotlib.cm.get_cmap(cmap)(minvalue))
+
+    def interpret(v):
+        if type(v) == str:
+            return None
+        if GradesErr.is_missing_grade(v):
+            return "color:#FF3B52;background-color:#FF3B52;opacity: 20%;"
+        if v != v or np.abs(v) < 0.1:  # Failure of automatic corrections
+            return f"color:{GradesErr.mincolor};background-color:{GradesErr.mincolor};"
+        return None
 
 
 def get_platform():
