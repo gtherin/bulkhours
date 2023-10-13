@@ -6,7 +6,7 @@ from email.mime.image import MIMEImage
 from .. import core
 
 
-def prepare_mail(label=None, default_student="john.doe@bulkhours.eu", signature="The bulkHours team"):
+def prepare_mail(label=None, default_student="john.doe@bulkhours.eu", signature="The bulkHours team", link=None):
     import IPython
     cfg = core.tools.get_config(is_new_format=True)
 
@@ -16,6 +16,9 @@ def prepare_mail(label=None, default_student="john.doe@bulkhours.eu", signature=
     if cfg.language == "fr":
         intro = f"Bonjour à toutes et à tous,<br/><br/>Voici le lien vers le cours du jour.<br/>💡Rappelez-vous bien de mettre votre adresse mail à la place de"
         end = f"Cordialement"
+
+    if link is None:
+        link = cfg[cfg.notebook_id]['page']
 
     html = f"""
 <html>
@@ -27,14 +30,16 @@ def prepare_mail(label=None, default_student="john.doe@bulkhours.eu", signature=
 <body>
     <h2>Mail to {cfg.virtual_room} students (in CCI)</h2>
     <p>{cfg.g[cfg.virtual_room]}</p>
+    <h2>Title of the mail:</h2><br/>
+    <p>TP du jour</p>
     <h2>Content of the mail:</h2><br/>
     <p>{intro} <b>'{default_student}'</b>:</p>
 
-    <ul><li><a href="{cfg[cfg.notebook_id]['page']}" style="font-size: 18px; margin: 4px 0;background-color: white; color: #4F77AA; padding: 5px 9px; text-align: center; text-decoration: none; display: inline-block;">Course of the day</a></li></ul>
+    <ul><li><a href="{link}" style="font-size: 18px; margin: 4px 0;background-color: white; color: #4F77AA; padding: 5px 9px; text-align: center; text-decoration: none; display: inline-block;">Course of the day</a></li></ul>
 
 {end},<br/><br/>
 
-{signature}</b>
+{signature}<br/>
 <img alt="" src="https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/BulkHours.png" width=100 />
 
 </body>
