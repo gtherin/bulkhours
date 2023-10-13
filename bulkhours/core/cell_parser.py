@@ -12,9 +12,9 @@ def get_equals_args(code, func_id="bulkhours.is_equal"):
 
     fargs = {}
     for i, a in enumerate(args):
-        if i == 0 and "=" not in a:
+        if i == 0 and "data_test" not in a:
             fargs["data_test"] = a
-        elif i == 1 and "=" not in a:
+        elif i == 1 and "data_ref" not in a:
             fargs["data_ref"] = a.replace("student.", "teacher.")
         elif "=" in a:
             fargs[a.split("=")[0]] = a.split("=")[1]
@@ -145,6 +145,8 @@ class CellParser:
     def block_equal_line(self, mode, l):
         indent = " " * (re.sub(r"^([\s]*)[\s]+.*$", r"\g<1>", l).count(" ") + 1)
         args = get_equals_args(l, func_id="bulkhours.is_equal")
+        print(args)
+        print("AAA")
         if "data_ref" not in args:
             args["data_ref"] = args["data_test"].replace("student.", "teacher.")
         args["min_score"] = float(args["min_score"]) if "min_score" in args else 0
