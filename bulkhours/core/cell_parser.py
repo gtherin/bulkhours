@@ -145,8 +145,7 @@ class CellParser:
     def block_equal_line(self, mode, l):
         indent = " " * (re.sub(r"^([\s]*)[\s]+.*$", r"\g<1>", l).count(" ") + 1)
         args = get_equals_args(l, func_id="bulkhours.is_equal")
-        print(args)
-        print("AAA")
+
         if "data_ref" not in args:
             args["data_ref"] = args["data_test"].replace("student.", "teacher.")
         args["min_score"] = float(args["min_score"]) if "min_score" in args else 0
