@@ -65,7 +65,9 @@ def clean_data(df, query=None, index=None, test_data=None):
 
 
 def get_data_from_file(raw_data, **kwargs):
-    if "http" in raw_data:
+    if ".gsheet" in raw_data:
+        filename = raw_data
+    elif "http" in raw_data:
         filename = raw_data
 
         nfilename = filename.split("/")[-1]
@@ -97,6 +99,9 @@ def get_data_from_file(raw_data, **kwargs):
         return pd.read_excel(filename)  # , **kwargs)
     elif ext == "tsv":
         return pd.read_csv(filename, sep="\t")
+    elif ext in ["gspread", "gsheet"]:
+        info = filename.split(".")
+        return pd.read_csv(f"https://docs.google.com/spreadsheets/d/{info[0]}/export?gid={info[1]}&format=csv")
     elif ext in ["csv"]:
         return pd.read_csv(filename)
     elif ext in ["h5"]:
