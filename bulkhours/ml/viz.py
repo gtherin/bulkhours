@@ -14,7 +14,7 @@ def vizualize(layers):
             elif l == len(layers)-1 and layers[l] == 1:
                 text_from_file += f"a{i}{l+1} [label=<y_hat>];\n"
             else:
-                text_from_file += f"a{i}{l+1} [label=<w<sub>{i}</sub><sup>[{l+1}]</sup>>]\n"
+                text_from_file += f"a{i}{l+1} [label=<z<sub>{i}</sub><sup>[{l+1}]</sup>>]\n"
         text_from_file += "}\n{rank=same; %s ;}" % ("->".join([f"a{i}{l+1}" for i in range(layers[l])]))
 
     if len(layers) > 0:
