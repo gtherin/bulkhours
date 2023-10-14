@@ -10,14 +10,35 @@ def get_equals_args(code, func_id="bulkhours.is_equal"):
 
     args = re.split(r",\s*(?![^()]*\))", args[1][1 : args[1].rfind(")")])
 
+
+    if func_id == "bulkhours.is_equal":
+        """data_test, data_ref, norm="Linf-norm", error=1e-8, policy="strict", min_score=0, max_score=10, cmax_score=False"""
+        kwargs = ["norm", "error", "policy", "min_score", "max_score", "cmax_score"]
+    else:
+        kwargs = ["norm", "error", "policy", "min_score", "max_score", "cmax_score"]
+
+
     fargs = {}
     for i, a in enumerate(args):
-        if i == 0 and "data_test" not in a:
-            fargs["data_test"] = a
-        elif i == 1 and "data_ref" not in a:
-            fargs["data_ref"] = a.replace("student.", "teacher.")
+        sa = a.split("=")
+
+        if i == 0:
+            if sa[0].replace(" ", "") == "data_test" and len(sa) > 1:
+                fargs["data_test"] = "=".join(sa[1:])
+            else:
+                fargs["data_test"] = a
+        elif i == 1:
+            if sa[0].replace(" ", "") == "data_ref":
+                fargs["data_ref"] = "=".join(sa[1:])
+            elif sa[0].replace(" ", "") in kwargs:
+                fargs[a.split("=")[0]] = a.split("=")[1]
+            else:
+                fargs["data_ref"] = a
         elif "=" in a:
             fargs[a.split("=")[0]] = a.split("=")[1]
+
+    if func_id == "bulkhours.is_equal" and "data_ref" not in fargs:
+        fargs["data_ref"] = fargs["data_test"].replace("student.", "teacher.")
 
     return fargs
 
