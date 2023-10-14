@@ -1,0 +1,215 @@
+page {
+  size: A4 portrait;
+  margin: 27mm 16mm 27mm 16mm;
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+  background: #FFFFFF;
+}
+
+a {
+  color: #5D6975;
+  text-decoration: underline;
+}
+
+body {
+  position: relative;
+  width: 21cm;
+  height: 29.7cm;
+  margin: 0 auto;
+  color: #001028;
+  background: #FFFFFF;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-family: Arial;
+}
+
+header {
+  background: #FFFFFF;
+  padding: 10px 0;
+  margin-bottom: 30px;
+}
+
+#logo {
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+#logo img {
+  width: 300px;
+}
+
+#project {
+  float: left;
+}
+
+#project span {
+  color: #5D6975;
+  text-align: right;
+  width: 60px;
+  margin-right: 10px;
+  display: inline-block;
+  font-size: 0.8em;
+}
+
+#company {
+  float: right;
+  text-align: left;
+}
+
+#company span {
+  color: #5D6975;
+  text-align: right;
+  width: 60px;
+  margin-right: 10px;
+  display: inline-block;
+  font-size: 0.8em;
+}
+
+
+#project div,
+#company div {
+  white-space: nowrap;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: 20px;
+}
+
+table th,
+table td {
+  text-align: center;
+}
+
+table.sumtable {
+  border-spacing: 1px;
+  margin: 0 0 0 0;
+  border-collapse: collapse
+}
+
+table.altable tr:nth-child(2n-1) td {
+  background: #F5F5F5;
+}
+
+table th {
+  padding: 5px 20px;
+  color: #5D6975;
+  border-bottom: 1px solid #C1CED9;
+  white-space: nowrap;
+  font-weight: normal;
+}
+
+table .service,
+table .desc {
+  text-align: left;
+}
+
+table td {
+  padding: 20px;
+  text-align: right;
+}
+
+table td.service,
+table td.desc {
+  vertical-align: top;
+}
+
+table td.unit,
+table td.qty,
+table td.total {
+  font-size: 1.2em;
+}
+
+table td.total {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #3cb69e;
+}
+
+table td.grandtotal {
+  font-size: 2.3em;
+  font-weight: bold;
+  color: #3cb69e;
+  border-top: 1px solid #5D6975;
+}
+
+p.greyy {
+  color: #c0c0c0;
+}
+
+
+#notices .notice {
+  color: #5D6975;
+  font-size: 1.2em;
+  text-align: left;
+}
+
+
+footer {
+  color: #EFEFEF;
+  height: 100px;
+  position: absolute;
+  bottom: 0;
+  padding: 8px 0;
+}
+
+.condition {
+  color: #c0c0c0;
+  font-size: 1.2em;
+  font-weight: 200;
+}
+
+.bank {
+  color: #000000;
+  text-align: left;
+  font-size: 1.4em;
+}
+
+.footer:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+
+h1 {
+  font-size: 2.4em;
+  line-height: 0.2em;
+  font-weight: bold;
+  text-align: right;
+}
+
+h2 {
+  font-size: 1.8em;
+  line-height: 0.8em;
+  font-weight: normal;
+  text-align: right;
+  margin: 0 0 10px 0;
+}
+
+h5 {
+  font-size: 1.1em;
+  line-height: 0.8em;
+  font-weight: lighter;
+  text-align: right;
+  margin: 0 0 10px 0;
+}
+
+
+
+.column {
+  float: right;
+  width: 60%;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Facture {{ invoice_number }}</title>
+    <link rel="stylesheet" href="templateg.css" media="all" />
+</head>
+
+<body>
+    <header class="clearfix">
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <div id="logo">
+                            <img src="{{ provider.logo }}">
+                    </td>
+                    <td>
+                        <h2>{{ provider.title }}</h2>
+                        <h3>{{ provider.position }}</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <h1>FACTURE N°{{ invoice_id }}</h1>
+        {% if start_date is defined %}<h5>Période du {{ start_date }} au {{ end_date }}</h5>{% endif %}
+        <h2>Le {{ invoice_date }}</h2>
+
+        <br />
+        <br />
+        <br />
+        <br />
+
+        <div id="company" class="clearfix">
+            <div><span>EMETTEUR</span> {{ provider.name }}</div>
+            <div><span>ADDRESSE</span> {{ provider.address }}</div>
+            <div><span></span> {{ provider.zipcode }}</div>
+            {% if provider.phone is defined %}<div><span>TELEPHONE</span> {{ provider.phone }}</div>{% endif %}
+            {% if provider.mail is defined %}<div><span>MAIL</span> <a href="mailto:{{ provider.mail }}">{{ provider.mail }}</a></div>{% endif %}
+
+        </div>
+        <div id="project">
+            <div><span>CLIENT</span> {{ client.name }}</div>
+            <div><span>ADDRESSE</span> {{ client.address }}</div>
+            <div><span></span> {{ client.zipcode }}</div>
+            {% if client.phone is defined %}<div><span>TELEPHONE</span>{{ client.phone }}</div>{% endif %}
+            {% if client.mail is defined %}
+            <div><span>MAIL</span> <a href="https://{{ client.mail }}">{{ client.mail }}</a></div>
+            {% endif %}
+            {% if client.web is defined %}
+            <div><span>WEB</span> <a href="https://{{ client.web }}">{{ client.web }}</a></div>
+            {% endif %}
+        </div>
+    </header>
+    <main>
+
+        <table class="altable">
+            <thead>
+                <tr>
+                    <th class="desc">DESCRIPTION</th>
+                    <th>QUANTITE</th>
+                    <th>PRIX UNITAIRE HT</th>
+                    <th>TOTAL HT</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sinvoice in subinvoices %}
+                <tr>
+                    <td class="desc"><b>{{sinvoice.prestation}}</b>
+                        {% if sinvoice.description is defined %}<br />{{sinvoice.description}}{% endif %}
+                    </td>
+                    <td class="qty">{{sinvoice.hours}}</td>
+                    <td class="unit">{{sinvoice.rate}}</td>
+                    <td class="total">{{sinvoice.total}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+
+
+        <div class="row">
+            <div class="column">
+                <table width="45%" class="sumtable">
+                    <tbody>
+                        <tr>
+                            <td colspan="5">SOUS-TOTAL HT</td>
+                            <td class="total">{{ subtotal }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">ACOMPTE</td>
+                            <td class="total">{{ vat_amount }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">TVA ({{ vat }})
+                                <p class="greyy">TVA non applicable, art. 293B du CGI</p>
+                            </td>
+                            <td class="total">{{ vat_amount }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="grandtotal">TOTAL</td>
+                            <td class="grandtotal">{{ total }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+
+        <div id="footer">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div width="50%" class="condition"> Conditions de paiement : A 30 jours dès réception de la
+                                facture, par chèque ou virement. Aucun escompte consenti pour règlement
+                                anticipé.
+                                Tout incident de paiement est passible d'intérêts de retard
+                                calculés selon le taux d'intérêt légal en vigueur au moment
+                                de l'incident. Indemnité forfaitaire pour frais de recouvrement due au créancier en cas
+                                de retard de
+                                paiement : 40 €.
+                            </div>
+                        </td>
+                        <td width="50%">
+                            <div class="bank">COORDONNÉES BANCAIRES<br /><br />
+                                {{ provider.bank_name }}<br />
+                                {{ provider.bank_iban }}<br />
+                                {{ provider.bank_bic }}<br />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+
+</html>

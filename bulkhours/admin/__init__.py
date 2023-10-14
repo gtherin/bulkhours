@@ -8,3 +8,4 @@ from .mail import send_mail, prepare_mail  # noqa
 # from .invoices.invoice import Invoice  # noqa
 from .audio import get_audio  # noqa
 from .dashboard import dashboard  # noqa
+from .invoice import Invoice  # noqa
