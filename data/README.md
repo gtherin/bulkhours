@@ -14,7 +14,7 @@
 #### World Bank Poverty and Inequality data
 #### `bulkhours.get_data("world.poverty")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)🔄)
-- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/poverty
 - Reference site: https://pip.worldbank.org/
 
@@ -155,7 +155,7 @@ def get_poverty(self, timeopt=None):
 #### World Bank Poverty and Inequality data (with gpx extra info)
 #### `bulkhours.get_data("world.mappoverty")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)🔄)
-- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/poverty
 - Reference site: https://pip.worldbank.org/
 
@@ -298,7 +298,7 @@ def get_mappoverty(self, **kwargs):
 #### World Bank Gdp data
 #### `bulkhours.get_data("world.gdp")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)🔄)
-- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/poverty
 - Reference site: https://pip.worldbank.org/
 
@@ -337,7 +337,7 @@ def get_gdp(self, timeopt=None, **data_info):
 #### World Bank Gdp data (with gpx extra info)
 #### `bulkhours.get_data("world.mapgdp")`
 - Raw data: [pip_dataset.csv](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)  ([raw](https://nyc3.digitaloceanspaces.com/owid-public/data/poverty/pip_dataset.csv)🔄)
-- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/poverty
 - Reference site: https://pip.worldbank.org/
 
@@ -375,7 +375,7 @@ def get_mapgdp(self, **kwargs):
 #### Global economic data
 #### `bulkhours.get_data("world.macro")`
 - Raw data: [corruption.csv](https://github.com/gtherin/bulkhours/blob/main/data/corruption.csv), [cost_of_living.csv](https://github.com/gtherin/bulkhours/blob/main/data/cost_of_living.csv), [richest_countries.csv](https://github.com/gtherin/bulkhours/blob/main/data/richest_countries.csv), [unemployment.csv](https://github.com/gtherin/bulkhours/blob/main/data/unemployment.csv), [tourism.csv](https://github.com/gtherin/bulkhours/blob/main/data/tourism.csv), [continent.tsv](https://github.com/gtherin/bulkhours/blob/main/data/continent.tsv)
-- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/world.py))
 
 <details>
 <summary>Show columns info</summary>
@@ -422,7 +422,7 @@ def get_macro(self, **data_info):
 #### Global economic data (with gpx extra info)
 #### `bulkhours.get_data("world.mapmacro")`
 - Raw data: [corruption.csv](https://github.com/gtherin/bulkhours/blob/main/data/corruption.csv), [cost_of_living.csv](https://github.com/gtherin/bulkhours/blob/main/data/cost_of_living.csv), [richest_countries.csv](https://github.com/gtherin/bulkhours/blob/main/data/richest_countries.csv), [unemployment.csv](https://github.com/gtherin/bulkhours/blob/main/data/unemployment.csv), [tourism.csv](https://github.com/gtherin/bulkhours/blob/main/data/tourism.csv), [continent.tsv](https://github.com/gtherin/bulkhours/blob/main/data/continent.tsv)
-- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/world.py))
 
 <details>
 <summary>Show columns info</summary>
@@ -472,7 +472,7 @@ def get_mapmacro(self, **kwargs):
 
 #### Corruption index per country
 #### `bulkhours.get_data("world.corruption")`
-- Raw data: [corruption.csv](https://github.com/gtherin/bulkhours/main/data/corruption.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/corruption.csv))
+- Raw data: [corruption.csv](https://github.com/gtherin/bulkhours/main/data/corruption.csv)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/data/corruption.csv))
 
 <details>
 <summary>Show code</summary>
@@ -495,7 +495,7 @@ def get_corruption(self, show_truth=False, **data_info):
 #### Life expectancy versus GDP/capita per country
 #### `bulkhours.get_data("world.life_expectancy_vs_gdp_2018")`
 - Raw data: [life-expectancy-vs-gdp-per-capita.csv](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/life-expectancy-vs-gdp-per-capita.csv)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/life-expectancy-vs-gdp-per-capita.csv)🤗)
-- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/grapher/life-expectancy-vs-gdp-per-capita
 - Reference site: Maddison Project Database (2020); UN WPP (2022); Zijdeman et al. (2015)
 
@@ -526,7 +526,7 @@ def get_life_expectancy_vs_gdp_2018(self, **data_info):
 
 #### Evolution du PIB et de ses composantes par rapport au trimestre precedent en volume en %
 #### `bulkhours.get_data("gmacro.fr_qgdp")`
-- Enrich data: [gmacro.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py))
+- Enrich data: [gmacro.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/gmacro.py))
 - Direct source: https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
 
 <details>
@@ -868,7 +868,7 @@ def get_fr_qgdp(self):
 
 #### Évolution du produit intérieur brut et de ses composantes
 #### `bulkhours.get_data("gmacro.fr_unemployement")`
-- Enrich data: [gmacro.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py))
+- Enrich data: [gmacro.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/gmacro.py))
 - Direct source: https://www.insee.fr/fr/statistiques/2830547#tableau-figure1
 
 <details>
@@ -930,7 +930,7 @@ Longue_duree,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,n
 
 #### United States Macroeconomic data (1959q1 - 2009q3)
 #### `bulkhours.get_data("gmacro.us_gdp")`
-- Enrich data: [gmacro.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py))
+- Enrich data: [gmacro.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/gmacro.py))
 - Direct source: https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html
 
 <details>
@@ -980,7 +980,7 @@ def get_us_gdp(self, simplify=True):
 
 #### France Macroeconomic data
 #### `bulkhours.get_data("gmacro.fr_gdp")`
-- Enrich data: [gmacro.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/gmacro.py))
+- Enrich data: [gmacro.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/gmacro.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/gmacro.py))
 
 <details>
 <summary>Show columns info</summary>
@@ -1022,23 +1022,6 @@ def get_fr_gdp(self, simplify=True):
 - Direct source: https://worldhappiness.report/data/
 
 <details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| country |  |
-| Ladder score |  |
-| Logged GDP per capita |  |
-| Social support |  |
-| Healthy life expectancy |  |
-| Freedom to make life choices |  |
-| Generosity |  |
-| Perceptions of corruption |  |
-
-</details>
-
-
-<details>
 <summary>Show code</summary>
 <code>
 def get_happiness(self, **data_info):
@@ -1065,776 +1048,10 @@ def get_happiness(self, **data_info):
 - Direct source: https://worldhappiness.report/data/
 
 <details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| pop_est |  |
-| continent |  |
-| name |  |
-| iso_a3 |  |
-| gdp_md_est |  |
-| geometry |  |
-| Ladder score |  |
-| Logged GDP per capita |  |
-| Social support |  |
-| Healthy life expectancy |  |
-| Freedom to make life choices |  |
-| Generosity |  |
-| Perceptions of corruption |  |
-
-</details>
-
-
-<details>
 <summary>Show code</summary>
 <code>
 def get_mappoverty(self, **kwargs):
     return get_mapgeneric(get_happiness(self, **kwargs))
-</code>
-</details>
-
-#### Cotisants, retraités et rapport démographique tous régimes en 2020
-#### `bulkhours.get_data("france.retraites")`
-- Enrich data: [france.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
-- Direct source: https://www.insee.fr/fr/statistiques/2415121#tableau-figure1
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| active |  |
-| retired |  |
-| rapport |  |
-
-</details>
-
-
-<details>
-<summary>Show code</summary>
-<code>
-def get_retraites(self):
-    return (
-        pd.read_csv(
-            StringIO(
-                """
-year	active	retired	rapport
-2020	28,2	16,9	1,67
-2019	28,5	16,7	1,71
-2018	28,2	16,5	1,71
-2017	27,9	16,3	1,72
-2016	27,6	16,1	1,71
-2015	27,4	16,0	1,71
-2014	27,3	15,8	1,73
-2013	27,2	15,6	1,74
-2012	27,1	15,3	1,77
-2011	27,0	15,3	1,77
-2010	26,8	15,1	1,78
-2009	26,8	14,7	1,82
-""".replace(
-                    ",", "."
-                )
-            ),
-            sep="\t",
-        )
-        .set_index("year")
-        .astype(float)
-        .sort_index()
-    )
-</code>
-</details>
-
-#### Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020
-#### `bulkhours.get_data("france.income")`
-- Enrich data: [france.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
-- Direct source: https://www.insee.fr/fr/statistiques/6436313#tableau-figure2
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| index |  |
-| income |  |
-| population |  |
-| xmin |  |
-| xmax |  |
-| is_valid |  |
-
-</details>
-
-
-<details>
-<summary>Show code</summary>
-<code>
-def get_income(self):
-    data = StringIO(
-        """income	population
-Moins de 1_200	583943
-De 1_200 à 1_300	613_321
-De 1_300 à 1_400	835_135
-De 1_400 à 1_500	969_172
-De 1_500 à 1_600	1_052_630
-De 1_600 à 1_700	1_008_034
-De 1_700 à 1_800	939_538
-De 1_800 à 1_900	863_042
-De 1_900 à 2_000	782_314
-De 2_000 à 2_100	706_339
-De 2_100 à 2_200	630_132
-De 2_200 à 2_300	563_387
-De 2_300 à 2_400	504_240
-De 2_400 à 2_500	452_167
-De 2_500 à 2_600	407_908
-De 2_600 à 2_700	365_648
-De 2_700 à 2_800	329_810
-De 2_800 à 2_900	294_230
-De 2_900 à 3_000	265_925
-De 3_000 à 3_100	241_899
-De 3_100 à 3_200	218_832
-De 3_200 à 3_300	198_266
-De 3_300 à 3_400	180_386
-De 3_400 à 3_500	164_164
-De 3_500 à 3_600	150_218
-De 3_600 à 3_700	136_878
-De 3_700 à 3_800	124_602
-De 3_800 à 3_900	114_322
-De 3_900 à 4_000	106_638
-De 4_000 à 4_100	97_332
-De 4_100 à 4_200	89_173
-De 4_200 à 4_300	82_839
-De 4_300 à 4_400	76_130
-De 4_400 à 4_500	69_887
-De 4_500 à 4_600	64_863
-De 4_600 à 4_700	60_466
-De 4_700 à 4_800	55_998
-De 4_800 à 4_900	52_101
-De 4_900 à 5_000	48_438
-De 5_000 à 5_100	44_831
-De 5_100 à 5_200	41_854
-De 5_200 à 5_300	38_848
-De 5_300 à 5_400	36_480
-De 5_400 à 5_500	34_092
-De 5_500 à 5_600	31_841
-De 5_600 à 5_700	29_948
-De 5_700 à 5_800	27_840
-De 5_800 à 5_900	26_335
-De 5_900 à 6_000	25_270
-De 6_000 à 6_100	23_380
-De 6_100 à 6_200	21_912
-De 6_200 à 6_300	20_313
-De 6_300 à 6_400	19_320
-De 6_400 à 6_500	18_286
-De 6_500 à 6_600	17_333
-De 6_600 à 6_700	16_394
-De 6_700 à 6_800	15_519
-De 6_800 à 6_900	14_700
-De 6_900 à 7_000	13_549
-De 7_000 à 7_100	13_210
-De 7_100 à 7_200	12_278
-De 7_200 à 7_300	11_829
-De 7_300 à 7_400	11_186
-De 7_400 à 7_500	10_567
-De 7_500 à 7_600	10_063
-De 7_600 à 7_700	9_698
-De 7_700 à 7_800	9_178
-De 7_800 à 7_900	8_974
-De 7_900 à 8_000	8_689
-De 8_000 à 8_100	8_170
-De 8_100 à 8_200	7_697
-De 8_200 à 8_300	7_431
-De 8_300 à 8_400	7_057
-De 8_400 à 8_500	6_674
-De 8_500 à 8_600	6_410
-De 8_600 à 8_700	6_138
-De 8_700 à 8_800	5_772
-De 8_800 à 8_900	5_585
-De 8_900 à 9_000	5_408
-Plus de 9_000	183_314
-"""
-    )
-
-    df = pd.read_csv(data, sep="\t").reset_index()
-
-    df["population"] = df["population"].str.replace(" ", "").astype(float)
-    df["xvalue"] = (
-        df["income"]
-        .str.replace("De ", "")
-        .str.replace("Moins de", "1_100 à")
-        .str.replace("Plus de 9_000", "9_000 à 9_100")
-    )
-    df["xvalue"] = df["xvalue"].str.replace(" ", "").str.split("à")
-    df["xmin"] = df["xvalue"].apply(lambda x: float(x[0]))
-    df["xmax"] = df["xvalue"].apply(lambda x: float(x[1]))
-    df["xvalue"] = 0.5 * (df["xmin"] + df["xmax"])
-    df["is_valid"] = ~df.index.isin([0, len(df) - 1])
-
-    return df.set_index("xvalue")
-</code>
-</details>
-
-#### Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019
-#### `bulkhours.get_data("france.salaires")`
-- Enrich data: [france.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
-- Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| Revenu annuel Femmes moyen   |  Revenu annuel Femmes moyen |         
-| Revenu annuel Hommes moyen  |  Revenu annuel Hommes moyen | 
-| Revenu annuel Femmes moyen Écart relatif (en %)   |   Revenu annuel Femmes moyen Écart relatif (en %)	| 
-| Salaire annuel Femmes moyen EQTP  |  Salaire annuel Femmes moyen EQTP | 
-| Salaire annuel Hommes moyen EQTP   |  Salaire annuel Hommes moyen EQTP |
-| Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)   |  Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP) |
-
-</details>
-
-
-<details>
-<summary>Show code</summary>
-<code>
-def get_salaires(self):
-    data = StringIO(
-        """
-categorie	revenu_femme	revenu_homme	revenu_diff	salaire_ajusté_femme	salaire_ajusté_homme	salaire_ajusté_diff
-Age: Moins de 25 ans	7 360	9 110	19,2	17 930	19 210	6,7
-Age: 25-39 ans	18 220	22 610	19,4	24 460	27 660	11,6
-Age: 40-49 ans	22 830	29 710	23,1	28 190	34 270	17,7
-Age: 50-54 ans	23 070	31 340	26,4	28 280	35 740	20,9
-Age: 55 ans ou plus	21 410	29 430	27,2	29 520	38 740	23,8
-Diplôme: Pas de diplôme	12 450	17 400	28,5	19 590	23 260	15,8
-Diplôme: inférieur au baccalauréat	15 180	20 510	26,0	21 460	25 650	16,3
-Diplôme: Baccalauréat à bac+2	20 480	26 560	22,9	25 570	31 000	17,5
-Diplôme: Bac+3 ou plus	30 790	44 410	30,7	36 190	50 140	27,8
-SocioPro: Cadres	36 040	45 370	20,6	42 820	52 950	19,1
-SocioPro: Professions intermédiaires	21 770	26 040	16,4	27 230	30 690	11,3
-SocioPro: Employés	13 900	15 310	9,2	20 860	22 850	8,7
-SocioPro: Ouvriers	11 960	17 200	30,5	19 580	22 930	14,6
-Secteur: privé et entreprises publiques	18 010	24 260	25,7	26 330	31 580	16,6
-Secteur: Fonction publique	21 330	25 290	15,7	26 640	31 090	14,3
-Secteur: Ensemble	18 970	24 420	22,3	26 430	31 510	16,1
-"""
-    )
-    df = pd.read_csv(data, sep="\t").set_index("categorie")
-    for c in df.columns:
-        df[c] = df[c].str.replace(" ", "").str.replace(",", ".").astype(float)
-
-    return df
-</code>
-</details>
-
-#### Inégalités salariales entre femmes et hommes de 1995 à 2019
-#### `bulkhours.get_data("france.histsalaires")`
-- Enrich data: [france.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/france.py))
-- Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| delta_rev_legacy   |  écart relatif du revenu salarial moyen homme/femme |         
-| delta_rev  |  écart relatif (en %) du revenu salarial moyen.1| 
-| delta_rev_eqtp_legacy   |  écart relatif du salaire moyen en EQTP	| 
-| delta_rev_eqtp  |  écart relatif du salaire moyen en EQTP| 
-| delta_vol_eqtp   |  écart relatif du volume de travail en EQTP moyen |
-
-</details>
-
-
-<details>
-<summary>Show code</summary>
-<code>
-def get_histsalaires(self):
-    data = StringIO(
-        """
-Année	écart relatif du revenu salarial moyen	écart relatif du revenu salarial moyen	écart relatif du salaire moyen en EQTP	écart relatif du salaire moyen en EQTP	écart relatif du volume de travail en EQTP moyen
-1995	27,4		18,5		10,9
-1996	27,8		18,8		11,1
-1997	27,6		18,5		11,2
-1998	27,8		18,3		11,4
-1999	27,9		17,9		11,9
-2000	28,2		18,6		11,6
-2001	28,2		18,8		11,3
-2002	27,8		18,5		11,3
-2003	27,6		18,5		11,1
-2004	27,3		18,4		10,9
-2005	27,1		18,3		10,8
-2006	26,9		18,2		10,6
-2007	26,8		18,5		10,2
-2008	27,1		18,7		10,3
-2009	26,1		18,3		9,6
-2010	25,5		18,2		9,0
-2011	25,6		18,2		9,2
-2012	25,3	25,5	18,2	18,5	8,8
-2013		24,8		18,2	8,2
-2014		24,1		17,9	7,8
-2015		23,7		17,8	7,2
-2016		23,3		17,0	7,7
-2017		22,9		16,7	7,7
-2018		22,8		16,6	7,6
-2019		22,3		16,1	7,6
-"""
-    )
-    df = pd.read_csv(data, sep="\t").set_index("Année")
-    for c in df.columns:
-        df[c] = df[c].str.replace(" ", "").str.replace(",", ".").astype(float)
-
-    return df
-</code>
-</details>
-
-#### Age de la population au 1er janvier (fin novembre 2022)
-#### `bulkhours.get_data("pyramide")`
-- Raw data: [pyramide.tsv](https://github.com/gtherin/bulkhours/main/data/pyramide.tsv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/pyramide.tsv))
-- Direct source: https://www.insee.fr/fr/statistiques/2381472#tableau-figure1
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| Année de naissance |  |
-| Age révolu |  |
-| Nombre de femmes |  |
-| Nombre d'hommes |  |
-| Ensemble |  |
-
-</details>
-
-#### Statement of Apple stock (Quarterly)
-#### `bulkhours.get_data("trading.apple")`
-- Raw data: [APPLE_DownloadFPrepStatementQuarter.tsv](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/APPLE_DownloadFPrepStatementQuarter.tsv)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/APPLE_DownloadFPrepStatementQuarter.tsv)🤗)
-- Enrich data: [trading.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/trading.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/trading.py))
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| revenue |  |
-| grossProfit |  |
-| ebitda |  |
-| netIncome |  |
-| eps |  |
-
-</details>
-
-
-<details>
-<summary>Show code</summary>
-<code>
-def get_apple(self):
-    apple = self.read_raw_data(self.raw_data).iloc[-4 * 5 :]
-
-    apple.index = pd.to_datetime(apple.index)
-    apple = apple[["date", "revenue", "grossProfit", "ebitda", "netIncome", "eps"]].set_index("date")
-    apple["revenue"] = apple["revenue"].astype(float)
-    apple.index = pd.date_range("2017-12-30", periods=20, freq="Q")
-
-    return apple
-</code>
-</details>
-
-#### Scipy list of available distributions
-#### `bulkhours.get_data("scipy_distributions_list")`
-- Enrich data: [statsdata.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
-
-<details>
-<summary>Show code</summary>
-<code>
-def get_scipy_distributions_list(self):
-    import scipy as sp
-
-    return [d for d in dir(sp.stats._continuous_distns) if not d in ["levy_stable", "studentized_range"]]
-</code>
-</details>
-
-#### Oil production in Saudi Arabia from 1996 to 2007
-#### `bulkhours.get_data("statsdata.oil")`
-- Enrich data: [statsdata.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
-- Direct source: https://www.statsmodels.org/stable/index.html
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| oil |  |
-
-</details>
-
-
-<details>
-<summary>Show code</summary>
-<code>
-def get_oil(self):
-    return pd.Series(
-        [
-            446.6565,
-            454.4733,
-            455.663,
-            423.6322,
-            456.2713,
-            440.5881,
-            425.3325,
-            485.1494,
-            506.0482,
-            526.792,
-            514.2689,
-            494.211,
-        ],
-        pd.date_range(start="1996", end="2008", freq="A"),
-    ).to_frame("oil")
-</code>
-</details>
-
-#### Air pollution data
-#### `bulkhours.get_data("statsdata.air")`
-- Enrich data: [statsdata.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
-- Direct source: https://www.statsmodels.org/stable/index.html
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| air |  |
-
-</details>
-
-
-<details>
-<summary>Show code</summary>
-<code>
-def get_air(self):
-    air = pd.Series(
-        [
-            17.5534,
-            21.86,
-            23.8866,
-            26.9293,
-            26.8885,
-            28.8314,
-            30.0751,
-            30.9535,
-            30.1857,
-            31.5797,
-            32.5776,
-            33.4774,
-            39.0216,
-            41.3864,
-            41.5966,
-        ],
-        pd.date_range(start="1990", end="2005", freq="A"),
-    )
-    return air.to_frame("air")
-</code>
-</details>
-
-#### Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods.
-#### `bulkhours.get_data("statsdata.livestock2")`
-- Enrich data: [statsdata.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
-- Direct source: https://www.statsmodels.org/stable/index.html
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| livestock2 |  |
-
-</details>
-
-
-<details>
-<summary>Show code</summary>
-<code>
-def get_livestock2(self):
-    index = pd.date_range(start="1970", end="2001", freq="A")
-    return pd.Series(
-        [
-            263.9177,
-            268.3072,
-            260.6626,
-            266.6394,
-            277.5158,
-            283.834,
-            290.309,
-            292.4742,
-            300.8307,
-            309.2867,
-            318.3311,
-            329.3724,
-            338.884,
-            339.2441,
-            328.6006,
-            314.2554,
-            314.4597,
-            321.4138,
-            329.7893,
-            346.3852,
-            352.2979,
-            348.3705,
-            417.5629,
-            417.1236,
-            417.7495,
-            412.2339,
-            411.9468,
-            394.6971,
-            401.4993,
-            408.2705,
-            414.2428,
-        ],
-        index,
-    ).to_frame("livestock2")
-</code>
-</details>
-
-#### Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods. (3)
-#### `bulkhours.get_data("statsdata.livestock3")`
-- Enrich data: [statsdata.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
-- Direct source: https://www.statsmodels.org/stable/index.html
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| livestock3 |  |
-
-</details>
-
-
-<details>
-<summary>Show code</summary>
-<code>
-def get_livestock3(self):
-    data = [407.9979, 403.4608, 413.8249, 428.105, 445.3387, 452.9942, 455.7402]
-    return pd.Series(data, pd.date_range(start="2001", end="2008", freq="A")).to_frame("livestock3")
-</code>
-</details>
-
-#### International visitor night in Australia (millions) < 2005
-#### `bulkhours.get_data("statsdata.aust")`
-- Enrich data: [statsdata.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| aust |  |
-
-</details>
-
-
-<details>
-<summary>Show code</summary>
-<code>
-def get_aust(self):
-    data = [
-        41.7275,
-        24.0418,
-        32.3281,
-        37.3287,
-        46.2132,
-        29.3463,
-        36.4829,
-        42.9777,
-        48.9015,
-        31.1802,
-        37.7179,
-        40.4202,
-        51.2069,
-        31.8872,
-        40.9783,
-        43.7725,
-        55.5586,
-        33.8509,
-        42.0764,
-        45.6423,
-        59.7668,
-        35.1919,
-        44.3197,
-        47.9137,
-    ]
-    return pd.Series(data, pd.date_range(start="2005", end="2010-Q4", freq="QS-OCT")).to_frame("aust")
-</code>
-</details>
-
-#### International visitor night in Australia (millions) > 2005
-#### `bulkhours.get_data("air_passengers")`
-- Raw data: [AirPassengers.csv](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/AirPassengers.csv)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/AirPassengers.csv)🤗)
-- Enrich data: [statsdata.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| #Passengers |  |
-| is_test |  |
-
-</details>
-
-
-<details>
-<summary>Show code</summary>
-<code>
-def get_air_passengers(self):
-    df = self.read_raw_data(self.raw_data).set_index("Month")
-
-    df.index = pd.to_datetime(df.index)
-    df.index.freq = "MS"
-    df["is_test"] = df.index >= df.index[120]
-
-    return df
-</code>
-</details>
-
-#### All-Transactions House Price Index for Houston
-#### `bulkhours.get_data("statsdata.hhousing")`
-- Enrich data: [statsdata.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
-- Direct source: https://fred.stlouisfed.org/series/ATNHPIUS26420Q
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| HOUSTNSA |  |
-
-</details>
-
-
-<details>
-<summary>Show code</summary>
-<code>
-def get_hhousing(self):
-    from pandas_datareader import data as pdr  # To get data
-
-    data = pdr.get_data_fred("HOUSTNSA", "1959-01-01")  # , "2019-06-01")
-    housing = data.HOUSTNSA.pct_change().dropna()
-    # Scale by 100 to get percentages
-    housing = 100 * housing.asfreq("MS")
-    return housing.to_frame()
-</code>
-</details>
-
-#### Descriptive statistics of hourly wages in selected EU countries in 2010 (in PPS)
-#### `bulkhours.get_data("mincer.stats")`
-- Direct source: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 2)
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| Mean |  |
-| Minimum |  |
-| Maximum |  |
-| Variance |  |
-| Coefficient |  |
-| of |  |
-| variation |  |
-
-</details>
-
-
-<details>
-<summary>Show code</summary>
-<code>
-def get_stats(self):
-    return pd.read_csv(
-        StringIO(
-            """Country Mean Minimum Maximum Variance Coefficient of variation
-Austria 16.196 7.330 46.400 64.591 0.4962
-Belgium 18.741 10.010 42.140 58.243 0.4072
-Bulgaria 5.349 2.340 13.050 7.771 0.5212
-Czech Republic 8.060 3.700 20.060 14.024 0.4646
-Denmark 19.528 11.750 35.650 29.825 0.2797
-Estonia 7.552 3.160 17.840 11.965 0.4580
-Finland 16.068 8.990 35.360 38.538 0.3863
-France 15.106 8.080 40.320 43.449 0.4364
-Germany 17.764 7.520 40.000 67.286 0.4618
-Hungary 8.055 3.760 19.730 15.993 0.4965
-Ireland 19.313 10.180 40.300 58.440 0.3958
-Italy 16.040 7.690 42.550 80.968 0.5610
-Latvia 6.238 3.160 13.160 5.978 0.3920
-Netherlands 16.471 7.230 32.420 34.222 0.3552
-Poland 8.821 4.080 22.620 20.516 0.5135
-Portugal 11.422 4.150 31.150 54.673 0.6474
-Romania 5.903 2.450 15.250 12.481 0.5985
-Slovakia 7.703 3.790 18.970 13.479 0.4766
-Slovenia 12.708 5.760 33.910 48.510 0.5481
-Spain 14.489 7.390 35.940 44.362 0.4597
-Sweden 14.651 9.550 28.050 18.079 0.2902
-United Kingdom 16.368 7.590 36.390 53.933 0.4487
-"""
-        ),
-        sep=" ",
-    ).set_index("Country")
-</code>
-</details>
-
-#### Mincer equation parameters per country
-#### `bulkhours.get_data("mincer.params")`
-- Enrich data: [mincer.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/mincer.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/mincer.py))
-- Direct source: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 3)
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| alpha_0i |  |
-| alpha_1i |  |
-| alpha_2i |  |
-| alpha_3i |  |
-| alpha_0i_e |  |
-| alpha_1i_e |  |
-| alpha_2i_e |  |
-| alpha_3i_e |  |
-
-</details>
-
-
-<details>
-<summary>Show code</summary>
-<code>
-def get_params(self):
-    return pd.read_csv(
-        StringIO(
-            """Country alpha_0i alpha_1i alpha_2i alpha_3i alpha_0i_e alpha_1i_e alpha_2i_e alpha_3i_e
-Austria 0.804517 0.331677 0.426552 -0.03883 0.218682 0.021472 0.113136 0.01396
-Belgium 1.297771 0.285186 0.335843 -0.02938 0.142724 0.014014 0.073839 0.009111
-Bulgaria 0.322091 0.416255 0.113577 -0.01772 0.228792 0.022465 0.118367 0.014605
-Czech_Republic 0.520228 0.346856 0.289626 -0.03328 0.229066 0.022491 0.118508 0.014622
-Denmark 1.545782 0.174215 0.437635 -0.04545 0.140934 0.013838 0.072913 0.008997
-Estonia 0.737041 0.352713 0.205628 -0.03139 0.238293 0.023397 0.123282 0.015211
-Finland 1.352042 0.258832 0.319167 -0.03292 0.177835 0.017461 0.092004 0.011352
-France 1.259472 0.292803 0.224716 -0.01589 0.159000 0.015612 0.08226 0.01015
-Germany 0.694024 0.339402 0.54815 -0.05546 0.180304 0.017704 0.093281 0.01151
-Hungary 0.770683 0.375923 0.068702 -0.0028 0.204335 0.020063 0.105714 0.013044
-Ireland 0.992552 0.26368 0.571297 -0.05996 0.171045 0.016794 0.088491 0.010919
-Italy 0.652806 0.340295 0.448101 -0.03797 0.227626 0.02235 0.117763 0.014531
-Latvia 0.856984 0.320107 0.07136 -0.01262 0.182072 0.017877 0.094196 0.011623
-Netherlands 0.851423 0.248588 0.571987 -0.05838 0.136289 0.013382 0.07051 0.0087
-Poland 0.395191 0.383528 0.325102 -0.0356 0.227625 0.02235 0.117763 0.01453
-Portugal -0.04775 0.46068 0.463982 -0.04216 0.262584 0.025783 0.135849 0.016762
-Romania 0.128356 0.453002 0.158483 -0.01838 0.269076 0.02642 0.139208 0.017177
-Slovakia 0.628832 0.341852 0.223241 -0.02638 0.238073 0.023376 0.123168 0.015197
-Slovenia 0.764813 0.385382 0.233162 -0.01591 0.190327 0.018688 0.098467 0.01215
-Spain 1.181748 0.317969 0.161371 -0.0043 0.187973 0.018457 0.097249 0.011999
-Sweden 1.471135 0.19044 0.324012 -0.03441 0.14431 0.014169 0.07466 0.009212
-United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.011896"""
-        ),
-        sep=" ",
-    ).set_index("Country")
 </code>
 </details>
 
@@ -1973,7 +1190,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### Standardized country information (iso m49)
 #### `bulkhours.get_data("continent")`
-- Raw data: [continent.tsv](https://github.com/gtherin/bulkhours/main/data/continent.tsv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/continent.tsv))
+- Raw data: [continent.tsv](https://github.com/gtherin/bulkhours/main/data/continent.tsv)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/data/continent.tsv))
 
 <details>
 <summary>Show columns info</summary>
@@ -1992,7 +1209,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### Corruption index per country
 #### `bulkhours.get_data("corruption")`
-- Raw data: [corruption.csv](https://github.com/gtherin/bulkhours/main/data/corruption.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/corruption.csv))
+- Raw data: [corruption.csv](https://github.com/gtherin/bulkhours/main/data/corruption.csv)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/data/corruption.csv))
 
 <details>
 <summary>Show columns info</summary>
@@ -2007,7 +1224,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### Cost of living
 #### `bulkhours.get_data("cost_of_living")`
-- Raw data: [cost_of_living.csv](https://github.com/gtherin/bulkhours/main/data/cost_of_living.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/cost_of_living.csv))
+- Raw data: [cost_of_living.csv](https://github.com/gtherin/bulkhours/main/data/cost_of_living.csv)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/data/cost_of_living.csv))
 
 <details>
 <summary>Show columns info</summary>
@@ -2024,7 +1241,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### GDP per capita per country
 #### `bulkhours.get_data("richest_countries")`
-- Raw data: [richest_countries.csv](https://github.com/gtherin/bulkhours/main/data/richest_countries.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/richest_countries.csv))
+- Raw data: [richest_countries.csv](https://github.com/gtherin/bulkhours/main/data/richest_countries.csv)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/data/richest_countries.csv))
 
 <details>
 <summary>Show columns info</summary>
@@ -2039,7 +1256,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### Tourism information per country
 #### `bulkhours.get_data("tourism")`
-- Raw data: [tourism.csv](https://github.com/gtherin/bulkhours/main/data/tourism.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/tourism.csv))
+- Raw data: [tourism.csv](https://github.com/gtherin/bulkhours/main/data/tourism.csv)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/data/tourism.csv))
 
 <details>
 <summary>Show columns info</summary>
@@ -2056,7 +1273,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### Unemployemnt rates per country
 #### `bulkhours.get_data("unemployment")`
-- Raw data: [unemployment.csv](https://github.com/gtherin/bulkhours/main/data/unemployment.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/unemployment.csv))
+- Raw data: [unemployment.csv](https://github.com/gtherin/bulkhours/main/data/unemployment.csv)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/data/unemployment.csv))
 
 <details>
 <summary>Show columns info</summary>
@@ -2070,7 +1287,7 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 
 #### Simple synthetic data for exercice
 #### `bulkhours.get_data("wages")`
-- Raw data: [wages.tsv](https://github.com/gtherin/bulkhours/main/data/wages.tsv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/wages.tsv))
+- Raw data: [wages.tsv](https://github.com/gtherin/bulkhours/main/data/wages.tsv)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/data/wages.tsv))
 
 <details>
 <summary>Show columns info</summary>
@@ -2101,6 +1318,740 @@ United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.0
 #### COR data
 #### `bulkhours.get_data("COR_5")`
 - Raw data: [Données septembre 2022 - partie 5.xlsx](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/Données septembre 2022 - partie 5.xlsx)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/Données septembre 2022 - partie 5.xlsx)🤗)
+#### Statement of Apple stock (Quarterly)
+#### `bulkhours.get_data("trading.apple")`
+- Raw data: [APPLE_DownloadFPrepStatementQuarter.tsv](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/APPLE_DownloadFPrepStatementQuarter.tsv)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/APPLE_DownloadFPrepStatementQuarter.tsv)🤗)
+- Enrich data: [trading.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/trading.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/trading.py))
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| revenue |  |
+| grossProfit |  |
+| ebitda |  |
+| netIncome |  |
+| eps |  |
+
+</details>
+
+
+<details>
+<summary>Show code</summary>
+<code>
+def get_apple(self):
+    apple = self.read_raw_data(self.raw_data).iloc[-4 * 5 :]
+
+    apple.index = pd.to_datetime(apple.index)
+    apple = apple[["date", "revenue", "grossProfit", "ebitda", "netIncome", "eps"]].set_index("date")
+    apple["revenue"] = apple["revenue"].astype(float)
+    apple.index = pd.date_range("2017-12-30", periods=20, freq="Q")
+
+    return apple
+</code>
+</details>
+
+#### Cotisants, retraités et rapport démographique tous régimes en 2020
+#### `bulkhours.get_data("france.retraites")`
+- Enrich data: [france.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/france.py))
+- Direct source: https://www.insee.fr/fr/statistiques/2415121#tableau-figure1
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| active |  |
+| retired |  |
+| rapport |  |
+
+</details>
+
+
+<details>
+<summary>Show code</summary>
+<code>
+def get_retraites(self):
+    return (
+        pd.read_csv(
+            StringIO(
+                """
+year	active	retired	rapport
+2020	28,2	16,9	1,67
+2019	28,5	16,7	1,71
+2018	28,2	16,5	1,71
+2017	27,9	16,3	1,72
+2016	27,6	16,1	1,71
+2015	27,4	16,0	1,71
+2014	27,3	15,8	1,73
+2013	27,2	15,6	1,74
+2012	27,1	15,3	1,77
+2011	27,0	15,3	1,77
+2010	26,8	15,1	1,78
+2009	26,8	14,7	1,82
+""".replace(
+                    ",", "."
+                )
+            ),
+            sep="\t",
+        )
+        .set_index("year")
+        .astype(float)
+        .sort_index()
+    )
+</code>
+</details>
+
+#### Distribution des salaires mensuels nets en équivalent temps plein (EQTP) en 2020
+#### `bulkhours.get_data("france.income")`
+- Enrich data: [france.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/france.py))
+- Direct source: https://www.insee.fr/fr/statistiques/6436313#tableau-figure2
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| index |  |
+| income |  |
+| population |  |
+| xmin |  |
+| xmax |  |
+| is_valid |  |
+
+</details>
+
+
+<details>
+<summary>Show code</summary>
+<code>
+def get_income(self):
+    data = StringIO(
+        """income	population
+Moins de 1_200	583943
+De 1_200 à 1_300	613_321
+De 1_300 à 1_400	835_135
+De 1_400 à 1_500	969_172
+De 1_500 à 1_600	1_052_630
+De 1_600 à 1_700	1_008_034
+De 1_700 à 1_800	939_538
+De 1_800 à 1_900	863_042
+De 1_900 à 2_000	782_314
+De 2_000 à 2_100	706_339
+De 2_100 à 2_200	630_132
+De 2_200 à 2_300	563_387
+De 2_300 à 2_400	504_240
+De 2_400 à 2_500	452_167
+De 2_500 à 2_600	407_908
+De 2_600 à 2_700	365_648
+De 2_700 à 2_800	329_810
+De 2_800 à 2_900	294_230
+De 2_900 à 3_000	265_925
+De 3_000 à 3_100	241_899
+De 3_100 à 3_200	218_832
+De 3_200 à 3_300	198_266
+De 3_300 à 3_400	180_386
+De 3_400 à 3_500	164_164
+De 3_500 à 3_600	150_218
+De 3_600 à 3_700	136_878
+De 3_700 à 3_800	124_602
+De 3_800 à 3_900	114_322
+De 3_900 à 4_000	106_638
+De 4_000 à 4_100	97_332
+De 4_100 à 4_200	89_173
+De 4_200 à 4_300	82_839
+De 4_300 à 4_400	76_130
+De 4_400 à 4_500	69_887
+De 4_500 à 4_600	64_863
+De 4_600 à 4_700	60_466
+De 4_700 à 4_800	55_998
+De 4_800 à 4_900	52_101
+De 4_900 à 5_000	48_438
+De 5_000 à 5_100	44_831
+De 5_100 à 5_200	41_854
+De 5_200 à 5_300	38_848
+De 5_300 à 5_400	36_480
+De 5_400 à 5_500	34_092
+De 5_500 à 5_600	31_841
+De 5_600 à 5_700	29_948
+De 5_700 à 5_800	27_840
+De 5_800 à 5_900	26_335
+De 5_900 à 6_000	25_270
+De 6_000 à 6_100	23_380
+De 6_100 à 6_200	21_912
+De 6_200 à 6_300	20_313
+De 6_300 à 6_400	19_320
+De 6_400 à 6_500	18_286
+De 6_500 à 6_600	17_333
+De 6_600 à 6_700	16_394
+De 6_700 à 6_800	15_519
+De 6_800 à 6_900	14_700
+De 6_900 à 7_000	13_549
+De 7_000 à 7_100	13_210
+De 7_100 à 7_200	12_278
+De 7_200 à 7_300	11_829
+De 7_300 à 7_400	11_186
+De 7_400 à 7_500	10_567
+De 7_500 à 7_600	10_063
+De 7_600 à 7_700	9_698
+De 7_700 à 7_800	9_178
+De 7_800 à 7_900	8_974
+De 7_900 à 8_000	8_689
+De 8_000 à 8_100	8_170
+De 8_100 à 8_200	7_697
+De 8_200 à 8_300	7_431
+De 8_300 à 8_400	7_057
+De 8_400 à 8_500	6_674
+De 8_500 à 8_600	6_410
+De 8_600 à 8_700	6_138
+De 8_700 à 8_800	5_772
+De 8_800 à 8_900	5_585
+De 8_900 à 9_000	5_408
+Plus de 9_000	183_314
+"""
+    )
+
+    df = pd.read_csv(data, sep="\t").reset_index()
+
+    df["population"] = df["population"].str.replace(" ", "").astype(float)
+    df["xvalue"] = (
+        df["income"]
+        .str.replace("De ", "")
+        .str.replace("Moins de", "1_100 à")
+        .str.replace("Plus de 9_000", "9_000 à 9_100")
+    )
+    df["xvalue"] = df["xvalue"].str.replace(" ", "").str.split("à")
+    df["xmin"] = df["xvalue"].apply(lambda x: float(x[0]))
+    df["xmax"] = df["xvalue"].apply(lambda x: float(x[1]))
+    df["xvalue"] = 0.5 * (df["xmin"] + df["xmax"])
+    df["is_valid"] = ~df.index.isin([0, len(df) - 1])
+
+    return df.set_index("xvalue")
+</code>
+</details>
+
+#### Revenu salarial et salaire en EQTP annuels moyens selon le sexe en 2019
+#### `bulkhours.get_data("france.salaires")`
+- Enrich data: [france.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/france.py))
+- Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| Revenu annuel Femmes moyen   |  Revenu annuel Femmes moyen |         
+| Revenu annuel Hommes moyen  |  Revenu annuel Hommes moyen | 
+| Revenu annuel Femmes moyen Écart relatif (en %)   |   Revenu annuel Femmes moyen Écart relatif (en %)	| 
+| Salaire annuel Femmes moyen EQTP  |  Salaire annuel Femmes moyen EQTP | 
+| Salaire annuel Hommes moyen EQTP   |  Salaire annuel Hommes moyen EQTP |
+| Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP)   |  Salaire annuel Femmes moyen EQTP Écart relatif (en % EQTP) |
+
+</details>
+
+
+<details>
+<summary>Show code</summary>
+<code>
+def get_salaires(self):
+    data = StringIO(
+        """
+categorie	revenu_femme	revenu_homme	revenu_diff	salaire_ajusté_femme	salaire_ajusté_homme	salaire_ajusté_diff
+Age: Moins de 25 ans	7 360	9 110	19,2	17 930	19 210	6,7
+Age: 25-39 ans	18 220	22 610	19,4	24 460	27 660	11,6
+Age: 40-49 ans	22 830	29 710	23,1	28 190	34 270	17,7
+Age: 50-54 ans	23 070	31 340	26,4	28 280	35 740	20,9
+Age: 55 ans ou plus	21 410	29 430	27,2	29 520	38 740	23,8
+Diplôme: Pas de diplôme	12 450	17 400	28,5	19 590	23 260	15,8
+Diplôme: inférieur au baccalauréat	15 180	20 510	26,0	21 460	25 650	16,3
+Diplôme: Baccalauréat à bac+2	20 480	26 560	22,9	25 570	31 000	17,5
+Diplôme: Bac+3 ou plus	30 790	44 410	30,7	36 190	50 140	27,8
+SocioPro: Cadres	36 040	45 370	20,6	42 820	52 950	19,1
+SocioPro: Professions intermédiaires	21 770	26 040	16,4	27 230	30 690	11,3
+SocioPro: Employés	13 900	15 310	9,2	20 860	22 850	8,7
+SocioPro: Ouvriers	11 960	17 200	30,5	19 580	22 930	14,6
+Secteur: privé et entreprises publiques	18 010	24 260	25,7	26 330	31 580	16,6
+Secteur: Fonction publique	21 330	25 290	15,7	26 640	31 090	14,3
+Secteur: Ensemble	18 970	24 420	22,3	26 430	31 510	16,1
+"""
+    )
+    df = pd.read_csv(data, sep="\t").set_index("categorie")
+    for c in df.columns:
+        df[c] = df[c].str.replace(" ", "").str.replace(",", ".").astype(float)
+
+    return df
+</code>
+</details>
+
+#### Inégalités salariales entre femmes et hommes de 1995 à 2019
+#### `bulkhours.get_data("france.histsalaires")`
+- Enrich data: [france.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/france.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/france.py))
+- Direct source: https://www.insee.fr/fr/statistiques/6047743?sommaire=6047805
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| delta_rev_legacy   |  écart relatif du revenu salarial moyen homme/femme |         
+| delta_rev  |  écart relatif (en %) du revenu salarial moyen.1| 
+| delta_rev_eqtp_legacy   |  écart relatif du salaire moyen en EQTP	| 
+| delta_rev_eqtp  |  écart relatif du salaire moyen en EQTP| 
+| delta_vol_eqtp   |  écart relatif du volume de travail en EQTP moyen |
+
+</details>
+
+
+<details>
+<summary>Show code</summary>
+<code>
+def get_histsalaires(self):
+    data = StringIO(
+        """
+Année	écart relatif du revenu salarial moyen	écart relatif du revenu salarial moyen	écart relatif du salaire moyen en EQTP	écart relatif du salaire moyen en EQTP	écart relatif du volume de travail en EQTP moyen
+1995	27,4		18,5		10,9
+1996	27,8		18,8		11,1
+1997	27,6		18,5		11,2
+1998	27,8		18,3		11,4
+1999	27,9		17,9		11,9
+2000	28,2		18,6		11,6
+2001	28,2		18,8		11,3
+2002	27,8		18,5		11,3
+2003	27,6		18,5		11,1
+2004	27,3		18,4		10,9
+2005	27,1		18,3		10,8
+2006	26,9		18,2		10,6
+2007	26,8		18,5		10,2
+2008	27,1		18,7		10,3
+2009	26,1		18,3		9,6
+2010	25,5		18,2		9,0
+2011	25,6		18,2		9,2
+2012	25,3	25,5	18,2	18,5	8,8
+2013		24,8		18,2	8,2
+2014		24,1		17,9	7,8
+2015		23,7		17,8	7,2
+2016		23,3		17,0	7,7
+2017		22,9		16,7	7,7
+2018		22,8		16,6	7,6
+2019		22,3		16,1	7,6
+"""
+    )
+    df = pd.read_csv(data, sep="\t").set_index("Année")
+    for c in df.columns:
+        df[c] = df[c].str.replace(" ", "").str.replace(",", ".").astype(float)
+
+    return df
+</code>
+</details>
+
+#### Age de la population au 1er janvier (fin novembre 2022)
+#### `bulkhours.get_data("pyramide")`
+- Raw data: [pyramide.tsv](https://github.com/gtherin/bulkhours/main/data/pyramide.tsv)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/data/pyramide.tsv))
+- Direct source: https://www.insee.fr/fr/statistiques/2381472#tableau-figure1
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| Année de naissance |  |
+| Age révolu |  |
+| Nombre de femmes |  |
+| Nombre d'hommes |  |
+| Ensemble |  |
+
+</details>
+
+#### Descriptive statistics of hourly wages in selected EU countries in 2010 (in PPS)
+#### `bulkhours.get_data("mincer.stats")`
+- Direct source: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 2)
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| Mean |  |
+| Minimum |  |
+| Maximum |  |
+| Variance |  |
+| Coefficient |  |
+| of |  |
+| variation |  |
+
+</details>
+
+
+<details>
+<summary>Show code</summary>
+<code>
+def get_stats(self):
+    return pd.read_csv(
+        StringIO(
+            """Country Mean Minimum Maximum Variance Coefficient of variation
+Austria 16.196 7.330 46.400 64.591 0.4962
+Belgium 18.741 10.010 42.140 58.243 0.4072
+Bulgaria 5.349 2.340 13.050 7.771 0.5212
+Czech Republic 8.060 3.700 20.060 14.024 0.4646
+Denmark 19.528 11.750 35.650 29.825 0.2797
+Estonia 7.552 3.160 17.840 11.965 0.4580
+Finland 16.068 8.990 35.360 38.538 0.3863
+France 15.106 8.080 40.320 43.449 0.4364
+Germany 17.764 7.520 40.000 67.286 0.4618
+Hungary 8.055 3.760 19.730 15.993 0.4965
+Ireland 19.313 10.180 40.300 58.440 0.3958
+Italy 16.040 7.690 42.550 80.968 0.5610
+Latvia 6.238 3.160 13.160 5.978 0.3920
+Netherlands 16.471 7.230 32.420 34.222 0.3552
+Poland 8.821 4.080 22.620 20.516 0.5135
+Portugal 11.422 4.150 31.150 54.673 0.6474
+Romania 5.903 2.450 15.250 12.481 0.5985
+Slovakia 7.703 3.790 18.970 13.479 0.4766
+Slovenia 12.708 5.760 33.910 48.510 0.5481
+Spain 14.489 7.390 35.940 44.362 0.4597
+Sweden 14.651 9.550 28.050 18.079 0.2902
+United Kingdom 16.368 7.590 36.390 53.933 0.4487
+"""
+        ),
+        sep=" ",
+    ).set_index("Country")
+</code>
+</details>
+
+#### Mincer equation parameters per country
+#### `bulkhours.get_data("mincer.params")`
+- Enrich data: [mincer.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/mincer.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/mincer.py))
+- Direct source: https://www.nbp.pl/publikacje/materialy_i_studia/226_en.pdf (table 3)
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| alpha_0i |  |
+| alpha_1i |  |
+| alpha_2i |  |
+| alpha_3i |  |
+| alpha_0i_e |  |
+| alpha_1i_e |  |
+| alpha_2i_e |  |
+| alpha_3i_e |  |
+
+</details>
+
+
+<details>
+<summary>Show code</summary>
+<code>
+def get_params(self):
+    return pd.read_csv(
+        StringIO(
+            """Country alpha_0i alpha_1i alpha_2i alpha_3i alpha_0i_e alpha_1i_e alpha_2i_e alpha_3i_e
+Austria 0.804517 0.331677 0.426552 -0.03883 0.218682 0.021472 0.113136 0.01396
+Belgium 1.297771 0.285186 0.335843 -0.02938 0.142724 0.014014 0.073839 0.009111
+Bulgaria 0.322091 0.416255 0.113577 -0.01772 0.228792 0.022465 0.118367 0.014605
+Czech_Republic 0.520228 0.346856 0.289626 -0.03328 0.229066 0.022491 0.118508 0.014622
+Denmark 1.545782 0.174215 0.437635 -0.04545 0.140934 0.013838 0.072913 0.008997
+Estonia 0.737041 0.352713 0.205628 -0.03139 0.238293 0.023397 0.123282 0.015211
+Finland 1.352042 0.258832 0.319167 -0.03292 0.177835 0.017461 0.092004 0.011352
+France 1.259472 0.292803 0.224716 -0.01589 0.159000 0.015612 0.08226 0.01015
+Germany 0.694024 0.339402 0.54815 -0.05546 0.180304 0.017704 0.093281 0.01151
+Hungary 0.770683 0.375923 0.068702 -0.0028 0.204335 0.020063 0.105714 0.013044
+Ireland 0.992552 0.26368 0.571297 -0.05996 0.171045 0.016794 0.088491 0.010919
+Italy 0.652806 0.340295 0.448101 -0.03797 0.227626 0.02235 0.117763 0.014531
+Latvia 0.856984 0.320107 0.07136 -0.01262 0.182072 0.017877 0.094196 0.011623
+Netherlands 0.851423 0.248588 0.571987 -0.05838 0.136289 0.013382 0.07051 0.0087
+Poland 0.395191 0.383528 0.325102 -0.0356 0.227625 0.02235 0.117763 0.01453
+Portugal -0.04775 0.46068 0.463982 -0.04216 0.262584 0.025783 0.135849 0.016762
+Romania 0.128356 0.453002 0.158483 -0.01838 0.269076 0.02642 0.139208 0.017177
+Slovakia 0.628832 0.341852 0.223241 -0.02638 0.238073 0.023376 0.123168 0.015197
+Slovenia 0.764813 0.385382 0.233162 -0.01591 0.190327 0.018688 0.098467 0.01215
+Spain 1.181748 0.317969 0.161371 -0.0043 0.187973 0.018457 0.097249 0.011999
+Sweden 1.471135 0.19044 0.324012 -0.03441 0.14431 0.014169 0.07466 0.009212
+United_Kingdom 0.750457 0.34039 0.540786 -0.06146 0.186361 0.018298 0.096415 0.011896"""
+        ),
+        sep=" ",
+    ).set_index("Country")
+</code>
+</details>
+
+#### Scipy list of available distributions
+#### `bulkhours.get_data("scipy_distributions_list")`
+- Enrich data: [statsdata.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py))
+
+<details>
+<summary>Show code</summary>
+<code>
+def get_scipy_distributions_list(self):
+    import scipy as sp
+
+    return [d for d in dir(sp.stats._continuous_distns) if not d in ["levy_stable", "studentized_range"]]
+</code>
+</details>
+
+#### Oil production in Saudi Arabia from 1996 to 2007
+#### `bulkhours.get_data("statsdata.oil")`
+- Enrich data: [statsdata.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py))
+- Direct source: https://www.statsmodels.org/stable/index.html
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| oil |  |
+
+</details>
+
+
+<details>
+<summary>Show code</summary>
+<code>
+def get_oil(self):
+    return pd.Series(
+        [
+            446.6565,
+            454.4733,
+            455.663,
+            423.6322,
+            456.2713,
+            440.5881,
+            425.3325,
+            485.1494,
+            506.0482,
+            526.792,
+            514.2689,
+            494.211,
+        ],
+        pd.date_range(start="1996", end="2008", freq="A"),
+    ).to_frame("oil")
+</code>
+</details>
+
+#### Air pollution data
+#### `bulkhours.get_data("statsdata.air")`
+- Enrich data: [statsdata.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py))
+- Direct source: https://www.statsmodels.org/stable/index.html
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| air |  |
+
+</details>
+
+
+<details>
+<summary>Show code</summary>
+<code>
+def get_air(self):
+    air = pd.Series(
+        [
+            17.5534,
+            21.86,
+            23.8866,
+            26.9293,
+            26.8885,
+            28.8314,
+            30.0751,
+            30.9535,
+            30.1857,
+            31.5797,
+            32.5776,
+            33.4774,
+            39.0216,
+            41.3864,
+            41.5966,
+        ],
+        pd.date_range(start="1990", end="2005", freq="A"),
+    )
+    return air.to_frame("air")
+</code>
+</details>
+
+#### Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods.
+#### `bulkhours.get_data("statsdata.livestock2")`
+- Enrich data: [statsdata.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py))
+- Direct source: https://www.statsmodels.org/stable/index.html
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| livestock2 |  |
+
+</details>
+
+
+<details>
+<summary>Show code</summary>
+<code>
+def get_livestock2(self):
+    index = pd.date_range(start="1970", end="2001", freq="A")
+    return pd.Series(
+        [
+            263.9177,
+            268.3072,
+            260.6626,
+            266.6394,
+            277.5158,
+            283.834,
+            290.309,
+            292.4742,
+            300.8307,
+            309.2867,
+            318.3311,
+            329.3724,
+            338.884,
+            339.2441,
+            328.6006,
+            314.2554,
+            314.4597,
+            321.4138,
+            329.7893,
+            346.3852,
+            352.2979,
+            348.3705,
+            417.5629,
+            417.1236,
+            417.7495,
+            412.2339,
+            411.9468,
+            394.6971,
+            401.4993,
+            408.2705,
+            414.2428,
+        ],
+        index,
+    ).to_frame("livestock2")
+</code>
+</details>
+
+#### Forecasting livestock, sheep in Asia: comparing forecasting performance of non-seasonal methods. (3)
+#### `bulkhours.get_data("statsdata.livestock3")`
+- Enrich data: [statsdata.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py))
+- Direct source: https://www.statsmodels.org/stable/index.html
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| livestock3 |  |
+
+</details>
+
+
+<details>
+<summary>Show code</summary>
+<code>
+def get_livestock3(self):
+    data = [407.9979, 403.4608, 413.8249, 428.105, 445.3387, 452.9942, 455.7402]
+    return pd.Series(data, pd.date_range(start="2001", end="2008", freq="A")).to_frame("livestock3")
+</code>
+</details>
+
+#### International visitor night in Australia (millions) < 2005
+#### `bulkhours.get_data("statsdata.aust")`
+- Enrich data: [statsdata.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py))
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| aust |  |
+
+</details>
+
+
+<details>
+<summary>Show code</summary>
+<code>
+def get_aust(self):
+    data = [
+        41.7275,
+        24.0418,
+        32.3281,
+        37.3287,
+        46.2132,
+        29.3463,
+        36.4829,
+        42.9777,
+        48.9015,
+        31.1802,
+        37.7179,
+        40.4202,
+        51.2069,
+        31.8872,
+        40.9783,
+        43.7725,
+        55.5586,
+        33.8509,
+        42.0764,
+        45.6423,
+        59.7668,
+        35.1919,
+        44.3197,
+        47.9137,
+    ]
+    return pd.Series(data, pd.date_range(start="2005", end="2010-Q4", freq="QS-OCT")).to_frame("aust")
+</code>
+</details>
+
+#### International visitor night in Australia (millions) > 2005
+#### `bulkhours.get_data("air_passengers")`
+- Raw data: [AirPassengers.csv](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/AirPassengers.csv)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/AirPassengers.csv)🤗)
+- Enrich data: [statsdata.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py))
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| #Passengers |  |
+| is_test |  |
+
+</details>
+
+
+<details>
+<summary>Show code</summary>
+<code>
+def get_air_passengers(self):
+    df = self.read_raw_data(self.raw_data).set_index("Month")
+
+    df.index = pd.to_datetime(df.index)
+    df.index.freq = "MS"
+    df["is_test"] = df.index >= df.index[120]
+
+    return df
+</code>
+</details>
+
+#### All-Transactions House Price Index for Houston
+#### `bulkhours.get_data("statsdata.hhousing")`
+- Enrich data: [statsdata.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py))
+- Direct source: https://fred.stlouisfed.org/series/ATNHPIUS26420Q
+
+<details>
+<summary>Show code</summary>
+<code>
+def get_hhousing(self):
+    from pandas_datareader import data as pdr  # To get data
+
+    data = pdr.get_data_fred("HOUSTNSA", "1959-01-01")  # , "2019-06-01")
+    housing = data.HOUSTNSA.pct_change().dropna()
+    # Scale by 100 to get percentages
+    housing = 100 * housing.asfreq("MS")
+    return housing.to_frame()
+</code>
+</details>
+
 
 
 ## Predictive_Maintenance 
@@ -2281,20 +2232,6 @@ def get_FLOPS(self):
 #### FLOPS for gpus
 #### `bulkhours.get_data("hpc.FLOPS_gpus")`
 - Reference site: https://en.wikipedia.org/wiki/FLOPS
-
-<details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| date |  |
-| un_costs |  |
-| costs |  |
-| platform |  |
-| comments |  |
-
-</details>
-
 
 <details>
 <summary>Show code</summary>
@@ -2737,7 +2674,7 @@ bkc.pi := 3.141593  #
 #### Quarterly sunspots activity (ssn)
 #### `bulkhours.get_data("sunspots")`
 - Raw data: [observed-solar-cycle-indices.json](https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json)  ([raw](https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json)🔄)
-- Enrich data: [statsdata.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/statsdata.py))
+- Enrich data: [statsdata.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/statsdata.py))
 - Direct source: https://www.swpc.noaa.gov/products/solar-cycle-progression
 - Reference site: https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
 
@@ -2809,7 +2746,7 @@ def get_sunspots(self):
 
 #### Prostate cancer data
 #### `bulkhours.get_data("prostate")`
-- Raw data: [prostate.tsv](https://github.com/gtherin/bulkhours/main/data/prostate.tsv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/prostate.tsv))
+- Raw data: [prostate.tsv](https://github.com/gtherin/bulkhours/main/data/prostate.tsv)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/data/prostate.tsv))
 - Direct source: https://hastie.su.domains/ElemStatLearn/data.html
 
 <details>
@@ -2918,7 +2855,7 @@ def get_sunspots(self):
 #### Data on CO2 and Greenhouse Gas Emissions by Our World in Data
 #### `bulkhours.get_data("co2.main")`
 - Raw data: [owid-co2-data.csv](https://github.com/owid/co2-data/master/owid-co2-data.csv)  ([raw](https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv))
-- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/world.py))
 
 <details>
 <summary>Show columns info</summary>
@@ -3011,7 +2948,7 @@ def get_sunspots(self):
 #### Data on CO2 and Greenhouse Gas Emissions by Our World in Data (with extra gpx data)
 #### `bulkhours.get_data("co2.mapmain")`
 - Raw data: [owid-co2-data.csv](https://github.com/owid/co2-data/master/owid-co2-data.csv)  ([raw](https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv))
-- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/world.py))
 
 <details>
 <summary>Show columns info</summary>
@@ -3120,8 +3057,8 @@ def get_sunspots(self):
 
 #### Greenhouse effect gaz concentrations
 #### `bulkhours.get_data("co2.concentrations")`
-- Raw data: [climate-change.csv](https://github.com/gtherin/bulkhours/main/data/climate-change.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/climate-change.csv))
-- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Raw data: [climate-change.csv](https://github.com/gtherin/bulkhours/main/data/climate-change.csv)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/data/climate-change.csv))
+- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/atmospheric-concentrations
 
 <details>
@@ -3170,8 +3107,8 @@ def get_concentrations(self, zone="World", **data_info):
 
 #### Greenhouse effect gaz concentrations
 #### `bulkhours.get_data("co2.mapconcentrations")`
-- Raw data: [climate-change.csv](https://github.com/gtherin/bulkhours/main/data/climate-change.csv)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/climate-change.csv))
-- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/guydegnol/bulkhours/main/bulkhours/data/world.py))
+- Raw data: [climate-change.csv](https://github.com/gtherin/bulkhours/main/data/climate-change.csv)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/data/climate-change.csv))
+- Enrich data: [world.py](https://github.com/gtherin/bulkhours/main/bulkhours/data/world.py)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/bulkhours/data/world.py))
 - Direct source: https://ourworldindata.org/atmospheric-concentrations
 
 <details>
