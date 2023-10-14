@@ -1,11 +1,16 @@
 import bulkhours
 
 
-def check_info(cmd):
-    info = bulkhours.core.cell_parser.get_equals_args(cmd)
+def check_info(cmd, func_id="bulkhours.is_equal"):
+    info = bulkhours.core.cell_parser.get_equals_args(cmd, func_id=func_id)
     print(cmd)
     print(info)
     return info
+
+
+def test_get_equals_student_evaluation_function():
+    info = check_info(cmd:="""def student_evaluation_function():""", func_id="student_evaluation_function")
+    info = check_info(cmd:="""def student_evaluation_function(debug=True, run=True):""", func_id="student_evaluation_function")
 
 def test_get_equals_args():
 
@@ -31,5 +36,5 @@ def test_get_equals_args():
 
     info = check_info(cmd:="""return bulkhours.is_equal(data_test, data_ref=0.9525741268)""")
     info = check_info(cmd:="""return bulkhours.is_equal(data_test, data_ref=np.array([1, 2, 3]), max_score=5, policy="strict", error=1e-8)""")
-    info = check_info(cmd:="""return bulkhours.is_equal(data_test, data_ref=3, max_score=5, policy="gaussian", error=1e-8)""")
+    info = check_info(cmd:="""return bulkhours.is_equal(data_test, 3, max_score=5, policy="gaussian", error=1e-8)""")
 
