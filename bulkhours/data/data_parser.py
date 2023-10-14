@@ -48,7 +48,7 @@ def clean_data(df, query=None, index=None, test_data=None):
         return df
 
     if "date" in df.columns:
-        df["date"] = pd.to_datetime(df["date"])
+        df["date"] = pd.to_datetime(df["date"], format='mixed')
 
     if query:
         df = df.query(query)
