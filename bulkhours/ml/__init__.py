@@ -1,11 +1,11 @@
 import numpy as np
-from . import lxmert  # noqa: F401
-
 import sys
 import subprocess
 import matplotlib.pyplot as plt
-from .rl.hugs import PPOHugs  # noqa
 
+from . import lxmert  # noqa: F401
+from .rl.hugs import PPOHugs  # noqa
+from .viz import vizualize  # noqa
 
 def runrealcmd(command, verbose=True):
     logfile = open("install.log", "w")
