@@ -122,15 +122,16 @@ class Invoice:
         os.system(f"wkhtmltopdf --enable-local-file-access {filename} {filename[:-4]}pdf")
 
     @staticmethod
-    def generate_invoices(user, outdir, info) -> None:
+    def generate_invoices(user, info, outdir=None) -> None:
         
         Invoice.set_db_info(user, info)
 
-        os.system(f"mkdir -p {outdir}")
-        cdir = os.getcwd()
+        if outdir is not None:
+            os.system(f"mkdir -p {outdir}")
+            cdir = os.getcwd()
 
-        os.chdir(outdir)
-        print(os.getcwd())
+            os.chdir(outdir)
+            print(os.getcwd())
         
         for ext in ["html", "css"]:
             hfile = core.tools.abspath(f"data/{Invoice.einfo['template']}.{ext}")
@@ -143,5 +144,6 @@ class Invoice:
         for invoice_id, df in Invoice.accounting.groupby("invoice_id"):
             Invoice(user, invoice_id, df).generate_html()
 
-        os.chdir(cdir)
-        print(os.getcwd())
+        if outdir is not None:
+            os.chdir(cdir)
+            print(os.getcwd())
