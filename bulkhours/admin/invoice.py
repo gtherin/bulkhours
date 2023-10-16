@@ -105,25 +105,21 @@ class Invoice:
         self.data["total"] = format_price(subtotal - vat_amount)
         self.data['invoice_id'] = self.invoice_id
 
-    def generate_html(self, outdir):
+    def generate_html(self):
 
         from jinja2 import Environment, FileSystemLoader
-        #outdir = core.tools.abspath(f"{outdir}")
 
-        templatefile = f"{outdir}/{self.einfo['template']}.html"
-        print(templatefile)
-
-        # Load the html template
+        # Load the HTML template
         env = Environment(loader=FileSystemLoader("."))
-        template = env.get_template(templatefile)
+        template = env.get_template(self.einfo["template"] + ".html")
 
         # Render the template with the dynamic data
         invoice = template.render(self.data)
 
-        with open(filename := f"{outdir}/{self.data['invoice_id']}_{self.client}_annex.html", "w") as f:
+        with open(filename := f"{self.data['invoice_id']}_{self.client}_annex.html", "w") as f:
             f.write(invoice)
         print(f"Generate files {filename} and {filename[:-4]}pdf")
-        os.system(f"cd {outdir} && wkhtmltopdf --enable-local-file-access {filename} {filename[:-4]}pdf")
+        os.system(f"wkhtmltopdf --enable-local-file-access {filename} {filename[:-4]}pdf")
 
     @staticmethod
     def generate_invoices(user, outdir, info) -> None:
@@ -131,10 +127,21 @@ class Invoice:
         Invoice.set_db_info(user, info)
 
         os.system(f"mkdir -p {outdir}")
+        cdir = os.getcwd()
+
+        os.chdir(outdir)
+        print(os.getcwd())
         
         for ext in ["html", "css"]:
             hfile = core.tools.abspath(f"data/{Invoice.einfo['template']}.{ext}")
-            os.system(f"cp {hfile} {outdir}/{Invoice.einfo['template']}.{ext}")
+            os.system(f"cp {hfile} {Invoice.einfo['template']}.{ext}")
+
+        for f in ["BulkHours.png", "dart.png"]:
+            hfile = core.tools.abspath(f"data/{f}")
+            os.system(f"cp {hfile} {f}")
 
         for invoice_id, df in Invoice.accounting.groupby("invoice_id"):
-            Invoice(user, invoice_id, df).generate_html(outdir)
+            Invoice(user, invoice_id, df).generate_html()
+
+        os.chdir(cdir)
+        print(os.getcwd())
