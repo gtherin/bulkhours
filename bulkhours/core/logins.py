@@ -55,7 +55,7 @@ def init_prems(config):
     config["eparams"] = False
 
     if not is_known_student:
-        if config["global"]["restricted"]:
+        if 0 and config["global"]["restricted"]:
             raise Exception.IndexError(
                 f"❌\x1b[41m\x1b[37mL'email '{email}' n'est pas configuré dans la base de données. Contacter le professeur svp\x1b[0m"
                 if language == "fr"
@@ -138,7 +138,7 @@ def init_env(packages=None, plt_style="default", **kwargs):
     start_time = time.time()
 
     if packages is not None and "BLK_PACKAGES_STATUS" not in os.environ:
-        installer.install_dependencies(packages, start_time)
+        installer.install_dependencies(packages, start_time, tools.is_admin(cfg=cfg))
         os.environ["BLK_PACKAGES_STATUS"] = f"INITIALIZED"
 
     colors.set_plt_style(plt_style)

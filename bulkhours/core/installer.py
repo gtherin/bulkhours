@@ -52,7 +52,7 @@ def get_tokens(token, raise_error=False, verbose=True):
     return {}
 
 
-def install_dependencies(packages, start_time):
+def install_dependencies(packages, start_time, is_admin):
     if start_time is None:
         start_time = time.time()
 
@@ -67,7 +67,12 @@ def install_dependencies(packages, start_time):
         "HUGGING_FACE", "swig,cmake,HF_UNIT1,apt-get,python-opengl,ffmpeg,xvfb,pyvirtualdisplay,shimmy>=0.2.1"
     )
 
-    if packages in [None, "None", ""]:
+    # Set default value
+    if packages in [None, "None"]:
+        packages = ""
+
+    # Install packages if admin
+    if packages == "" and not is_admin:
         return
 
     # Update pip
@@ -79,6 +84,10 @@ def install_dependencies(packages, start_time):
     )
     # if packages in ["rl", "reinforcement learning"]:
     #    rl.init_env(verbose=verbose)
+
+    # Install the xattr package if admin
+    if is_admin and ",xattr" not in packages:
+        packages += ",xattr"
 
     # Install packages
     for package in packages.split(","):
