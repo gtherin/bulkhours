@@ -118,8 +118,10 @@ class Invoice:
 
         with open(filename := f"{self.data['invoice_id']}_{self.client}_annex.html", "w") as f:
             f.write(invoice)
-        print(f"Generate files {filename} and {filename[:-4]}pdf")
+        print(f"Generate files and {filename[:-4]}pdf (from) {filename}")
         os.system(f"wkhtmltopdf --enable-local-file-access {filename} {filename[:-4]}pdf")
+        os.system(f"rm -rf {filename}")
+        return f"{filename[:-4]}pdf"
 
     @staticmethod
     def generate_invoices(user, info, outdir=None) -> None:
@@ -139,8 +141,9 @@ class Invoice:
             hfile = core.tools.abspath(f"data/{f}")
             os.system(f"cp {hfile} {f}")
 
+        files = []
         for invoice_id, df in Invoice.accounting.groupby("invoice_id"):
-            Invoice(user, invoice_id, df).generate_html()
+            files.append(Invoice(user, invoice_id, df).generate_html())
 
         for f in filelists:
             os.system(f"rm -rf {f}")
@@ -148,3 +151,4 @@ class Invoice:
         if outdir is not None:
             os.chdir(cdir)
             print(os.getcwd())
+        return files
