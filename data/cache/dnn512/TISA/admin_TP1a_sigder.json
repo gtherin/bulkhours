@@ -1,0 +1,312 @@
+{
+    "alexandra.larsonneur@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = sigmoid(x)*(1-sigmoid(x)) # ...\n    sigmoid(x)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "alexandra.larsonneur@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = sigmoid(x)*(1-sigmoid(x)) # ...\n    sigmoid(x)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:51:20",
+        "atype": "bkcode"
+    },
+    "alexis.akujuobi-asoluka@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = 1/(1+np.exp(-x))\n    ds = s*(1-s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "alexis.akujuobi-asoluka@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = 1/(1+np.exp(-x))\n    ds = s*(1-s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-03 20:17:12"
+    },
+    "ali.m-sahi@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = 1/(1+np.exp(-x))\n    ds = s * (1 - s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "ali.m-sahi@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = 1/(1+np.exp(-x))\n    ds = s * (1 - s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:45:48",
+        "atype": "bkcode"
+    },
+    "angel.jouen@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = sigmoid(x)*(1-sigmoid(x)) # ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "angel.jouen@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = sigmoid(x)*(1-sigmoid(x)) # ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:54:22",
+        "atype": "bkcode"
+    },
+    "antoine.rochette@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = sigmoid(x)\n    ds = s*(1-s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "antoine.rochette@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = sigmoid(x)\n    ds = s*(1-s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:53:10",
+        "atype": "bkcode"
+    },
+    "arij.salablab@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = sigmoid(x)*(1-sigmoid(x)) # ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "arij.salablab@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = sigmoid(x)*(1-sigmoid(x)) # ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-03 13:55:29"
+    },
+    "armand.loisil@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n    s = sigmoid(x)\n    ### START CODE HERE ###\n    ds = s*(1-s) # ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "armand.loisil@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n    s = sigmoid(x)\n    ### START CODE HERE ###\n    ds = s*(1-s) # ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:47:03",
+        "atype": "bkcode"
+    },
+    "axel.autexier@ipsa.fr": {
+        "note_upd": "2023-10-10 20:18:03",
+        "note": NaN
+    },
+    "axel.streiff@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    sigma = sigmoid(x)\n    ds =  sigma * (1 - sigma)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "axel.streiff@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    sigma = sigmoid(x)\n    ds =  sigma * (1 - sigma)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:51:46",
+        "atype": "bkcode"
+    },
+    "badis.perdrix@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = 1/(1+np.exp(-x))*(1-(1/(1+np.exp(-x)))) # ...\n    ### END CODE HERE ###\n\n    return ds\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "badis.perdrix@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = 1/(1+np.exp(-x))*(1-(1/(1+np.exp(-x)))) # ...\n    ### END CODE HERE ###\n\n    return ds\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:56:58",
+        "atype": "bkcode"
+    },
+    "baptiste.rousselet@ipsa.fr": {
+        "answer": "import numpy as np\ndef sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = 1/(1+np.exp(-x))\n    ds = s*(1-s)\n    # ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "baptiste.rousselet@ipsa.fr",
+        "main_execution": "import numpy as np\ndef sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = 1/(1+np.exp(-x))\n    ds = s*(1-s)\n    # ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 14:06:41",
+        "atype": "bkcode"
+    },
+    "colin.duchanoy@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = sigmoid(x)*(1-sigmoid(x))\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "colin.duchanoy@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = sigmoid(x)*(1-sigmoid(x))\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:50:03",
+        "atype": "bkcode"
+    },
+    "corentin.dumont@ipsa.fr": {
+        "note_upd": "2023-10-10 20:18:03",
+        "note": NaN
+    },
+    "dorian.rondeau@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s  = sigmoid(x)\n    ds = s*(1-s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "dorian.rondeau@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s  = sigmoid(x)\n    ds = s*(1-s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:43:04",
+        "atype": "bkcode"
+    },
+    "evan.garcia@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = sigmoid(x) * (1 - sigmoid(x))\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "evan.garcia@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = sigmoid(x) * (1 - sigmoid(x))\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-03 19:59:25"
+    },
+    "gaetan.chiesura@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = sigmoid(x)*(1-sigmoid(x))\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "gaetan.chiesura@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = sigmoid(x)*(1-sigmoid(x))\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:53:17",
+        "atype": "bkcode"
+    },
+    "geoffrey.vaillant@ipsa.fr": {
+        "note_upd": "2023-10-10 20:18:03",
+        "note": NaN
+    },
+    "guillaume.therin@ipsa.fr": {
+        "note_upd": "2023-10-10 20:18:03",
+        "note": NaN
+    },
+    "john.doe@ipsa.fr": {
+        "note_upd": "2023-10-10 20:18:03",
+        "note": NaN
+    },
+    "julian.lavarelo@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = sigmoid(x)\n    ds = s*(1-s) # ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "julian.lavarelo@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = sigmoid(x)\n    ds = s*(1-s) # ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:47:51",
+        "atype": "bkcode"
+    },
+    "lea.dupin@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = sigmoid(x)\n    ds = s * (1 - s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "lea.dupin@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = sigmoid(x)\n    ds = s * (1 - s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-03 13:55:03"
+    },
+    "luc.fourty@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = (1 / (1 + np.exp(-x)))*(1 - 1 / (1 + np.exp(-x)))\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "luc.fourty@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = (1 / (1 + np.exp(-x)))*(1 - 1 / (1 + np.exp(-x)))\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:47:37",
+        "atype": "bkcode"
+    },
+    "luc.sauleau@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n\n    s = 1/(1+np.exp(-x))\n\n    ds = s*(1-s) # ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "luc.sauleau@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n\n    s = 1/(1+np.exp(-x))\n\n    ds = s*(1-s) # ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:50:25",
+        "atype": "bkcode"
+    },
+    "ludovic.said@ipsa.fr": {
+        "note_upd": "2023-10-10 20:18:03",
+        "note": NaN
+    },
+    "mathieu.klingler@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = sigmoid(x)*(1-sigmoid(x))\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "mathieu.klingler@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = sigmoid(x)*(1-sigmoid(x))\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:51:05",
+        "atype": "bkcode"
+    },
+    "matteo.crosnier-de-bellaistre@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = 1/(1+np.exp(x))\n    ds = s*(1-s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "matteo.crosnier-de-bellaistre@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = 1/(1+np.exp(x))\n    ds = s*(1-s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:45:10",
+        "atype": "bkcode"
+    },
+    "mikael.kealbert@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = sigmoid(x)*(1 - sigmoid(x))\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "mikael.kealbert@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = sigmoid(x)*(1 - sigmoid(x))\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 23:56:30",
+        "atype": "bkcode"
+    },
+    "nathan.heckmann@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = sigmoid(x)*(1-sigmoid(x))\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "nathan.heckmann@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = sigmoid(x)*(1-sigmoid(x))\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:58:15",
+        "atype": "bkcode"
+    },
+    "nils.joanne@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = 1/(1+np.exp(-x))\n    ds = s*(1-s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "nils.joanne@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = 1/(1+np.exp(-x))\n    ds = s*(1-s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:50:43",
+        "atype": "bkcode"
+    },
+    "omar.al-hammal@ipsa.fr": {
+        "note_upd": "2023-10-10 20:18:03",
+        "note": NaN
+    },
+    "pedro-henrique.valvezon-maldonado@ipsa.fr": {
+        "note_upd": "2023-10-10 20:18:03",
+        "note": NaN
+    },
+    "riccardo.cecchetto@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = ( 1/(1+np.exp(-x)) )* (1 - (1/(1+np.exp(-x))))# ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "riccardo.cecchetto@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = ( 1/(1+np.exp(-x)) )* (1 - (1/(1+np.exp(-x))))# ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:53:28",
+        "atype": "bkcode"
+    },
+    "romain.miaux@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = sigmoid(x)\n    ds = s * (1 - s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "romain.miaux@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = sigmoid(x)\n    ds = s * (1 - s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 16:10:16"
+    },
+    "solution": {
+        "update_time": "2023-10-10 22:17:46",
+        "visible": true,
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = 1 / (1 + np.exp(-x))\n    ds = s * (1 - s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(f\"sigmoid_derivative({x})={sigmoid_derivative(x)}\")\n\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "explanation": "",
+        "evaluation": "def student_evaluation_function():\n    x = np.linspace(0, 10, 10)\n    return bulkhours.is_equal(data_test=student.sigmoid_derivative(x), min_score=1.0, max_score=3.0, policy=\"strict\", error=0.001, data_ref=teacher.sigmoid_derivative(x))\n\n",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = 1 / (1 + np.exp(-x))\n    ds = s * (1 - s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(f\"sigmoid_derivative({x})={sigmoid_derivative(x)}\")\n\n",
+        "user": "solution",
+        "note": 3.0,
+        "atype": "bkcode",
+        "hint": ""
+    },
+    "sualp.komurcuoglu@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = s = 1 / (1 + np.exp(-x)) # s = basic_sigmoid(x) doesn't work?\n    ds = s * (1 - s) # ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "sualp.komurcuoglu@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = s = 1 / (1 + np.exp(-x)) # s = basic_sigmoid(x) doesn't work?\n    ds = s * (1 - s) # ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 17:58:22"
+    },
+    "thibaud.bonnet@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = sigmoid(x)\n    ds = s * (1 - s) # ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "thibaud.bonnet@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = sigmoid(x)\n    ds = s * (1 - s) # ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:52:05",
+        "atype": "bkcode"
+    },
+    "wassil.amghar@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = (1/(1+np.exp(-1*x)))*(1-(1/(1+np.exp(-1*x)))) # ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "wassil.amghar@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    ds = (1/(1+np.exp(-1*x)))*(1-(1/(1+np.exp(-1*x)))) # ...\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:55:49",
+        "atype": "bkcode"
+    },
+    "wenceslas.lombard@ipsa.fr": {
+        "note_upd": "2023-10-10 20:18:03",
+        "note": NaN
+    },
+    "yann-loic-atasse.atakoui@ipsa.fr": {
+        "answer": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = 1 / (1 + np.exp(-1*x))\n    ds = s*(1 - s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note_upd": "2023-10-10 20:18:03",
+        "user": "yann-loic-atasse.atakoui@ipsa.fr",
+        "main_execution": "def sigmoid_derivative(x):\n    \"\"\"\n    Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.\n    You can store the output of the sigmoid function into variables and then use it to calculate the gradient.\n\n    Arguments:\n    x -- A scalar or numpy array\n\n    Return:\n    ds -- Your computed gradient.\n    \"\"\"\n\n    ### START CODE HERE ###\n    s = 1 / (1 + np.exp(-1*x))\n    ds = s*(1 - s)\n    ### END CODE HERE ###\n\n    return ds\n\n# Plot your version of your sigmoid function with matplotlib\nplt.plot(np.linspace(-10, 10), sigmoid_derivative(np.linspace(-10, 10)))\n\nx = np.array([1, 2, 3])\nprint(\"sigmoid_derivative(x) = \" + str(sigmoid_derivative(x)))\n",
+        "note": 3.0,
+        "update_time": "2023-10-03 13:57:27",
+        "atype": "bkcode"
+    }
+}

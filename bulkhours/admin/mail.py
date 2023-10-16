@@ -6,10 +6,11 @@ from email.mime.image import MIMEImage
 from .. import core
 
 
-def copy(drive_rdir, filename):
+def copy(email, drive_rdir, filename, default_student):
 
     from subprocess import getoutput
     from google.colab import drive
+    import nbformat
 
     def get_drive_filename(filename):
         from xattr import xattr
@@ -19,22 +20,44 @@ def copy(drive_rdir, filename):
     drive.mount('/content/gdrive/')
     ofilename = f"{drive_rdir}/{filename}"
 
+    # Get token
     cfg = core.tools.get_config(is_new_format=True)
     ntoken = cfg.tokens[cfg.virtual_room]
-    cfilename = ofilename.replace('.', f'_{cfg.virtual_room}.')
 
-    import nbformat as nbf
-    ntbk = nbf.read(ofilename, nbf.NO_CONVERT).copy()
-    new_ntbk = ntbk
-    new_ntbk.cells = [cell for cell in ntbk.cells]
+    # Parse notebook
+    to_pop, nb = [], nbformat.read(ofilename, nbformat.NO_CONVERT).copy()
+    for idx, cell in enumerate(nb.cells):
+        if cell["cell_type"] == "code":
+            # Change the initialization cell
+            if "\ndatabase" in cell["source"]:
+                source = cell["source"].split("\n")
+                nsource = []
+                for s in source:
+                    if s.startswith('database'):
+                        s = f'database = "{ntoken}"'
+                    if s.startswith('email'):
+                        s = s.replace(email, default_student)
+                    nsource.append(s)
+                cell["source"] ="\n".join(nsource)
+                cell["outputs"][0]["text"] = ""
+            # Remove cells with admin code
+            elif "[admin]" in cell["source"] or "bulkhours.admin" in cell["source"]:
+                to_pop.append(idx)
+            # Remove cells with solution
+            elif " -u solution" in cell["source"]:
+                to_pop.append(idx)
+            # Format cells with reset info
+            elif " -u reset" in cell["source"]:
+                cell["source"] = cell["source"].replace(" -u reset", "")
+        #print(idx, cell.keys(), cell["metadata"])
 
-    for indx, cell in enumerate(ntbk.cells):
-        if cell["cell_type"] == "code" and "\ndatabase" in cell["source"]:
-            source = cell["source"].split("\n")
-            nsource = [f'database = "{ntoken}"' if s.startswith('database') else s for s in source]
-            cell["source"] ="\n".join(nsource)
+    # Remove listed cells
+    print("Pop the following cells: ", to_pop)
+    for i in to_pop[::-1]:
+        nb.cells.pop(i)
 
-    nbf.write(new_ntbk, cfilename, version=nbf.NO_CONVERT)
+    # Create the new notebook
+    nbformat.write(nb, cfilename:=ofilename.replace('.', f'_{cfg.virtual_room}.'), version=nbformat.NO_CONVERT)
     dfilename = get_drive_filename(cfilename)
     print(f"File {cfilename} is accessible via: {dfilename}")
     return dfilename
@@ -45,7 +68,10 @@ def prepare_mail(default_student="john.doe@bulkhours.eu", signature="The bulkHou
                  notebook_file=None, drive_rdir=None):
 
     if generate_file:
-        notebook_file = copy(drive_rdir, notebook_file)
+        notebook_file = copy(signature, drive_rdir, notebook_file, default_student)
+
+    if "@" in signature:
+        signature = signature.split("@")[0].replace(".", " ").title()
 
     import IPython
     cfg = core.tools.get_config(is_new_format=True)

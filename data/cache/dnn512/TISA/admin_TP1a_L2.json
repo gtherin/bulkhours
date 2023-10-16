@@ -1,0 +1,307 @@
+{
+    "alexandra.larsonneur@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.dot(np.abs(yhat-y),np.abs(yhat-y))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "alexandra.larsonneur@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.dot(np.abs(yhat-y),np.abs(yhat-y))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:19:28",
+        "atype": "bkcode"
+    },
+    "alexis.akujuobi-asoluka@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.dot(np.abs(yhat-y),np.abs(yhat-y))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "alexis.akujuobi-asoluka@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.dot(np.abs(yhat-y),np.abs(yhat-y))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 20:31:09",
+        "atype": "bkcode"
+    },
+    "ali.m-sahi@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    diff = (y - yhat)\n    sum = np.dot(diff, diff)\n    loss = sum # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "ali.m-sahi@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    diff = (y - yhat)\n    sum = np.dot(diff, diff)\n    loss = sum # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:10:37",
+        "atype": "bkcode"
+    },
+    "angel.jouen@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum((y-yhat)**2)\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "angel.jouen@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum((y-yhat)**2)\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:21:23",
+        "atype": "bkcode"
+    },
+    "antoine.rochette@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.dot((y-yhat), (y-yhat))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "antoine.rochette@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.dot((y-yhat), (y-yhat))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:22:06",
+        "atype": "bkcode"
+    },
+    "arij.salablab@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum(np.abs(y - yhat)**2) # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "arij.salablab@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum(np.abs(y - yhat)**2) # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-04 16:56:46",
+        "atype": "bkcode"
+    },
+    "armand.loisil@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum((np.abs(y-yhat))**2) # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "armand.loisil@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum((np.abs(y-yhat))**2) # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:16:03",
+        "atype": "bkcode"
+    },
+    "axel.autexier@ipsa.fr": {
+        "note_upd": "2023-10-10 20:43:31",
+        "note": NaN
+    },
+    "axel.streiff@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.dot((y - yhat),(y - yhat))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "axel.streiff@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.dot((y - yhat),(y - yhat))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-03 14:20:12"
+    },
+    "badis.perdrix@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.dot(y,y)-2*np.dot(y,yhat)+np.dot(yhat,yhat) # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "badis.perdrix@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.dot(y,y)-2*np.dot(y,yhat)+np.dot(yhat,yhat) # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:25:00",
+        "atype": "bkcode"
+    },
+    "baptiste.rousselet@ipsa.fr": {
+        "note_upd": "2023-10-10 20:43:31",
+        "note": NaN
+    },
+    "colin.duchanoy@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum(np.dot(y-yhat,y-yhat))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "colin.duchanoy@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum(np.dot(y-yhat,y-yhat))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:11:16",
+        "atype": "bkcode"
+    },
+    "corentin.dumont@ipsa.fr": {
+        "note_upd": "2023-10-10 20:43:31",
+        "note": NaN
+    },
+    "dorian.rondeau@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum(pow(y-yhat,2))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "dorian.rondeau@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum(pow(y-yhat,2))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:06:15",
+        "atype": "bkcode"
+    },
+    "evan.garcia@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    Y = y - yhat\n    loss = np.sum(np.dot(Y,Y))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "evan.garcia@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    Y = y - yhat\n    loss = np.sum(np.dot(Y,Y))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 20:07:42",
+        "atype": "bkcode"
+    },
+    "gaetan.chiesura@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss =np.sum((np.abs(y-yhat))**2)\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "gaetan.chiesura@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss =np.sum((np.abs(y-yhat))**2)\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:19:04",
+        "atype": "bkcode"
+    },
+    "geoffrey.vaillant@ipsa.fr": {
+        "note_upd": "2023-10-10 20:43:31",
+        "note": NaN
+    },
+    "guillaume.therin@ipsa.fr": {
+        "note_upd": "2023-10-10 20:43:31",
+        "note": NaN
+    },
+    "john.doe@ipsa.fr": {
+        "note_upd": "2023-10-10 20:43:31",
+        "note": NaN
+    },
+    "julian.lavarelo@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum((y-yhat)**2) # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "julian.lavarelo@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum((y-yhat)**2) # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:19:54",
+        "atype": "bkcode"
+    },
+    "lea.dupin@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum(np.power(y - yhat, 2))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "lea.dupin@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum(np.power(y - yhat, 2))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:29:54",
+        "atype": "bkcode"
+    },
+    "luc.fourty@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    Y = y - yhat\n    loss = np.dot(Y,Y)\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "luc.fourty@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    Y = y - yhat\n    loss = np.dot(Y,Y)\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:27:46",
+        "atype": "bkcode"
+    },
+    "luc.sauleau@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum((y-yhat)**2)\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "luc.sauleau@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum((y-yhat)**2)\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:14:55",
+        "atype": "bkcode"
+    },
+    "ludovic.said@ipsa.fr": {
+        "note_upd": "2023-10-10 20:43:31",
+        "note": NaN
+    },
+    "mathieu.klingler@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum(np.dot((y-yhat),(y-yhat))) # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "mathieu.klingler@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum(np.dot((y-yhat),(y-yhat))) # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:11:22",
+        "atype": "bkcode"
+    },
+    "matteo.crosnier-de-bellaistre@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum(np.power(np.abs(y-yhat),2),keepdims=True)\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "matteo.crosnier-de-bellaistre@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum(np.power(np.abs(y-yhat),2),keepdims=True)\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:11:37",
+        "atype": "bkcode"
+    },
+    "mikael.kealbert@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum(np.dot(yhat-y, yhat-y))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "mikael.kealbert@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum(np.dot(yhat-y, yhat-y))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 23:57:30",
+        "atype": "bkcode"
+    },
+    "nathan.heckmann@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    # Calculate the squared differences between yhat and y\n    squared_diff = (y - yhat) ** 2\n\n    # Calculate the sum of squared differences\n    loss = np.sum(squared_diff)\n\n\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "nathan.heckmann@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    # Calculate the squared differences between yhat and y\n    squared_diff = (y - yhat) ** 2\n\n    # Calculate the sum of squared differences\n    loss = np.sum(squared_diff)\n\n\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-04 14:24:28",
+        "atype": "bkcode"
+    },
+    "nils.joanne@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum((y-yhat)**2) # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "nils.joanne@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum((y-yhat)**2) # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:09:54",
+        "atype": "bkcode"
+    },
+    "omar.al-hammal@ipsa.fr": {
+        "note_upd": "2023-10-10 20:43:31",
+        "note": NaN
+    },
+    "pedro-henrique.valvezon-maldonado@ipsa.fr": {
+        "note_upd": "2023-10-10 20:43:31",
+        "note": NaN
+    },
+    "riccardo.cecchetto@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum(np.square(y - yhat)) # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "riccardo.cecchetto@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum(np.square(y - yhat)) # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:14:21",
+        "atype": "bkcode"
+    },
+    "romain.miaux@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    if y.shape != yhat.shape:\n      print(\"Not compatible size for the predicted values and the real values\")\n      exit()\n    x = y - yhat\n    loss = np.sum(x @ x)\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "romain.miaux@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    if y.shape != yhat.shape:\n      print(\"Not compatible size for the predicted values and the real values\")\n      exit()\n    x = y - yhat\n    loss = np.sum(x @ x)\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 16:10:52"
+    },
+    "solution": {
+        "update_time": "2023-10-10 22:43:26",
+        "visible": true,
+        "answer": "\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum(np.dot(y-yhat, y-yhat))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "explanation": "",
+        "evaluation": "def student_evaluation_function(max_score=10):\n    if np.abs(student.L2(yhat, y) - 0.43) < 0.001:\n        return max_score\n    return 0\n",
+        "main_execution": "\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.sum(np.dot(y-yhat, y-yhat))\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n\n",
+        "user": "solution",
+        "note": 10.0,
+        "atype": "bkcode",
+        "hint": ""
+    },
+    "sualp.komurcuoglu@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    diff = np.square((y - yhat))\n    loss = np.sum(diff) # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "sualp.komurcuoglu@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    diff = np.square((y - yhat))\n    loss = np.sum(diff) # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 18:10:57"
+    },
+    "thibaud.bonnet@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    x = y - yhat\n    ### END CODE HERE ###\n\n    return np.sum(np.dot(x, x), axis = 0, keepdims = True)\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "thibaud.bonnet@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    x = y - yhat\n    ### END CODE HERE ###\n\n    return np.sum(np.dot(x, x), axis = 0, keepdims = True)\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:20:52",
+        "atype": "bkcode"
+    },
+    "wassil.amghar@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.dot(y,y)-2*np.dot(y,yhat)+np.dot(yhat,yhat) # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "wassil.amghar@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.dot(y,y)-2*np.dot(y,yhat)+np.dot(yhat,yhat) # ...\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:24:59",
+        "atype": "bkcode"
+    },
+    "wenceslas.lombard@ipsa.fr": {
+        "note_upd": "2023-10-10 20:43:31",
+        "note": NaN
+    },
+    "yann-loic-atasse.atakoui@ipsa.fr": {
+        "answer": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.dot(yhat, y)\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note_upd": "2023-10-10 20:43:31",
+        "user": "yann-loic-atasse.atakoui@ipsa.fr",
+        "main_execution": "\n# GRADED FUNCTION: L2\n\ndef L2(yhat, y):\n    \"\"\"\n    Arguments:\n    yhat -- vector of size m (predicted labels)\n    y -- vector of size m (true labels)\n\n    Returns:\n    loss -- the value of the L2 loss function defined above\n    \"\"\"\n\n    ### START CODE HERE ###\n    loss = np.dot(yhat, y)\n    ### END CODE HERE ###\n\n    return loss\n\nyhat = np.array([.9, 0.2, 0.1, .4, .9])\ny = np.array([1, 0, 0, 1, 1])\nprint(f\"L2(yhat, y) = {L2(yhat, y)}\")\n",
+        "note": 0.0,
+        "update_time": "2023-10-03 14:30:09",
+        "atype": "bkcode"
+    }
+}
