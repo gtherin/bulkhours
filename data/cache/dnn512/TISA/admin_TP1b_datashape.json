@@ -1,0 +1,286 @@
+{
+    "alexandra.larsonneur@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0] # ...\nm_test =test_set_x_orig.shape[0] # ...\nnum_px = train_set_x_orig.shape[1] # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\n\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "alexandra.larsonneur@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0] # ...\nm_test =test_set_x_orig.shape[0] # ...\nnum_px = train_set_x_orig.shape[1] # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\n\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:29:49",
+        "atype": "bkcode"
+    },
+    "alexis.akujuobi-asoluka@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0] # given as example\nm_test = test_set_x_orig.shape[0] # same principle as for first case\nnum_px = train_set_x_orig.shape[1] # same principle as for first case, num_px is in second position (1 in python iteration)\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "alexis.akujuobi-asoluka@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0] # given as example\nm_test = test_set_x_orig.shape[0] # same principle as for first case\nnum_px = train_set_x_orig.shape[1] # same principle as for first case, num_px is in second position (1 in python iteration)\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 18:33:57",
+        "atype": "bkcode"
+    },
+    "ali.m-sahi@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0] # ...\nm_test = test_set_x_orig.shape[0] # ...\nnum_px = train_set_x_orig.shape[1] # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "ali.m-sahi@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0] # ...\nm_test = test_set_x_orig.shape[0] # ...\nnum_px = train_set_x_orig.shape[1] # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-03 14:26:07"
+    },
+    "angel.jouen@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "angel.jouen@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 15:59:03"
+    },
+    "antoine.rochette@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "antoine.rochette@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:28:38",
+        "atype": "bkcode"
+    },
+    "armand.loisil@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0] # ...\nm_test = test_set_x_orig.shape[0] # ...\nnum_px = train_set_x_orig.shape[1] # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "armand.loisil@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0] # ...\nm_test = test_set_x_orig.shape[0] # ...\nnum_px = train_set_x_orig.shape[1] # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-03 14:41:02"
+    },
+    "axel.streiff@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "axel.streiff@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 15:47:14"
+    },
+    "badis.perdrix@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0] # ...\nm_test = test_set_x_orig.shape[0] # ...\nnum_px = train_set_x_orig.shape[1] # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "badis.perdrix@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0] # ...\nm_test = test_set_x_orig.shape[0] # ...\nnum_px = train_set_x_orig.shape[1] # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 15:32:27"
+    },
+    "baptiste.rousselet@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0]# ...\nm_test = test_set_x_orig.shape[0] # ...\nnum_px = test_set_x_orig.shape[1] # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "baptiste.rousselet@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0]# ...\nm_test = test_set_x_orig.shape[0] # ...\nnum_px = test_set_x_orig.shape[1] # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 08:53:40"
+    },
+    "colin.duchanoy@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "colin.duchanoy@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-03 15:22:02"
+    },
+    "dorian.rondeau@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "dorian.rondeau@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 10:45:06"
+    },
+    "evan.garcia@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "evan.garcia@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-03 14:30:28"
+    },
+    "gaetan.chiesura@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = test_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "gaetan.chiesura@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = test_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 16:09:19"
+    },
+    "geoffrey.vaillant@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\nm_test = test_set_x_orig.shape[0]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "geoffrey.vaillant@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\nm_test = test_set_x_orig.shape[0]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "update_time": "2023-10-04 13:16:01",
+        "atype": "bkcode"
+    },
+    "guillaume.therin@ipsa.fr": {
+        "answer": "print(\"A\")\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "guillaume.therin@ipsa.fr",
+        "main_execution": "print(\"A\")\n",
+        "note": 0.0,
+        "update_time": "2023-10-04 11:06:19",
+        "atype": "bkcode",
+        "note_src": "manual"
+    },
+    "john.doe@ipsa.fr": {
+        "answer": "m_train = 0 # ...\nm_test = 0 # ...\nnum_px = 0 # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "john.doe@ipsa.fr",
+        "main_execution": "m_train = 0 # ...\nm_test = 0 # ...\nnum_px = 0 # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 1.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 11:23:36"
+    },
+    "julian.lavarelo@ipsa.fr": {
+        "answer": "\n\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "julian.lavarelo@ipsa.fr",
+        "main_execution": "\n\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-03 21:33:42"
+    },
+    "lea.dupin@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = test_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "lea.dupin@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = test_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 10:43:53"
+    },
+    "luc.fourty@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[2]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "luc.fourty@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[2]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 08:58:31"
+    },
+    "luc.sauleau@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0] # ...\nm_test = test_set_x_orig.shape[0] # ...\nnum_px = train_set_x_orig.shape[2] # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "luc.sauleau@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0] # ...\nm_test = test_set_x_orig.shape[0] # ...\nnum_px = train_set_x_orig.shape[2] # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:28:03",
+        "atype": "bkcode"
+    },
+    "mathieu.klingler@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0] # ...\nm_test = test_set_x_orig.shape[0] # ...\nnum_px = train_set_x_orig.shape[1] # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "mathieu.klingler@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0] # ...\nm_test = test_set_x_orig.shape[0] # ...\nnum_px = train_set_x_orig.shape[1] # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:22:33",
+        "atype": "bkcode"
+    },
+    "matteo.crosnier-de-bellaistre@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "matteo.crosnier-de-bellaistre@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 08:40:50"
+    },
+    "mikael.kealbert@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "mikael.kealbert@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 23:59:27",
+        "atype": "bkcode"
+    },
+    "nathan.heckmann@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "nathan.heckmann@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:46:21",
+        "atype": "bkcode"
+    },
+    "riccardo.cecchetto@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0] # ...\nm_test = test_set_x_orig.shape[0]# ...\nnum_px = train_set_x_orig.shape[1] \n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "riccardo.cecchetto@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0] # ...\nm_test = test_set_x_orig.shape[0]# ...\nnum_px = train_set_x_orig.shape[1] \n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:26:53",
+        "atype": "bkcode"
+    },
+    "romain.miaux@ipsa.fr": {
+        "answer": "m_train, num_px, _, _ = train_set_x_orig.shape\nm_test = test_set_x_orig.shape[0]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "romain.miaux@ipsa.fr",
+        "main_execution": "m_train, num_px, _, _ = train_set_x_orig.shape\nm_test = test_set_x_orig.shape[0]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 16:05:10"
+    },
+    "solution": {
+        "update_time": "2023-10-10 22:48:38",
+        "visible": true,
+        "answer": "\n### START CODE HERE ###\nm_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n### END CODE HERE ###\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "explanation": "",
+        "evaluation": "def student_evaluation_function(max_score=10):\n    score = 1\n    score += bulkhours.is_equal(data_test=student.m_train, data_ref=teacher.m_train, max_score=3.0, min_score=0)\n\n    score += bulkhours.is_equal(data_test=student.m_test, data_ref=teacher.m_test, max_score=3.0, min_score=0)\n\n    score += bulkhours.is_equal(data_test=student.num_px, max_score=3.0, data_ref=teacher.num_px, min_score=0)\n\n    return score\n",
+        "main_execution": "\n### START CODE HERE ###\nm_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[1]\n### END CODE HERE ###\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n\n",
+        "user": "solution",
+        "note": 10.0,
+        "atype": "bkcode",
+        "hint": ""
+    },
+    "sualp.komurcuoglu@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0] # ...\nm_test = test_set_x_orig.shape[0] # ...\nnum_px = train_set_x_orig.shape[2] # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "sualp.komurcuoglu@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0] # ...\nm_test = test_set_x_orig.shape[0] # ...\nnum_px = train_set_x_orig.shape[2] # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 13:30:12"
+    },
+    "thibaud.bonnet@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[2]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "thibaud.bonnet@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = train_set_x_orig.shape[2]\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:32:39",
+        "atype": "bkcode"
+    },
+    "wassil.amghar@ipsa.fr": {
+        "answer": "m_train = train_set_x_orig.shape[0] # ...\nm_test = test_set_x_orig.shape[0] # ...\nnum_px = train_set_x_orig.shape[1] # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note_upd": "2023-10-11 08:19:04",
+        "user": "wassil.amghar@ipsa.fr",
+        "main_execution": "m_train = train_set_x_orig.shape[0] # ...\nm_test = test_set_x_orig.shape[0] # ...\nnum_px = train_set_x_orig.shape[1] # ...\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 09:05:24"
+    },
+    "yann-loic-atasse.atakoui@ipsa.fr": {
+        "note_upd": "2023-10-11 08:19:04",
+        "note": 10.0,
+        "answer": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = 64\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "main_execution": "m_train = train_set_x_orig.shape[0]\nm_test = test_set_x_orig.shape[0]\nnum_px = 64\n\nprint(\"Number of training examples: m_train = \" + str(m_train))\nprint(\"Number of testing examples: m_test = \" + str(m_test))\nprint(\"Height/Width of each image: num_px = \" + str(num_px))\nprint(\"Each image is of size: (\" + str(num_px) + \", \" + str(num_px) + \", 3)\")\nprint(\"train_set_x shape: \" + str(train_set_x_orig.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x shape: \" + str(test_set_x_orig.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\n",
+        "user": "yann-loic-atasse.atakoui@ipsa.fr ",
+        "atype": "bkcode",
+        "update_time": "2023-10-04 13:43:40"
+    }
+}

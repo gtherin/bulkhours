@@ -1,0 +1,285 @@
+{
+    "alexandra.larsonneur@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(train_set_x_orig.shape[0],-1).T\ntest_set_x_flatten = test_set_x_orig.reshape(test_set_x_orig.shape[0],-1).T\n\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "alexandra.larsonneur@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(train_set_x_orig.shape[0],-1).T\ntest_set_x_flatten = test_set_x_orig.reshape(test_set_x_orig.shape[0],-1).T\n\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:39:13",
+        "atype": "bkcode"
+    },
+    "alexis.akujuobi-asoluka@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(train_set_x_orig.shape[0],-1).T # python way to flatten given vector\ntest_set_x_flatten = test_set_x_orig.reshape(test_set_x_orig.shape[0],-1).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "alexis.akujuobi-asoluka@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(train_set_x_orig.shape[0],-1).T # python way to flatten given vector\ntest_set_x_flatten = test_set_x_orig.reshape(test_set_x_orig.shape[0],-1).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 18:47:42",
+        "atype": "bkcode"
+    },
+    "ali.m-sahi@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train*num_px*num_px*3, 1)\ntest_set_x_flatten = test_set_x_orig.reshape(m_test*num_px*num_px*3, 1)\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "ali.m-sahi@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train*num_px*num_px*3, 1)\ntest_set_x_flatten = test_set_x_orig.reshape(m_test*num_px*num_px*3, 1)\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 0.0,
+        "update_time": "2023-10-03 14:40:08",
+        "atype": "bkcode"
+    },
+    "angel.jouen@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = np.reshape(train_set_x_orig,([m_train,num_px*num_px*3])).T\ntest_set_x_flatten = np.reshape(test_set_x_orig,([m_test,num_px*num_px*3])).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "angel.jouen@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = np.reshape(train_set_x_orig,([m_train,num_px*num_px*3])).T\ntest_set_x_flatten = np.reshape(test_set_x_orig,([m_test,num_px*num_px*3])).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 15:59:55"
+    },
+    "antoine.rochette@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = np.reshape(train_set_x_orig, (m_train, num_px*num_px*3)).T\ntest_set_x_flatten = np.reshape(test_set_x_orig, (m_test, num_px*num_px*3)).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "antoine.rochette@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = np.reshape(train_set_x_orig, (m_train, num_px*num_px*3)).T\ntest_set_x_flatten = np.reshape(test_set_x_orig, (m_test, num_px*num_px*3)).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:37:03",
+        "atype": "bkcode"
+    },
+    "arij.salablab@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten_size = np.array([num_px*num_px*3, m_train])   # on mets m_train car on veut créer une colonne pour chacune des images\ntest_set_x_flatten_size = np.array([num_px*num_px*3, m_test])\ntrain_set_x_flatten = train_set_x_orig.reshape(train_set_x_flatten_size)\ntest_set_x_flatten = test_set_x_orig.reshape(test_set_x_flatten_size)\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "arij.salablab@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten_size = np.array([num_px*num_px*3, m_train])   # on mets m_train car on veut créer une colonne pour chacune des images\ntest_set_x_flatten_size = np.array([num_px*num_px*3, m_test])\ntrain_set_x_flatten = train_set_x_orig.reshape(train_set_x_flatten_size)\ntest_set_x_flatten = test_set_x_orig.reshape(test_set_x_flatten_size)\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 0.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-03 14:59:59"
+    },
+    "armand.loisil@ipsa.fr": {
+        "answer": "\n# Reshape the training and test examples\n### START CODE HERE ###\n\nm,l,c,w = np.shape(train_set_x_orig)\ntrain_set_x_flatten = train_set_x_orig.reshape(m,3*num_px**2).T\nm,l,c,w = np.shape(test_set_x_orig)\ntest_set_x_flatten = test_set_x_orig.reshape(m,3*num_px**2).T\n\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "armand.loisil@ipsa.fr",
+        "main_execution": "\n# Reshape the training and test examples\n### START CODE HERE ###\n\nm,l,c,w = np.shape(train_set_x_orig)\ntrain_set_x_flatten = train_set_x_orig.reshape(m,3*num_px**2).T\nm,l,c,w = np.shape(test_set_x_orig)\ntest_set_x_flatten = test_set_x_orig.reshape(m,3*num_px**2).T\n\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 14:40:55",
+        "atype": "bkcode"
+    },
+    "axel.streiff@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = np.reshape(train_set_x_orig,(m_train,num_px*num_px*3)).T\ntest_set_x_flatten = np.reshape(test_set_x_orig,(m_test,num_px*num_px*3)).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "axel.streiff@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = np.reshape(train_set_x_orig,(m_train,num_px*num_px*3)).T\ntest_set_x_flatten = np.reshape(test_set_x_orig,(m_test,num_px*num_px*3)).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 15:47:26"
+    },
+    "badis.perdrix@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\ns = 64*64*3\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train, -1).T\ntest_set_x_flatten = test_set_x_orig.reshape(m_test, -1).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "badis.perdrix@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\ns = 64*64*3\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train, -1).T\ntest_set_x_flatten = test_set_x_orig.reshape(m_test, -1).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "update_time": "2023-10-04 15:32:55",
+        "atype": "bkcode"
+    },
+    "baptiste.rousselet@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\n\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train, -1).T\ntest_set_x_flatten = test_set_x_orig.reshape(m_test, -1).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "baptiste.rousselet@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\n\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train, -1).T\ntest_set_x_flatten = test_set_x_orig.reshape(m_test, -1).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "update_time": "2023-10-04 10:35:25",
+        "atype": "bkcode"
+    },
+    "colin.duchanoy@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train,3*num_px**2).T\ntest_set_x_flatten = test_set_x_orig.reshape(m_test,3*num_px**2).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "colin.duchanoy@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train,3*num_px**2).T\ntest_set_x_flatten = test_set_x_orig.reshape(m_test,3*num_px**2).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-03 15:22:09"
+    },
+    "dorian.rondeau@ipsa.fr": {
+        "answer": "\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train,num_px*num_px*3).T #sanity check different because transposed\ntest_set_x_flatten = test_set_x_orig.reshape(m_test,num_px*num_px*3).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "dorian.rondeau@ipsa.fr",
+        "main_execution": "\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train,num_px*num_px*3).T #sanity check different because transposed\ntest_set_x_flatten = test_set_x_orig.reshape(m_test,num_px*num_px*3).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 10:45:17"
+    },
+    "evan.garcia@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train,num_px*num_px*3).T\ntest_set_x_flatten = test_set_x_orig.reshape(m_test,num_px*num_px*3).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "evan.garcia@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train,num_px*num_px*3).T\ntest_set_x_flatten = test_set_x_orig.reshape(m_test,num_px*num_px*3).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "update_time": "2023-10-03 20:17:48",
+        "atype": "bkcode"
+    },
+    "gaetan.chiesura@ipsa.fr": {
+        "answer": "\"\"\"\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\"\"\"\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = np.reshape(train_set_x_orig,(m_train, num_px*num_px*3)).T\ntest_set_x_flatten = np.reshape(test_set_x_orig,(m_test, num_px*num_px*3)).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten.T[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "gaetan.chiesura@ipsa.fr",
+        "main_execution": "\"\"\"\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\"\"\"\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = np.reshape(train_set_x_orig,(m_train, num_px*num_px*3)).T\ntest_set_x_flatten = np.reshape(test_set_x_orig,(m_test, num_px*num_px*3)).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten.T[0:5,0]))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 16:09:28"
+    },
+    "geoffrey.vaillant@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train, -1).T\ntest_set_x_flatten = test_set_x_orig.reshape(m_test, -1).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "geoffrey.vaillant@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train, -1).T\ntest_set_x_flatten = test_set_x_orig.reshape(m_test, -1).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "update_time": "2023-10-04 13:17:36",
+        "atype": "bkcode"
+    },
+    "john.doe@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\n\ntrain_set_x_flatten = np.reshape(train_set_x_orig,(m_train, num_px*num_px*3)).T\ntest_set_x_flatten = np.reshape(test_set_x_orig,(m_test, num_px*num_px*3)).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "john.doe@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\n\ntrain_set_x_flatten = np.reshape(train_set_x_orig,(m_train, num_px*num_px*3)).T\ntest_set_x_flatten = np.reshape(test_set_x_orig,(m_test, num_px*num_px*3)).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 11:22:41"
+    },
+    "julian.lavarelo@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\n\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train,num_px*num_px*3).T\n\ntest_set_x_flatten = np.array(test_set_x_orig).reshape(m_test,num_px*num_px*3).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "julian.lavarelo@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\n\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train,num_px*num_px*3).T\n\ntest_set_x_flatten = np.array(test_set_x_orig).reshape(m_test,num_px*num_px*3).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 10:46:08"
+    },
+    "lea.dupin@ipsa.fr": {
+        "answer": "\n# We already  have those values\n\"\"\"\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\"\"\"\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = np.reshape(train_set_x_orig,(m_train, num_px*num_px*3)).T\ntest_set_x_flatten = np.reshape(test_set_x_orig,(m_test, num_px*num_px*3)).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "lea.dupin@ipsa.fr",
+        "main_execution": "\n# We already  have those values\n\"\"\"\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\"\"\"\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = np.reshape(train_set_x_orig,(m_train, num_px*num_px*3)).T\ntest_set_x_flatten = np.reshape(test_set_x_orig,(m_test, num_px*num_px*3)).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 10:43:57"
+    },
+    "luc.fourty@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntaille = num_px * num_px * 3\ntrain_set_x_flatten = np.zeros((taille,m_train)).T\ntest_set_x_flatten = np.zeros((taille, m_test)).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "luc.fourty@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntaille = num_px * num_px * 3\ntrain_set_x_flatten = np.zeros((taille,m_train)).T\ntest_set_x_flatten = np.zeros((taille, m_test)).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 0.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 08:58:56"
+    },
+    "luc.sauleau@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = np.reshape(train_set_x_orig, (num_px*num_px*3, m_train)).T\ntest_set_x_flatten = np.reshape(test_set_x_orig, (num_px*num_px*3, m_test)).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "luc.sauleau@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = np.reshape(train_set_x_orig, (num_px*num_px*3, m_train)).T\ntest_set_x_flatten = np.reshape(test_set_x_orig, (num_px*num_px*3, m_test)).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 0.0,
+        "update_time": "2023-10-03 14:47:35",
+        "atype": "bkcode"
+    },
+    "mathieu.klingler@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train,num_px*num_px*3).T\ntest_set_x_flatten = test_set_x_orig.reshape(m_test,(num_px**2)*3).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "mathieu.klingler@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train,num_px*num_px*3).T\ntest_set_x_flatten = test_set_x_orig.reshape(m_test,(num_px**2)*3).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-03 15:23:26"
+    },
+    "matteo.crosnier-de-bellaistre@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\n\ntrain_set_x_flatten = np.reshape(train_set_x_orig,(num_px*num_px*3,m_train))\ntest_set_x_flatten = np.reshape(test_set_x_orig,(num_px*num_px*3,m_test))\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "matteo.crosnier-de-bellaistre@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\n\ntrain_set_x_flatten = np.reshape(train_set_x_orig,(num_px*num_px*3,m_train))\ntest_set_x_flatten = np.reshape(test_set_x_orig,(num_px*num_px*3,m_test))\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 0.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 08:41:23"
+    },
+    "mikael.kealbert@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = np.reshape(train_set_x_orig,(num_px*num_px*3, m_train))\ntest_set_x_flatten = np.reshape(test_set_x_orig,(num_px*num_px*3, m_test))\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "mikael.kealbert@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = np.reshape(train_set_x_orig,(num_px*num_px*3, m_train))\ntest_set_x_flatten = np.reshape(test_set_x_orig,(num_px*num_px*3, m_test))\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 0.0,
+        "update_time": "2023-10-03 23:59:37",
+        "atype": "bkcode"
+    },
+    "nathan.heckmann@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ndim = num_px*num_px*3\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train, dim).T\ntest_set_x_flatten = test_set_x_orig.reshape(m_test, dim).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "nathan.heckmann@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ndim = num_px*num_px*3\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train, dim).T\ntest_set_x_flatten = test_set_x_orig.reshape(m_test, dim).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 14:58:27"
+    },
+    "nils.joanne@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape([num_px* num_px* 3,m_train])\ntest_set_x_flatten = test_set_x_orig.reshape([num_px* num_px* 3,m_test])\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "nils.joanne@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape([num_px* num_px* 3,m_train])\ntest_set_x_flatten = test_set_x_orig.reshape([num_px* num_px* 3,m_test])\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 0.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-03 14:34:34"
+    },
+    "riccardo.cecchetto@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape([m_train,num_px*num_px*3]).T\ntest_set_x_flatten = test_set_x_orig.reshape([m_test,num_px*num_px*3]).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten.T[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "riccardo.cecchetto@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape([m_train,num_px*num_px*3]).T\ntest_set_x_flatten = test_set_x_orig.reshape([m_test,num_px*num_px*3]).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten.T[0:5,0]))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 15:34:00"
+    },
+    "romain.miaux@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ndim = num_px*num_px*3\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train, dim).T\ntest_set_x_flatten = test_set_x_orig.reshape(m_test, dim).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "romain.miaux@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ndim = num_px*num_px*3\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train, dim).T\ntest_set_x_flatten = test_set_x_orig.reshape(m_test, dim).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 16:05:15"
+    },
+    "solution": {
+        "update_time": "2023-10-10 22:53:37",
+        "visible": true,
+        "answer": "# Reshape the training and test examples\n\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train, num_px * num_px * 3).T\ntest_set_x_flatten = test_set_x_orig.reshape(m_test, num_px * num_px * 3).T\n### END CODE HERE ###\n\nprint(\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\nprint(\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "explanation": "",
+        "user": "solution",
+        "main_execution": "# Reshape the training and test examples\n\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train, num_px * num_px * 3).T\ntest_set_x_flatten = test_set_x_orig.reshape(m_test, num_px * num_px * 3).T\n### END CODE HERE ###\n\nprint(\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint(\"train_set_y shape: \" + str(train_set_y.shape))\nprint(\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint(\"test_set_y shape: \" + str(test_set_y.shape))\nprint(\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n\n",
+        "evaluation": "def student_evaluation_function():\n    if student.train_set_x_flatten.shape[0] == 209:\n        train_set_x_flatten = student.train_set_x_flatten.T\n        test_set_x_flatten = student.test_set_x_flatten.T\n\n    score = bulkhours.is_equal(data_test=train_set_x_flatten, data_ref=teacher.train_set_x_flatten, max_score=5.0, min_score=0)\n\n    score += bulkhours.is_equal(data_test=test_set_x_flatten, max_score=5.0, data_ref=test_set_x_flatten, min_score=0)\n\n    return score\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "hint": ""
+    },
+    "sualp.komurcuoglu@ipsa.fr": {
+        "answer": "\nm_train = train_set_x_orig.shape[0] # ...\nm_test = test_set_x_orig.shape[0] # ...\nnum_px = train_set_x_orig.shape[2] # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = np.reshape(train_set_x_orig, (m_train, num_px*num_px*3)).T # had to do a transposition.\ntest_set_x_flatten = np.reshape(test_set_x_orig, (m_test, num_px*num_px*3)).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "sualp.komurcuoglu@ipsa.fr",
+        "main_execution": "\nm_train = train_set_x_orig.shape[0] # ...\nm_test = test_set_x_orig.shape[0] # ...\nnum_px = train_set_x_orig.shape[2] # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = np.reshape(train_set_x_orig, (m_train, num_px*num_px*3)).T # had to do a transposition.\ntest_set_x_flatten = np.reshape(test_set_x_orig, (m_test, num_px*num_px*3)).T\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 10.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-04 17:40:27"
+    },
+    "thibaud.bonnet@ipsa.fr": {
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(np.dot(num_px, num_px) * 3, m_train)\ntest_set_x_flatten = test_set_x_orig.reshape(np.dot(num_px, num_px) * 3, m_test)\n### END CODE HERE ###\n\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note_upd": "2023-10-11 08:20:14",
+        "user": "thibaud.bonnet@ipsa.fr",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(np.dot(num_px, num_px) * 3, m_train)\ntest_set_x_flatten = test_set_x_orig.reshape(np.dot(num_px, num_px) * 3, m_test)\n### END CODE HERE ###\n\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "note": 0.0,
+        "atype": "bkcode",
+        "update_time": "2023-10-03 14:39:05"
+    },
+    "yann-loic-atasse.atakoui@ipsa.fr": {
+        "note_upd": "2023-10-11 08:20:14",
+        "note": 0.0,
+        "answer": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train*num_px*num_px*3, 1)\ntest_set_x_flatten = test_set_x_orig.reshape(m_test*num_px*num_px*3, 1)\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "main_execution": "\nm_train = 209 # ...\nm_test = 50 # ...\nnum_px = 64 # ...\n\n# Reshape the training and test examples\n### START CODE HERE ###\ntrain_set_x_flatten = train_set_x_orig.reshape(m_train*num_px*num_px*3, 1)\ntest_set_x_flatten = test_set_x_orig.reshape(m_test*num_px*num_px*3, 1)\n### END CODE HERE ###\n\nprint (\"train_set_x_flatten shape: \" + str(train_set_x_flatten.shape))\nprint (\"train_set_y shape: \" + str(train_set_y.shape))\nprint (\"test_set_x_flatten shape: \" + str(test_set_x_flatten.shape))\nprint (\"test_set_y shape: \" + str(test_set_y.shape))\nprint (\"sanity check after reshaping: \" + str(train_set_x_flatten[0:5,0]))\n",
+        "user": "yann-loic-atasse.atakoui@ipsa.fr ",
+        "atype": "bkcode",
+        "update_time": "2023-10-04 13:43:53"
+    }
+}
