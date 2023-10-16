@@ -143,10 +143,8 @@ class Invoice:
             Invoice(user, invoice_id, df).generate_html()
 
         for f in filelists:
-            hfile = core.tools.abspath(f"data/{f}")
             os.system(f"rm -rf {f}")
 
         if outdir is not None:
-
             os.chdir(cdir)
             print(os.getcwd())
