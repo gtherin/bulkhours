@@ -19,7 +19,7 @@ def copy(drive_rdir, filename):
     drive.mount('/content/gdrive/')
     ofilename = f"{drive_rdir}/{filename}"
 
-    cfg = core.get_config(is_new_format=True)
+    cfg = core.tools.get_config(is_new_format=True)
     ntoken = cfg.tokens[cfg.virtual_room]
     cfilename = ofilename.replace('.', f'_{cfg.virtual_room}.')
 
