@@ -133,17 +133,20 @@ class Invoice:
             os.chdir(outdir)
             print(os.getcwd())
         
-        for ext in ["html", "css"]:
-            hfile = core.tools.abspath(f"data/{Invoice.einfo['template']}.{ext}")
-            os.system(f"cp {hfile} {Invoice.einfo['template']}.{ext}")
+        filelists = ["BulkHours.png", "dart.png", Invoice.einfo['template'] + ".html", Invoice.einfo['template'] + ".css"]
 
-        for f in ["BulkHours.png", "dart.png"]:
+        for f in filelists:
             hfile = core.tools.abspath(f"data/{f}")
             os.system(f"cp {hfile} {f}")
 
         for invoice_id, df in Invoice.accounting.groupby("invoice_id"):
             Invoice(user, invoice_id, df).generate_html()
 
+        for f in filelists:
+            hfile = core.tools.abspath(f"data/{f}")
+            os.system(f"rm -rf {f}")
+
         if outdir is not None:
+
             os.chdir(cdir)
             print(os.getcwd())
