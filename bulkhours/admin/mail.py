@@ -6,7 +6,47 @@ from email.mime.image import MIMEImage
 from .. import core
 
 
-def prepare_mail(label=None, default_student="john.doe@bulkhours.eu", signature="The bulkHours team", link=None):
+def copy(drive_rdir, filename):
+
+    from subprocess import getoutput
+    from google.colab import drive
+
+    def get_drive_filename(filename):
+        from xattr import xattr
+        return f"https://colab.research.google.com/drive/" + (xattr(filename).get('user.drive.id').decode())
+
+    # Get student reference notebook
+    drive.mount('/content/gdrive/')
+    ofilename = f"{drive_rdir}/{filename}"
+
+    cfg = core.get_config(is_new_format=True)
+    ntoken = cfg.tokens[cfg.virtual_room]
+    cfilename = ofilename.replace('.', f'_{cfg.virtual_room}.')
+
+    import nbformat as nbf
+    ntbk = nbf.read(ofilename, nbf.NO_CONVERT).copy()
+    new_ntbk = ntbk
+    new_ntbk.cells = [cell for cell in ntbk.cells]
+
+    for indx, cell in enumerate(ntbk.cells):
+        if cell["cell_type"] == "code" and "\ndatabase" in cell["source"]:
+            source = cell["source"].split("\n")
+            nsource = [f'database = "{ntoken}"' if s.startswith('database') else s for s in source]
+            cell["source"] ="\n".join(nsource)
+
+    nbf.write(new_ntbk, cfilename, version=nbf.NO_CONVERT)
+    dfilename = get_drive_filename(cfilename)
+    print(f"File {cfilename} is accessible via: {dfilename}")
+    return dfilename
+
+
+
+def prepare_mail(default_student="john.doe@bulkhours.eu", signature="The bulkHours team", generate_file=True, 
+                 notebook_file=None, drive_rdir=None):
+
+    if generate_file:
+        notebook_file = copy(drive_rdir, notebook_file)
+
     import IPython
     cfg = core.tools.get_config(is_new_format=True)
 
