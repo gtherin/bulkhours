@@ -137,7 +137,7 @@ def init_env(packages=None, plt_style="default", **kwargs):
     info = init_prems(cfg)
     start_time = time.time()
 
-    if packages is not None and "BLK_PACKAGES_STATUS" not in os.environ:
+    if "BLK_PACKAGES_STATUS" not in os.environ:
         installer.install_dependencies(packages, start_time, tools.is_admin(cfg=cfg))
         os.environ["BLK_PACKAGES_STATUS"] = f"INITIALIZED"
 
