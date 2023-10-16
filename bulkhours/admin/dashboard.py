@@ -120,14 +120,14 @@ class WidgetDashboard(core.WidgetTextArea):
                     layout=form_item_layout,
                 )
             )
-        xwidgets.append(
-            ipywidgets.Box(
-                [get_html("Page"), self.ws["page"]],
-                layout=form_item_layout,
+            xwidgets.append(
+                ipywidgets.Box(
+                    [get_html("Page"), self.ws["page"]],
+                    layout=form_item_layout,
+                )
             )
-        )
 
-        if "tokens" in config["global"] and type(tokens := config["global"]["tokens"]) == dict:
+        if 0 and "tokens" in config["global"] and type(tokens := config["global"]["tokens"]) == dict:
             xwidgets.append(
                 ipywidgets.Box(
                     [
@@ -147,7 +147,7 @@ class WidgetDashboard(core.WidgetTextArea):
                 [
                     self.ws["chatgpt"],
                     self.ws["norm20"],
-                    self.ws["restricted"],
+                    #self.ws["restricted"],
                     self.ws["is_locked"],
                     self.ws["language"],
                     self.cinfo.abuttons["delete_solution"].b,
