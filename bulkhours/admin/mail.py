@@ -57,9 +57,6 @@ def prepare_mail(default_student="john.doe@bulkhours.eu", signature="The bulkHou
         intro = f"Bonjour à toutes et à tous,<br/><br/>Voici le lien vers le cours du jour.<br/>💡Rappelez-vous bien de mettre votre adresse mail à la place de"
         end = f"Cordialement"
 
-    if link is None:
-        link = cfg[cfg.notebook_id]['page']
-
     html = f"""
 <html>
 <head>
@@ -75,7 +72,7 @@ def prepare_mail(default_student="john.doe@bulkhours.eu", signature="The bulkHou
     <h2>Content of the mail:</h2><br/>
     <p>{intro} <b>'{default_student}'</b>:</p>
 
-    <ul><li><a href="{link}" style="font-size: 18px; margin: 4px 0;background-color: white; color: #4F77AA; padding: 5px 9px; text-align: center; text-decoration: none; display: inline-block;">Course of the day</a></li></ul>
+    <ul><li><a href="{notebook_file}" style="font-size: 18px; margin: 4px 0;background-color: white; color: #4F77AA; padding: 5px 9px; text-align: center; text-decoration: none; display: inline-block;">Course of the day</a></li></ul>
 
 {end},<br/><br/>
 
