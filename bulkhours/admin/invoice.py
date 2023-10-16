@@ -34,8 +34,8 @@ class Invoice:
 
     @staticmethod
     def set_db_info(user, einfo):
-        Invoice.accounting = data.get_data(einfo[user]["accounting"])
-        Invoice.entities = data.get_data(einfo[user]["entities"])
+        Invoice.accounting = data.get_data(einfo[user]["accounting"], credit=False)
+        Invoice.entities = data.get_data(einfo[user]["entities"], credit=False)
         Invoice.einfo = einfo[user]
 
         # Only keep invoice_ids with existing invoices
