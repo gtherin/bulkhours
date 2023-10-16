@@ -1,10 +1,13 @@
 
 from .. import core
 
-def vizualize(layers, activation=None, show_activation=True):
-    import graphviz
 
-    text_from_file = """digraph G {rankdir = LR; splines=false; edge[style=invis]; ranksep= 1.4"""
+
+
+def vizualize(layers, activation=None, show_activation=True, filename=None):
+    import graphviz
+    # size = "7.75,10.25"
+    text_from_file = """digraph G {rankdir = LR; splines=false; edge[style=invis]; ranksep= 1.4  """
 
     colors = [core.c.green,core.c.blue, core.c.red, core.c.purple, core.c.yellow, core.c.black]
     colors[len(layers)-1] = core.c.orange
@@ -67,6 +70,11 @@ def vizualize(layers, activation=None, show_activation=True):
 
     text_from_file += "}"
 
-    src = graphviz.Source(text_from_file)
-    src.render()
-    return src
+    grv = graphviz.Source(text_from_file)
+
+    if filename is not None:
+        filename = filename.split(".")[0]
+        grv.render(filename, format="png")
+    else:
+        grv.render()
+        return grv
