@@ -49,6 +49,11 @@ def copy(email, drive_rdir, filename, default_student):
             # Format cells with reset info
             elif " -u reset" in cell["source"]:
                 cell["source"] = cell["source"].replace(" -u reset", "")
+        if cell["cell_type"] == "markdown":
+            source = cell["source"].split("\n")
+            # Remove markdown cells with [admin in the first line]
+            if "[admin]" in source[0]:
+                to_pop.append(idx)
         #print(idx, cell.keys(), cell["metadata"])
 
     # Remove listed cells
