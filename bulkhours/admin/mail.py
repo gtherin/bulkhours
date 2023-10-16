@@ -76,12 +76,16 @@ def prepare_mail(default_student="john.doe@bulkhours.eu", signature="The bulkHou
     import IPython
     cfg = core.tools.get_config(is_new_format=True)
 
+    title = f"Notebook of the day: {notebook_file.split(".")[0]}"
     intro = f"Dear all,<br/><br/>Here is the practical course of the day. Remember to write your email address to replace"
     end = f"Best regards"
 
     if cfg.language == "fr":
+        title = f"Notebook du jour: {notebook_file.split(".")[0]}"
         intro = f"Bonjour à toutes et à tous,<br/><br/>Voici le lien vers le cours du jour.<br/>💡Rappelez-vous bien de mettre votre adresse mail à la place de"
         end = f"Cordialement"
+
+    students = cfg.g[cfg.virtual_room].replace(default_student+";", "")
 
     html = f"""
 <html>
@@ -92,9 +96,9 @@ def prepare_mail(default_student="john.doe@bulkhours.eu", signature="The bulkHou
 </head>
 <body>
     <h2>Mail to {cfg.virtual_room} students (in CCI)</h2>
-    <p>{cfg.g[cfg.virtual_room]}</p>
+    <p>{students}</p>
     <h2>Title of the mail:</h2><br/>
-    <p>TP du jour</p>
+    <p>{title}</p>
     <h2>Content of the mail:</h2><br/>
     <p>{intro} <b>'{default_student}'</b>:</p>
 
