@@ -54,7 +54,7 @@ df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BKRESET.INIT:0
         if keep_line:
             nsource.append(s)
 
-    print("\n".join(nsource))
+    #print("\n".join(nsource))
     return "\n".join(nsource)
 
 def cell_solution(source):
@@ -124,7 +124,7 @@ def copy(email, drive_rdir, filename, default_student, reset=True):
             # Format cells with reset info
             elif " -u reset" in source[0]:
                 cell["source"] = cell["source"].replace(" -u reset", "")
-            elif "\n%%evaluation_cell_id " in source[0]:
+            elif source[0].startswith('"%%evaluation_cell_id "'):
                 cell["source"] = cell_reset(source) if reset else cell_solution(source)
                 cell["outputs"][0]["text"] = ""
         if cell["cell_type"] == "markdown":
@@ -152,7 +152,7 @@ def prepare_mail(default_student="john.doe@bulkhours.eu", signature="The bulkHou
 
     notebook_info = notebook_file.split('.')[0]
     if generate_file:
-        notebook_file = copy(signature, drive_rdir, notebook_file, default_student)
+        notebook_file = copy(signature, drive_rdir, notebook_file, default_student, reset=True)
 
     if "@" in signature:
         signature = signature.split("@")[0].replace(".", " ").title()
