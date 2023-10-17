@@ -124,12 +124,12 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
             # Format cells with reset info
             elif " -u reset" in source[0]:
                 cell["source"] = cell["source"].replace(" -u reset", "")
+                print(cell["outputs"])
             elif source[0].startswith('%%evaluation_cell_id '):
                 cell["source"] = cell_reset(source) if reset else cell_solution(source)
                 if debug:
                     print(cell["outputs"])
-
-                cell["outputs"][0]["text"] = ""
+                cell["outputs"] = []
         if cell["cell_type"] == "markdown":
             source = cell["source"].split("\n")
             # Remove markdown cells with [admin in the first line]
