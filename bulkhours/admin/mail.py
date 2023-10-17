@@ -160,19 +160,21 @@ def prepare_mail(default_student="john.doe@bulkhours.eu", signature="The bulkHou
                  generate_solution=True, notebook_file=None, drive_rdir=None, debug=False):
 
     notebook_info = notebook_file.split('.')[0]
+    cfg = core.tools.get_config(is_new_format=True)
+
+    if generate_solution:
+        copy(signature, drive_rdir, notebook_file, default_student, reset=False, debug=debug)
+
     if generate_file:
         cfilename = copy(signature, drive_rdir, notebook_file, default_student, reset=True, debug=debug)
         dnotebook_file = get_drive_filename(cfilename)
     else:
         dnotebook_file = get_drive_filename(f"{drive_rdir}/{notebook_file}".replace('.', f'_{cfg.virtual_room}.'))
-    if generate_solution:
-        copy(signature, drive_rdir, notebook_file, default_student, reset=False, debug=debug)
 
     if "@" in signature:
         signature = signature.split("@")[0].replace(".", " ").title()
 
     import IPython
-    cfg = core.tools.get_config(is_new_format=True)
 
     title = f"Notebook of the day: {notebook_info}"
     intro = f"Dear all,<br/><br/>Here is the practical course of the day. Remember to write your email address to replace"
