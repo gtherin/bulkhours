@@ -85,6 +85,7 @@ def copy(email, drive_rdir, filename, default_student, reset=True):
         return f"https://colab.research.google.com/drive/" + (xattr(filename).get('user.drive.id').decode())
 
     # Get student reference notebook
+    cfg = core.tools.get_config(is_new_format=True)
     ofilename = f"{drive_rdir}/{filename}"
     cfilename = ofilename.replace('.', f'_{cfg.virtual_room}.')
     IPython.display.display(
@@ -94,7 +95,6 @@ def copy(email, drive_rdir, filename, default_student, reset=True):
     drive.mount('/content/gdrive/')
 
     # Get token
-    cfg = core.tools.get_config(is_new_format=True)
     ntoken = cfg.tokens[cfg.virtual_room]
 
     # Parse notebook
