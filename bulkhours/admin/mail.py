@@ -150,6 +150,7 @@ def copy(email, drive_rdir, filename, default_student, reset=True):
 def prepare_mail(default_student="john.doe@bulkhours.eu", signature="The bulkHours team", generate_file=True, 
                  notebook_file=None, drive_rdir=None):
 
+    notebook_info = notebook_file.split('.')[0]
     if generate_file:
         notebook_file = copy(signature, drive_rdir, notebook_file, default_student)
 
@@ -159,12 +160,12 @@ def prepare_mail(default_student="john.doe@bulkhours.eu", signature="The bulkHou
     import IPython
     cfg = core.tools.get_config(is_new_format=True)
 
-    title = f"Notebook of the day: {notebook_file.split('.')[0]}"
+    title = f"Notebook of the day: {notebook_info}"
     intro = f"Dear all,<br/><br/>Here is the practical course of the day. Remember to write your email address to replace"
     end = f"Best regards"
 
     if cfg.language == "fr":
-        title = f"Notebook du jour: {notebook_file.split('.')[0]}"
+        title = f"Notebook du jour: {notebook_info}"
         intro = f"Bonjour à toutes et à tous,<br/><br/>Voici le lien vers le cours du jour.<br/>💡Rappelez-vous bien de mettre votre adresse mail à la place de"
         end = f"Cordialement"
 
