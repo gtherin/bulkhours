@@ -143,7 +143,8 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
         nb.cells.pop(i)
 
     # Create the new notebook
-    nbformat.write(nb, cfilename:=ofilename.replace('.', f'_{cfg.virtual_room}.'), version=nbformat.NO_CONVERT)
+    nb_est = cfg.virtual_room if reset else "solution"
+    nbformat.write(nb, cfilename := ofilename.replace('.', f'_{nb_est}.'), version=nbformat.NO_CONVERT)
 
     dfilename = get_drive_filename(cfilename)
     IPython.display.display(IPython.display.Markdown(f"""* 🌍 {dfilename}\n* 📁 '`{cfilename}`'\n"""))    
@@ -151,11 +152,13 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
 
 
 def prepare_mail(default_student="john.doe@bulkhours.eu", signature="The bulkHours team", generate_file=True, 
-                 notebook_file=None, drive_rdir=None, debug=False):
+                 generate_solution=True, notebook_file=None, drive_rdir=None, debug=False):
 
     notebook_info = notebook_file.split('.')[0]
     if generate_file:
         notebook_file = copy(signature, drive_rdir, notebook_file, default_student, reset=True, debug=debug)
+    if generate_solution:
+        notebook_file = copy(signature, drive_rdir, notebook_file, default_student, reset=False)
 
     if "@" in signature:
         signature = signature.split("@")[0].replace(".", " ").title()
