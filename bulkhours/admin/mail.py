@@ -76,7 +76,7 @@ def get_drive_filename(filename):
     from xattr import xattr
     return f"https://colab.research.google.com/drive/" + (xattr(filename).get('user.drive.id').decode())
 
-def copy(email, drive_rdir, filename, default_student, reset=True, debug=False, quiet=False):
+def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
 
     import IPython
     from subprocess import getoutput
@@ -86,10 +86,10 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False, 
     # Get student reference notebook
     cfg = core.tools.get_config(is_new_format=True)
     ofilename = f"{drive_rdir}/{filename}"
-    cfilename = ofilename.replace('.', f'_{cfg.virtual_room}.')
-    if not quiet:
-        IPython.display.display(
-            IPython.display.Markdown(f"## Notebook generation '`{cfilename.split('/')[-1]}`'"))    
+    cfilename = f"{drive_rdir}/{filename}".replace('.', f'_{cfg.virtual_room}.' if reset else "_solution.")
+
+    IPython.display.display(
+        IPython.display.Markdown(f"## Notebook generation '`{cfilename.split('/')[-1]}`'"))    
 
     # Mount google drive
     drive.mount('/content/gdrive/')
@@ -149,9 +149,7 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False, 
         nb.cells.pop(i)
 
     # Create the new notebook
-    nb_est = cfg.virtual_room if reset else "solution"
-    nbformat.write(nb, cfilename := ofilename.replace('.', f'_{nb_est}.'), version=nbformat.NO_CONVERT)
-
+    nbformat.write(nb, cfilename, version=nbformat.NO_CONVERT)
     dfilename = get_drive_filename(cfilename)
     IPython.display.display(IPython.display.Markdown(f"""* 🌍 {dfilename}\n* 📁 '`{cfilename}`'\n"""))    
     return dfilename
@@ -167,8 +165,7 @@ def prepare_mail(default_student="john.doe@bulkhours.eu", signature="The bulkHou
         copy(signature, drive_rdir, notebook_file, default_student, reset=False, debug=debug)
 
     if generate_file:
-        cfilename = copy(signature, drive_rdir, notebook_file, default_student, reset=True, debug=debug)
-        dnotebook_file = get_drive_filename(cfilename)
+        dnotebook_file = copy(signature, drive_rdir, notebook_file, default_student, reset=True, debug=debug)
     else:
         dnotebook_file = get_drive_filename(f"{drive_rdir}/{notebook_file}".replace('.', f'_{cfg.virtual_room}.'))
 
