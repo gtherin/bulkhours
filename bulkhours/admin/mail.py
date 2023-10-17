@@ -72,24 +72,24 @@ def cell_solution(source):
     print("\n".join(nsource))
     return "\n".join(nsource)
 
+def get_drive_filename(filename):
+    from xattr import xattr
+    return f"https://colab.research.google.com/drive/" + (xattr(filename).get('user.drive.id').decode())
 
-def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
+def copy(email, drive_rdir, filename, default_student, reset=True, debug=False, quiet=False):
 
     import IPython
     from subprocess import getoutput
     from google.colab import drive
     import nbformat
 
-    def get_drive_filename(filename):
-        from xattr import xattr
-        return f"https://colab.research.google.com/drive/" + (xattr(filename).get('user.drive.id').decode())
-
     # Get student reference notebook
     cfg = core.tools.get_config(is_new_format=True)
     ofilename = f"{drive_rdir}/{filename}"
     cfilename = ofilename.replace('.', f'_{cfg.virtual_room}.')
-    IPython.display.display(
-        IPython.display.Markdown(f"## Notebook generation '`{cfilename.split('/')[-1]}`'"))    
+    if not quiet:
+        IPython.display.display(
+            IPython.display.Markdown(f"## Notebook generation '`{cfilename.split('/')[-1]}`'"))    
 
     # Mount google drive
     drive.mount('/content/gdrive/')
@@ -120,11 +120,16 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
                 to_pop.append(idx)
             # Remove cells with solution
             elif " -u solution" in source[0]:
-                to_pop.append(idx)
+                if reset:
+                    to_pop.append(idx)
+                else: # is_solution
+                    cell["source"] = cell["source"].replace(" -u solution", "")
             # Format cells with reset info
             elif " -u reset" in source[0]:
-                cell["source"] = cell["source"].replace(" -u reset", "")
-                print(cell["outputs"])
+                if reset:
+                    cell["source"] = cell["source"].replace(" -u reset", "")
+                else: # is_solution
+                    to_pop.append(idx)
             elif source[0].startswith('%%evaluation_cell_id '):
                 cell["source"] = cell_reset(source) if reset else cell_solution(source)
                 if debug:
@@ -156,9 +161,12 @@ def prepare_mail(default_student="john.doe@bulkhours.eu", signature="The bulkHou
 
     notebook_info = notebook_file.split('.')[0]
     if generate_file:
-        notebook_file = copy(signature, drive_rdir, notebook_file, default_student, reset=True, debug=debug)
+        cfilename = copy(signature, drive_rdir, notebook_file, default_student, reset=True, debug=debug)
+        dnotebook_file = get_drive_filename(cfilename)
+    else:
+        dnotebook_file = get_drive_filename(f"{drive_rdir}/{notebook_file}".replace('.', f'_{cfg.virtual_room}.'))
     if generate_solution:
-        notebook_file = copy(signature, drive_rdir, notebook_file, default_student, reset=False)
+        copy(signature, drive_rdir, notebook_file, default_student, reset=False, debug=debug)
 
     if "@" in signature:
         signature = signature.split("@")[0].replace(".", " ").title()
@@ -192,7 +200,7 @@ def prepare_mail(default_student="john.doe@bulkhours.eu", signature="The bulkHou
     <h2>Content of the mail:</h2><br/>
     <p>{intro} <b>'{default_student}'</b>:</p>
 
-    <ul><li><a href="{notebook_file}" style="font-size: 18px; margin: 4px 0;background-color: white; color: #4F77AA; padding: 5px 9px; text-align: center; text-decoration: none; display: inline-block;">Course of the day</a></li></ul>
+    <ul><li><a href="{dnotebook_file}" style="font-size: 18px; margin: 4px 0;background-color: white; color: #4F77AA; padding: 5px 9px; text-align: center; text-decoration: none; display: inline-block;">Course of the day</a></li></ul>
 
 {end},<br/><br/>
 
