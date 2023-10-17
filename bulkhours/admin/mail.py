@@ -75,6 +75,7 @@ def cell_solution(source):
 
 def copy(email, drive_rdir, filename, default_student, reset=True):
 
+    import IPython
     from subprocess import getoutput
     from google.colab import drive
     import nbformat
@@ -135,10 +136,14 @@ def copy(email, drive_rdir, filename, default_student, reset=True):
 
     # Create the new notebook
     nbformat.write(nb, cfilename:=ofilename.replace('.', f'_{cfg.virtual_room}.'), version=nbformat.NO_CONVERT)
-    dfilename = get_drive_filename(cfilename)
-    print(f"File {cfilename} is accessible via: {dfilename}")
-    return dfilename
 
+    dfilename = get_drive_filename(cfilename)
+    IPython.display.display(
+        IPython.display.Markdown(f"""## Generated notebook '`{cfilename.split('/')[-1]}`'
+    * 🌍 {dfilename}
+    * 📁 '`{cfilename}`'
+    """))    
+    return dfilename
 
 
 def prepare_mail(default_student="john.doe@bulkhours.eu", signature="The bulkHours team", generate_file=True, 
