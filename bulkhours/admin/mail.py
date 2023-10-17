@@ -69,7 +69,7 @@ def cell_solution(source):
 
         nsource.append(s)
 
-    print("\n".join(nsource))
+    # print("\n".join(nsource))
     return "\n".join(nsource)
 
 def get_drive_filename(filename):
@@ -134,7 +134,8 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False, 
                 cell["source"] = cell_reset(source) if reset else cell_solution(source)
                 if debug:
                     print(cell["outputs"])
-                cell["outputs"] = []
+                if reset:
+                    cell["outputs"] = []
         if cell["cell_type"] == "markdown":
             source = cell["source"].split("\n")
             # Remove markdown cells with [admin in the first line]
