@@ -85,8 +85,13 @@ def copy(email, drive_rdir, filename, default_student, reset=True):
         return f"https://colab.research.google.com/drive/" + (xattr(filename).get('user.drive.id').decode())
 
     # Get student reference notebook
-    drive.mount('/content/gdrive/')
     ofilename = f"{drive_rdir}/{filename}"
+    cfilename = ofilename.replace('.', f'_{cfg.virtual_room}.')
+    IPython.display.display(
+        IPython.display.Markdown(f"## Notebook generation '`{cfilename.split('/')[-1]}`'"))    
+
+    # Mount google drive
+    drive.mount('/content/gdrive/')
 
     # Get token
     cfg = core.tools.get_config(is_new_format=True)
@@ -138,11 +143,7 @@ def copy(email, drive_rdir, filename, default_student, reset=True):
     nbformat.write(nb, cfilename:=ofilename.replace('.', f'_{cfg.virtual_room}.'), version=nbformat.NO_CONVERT)
 
     dfilename = get_drive_filename(cfilename)
-    IPython.display.display(
-        IPython.display.Markdown(f"""## Generated notebook '`{cfilename.split('/')[-1]}`'
-    * 🌍 {dfilename}
-    * 📁 '`{cfilename}`'
-    """))    
+    IPython.display.display(IPython.display.Markdown(f"""* 🌍 {dfilename}\n* 📁 '`{cfilename}`'\n"""))    
     return dfilename
 
 
