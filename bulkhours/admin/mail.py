@@ -73,7 +73,7 @@ def cell_solution(source):
     return "\n".join(nsource)
 
 
-def copy(email, drive_rdir, filename, default_student, reset=True):
+def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
 
     import IPython
     from subprocess import getoutput
@@ -126,6 +126,9 @@ def copy(email, drive_rdir, filename, default_student, reset=True):
                 cell["source"] = cell["source"].replace(" -u reset", "")
             elif source[0].startswith('%%evaluation_cell_id '):
                 cell["source"] = cell_reset(source) if reset else cell_solution(source)
+                if debug:
+                    print(cell["outputs"])
+
                 cell["outputs"][0]["text"] = ""
         if cell["cell_type"] == "markdown":
             source = cell["source"].split("\n")
@@ -148,11 +151,11 @@ def copy(email, drive_rdir, filename, default_student, reset=True):
 
 
 def prepare_mail(default_student="john.doe@bulkhours.eu", signature="The bulkHours team", generate_file=True, 
-                 notebook_file=None, drive_rdir=None):
+                 notebook_file=None, drive_rdir=None, debug=False):
 
     notebook_info = notebook_file.split('.')[0]
     if generate_file:
-        notebook_file = copy(signature, drive_rdir, notebook_file, default_student, reset=True)
+        notebook_file = copy(signature, drive_rdir, notebook_file, default_student, reset=True, debug=debug)
 
     if "@" in signature:
         signature = signature.split("@")[0].replace(".", " ").title()
