@@ -42,9 +42,8 @@ def get_FLOPS(self):
     category="Computing",
     ref_site="https://en.wikipedia.org/wiki/FLOPS",
 )
-def get_FLOPS(self):
+def get_gpus(self):
     return flops.get_table_from_wiki("FLOPS", "NVIDIA", columns=["date", "un_costs", "costs", "platform", "comments"])
-
 
 @DataParser.register_dataset(
     label="hpc.FLOPS_cpus",
@@ -83,3 +82,28 @@ def get_cpus(self):
     df["engraving_scale3"] = df["engraving_scale3"].fillna(1).astype(float)
 
     return df
+
+@DataParser.register_dataset(
+    label="hpc.FLOPS_costs",
+    summary="Costs of FLOPS",
+    category="Computing",
+    ref_site="https://en.wikipedia.org/wiki/FLOPS",
+)
+def get_costs(self):
+    return flops.get_table_from_wiki("FLOPS", "Approximate USD per GFLOPS")#, columns=["date", "un_costs", "costs", "platform", "comments"])
+
+DataParser.register_dataset(
+    label="hpc.green500",
+    summary="Energy Efficiency (GFlops/watts)",
+    category="Computing",
+    ref_site="https://www.top500.org/lists/green500/2023/06/",
+    raw_data="https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/green500_top_202306.xlsx",
+)
+
+DataParser.register_dataset(
+    label="hpc.top500",
+    summary="Energy Efficiency (GFlops/watts)",
+    category="Computing",
+    ref_site="https://www.top500.org/lists/top500/2023/06/",
+    raw_data="https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/TOP500_202306.xlsx",
+)
