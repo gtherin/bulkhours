@@ -7,6 +7,13 @@ from .. import core
 
 
 def cell_reset(source):
+
+    # Remove xtra functions
+    cfg = core.tools.get_config(is_new_format=True)
+    student_data = core.cell_parser.CellParser.crunch_data(cfg, user="dummy", data=source)
+    source = student_data.get_code("main_execution").split("\n")
+
+    
     """
 # BKRESET.REMOVE:START
     # This code won't appear in the reset generation
@@ -58,6 +65,12 @@ df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BKRESET.INIT:0
     return "\n".join(nsource)
 
 def cell_solution(source):
+
+    # Remove xtra functions
+    cfg = core.tools.get_config(is_new_format=True)
+    student_data = core.cell_parser.CellParser.crunch_data(cfg, user="dummy", data=source)
+    source = student_data.get_code("main_execution").split("\n")
+
     nsource = []
     for s in source:
         if "BKRESET." in s:
@@ -131,7 +144,7 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
                 else: # is_solution
                     to_pop.append(idx)
             elif source[0].startswith('%%evaluation_cell_id '):
-                cell["source"] = cell_reset(source) if reset else cell_solution(source)
+                cell["source"] = cell_reset(cell["source"]) if reset else cell_solution(cell["source"])
                 if debug:
                     print(cell["outputs"])
                 if reset:

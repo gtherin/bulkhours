@@ -5,7 +5,7 @@ from .. import data
 from .. import core
 
 def format_num(price):
-    return format(price, ",").replace(",", " ").replace(".", ",")
+    return "{:.2f}".format(price, ",").replace(",", " ").replace(".", ",")
 
 def format_price(price):
     return format_num(price) + " €"
@@ -43,7 +43,6 @@ class Invoice:
 
     def __init__(self, name, invoice_id, df):
 
-
         self.client, self.provider = df["client"].iloc[0], df["provider"].iloc[0]
         self.name = name
         self.invoice_id = invoice_id
@@ -52,10 +51,14 @@ class Invoice:
         self.data = {}
         self.data["provider"] = Invoice.entities.set_index("client").loc[self.provider].to_dict()
         self.data["provider"]["logo"] = Invoice.einfo["logo"]
-        
+
         self.data["client"] = Invoice.entities.set_index("client").loc[self.client].to_dict()
+        for k, v in self.data["provider"].copy().items():
+            if v == "" or v != v:
+                del self.data["provider"][k]
+
         for k, v in self.data["client"].copy().items():
-            if v == "":
+            if v == "" or v != v:
                 del self.data["client"][k]
         self.add_dates(df)
         self.add_transactions(df)
@@ -68,8 +71,12 @@ class Invoice:
 
         year, month = int(self.invoice_date.split("-")[0]), int(self.invoice_date.split("-")[1])
         self.invoice_date = datetime.datetime(year, month, int(self.invoice_date.split("-")[2]))
-        start_date = datetime.datetime(year, month, 1)
-        end_date = datetime.datetime(year, month, calendar.monthrange(year, month)[1])
+        if "start_date" in df.columns:
+            start_date = datetime.datetime.strptime(df["start_date"].unique()[0], "%Y-%m-%d")
+            end_date = datetime.datetime.strptime(df["end_date"].unique()[0], "%Y-%m-%d")
+        else:
+            start_date = datetime.datetime(year, month, 1)
+            end_date = datetime.datetime(year, month, calendar.monthrange(year, month)[1])
 
         self.data.update(
             {

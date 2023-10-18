@@ -18,8 +18,8 @@
                     </td>
                     <td>
                         <h2>{{ provider.title }}</h2>
-                        <h3>{{ provider.position }}</h4>
-                    </td>
+                        {% if provider.position is defined %}<h3>{{ provider.position }}</h3>{% endif %}
+                        </td>
                 </tr>
                 <tr>
                     <td>
@@ -51,9 +51,7 @@
             <div><span>ADDRESSE</span> {{ client.address }}</div>
             <div><span></span> {{ client.zipcode }}</div>
             {% if client.phone is defined %}<div><span>TELEPHONE</span>{{ client.phone }}</div>{% endif %}
-            {% if client.mail is defined %}
-            <div><span>MAIL</span> <a href="https://{{ client.mail }}">{{ client.mail }}</a></div>
-            {% endif %}
+            {% if client.mail is defined %}<div><span>MAIL</span> <a href="https://{{ client.mail }}">{{ client.mail }}</a></div>{% endif %}
             {% if client.web is defined %}
             <div><span>WEB</span> <a href="https://{{ client.web }}">{{ client.web }}</a></div>
             {% endif %}
