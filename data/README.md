@@ -2234,9 +2234,23 @@ def get_FLOPS(self):
 - Reference site: https://en.wikipedia.org/wiki/FLOPS
 
 <details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| date |  |
+| un_costs |  |
+| costs |  |
+| platform |  |
+| comments |  |
+
+</details>
+
+
+<details>
 <summary>Show code</summary>
 <code>
-def get_FLOPS(self):
+def get_gpus(self):
     return flops.get_table_from_wiki("FLOPS", "NVIDIA", columns=["date", "un_costs", "costs", "platform", "comments"])
 </code>
 </details>
@@ -2298,6 +2312,133 @@ def get_cpus(self):
 
     return df
 </code>
+</details>
+
+#### Costs of FLOPS
+#### `bulkhours.get_data("hpc.FLOPS_costs")`
+- Reference site: https://en.wikipedia.org/wiki/FLOPS
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| ('Date', 'Date') |  |
+| ('Approximate USD per GFLOPS', 'Unadjusted') |  |
+| ('Approximate USD per GFLOPS', '2022[69]') |  |
+| ('Platform providing the lowest cost per GFLOPS', 'Platform providing the lowest cost per GFLOPS') |  |
+| ('Comments', 'Comments') |  |
+
+</details>
+
+
+<details>
+<summary>Show code</summary>
+<code>
+def get_costs(self):
+    return flops.get_table_from_wiki("FLOPS", "Approximate USD per GFLOPS")#, columns=["date", "un_costs", "costs", "platform", "comments"])
+</code>
+</details>
+
+#### Energy Efficiency (GFlops/watts)
+#### `bulkhours.get_data("hpc.green500")`
+- Raw data: [green500_top_202306.xlsx](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/green500_top_202306.xlsx)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/green500_top_202306.xlsx)🤗)
+- Reference site: https://www.top500.org/lists/green500/2023/06/
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| Rank |  |
+| TOP500 Rank |  |
+| Name |  |
+| Computer |  |
+| Site |  |
+| Manufacturer |  |
+| Country |  |
+| Year |  |
+| Segment |  |
+| Total Cores |  |
+| Accelerator/Co-Processor Cores |  |
+| Rmax [TFlop/s] |  |
+| Rpeak [TFlop/s] |  |
+| Power (kW) |  |
+| Power Source |  |
+| Energy Efficiency [GFlops/Watts] |  |
+| Power Source.1 |  |
+| Power Quality Level |  |
+| Optimized Run (HPL) |  |
+| Optimized Run (Peak Power) |  |
+| Memory |  |
+| Architecture |  |
+| Processor |  |
+| Processor Technology |  |
+| Processor Speed (MHz) |  |
+| Operating System |  |
+| OS Family |  |
+| Accelerator/Co-Processor |  |
+| Cores per Socket |  |
+| Processor Generation |  |
+| System Model |  |
+| System Family |  |
+| Interconnect Family |  |
+| Interconnect |  |
+| Continent |  |
+| Site ID |  |
+| System ID |  |
+
+</details>
+
+#### Energy Efficiency (GFlops/watts)
+#### `bulkhours.get_data("hpc.top500")`
+- Raw data: [TOP500_202306.xlsx](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/TOP500_202306.xlsx)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/TOP500_202306.xlsx)🤗)
+- Reference site: https://www.top500.org/lists/top500/2023/06/
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| Rank |  |
+| Previous Rank |  |
+| First Appearance |  |
+| First Rank |  |
+| Name |  |
+| Computer |  |
+| Site |  |
+| Manufacturer |  |
+| Country |  |
+| Year |  |
+| Segment |  |
+| Total Cores |  |
+| Accelerator/Co-Processor Cores |  |
+| Rmax [TFlop/s] |  |
+| Rpeak [TFlop/s] |  |
+| Nmax |  |
+| Nhalf |  |
+| HPCG [TFlop/s] |  |
+| Power (kW) |  |
+| Power Source |  |
+| Energy Efficiency [GFlops/Watts] |  |
+| Memory |  |
+| Architecture |  |
+| Processor |  |
+| Processor Technology |  |
+| Processor Speed (MHz) |  |
+| Operating System |  |
+| OS Family |  |
+| Accelerator/Co-Processor |  |
+| Cores per Socket |  |
+| Processor Generation |  |
+| System Model |  |
+| System Family |  |
+| Interconnect Family |  |
+| Interconnect |  |
+| Continent |  |
+| Site ID |  |
+| System ID |  |
+
 </details>
 
 #### Computational capacity of the fastest supercomputers
