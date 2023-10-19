@@ -107,8 +107,8 @@ git pull 2> /dev/null
 
 def styles(sdata, cmap="RdBu", icolumns=["nom", "prenom"], sorted_by=True, hide_grades=False):
 
-    core.tools.GradesErr.set_min_color(minvalue=0.0, cmap=cmap)
-
+    core.tools.GradesErr.set_static_style_info(minvalue=0.0, cmap=cmap)
+    
     if hide_grades:
         sdata = sdata.drop(columns=["all"])
 
@@ -131,12 +131,20 @@ def styles(sdata, cmap="RdBu", icolumns=["nom", "prenom"], sorted_by=True, hide_
     stylish = (
         stylish.hide(axis="index")
         .background_gradient(cmap=cmap, vmin=0, vmax=10)
-        .applymap(core.tools.GradesErr.interpret, subset=list(fcolumns))
     )
+
+    ccols = [c for c in list(fcolumns) if c != "all" and sdata[c]["solution"] > 0]
+    nccols = [c for c in list(fcolumns) if c not in ccols]
+
+    def interpret_corr(v):
+        return core.tools.GradesErr.interpret(v, True)
+    stylish = stylish.applymap(interpret_corr, subset=ccols)
+
+    def interpret_ncorr(v):
+        return core.tools.GradesErr.interpret(v, False)
+    stylish = stylish.applymap(interpret_ncorr, subset=nccols)
 
     if "all" in sdata.columns:
         stylish = stylish.background_gradient(cmap=cmap, subset=["all"], vmin=0, vmax=10.0)
 
-    return stylish.set_properties(**{"opacity": "70%"}, subset=nacolumns).format(
-        "{:.1f}", na_rep="✅", subset=nacolumns
-    )
+    return stylish.set_properties().format("{:.1f}", na_rep="✅", subset=nacolumns)

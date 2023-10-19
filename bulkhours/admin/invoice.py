@@ -41,11 +41,12 @@ class Invoice:
         # Only keep invoice_ids with existing invoices
         Invoice.accounting = Invoice.accounting[Invoice.accounting["invoice_id"].str.len() > 2]
 
-    def __init__(self, name, invoice_id, df):
+    def __init__(self, name, invoice_id, df, doc_type="FACTURE"):
 
         self.client, self.provider = df["client"].iloc[0], df["provider"].iloc[0]
         self.name = name
         self.invoice_id = invoice_id
+        self.doc_type = doc_type
 
         self.transactions = []
         self.data = {}
@@ -111,6 +112,7 @@ class Invoice:
         self.data["vat_amount"] = format_price(vat_amount := subtotal * 0)
         self.data["total"] = format_price(subtotal - vat_amount)
         self.data['invoice_id'] = self.invoice_id
+        self.data['doc_type'] = self.doc_type
 
     def generate_html(self):
 
@@ -123,7 +125,9 @@ class Invoice:
         # Render the template with the dynamic data
         invoice = template.render(self.data)
 
-        with open(filename := f"{self.data['invoice_id']}_{self.client}_annex.html", "w") as f:
+        doc_type = "annex" if self.doc_type in ["FACTURE", "Facture"] else "costimation"
+
+        with open(filename := f"{self.data['invoice_id']}_{self.client}_{doc_type}.html", "w") as f:
             f.write(invoice)
         print(f"Generate files and {filename[:-4]}pdf (from) {filename}")
         os.system(f"wkhtmltopdf --enable-local-file-access {filename} {filename[:-4]}pdf")
@@ -131,7 +135,7 @@ class Invoice:
         return f"{filename[:-4]}pdf"
 
     @staticmethod
-    def generate_invoices(user, info, outdir=None) -> None:
+    def generate_invoices(user, info, outdir=None, doc_type="FACTURE") -> None:
         
         Invoice.set_db_info(user, info)
 
@@ -150,7 +154,7 @@ class Invoice:
 
         files = []
         for invoice_id, df in Invoice.accounting.groupby("invoice_id"):
-            files.append(Invoice(user, invoice_id, df).generate_html())
+            files.append(Invoice(user, invoice_id, df, doc_type=doc_type).generate_html())
 
         for f in filelists:
             os.system(f"rm -rf {f}")

@@ -118,8 +118,9 @@ class WidgetBase:
         admin.answers.update_notes(self.cinfo.cell_id, grades)
         grades = grades.drop(columns=["mail"]).set_index("auser").T
 
-        tools.GradesErr.set_min_color(minvalue=0.0, cmap=(cmap:="RdBu"))
-        grades = grades.style.format(precision=1).applymap(tools.GradesErr.interpret).background_gradient(cmap=cmap, vmin=0, vmax=max_score)
+        tools.GradesErr.set_static_style_info(minvalue=0.0, cmap=(cmap:="RdBu"))
+        fstyles = lambda v: tools.GradesErr.interpret(v, False)
+        grades = grades.style.format(precision=1).applymap(fstyles).background_gradient(cmap=cmap, vmin=0, vmax=max_score)
         IPython.display.display(grades)
 
     def submit(self, output, user=None):
