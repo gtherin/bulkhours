@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Facture {{ invoice_number }}</title>
+    <title>{{ doc_type }} {{ invoice_id }}</title>
     <link rel="stylesheet" href="templates.css" media="all" />
 </head>
 
@@ -29,7 +29,7 @@
         </table>
         </div>
 
-        <h1>FACTURE N°{{ invoice_id }}</h1>
+        <h1>{{ doc_type }} N°{{ invoice_id }}</h1>
         {% if start_date is defined %}<h5>Période du {{ start_date }} au {{ end_date }}</h5>{% endif %}
         <h2>Le {{ invoice_date }}</h2>
 

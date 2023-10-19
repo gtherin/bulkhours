@@ -14,17 +14,18 @@ class GradesErr:
     MAX_SCORE_NOT_AVAILABLE = -13
 
     @staticmethod
-    def set_min_color(minvalue=0.0, cmap="RdBu"):
+    def set_static_style_info(minvalue=0.0, cmap="RdBu"):
         GradesErr.mincolor = matplotlib.colors.rgb2hex(matplotlib.cm.get_cmap(cmap)(minvalue))
 
     @staticmethod
-    def interpret(v):
+    def interpret(v, is_corrected):
+        opacity = "40" if is_corrected else "60"
         if type(v) == str:
             return None
         elif v in [GradesErr.DEFAULT_GRADE, GradesErr.EVALUATION_CRASHED, GradesErr.ANSWER_FOUND]:
-            return "color:#FF3B52;background-color:#FF3B52;opacity: 20%;"
+            return f"color:#FF3B52;background-color:#FF3B52;opacity: {opacity}%"
         elif v != v:  # Failure of automatic corrections
-            return f"color:{GradesErr.mincolor};background-color:{GradesErr.mincolor};"
+            return f"color:{GradesErr.mincolor};background-color:{GradesErr.mincolor};opacity: 70%"
         else:
             return None
 

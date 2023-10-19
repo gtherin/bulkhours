@@ -71,6 +71,11 @@ def summary(
     data = data.set_index("mail")
     data = data[["nom", "prenom", "all"] + exos] if columns is None else data[columns]
 
+    for k, v in aliases.items():
+        if v in data.index and k in data.index:
+            for c in exos:
+                data.at[k, c] = data.at[v, c]
+
     sdata = tools.styles(data, cmap=cmap, hide_grades=hide_grades) if cmap is not None else data
 
     if export_notes:
