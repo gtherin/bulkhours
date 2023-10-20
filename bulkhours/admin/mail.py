@@ -42,7 +42,7 @@ df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BKRESET.INIT:0
             l = s.split("BKRESET.")
             if "INIT:" in l[1]:
                 if "=" in s:
-                    s = s.split("=")[0] + "=" + l[1].replace("INIT:", "") + "  # ..."
+                    s = s.split("=")[0] + "= " + l[1].replace("INIT:", "") + "  # ..."
                 elif "return " in s:
                     s = s.split("return ")[0] + "return " + l[1].replace("INIT:", "") + "  # ..."
             if "REMOVE" in l[1]:
