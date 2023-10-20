@@ -2,8 +2,12 @@ import IPython
 from . import tools
 
 
+evaluation_instructions = None
+evaluation_openai_token = "YOUR_KEY"
+
+
 def ask_chat_gpt(
-    question="", openai_token="YOUR_KEY", model="gpt-3.5-turbo", temperature=0.5, is_code=False, size="256x256"
+    question="", openai_token="YOUR_KEY", model="gpt-3.5-turbo", temperature=0.5, is_code=False, size="256x256", raw=False
 ):
     """
     temperature Conservative(0) => Creative(1)
@@ -27,7 +31,6 @@ Vous devez creer une clé d'API
         return
 
     openai.api_key = openai_token
-    print("")
 
     if model in ["image"]:
         response = openai.Image.create(prompt=question, n=1, size=size)
@@ -35,14 +38,20 @@ Vous devez creer une clé d'API
         IPython.display.display(IPython.display.Image(url=image_url))
         return
 
+    # Ask chat-gpt
     completion = openai.ChatCompletion.create(
         model=model, messages=[{"role": "user", "content": (prompt := question)}], temperature=temperature
     )
 
+    # Get content
+    content = completion["choices"][0]["message"]["content"]
+
+    # return raw data
+    if raw:
+        return content
+
     # Display prompt
     IPython.display.display(IPython.display.Markdown("### " + prompt))
-
-    content = completion["choices"][0]["message"]["content"]
 
     # Display answer
     if is_code:

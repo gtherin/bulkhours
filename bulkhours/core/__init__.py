@@ -7,6 +7,7 @@ import subprocess
 from .evaluation import Evaluation  # noqa
 from . import colors as c  # noqa
 from .puppets import *  # noqa
+from .grade import Grade  # noqa
 from . import tools  # noqa
 from . import firebase  # noqa
 from . import buttons  # noqa

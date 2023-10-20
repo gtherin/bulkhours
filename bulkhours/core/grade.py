@@ -7,7 +7,7 @@ class Grade:
     EVALUATION_CRASHED = -11
     ANSWER_FOUND = -12
     MAX_SCORE_NOT_AVAILABLE = -13
-    grad_names = ["grade_man", "grade_eva", "grade_bot", "note"]
+    grad_names = ["grade_man", "grade_ana", "grade_bot"]
 
     @staticmethod
     def check_gradname_validity(grade_name):
