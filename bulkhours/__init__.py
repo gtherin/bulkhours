@@ -37,3 +37,8 @@ if ipp := IPython.get_ipython():
 
     ipp.register_magics(CCPPlugin(ipp))
     ipp.register_magics(Evaluation(ipp))
+
+def dmd(*args, **kwargs):
+    import IPython
+    IPython.display.display(IPython.display.Markdown(*args, **kwargs))
+
