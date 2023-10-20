@@ -55,23 +55,22 @@ def get_answers(cell_id, refresh=True, update_git=False, verbose=False, aliases=
     return data
 
 
-def update_notes(cell_id, grades):
+def update_grades(cell_id, grades, grade_name):
     cfg = core.tools.get_config(is_new_format=True)
 
     uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     for k in grades.index:
-        update_note_in_db(cell_id, grades["mail"][k], grades[cell_id + ".n"][k], uptime, cfg=cfg)
+        update_note_in_db(cell_id, grades["mail"][k], grades[cell_id + ".n"][k], uptime, cfg=cfg, grade_name=grade_name)
 
 
-def update_note_in_db(cell_id, user, note, uptime, is_manual=False, cfg=None):
+def update_note_in_db(cell_id, user, grade, uptime, grade_name="grade", cfg=None):
 
-    if not core.tools.GradesErr.is_valid(note):
+    core.Grade.check_gradname_validity(grade_name)
+
+    if not core.Grade.is_valid(grade):
         return
 
-    info = {"note": note, "note_upd": uptime}
-
-    if is_manual:
-        info["note_src"] = "manual"
+    info = {grade_name: grade, grade_name + "_upd": uptime}
 
     try:
         return core.firebase.get_document(question=cell_id, user=user, cinfo=cfg).update(info)
@@ -79,7 +78,7 @@ def update_note_in_db(cell_id, user, note, uptime, is_manual=False, cfg=None):
         return core.firebase.get_document(question=cell_id, user=user, cinfo=cfg).set(info)
 
 
-def update_note(cell_id, user, note, verbose=True, is_manual=False):
+def update_grade(cell_id, user, grade, verbose=True, grade_name="grade", comment=""):
 
     cfg = core.tools.get_config(is_new_format=True)
 
@@ -89,25 +88,29 @@ def update_note(cell_id, user, note, verbose=True, is_manual=False):
         data[user] = {}
 
     uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    if user in data and "note" in data[user]:
+    if user in data and grade_name in data[user]:
         cmd = (
-            f"Pour {cell_id}/{user}, mise à jour de la note de {data[user]['note']} à {note} ({uptime})"
+            f"Pour {cell_id}/{user}, mise à jour de la note '{grade_name}' de {data[user][grade_name]} à {grade} ({uptime})"
             if cfg.language == "fr"
-            else f"For {cell_id}/{user}, update note from {data[user]['note']} to {note} ({uptime})"
+            else f"For {cell_id}/{user}, update the grade '{grade_name}' from {data[user][grade_name]} to {grade} ({uptime})"
         )
     else:
         cmd = (
-            f"Pour {cell_id}/{user}, mise à jour de la à {note} ({uptime})"
+            f"Pour {cell_id}/{user}, mise à jour de la note '{grade_name}' à {grade} ({uptime})"
             if cfg.language == "fr"
-            else f"For {cell_id}/{user}, set note from to {note} at {uptime}"
+            else f"For {cell_id}/{user}, set the grade '{grade_name}' from to {grade} at {uptime}"
         )
+    import IPython
 
     if verbose:
         print(f"\x1b[35m\x1b[1m{cmd}\x1b[m")
+        if comment!="":
+            IPython.display.display(IPython.display.Markdown(f"* **{user}**: {comment}"))
+
 
     # Set grades
-    data[user]["note"] = note
+    data[user][grade_name] = grade
     with open(get_cfilename(cfg, cell_id), "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
-    update_note_in_db(cell_id, user, note, uptime, is_manual=is_manual, cfg=cfg)
+    update_note_in_db(cell_id, user, grade, uptime, grade_name=grade_name, cfg=cfg)

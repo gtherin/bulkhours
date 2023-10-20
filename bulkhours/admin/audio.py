@@ -123,7 +123,7 @@ def estimate_grade(text, exo, cinfo=None):
                 ref_dist = dict(dist=r_dist, name=str(s), login=i, grade=grade, raw=text)
     if ref_dist["login"] != "Nope":
         # students.at[ref_dist["login"], exo] = float(ref_dist["grade"])
-        answers.update_note(cinfo.notebook_id + "_" + exo, ref_dist["login"], float(ref_dist["grade"]))
+        answers.update_grade(cinfo.notebook_id + "_" + exo, ref_dist["login"], float(ref_dist["grade"], grade="grade_man"))
 
     return ref_dist
 

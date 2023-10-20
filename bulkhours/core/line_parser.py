@@ -155,7 +155,7 @@ class LineParser:
 
         available_widgets = get_available_widgets()
         if self.is_admin:
-            ewidgets = "oa" if "def student_evaluation_function" in cell else "o"
+            ewidgets = "oa"# if "def student_evaluation_function" in cell else "o"
             available_widgets = {k: v + ewidgets for k, v in available_widgets.items()}
 
         if hasattr(self, "widgets") and self.widgets is None:

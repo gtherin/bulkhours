@@ -4,34 +4,6 @@ import ipywidgets
 import IPython
 from argparse import Namespace
 from .config import Config
-import matplotlib
-
-class GradesErr:
-    DEFAULT_GRADE = -9
-    NO_ANSWER_FOUND = -10
-    EVALUATION_CRASHED = -11
-    ANSWER_FOUND = -12
-    MAX_SCORE_NOT_AVAILABLE = -13
-
-    @staticmethod
-    def set_static_style_info(minvalue=0.0, cmap="RdBu"):
-        GradesErr.mincolor = matplotlib.colors.rgb2hex(matplotlib.cm.get_cmap(cmap)(minvalue))
-
-    @staticmethod
-    def interpret(v, is_corrected):
-        opacity = "40" if is_corrected else "60"
-        if type(v) == str:
-            return None
-        elif v in [GradesErr.DEFAULT_GRADE, GradesErr.EVALUATION_CRASHED, GradesErr.ANSWER_FOUND]:
-            return f"color:#FF3B52;background-color:#FF3B52;opacity: {opacity}%"
-        elif v != v:  # Failure of automatic corrections
-            return f"color:{GradesErr.mincolor};background-color:{GradesErr.mincolor};opacity: 70%"
-        else:
-            return None
-
-    @staticmethod
-    def is_valid(note):
-        return note >= 0
 
 
 def get_platform():

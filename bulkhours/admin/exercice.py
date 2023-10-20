@@ -8,7 +8,7 @@ class Exercice:
     def __init__(self, user, exo) -> None:
         from .. import core
         self.user, self.exo, self.answer = user, exo, ""
-        self.utime, self.note, self.count = np.nan, core.tools.GradesErr.DEFAULT_GRADE, np.nan
+        self.utime, self.note, self.count = np.nan, core.Grade.DEFAULT_GRADE, np.nan
 
     def update_data(self, adata) -> None:
         from .. import core
@@ -16,9 +16,9 @@ class Exercice:
         self.count = 1
         self.utime = adata["update_time"] if "update_time" in adata else datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if "note" not in adata:  # Failure of automatic grades
-            self.note = core.tools.GradesErr.ANSWER_FOUND
+            self.note = core.Grade.ANSWER_FOUND
         elif adata["note"] is None:  # Failure of automatic grades
-            self.note = core.tools.GradesErr.EVALUATION_CRASHED
+            self.note = core.Grade.EVALUATION_CRASHED
         else:
             self.note = float(adata["note"])
 

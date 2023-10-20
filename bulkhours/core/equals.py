@@ -7,7 +7,7 @@ import pandas as pd
 import os
 
 from . import contexts
-from . import tools
+from .grade import Grade
 
 
 def is_equal(
@@ -143,7 +143,7 @@ def get_max_score(teacher_data):
         contexts.run_cell(evaluation_code.replace("student.", "teacher."), stdout=False)
         return float(os.environ["FINAL_SCORE"])
     except:
-        return tools.GradesErr.MAX_SCORE_NOT_AVAILABLE
+        return Grade.MAX_SCORE_NOT_AVAILABLE
 
 
 def evaluate_student(student_data, teacher_data, raw=False, use_student_context=True, user="", verbose=False):
@@ -156,7 +156,7 @@ def evaluate_student(student_data, teacher_data, raw=False, use_student_context=
 
     student_code = student_data.get_code("main_execution")
     if student_code == "":
-        return tools.GradesErr.NO_ANSWER_FOUND
+        return Grade.NO_ANSWER_FOUND
 
     # Get the formatted evaluation code
     evaluation_code = get_evaluation_code(teacher_data)
@@ -184,7 +184,7 @@ def evaluate_student(student_data, teacher_data, raw=False, use_student_context=
         contexts.run_cell(evaluation_code, do_debug)
         score = float(os.environ["FINAL_SCORE"])
     except:
-        score = tools.GradesErr.EVALUATION_CRASHED
+        score = Grade.EVALUATION_CRASHED
 
     if raw:
         return score

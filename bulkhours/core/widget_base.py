@@ -1,15 +1,85 @@
 import IPython
 import ipywidgets
-from . import tools
 import numpy as np
 import pandas as pd
 import sys
+
+from .grade import Grade
+from . import tools
 from .cell_parser import CellParser
 from .line_parser import LineParser
 from . import buttons
 from . import equals
 from . import contexts
 
+
+
+reset = """# Create a 2 axes figure
+fig, axes = plt.subplots(1, 2, figsize=(15, 4))
+sns.set_palette("hls")
+
+# 1. Implement a normal(/gaussian) function
+def gaussian(x: np.ndarray, mu: float, sig: float) -> np.ndarray:
+    return x  # ...
+
+ax = axes[0]
+ax.set_title("Normal distributions")
+x = np.linspace(-10, 10, 200)
+# 2. Plot the previous function with the previous x
+# ...
+# 3. Plot the scipy norm pdf function (with mu=2 and sigma=3).
+# ...
+# 4. Generate 1000 random events according with the previous distribution
+# Plot the histogram
+# ...
+ax.legend()
+
+ax = axes[1]
+for k in np.geomspace(2, 128, num=7, dtype=int):
+    # 5. Plot the student pdf function for a 95%CI (with k as parameter).
+    # ...
+
+    # 6. Calculate the Shapiro and Kolmogov tests pvalues for 5000 random events generated with the previous distribution
+    shapiro_pvalue = 0  # ...
+    kolmogorov_pvalue = 0  # ...
+
+    # 7. Get the skew estimator and calculate it with the Pearson estimator (with a norm.cdf).
+    skew, sperson = 0, 0  # ...
+
+    print(f'k={k}, skew={skew:.2f}, skew(Pearson)={sperson:.2f}, pval(Shapiro)={shapiro_pvalue:.2f}, pval(Kolmogorov)={kolmogorov_pvalue:.2f}')
+
+ax.set_xlim([-2, 2])
+ax.set_xlabel(r"$x$")
+ax.set_ylabel(r"$P_{Student}(x)$")
+ax.set_title(r"$Student$ Probability density")
+ax.legend()
+
+# 8. Comment the points 6 and 7
+print("... MY COMMENT")
+
+"""
+
+def bot_evaluation(cell_id, user, student_data, teacher_data):
+    from .. import admin
+    from . import gpt
+
+    prompt = f"""{gpt.evaluation_instructions}
+Initial solution:\n<start>{reset}</start>
+Final solution:\n<end>{teacher_data.get_code("main_execution")}<end>
+Student solution:\n<answer>{student_data.get_code("main_execution")}</answer>\n"""                
+    response = gpt.ask_chat_gpt(question=prompt, model="gpt-3.5-turbo", temperature=0., raw=True, openai_token=gpt.evaluation_openai_token)
+
+    try:
+        grade = response.split("Grade: ")[1]
+        if "/" in grade:
+            grade = grade.split("/")[0]
+        grade = float(grade)
+        IPython.display.display(IPython.display.Markdown(f"* **{user}**: {response}"))
+        
+        return grade
+    except:
+        IPython.display.display(IPython.display.Markdown(f"* **{user}**:\n #### Grade was not properly extracted from response:\n{response}"))
+        return np.nan
 
 class WidgetBase:
     widget_id = "base"
@@ -72,9 +142,7 @@ class WidgetBase:
         else:
             teacher_data = CellParser.crunch_data(self.cinfo, user="solution", data=None) # Get data from database
 
-        if teacher_data.get_code("evaluation") == "":
-            print("No correction available")
-            return
+        bot_correction = teacher_data.get_code("evaluation") == "" or "automatic_eval" in teacher_data.get_code("evaluation")
 
         from .. import admin
 
@@ -85,7 +153,10 @@ class WidgetBase:
 
         print(f"\x1b[35m\x1b[1mNotes for {self.cinfo.cell_id}: \x1b[m", end="")
 
-        max_score = equals.get_max_score(teacher_data)
+        if bot_correction:
+            max_score = 10
+        else:
+            max_score = equals.get_max_score(teacher_data)
 
         answers = admin.answers.get_answers(self.cinfo.cell_id, verbose=False, refresh=True)
         for u in grades.index:
@@ -97,7 +168,8 @@ class WidgetBase:
             if duser is not None and auser != duser:
                 continue
 
-            print(f"\x1b[35m\x1b[1m{auser}, \x1b[m", end="")
+            if not bot_correction:
+                print(f"\x1b[35m\x1b[1m{auser}, \x1b[m", end="")
 
             if mail not in answers:
                 print(f"\x1b[35m\x1b[1m(nan), \x1b[m", end="")
@@ -111,15 +183,21 @@ class WidgetBase:
                 print(f"\x1b[35m\x1b[1m({student_data.minfo['note']} [MAN]), \x1b[m", end="")
                 continue
 
-            score = equals.evaluate_student(student_data, teacher_data, raw=True, user=auser, verbose=verbose)
-            grades.loc[u, self.cinfo.cell_id + ".n"] = score
-            print(f"\x1b[35m\x1b[1m({score}), \x1b[m", end="")
+            if bot_correction:
+                score = bot_evaluation(self.cinfo.cell_id, mail, student_data, teacher_data)
+            else:
+                score = equals.evaluate_student(student_data, teacher_data, raw=True, user=auser, verbose=verbose)
+                print(f"\x1b[35m\x1b[1m({score}), \x1b[m", end="")
 
-        admin.answers.update_notes(self.cinfo.cell_id, grades)
+            grades.loc[u, self.cinfo.cell_id + ".n"] = score
+     
+        grad_name = "grade_bot" if bot_correction else "grade_ana"
+
+        admin.answers.update_grades(self.cinfo.cell_id, grades, grad_name)
         grades = grades.drop(columns=["mail"]).set_index("auser").T
 
-        tools.GradesErr.set_static_style_info(minvalue=0.0, cmap=(cmap:="RdBu"))
-        fstyles = lambda v: tools.GradesErr.interpret(v, False)
+        Grade.set_static_style_info(minvalue=0.0, cmap=(cmap:="RdBu"))
+        fstyles = lambda v: Grade.apply_style(v, False)
         grades = grades.style.format(precision=1).applymap(fstyles).background_gradient(cmap=cmap, vmin=0, vmax=max_score)
         IPython.display.display(grades)
 
@@ -260,6 +338,11 @@ class WidgetBase:
 
         def func_o(b):
             return buttons.update_button(b, abuttons["o"], output, self, "osubmit")
+
+        if "student_evaluation_function" in self.cell_source:
+            abuttons["a"].b.description = "🧮Correct students"
+        else:
+            abuttons["a"].b.description = "🤖Correct students"
 
         def func_a(b):
             return buttons.update_button(b, abuttons["a"], output, self, "autocorrect")
