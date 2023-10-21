@@ -167,7 +167,10 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
     # Create the new notebook
     nbformat.write(nb, cfilename, version=nbformat.NO_CONVERT)
     dfilename = get_drive_filename(cfilename)
-    IPython.display.display(IPython.display.Markdown(f"""* 🌍 {dfilename}\n* 📁 '`{cfilename}`'\n"""))    
+    if "/local" in dfilename:
+        IPython.display.display(IPython.display.Markdown(f"""* 🌍 ❌<b><font color="red">File has not been yet mounted on the cloud. Please rerun🔄</font></b>❌\n* 📁 '`{cfilename}`'\n"""))
+    else:
+        IPython.display.display(IPython.display.Markdown(f"""* 🌍 {dfilename}\n* 📁 '`{cfilename}`'\n"""))    
     return dfilename
 
 
@@ -184,6 +187,9 @@ def prepare_mail(default_student="john.doe@bulkhours.eu", signature="The bulkHou
         dnotebook_file = copy(signature, drive_rdir, notebook_file, default_student, reset=True, debug=debug)
     else:
         dnotebook_file = get_drive_filename(f"{drive_rdir}/{notebook_file}".replace('.', f'_{cfg.virtual_room}.'))
+
+    if "/local" in dnotebook_file:
+        return
 
     if "@" in signature:
         signature = signature.split("@")[0].replace(".", " ").title()
