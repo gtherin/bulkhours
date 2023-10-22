@@ -40,7 +40,7 @@ def get_users_list(no_admin=True, sort_by=None):
     users["nom"] = new[1].str.capitalize()
 
     users = pd.concat(
-        [users, pd.DataFrame.from_records([{"mail": "solution", "is_admin": 1, "prenom": "Sol", "nom": "Ution"}])]
+        [users, pd.DataFrame.from_records([{"mail": core.tools.REF_USER, "is_admin": 1, "prenom": "Sol", "nom": "Ution"}])]
     )
 
     users['auser'] = users["prenom"] + "." + users["nom"].str[0]
@@ -130,7 +130,7 @@ def styles(sdata, cmap="RdBu", icolumns=["nom", "prenom"], sorted_by=True, hide_
 
     stylish = stylish.background_gradient(cmap=cmap, vmin=0, vmax=10)
 
-    ccols = [c for c in list(fcolumns) if c != "all" and sdata[c]["solution"] > 0]
+    ccols = [c for c in list(fcolumns) if c != "all" and sdata[c][core.tools.REF_USER] > 0]
     def interpret_corr(v):
         return core.Grade.apply_style(v, True)
     stylish = stylish.applymap(interpret_corr, subset=ccols)
