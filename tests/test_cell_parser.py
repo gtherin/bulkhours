@@ -8,6 +8,10 @@ def check_info(cmd, func_id="bulkhours.is_equal"):
     return info
 
 
+#def test_crunch_solution():
+#    local_data = CellParser.crunch_data(cinfo=self.cinfo, user=user, data=self.cell_source)
+
+
 def test_get_equals_student_evaluation_function():
     info = check_info(cmd:="""def student_evaluation_function():""", func_id="student_evaluation_function")
     info = check_info(cmd:="""def student_evaluation_function(debug=True, run=True):""", func_id="student_evaluation_function")

@@ -145,7 +145,7 @@ class LineParser:
 
     @classmethod
     def from_cell_id_user(cls, cell_id, user=tools.REF_USER):
-        cinfo = cls(f"%%evaluation_cell_id -i {cell_id} -u {user}", "\n", is_cell=True)
+        cinfo = cls(f"%%evaluation_cell_id -i {cell_id}", "\n", is_cell=True)
         cinfo.user = user
         return cinfo
 
