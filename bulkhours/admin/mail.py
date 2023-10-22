@@ -36,7 +36,6 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
     for idx, cell in enumerate(nb.cells):
         if cell["cell_type"] == "code":
             source = cell["source"].split("\n")
-            parsed_cell = core.cell_parser.CellParser.crunch_data(cfg, user="solution", data=cell["source"])
 
             # Change the initialization cell
             if "\ndatabase" in cell["source"]:
@@ -65,6 +64,7 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
                 else: # is_solution
                     to_pop.append(idx)
             elif source[0].startswith('%%evaluation_cell_id '):
+                parsed_cell = core.cell_parser.CellParser.crunch_data(cfg, user="solution", data=cell["source"])
                 cell["source"] = parsed_cell.get_reset() if reset else parsed_cell.get_solution()
                 #cell["source"] = cell_reset(cell["source"]) if reset else cell_solution(cell["source"])
                 if debug:
