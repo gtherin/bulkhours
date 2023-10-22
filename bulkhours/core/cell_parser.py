@@ -74,16 +74,21 @@ class CellParser:
     meta_modes = ["evaluation", "explanation", "hint"]
 
     @classmethod
-    def from_data(cls, data):
-
+    def from_data(cls, cinfo=None, user="", data=None):
+        if cinfo is None:
+            cinfo = LineParser.head_line_from_cell(data)
         return cls(cinfo=cinfo, parse_cell=True, cell_source=data, user=user, source="")
 
     @classmethod
-    def crunch_data(cls, cinfo, user, data=None):
+    def crunch_data(cls, cinfo=None, user="", data=None):
         if data is None:
             from . import firebase
 
             data = firebase.get_solution_from_corrector(cinfo.cell_id, corrector=user, cinfo=cinfo)
+        else:
+            if cinfo is None:
+                cinfo = LineParser.head_line_from_cell(data)
+
         return cls(cinfo=cinfo, parse_cell=True, cell_source=data, user=user, source="")
 
     def __init__(self, parse_cell=True, **kwargs):

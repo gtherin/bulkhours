@@ -30,6 +30,7 @@ from . import math  # noqa
 from .ecox.trading import *  # noqa
 
 from .core.logins import init_env  # noqa
+from .core.tools import dmd  # noqa
 
 if ipp := IPython.get_ipython():
     from .core.evaluation import Evaluation
@@ -37,8 +38,4 @@ if ipp := IPython.get_ipython():
 
     ipp.register_magics(CCPPlugin(ipp))
     ipp.register_magics(Evaluation(ipp))
-
-def dmd(*args, **kwargs):
-    import IPython
-    IPython.display.display(IPython.display.Markdown(*args, **kwargs))
 
