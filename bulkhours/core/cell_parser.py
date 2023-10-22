@@ -81,6 +81,9 @@ class CellParser:
             from . import firebase
 
             data = firebase.get_solution_from_corrector(cinfo.cell_id, corrector=user, cinfo=cinfo)
+        if user is not None:
+            cinfo.user = user
+
         return cls(cinfo, data)
 
     def __init__(self, cinfo, cell_source):
