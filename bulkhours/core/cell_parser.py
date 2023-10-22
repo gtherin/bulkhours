@@ -73,7 +73,31 @@ def cell_solution(source):
 class CellParser:
     meta_modes = ["evaluation", "explanation", "hint"]
 
-    def __init__(self, parse_cell=False, **kwargs):
+    @classmethod
+    def from_data(cls, data):
+
+        return cls(cinfo=cinfo, parse_cell=True, cell_source=data, user=user, source="")
+
+    @classmethod
+    def crunch_data(cls, cinfo, user, data=None):
+        if data is None:
+            from . import firebase
+
+            data = firebase.get_solution_from_corrector(cinfo.cell_id, corrector=user, cinfo=cinfo)
+        return cls(cinfo=cinfo, parse_cell=True, cell_source=data, user=user, source="")
+
+    def __init__(self, parse_cell=True, **kwargs):
+        # Reformat db info to cell format
+        if "cell_source" in kwargs and type(cell_source := kwargs["cell_source"]) == dict:
+            raw_code = [cell_source[e] for e in ["main_execution"] + CellParser.meta_modes if e in cell_source]
+            kwargs["cell_source"] = "\n".join(raw_code)
+
+        self.is_cell_source = "cell_source" in kwargs and type(kwargs["cell_source"]) == str
+        self.minfo = kwargs
+        if parse_cell and self.is_cell_source:
+            self.get_cell_decomposition()
+
+    def __init2__(self, **kwargs):
         # Reformat db info to cell format
         if "cell_source" in kwargs and type(cell_source := kwargs["cell_source"]) == dict:
             raw_code = [cell_source[e] for e in ["main_execution"] + CellParser.meta_modes if e in cell_source]
@@ -82,13 +106,16 @@ class CellParser:
         self.minfo = kwargs
 
         if "cell_id" not in self.minfo:
-            info = LineParser.head_line_from_cell(self.minfo["cell_source"])
+            if "cinfo" in kwargs:
+                info = kwargs["cinfo"]
+            else:
+                info = LineParser.head_line_from_cell(kwargs["cell_source"])
             self.minfo = vars(info)
             self.minfo["cinfo"] = info
             self.minfo.update(kwargs)
         self.minfo.update({k: v for k, v in kwargs.items() if "grade" in k})
 
-        if parse_cell and self.is_cell_source:
+        if self.is_cell_source:
             self.get_cell_decomposition()
 
     def store_info(self, key, val, ekey=None, verbose=False):
@@ -149,14 +176,6 @@ class CellParser:
             if l.split("(")[0] not in [f"student_{m}_function" for m in CellParser.meta_modes]:
                 ncode += l + "\n"
         return ncode
-
-    @classmethod
-    def crunch_data(cls, cinfo, user, data=None):
-        if data is None:
-            from . import firebase
-
-            data = firebase.get_solution_from_corrector(cinfo.cell_id, corrector=user, cinfo=cinfo)
-        return cls(cinfo=cinfo, parse_cell=True, cell_source=data, user=user, source="")
 
     def is_evaluation_available(self):
         return "evaluation" in self.minfo and self.minfo["evaluation"] != ""
