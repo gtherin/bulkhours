@@ -157,7 +157,7 @@ class WidgetBase:
         if user is None:
             user = self.cinfo.user
         local_data = CellParser.crunch_data(cinfo=self.cinfo, user=user, data=self.cell_source)
-        return firebase.send_answer_to_corrector(local_data.minfo["cinfo"], **local_data.get_dbcell_decomposition())
+        return firebase.send_answer_to_corrector(local_data.cinfo, **local_data.get_dbcell_decomposition())
 
     def osubmit(self, output):
         return self.submit(output, user="solution")
