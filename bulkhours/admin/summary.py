@@ -84,7 +84,7 @@ def summary(
             f"notes_{cfg.subject}_{cfg.virtual_room}_{cfg.notebook_id}.csv",
             data=data.to_csv(index=False),
             label="Export notes📝",
-            tooltip="""⚠️Seulement disponible à l'évaluateur⚠️.
+            tooltip="""⚠️Seulement disponible pour l'évaluateur⚠️.
 💾Envoi de la réponse (contenu de la cellule actuelle) comme solution officielle.""",
         )
 
