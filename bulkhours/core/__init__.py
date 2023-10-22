@@ -19,7 +19,6 @@ from .keywords import get_wordscloud  # noqa
 from .cell_parser import CellParser  # noqa
 from .line_parser import LineParser  # noqa
 
-
 def git_push(argv=sys.argv[1:]):
     def get_nversion(version):
         sversion = version.split(".")

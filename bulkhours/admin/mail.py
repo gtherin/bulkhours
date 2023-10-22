@@ -10,11 +10,15 @@ def get_drive_filename(filename):
     from xattr import xattr
     return f"https://colab.research.google.com/drive/" + (xattr(filename).get('user.drive.id').decode())
 
+def mount_gdrive():
+    from google.colab import drive
+
+    drive.mount('/content/gdrive/')
+
 def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
 
     import IPython
     from subprocess import getoutput
-    from google.colab import drive
     import nbformat
 
     # Get student reference notebook
@@ -25,8 +29,9 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
     IPython.display.display(
         IPython.display.Markdown(f"## Notebook generation '`{cfilename.split('/')[-1]}`'"))    
 
-    # Mount google drive
-    drive.mount('/content/gdrive/')
+    # Mount google drive if needed
+    if "/content/gdrive" in drive_rdir:
+        mount_gdrive()
 
     # Get token
     ntoken = cfg.tokens[cfg.virtual_room]
@@ -64,7 +69,7 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
                 else: # is_solution
                     to_pop.append(idx)
             elif source[0].startswith('%%evaluation_cell_id '):
-                parsed_cell = core.cell_parser.CellParser.crunch_data(cfg, user="solution", data=cell["source"])
+                parsed_cell = core.cell_parser.CellParser.crunch_data(user="solution", data=cell["source"])
                 cell["source"] = parsed_cell.get_reset() if reset else parsed_cell.get_solution()
                 #cell["source"] = cell_reset(cell["source"]) if reset else cell_solution(cell["source"])
                 if debug:
@@ -84,11 +89,15 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
 
     # Create the new notebook
     nbformat.write(nb, cfilename, version=nbformat.NO_CONVERT)
-    dfilename = get_drive_filename(cfilename)
+
+    # Get the filename if in google drive
+    dfilename = get_drive_filename(cfilename) if "/content/gdrive" in drive_rdir else cfilename
+
+    # Print info
     if "/local" in dfilename:
-        IPython.display.display(IPython.display.Markdown(f"""* 🌍 ❌<b><font color="red">File has not been yet mounted on the cloud. Please rerun🔄</font></b>❌\n* 📁 '`{cfilename}`'\n"""))
+        core.tools.dmd(f"""* 🌍 ❌<b><font color="red">File has not been yet mounted on the cloud. Please rerun🔄</font></b>❌\n* 📁 '`{cfilename}`'\n""")
     else:
-        IPython.display.display(IPython.display.Markdown(f"""* 🌍 {dfilename}\n* 📁 '`{cfilename}`'\n"""))    
+        core.tools.dmd(f"""* 🌍 {dfilename}\n* 📁 '`{cfilename}`'\n""")
     return dfilename
 
 

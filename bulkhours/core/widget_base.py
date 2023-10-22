@@ -14,7 +14,6 @@ from . import contexts
 
 
 def bot_evaluation(cell_id, user, student_data, teacher_data):
-    from .. import admin
     from . import gpt
 
     prompt = f"""{gpt.evaluation_instructions}
@@ -58,8 +57,8 @@ class WidgetBase:
         return "Nope"
 
     def display_ecorrection(self, output):
-        teacher_data = CellParser.crunch_data(self.cinfo, user="solution")
-        student_data = CellParser.crunch_data(self.cinfo, user=self.cinfo.user, data=self.cell_source)
+        teacher_data = CellParser.crunch_data(cinfo=self.cinfo, user="solution")
+        student_data = CellParser.crunch_data(cinfo=self.cinfo, user=self.cinfo.user, data=self.cell_source)
 
         if teacher_data.is_evaluation_available():
             score = equals.evaluate_student(student_data, teacher_data, raw=False, user=self.cinfo.user)
@@ -93,9 +92,9 @@ class WidgetBase:
             teacher_is_local, sort_by, verbose, duser = True, None, False, None
 
         if teacher_is_local:
-            teacher_data = CellParser.crunch_data(self.cinfo, user=self.cinfo.user, data=self.cell_source) # Get data from cell
+            teacher_data = CellParser.crunch_data(cinfo=self.cinfo, user=self.cinfo.user, data=self.cell_source) # Get data from cell
         else:
-            teacher_data = CellParser.crunch_data(self.cinfo, user="solution", data=None) # Get data from database
+            teacher_data = CellParser.crunch_data(cinfo=self.cinfo, user="solution", data=None) # Get data from database
 
         bot_correction = teacher_data.get_code("evaluation") == "" or "automatic_eval" in teacher_data.get_code("evaluation")
 
@@ -131,7 +130,7 @@ class WidgetBase:
                 continue
 
             # Get student data
-            student_data = CellParser(parse_cell=True, cell_source=answers[mail], user=mail, cell_id=self.cinfo.cell_id, cinfo=self.cinfo)
+            student_data = CellParser.crunch_data(cinfo=self.cinfo, data=answers[mail], user=mail)
 
             # Don't perform autocorrection if no data is available 
             if student_data.is_manual_note():
@@ -167,7 +166,7 @@ class WidgetBase:
             return
         if user is None:
             user = self.cinfo.user
-        local_data = CellParser.crunch_data(self.cinfo, user=user, data=self.cell_source)
+        local_data = CellParser.crunch_data(cinfo=self.cinfo, user=user, data=self.cell_source)
         return firebase.send_answer_to_corrector(local_data.minfo["cinfo"], **local_data.get_dbcell_decomposition())
 
     def osubmit(self, output):
@@ -251,6 +250,7 @@ class WidgetBase:
         return ask_chat_gpt(question=self.gtext.value, is_code=True)
 
     def evaluate_cell(self):
+    
         bbox = self.init_widgets()
 
         self.display_widgets(bbox, self.abuttons)

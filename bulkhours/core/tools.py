@@ -88,6 +88,13 @@ def code(codebody, raw=False, display=False, style=None):
             return w
 
 
+def dmd(*args, **kwargs):
+    import IPython
+    if IPython.get_ipython():
+        IPython.display.display(IPython.display.Markdown(*args, **kwargs))
+    else:
+        print(args[0])
+
 def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="black", icon="📚"):
     if header:
         html(header + "" + icon, size="4", color=hc, display=True)

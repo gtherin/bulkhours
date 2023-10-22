@@ -27,9 +27,7 @@ print("BK ROCKS")  # BKRESET.REPLACE:print("...COMMENT...")
 """
 
 def test_cell_reset():
-
-    cfg = bulkhours.core.tools.get_config(is_new_format=True)
-    teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(cfg, user="solution", data=cell_content)
+    teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(user="solution", data=cell_content)
     code = teacher_data.get_reset()
     print(code)
 
@@ -40,9 +38,7 @@ def test_cell_reset():
         raise Exception("Should not be here")
 
 def test_cell_solution():
-
-    cfg = bulkhours.core.tools.get_config(is_new_format=True)
-    teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(cfg, user="solution", data=cell_content)
+    teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(user="solution", data=cell_content)
     code = teacher_data.get_solution()
     print(code)
 
