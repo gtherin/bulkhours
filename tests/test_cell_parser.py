@@ -9,7 +9,6 @@ def check_info(cmd, func_id="bulkhours.is_equal"):
 
 
 def test_get_equals_student_evaluation_function():
-    return
     info = check_info(cmd:="""def student_evaluation_function():""", func_id="student_evaluation_function")
     info = check_info(cmd:="""def student_evaluation_function(debug=True, run=True):""", func_id="student_evaluation_function")
 
@@ -47,21 +46,15 @@ def student_evaluation_function():
 # 5. Comment
 print("... COMMENT...")  # BKRESET.REPLACE:print("... COMMENT...")
 """
-    # Remove xtra functions
 
-    #cfg = bulkhours.core.tools.get_config(is_new_format=True)
     teacher_data = bulkhours.core.cell_parser.CellParser(parse_cell=True, cell_source=cell_content, user="solution")
-    return
     print(teacher_data.minfo.keys())
-    print(teacher_data.minfo["main_execution"])
     print(teacher_data.get_solution())
     print(teacher_data.get_reset())
 
 
 
 def test_get_func_args():
-
-    return
 
     info = check_info(cmd:="""return bulkhours.is_equal(np.array([1, 2, 3]))""")
     if info["data_ref"] != info["data_test"].replace("student.", "teacher."):

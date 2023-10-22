@@ -86,7 +86,7 @@ class CellParser:
             self.minfo = vars(info)
             self.minfo["cinfo"] = info
             self.minfo.update(kwargs)
-        self.minfo.update({k: v for k, v in cell_source.items() if "grade" in k})
+        self.minfo.update({k: v for k, v in kwargs.items() if "grade" in k})
 
         if parse_cell and self.is_cell_source:
             self.get_cell_decomposition()
