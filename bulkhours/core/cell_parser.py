@@ -1,5 +1,6 @@
-import re
 from .line_parser import LineParser
+from .grade import Grade
+from . import tools
 
 
 def cell_reset(source):
@@ -74,25 +75,16 @@ class CellParser:
     meta_modes = ["evaluation", "explanation", "hint"]
 
     @classmethod
-    def crunch_data(cls, cinfo=None, user="", data=None):
+    def crunch_data(cls, cinfo=None, user=None, data=None):
+
         if data is None:
             from . import firebase
 
             data = firebase.get_solution_from_corrector(cinfo.cell_id, corrector=user, cinfo=cinfo)
+        return cls(cinfo, data)
 
-        return cls(cinfo=cinfo, parse_cell=True, cell_source=data, user=user, source="")
-
-    def __init__(self, parse_cell=True, **kwargs):
-        # Reformat db info to cell format
-        if "cell_source" in kwargs and type(cell_source := kwargs["cell_source"]) == dict:
-            raw_code = [cell_source[e] for e in ["main_execution"] + CellParser.meta_modes if e in cell_source]
-            kwargs["cell_source"] = "\n".join(raw_code)
-
-        self.is_cell_source = "cell_source" in kwargs and type(kwargs["cell_source"]) == str
-        self.minfo = kwargs
-
-        if parse_cell and self.is_cell_source:
-            self.get_cell_decomposition()
+    def __init__(self, cinfo, cell_source):
+        self.parse_cell(cinfo, cell_source)
 
     def store_info(self, key, val, ekey=None, verbose=False):
         if key not in self.minfo:
@@ -112,11 +104,11 @@ class CellParser:
 
     def get_code(self, c):
         # TODO: Fix this hack. Need to be run to avoid problems, if not launched, solution=user
-        self.get_cell_decomposition()
+        #self.parse_cell(self.cinfo, self.cell_source)
         return self.minfo[c]["code"] if c in self.minfo and "code" in self.minfo[c] else ""
 
     def is_manual_note(self):
-        return "note_src" in self.minfo and self.minfo["note_src"] in "manual"
+        return "grade_man" in self.minfo
         
     @property
     def max_score(self):
@@ -127,7 +119,7 @@ class CellParser:
         )
 
     def is_cell_type(self):
-        return self.minfo["cinfo"] in ["bkcode", "bkscript"]
+        return self.cinfo.type in ["bkcode", "bkscript"]
 
     @staticmethod
     def c2python(l):
@@ -156,6 +148,9 @@ class CellParser:
     def is_evaluation_available(self):
         return "evaluation" in self.minfo and self.minfo["evaluation"] != ""
 
+    def get_grade(self):
+        return Grade.get(self.minfo)
+
     def do_run_evaluation(self):
         return self.is_evaluation_available() and (
             "run=true" in self.get_code("evaluation").lower()
@@ -163,7 +158,7 @@ class CellParser:
         )
 
     def is_evaluation_visible(self):
-        if self.minfo["cell_source"] is None:
+        if self.cell_source is None:
             return False
         return "visible" not in self.minfo or not self.minfo["visible"]
 
@@ -192,7 +187,6 @@ class CellParser:
             self.minfo[tmode]["emp_max_score"] = 0
 
     def block_equal_line(self, mode, l):
-        indent = " " * (re.sub(r"^([\s]*)[\s]+.*$", r"\g<1>", l).count(" ") + 1)
         args = LineParser.get_func_args(l, func_id="bulkhours.is_equal")
 
         if "data_ref" not in args:
@@ -209,10 +203,7 @@ class CellParser:
         func = "bulkhours.is_equal"
         l2 = l[: l.rfind(func) + len(func)] + "(%s)\n" % (", ".join([f"{k}={v}" for k, v in args.items()]),)
         # indent = " " * (re.sub(r"^([\s]*)[\s]+.*$", r"\g<1>", l).count(" ") + 1)
-        # if not do_debug:
-        #    l = f"{indent}try:\n    {l}\n{indent}except:\n{indent}    print('FINAL_SCORE={min_score}/{max_score}')\n"
-        # print(l)
-        # print(l2)
+        # l = f"{indent}try:\n    {l}\n{indent}except:\n{indent}    print('FINAL_SCORE={min_score}/{max_score}')\n"
 
         return l2
 
@@ -224,24 +215,38 @@ class CellParser:
             "evaluation": self.get_code("evaluation"),
             "answer": self.minfo["answer"],
         }
-        info["atype"] = self.minfo["cinfo"].type
+        info["atype"] = self.cinfo.type
         info["visible"] = True
-        info["user"] = self.minfo["user"]
+        info["user"] = self.cinfo.user
 
         return info
 
-    def get_cell_decomposition(self):
-        cell_source, cell_id = self.minfo["cell_source"], self.minfo["cinfo"].cell_id
+    def parse_cell(self, cinfo, cell_source):
+        self.cinfo, self.cell_source = cinfo, cell_source
+
+        # If cell_source is already a dictionary, no need to parse anymore
+        if type(cell_source) == dict:
+            self.minfo = cell_source
+            self.raw_exec_code = self.minfo["main_execution"]
+            self.raw_code = "\n".join([cell_source[e] for e in ["main_execution"] + CellParser.meta_modes if e in cell_source])
+            self.cinfo = self.minfo["cinfo"] if "cinfo" in self.minfo else cinfo
+            return
+        # Otherwise, parse
+
+        # Parse to create a dictionary
+        self.raw_code = cell_source
+        self.minfo = {}
+
+        # Init minfo code blocks
         for tmode in ["main_execution"] + CellParser.meta_modes:
             if tmode in self.minfo and "code" in self.minfo[tmode]:
                 self.minfo[tmode]["code"] = ""
 
+        # By default, the parsed code goes to the 'main_execution' block of code
         mode = "main_execution"
         self.store_info(mode, "", ekey="code", verbose=False)
-        if cell_source is None:
-            return
 
-        for l in cell_source.splitlines():
+        for l in self.raw_code.splitlines():
             l = CellParser.c2python(l)
 
             for tmode in CellParser.meta_modes:
@@ -259,23 +264,22 @@ class CellParser:
                     l = ""
 
             if "%evaluation_cell_id" == l.replace(" ", "").split("-")[0]:
-                info = LineParser(l, cell_source, is_cell=False)
-                self.minfo[cell_id] = vars(info)
+                info = LineParser(l, self.raw_code, is_cell=False)
+                self.minfo[info.cell_id] = vars(info)
 
             if ".is_equal" in l:
                 l = self.block_equal_line(mode, l)
 
             self.store_info(mode, l + "\n", ekey="code", verbose=False)
 
+        self.raw_exec_code = self.minfo["main_execution"]["code"]
+
         if self.is_cell_type():
-            self.minfo["answer"] = cell_source
-            self.raw_exec_code = cell_source
+            self.minfo["answer"] = self.get_solution()
         else:
             self.raw_exec_code = self.minfo["main_execution"]["code"]
-            if "user" in self.minfo and self.minfo["user"] == "solution":
+            if "user" in self.minfo and self.minfo["user"] == tools.REF_USER:
                 self.minfo["main_execution"]["code"] = self.get_solution()
-
-            self.minfo["answer"] = self.minfo["main_execution"]["code"]
 
     def get_solution(self):
         return cell_solution(self.raw_exec_code)

@@ -13,27 +13,17 @@ from . import equals
 from . import contexts
 
 
-def bot_evaluation(cell_id, user, student_data, teacher_data):
+def bot_evaluation(student_data, teacher_data):
     from . import gpt
 
-    prompt = f"""{gpt.evaluation_instructions}
-Initial solution:\n<start>\n{teacher_data.get_reset()}\n</start>
-Final solution:\n<end>\n{teacher_data.get_solution()}\n</end>
-Student solution:\n<answer>\n{student_data.get_solution()}\n</answer>\n"""
-
-    response = gpt.ask_chat_gpt(question=prompt, model="gpt-3.5-turbo", temperature=0., raw=True, openai_token=gpt.evaluation_openai_token)
-
-    try:
-        grade = response.split("Grade: ")[1]
-        if "/" in grade:
-            grade = grade.split("/")[0]
-        grade = float(grade)
-        IPython.display.display(IPython.display.Markdown(f"* **{user}**: {response}"))
-        
+    if gpt.evaluation_instructions is not None:
+        print("")
+        grade, _ = gpt.get_grade(student_data, teacher_data)
         return grade
-    except:
-        IPython.display.display(IPython.display.Markdown(f"* **{user}**:\n #### Grade was not properly extracted from response:\n{response}"))
-        return np.nan
+
+    print("🚧Need to implement evaluation_instructions")
+    return np.nan
+
 
 class WidgetBase:
     widget_id = "base"
@@ -132,13 +122,13 @@ class WidgetBase:
             # Get student data
             student_data = CellParser.crunch_data(cinfo=self.cinfo, data=answers[mail], user=mail)
 
-            # Don't perform autocorrection if no data is available 
+            # Don't manual data is available 
             if student_data.is_manual_note():
-                print(f"\x1b[35m\x1b[1m({student_data.minfo['note']} [MAN]), \x1b[m", end="")
+                print(f"\x1b[35m\x1b[1m({student_data.minfo['grade_man']} [MAN]), \x1b[m", end="")
                 continue
 
             if bot_correction:
-                score = bot_evaluation(self.cinfo.cell_id, mail, student_data, teacher_data)
+                score = bot_evaluation(student_data, teacher_data)
             else:
                 score = equals.evaluate_student(student_data, teacher_data, raw=True, user=auser, verbose=verbose)
                 print(f"\x1b[35m\x1b[1m({score}), \x1b[m", end="")
