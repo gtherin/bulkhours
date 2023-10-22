@@ -47,7 +47,7 @@ def student_evaluation_function():
 print("... COMMENT...")  # BKRESET.REPLACE:print("... COMMENT...")
 """
 
-    cinfo = bulkhours.core.LineParser.from_cell_id("synthetic")
+    cinfo = bulkhours.core.LineParser.from_cell_id_user("synthetic", "solution")
     teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(cinfo=cinfo, data=cell_content, user="solution")
     print(teacher_data.minfo.keys())
     print(teacher_data.get_solution())

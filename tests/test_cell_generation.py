@@ -27,7 +27,7 @@ print("BK ROCKS")  # BKRESET.REPLACE:print("...COMMENT...")
 """
 
 def test_cell_reset():
-    cinfo = bulkhours.core.LineParser.from_cell_id("synthetic")
+    cinfo = bulkhours.core.LineParser.from_cell_id_user("synthetic", "solution")
     teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(cinfo=cinfo, user="solution", data=cell_content)
     code = teacher_data.get_reset()
     print(code)
@@ -39,7 +39,7 @@ def test_cell_reset():
         raise Exception("Should not be here")
 
 def test_cell_solution():
-    cinfo = bulkhours.core.LineParser.from_cell_id("synthetic")
+    cinfo = bulkhours.core.LineParser.from_cell_id_user("synthetic", "solution")
     teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(cinfo=cinfo, user="solution", data=cell_content)
     code = teacher_data.get_solution()
     print(code)

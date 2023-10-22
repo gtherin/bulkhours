@@ -8,7 +8,6 @@ import IPython
 from . import tools
 from .cache_manager import CacheManager
 
-
 def format_opt(label, raw2norm=True):
     rr = {"-": "__minus__", "@": "__at__", " ": "__space__", "/": "__slash__"}
     if len(label) > 0 and label[0] != "-":
@@ -110,17 +109,16 @@ Il permet de faire correspondre la cellule avec sa solution"""
 
         admin.add_argument("-u", "--user", default=None, help=st("Identifiant de l'utilisateur soumettant la réponse"))
         admin.add_argument("-a", "--answer", default="", help=st("Fonctionnalité beta pour un serveur jupyter local"))
-    meta_options = parser.add_argument_group("Options méta")
 
+    meta_options = parser.add_argument_group("Options méta")
     meta_options.add_argument("-h", "--help", dest="help", action="store_true", help=st("Affiche ce texte"))
-    meta_options.add_argument(
-        "-p", "--puppet", default="", help=st("Fonctionnalité beta pour un serveur jupyter local")
-    )
+    meta_options.add_argument("-p", "--puppet", default="", help=st("Fonctionnalité beta pour un serveur jupyter local"))
 
     return parser
 
 
 class LineParser:
+
     def __repr__(self):
         info = [
             f"{v}={getattr(self, v)}"
@@ -146,8 +144,10 @@ class LineParser:
         return ", ".join(info)
 
     @classmethod
-    def from_cell_id(cls, cell_id):
-        return cls("%%evaluation_cell_id -i " + cell_id, "\n", is_cell=True)
+    def from_cell_id_user(cls, cell_id, user=tools.REF_USER):
+        cinfo = cls(f"%%evaluation_cell_id -i {cell_id} -u {user}", "\n", is_cell=True)
+        cinfo.user = user
+        return cinfo
 
     def __init__(self, line, cell_source, is_cell=True):
 
