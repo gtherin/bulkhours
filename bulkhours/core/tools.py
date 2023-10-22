@@ -5,6 +5,7 @@ import IPython
 from argparse import Namespace
 from .config import Config
 
+REF_USER = "solution"
 
 def get_platform():
     if os.path.exists("/content"):
