@@ -25,7 +25,7 @@ all_labels = {
     "autocorrect_f_en": "Solution was published",
     "autocorrect_f_fr": "Solution publiée",
     # "autocorrect_d_en": """Envoi de la réponse (contenu de la cellule actuelle) sur le serveur de correction.\nLa réponse pourra être utilisée pour evaluation""",
-    "autocorrect_d_fr": """⚠️Seulement disponible à l'évaluateur⚠️.
+    "autocorrect_d_fr": """⚠️Seulement disponible pour l'évaluateur⚠️.
 📝Utilise le code de la fonction 'student_evaluation_function' pour évaluer tous les étudiants de la classe virtuelle.
 """,
     "solution_o_en": "Publish solution     ",
@@ -33,7 +33,7 @@ all_labels = {
     "solution_f_en": "Solution was published",
     "solution_f_fr": "Solution publiée",
     # "solution_d_en": """Envoi de la réponse (contenu de la cellule actuelle) sur le serveur de correction.\nLa réponse pourra être utilisée pour evaluation""",
-    "solution_d_fr": """⚠️Seulement disponible à l'évaluateur⚠️.
+    "solution_d_fr": """⚠️Seulement disponible pour l'évaluateur⚠️.
 📤Envoi de la réponse (contenu de la cellule actuelle) comme solution officielle.
 💡Si la fonction 'student_evaluation_function' est disponible, elle pourra être utilisée pour évaluer les étudiants.
 """,

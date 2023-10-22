@@ -70,7 +70,7 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
                     to_pop.append(idx)
             elif source[0].startswith('%%evaluation_cell_id '):
                 cinfo = core.LineParser(source[0], cell["source"])
-                parsed_cell = core.cell_parser.CellParser.crunch_data(cinfo=cinfo, user="solution", data=cell["source"])
+                parsed_cell = core.cell_parser.CellParser.crunch_data(cinfo=cinfo, user=core.tools.REF_USER, data=cell["source"])
                 cell["source"] = parsed_cell.get_reset() if reset else parsed_cell.get_solution()
                 #cell["source"] = cell_reset(cell["source"]) if reset else cell_solution(cell["source"])
                 if debug:
