@@ -38,6 +38,8 @@ class Invoice:
         Invoice.entities = data.get_data(einfo[user]["entities"], credit=False)
         Invoice.einfo = einfo[user]
 
+        Invoice.accounting["invoice_id"] = Invoice.accounting["invoice_id"].astype(str)
+
         # Only keep invoice_ids with existing invoices
         Invoice.accounting = Invoice.accounting[Invoice.accounting["invoice_id"].str.len() > 2]
 
@@ -99,8 +101,8 @@ class Invoice:
             if type(tr["qty"]) == int:
                 tr["rhours"] = tr["qty"]
             else:
-                tr["rhours"] = float(tr["qty"].replace(" ", "").replace(",", "."))
-            tr["rrate"] = float(tr["rate_ht"].replace(" ", "").replace(",", "."))
+                tr["rhours"] = float(tr["qty"].replace("\u202f", "").replace(" ", "").replace(",", "."))
+            tr["rrate"] = float(tr["rate_ht"].replace("\u202f", "").replace(" ", "").replace(",", "."))
             tr["total"] = format_price(rtotal := tr["rhours"] * tr["rrate"])
             tr["rate"] = format_price(tr["rrate"])
             tr["hours"] = format_num(tr["rhours"])
