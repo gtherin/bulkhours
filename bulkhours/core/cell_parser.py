@@ -74,20 +74,11 @@ class CellParser:
     meta_modes = ["evaluation", "explanation", "hint"]
 
     @classmethod
-    def from_data(cls, cinfo=None, user="", data=None):
-        if cinfo is None:
-            cinfo = LineParser.head_line_from_cell(data)
-        return cls(cinfo=cinfo, parse_cell=True, cell_source=data, user=user, source="")
-
-    @classmethod
     def crunch_data(cls, cinfo=None, user="", data=None):
         if data is None:
             from . import firebase
 
             data = firebase.get_solution_from_corrector(cinfo.cell_id, corrector=user, cinfo=cinfo)
-        else:
-            if cinfo is None:
-                cinfo = LineParser.head_line_from_cell(data)
 
         return cls(cinfo=cinfo, parse_cell=True, cell_source=data, user=user, source="")
 
@@ -99,28 +90,8 @@ class CellParser:
 
         self.is_cell_source = "cell_source" in kwargs and type(kwargs["cell_source"]) == str
         self.minfo = kwargs
+
         if parse_cell and self.is_cell_source:
-            self.get_cell_decomposition()
-
-    def __init2__(self, **kwargs):
-        # Reformat db info to cell format
-        if "cell_source" in kwargs and type(cell_source := kwargs["cell_source"]) == dict:
-            raw_code = [cell_source[e] for e in ["main_execution"] + CellParser.meta_modes if e in cell_source]
-            kwargs["cell_source"] = "\n".join(raw_code)        
-        self.is_cell_source = "cell_source" in kwargs and type(kwargs["cell_source"]) == str
-        self.minfo = kwargs
-
-        if "cell_id" not in self.minfo:
-            if "cinfo" in kwargs:
-                info = kwargs["cinfo"]
-            else:
-                info = LineParser.head_line_from_cell(kwargs["cell_source"])
-            self.minfo = vars(info)
-            self.minfo["cinfo"] = info
-            self.minfo.update(kwargs)
-        self.minfo.update({k: v for k, v in kwargs.items() if "grade" in k})
-
-        if self.is_cell_source:
             self.get_cell_decomposition()
 
     def store_info(self, key, val, ekey=None, verbose=False):

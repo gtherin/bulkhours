@@ -23,6 +23,6 @@ Example:
 """
     # Remove xtra functions
 
-    head_line = bulkhours.core.LineParser.head_line_from_cell(cell_content)
-    print(head_line.cell_id)
+    cinfo = bulkhours.core.LineParser(cell_content.split("\n")[0], cell_content)
+    print(cinfo.cell_id)
 
