@@ -1,3 +1,4 @@
+import re
 import argparse
 import json
 import os
@@ -17,6 +18,15 @@ def format_opt(label, raw2norm=True):
 
 
 def format_opts(argv):
+    """This function merges arguments together
+Example:
+-i cell_d -c Salut les gars becomes
+['-i', 'cell_id', '-c', 'Salut__space__les__space__gars']
+instead of
+['-i', 'cell_id', '-c', 'Salut', 'les', 'gars']
+With format_func, it will become:
+['-i', 'cell_id', '-c', 'Salut les gars']
+    """
     nargv = []
     for a in argv:
         if a[0] != "-" and nargv[-1][0] != "-":
@@ -135,45 +145,54 @@ class LineParser:
         ]
         return ", ".join(info)
 
-    def __init__(self, line, cell_source, is_cell=True):
-        if "evaluation_cell_id " in line:
-            line = line.split("evaluation_cell_id ")[-1]
+    @classmethod
+    def head_line_from_cell(cls, cell_source):
+        line = cell_source.split("\n")[0]
+        return cls(line, cell_source, is_cell=True)
 
+    def __init__(self, line, cell_source, is_cell=True):
+
+        # Get the options (The first "-" found") 
+        opts_line = line[line.find("-"):]
+
+        # get options
         self.line, cell = line, cell_source
         cfg = tools.get_config(is_new_format=True)
-        config = tools.get_config()
         self.is_admin = tools.is_admin(cfg=cfg)
 
-        if line != "":
+        if opts_line != "":
             parser = get_argparser(self.is_admin)
-            pdata = parser.parse_args(format_opts(line.split()))
+            pdata = parser.parse_args(format_opts(opts_line.split()))
             if pdata.help:
                 parser.print_help()
 
             for k, v in vars(pdata).items():
                 setattr(self, k, format_opt(v, raw2norm=False) if v and v is not None else v)
+        else:
+            #print("Line is empty")
+            return
 
         available_widgets = get_available_widgets()
         if self.is_admin:
             ewidgets = "oa"# if "def student_evaluation_function" in cell else "o"
             available_widgets = {k: v + ewidgets for k, v in available_widgets.items()}
 
-        if hasattr(self, "widgets") and self.widgets is None:
+        if not hasattr(self, "widgets") or self.widgets is None:
             self.widgets = (
                 available_widgets[self.type] if self.type in available_widgets else available_widgets["default"]
             )
 
         for p in ["language", "restricted", "chatgpt", "norm20", "subject"]:
-            if p in config["global"]:
-                setattr(self, p, config["global"][p])
+            if p in cfg.g:
+                setattr(self, p, cfg.g[p])
 
         if not hasattr(self, "user") or self.user is None:
-            self.user = config["email"]
+            self.user = cfg.email
 
         for p in ["notebook_id", "virtual_room"]:
-            setattr(self, p, config[p])
+            setattr(self, p, cfg[p])
 
-        mode = "production" if "mode" not in config else config["mode"]
+        mode = "production" if "mode" not in cfg else cfg["mode"]
         if mode == "passive":
             self.widgets = self.widgets.replace("s", "")
         if mode == "production" and self.is_admin:
@@ -186,7 +205,8 @@ class LineParser:
             o = f"{a}.{self.cell_id}"
             if o not in CacheManager.objects:
                 CacheManager.objects[o] = dict()
-                IPython.get_ipython().run_cell(f"from argparse import Namespace\n{o} = Namespace()")
+                if IPython.get_ipython():
+                    IPython.get_ipython().run_cell(f"from argparse import Namespace\n{o} = Namespace()")
 
             for l in cell_source.splitlines():
                 if o == l.replace(" ", "")[: len(o)]:
@@ -206,3 +226,42 @@ class LineParser:
         if is_cell:
             CacheManager.objects["current_cell"] = self.cell_id
             os.environ["BLK_CELL_ID"] = self.cell_id
+
+    @staticmethod
+    def get_func_args(code, func_id="bulkhours.is_equal"):
+        args = code.replace(" ", "").split(func_id)
+        if len(args) == 1:
+            return {}
+
+        args = re.split(r",\s*(?![^()]*\))", args[1][1 : args[1].rfind(")")])
+
+        if func_id == "bulkhours.is_equal":
+            kwargs = ["norm", "error", "policy", "min_score", "max_score", "cmax_score"]
+        else:
+            kwargs = ["debug", "run", "min_score", "max_score"]
+
+        fargs = {}
+        for i, a in enumerate(args):
+            sa = a.split("=")
+
+            if func_id == "bulkhours.is_equal" and i == 0:
+                if sa[0].replace(" ", "") == "data_test" and len(sa) > 1:
+                    fargs["data_test"] = "=".join(sa[1:])
+                else:
+                    fargs["data_test"] = a
+            elif func_id == "bulkhours.is_equal" and i == 1:
+                if sa[0].replace(" ", "") == "data_ref":
+                    fargs["data_ref"] = "=".join(sa[1:])
+                elif sa[0].replace(" ", "") in kwargs:
+                    fargs[sa[0]] = "=".join(sa[1:])
+                else:
+                    fargs["data_ref"] = a
+            elif "=" in a:
+                fargs[sa[0]] = "=".join(sa[1:])
+
+        if func_id == "bulkhours.is_equal" and "data_ref" not in fargs:
+            fargs["data_ref"] = fargs["data_test"].replace("student.", "teacher.")
+
+        return fargs
+
+

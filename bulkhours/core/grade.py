@@ -16,6 +16,8 @@ class Grade:
 
     @staticmethod
     def src(answer):
+        if type(answer) != dict:
+            answer = answer.minfo
         for g in Grade.grad_names:
             if g in answer:
                 return g
@@ -23,6 +25,9 @@ class Grade:
 
     @staticmethod
     def get(answer):
+        if type(answer) != dict:
+            answer = answer.minfo
+
         src = Grade.src(answer)
         if src is None:
             return Grade.DEFAULT_GRADE

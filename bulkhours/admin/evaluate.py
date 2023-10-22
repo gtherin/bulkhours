@@ -22,24 +22,21 @@ def show_answer(out, cuser, answer, style=None):
     with out:
         # Show code
         core.tools.html(f"Code ({cuser})", size="4", color=color, use_ipywidgets=True, display=True)
-        if "answer" in answer:
-            core.tools.code(answer["answer"], display=True, style=style)  # , raw=show_raw_code
+        core.tools.code(answer, display=True, style=style)  # , raw=show_raw_code
 
         # Execute code
         core.tools.html(f"Execution ({cuser})💻", size="4", color=color, use_ipywidgets=True, display=True)
-        if "answer" in answer:
-            core.tools.eval_code(answer["answer"])
+        core.tools.eval_code(answer)
 
 
-def create_evaluation_buttonanswer(cell_id, cuser, answer, solution):
-    config = core.tools.get_config()
+def create_evaluation_buttonanswer(cell_id, cuser, cfg, student_data, teacher_data):
 
-    language = config["global"]["language"]
+    language = cfg.g["language"]
     label = core.tools.html(get_alias_name(cuser), size="6", color="#4F4F4F", use_ipywidgets=True)
     abuttons = core.buttons.get_buttons_list(label="", language=language, user="solution")
     output = ipywidgets.Output()
 
-    grade = core.Grade.get(answer)
+    grade = core.Grade.get(student_data)
 
     widget = ipywidgets.FloatSlider(
         min=0,
@@ -58,60 +55,16 @@ def create_evaluation_buttonanswer(cell_id, cuser, answer, solution):
             output.clear_output()
             answers.update_grade(cell_id, cuser, widget.value, name="grade_man")
 
-    if "main_execution" in answer and "main_execution" in answer and core.gpt.evaluation_instructions is not None:
+    if "main_execution" in student_data.minfo and "main_execution" in teacher_data.minfo and core.gpt.evaluation_instructions is not None:
         abuttons["a"].b.description = "🤖Correct student"
 
     def autocorrect(data, output):
 
-        reset = """# Create a 2 axes figure
-fig, axes = plt.subplots(1, 2, figsize=(15, 4))
-sns.set_palette("hls")
-
-# 1. Implement a normal(/gaussian) function
-def gaussian(x: np.ndarray, mu: float, sig: float) -> np.ndarray:
-    return x  # ...
-
-ax = axes[0]
-ax.set_title("Normal distributions")
-x = np.linspace(-10, 10, 200)
-# 2. Plot the previous function with the previous x
-# ...
-# 3. Plot the scipy norm pdf function (with mu=2 and sigma=3).
-# ...
-# 4. Generate 1000 random events according with the previous distribution
-# Plot the histogram
-# ...
-ax.legend()
-
-ax = axes[1]
-for k in np.geomspace(2, 128, num=7, dtype=int):
-    # 5. Plot the student pdf function for a 95%CI (with k as parameter).
-    # ...
-
-    # 6. Calculate the Shapiro and Kolmogov tests pvalues for 5000 random events generated with the previous distribution
-    shapiro_pvalue = 0  # ...
-    kolmogorov_pvalue = 0  # ...
-
-    # 7. Get the skew estimator and calculate it with the Pearson estimator (with a norm.cdf).
-    skew, sperson = 0, 0  # ...
-
-    print(f'k={k}, skew={skew:.2f}, skew(Pearson)={sperson:.2f}, pval(Shapiro)={shapiro_pvalue:.2f}, pval(Kolmogorov)={kolmogorov_pvalue:.2f}')
-
-ax.set_xlim([-2, 2])
-ax.set_xlabel(r"$x$")
-ax.set_ylabel(r"$P_{Student}(x)$")
-ax.set_title(r"$Student$ Probability density")
-ax.legend()
-
-# 8. Comment the points 6 and 7
-print("... MY COMMENT")
-
-"""
-        if "main_execution" in answer and "main_execution" in answer and core.gpt.evaluation_instructions is not None:
+        if "main_execution" in student_data.minfo and "main_execution" in teacher_data.minfo and core.gpt.evaluation_instructions is not None:
             prompt = f"""{core.gpt.evaluation_instructions}
-Initial solution:\n<start>{reset}</start>
-Final solution:\n<end>{solution['main_execution']}<end>
-Student solution:\n<answer>{answer['main_execution']}</answer>\n"""                
+Initial solution:\n<start>\n{teacher_data.get_reset()}\n</start>
+Final solution:\n<end>\n{teacher_data.get_solution()}\n</end>
+Student solution:\n<answer>\n{student_data.get_solution()}\n</answer>\n"""
             response = core.ask_chat_gpt(question=prompt, model="gpt-3.5-turbo", temperature=0., raw=True, openai_token=core.gpt.evaluation_openai_token)
 
             try:
@@ -140,36 +93,40 @@ Student solution:\n<answer>{answer['main_execution']}</answer>\n"""
 
 def evaluate(cell_id, user="NEXT", show_correction=False, style=None, **kwargs):
     cell_answers = answers.get_answers(cell_id, **kwargs)
-    config = core.tools.get_config(is_new_format=True)
+    cfg = core.tools.get_config(is_new_format=True)
 
     users = tools.get_users_list(no_admin=False)
     ausers = users.set_index("auser")["mail"].to_dict()
 
+    if "solution" in cell_answers:
+        teacher_data = core.cell_parser.CellParser(parse_cell=True, cell_source=cell_answers["solution"], user="solution", cell_id=cell_id, cinfo=cfg)
+
     nuser, did_find_answer = user, False
     for cuser, answer in cell_answers.items():
 
-        grade = core.Grade.get(answer)
-
-        if (user == "NEXT" and grade == core.Grade.DEFAULT_GRADE) or user == cuser or (user in ausers and ausers[user] == cuser):
+        if (user == "NEXT" and core.Grade.DEFAULT_GRADE == core.Grade.get(answer)) or user == cuser or (user in ausers and ausers[user] == cuser):
             nuser, did_find_answer = cuser, True
+
+            student_data = core.cell_parser.CellParser(parse_cell=True, cell_source=answer, user=cuser, cell_id=cell_id, cinfo=cfg)
             if show_correction and "solution" in cell_answers:
                 out1 = ipywidgets.Output(layout={"width": "50%"})
                 out2 = ipywidgets.Output(layout={"width": "50%"})
                 tabs = ipywidgets.HBox([out1, out2])
 
-                show_answer(out1, cuser, answer, style=style)
+                show_answer(out1, cuser, student_data.get_solution(), style=style)
                 # bulkhours.c.set_style(out2, "sol_background")
-                show_answer(out2, "solution", cell_answers["solution"], style=style)
+                show_answer(out2, "solution", teacher_data.get_solution(), style=style)
 
             else:
                 tabs = ipywidgets.Output(layout={"width": "100%"})
-                show_answer(tabs, cuser, answer, style=style)
+                show_answer(tabs, cuser, student_data.get_solution(), style=style)
 
             out = ipywidgets.Output(layout={"border": "1px solid #CFCFCF", "width": "100%"})
             # bulkhours.c.set_style(out, "cell_background")
-            with out:
-                solution = cell_answers["solution"] if "solution" in cell_answers else None
-                create_evaluation_buttonanswer(cell_id, cuser, answer, solution)
+
+            if "solution" in cell_answers:
+                with out:
+                    create_evaluation_buttonanswer(cell_id, cuser, cfg, student_data, teacher_data)
 
             IPython.display.display(ipywidgets.VBox([tabs, out]))
             return
@@ -177,7 +134,7 @@ def evaluate(cell_id, user="NEXT", show_correction=False, style=None, **kwargs):
     if not did_find_answer:
         core.tools.html(
             f"Pas de réponse disponible pour {nuser}"
-            if config.language == "fr"
+            if cfg.language == "fr"
             else f"{nuser} answer is not available",
             use_ipywidgets=True,
         )

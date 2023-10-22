@@ -13,60 +13,15 @@ from . import equals
 from . import contexts
 
 
-
-reset = """# Create a 2 axes figure
-fig, axes = plt.subplots(1, 2, figsize=(15, 4))
-sns.set_palette("hls")
-
-# 1. Implement a normal(/gaussian) function
-def gaussian(x: np.ndarray, mu: float, sig: float) -> np.ndarray:
-    return x  # ...
-
-ax = axes[0]
-ax.set_title("Normal distributions")
-x = np.linspace(-10, 10, 200)
-# 2. Plot the previous function with the previous x
-# ...
-# 3. Plot the scipy norm pdf function (with mu=2 and sigma=3).
-# ...
-# 4. Generate 1000 random events according with the previous distribution
-# Plot the histogram
-# ...
-ax.legend()
-
-ax = axes[1]
-for k in np.geomspace(2, 128, num=7, dtype=int):
-    # 5. Plot the student pdf function for a 95%CI (with k as parameter).
-    # ...
-
-    # 6. Calculate the Shapiro and Kolmogov tests pvalues for 5000 random events generated with the previous distribution
-    shapiro_pvalue = 0  # ...
-    kolmogorov_pvalue = 0  # ...
-
-    # 7. Get the skew estimator and calculate it with the Pearson estimator (with a norm.cdf).
-    skew, sperson = 0, 0  # ...
-
-    print(f'k={k}, skew={skew:.2f}, skew(Pearson)={sperson:.2f}, pval(Shapiro)={shapiro_pvalue:.2f}, pval(Kolmogorov)={kolmogorov_pvalue:.2f}')
-
-ax.set_xlim([-2, 2])
-ax.set_xlabel(r"$x$")
-ax.set_ylabel(r"$P_{Student}(x)$")
-ax.set_title(r"$Student$ Probability density")
-ax.legend()
-
-# 8. Comment the points 6 and 7
-print("... MY COMMENT")
-
-"""
-
 def bot_evaluation(cell_id, user, student_data, teacher_data):
     from .. import admin
     from . import gpt
 
     prompt = f"""{gpt.evaluation_instructions}
-Initial solution:\n<start>{reset}</start>
-Final solution:\n<end>{teacher_data.get_code("main_execution")}<end>
-Student solution:\n<answer>{student_data.get_code("main_execution")}</answer>\n"""                
+Initial solution:\n<start>\n{teacher_data.get_reset()}\n</start>
+Final solution:\n<end>\n{teacher_data.get_solution()}\n</end>
+Student solution:\n<answer>\n{student_data.get_solution()}\n</answer>\n"""
+
     response = gpt.ask_chat_gpt(question=prompt, model="gpt-3.5-turbo", temperature=0., raw=True, openai_token=gpt.evaluation_openai_token)
 
     try:
@@ -176,7 +131,7 @@ class WidgetBase:
                 continue
 
             # Get student data
-            student_data = CellParser.crunch_data(self.cinfo, user=mail, data=answers[mail])
+            student_data = CellParser(parse_cell=True, cell_source=answers[mail], user=mail, cell_id=self.cinfo.cell_id, cinfo=self.cinfo)
 
             # Don't perform autocorrection if no data is available 
             if student_data.is_manual_note():
