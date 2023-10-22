@@ -1,43 +1,73 @@
 import re
-
 from .line_parser import LineParser
 
 
-def get_equals_args(code, func_id="bulkhours.is_equal"):
-    args = code.replace(" ", "").split(func_id)
-    if len(args) == 1:
-        return {}
+def cell_reset(source):
+    """
+# BKRESET.REMOVE:START
+    # This code won't appear in the reset generation
+    # It will appear on the solution though
+# BKRESET.REMOVE:END
 
-    args = re.split(r",\s*(?![^()]*\))", args[1][1 : args[1].rfind(")")])
+# BKRESET.PRINT:raw_std = gdf[f"ret_{i}"].ewm(20).std()
+    # The previous line will be printed in the reset generation
+    # The previous line won't be printed in the solution generation
 
-    if func_id == "bulkhours.is_equal":
-        kwargs = ["norm", "error", "policy", "min_score", "max_score", "cmax_score"]
-    else:
-        kwargs = ["debug", "run", "min_score", "max_score"]
+print(models["fit1"].forecast(3)) # BKRESET.REMOVE:LINE
+    # The previous line won't be printed in the reset generation
+    # The previous line will be printed in the solution generation
+    
+df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BKRESET.INIT:0
+    """
+    nsource = []
 
-    fargs = {}
-    for i, a in enumerate(args):
-        sa = a.split("=")
+    keep_line = True
 
-        if func_id == "bulkhours.is_equal" and i == 0:
-            if sa[0].replace(" ", "") == "data_test" and len(sa) > 1:
-                fargs["data_test"] = "=".join(sa[1:])
-            else:
-                fargs["data_test"] = a
-        elif func_id == "bulkhours.is_equal" and i == 1:
-            if sa[0].replace(" ", "") == "data_ref":
-                fargs["data_ref"] = "=".join(sa[1:])
-            elif sa[0].replace(" ", "") in kwargs:
-                fargs[sa[0]] = "=".join(sa[1:])
-            else:
-                fargs["data_ref"] = a
-        elif "=" in a:
-            fargs[sa[0]] = "=".join(sa[1:])
+    for s in source.split("\n"):
+        if "BKRESET." in s:
+            l = s.split("BKRESET.")
+            if "INIT:" in l[1]:
+                if "=" in s:
+                    s = s.split("=")[0] + "= " + l[1].replace("INIT:", "") + "  # ..."
+                elif "return " in s:
+                    s = s.split("return ")[0] + "return " + l[1].replace("INIT:", "") + "  # ..."
+            if "REMOVE" in l[1]:
+                if "START" in l[1]:
+                    keep_line = False
+                elif "END" in l[1]:
+                    keep_line = True
+                    s = s.split("#")[0] + "# ..."
+                else:
+                    indentation = len(s) - len(s.lstrip())
+                    s = (" " * indentation) + "# ..."
+            if "REPLACE" in l[1]:
+                indentation = len(s) - len(s.lstrip())
+                s = (" " * indentation) + l[1].replace("REPLACE:", "") + "  # ..."
+            if "PRINT" in l[1]:
+                indentation = len(s) - len(s.lstrip())
+                s = (" " * indentation) + l[1].replace("PRINT:", "")
 
-    if func_id == "bulkhours.is_equal" and "data_ref" not in fargs:
-        fargs["data_ref"] = fargs["data_test"].replace("student.", "teacher.")
+        if keep_line:
+            nsource.append(s)
 
-    return fargs
+    #print("\n".join(nsource))
+    return "\n".join(nsource)
+
+def cell_solution(source):
+
+    nsource = []
+    for s in source.split("\n"):
+        if "BKRESET." in s:
+            l = s.split("BKRESET.")
+            if "REMOVE:START" in l[1] or "REMOVE:END" in l[1] or "PRINT" in l[1]:
+                continue
+            elif "INIT:" in l[1] or "REPLACE:" in l[1] or "REMOVE" in l[1]:
+                s = l[0][:l[0].rfind("#")]
+
+        nsource.append(s)
+
+    # print("\n".join(nsource))
+    return "\n".join(nsource)
 
 
 class CellParser:
@@ -47,10 +77,17 @@ class CellParser:
         # Reformat db info to cell format
         if "cell_source" in kwargs and type(cell_source := kwargs["cell_source"]) == dict:
             raw_code = [cell_source[e] for e in ["main_execution"] + CellParser.meta_modes if e in cell_source]
-            kwargs["cell_source"] = "\n".join(raw_code)
-
+            kwargs["cell_source"] = "\n".join(raw_code)        
         self.is_cell_source = "cell_source" in kwargs and type(kwargs["cell_source"]) == str
         self.minfo = kwargs
+
+        if "cell_id" not in self.minfo:
+            info = LineParser.head_line_from_cell(self.minfo["cell_source"])
+            self.minfo = vars(info)
+            self.minfo["cinfo"] = info
+            self.minfo.update(kwargs)
+        self.minfo.update({k: v for k, v in cell_source.items() if "grade" in k})
+
         if parse_cell and self.is_cell_source:
             self.get_cell_decomposition()
 
@@ -78,7 +115,6 @@ class CellParser:
     def is_manual_note(self):
         return "note_src" in self.minfo and self.minfo["note_src"] in "manual"
         
-
     @property
     def max_score(self):
         return (
@@ -155,34 +191,20 @@ class CellParser:
         return l
 
     def block_start(self, l, tmode, func_id):
-        self.minfo[tmode] = get_equals_args(l, func_id=func_id)
+        self.minfo[tmode] = LineParser.get_func_args(l, func_id=func_id)
         self.minfo[tmode]["visible"] = True
         if tmode == "evaluation":
             self.minfo[tmode]["emp_max_score"] = 0
 
     def block_equal_line(self, mode, l):
         indent = " " * (re.sub(r"^([\s]*)[\s]+.*$", r"\g<1>", l).count(" ") + 1)
-        args = get_equals_args(l, func_id="bulkhours.is_equal")
+        args = LineParser.get_func_args(l, func_id="bulkhours.is_equal")
 
         if "data_ref" not in args:
             args["data_ref"] = args["data_test"].replace("student.", "teacher.")
         args["min_score"] = float(args["min_score"]) if "min_score" in args else 0
         args["max_score"] = float(args["max_score"]) if "max_score" in args else 10
 
-        """if "data_ref" not in args and "data_test" in args:
-            if "student." in args["data_test"]:
-                l = l[: l.rfind(")")] + ", data_ref=%s)" % args["data_test"].replace("student.", "teacher.")
-            else:
-                l = l[: l.rfind(")")] + f", data_ref=teacher.{args['data_test']})"
-
-        if (
-            "data_test" in args
-            and "student." in args["data_test"]
-            and "data_ref" in args
-            and "teacher." not in args["data_ref"]
-        ):
-            l = f"{indent}{args['data_test'].replace('student.', 'teacher.')} = {args['data_ref']}\n{l}  # cleaned"
-        """
         if "equals" not in self.minfo[mode]:
             self.minfo[mode]["equals"] = []
 
@@ -252,5 +274,16 @@ class CellParser:
 
         if self.is_cell_type():
             self.minfo["answer"] = cell_source
+            self.raw_exec_code = cell_source
         else:
+            self.raw_exec_code = self.minfo["main_execution"]["code"]
+            if "user" in self.minfo and self.minfo["user"] == "solution":
+                self.minfo["main_execution"]["code"] = self.get_solution()
+
             self.minfo["answer"] = self.minfo["main_execution"]["code"]
+
+    def get_solution(self):
+        return cell_solution(self.raw_exec_code)
+    
+    def get_reset(self):
+        return cell_reset(self.raw_exec_code)        

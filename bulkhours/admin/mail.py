@@ -6,88 +6,6 @@ from email.mime.image import MIMEImage
 from .. import core
 
 
-def cell_reset(source):
-
-    # Remove xtra functions
-    cfg = core.tools.get_config(is_new_format=True)
-    student_data = core.cell_parser.CellParser.crunch_data(cfg, user="dummy", data=source)
-    source = student_data.get_code("main_execution").split("\n")
-
-    
-    """
-# BKRESET.REMOVE:START
-    # This code won't appear in the reset generation
-    # It will appear on the solution though
-# BKRESET.REMOVE:END
-
-# BKRESET.PRINT:raw_std = gdf[f"ret_{i}"].ewm(20).std()
-    # The previous line will be printed in the reset generation
-    # The previous line won't be printed in the solution generation
-
-    
-print(models["fit1"].forecast(3)) # BKRESET.REMOVE:LINE
-    # The previous line won't be printed in the reset generation
-    # The previous line will be printed in the solution generation
-
-    
-df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BKRESET.INIT:0
-
-    """
-    nsource = []
-
-    keep_line = True
-
-    for s in source:
-        if "BKRESET." in s:
-            l = s.split("BKRESET.")
-            if "INIT:" in l[1]:
-                if "=" in s:
-                    s = s.split("=")[0] + "= " + l[1].replace("INIT:", "") + "  # ..."
-                elif "return " in s:
-                    s = s.split("return ")[0] + "return " + l[1].replace("INIT:", "") + "  # ..."
-            if "REMOVE" in l[1]:
-                if "START" in l[1]:
-                    keep_line = False
-                elif "END" in l[1]:
-                    keep_line = True
-                    s = s.split("#")[0] + "# ..."
-                else:
-                    indentation = len(s) - len(s.lstrip())
-                    s = (" " * indentation) + "# ..."
-            if "REPLACE" in l[1]:
-                indentation = len(s) - len(s.lstrip())
-                s = (" " * indentation) + l[1].replace("REPLACE:", "") + "  # ..."
-            if "PRINT" in l[1]:
-                indentation = len(s) - len(s.lstrip())
-                s = (" " * indentation) + l[1].replace("PRINT:", "")
-
-        if keep_line:
-            nsource.append(s)
-
-    #print("\n".join(nsource))
-    return "\n".join(nsource)
-
-def cell_solution(source):
-
-    # Remove xtra functions
-    cfg = core.tools.get_config(is_new_format=True)
-    student_data = core.cell_parser.CellParser.crunch_data(cfg, user="dummy", data=source)
-    source = student_data.get_code("main_execution").split("\n")
-
-    nsource = []
-    for s in source:
-        if "BKRESET." in s:
-            l = s.split("BKRESET.")
-            if "INIT:" in l[1] or "REPLACE:" in l[1]:
-                s = l[0][:l[0].rfind("#")]
-            if "REMOVE" in l[1] or "PRINT" in l[1]:
-                continue
-
-        nsource.append(s)
-
-    # print("\n".join(nsource))
-    return "\n".join(nsource)
-
 def get_drive_filename(filename):
     from xattr import xattr
     return f"https://colab.research.google.com/drive/" + (xattr(filename).get('user.drive.id').decode())
@@ -117,8 +35,8 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
     to_pop, nb = [], nbformat.read(ofilename, nbformat.NO_CONVERT).copy()
     for idx, cell in enumerate(nb.cells):
         if cell["cell_type"] == "code":
-
             source = cell["source"].split("\n")
+            parsed_cell = core.cell_parser.CellParser.crunch_data(cfg, user="solution", data=cell["source"])
 
             # Change the initialization cell
             if "\ndatabase" in cell["source"]:
@@ -147,7 +65,8 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
                 else: # is_solution
                     to_pop.append(idx)
             elif source[0].startswith('%%evaluation_cell_id '):
-                cell["source"] = cell_reset(cell["source"]) if reset else cell_solution(cell["source"])
+                cell["source"] = parsed_cell.get_reset() if reset else parsed_cell.get_solution()
+                #cell["source"] = cell_reset(cell["source"]) if reset else cell_solution(cell["source"])
                 if debug:
                     print(cell["outputs"])
                 if reset:
@@ -157,7 +76,6 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
             # Remove markdown cells with [admin in the first line]
             if "[admin]" in source[0]:
                 to_pop.append(idx)
-        #print(idx, cell.keys(), cell["metadata"])
 
     # Remove listed cells
     print("Pop the following cells: ", to_pop)
