@@ -47,7 +47,7 @@ class WidgetBase:
         return "Nope"
 
     def display_ecorrection(self, output):
-        teacher_data = CellParser.crunch_data(cinfo=self.cinfo, user="solution")
+        teacher_data = CellParser.crunch_data(cinfo=self.cinfo, user=tools.REF_USER)
         student_data = CellParser.crunch_data(cinfo=self.cinfo, user=self.cinfo.user, data=self.cell_source)
 
         if teacher_data.is_evaluation_available():
@@ -84,7 +84,7 @@ class WidgetBase:
         if teacher_is_local:
             teacher_data = CellParser.crunch_data(cinfo=self.cinfo, user=self.cinfo.user, data=self.cell_source) # Get data from cell
         else:
-            teacher_data = CellParser.crunch_data(cinfo=self.cinfo, user="solution", data=None) # Get data from database
+            teacher_data = CellParser.crunch_data(cinfo=self.cinfo, user=tools.REF_USER, data=None) # Get data from database
 
         bot_correction = teacher_data.get_code("evaluation") == "" or "automatic_eval" in teacher_data.get_code("evaluation")
 
@@ -154,18 +154,16 @@ class WidgetBase:
                 output.clear_output()
                 tools.html(f"Nothing to send 🙈🙉🙊", display=True, style="body")
             return
-        if user is None:
-            user = self.cinfo.user
         local_data = CellParser.crunch_data(cinfo=self.cinfo, user=user, data=self.cell_source)
         return firebase.send_answer_to_corrector(local_data.cinfo, **local_data.get_dbcell_decomposition())
 
     def osubmit(self, output):
-        return self.submit(output, user="solution")
+        return self.submit(output, user=tools.REF_USER)
 
     def send_message(self, output):
         from . import firebase
 
-        data = firebase.get_solution_from_corrector(self.cinfo.cell_id, corrector="solution")
+        data = firebase.get_solution_from_corrector(self.cinfo.cell_id, corrector=tools.REF_USER)
         if (user := self.cinfo.user) in data or (user := "all") in data:
             tools.html(
                 f"Message ({self.cinfo.cell_id}, {user}) du correcteur"
@@ -186,7 +184,7 @@ class WidgetBase:
         IPython.display.display(bbox, output)
 
     def display_correction(self, student_data, teacher_data, output=None, score=""):
-        codebody = "google.colab" in sys.modules and self.cinfo.user != "solution"
+        codebody = "google.colab" in sys.modules and self.cinfo.user != tools.REF_USER
         kwargs = (
             {"codebody" if codebody else "rawbody": teacher_data.get_code("main_execution")}
             if "main_execution" in teacher_data.minfo
