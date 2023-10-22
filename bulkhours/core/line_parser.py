@@ -146,9 +146,8 @@ class LineParser:
         return ", ".join(info)
 
     @classmethod
-    def head_line_from_cell(cls, cell_source):
-        line = cell_source.split("\n")[0]
-        return cls(line, cell_source, is_cell=True)
+    def from_cell_id(cls, cell_id):
+        return cls("%%evaluation_cell_id -i " + cell_id, "\n", is_cell=True)
 
     def __init__(self, line, cell_source, is_cell=True):
 

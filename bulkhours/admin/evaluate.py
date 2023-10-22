@@ -95,11 +95,12 @@ def evaluate(cell_id, user="NEXT", show_correction=False, style=None, **kwargs):
     cell_answers = answers.get_answers(cell_id, **kwargs)
     cfg = core.tools.get_config(is_new_format=True)
 
+    cinfo = core.LineParser.from_cell_id(cell_id)
     users = tools.get_users_list(no_admin=False)
     ausers = users.set_index("auser")["mail"].to_dict()
 
     if "solution" in cell_answers:
-        teacher_data = core.cell_parser.CellParser.crunch_data(data=cell_answers["solution"], user="solution")
+        teacher_data = core.CellParser.crunch_data(cinfo=cinfo, data=cell_answers["solution"], user="solution")
 
     nuser, did_find_answer = user, False
     for cuser, answer in cell_answers.items():
@@ -107,7 +108,7 @@ def evaluate(cell_id, user="NEXT", show_correction=False, style=None, **kwargs):
         if (user == "NEXT" and core.Grade.DEFAULT_GRADE == core.Grade.get(answer)) or user == cuser or (user in ausers and ausers[user] == cuser):
             nuser, did_find_answer = cuser, True
 
-            student_data = core.cell_parser.CellParser.crunch_data(data=answer, user=cuser)
+            student_data = core.CellParser.crunch_data(cinfo=cinfo, data=answer, user=cuser)
             if show_correction and "solution" in cell_answers:
                 out1 = ipywidgets.Output(layout={"width": "50%"})
                 out2 = ipywidgets.Output(layout={"width": "50%"})
