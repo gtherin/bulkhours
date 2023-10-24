@@ -156,7 +156,8 @@ class Invoice:
 
         files = []
         for invoice_id, df in Invoice.accounting.groupby("invoice_id"):
-            files.append(Invoice(user, invoice_id, df, doc_type=doc_type).generate_html())
+            if not df["invoice_date"].dropna().empty:
+                files.append(Invoice(user, invoice_id, df, doc_type=doc_type).generate_html())
 
         for f in filelists:
             os.system(f"rm -rf {f}")
