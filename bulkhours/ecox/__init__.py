@@ -6,7 +6,7 @@ from . import trading  # noqa
 
 from .block import Block, BlockCoin, BlockMsg  # noqa
 from .blockchain import BlockChain  # noqa
-from .weather import get_weather_data  # noqa
+from .weather_data import get_wheather_data  # noqa
 
 def random(samples_number, sample_size, mu=4, distrib="bimodal", seed=42):
     """return a dataframe of exp(-X/scale)/scale for random X"""
