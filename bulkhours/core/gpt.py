@@ -79,9 +79,11 @@ def ask_dall_e(question="", temperature=0.5, size="256x256"):
 def get_grade(student_data, teacher_data):
     if "main_execution" in student_data.minfo and "main_execution" in teacher_data.minfo and evaluation_instructions is not None:
         prompt = f"""{evaluation_instructions}
-Initial solution:\n<start>\n{teacher_data.get_reset()}\n</start>
-Final solution:\n<end>\n{teacher_data.get_solution()}\n</end>
-Student solution:\n<answer>\n{student_data.get_solution()}\n</answer>\n"""
+- question:\n<start>\n{teacher_data.get_reset()}\n</start>
+- actual solution:\n<end>\n{teacher_data.get_solution()}\n</end>
+- student's solution:\n<answer>\n{student_data.get_solution()}\n</answer>\n"""
+        
+        #print(prompt)
         response = ask_chat_gpt(question=prompt, model="gpt-3.5-turbo", temperature=0., raw=True, openai_token=evaluation_openai_token)
 
         # Get student user
