@@ -1,11 +1,12 @@
-from os.path import dirname, basename, isfile, join
+import os
 import glob
 
-modules = glob.glob(join(dirname(__file__), "*.py"))
+
+modules = glob.glob(os.path.join(os.path.dirname(__file__), "*.py"))
 modules = [
-    basename(f)[:-3]
+    os.path.basename(f)[:-3]
     for f in modules
-    if isfile(f) and basename(f)[:-3] not in ["data_parser", "__init__", "help", "datasets"]
+    if os.path.isfile(f) and os.path.basename(f)[:-3] not in ["data_parser", "__init__", "help", "datasets"]
 ]
 __all__ = modules
 from . import *
@@ -23,6 +24,19 @@ def get_data(label, **kwargs):
     )
 
     return DataParser(**data_info).get_data()
+
+
+def download_data(filename):
+    url = "https://huggingface.co/datasets/guydegnol/"
+    bfilename = os.path.basename(filename)
+    if "http" in filename:
+        cmd = f"curl {filename} --output {bfilename}"
+    else:
+        dirname = os.path.dirname(filename) if "/" in filename else "model_weights"
+        cmd = f"curl {url}{dirname}/raw/main/{bfilename} --output {bfilename}"
+
+    os.system(cmd)
+    return bfilename
 
 
 def get_image(label, ax=None):
