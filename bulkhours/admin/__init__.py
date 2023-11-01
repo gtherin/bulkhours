@@ -1,4 +1,5 @@
-from .evaluate import evaluate  # noqa
+from .evaluate import evaluate, clean_grades  # noqa
+from .leadlags import leadlags  # noqa
 from . import answers  # noqa
 from . import tools  # noqa
 from .summary import summary  # noqa

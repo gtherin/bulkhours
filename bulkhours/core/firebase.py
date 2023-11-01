@@ -3,8 +3,7 @@ import json
 import datetime
 from argparse import Namespace
 from . import tools
-
-REF_USER = "solution"
+from .tools import REF_USER
 
 
 def get_paris_time():
@@ -97,6 +96,14 @@ class DbDocument:
 
     def update(self, data) -> None:
         DbDocument.read_cache_data()
+        DbDocument.data_base_cache[self.question][self.user].update(data)
+        DbDocument.write_cache_data()
+
+    def delete_fields(self, data, fields) -> None:
+        DbDocument.read_cache_data()
+        for c in fields:
+            if c in data:
+                del data[c]
         DbDocument.data_base_cache[self.question][self.user].update(data)
         DbDocument.write_cache_data()
 

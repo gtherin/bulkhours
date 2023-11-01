@@ -10,7 +10,7 @@ from . import tools
 def summary(
     no_admin=False,
     reload_cache=True,
-    cinfo="*.n",
+    cinfo="*.g",
     update_git=False,
     columns=None,
     cmap="RdBu",  # bwr_r RdBu
@@ -29,7 +29,7 @@ def summary(
     :param cmap: Colormap to use the notes
     :param update_git: update data on the cloud
 
-    :return: a note between the minimal note and maximal note
+    :return: a grade between the minimal grade and maximal grade
     """
 
     cfg = core.tools.get_config(is_new_format=True, **kwargs)
@@ -65,7 +65,7 @@ def summary(
     if cinfo in ["", "A"]:
         for s in Exercice.fields:
             data = exercices.merge_dataframe(data, s, suffix="." + s[0])
-    elif cinfo in ["*.c", "*.t", "*.n"]:
+    elif cinfo in ["*.c", "*.t", "*.g"]:
         data = exercices.merge_dataframe(data, [s for s in Exercice.fields if s[0] == cinfo[-1]][0])
 
     data = data.set_index("mail")

@@ -1,26 +1,32 @@
 import numpy as np
 import pandas as pd
-import datetime
 
 class Exercice:
-    fields = ["count", "time", "note"]
+    fields = ["count", "time", "grade"]
 
     def __init__(self, user, exo) -> None:
         from .. import core
         self.user, self.exo, self.answer = user, exo, ""
-        self.utime, self.note, self.count = np.nan, core.Grade.DEFAULT_GRADE, np.nan
+        self.utime, self.grade, self.count = np.nan, core.Grade.DEFAULT_GRADE, np.nan
+        self.src = ""
 
     def update_data(self, adata) -> None:
         from .. import core
 
         self.count = 1
-        self.utime = adata["update_time"] if "update_time" in adata else datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        if "note" not in adata:  # Failure of automatic grades
-            self.note = core.Grade.ANSWER_FOUND
-        elif adata["note"] is None:  # Failure of automatic grades
-            self.note = core.Grade.EVALUATION_CRASHED
+        self.src = core.Grade.src(adata)
+        self.grade = core.Grade.get(adata)
+        self.utime = core.Grade.upd(adata)
+
+        return
+
+        if "grade" not in adata:  # Failure of automatic grades
+            self.grade = core.Grade.get(adata)
+        elif adata["grade"] is None:  # Failure of automatic grades
+            self.grade = core.Grade.EVALUATION_CRASHED
         else:
-            self.note = float(adata["note"])
+            self.grade = float(adata["grade"])
+
 
 
 class Exercices:
@@ -47,7 +53,7 @@ class Exercices:
 
         if field == "count":
             data["all.c"] = data[[e + ".c" for e in self.exos]].count(axis=1)
-        if field == "note":
+        if field == "grade":
             ceval = self.cfg.n["evaluation"]
 
             data["all"] = np.round(data.fillna(0.0).clip(0).sum(axis=1), 1)

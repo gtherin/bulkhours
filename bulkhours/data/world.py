@@ -121,7 +121,17 @@ def get_mapmacro(self, **kwargs):
 
 
 @DataParser.register_dataset(
-    label="world.corruption", summary="Corruption index per country", category="Economics", raw_data="corruption.csv"
+    label="world.corruption", 
+    summary="Corruption index per country", 
+    category="Economics", 
+    raw_data=[
+        "corruption.csv",
+        "cost_of_living.csv",
+        "richest_countries.csv",
+        "unemployment.csv",
+        "continent.tsv",
+    ],
+    on="country",
 )
 def get_corruption(self, show_truth=False, **data_info):
     show_truth = self.data_info["show_truth"] if "show_truth" in self.data_info else False
@@ -131,6 +141,7 @@ def get_corruption(self, show_truth=False, **data_info):
         df["corruption_index"] = df["corruption_index"].where(
             ~df.index.isin(["Spain", "Japan", "Sweden", "Romania"]), other=np.nan
         )
+
     df = df[["annual_income", "corruption_index", "gdp_per_capita", "unemployment_rate"]]
     df = df.dropna(subset=["annual_income", "gdp_per_capita", "unemployment_rate"])
 
