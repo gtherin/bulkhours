@@ -18,7 +18,7 @@ def get_cdata(cfg, cell_id):
     return {}
 
 
-def get_answers(cell_id, refresh=True, update_git=False, verbose=False, aliases={}):
+def get_answers(cell_id, update_git=False, verbose=False, aliases={}):
     cfg = core.tools.get_config(is_new_format=True)
     students_list = tools.get_users_list(no_admin=False)
 

@@ -122,8 +122,15 @@ def evaluate_student(cell_id, cfg, cuser, student_data, teacher_data, show_corre
 
 def evaluate(cell_id, user="NEXT", show_correction=False, style=None, **kwargs):
 
+    cfg = core.tools.get_config(is_new_format=True, **kwargs)
+
+    if cell_id == "NEXT":
+        exos = cfg.n["exercices"].split(";")
+        print(exos)
+        return
+
+
     cell_answers = answers.get_answers(cell_id, **kwargs)
-    cfg = core.tools.get_config(is_new_format=True)
     cinfo = core.LineParser.from_cell_id_user(cell_id, core.tools.REF_USER)
     teacher_data = core.CellParser.crunch_data(cinfo=cinfo, data=cell_answers[core.tools.REF_USER] if core.tools.REF_USER in cell_answers else "", user=core.tools.REF_USER)
 

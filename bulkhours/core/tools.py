@@ -169,3 +169,11 @@ def is_admin(cfg=None):
         and "admins" in cfg.data["global"]
         and cfg.data["email"] in cfg.data["global"]["admins"]
     )
+
+def format_opt(label, raw2norm=True):
+    rr = {"-": "__minus__", "@": "__at__", " ": "__space__", "/": "__slash__"}
+    if len(label) > 0 and label[0] != "-":
+        for k, v in rr.items():
+            label = label.replace(k, v) if raw2norm else label.replace(v, k)
+    return label
+
