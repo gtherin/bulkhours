@@ -318,7 +318,7 @@ def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, *
     if update_time:
         kwargs.update({"update_time": uptime})
     if user == REF_USER and "grade_man" not in kwargs:
-        kwargs.update({"grade_man": 10})
+        kwargs.update({"grade_man": 10, "grade_man_upd": uptime})
     else:
         kwargs = {k: v for k, v in kwargs.items() if k not in ["evaluation", "explanation", "hint", "visible"]}
 
