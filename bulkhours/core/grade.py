@@ -64,5 +64,5 @@ class Grade:
             return None
 
     @staticmethod
-    def is_valid(note):
-        return note >= 0
+    def is_valid(grade):
+        return grade >= 0

@@ -25,14 +25,14 @@ def is_equal(
        - L2-norm:= distance = ||data_test-data_ref||_2
 
     :param error: tolerance on the results comparison
-    :param min_score: the minimal note a student can get. defaults to 0.
-    :param max_score: the maximal note a student can get. defaults to 10
+    :param min_score: the minimal grade a student can get. defaults to 0.
+    :param max_score: the maximal grade a student can get. defaults to 10
 
     :param policy:
       - strict: policy is max_score if |distance| < error, 0 otherwise
       - gaussian: policy max_score * exp(-(distance/error)**2/2)
 
-    :return: a note between the minimal note and maximal note
+    :return: a grade between the minimal grade and maximal grade
 
     examples
     return bulkhours.is_equal(data_test)
