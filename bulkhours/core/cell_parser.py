@@ -238,8 +238,12 @@ class CellParser:
         # If cell_source is already a dictionary, no need to parse anymore
         if type(cell_source) == dict:
             self.minfo = cell_source
-            self.raw_exec_code = self.minfo["main_execution"]
-            self.raw_code = "\n".join([cell_source[e] for e in ["main_execution"] + CellParser.meta_modes if e in cell_source])
+            if "main_execution" in self.minfo:
+                self.raw_exec_code = self.minfo["main_execution"]
+                self.raw_code = "\n".join([cell_source[e] for e in ["main_execution"] + CellParser.meta_modes if e in cell_source])
+            else:
+
+                self.raw_code, self.raw_exec_code = "", ""
             self.cinfo = self.minfo["cinfo"] if "cinfo" in self.minfo else cinfo
             return
         # Otherwise, parse

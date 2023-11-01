@@ -5,7 +5,7 @@ def check_format(argv):
     argv = argv.split()
     print(argv)
     print(opts := bulkhours.core.line_parser.format_opts(argv))
-    print([bulkhours.core.line_parser.format_opt(v, raw2norm=False) for v in opts])
+    print([bulkhours.core.tools.format_opt(v, raw2norm=False) for v in opts])
 
 
 def test_line_parser():

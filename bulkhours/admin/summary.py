@@ -45,13 +45,18 @@ def summary(
     if reload_cache:
         from .cache import cache_answers
 
+        if aliases != {}:
+            core.firebase.get_document(question="info", user="aliases", cinfo=cfg).set(aliases)
+        else:
+            aliases = core.firebase.get_document(question="info", user="aliases", cinfo=cfg).get().to_dict()
+
         cache_answers(reload_cache if type(reload_cache) == list else exos, update_git=update_git, verbose=False, aliases=aliases)
 
     data = tools.get_users_list(no_admin=no_admin)
 
     IPython.display.display(IPython.display.Markdown(f"## {cfg.virtual_room}: {(1-data['is_admin']).sum()} students"))
 
-    exercices = Exercices(users := list(data.mail.unique()), exos, cfg)
+    exercices = Exercices(users := list(data.mail.unique()), exos, cfg, aliases=aliases)
 
     for exo in exos:
         filename = aanswers.get_cfilename(cfg, exo)
@@ -69,6 +74,9 @@ def summary(
         data = exercices.merge_dataframe(data, [s for s in Exercice.fields if s[0] == cinfo[-1]][0])
 
     data = data.set_index("mail")
+
+    core.firebase.get_document(question="info", user="grades", cinfo=cfg).set(data["all"].to_dict())
+
     data = data[["nom", "prenom", "all"] + exos] if columns is None else data[columns]
 
     for k, v in aliases.items():

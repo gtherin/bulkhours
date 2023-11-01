@@ -102,7 +102,7 @@ class WidgetBase:
         else:
             max_score = equals.get_max_score(teacher_data)
 
-        answers = admin.answers.get_answers(self.cinfo.cell_id, verbose=False, refresh=True)
+        answers = admin.answers.get_answers(self.cinfo.cell_id, verbose=False)
         for u in grades.index:
 
             mail, auser = grades["mail"][u], grades["auser"][u]

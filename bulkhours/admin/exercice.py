@@ -17,7 +17,6 @@ class Exercice:
         self.src = core.Grade.src(adata)
         self.grade = core.Grade.get(adata)
         self.utime = core.Grade.upd(adata)
-
         return
 
         if "grade" not in adata:  # Failure of automatic grades
@@ -30,12 +29,16 @@ class Exercice:
 
 
 class Exercices:
-    def __init__(self, users, exos, cfg) -> None:
+    def __init__(self, users, exos, cfg, aliases={}) -> None:
         self.users, self.exos = list(users), exos
         self.cfg = cfg
+        self.aliases = aliases
         self.exercices = {u: {e: Exercice(u, e) for e in exos} for u in users}
 
     def update_data(self, user, exo, adata) -> None:
+        for k, v in self.aliases.items():
+            if v == user:
+                self.update_data(k, exo, adata)
         if user not in self.exercices:
             self.exercices[user] = {e: Exercice(user, e) for e in self.exos}
         self.exercices[user][exo].update_data(adata)

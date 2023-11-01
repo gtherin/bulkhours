@@ -8,14 +8,6 @@ import IPython
 from . import tools
 from .cache_manager import CacheManager
 
-def format_opt(label, raw2norm=True):
-    rr = {"-": "__minus__", "@": "__at__", " ": "__space__", "/": "__slash__"}
-    if len(label) > 0 and label[0] != "-":
-        for k, v in rr.items():
-            label = label.replace(k, v) if raw2norm else label.replace(v, k)
-    return label
-
-
 def format_opts(argv):
     """This function merges arguments together
 Example:
@@ -32,7 +24,7 @@ With format_func, it will become:
             nargv[-1] += " " + a
         else:
             nargv.append(a)
-    return [format_opt(a) for a in nargv]
+    return [tools.format_opt(a) for a in nargv]
 
 
 def get_available_widgets():
@@ -166,7 +158,7 @@ class LineParser:
                 parser.print_help()
 
             for k, v in vars(pdata).items():
-                setattr(self, k, format_opt(v, raw2norm=False) if v and v is not None else v)
+                setattr(self, k, tools.format_opt(v, raw2norm=False) if v and v is not None else v)
         else:
             #print("Line is empty")
             return
