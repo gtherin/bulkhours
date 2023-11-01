@@ -1,4 +1,5 @@
 import matplotlib
+import datetime
 
 class Grade:
 
@@ -30,8 +31,21 @@ class Grade:
 
         src = Grade.src(answer)
         if src is None:
-            return Grade.DEFAULT_GRADE
-        return answer[src]
+            if "answer" in answer:
+                return Grade.ANSWER_FOUND
+            
+            return Grade.NO_ANSWER_FOUND
+        return float(answer[src])
+
+    @staticmethod
+    def upd(answer):
+        if type(answer) != dict:
+            answer = answer.minfo
+
+        src = Grade.src(answer)
+        if src is None:
+            return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        return answer[src + "_upd"]
 
     @staticmethod
     def set_static_style_info(minvalue=0.0, cmap="RdBu"):
@@ -42,10 +56,10 @@ class Grade:
         opacity = "40" if is_corrected else "60"
         if type(v) == str:
             return None
-        elif v in [Grade.DEFAULT_GRADE, Grade.EVALUATION_CRASHED, Grade.ANSWER_FOUND]:
-            return f"color:#FF3B52;background-color:#FF3B52;opacity: {opacity}%"
         elif v != v:  # Failure of automatic corrections
             return f"color:{Grade.mincolor};background-color:{Grade.mincolor};opacity: 70%"
+        elif int(v) in [Grade.DEFAULT_GRADE, Grade.EVALUATION_CRASHED, Grade.ANSWER_FOUND]:
+            return f"color:#FF3B52;background-color:#FF3B52;opacity: {opacity}%"
         else:
             return None
 

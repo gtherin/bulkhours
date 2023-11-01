@@ -1,3 +1,5 @@
+import datetime
+
 from .line_parser import LineParser
 from .grade import Grade
 from . import tools
@@ -89,6 +91,9 @@ class CellParser:
     def __init__(self, cinfo, cell_source):
         self.parse_cell(cinfo, cell_source)
 
+    def get_update_time(self):
+        return self.minfo["update_time"] if "update_time" in  self.minfo else datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
     def store_info(self, key, val, ekey=None, verbose=False):
         if key not in self.minfo:
             self.minfo[key] = {}
@@ -112,6 +117,9 @@ class CellParser:
 
     def is_manual_note(self):
         return "grade_man" in self.minfo
+
+    def has_answer(self):
+        return "answer" in self.minfo and self.minfo["answer"] != ""
         
     @property
     def max_score(self):

@@ -52,7 +52,8 @@ def create_evaluation_buttonanswer(cell_id, cuser, cfg, student_data, teacher_da
     def sevaluate(data, output):
         with output:
             output.clear_output()
-            answers.update_grade(cell_id, cuser, widget.value, name="grade_man")
+            print("")
+            answers.update_grade(cell_id, cuser, widget.value, grade_name="grade_man")
 
     if "main_execution" in student_data.minfo and "main_execution" in teacher_data.minfo and core.gpt.evaluation_instructions is not None:
         abuttons["a"].b.description = "🤖Correct student"
@@ -80,52 +81,67 @@ def create_evaluation_buttonanswer(cell_id, cuser, cfg, student_data, teacher_da
     IPython.display.display(ipywidgets.HBox([label, widget, abuttons["e"].b, abuttons["a"].b]), output)
 
 
-def evaluate(cell_id, user="NEXT", show_correction=False, style=None, **kwargs):
+def clean_grades(cell_id, **kwargs):
+
     cell_answers = answers.get_answers(cell_id, **kwargs)
     cfg = core.tools.get_config(is_new_format=True)
-
-    users = tools.get_users_list(no_admin=False)
-    ausers = users.set_index("auser")["mail"].to_dict()
-
-    if core.tools.REF_USER in cell_answers:
-        cinfo = core.LineParser.from_cell_id_user(cell_id, core.tools.REF_USER)
-        teacher_data = core.CellParser.crunch_data(cinfo=cinfo, data=cell_answers[core.tools.REF_USER], user=core.tools.REF_USER)
-
-    nuser, did_find_answer = user, False
     for cuser, answer in cell_answers.items():
 
-        if (user == "NEXT" and core.Grade.DEFAULT_GRADE == core.Grade.get(answer)) or user == cuser or (user in ausers and ausers[user] == cuser):
-            nuser, did_find_answer = cuser, True
+        if core.firebase.DbDocument.data_base_cache is None:        
+            from google.cloud import firestore
+            dcols = {k: firestore.DELETE_FIELD for k in answer.keys() if k in ['note', 'note_upd', 'note_src', 'grade_bot', 'grade_bot_upd']}
+            core.firebase.get_document(question=cell_id, user=cuser, cinfo=cfg).update(dcols)
+        else:
+            dcols = {k: None for k in answer.items() if k in ['note', 'note_upd', 'note_src', 'grade_bot', 'grade_bot_upd']}
+            core.firebase.get_document(question=cell_id, user=cuser, cinfo=cfg).delete_fields(answer, ['note', 'note_upd', 'note_src', 'grade_bot', 'grade_bot_upd'])
 
-            cinfo = core.LineParser.from_cell_id_user(cell_id, cuser)
-            student_data = core.CellParser.crunch_data(cinfo=cinfo, data=answer, user=cuser)
-            if show_correction and core.tools.REF_USER in cell_answers:
-                out1 = ipywidgets.Output(layout={"width": "50%"})
-                out2 = ipywidgets.Output(layout={"width": "50%"})
-                tabs = ipywidgets.HBox([out1, out2])
 
-                show_answer(out1, cuser, student_data.get_solution(), style=style)
-                # bulkhours.c.set_style(out2, "sol_background")
-                show_answer(out2, core.tools.REF_USER, teacher_data.get_solution(), style=style)
 
-            else:
-                tabs = ipywidgets.Output(layout={"width": "100%"})
-                show_answer(tabs, cuser, student_data.get_solution(), style=style)
+def evaluate_student(cell_id, cfg, cuser, student_data, teacher_data, show_correction=False, style=None):
 
-            out = ipywidgets.Output(layout={"border": "1px solid #CFCFCF", "width": "100%"})
-            # bulkhours.c.set_style(out, "cell_background")
+    if show_correction and teacher_data.has_answer():
+        out1 = ipywidgets.Output(layout={"width": "50%"})
+        out2 = ipywidgets.Output(layout={"width": "50%"})
+        tabs = ipywidgets.HBox([out1, out2])
 
-            if core.tools.REF_USER in cell_answers:
-                with out:
-                    create_evaluation_buttonanswer(cell_id, cuser, cfg, student_data, teacher_data)
+        show_answer(out1, cuser, student_data.get_solution(), style=style)
+        # bulkhours.c.set_style(out2, "sol_background")
+        show_answer(out2, core.tools.REF_USER, teacher_data.get_solution(), style=style)
 
-            IPython.display.display(ipywidgets.VBox([tabs, out]))
-            return
+    else:
+        tabs = ipywidgets.Output(layout={"width": "100%"})
+        show_answer(tabs, cuser, student_data.get_solution(), style=style)
 
-    if not did_find_answer:
-        core.tools.html(
-            f"Pas de réponse disponible pour {nuser}"
-            if cfg.language == "fr"
-            else f"{nuser} answer is not available",
-            use_ipywidgets=True,
-        )
+    out = ipywidgets.Output(layout={"border": "1px solid #CFCFCF", "width": "100%"})
+    # bulkhours.c.set_style(out, "cell_background")
+
+    with out:
+        create_evaluation_buttonanswer(cell_id, cuser, cfg, student_data, teacher_data)
+
+    IPython.display.display(ipywidgets.VBox([tabs, out]))
+
+def evaluate(cell_id, user="NEXT", show_correction=False, style=None, **kwargs):
+
+    cell_answers = answers.get_answers(cell_id, **kwargs)
+    cfg = core.tools.get_config(is_new_format=True)
+    cinfo = core.LineParser.from_cell_id_user(cell_id, core.tools.REF_USER)
+    teacher_data = core.CellParser.crunch_data(cinfo=cinfo, data=cell_answers[core.tools.REF_USER] if core.tools.REF_USER in cell_answers else "", user=core.tools.REF_USER)
+
+    users = tools.get_users_list(no_admin=False)
+    for u in users.index:
+
+        mail, auser = users["mail"][u], users["auser"][u]
+        cinfo = core.LineParser.from_cell_id_user(cell_id, mail)
+        student_data = core.CellParser.crunch_data(cinfo=cinfo, data=cell_answers[mail] if mail in cell_answers else "", user=mail)
+
+        if user == "NEXT" and student_data.has_answer() and core.Grade.ANSWER_FOUND == int(student_data.get_grade()):
+            return evaluate_student(cell_id, cfg, mail, student_data, teacher_data, show_correction=show_correction, style=style)
+        if user == mail or user == auser:
+            return evaluate_student(cell_id, cfg, mail, student_data, teacher_data, show_correction=show_correction, style=style)
+
+    core.tools.html(
+        f"Pas de traitement possible pour {user}"
+        if cfg.language == "fr"
+        else f"No possible treatment for {user}",
+        use_ipywidgets=True,
+    )
