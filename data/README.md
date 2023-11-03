@@ -472,7 +472,27 @@ def get_mapmacro(self, **kwargs):
 
 #### Corruption index per country
 #### `bulkhours.get_data("world.corruption")`
-- Raw data: [corruption.csv](https://github.com/gtherin/bulkhours/main/data/corruption.csv)  ([raw](https://raw.githubusercontent.com/gtherin/bulkhours/main/data/corruption.csv))
+- Raw data: [corruption.csv](https://github.com/gtherin/bulkhours/blob/main/data/corruption.csv), [cost_of_living.csv](https://github.com/gtherin/bulkhours/blob/main/data/cost_of_living.csv), [richest_countries.csv](https://github.com/gtherin/bulkhours/blob/main/data/richest_countries.csv), [unemployment.csv](https://github.com/gtherin/bulkhours/blob/main/data/unemployment.csv), [continent.tsv](https://github.com/gtherin/bulkhours/blob/main/data/continent.tsv)
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| country |  |
+| annual_income |  |
+| corruption_index |  |
+| gdp_per_capita |  |
+| unemployment_rate |  |
+| index |  |
+| iso |  |
+| m49 |  |
+| region1 |  |
+| region2 |  |
+| continent |  |
+
+</details>
+
 
 <details>
 <summary>Show code</summary>
@@ -485,6 +505,7 @@ def get_corruption(self, show_truth=False, **data_info):
         df["corruption_index"] = df["corruption_index"].where(
             ~df.index.isin(["Spain", "Japan", "Sweden", "Romania"]), other=np.nan
         )
+
     df = df[["annual_income", "corruption_index", "gdp_per_capita", "unemployment_rate"]]
     df = df.dropna(subset=["annual_income", "gdp_per_capita", "unemployment_rate"])
 
@@ -1022,6 +1043,23 @@ def get_fr_gdp(self, simplify=True):
 - Direct source: https://worldhappiness.report/data/
 
 <details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| country |  |
+| Ladder score |  |
+| Logged GDP per capita |  |
+| Social support |  |
+| Healthy life expectancy |  |
+| Freedom to make life choices |  |
+| Generosity |  |
+| Perceptions of corruption |  |
+
+</details>
+
+
+<details>
 <summary>Show code</summary>
 <code>
 def get_happiness(self, **data_info):
@@ -1046,6 +1084,28 @@ def get_happiness(self, **data_info):
 #### `bulkhours.get_data("world.maphappiness")`
 - Raw data: [DataForFigure2.1WHR2023.xls](https://happiness-report.s3.amazonaws.com/2023/DataForFigure2.1WHR2023.xls)  ([raw](https://happiness-report.s3.amazonaws.com/2023/DataForFigure2.1WHR2023.xls)🔄)
 - Direct source: https://worldhappiness.report/data/
+
+<details>
+<summary>Show columns info</summary>
+
+| Column   |      Info |
+|-----------|:-----------|
+| pop_est |  |
+| continent |  |
+| name |  |
+| iso_a3 |  |
+| gdp_md_est |  |
+| geometry |  |
+| Ladder score |  |
+| Logged GDP per capita |  |
+| Social support |  |
+| Healthy life expectancy |  |
+| Freedom to make life choices |  |
+| Generosity |  |
+| Perceptions of corruption |  |
+
+</details>
+
 
 <details>
 <summary>Show code</summary>
@@ -2260,24 +2320,6 @@ def get_gpus(self):
 - Reference site: https://en.wikipedia.org/wiki/FLOPS
 
 <details>
-<summary>Show columns info</summary>
-
-| Column   |      Info |
-|-----------|:-----------|
-| processor |  |
-| count |  |
-| date |  |
-| designer |  |
-| engraving_scale |  |
-| area |  |
-| density |  |
-| engraving_scale2 |  |
-| engraving_scale3 |  |
-
-</details>
-
-
-<details>
 <summary>Show code</summary>
 <code>
 def get_cpus(self):
@@ -2443,7 +2485,7 @@ def get_costs(self):
 
 #### Computational capacity of the fastest supercomputers
 #### `bulkhours.get_data("supercomputers")`
-- Raw data: [Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv](https://github.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv)  ([raw](https://raw.githubusercontent.com/owid/owid-datasets/dd7a4ecbb249f98028e25c304ef7d68de8979ea9/datasets/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database/Supercomputer%20power%20(FLOPS)%20%E2%80%93%20TOP500%20Database.csv))
+- Raw data: [supercomputer-power-flops.csv](https://huggingface.co/datasets/guydegnol/bulkhours/blob/main/supercomputer-power-flops.csv)  ([raw](https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/supercomputer-power-flops.csv)🤗)
 - Direct source: https://ourworldindata.org/grapher/supercomputer-power-flops
 
 <details>
