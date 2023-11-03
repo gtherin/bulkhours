@@ -42,14 +42,16 @@ def summary(
 
     exos = cfg.n["exercices"].split(";")
 
+    # Get aliases from db if not filled
+    if aliases != {}:
+        core.firebase.get_document(question="info", user="aliases", cinfo=cfg).set(aliases)
+    else:
+        aliases = core.firebase.get_document(question="info", user="aliases", cinfo=cfg).get().to_dict()
+    if aliases is None:
+        aliases  = {}
+
     if reload_cache:
         from .cache import cache_answers
-
-        if aliases != {}:
-            core.firebase.get_document(question="info", user="aliases", cinfo=cfg).set(aliases)
-        else:
-            aliases = core.firebase.get_document(question="info", user="aliases", cinfo=cfg).get().to_dict()
-
         cache_answers(reload_cache if type(reload_cache) == list else exos, update_git=update_git, verbose=False, aliases=aliases)
 
     data = tools.get_users_list(no_admin=no_admin)

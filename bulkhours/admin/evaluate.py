@@ -13,7 +13,7 @@ def get_alias_name(cuser):
     return cuser
 
 
-def show_answer(out, cuser, answer, style=None):
+def show_answer(out, cuser, answer, style=None, execute=True):
     color = "green" if cuser == core.tools.REF_USER else "red"
     cuser = get_alias_name(cuser)
     show_raw_code = style == "dark"  # not ("google.colab" in sys.modules and style != "dark")
@@ -25,7 +25,8 @@ def show_answer(out, cuser, answer, style=None):
 
         # Execute code
         core.tools.html(f"Execution ({cuser})💻", size="4", color=color, use_ipywidgets=True, display=True)
-        core.tools.eval_code(answer)
+        if execute:
+            core.tools.eval_code(answer)
 
 
 def create_evaluation_buttonanswer(cell_id, cuser, cfg, student_data, teacher_data):
@@ -97,20 +98,20 @@ def clean_grades(cell_id, **kwargs):
 
 
 
-def evaluate_student(cell_id, cfg, cuser, student_data, teacher_data, show_correction=False, style=None):
+def evaluate_student(cell_id, cfg, cuser, student_data, teacher_data, show_correction=True, style=None, execute=True):
 
     if show_correction and teacher_data.has_answer():
         out1 = ipywidgets.Output(layout={"width": "50%"})
         out2 = ipywidgets.Output(layout={"width": "50%"})
         tabs = ipywidgets.HBox([out1, out2])
 
-        show_answer(out1, cuser, student_data.get_solution(), style=style)
+        show_answer(out1, cuser, student_data.get_solution(), style=style, execute=execute)
         # bulkhours.c.set_style(out2, "sol_background")
-        show_answer(out2, core.tools.REF_USER, teacher_data.get_solution(), style=style)
+        show_answer(out2, core.tools.REF_USER, teacher_data.get_solution(), style=style, execute=execute)
 
     else:
         tabs = ipywidgets.Output(layout={"width": "100%"})
-        show_answer(tabs, cuser, student_data.get_solution(), style=style)
+        show_answer(tabs, cuser, student_data.get_solution(), style=style, execute=execute)
 
     out = ipywidgets.Output(layout={"border": "1px solid #CFCFCF", "width": "100%"})
     # bulkhours.c.set_style(out, "cell_background")
@@ -120,7 +121,7 @@ def evaluate_student(cell_id, cfg, cuser, student_data, teacher_data, show_corre
 
     IPython.display.display(ipywidgets.VBox([tabs, out]))
 
-def evaluate(cell_id, user="NEXT", show_correction=False, style=None, **kwargs):
+def evaluate(cell_id, user="NEXT", show_correction=True, style=None, execute=True, **kwargs):
 
     cfg = core.tools.get_config(is_new_format=True, **kwargs)
 
@@ -129,22 +130,24 @@ def evaluate(cell_id, user="NEXT", show_correction=False, style=None, **kwargs):
         print(exos)
         return
 
+    aliases = core.firebase.get_document(question="info", user="aliases", cinfo=cfg).get().to_dict()
 
-    cell_answers = answers.get_answers(cell_id, **kwargs)
+    cell_answers = answers.get_answers(cell_id, aliases=aliases, **kwargs)
     cinfo = core.LineParser.from_cell_id_user(cell_id, core.tools.REF_USER)
     teacher_data = core.CellParser.crunch_data(cinfo=cinfo, data=cell_answers[core.tools.REF_USER] if core.tools.REF_USER in cell_answers else "", user=core.tools.REF_USER)
 
     users = tools.get_users_list(no_admin=False)
-    for u in users.index:
+    for e, u in enumerate(users.index):
 
         mail, auser = users["mail"][u], users["auser"][u]
         cinfo = core.LineParser.from_cell_id_user(cell_id, mail)
         student_data = core.CellParser.crunch_data(cinfo=cinfo, data=cell_answers[mail] if mail in cell_answers else "", user=mail)
 
         if user == "NEXT" and student_data.has_answer() and core.Grade.ANSWER_FOUND == int(student_data.get_grade()):
-            return evaluate_student(cell_id, cfg, mail, student_data, teacher_data, show_correction=show_correction, style=style)
+            print(f"{e}/{len(users)}")
+            return evaluate_student(cell_id, cfg, mail, student_data, teacher_data, show_correction=show_correction, style=style, execute=execute)
         if user == mail or user == auser:
-            return evaluate_student(cell_id, cfg, mail, student_data, teacher_data, show_correction=show_correction, style=style)
+            return evaluate_student(cell_id, cfg, mail, student_data, teacher_data, show_correction=show_correction, style=style, execute=execute)
 
     core.tools.html(
         f"Pas de traitement possible pour {user}"
