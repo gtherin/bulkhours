@@ -31,7 +31,7 @@ def get_answers(cell_id, update_git=False, verbose=False, aliases={}):
 
         # Find the right name if typo in the db name
         student_id = str(answer.id).replace(" ", "")
-        if student_id in aliases:
+        if aliases is not None and student_id in aliases:
             student_id = aliases[student_id]
 
         if students_list.query(f"mail == '{student_id}'").empty:

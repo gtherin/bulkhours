@@ -32,7 +32,7 @@ class Exercices:
     def __init__(self, users, exos, cfg, aliases={}) -> None:
         self.users, self.exos = list(users), exos
         self.cfg = cfg
-        self.aliases = aliases
+        self.aliases = aliases if aliases is not None else {}
         self.exercices = {u: {e: Exercice(u, e) for e in exos} for u in users}
 
     def update_data(self, user, exo, adata) -> None:
