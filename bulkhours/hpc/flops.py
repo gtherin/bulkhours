@@ -38,7 +38,7 @@ def get_engraving_scale(verbose=False):
         year = str(line)[-9:-5]
         scale = line.find("a").get_text()
         scale = float(scale[:-3]) * 1000 if "µm" in scale else float(scale[:-3])
-        data.append({"year": year, "scale": int(scale)})
+        data.append({"year": int(year), "scale": int(scale)})
 
     return pd.DataFrame.from_records(data)
 
