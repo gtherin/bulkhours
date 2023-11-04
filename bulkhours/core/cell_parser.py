@@ -266,31 +266,32 @@ class CellParser:
         mode = "main_execution"
         self.store_info(mode, "", ekey="code", verbose=False)
 
-        for l in self.raw_code.splitlines():
-            l = CellParser.c2python(l)
+        if self.raw_code is not None:
+            for l in self.raw_code.splitlines():
+                l = CellParser.c2python(l)
 
-            for tmode in CellParser.meta_modes:
-                func_id = f"student_{tmode}_function"
+                for tmode in CellParser.meta_modes:
+                    func_id = f"student_{tmode}_function"
 
-                # Switch modes
-                if self.block_is_start(l, func_id):
-                    self.block_start(l, mode := tmode, func_id)
+                    # Switch modes
+                    if self.block_is_start(l, func_id):
+                        self.block_start(l, mode := tmode, func_id)
 
-                elif mode == tmode and self.block_is_end(l):
-                    mode, l = "main_execution", self.block_end(l)
+                    elif mode == tmode and self.block_is_end(l):
+                        mode, l = "main_execution", self.block_end(l)
 
-                # Remove execution lines for meta functions
-                if l.split("(")[0] in [f"student_{tmode}_function("]:
-                    l = ""
+                    # Remove execution lines for meta functions
+                    if l.split("(")[0] in [f"student_{tmode}_function("]:
+                        l = ""
 
-            if "%evaluation_cell_id" == l.replace(" ", "").split("-")[0]:
-                info = LineParser(l, self.raw_code, is_cell=False)
-                self.minfo[info.cell_id] = vars(info)
+                if "%evaluation_cell_id" == l.replace(" ", "").split("-")[0]:
+                    info = LineParser(l, self.raw_code, is_cell=False)
+                    self.minfo[info.cell_id] = vars(info)
 
-            if ".is_equal" in l:
-                l = self.block_equal_line(mode, l)
+                if ".is_equal" in l:
+                    l = self.block_equal_line(mode, l)
 
-            self.store_info(mode, l + "\n", ekey="code", verbose=False)
+                self.store_info(mode, l + "\n", ekey="code", verbose=False)
 
         self.raw_exec_code = self.minfo["main_execution"]["code"]
 
