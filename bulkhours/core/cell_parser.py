@@ -113,7 +113,12 @@ class CellParser:
     def get_code(self, c):
         # TODO: Fix this hack. Need to be run to avoid problems, if not launched, solution=user
         #self.parse_cell(self.cinfo, self.cell_source)
-        return self.minfo[c]["code"] if c in self.minfo and "code" in self.minfo[c] else ""
+        if c in self.minfo:
+            if type(self.minfo[c]) == str:
+                return self.minfo[c]
+            if type(self.minfo[c]) == dict and "code" in self.minfo[c]:
+                return self.minfo[c]["code"]
+        return ""
 
     def is_manual_note(self):
         return "grade_man" in self.minfo

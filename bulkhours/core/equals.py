@@ -79,7 +79,7 @@ def is_equal(
     return final_score
 
 
-def explain_student(student_data, teacher_data, raw=False):
+def execute_teacher_code(student_data, teacher_data, raw=False, tmode="explanation"):
     """Function to explain the answer to the student
 
     Parameters
@@ -94,30 +94,12 @@ def explain_student(student_data, teacher_data, raw=False):
     string
         a value in a string
     """
-    if "def student_explanation" in (explanation_code := teacher_data.get_code("explanation")):
-        if "show_code=true" in explanation_code.replace(" ", "").lower():
-            print(explanation_code)
-        IPython.get_ipython().run_cell(explanation_code)
+    if f"def student_{tmode}_function" in (tcode := teacher_data.get_code(tmode)):
+        if "show_code=true" in tcode.replace(" ", "").lower():
+            print(tcode)
 
-def hint_student(student_data, teacher_data, raw=False):
-    """Function to hint the answer to the student
-
-    Parameters
-    ----------
-    first : array_like
-        the 1st param name `first`
-    second : {'value', 'other'}, optional
-        the 3rd param, by default 'value'
-
-    Returns
-    -------
-    string
-        a value in a string
-    """
-    if "def student_hint" in (hint_code := teacher_data.get_code("hint")):
-        if "show_code=true" in hint_code.replace(" ", "").lower():
-            print(hint_code)
-        IPython.get_ipython().run_cell(hint_code)
+        IPython.get_ipython().run_cell(tcode)
+        IPython.get_ipython().run_cell(f"student_{tmode}_function()")
 
 
 def get_evaluation_code(teacher_data):
@@ -180,11 +162,15 @@ def evaluate_student(student_data, teacher_data, raw=False, use_student_context=
     if "show_code=true" in teacher_data.get_code("evaluation").replace(" ", "").lower():
         print(evaluation_code)
 
-    try:
+    if do_debug:
         contexts.run_cell(evaluation_code, do_debug)
         score = float(os.environ["FINAL_SCORE"])
-    except:
-        score = Grade.EVALUATION_CRASHED
+    else:
+        try:
+            contexts.run_cell(evaluation_code, do_debug)
+            score = float(os.environ["FINAL_SCORE"])
+        except:
+            score = Grade.EVALUATION_CRASHED
 
     if raw:
         return score
