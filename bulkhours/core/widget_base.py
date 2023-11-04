@@ -55,6 +55,15 @@ class WidgetBase:
         else:
             score = ""
 
+        if teacher_data.is_hint_available():
+            equals.hint_student(student_data, teacher_data, raw=False, tmode="hint")
+
+        if teacher_data.is_explanation_available():
+            print("")
+            equals.execute_teacher_code(student_data, teacher_data, raw=False, tmode="explanation")
+            if not teacher_data.is_evaluation_visible():
+                return
+
         if not teacher_data.is_evaluation_visible():
             with output:
                 tools.html(
@@ -68,11 +77,6 @@ class WidgetBase:
 
         self.display_correction(student_data, teacher_data, output=output, score=score)
 
-        if teacher_data.is_explanation_available():
-            equals.explain_student(student_data, teacher_data, raw=False)
-
-        if teacher_data.is_hint_available():
-            equals.hint_student(student_data, teacher_data, raw=False)
 
     def autocorrect(self, output):
 
@@ -103,7 +107,7 @@ class WidgetBase:
             max_score = equals.get_max_score(teacher_data)
 
         answers = admin.answers.get_answers(self.cinfo.cell_id, verbose=False)
-        for u in grades.index:
+        for u in grades.index[1:3]:
 
             mail, auser = grades["mail"][u], grades["auser"][u]
             if type(mail) == pd.Series:
@@ -130,11 +134,13 @@ class WidgetBase:
             if bot_correction:
                 score = bot_evaluation(student_data, teacher_data)
             else:
+                print("AAAAAAAAAAAAAAAA")
                 score = equals.evaluate_student(student_data, teacher_data, raw=True, user=auser, verbose=verbose)
                 print(f"\x1b[35m\x1b[1m({score}), \x1b[m", end="")
 
             grades.loc[u, self.cinfo.cell_id + ".n"] = score
      
+        return
         grad_name = "grade_bot" if bot_correction else "grade_ana"
 
         admin.answers.update_grades(self.cinfo.cell_id, grades, grad_name)
