@@ -57,6 +57,7 @@ def get_cpus(self):
         wpage="Transistor_count", in_table="20-bit, 6-chip, 28 chips total", columns=columns
     )
     df = df.iloc[:-1]
+    df = df[~df["date"].isin(["Apple", "TBD"])]
     df["date"] = df["date"].str.replace("March ", "").str.replace("November ", "")
     df["date"] = df["date"].str.replace("March ", "").str.replace("November ", "")
     df["date"] = df["date"].str.split("[").str[0].astype(int)
