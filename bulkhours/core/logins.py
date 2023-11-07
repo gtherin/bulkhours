@@ -160,6 +160,10 @@ import ipywidgets
         """
         )
 
+        if tools.get_platform() == "colab":
+            print("%cd /content")
+            ipp.run_cell("%cd /content")
+
     if not quiet_mode:
         print("\n- session-info: " + info)
 
