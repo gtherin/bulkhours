@@ -22,8 +22,9 @@ print(models["fit1"].forecast(3)) # BKRESET.REMOVE:LINE
     
 df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BKRESET.INIT:0
     """
-    nsource = []
 
+    separator = "//" if "// BKRESET" in source else "#"
+    nsource = []
     keep_line = True
 
     for s in source.split("\n"):
@@ -31,21 +32,21 @@ df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BKRESET.INIT:0
             l = s.split("BKRESET.")
             if "INIT:" in l[1]:
                 if "=" in s:
-                    s = s.split("=")[0] + "= " + l[1].replace("INIT:", "") + "  # ..."
+                    s = s.split("=")[0] + "= " + l[1].replace("INIT:", "") + f"  {separator} ..."
                 elif "return " in s:
-                    s = s.split("return ")[0] + "return " + l[1].replace("INIT:", "") + "  # ..."
+                    s = s.split("return ")[0] + "return " + l[1].replace("INIT:", "") + f"  {separator} ..."
             if "REMOVE" in l[1]:
                 if "START" in l[1]:
                     keep_line = False
                 elif "END" in l[1]:
                     keep_line = True
-                    s = s.split("#")[0] + "# ..."
+                    s = s.split(separator)[0] + separator + " ..."
                 else:
                     indentation = len(s) - len(s.lstrip())
-                    s = (" " * indentation) + "# ..."
+                    s = (" " * indentation) + separator + " ..."
             if "REPLACE" in l[1]:
                 indentation = len(s) - len(s.lstrip())
-                s = (" " * indentation) + l[1].replace("REPLACE:", "") + "  # ..."
+                s = (" " * indentation) + l[1].replace("REPLACE:", "") + f"  {separator} ..."
             if "PRINT" in l[1]:
                 indentation = len(s) - len(s.lstrip())
                 s = (" " * indentation) + l[1].replace("PRINT:", "")
@@ -58,6 +59,7 @@ df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BKRESET.INIT:0
 
 def cell_solution(source):
 
+    separator = "//" if "// BKRESET" not in source else "#"
     nsource = []
     for s in source.split("\n"):
         if "BKRESET." in s:
@@ -65,7 +67,7 @@ def cell_solution(source):
             if "REMOVE:START" in l[1] or "REMOVE:END" in l[1] or "PRINT" in l[1]:
                 continue
             elif "INIT:" in l[1] or "REPLACE:" in l[1] or "REMOVE" in l[1]:
-                s = l[0][:l[0].rfind("#")]
+                s = l[0][:l[0].rfind(separator)]
 
         nsource.append(s)
 
