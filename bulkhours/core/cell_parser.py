@@ -56,7 +56,7 @@ df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BKRESET.INIT:0
 
     code = "\n".join(nsource)
     for _ in range(3):
-        if code[-1] == "\n":
+        if len(code) > 0 and code[-1] == "\n":
             code = code[:-1]
     #print(code)
     return code
@@ -77,7 +77,7 @@ def cell_solution(source):
 
     code = "\n".join(nsource)
     for _ in range(3):
-        if code[-1] == "\n":
+        if len(code) > 0 and code[-1] == "\n":
             code = code[:-1]
     #print(code)
     return code
