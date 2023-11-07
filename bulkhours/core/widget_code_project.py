@@ -2,7 +2,6 @@ import os
 import IPython
 import ipywidgets
 import subprocess
-import glob
 from argparse import Namespace
 
 from . import widget_base
@@ -23,7 +22,7 @@ def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
     midwidth = "%.0fpx" % (int(width[:-2]) / 2)
 
     filenames = cinfo.options.split(",")
-    os.system("mkdir -p cache")
+    os.system(f"mkdir -p {cinfo.cell_id}")
 
     if show_solution:
         solution = firebase.get_solution_from_corrector(cinfo.cell_id, corrector="solution", cinfo=cinfo)
@@ -32,7 +31,7 @@ def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
     files = []
     for t, f in enumerate(filenames):
         ff = f.split(":")
-        if not os.path.exists(cfilename := f"cache/{cinfo.cell_id}_{ff[0]}"):
+        if not os.path.exists(cfilename := f"{cinfo.cell_id}/{ff[0]}"):
             rfilename = tools.abspath(f"data/exercices/{cinfo.cell_id}_{ff[0]}")
             if verbose:
                 print(f"Generate {cfilename} from {rfilename}")
@@ -88,22 +87,20 @@ class WidgetCodeProject(widget_base.WidgetBase):
         filenames = self.cinfo.options.split(",")
 
         for t, fn in enumerate(filenames):
-            with open(f"cache/{self.cinfo.cell_id}_{fn}", "w") as f:
-                f.write(files[t].value)
-            with open(f"cache/{fn}", "w") as f:
+            with open(f"{self.cinfo.cell_id}/{fn}", "w") as f:
                 f.write(files[t].value)
 
         if exec_process:
-            print(f"Save files cache/{filenames}, compile and execute program")
-            os.system('echo "cd cache && make all && ./main" > cache/main.sh && chmod 777 cache/main.sh')
+            print(f"Save files {self.cinfo.cell_id}/{filenames}, compile and execute program")
+            os.system(f'echo "cd {self.cinfo.cell_id} && make all && ./main" > {self.cinfo.cell_id}/main.sh && chmod 777 {self.cinfo.cell_id}/main.sh')
             print(
                 subprocess.run(
-                    "bash cache/main.sh".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+                    "bash {self.cinfo.cell_id}/main.sh".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
                 ).stdout
             )
 
         else:
-            print(f"Save files cache/{filenames}")
+            print(f"Save files {self.cinfo.cell_id}/{filenames}")
 
     def display_ecorrection(self, output):
         IPython.display.display(self.cinfo)

@@ -1,0 +1,77 @@
+// BKRESET.SPLIT:myclass.h
+#include <iostream>
+using namespace std;
+
+// Declare a new class
+class MyClass {
+  // Set all members of the class as public
+  // All members should be declared in the class declaration
+  private:
+    void getFirstName();
+    int myNum;        // Attribute (int variable)
+    string myString;  // Attribute (string variable)
+
+  public:
+    MyClass(int yourNum) {myNum = yourNum;}
+    MyClass(string yourString);
+    MyClass(string yourString, int yourNum);
+    MyClass() {cout << "Je fais rien" << endl;}
+
+    void getLastName() {cout <<"Doe" << endl;}
+    void getFirstName2() {getFirstName();}
+
+    void setMyNum(int yourNum) {myNum = yourNum;}
+    int getMyNum() {return myNum;}
+};
+// BKRESET.SPLIT:myclass.cpp
+#include "myclass.h"
+
+// Function can be implemented from outside the declaration
+void MyClass::getFirstName(){
+    cout << "John" << endl;
+}
+
+MyClass::MyClass(string yourString) {
+    myString = yourString;
+    }
+MyClass::MyClass(string yourString, int yourNum) {
+    myString = yourString;
+        myNum = yourNum;
+    }
+// BKRESET.SPLIT:main.cpp
+#include "myclass.h"
+
+int main() {
+  MyClass myObj;  
+  myObj.setMyNum(70);
+  cout << myObj.getMyNum() <<endl;
+  return 0;
+
+  // Create object from MyClass
+  MyClass myObj3;  
+  MyClass myObj2("youpi");  
+
+  // Access attributes and set values
+  myObj.setMyNum(70);
+  cout << myObj.getMyNum() <<endl;
+
+  myObj.setMyNum(35);
+  cout << myObj.getMyNum() <<endl;
+
+  // Print values
+  myObj.getFirstName2();
+  myObj.getLastName();
+  cout << myObj.getMyNum() <<endl;
+  //cout << myObj.myString <<endl; 
+  return 0;
+}
+// BKRESET.SPLIT:Makefile
+myclass.o: myclass.h myclass.cpp
+	@g++ -c myclass.cpp
+
+main.o: main.cpp
+	@g++ -c main.cpp
+
+all: myclass.o main.o
+	@echo "- Compile and execute:"
+	@/usr/bin/g++ -o main myclass.o main.o

@@ -139,7 +139,8 @@ def init_env(packages=None, plt_style="default", **kwargs):
 
     if "BLK_PACKAGES_STATUS" not in os.environ:
         installer.install_dependencies(packages, start_time, tools.is_admin(cfg=cfg))
-        os.environ["BLK_PACKAGES_STATUS"] = f"INITIALIZED"
+        os.environ["BLK_PACKAGES_STATUS"] = "INITIALIZED"
+        os.environ["BLK_ROOT_DIR"] = os.environ["PWD"]
 
     colors.set_plt_style(plt_style)
     version = open(tools.abspath("bulkhours/__version__.py")).readlines()[0].split('"')[1]
@@ -161,7 +162,6 @@ import ipywidgets
         )
 
         if tools.get_platform() == "colab":
-            print("%cd /content")
             ipp.run_cell("%cd /content")
 
     if not quiet_mode:
