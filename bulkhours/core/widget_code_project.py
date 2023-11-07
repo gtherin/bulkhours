@@ -105,7 +105,7 @@ class WidgetCodeProject(widget_base.WidgetBase):
             os.system(f'echo "cd {self.cinfo.cell_id} && make all && ./main" > {self.cinfo.cell_id}/main.sh && chmod 777 {self.cinfo.cell_id}/main.sh')
             print(
                 subprocess.run(
-                    "bash {self.cinfo.cell_id}/main.sh".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+                    f"bash {self.cinfo.cell_id}/main.sh".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
                 ).stdout
             )
 
