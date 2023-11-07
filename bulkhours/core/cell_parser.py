@@ -54,8 +54,12 @@ df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BKRESET.INIT:0
         if keep_line:
             nsource.append(s)
 
-    #print("\n".join(nsource))
-    return "\n".join(nsource)
+    code = "\n".join(nsource)
+    for _ in range(3):
+        if code[-1] == "\n":
+            code = code[:-1]
+    #print(code)
+    return code
 
 def cell_solution(source):
 
@@ -71,8 +75,12 @@ def cell_solution(source):
 
         nsource.append(s)
 
-    # print("\n".join(nsource))
-    return "\n".join(nsource)
+    code = "\n".join(nsource)
+    for _ in range(3):
+        if code[-1] == "\n":
+            code = code[:-1]
+    #print(code)
+    return code
 
 
 class CellParser:
