@@ -1,0 +1,29 @@
+// BKRESET.SPLIT:quadrilater.h
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Quadrilateral {
+  public: 
+    void properties() {
+      cout << "Quadrilateral: sides are " << SideProperties() <<" and angles are " << AnglesProperties() << endl;
+    }
+  string SideProperties() {return "ordinary";}
+  string AnglesProperties() {return "ordinary";}
+};
+// BKRESET.SPLIT:quadrilater.cpp
+#include "quadrilater.h"
+    
+int main() {
+  Quadrilateral().properties();
+  //Trapezoid().properties();
+  //Rectangle().properties();
+  //Square().properties();
+}
+// BKRESET.SPLIT:Makefile
+quadrilater.o: quadrilater.h quadrilater.cpp
+	@g++ -c quadrilater.cpp
+
+all: quadrilater.o
+	@echo "- Compile and execute:"
+	@/usr/bin/g++ -o main quadrilater.o
