@@ -63,7 +63,7 @@ def install_dependencies(packages, start_time, is_admin):
     import glob
     for filename in glob.glob(f"{bulk_dir}/bulkhours/data/exercices/*_sol.uno"):
         if get_platform() != "local" and not is_admin:
-            print(f"rm -rf {filename}")
+            os.sytem(f"rm -rf {filename}")
 
     if get_platform() == "sagemaker":
         if "CONDA_PREFIX" in os.environ and "sagemaker-distribution" not in os.environ["CONDA_PREFIX"]:
