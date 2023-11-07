@@ -59,3 +59,4 @@ test_catvnoncat.h5
 train_catvnoncat.h5
 vaccinations.csv
 
+data/exercices/*_sol.txt
