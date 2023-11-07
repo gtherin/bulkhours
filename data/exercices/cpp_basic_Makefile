@@ -1,9 +1,0 @@
-myclass.o: myclass.h myclass.cpp
-	@g++ -c myclass.cpp
-
-main.o: main.cpp
-	@g++ -c main.cpp
-
-all: myclass.o main.o
-	@echo "- Compile and execute:"
-	@/usr/bin/g++ -o main myclass.o main.o

@@ -6,6 +6,7 @@ from argparse import Namespace
 
 from . import widget_base
 from . import tools
+from . import installer
 
 
 def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
@@ -28,16 +29,25 @@ def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
         solution = firebase.get_solution_from_corrector(cinfo.cell_id, corrector="solution", cinfo=cinfo)
         solution = {k.replace("_dot_", "."): v for k, v in solution.items()}
 
+    if os.path.exists(rfilename := tools.abspath(f"data/exercices/{cinfo.cell_id}.uno")):
+        code = installer.unobscure(open(rfilename, "r").read())
+    elif os.path.exists(rfilename := tools.abspath(f"data/exercices/{cinfo.cell_id}_reset.txt")):
+        code = open(rfilename, "r").read()
+
+    files_code = code.split("// BKRESET.SPLIT:")[1:]
+    rfiles = {f[:f.find("\n")]: f[f.find("\n")+1:] for f in files_code}
+
     files = []
     for t, f in enumerate(filenames):
         ff = f.split(":")
+        cfilename = f"{cinfo.cell_id}/{ff[0]}"
         if not os.path.exists(cfilename := f"{cinfo.cell_id}/{ff[0]}"):
-            rfilename = tools.abspath(f"data/exercices/{cinfo.cell_id}_{ff[0]}")
+
             if verbose:
                 print(f"Generate {cfilename} from {rfilename}")
 
             # Store in files to be compiled
-            data = open(rfilename).read()
+            data = rfiles[ff[0]]
             with open(cfilename, "w") as f:
                 f.write(data)
 
