@@ -116,7 +116,10 @@ def styles(sdata, cmap="RdBu", icolumns=["nom", "prenom"], sorted_by=True, hide_
     nacolumns = [c for c in fcolumns if "all" not in c]
 
     if sorted_by:
-        sdata = sdata.sort_values(icolumns)
+        if type(sorted_by) in [str, list]:
+            sdata = sdata.sort_values(sorted_by)
+        else:
+            sdata = sdata.sort_values(icolumns)
 
     sdata = sdata.rename(columns={c + ".n": c for c in fcolumns})
 
@@ -130,7 +133,7 @@ def styles(sdata, cmap="RdBu", icolumns=["nom", "prenom"], sorted_by=True, hide_
 
     stylish = stylish.background_gradient(cmap=cmap, vmin=0, vmax=10)
 
-    ccols = [c for c in list(fcolumns) if c != "all" and sdata[c][core.tools.REF_USER] > 0]
+    ccols = [c for c in list(fcolumns) if c != "all" and core.tools.REF_USER in sdata[c] and sdata[c][core.tools.REF_USER] > 0]
     def interpret_corr(v):
         return core.Grade.apply_style(v, True)
     stylish = stylish.applymap(interpret_corr, subset=ccols)

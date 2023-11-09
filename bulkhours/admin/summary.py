@@ -1,5 +1,6 @@
 import json
 import IPython
+import pandas as pd
 
 from .. import core
 from .exercice import Exercices, Exercice
@@ -16,7 +17,10 @@ def summary(
     cmap="RdBu",  # bwr_r RdBu
     export_notes=True,
     aliases = {},
-    hide_grades = False,
+    hide_grades=False,
+    aggregate=None,
+    apply=None,
+    sorted_by=True,
     **kwargs,
 ):
     """Permet de faire un point sur
@@ -58,35 +62,46 @@ def summary(
 
     IPython.display.display(IPython.display.Markdown(f"## {cfg.virtual_room}: {(1-data['is_admin']).sum()} students"))
 
-    exercices = Exercices(users := list(data.mail.unique()), exos, cfg, aliases=aliases)
+    if aggregate is not None:
+        grades = pd.DataFrame({n: core.firebase.get_document(question_id=f"{cfg.subject}_{cfg.virtual_room}_{n}_info", user="grades").get().to_dict() for n in aggregate})
+        data = data.merge(grades, how="left", left_on="mail", right_index=True)
+        data['all'] = data[aggregate].mean(axis=1)
+        data = data.set_index("mail")
+        exos, columns = aggregate, None
 
-    for exo in exos:
-        filename = aanswers.get_cfilename(cfg, exo)
+    else:
 
-        with open(filename) as json_file:
-            answers = json.load(json_file)
+        exercices = Exercices(users := list(data.mail.unique()), exos, cfg, aliases=aliases)
 
-            for user, adata in answers.items():
-                exercices.update_data(user, exo, adata)
+        for exo in exos:
+            filename = aanswers.get_cfilename(cfg, exo)
 
-    if cinfo in ["", "A"]:
-        for s in Exercice.fields:
-            data = exercices.merge_dataframe(data, s, suffix="." + s[0])
-    elif cinfo in ["*.c", "*.t", "*.g"]:
-        data = exercices.merge_dataframe(data, [s for s in Exercice.fields if s[0] == cinfo[-1]][0])
+            with open(filename) as json_file:
+                answers = json.load(json_file)
 
-    data = data.set_index("mail")
+                for user, adata in answers.items():
+                    exercices.update_data(user, exo, adata)
 
-    core.firebase.get_document(question="info", user="grades", cinfo=cfg).set(data["all"].to_dict())
+        if cinfo in ["", "A"]:
+            for s in Exercice.fields:
+                data = exercices.merge_dataframe(data, s, suffix="." + s[0])
+        elif cinfo in ["*.c", "*.t", "*.g"]:
+            data = exercices.merge_dataframe(data, [s for s in Exercice.fields if s[0] == cinfo[-1]][0])
+
+        data = data.set_index("mail")
+
+        core.firebase.get_document(question="info", user="grades", cinfo=cfg).set(data["all"].to_dict())
 
     data = data[["nom", "prenom", "all"] + exos] if columns is None else data[columns]
+    if apply is not None:
+        data = apply(data, exos)
 
     for k, v in aliases.items():
         if v in data.index and k in data.index:
             for c in exos:
                 data.at[k, c] = data.at[v, c]
 
-    sdata = tools.styles(data, cmap=cmap, hide_grades=hide_grades) if cmap is not None else data
+    sdata = tools.styles(data, cmap=cmap, hide_grades=hide_grades, sorted_by=sorted_by) if cmap is not None else data
 
     if export_notes:
         IPython.display.display(sdata)
