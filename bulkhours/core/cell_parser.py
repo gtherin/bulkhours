@@ -186,7 +186,7 @@ class CellParser:
     def is_evaluation_visible(self):
         if self.cell_source is None:
             return False
-        return "visible" not in self.minfo or not self.minfo["visible"]
+        return "visible" not in self.minfo or self.minfo["visible"]
 
     def is_explanation_available(self):
         return "explanation" in self.minfo and self.minfo["explanation"] != ""
