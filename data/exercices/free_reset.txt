@@ -1,0 +1,31 @@
+// BKRESET.SPLIT:efree.h
+#include <iostream>
+using namespace std;
+
+// Declare a new class
+class MyClass {
+  ...
+};
+// BKRESET.SPLIT:efree.cpp
+#include "efree.h"
+
+// Function can be implemented from outside the declaration
+...
+
+// BKRESET.SPLIT:main.cpp
+#include "efree.h"
+
+int main() {
+  MyClass myObj;
+  ...
+}
+// BKRESET.SPLIT:Makefile
+efree.o: efree.h efree.cpp
+	@g++ -c efree.cpp
+
+main.o: main.cpp
+	@g++ -c main.cpp
+
+all: efree.o main.o
+	@echo "- Compile and execute:"
+	@/usr/bin/g++ -o main efree.o main.o
