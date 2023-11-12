@@ -3,21 +3,21 @@
 using namespace std;
 
 // Declare a new class
-class MyClass {
-  ...
+class EFree {
+  // ...
 };
 // BKRESET.SPLIT:efree.cpp
 #include "efree.h"
 
 // Function can be implemented from outside the declaration
-...
+// ...
 
 // BKRESET.SPLIT:main.cpp
 #include "efree.h"
 
 int main() {
-  MyClass myObj;
-  ...
+  EFree myObj;
+  // ...
 }
 // BKRESET.SPLIT:Makefile
 efree.o: efree.h efree.cpp
