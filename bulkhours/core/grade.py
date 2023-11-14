@@ -33,6 +33,8 @@ class Grade:
         if src is None:
             if "answer" in answer:
                 return Grade.ANSWER_FOUND
+            if "atype" in answer and answer["atype"] == "code_project" and "update_time" in answer:
+                return Grade.ANSWER_FOUND
             
             return Grade.NO_ANSWER_FOUND
         return float(answer[src])
