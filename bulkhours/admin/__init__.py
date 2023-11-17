@@ -10,3 +10,4 @@ from .mail import *  # noqa
 from .audio import get_audio  # noqa
 from .dashboard import dashboard  # noqa
 from .invoice import Invoice  # noqa
+from .roadmap import plot_roadmap  # noqa
