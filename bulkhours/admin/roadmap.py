@@ -6,6 +6,7 @@ from .. import data
 def plot_roadmap(user, info, name="global", colors=None, bg_color=None, marker=None):
 
     import plotly.graph_objects as go
+    import numpy as np
 
     df = data.get_data(info[user]["roadmap"], credit=False)
     df = df.query("tline>=0")
@@ -20,24 +21,23 @@ def plot_roadmap(user, info, name="global", colors=None, bg_color=None, marker=N
     if type(colors) == list:
         colors = {c: colors[i] for i, c in enumerate(df.category.unique())}
 
-    df["fcolor"] = df["category"].map(colors)
+    df["fcolorc"] = df["category"].map(colors)
+    df["description"] = df["description"].fillna(df["task"])
+    df["dash"] = df["dash"].fillna("solid")
+    df["tcolor"] = df["tcolor"].fillna("white")
+    df["fcolor"] = df["fcolor"].fillna(df["fcolorc"])
+    df["lcolor"] = df["lcolor"].fillna(df["fcolorc"])
+    df["tsize"] = df["tsize"].fillna(16)
 
     cats = {}
     fig = go.Figure()
     today = datetime.datetime.now()
     for i, d in df.iterrows():
         xmin, xmax = datetime.datetime.strptime(d["start_date"], '%Y-%m-%d'), datetime.datetime.strptime(d["end_date"], '%Y-%m-%d')
-        ekwargs = eval("dict(" + str(d.kwargs) + ")") if type(d.kwargs) != float else {}
-        tsize = 16 if "tsize" not in ekwargs else ekwargs["tsize"]
-        tcolor = 'white' if "tcolor" not in ekwargs else ekwargs["tcolor"]
-        fcolor = d.fcolor if "fcolor" not in ekwargs else ekwargs["fcolor"]
-        lcolor = fcolor if "lcolor" not in ekwargs else ekwargs["lcolor"]
-        dash = 'solid' if "dash" not in ekwargs else ekwargs["dash"]
-        description = d.task if "description" not in ekwargs else ekwargs["description"]
 
         kwargs = dict(y=[-d.tline - 0.45, -d.tline - 0.45, -d.tline + 0.45, -d.tline + 0.45, -d.tline - 0.45],
-                    mode='lines', name=d.category, meta=[description], hovertemplate='%{meta[0]}<extra></extra>',
-                    legendgroup=d.category, line=dict(color=lcolor, width=4, dash=dash), fill='toself', fillcolor=fcolor)
+                    mode='lines', name=d.category, meta=[d.description], hovertemplate='%{meta[0]}<extra></extra>',
+                    legendgroup=d.category, line=dict(color=d.lcolor, width=4, dash=d.dash), fill='toself', fillcolor=d.fcolor)
 
         if xmin < today:
             fig.add_trace(go.Scatter(x=[xmin, today, today, xmin, xmin], opacity=0.6, showlegend=False, **kwargs))
@@ -49,7 +49,7 @@ def plot_roadmap(user, info, name="global", colors=None, bg_color=None, marker=N
             cats[d.category] = True
 
         fig.add_trace(go.Scatter(x=[xmin + 0.5*(xmax-xmin)], y=[-d.tline], mode='text', legendgroup=d.category, text=[d.task], hoverinfo='skip', 
-                                textposition="middle center", textfont=dict(color=tcolor, size=tsize), showlegend=False))
+                                textposition="middle center", textfont=dict(color=d.tcolor, size=d.tsize), showlegend=False))
 
     if bg_color is None:
         bg_color = "rgba(0,0,0,0)"
