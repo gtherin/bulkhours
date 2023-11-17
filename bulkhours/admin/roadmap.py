@@ -3,13 +3,16 @@ import datetime
 from .. import data
 
 
-def plot_roadmap(user, info, name="global", colors=None):
+def plot_roadmap(user, info, name="global", colors=None, bg_color=None, marker=None):
 
     import plotly.graph_objects as go
 
     df = data.get_data(info[user]["roadmap"], credit=False)
     df = df.query("tline>=0")
     df = df.query(f"roadmap == '{name}'")
+
+    if marker is None:
+        marker = "red"
 
     if colors is None:
         colors = ["#52DE97", "#FF5733", '#C70039', "#0097B2", '#FBE555', "#581845", "black", "#C70039", "#FF5733", "#0097B2", "#52DE97", "#FBE555"]
@@ -48,11 +51,15 @@ def plot_roadmap(user, info, name="global", colors=None):
         fig.add_trace(go.Scatter(x=[xmin + 0.5*(xmax-xmin)], y=[-d.tline], mode='text', legendgroup=d.category, text=[d.task], hoverinfo='skip', 
                                 textposition="middle center", textfont=dict(color=tcolor, size=tsize), showlegend=False))
 
-    fig.add_vline(x=today, line_width=4, line_color="red")
-    fig.update_layout(template="plotly_white", title="", margin=dict(l=0, r=0, t=0, b=0), autosize=False, 
-                    width=1000, height=400, paper_bgcolor="rgba(0,0,0,0)")
+    if bg_color is None:
+        bg_color = "rgba(0,0,0,0)"
+
+    fig.add_vline(x=today, line_width=4, line_color=marker)
+    fig.update_layout(template="plotly_dark", title="", margin=dict(l=0, r=0, t=0, b=0), autosize=False, 
+                    width=1000, height=400, paper_bgcolor=bg_color, plot_bgcolor=bg_color)
 
     fig.update_yaxes(visible=False)
+    fig.update_xaxes(gridcolor='white')
     fig.show()
     return
 
