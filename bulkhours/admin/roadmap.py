@@ -10,7 +10,7 @@ def plot_roadmap(user, info, name="global", colors=None, bg_color=None, marker=N
 
     df = data.get_data(info[user]["roadmap"], credit=False)
     df = df.query("tline>=0")
-    df = df.query(f"roadmap == '{name}'")
+    df = df.query(f"roadmap == '{name}'").copy()
 
     if marker is None:
         marker = "red"
@@ -56,7 +56,8 @@ def plot_roadmap(user, info, name="global", colors=None, bg_color=None, marker=N
 
     fig.add_vline(x=today, line_width=4, line_color=marker)
     fig.update_layout(template="plotly_dark", title="", margin=dict(l=0, r=0, t=0, b=0), autosize=False, 
-                    width=1000, height=400, paper_bgcolor=bg_color, plot_bgcolor=bg_color)
+                    width=1000, height=400, paper_bgcolor=bg_color, plot_bgcolor=bg_color, xaxis = dict(tickfont = dict(size=16)),
+                    legend=dict(orientation="h", font=dict(size=22), x=0.15, y=1.1))
 
     fig.update_yaxes(visible=False)
     fig.update_xaxes(gridcolor='white')
