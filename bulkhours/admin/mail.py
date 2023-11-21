@@ -52,7 +52,8 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
                         s = s.replace(email, default_student)
                     nsource.append(s)
                 cell["source"] = "\n".join(nsource)
-                cell["outputs"][0]["text"] = ""
+                if "outputs" in cell and len(cell["outputs"]) > 0:
+                    cell["outputs"][0]["text"] = ""
             # Remove cells with admin code
             elif "[admin]" in source[0] or "bulkhours.admin" in cell["source"]:
                 to_pop.append(idx)
