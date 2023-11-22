@@ -39,7 +39,10 @@ class WidgetDashboard(core.WidgetTextArea):
         notebook_id = config.get("notebook_id")
 
         self.ws = {
-            k: ipywidgets.Text(value=config[notebook_id][k], layout=ipywidgets.Layout(flex="4 1 0%", width="auto"))
+            k: ipywidgets.Text(
+                value=config[notebook_id][k],
+                layout=ipywidgets.Layout(flex="4 1 0%", width="auto"),
+            )
             for k in ["evaluation", "exercices", "page"]
         }
 
@@ -69,7 +72,9 @@ class WidgetDashboard(core.WidgetTextArea):
         is_locked = virtual_room in cfg.is_locked
         self.ws["is_locked"] = ipywidgets.Checkbox(
             value=is_locked,
-            description="Soumissions authorisée🟢/✔️interdite⛔" if cfg.isfr else "Submissions allowed🟢/✔️forbidden⛔",
+            description="Soumissions authorisée🟢/✔️interdite⛔
+            if cfg.isfr
+           r else "Submissions allowed🟢/✔️forbidden⛔",
             indent=False,
             tooltip="""The checkbox is used to control the global access to the notebooks:
 - If not checked🟢, students can still commit answers if the solution is not available,
@@ -77,7 +82,9 @@ class WidgetDashboard(core.WidgetTextArea):
 """,
             layout=ipywidgets.Layout(width="auto", flex_flow="row", display="flex"),
         )
-        form_item_layout = ipywidgets.Layout(display="flex", flex_flow="row", justify_content="space-between")
+        form_item_layout = ipywidgets.Layout(
+            display="flex", flex_flow="row", justify_content="space-between"
+        )
 
         label = (
             f"Paramètres du cours (nb_id={notebook_id}, salle virtuelle={virtual_room})"
@@ -88,22 +95,31 @@ class WidgetDashboard(core.WidgetTextArea):
 
         xwidgets = []  # self.ws["title"]]
 
-        self.ws["virtual_room"] = ipywidgets.RadioButtons(value=virtual_room, options=virtual_rooms.split(";"))
+        self.ws["virtual_room"] = ipywidgets.RadioButtons(
+            value=virtual_room, options=virtual_rooms.split(";")
+        )
 
-        self.ws["language"] = ipywidgets.RadioButtons(value=cfg.language, options=["fr", "en"])
+        self.ws["language"] = ipywidgets.RadioButtons(
+            value=cfg.language, options=["fr", "en"]
+        )
 
         def get_html(label):
             html_code = f"<b><font face='FiraCode Nerd Font' size=4 color='#888888'>{label}<font></b><br/>"
-            return ipywidgets.HTML(value=html_code, layout=ipywidgets.Layout(flex="1 1 0%", width="auto"))
+            return ipywidgets.HTML(
+                value=html_code, layout=ipywidgets.Layout(flex="1 1 0%", width="auto")
+            )
 
         for vroom in virtual_rooms.split(";") + ["admins"]:
             self.ws[vroom] = ipywidgets.Text(
-                value=config["global"][vroom], layout=ipywidgets.Layout(flex="4 1 0%", width="auto")
+                value=config["global"][vroom],
+                layout=ipywidgets.Layout(flex="4 1 0%", width="auto"),
             )
             xwidgets.append(
                 ipywidgets.Box(
                     [get_html(vroom), self.ws[vroom]],
-                    layout=ipywidgets.Layout(display="flex", flex_flow="row", justify_content="space-between"),
+                    layout=ipywidgets.Layout(
+                        display="flex", flex_flow="row", justify_content="space-between"
+                    ),
                 )
             )
 
@@ -127,7 +143,11 @@ class WidgetDashboard(core.WidgetTextArea):
                 )
             )
 
-        if 0 and "tokens" in config["global"] and type(tokens := config["global"]["tokens"]) == dict:
+        if (
+            0
+            and "tokens" in config["global"]
+            and type(tokens := config["global"]["tokens"]) == dict
+        ):
             xwidgets.append(
                 ipywidgets.Box(
                     [
@@ -147,7 +167,7 @@ class WidgetDashboard(core.WidgetTextArea):
                 [
                     self.ws["chatgpt"],
                     self.ws["norm20"],
-                    #self.ws["restricted"],
+                    # self.ws["restricted"],
                     self.ws["is_locked"],
                     self.ws["language"],
                     self.cinfo.abuttons["delete_solution"].b,
@@ -160,7 +180,11 @@ class WidgetDashboard(core.WidgetTextArea):
         return ipywidgets.Box(
             xwidgets,
             layout=ipywidgets.Layout(
-                display="flex", flex_flow="column", border="solid 2px", align_items="stretch", width="100%"
+                display="flex",
+                flex_flow="column",
+                border="solid 2px",
+                align_items="stretch",
+                width="100%",
             ),
         )
 
@@ -182,23 +206,45 @@ class WidgetDashboard(core.WidgetTextArea):
 
             config["virtual_room"] = self.ws["virtual_room"].value
 
-        config["global"].update({k: self.ws[k].value for k in ["chatgpt", "norm20", "restricted", "language"]})
+        config["global"].update(
+            {
+                k: self.ws[k].value
+                for k in ["chatgpt", "norm20", "restricted", "language"]
+            }
+        )
 
         virtual_rooms = config["global"]["virtual_rooms"].split(";")
-        config["global"].update({vroom: self.ws[vroom].value.replace(",", ";") for vroom in virtual_rooms})
+        config["global"].update(
+            {vroom: self.ws[vroom].value.replace(",", ";") for vroom in virtual_rooms}
+        )
 
         if "is_locked" not in config[notebook_id]:
             config[notebook_id]["is_locked"] = ""
 
-        if self.ws["is_locked"].value and config["virtual_room"] not in config[notebook_id]["is_locked"]:
-            print(f"⚠️\x1b[31m\x1b[41m\x1b[37mStudents won't be able to submit answers anymore for '{notebook_id}/{config['virtual_room']}'\x1b[m⚠️")
+        if (
+            self.ws["is_locked"].value
+            and config["virtual_room"] not in config[notebook_id]["is_locked"]
+        ):
+            print(
+                f"⚠️\x1b[31m\x1b[41m\x1b[37mStudents won't be able to submit answers anymore for '{notebook_id}/{config['virtual_room']}'\x1b[m⚠️"
+            )
             config[notebook_id]["is_locked"] += config["virtual_room"] + ";"
-        elif not self.ws["is_locked"].value and (config["virtual_room"] + ";") in config[notebook_id]["is_locked"]:
-            print(f"⚠️\x1b[32m\x1b[1mStudents can submit answers for '{notebook_id}/{config['virtual_room']}'\x1b[m⚠️")
-            config[notebook_id]["is_locked"] = config[notebook_id]["is_locked"].replace(config["virtual_room"] + ";", "")
+        elif (
+            not self.ws["is_locked"].value
+            and (config["virtual_room"] + ";") in config[notebook_id]["is_locked"]
+        ):
+            print(
+                f"⚠️\x1b[32m\x1b[1mStudents can submit answers for '{notebook_id}/{config['virtual_room']}'\x1b[m⚠️"
+            )
+            config[notebook_id]["is_locked"] = config[notebook_id]["is_locked"].replace(
+                config["virtual_room"] + ";", ""
+            )
 
         config[notebook_id].update(
-            {k: self.ws[k].value.replace(",", ";") for k in ["exercices", "evaluation", "page", "virtual_room"]}
+            {
+                k: self.ws[k].value.replace(",", ";")
+                for k in ["exercices", "evaluation", "page", "virtual_room"]
+            }
         )
 
         core.firebase.save_config("global", config)
@@ -255,14 +301,23 @@ def dashboard(virtual_room=None, verbose=True):
 
     def func_delete_solution(b):
         return core.buttons.update_button(
-            b, bwidgeta.cinfo.abuttons["delete_solution"], output, bwidgeta, "delete_solution_on_click"
+            b,
+            bwidgeta.cinfo.abuttons["delete_solution"],
+            output,
+            bwidgeta,
+            "delete_solution_on_click",
         )
 
     bwidgeta.cinfo.abuttons["delete_solution"].b.on_click(func_delete_solution)
 
     def func_c(b):
         return core.buttons.update_button(
-            b, bwidgeta.cinfo.abuttons["save_changes"], output, bwidgeta, "submit_on_click", kwargs=dict()
+            b,
+            bwidgeta.cinfo.abuttons["save_changes"],
+            output,
+            bwidgeta,
+            "submit_on_click",
+            kwargs=dict(),
         )
 
     bwidgeta.cinfo.abuttons["save_changes"].b.on_click(func_c)
