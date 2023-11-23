@@ -72,9 +72,9 @@ class WidgetDashboard(core.WidgetTextArea):
         is_locked = virtual_room in cfg.is_locked
         self.ws["is_locked"] = ipywidgets.Checkbox(
             value=is_locked,
-            description="Soumissions authorisée🟢/✔️interdite⛔
+            description="Soumissions authorisée🟢/✔️interdite⛔"
             if cfg.isfr
-           r else "Submissions allowed🟢/✔️forbidden⛔",
+            else "Submissions allowed🟢/✔️forbidden⛔",
             indent=False,
             tooltip="""The checkbox is used to control the global access to the notebooks:
 - If not checked🟢, students can still commit answers if the solution is not available,
