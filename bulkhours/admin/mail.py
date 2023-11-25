@@ -50,9 +50,12 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
     for idx, cell in enumerate(nb.cells):
         if cell["cell_type"] == "code":
             source = cell["source"].split("\n")
+            is_it_an_evaluation_cell = source[0].startswith(
+                "%%evaluation_cell_id "
+            ) or source[0].startswith("%evaluation_cell_id ")
 
             # Change the initialization cell
-            if "\ndatabase" in cell["source"]:
+            if "\ndatabase" in cell["source"] and not is_it_an_evaluation_cell:
                 nsource = []
                 for s in source:
                     if s.startswith("database"):
@@ -64,7 +67,7 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
                 if "outputs" in cell and len(cell["outputs"]) > 0:
                     cell["outputs"][0]["text"] = ""
             # Remove cells with admin code
-            elif "[admin]" in source[0] or "bulkhours.admin" in cell["source"]:
+            elif "[admin]" in source[0]:
                 to_pop.append(idx)
             # Remove cells with solution
             elif " -u solution" in source[0]:
@@ -78,9 +81,7 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
                     cell["source"] = cell["source"].replace(" -u reset", "")
                 else:  # is_solution
                     to_pop.append(idx)
-            elif source[0].startswith("%%evaluation_cell_id ") or source[0].startswith(
-                "%evaluation_cell_id "
-            ):
+            elif is_it_an_evaluation_cell:
                 cinfo = core.LineParser(source[0], cell["source"])
                 parsed_cell = core.cell_parser.CellParser.crunch_data(
                     cinfo=cinfo, user=core.tools.REF_USER, data=cell["source"]
