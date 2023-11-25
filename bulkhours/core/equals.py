@@ -8,6 +8,19 @@ import os
 
 from . import contexts
 from .grade import Grade
+from .line_parser import LineParser
+
+
+def gpt_evaluation(student_data, teacher_data):
+    from . import gpt
+
+    if gpt.evaluation_instructions is not None:
+        print("")
+        grade, _ = gpt.get_grade(student_data, teacher_data)
+        return grade
+
+    print("🚧Need to implement evaluation_instructions")
+    return np.nan
 
 
 def is_equal(
@@ -128,6 +141,19 @@ os.environ['FINAL_SCORE'] = str(eresult)
 def get_max_score(teacher_data):
     # Get the formatted evaluation code
     evaluation_code = get_evaluation_code(teacher_data)
+
+    # Include gpt instructions
+    nevaluation_code = ""
+    for e in evaluation_code.split("\n"):
+        if "admin.gpt_eval" in e:
+            l = LineParser.get_func_args(e, func_id="bulkhours.admin.gpt_eval")
+            nevaluation_code += (
+                e.replace("bulkhours.admin.gpt_eval", l["max_score"] + "  #") + "\n"
+            )
+        else:
+            nevaluation_code += e + "\n"
+
+    evaluation_code = nevaluation_code
     do_debug = "debug=true" in evaluation_code.replace(" ", "").lower()
 
     # Run the teacher code if needed
@@ -173,6 +199,13 @@ def evaluate_student(
 
     # Run the teacher code and get max_score from it
     max_score = get_max_score(teacher_data)
+
+    if "admin.gpt_eval" in evaluation_code:
+        score = max_score * gpt_evaluation(student_data, teacher_data)
+        if raw:
+            return score
+
+        return f"{score}/{max_score}"
 
     # Run the student code if needed
     contexts.build_context(

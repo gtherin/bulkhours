@@ -13,18 +13,6 @@ from . import equals
 from . import contexts
 
 
-def bot_evaluation(student_data, teacher_data):
-    from . import gpt
-
-    if gpt.evaluation_instructions is not None:
-        print("")
-        grade, _ = gpt.get_grade(student_data, teacher_data)
-        return grade
-
-    print("🚧Need to implement evaluation_instructions")
-    return np.nan
-
-
 class WidgetBase:
     widget_id = "base"
     widget_comp = "lwsc"
@@ -100,10 +88,6 @@ class WidgetBase:
                 cinfo=self.cinfo, user=tools.REF_USER, data=None
             )  # Get data from database
 
-        bot_correction = teacher_data.get_code(
-            "evaluation"
-        ) == "" or "automatic_eval" in teacher_data.get_code("evaluation")
-
         from .. import admin
 
         grades = admin.tools.get_users_list(no_admin=False, sort_by=sort_by)
@@ -113,10 +97,7 @@ class WidgetBase:
 
         print(f"\x1b[35m\x1b[1mNotes for {self.cinfo.cell_id}: \x1b[m", end="")
 
-        if bot_correction:
-            max_score = 10
-        else:
-            max_score = equals.get_max_score(teacher_data)
+        max_score = equals.get_max_score(teacher_data)
 
         answers = admin.answers.get_answers(self.cinfo.cell_id, verbose=False)
         for u in grades.index:
@@ -127,9 +108,7 @@ class WidgetBase:
             if duser is not None and auser != duser:
                 continue
 
-            if not bot_correction:
-                print(f"\x1b[35m\x1b[1m{auser}, \x1b[m", end="")
-
+            print(f"\x1b[35m\x1b[1m{auser}, \x1b[m", end="")
             if mail not in answers:
                 print(f"\x1b[35m\x1b[1m(nan), \x1b[m", end="")
                 continue
@@ -147,17 +126,18 @@ class WidgetBase:
                 )
                 continue
 
-            if bot_correction:
-                score = bot_evaluation(student_data, teacher_data)
-            else:
-                score = equals.evaluate_student(
-                    student_data, teacher_data, raw=True, user=auser, verbose=verbose
-                )
-                print(f"\x1b[35m\x1b[1m({score}), \x1b[m", end="")
+            score = equals.evaluate_student(
+                student_data, teacher_data, raw=True, user=auser, verbose=verbose
+            )
+            print(f"\x1b[35m\x1b[1m({score}), \x1b[m", end="")
 
             grades.loc[u, self.cinfo.cell_id + ".n"] = score
 
-        grad_name = "grade_bot" if bot_correction else "grade_ana"
+        grad_name = (
+            "grade_bot"
+            if "admin.gpt_eval" in teacher_data.get_code("evaluation")
+            else "grade_ana"
+        )
 
         admin.answers.update_grades(self.cinfo.cell_id, grades, grad_name)
         grades = grades.drop(columns=["mail"]).set_index("auser").T

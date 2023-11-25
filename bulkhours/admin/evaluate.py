@@ -183,6 +183,7 @@ def evaluate(
     style=None,
     execute=True,
     virtual_room=None,
+    level=None,
     **kwargs,
 ):
     if virtual_room is not None:
@@ -225,7 +226,7 @@ def evaluate(
         if (
             user == "NEXT"
             and student_data.has_answer()
-            and core.Grade.ANSWER_FOUND == int(student_data.get_grade())
+            and core.Grade.ANSWER_FOUND == int(student_data.get_grade(level))
         ):
             print(f"{e}/{len(users)}")
             return evaluate_student(

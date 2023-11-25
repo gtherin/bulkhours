@@ -199,8 +199,11 @@ class CellParser:
     def is_evaluation_available(self):
         return "evaluation" in self.minfo and self.minfo["evaluation"] != ""
 
-    def get_grade(self):
-        return Grade.get(self.minfo)
+    def get_grade(self, level=None):
+        return Grade.get(self.minfo, level=level)
+
+    def get_src(self):
+        return Grade.src(self.minfo)
 
     def do_run_evaluation(self):
         return self.is_evaluation_available() and (
