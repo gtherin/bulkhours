@@ -6,50 +6,115 @@ import numpy as np
 from .. import core
 
 
-def switch_classroom(virtual_room, verbose=True):
-    cfg = core.tools.get_config(is_new_format=True)
+def switch_classroom(virtual_room, verbose=True, **kwargs):
+    cfg = core.tools.get_config(is_new_format=True, **kwargs)
     if virtual_room is not None and virtual_room != cfg.virtual_room:
         if verbose:
-            print(f"\x1b[35m\x1b[1mSwitching from {cfg.virtual_room} to {virtual_room}\x1b[m")
+            print(
+                f"\x1b[35m\x1b[1mSwitching from {cfg.virtual_room} to {virtual_room}\x1b[m"
+            )
 
         cfg["virtual_room"] = virtual_room
         core.tools.update_config(cfg)
 
     if verbose:
-        if "is_locked" in cfg[cfg.notebook_id] and (cfg.virtual_room + ";") in cfg[cfg.notebook_id]["is_locked"]:
-            print(f"⚠️\x1b[31m\x1b[41m\x1b[37mStudents can not submit answers '{cfg.notebook_id}/{cfg['virtual_room']}'\x1b[m⚠️")
-        elif "is_locked" in cfg[cfg.notebook_id] and (cfg.virtual_room + ";") not in cfg[cfg.notebook_id]["is_locked"]:
-            print(f"\x1b[32m\x1b[1mStudents can submit answers for '{cfg.notebook_id}/{cfg['virtual_room']}'\x1b[m")
+        if (
+            "is_locked" in cfg[cfg.notebook_id]
+            and (cfg.virtual_room + ";") in cfg[cfg.notebook_id]["is_locked"]
+        ):
+            print(
+                f"⚠️\x1b[31m\x1b[41m\x1b[37mStudents can not submit answers '{cfg.notebook_id}/{cfg['virtual_room']}'\x1b[m⚠️"
+            )
+        elif (
+            "is_locked" in cfg[cfg.notebook_id]
+            and (cfg.virtual_room + ";") not in cfg[cfg.notebook_id]["is_locked"]
+        ):
+            print(
+                f"\x1b[32m\x1b[1mStudents can submit answers for '{cfg.notebook_id}/{cfg['virtual_room']}'\x1b[m"
+            )
 
     return cfg
 
 
-def get_users_list(no_admin=True, sort_by=None):
+def get_users_list(no_admin=True, sort_by=None, euser=None):
     info = core.tools.get_config(is_new_format=True)
     virtual_room = info["virtual_room"]
 
     users = []
     if not no_admin:
-        users += [(k, 1) for k in info.g["admins"].replace(",", ";").replace(" ", "").replace(" ", "").split(";") if k != ""]
-    users += [(k, 0) for k in info.g[virtual_room].replace(",", ";").replace(" ", "").replace(" ", "").split(";") if k != ""]
+        users += [
+            (k, 1)
+            for k in info.g["admins"]
+            .replace(",", ";")
+            .replace(" ", "")
+            .replace(" ", "")
+            .split(";")
+            if k != ""
+        ]
+    users += [
+        (k, 0)
+        for k in info.g[virtual_room]
+        .replace(",", ";")
+        .replace(" ", "")
+        .replace(" ", "")
+        .split(";")
+        if k != ""
+    ]
 
-    users = pd.DataFrame(users, columns=["mail", "is_admin"]).drop_duplicates(subset=["mail"])
+    users = pd.DataFrame(users, columns=["mail", "is_admin"]).drop_duplicates(
+        subset=["mail"]
+    )
 
-    new = users["mail"].str.split("@", n=1, expand=True)[0].str.split(".", n=1, expand=True)
+    # Add extra_user if not found
+    if euser is not None and "@" in euser and euser not in users["mail"].unique():
+        users = pd.concat(
+            [
+                users,
+                pd.DataFrame.from_records(
+                    [
+                        {
+                            "mail": euser,
+                            "is_admin": 0,
+                        }
+                    ]
+                ),
+            ]
+        )
+
+    new = (
+        users["mail"]
+        .str.split("@", n=1, expand=True)[0]
+        .str.split(".", n=1, expand=True)
+    )
+
     users["prenom"] = new[0].str.capitalize()
     users["nom"] = new[1].str.capitalize()
 
     users = pd.concat(
-        [users, pd.DataFrame.from_records([{"mail": core.tools.REF_USER, "is_admin": 1, "prenom": "Sol", "nom": "Ution"}])]
+        [
+            users,
+            pd.DataFrame.from_records(
+                [
+                    {
+                        "mail": core.tools.REF_USER,
+                        "is_admin": 1,
+                        "prenom": "Sol",
+                        "nom": "Ution",
+                    }
+                ]
+            ),
+        ]
     )
 
-    users['auser'] = users["prenom"] + "." + users["nom"].str[0]
-    users["auser"] = users['auser'].where(~users['auser'].duplicated(), other=users["prenom"] + "." + users["nom"])
+    users["auser"] = users["prenom"] + "." + users["nom"].str[0]
+    users["auser"] = users["auser"].where(
+        ~users["auser"].duplicated(), other=users["prenom"] + "." + users["nom"]
+    )
 
     for c in ["prenom", "nom", "mail", "auser"]:
         users[c] = users[c].astype(str)
 
-    users = users[['auser', "prenom", "nom", "mail", "is_admin"]]
+    users = users[["auser", "prenom", "nom", "mail", "is_admin"]]
     if sort_by is not None:
         users = users.sort_by(sort_by)
 
@@ -91,7 +156,10 @@ git pull 2> /dev/null
     if update_git:
         print(
             subprocess.run(
-                "bash git_push.sh".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+                "bash git_push.sh".split(),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
             ).stdout
         )
         os.system("rm -rf git_push.sh")
@@ -105,10 +173,11 @@ git pull 2> /dev/null
         print(f"\x1b[32m\x1b[1m{msg}{cmd}\x1b[m")
 
 
-def styles(sdata, cmap="RdBu", icolumns=["nom", "prenom"], sorted_by=True, hide_grades=False):
-
+def styles(
+    sdata, cmap="RdBu", icolumns=["nom", "prenom"], sorted_by=True, hide_grades=False
+):
     core.Grade.set_static_style_info(minvalue=0.0, cmap=cmap)
-    
+
     if hide_grades:
         sdata = sdata.drop(columns=["all"])
 
@@ -133,17 +202,29 @@ def styles(sdata, cmap="RdBu", icolumns=["nom", "prenom"], sorted_by=True, hide_
 
     stylish = stylish.background_gradient(cmap=cmap, vmin=0, vmax=10)
 
-    ccols = [c for c in list(fcolumns) if c != "all" and core.tools.REF_USER in sdata[c] and sdata[c][core.tools.REF_USER] > 0]
+    ccols = [
+        c
+        for c in list(fcolumns)
+        if c != "all"
+        and core.tools.REF_USER in sdata[c]
+        and sdata[c][core.tools.REF_USER] > 0
+    ]
+
     def interpret_corr(v):
         return core.Grade.apply_style(v, True)
+
     stylish = stylish.applymap(interpret_corr, subset=ccols)
 
     nccols = [c for c in list(fcolumns) if c not in ccols]
+
     def interpret_ncorr(v):
         return core.Grade.apply_style(v, False)
+
     stylish = stylish.applymap(interpret_ncorr, subset=nccols)
 
     if "all" in sdata.columns:
-        stylish = stylish.background_gradient(cmap=cmap, subset=["all"], vmin=0, vmax=10.0)
+        stylish = stylish.background_gradient(
+            cmap=cmap, subset=["all"], vmin=0, vmax=10.0
+        )
 
     return stylish.set_properties().format("{:.1f}", na_rep="✅", subset=nacolumns)

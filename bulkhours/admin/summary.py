@@ -8,6 +8,44 @@ from . import answers as aanswers
 from . import tools
 
 
+def get_num_answers():
+    cfg = core.tools.get_config(is_new_format=True)
+
+    anscs = {}
+    for e in cfg.n["exercices"].split(";"):
+        anss = aanswers.get_answers(e)
+        for k, _ in anss.items():
+            if k not in anscs:
+                anscs[k] = 0
+            anscs[k] += 1
+    return anscs
+
+
+def get_groups(aliases=None, virtual_rooms=[None]):
+    for v in virtual_rooms:
+        if v is not None:
+            tools.switch_classroom(v)
+
+        anscs = get_num_answers()
+
+        naliases = {}
+        groups = aanswers.get_answers("mygroup")
+        for k, v in groups.items():
+            members = [p for p in v["answer"].split('"') if "@" in p]
+            rm, an = k, 1
+            for p in members:
+                if p in anscs and anscs[p] > an:
+                    rm = p
+                    an = anscs[p]
+            for p in members:
+                if ".doe@" not in p and rm != p:
+                    naliases[p] = rm
+
+        if aliases is not None:
+            naliases.update(aliases)
+    return naliases
+
+
 def summary(
     no_admin=False,
     reload_cache=True,
@@ -16,7 +54,7 @@ def summary(
     columns=None,
     cmap="RdBu",  # bwr_r RdBu
     export_notes=True,
-    aliases = {},
+    aliases={},
     hide_grades=False,
     aggregate=None,
     apply=None,
@@ -48,30 +86,57 @@ def summary(
 
     # Get aliases from db if not filled
     if aliases != {}:
-        core.firebase.get_document(question="info", user="aliases", cinfo=cfg).set(aliases)
+        core.firebase.get_document(question="info", user="aliases", cinfo=cfg).set(
+            aliases
+        )
     else:
-        aliases = core.firebase.get_document(question="info", user="aliases", cinfo=cfg).get().to_dict()
+        aliases = (
+            core.firebase.get_document(question="info", user="aliases", cinfo=cfg)
+            .get()
+            .to_dict()
+        )
     if aliases is None:
-        aliases  = {}
+        aliases = {}
 
     if reload_cache:
         from .cache import cache_answers
-        cache_answers(reload_cache if type(reload_cache) == list else exos, update_git=update_git, verbose=False, aliases=aliases)
+
+        cache_answers(
+            reload_cache if type(reload_cache) == list else exos,
+            update_git=update_git,
+            verbose=False,
+            aliases=aliases,
+        )
 
     data = tools.get_users_list(no_admin=no_admin)
 
-    IPython.display.display(IPython.display.Markdown(f"## {cfg.virtual_room}: {(1-data['is_admin']).sum()} students"))
+    IPython.display.display(
+        IPython.display.Markdown(
+            f"## {cfg.virtual_room}: {(1-data['is_admin']).sum()} students"
+        )
+    )
 
     if aggregate is not None:
-        grades = pd.DataFrame({n: core.firebase.get_document(question_id=f"{cfg.subject}_{cfg.virtual_room}_{n}_info", user="grades").get().to_dict() for n in aggregate})
+        grades = pd.DataFrame(
+            {
+                n: core.firebase.get_document(
+                    question_id=f"{cfg.subject}_{cfg.virtual_room}_{n}_info",
+                    user="grades",
+                )
+                .get()
+                .to_dict()
+                for n in aggregate
+            }
+        )
         data = data.merge(grades, how="left", left_on="mail", right_index=True)
-        data['all'] = data[aggregate].mean(axis=1)
+        data["all"] = data[aggregate].mean(axis=1)
         data = data.set_index("mail")
         exos, columns = aggregate, None
 
     else:
-
-        exercices = Exercices(users := list(data.mail.unique()), exos, cfg, aliases=aliases)
+        exercices = Exercices(
+            users := list(data.mail.unique()), exos, cfg, aliases=aliases
+        )
 
         for exo in exos:
             filename = aanswers.get_cfilename(cfg, exo)
@@ -86,11 +151,14 @@ def summary(
             for s in Exercice.fields:
                 data = exercices.merge_dataframe(data, s, suffix="." + s[0])
         elif cinfo in ["*.c", "*.t", "*.g"]:
-            data = exercices.merge_dataframe(data, [s for s in Exercice.fields if s[0] == cinfo[-1]][0])
+            data = exercices.merge_dataframe(
+                data, [s for s in Exercice.fields if s[0] == cinfo[-1]][0]
+            )
 
         data = data.set_index("mail")
-
-        core.firebase.get_document(question="info", user="grades", cinfo=cfg).set(data["all"].to_dict())
+        core.firebase.get_document(question="info", user="grades", cinfo=cfg).set(
+            data["all"].to_dict()
+        )
 
     data = data[["nom", "prenom", "all"] + exos] if columns is None else data[columns]
     if apply is not None:
@@ -101,7 +169,11 @@ def summary(
             for c in exos:
                 data.at[k, c] = data.at[v, c]
 
-    sdata = tools.styles(data, cmap=cmap, hide_grades=hide_grades, sorted_by=sorted_by) if cmap is not None else data
+    sdata = (
+        tools.styles(data, cmap=cmap, hide_grades=hide_grades, sorted_by=sorted_by)
+        if cmap is not None
+        else data
+    )
 
     if export_notes:
         IPython.display.display(sdata)
