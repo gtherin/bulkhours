@@ -11,7 +11,14 @@ from .grade import Grade
 
 
 def is_equal(
-    data_test, data_ref, norm="Linf-norm", error=1e-8, policy="strict", min_score=0, max_score=10, cmax_score=False
+    data_test,
+    data_ref,
+    norm="Linf-norm",
+    error=1e-8,
+    policy="strict",
+    min_score=0,
+    max_score=10,
+    cmax_score=False,
 ):
     """Return the student score compared to a benchmark value
 
@@ -55,7 +62,10 @@ def is_equal(
 
     if type(data_test) == str:
         estimation_error = np.abs(
-            1.0 - difflib.SequenceMatcher(None, data_test.replace("\n", ""), data_ref.replace("\n", "")).ratio()
+            1.0
+            - difflib.SequenceMatcher(
+                None, data_test.replace("\n", ""), data_ref.replace("\n", "")
+            ).ratio()
         )
     else:
         estimation_error = np.abs(data_test - data_ref)
@@ -110,7 +120,9 @@ os.environ['FINAL_SCORE'] = "0"
 global eresult
 eresult = student_evaluation_function()
 os.environ['FINAL_SCORE'] = str(eresult)
-""" % teacher_data.get_code("evaluation")
+""" % teacher_data.get_code(
+        "evaluation"
+    )
 
 
 def get_max_score(teacher_data):
@@ -119,16 +131,31 @@ def get_max_score(teacher_data):
     do_debug = "debug=true" in evaluation_code.replace(" ", "").lower()
 
     # Run the teacher code if needed
-    contexts.build_context(teacher_data, "main_execution", "teacher", f"teacher." in evaluation_code, do_debug=do_debug)
+    contexts.build_context(
+        teacher_data,
+        "main_execution",
+        "teacher",
+        evaluation_code,
+        f"teacher." in evaluation_code,
+        do_debug=do_debug,
+    )
 
     try:
+        evaluation_code = evaluation_code.replace("bulkhours.admin.replace(", "#")
         contexts.run_cell(evaluation_code.replace("student.", "teacher."), stdout=False)
         return float(os.environ["FINAL_SCORE"])
     except:
         return Grade.MAX_SCORE_NOT_AVAILABLE
 
 
-def evaluate_student(student_data, teacher_data, raw=False, use_student_context=True, user="", verbose=False):
+def evaluate_student(
+    student_data,
+    teacher_data,
+    raw=False,
+    use_student_context=True,
+    user="",
+    verbose=False,
+):
     """
     This function is used to evaluate the student code.
 
@@ -152,13 +179,16 @@ def evaluate_student(student_data, teacher_data, raw=False, use_student_context=
         student_data,
         "main_execution",
         "student",
+        evaluation_code,
         f"student." in evaluation_code,
         do_debug=do_debug,
-        use_context=use_student_context, user=user
+        use_context=use_student_context,
+        user=user,
     )
     if not use_student_context:
         evaluation_code = evaluation_code.replace("student.", "")
 
+    evaluation_code = evaluation_code.replace("bulkhours.admin.replace(", "#")
     if "show_code=true" in teacher_data.get_code("evaluation").replace(" ", "").lower():
         print(evaluation_code)
 
