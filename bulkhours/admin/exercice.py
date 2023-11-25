@@ -1,11 +1,13 @@
 import numpy as np
 import pandas as pd
 
+
 class Exercice:
     fields = ["count", "time", "grade"]
 
     def __init__(self, user, exo) -> None:
         from .. import core
+
         self.user, self.exo, self.answer = user, exo, ""
         self.utime, self.grade, self.count = np.nan, core.Grade.DEFAULT_GRADE, np.nan
         self.src = ""
@@ -17,15 +19,6 @@ class Exercice:
         self.src = core.Grade.src(adata)
         self.grade = core.Grade.get(adata)
         self.utime = core.Grade.upd(adata)
-        return
-
-        if "grade" not in adata:  # Failure of automatic grades
-            self.grade = core.Grade.get(adata)
-        elif adata["grade"] is None:  # Failure of automatic grades
-            self.grade = core.Grade.EVALUATION_CRASHED
-        else:
-            self.grade = float(adata["grade"])
-
 
 
 class Exercices:
@@ -45,7 +38,10 @@ class Exercices:
 
     def get_dataframe(self, field, suffix=""):
         data = pd.DataFrame(
-            {e + suffix: [getattr(self.exercices[u][e], field) for u in self.users] for e in self.exos},
+            {
+                e + suffix: [getattr(self.exercices[u][e], field) for u in self.users]
+                for e in self.exos
+            },
             index=self.users,
         )
 
@@ -68,7 +64,10 @@ class Exercices:
                     data["all"] = (
                         np.round(data.fillna(0.0).clip(0).mean(axis=1), 1)
                         if ceval == ""
-                        else data.fillna(0.0).clip(0).rename(columns=lambda value: value.replace(".", "_")).eval(ceval)
+                        else data.fillna(0.0)
+                        .clip(0)
+                        .rename(columns=lambda value: value.replace(".", "_"))
+                        .eval(ceval)
                     )
                 except:
                     print(
@@ -80,4 +79,9 @@ class Exercices:
         return data
 
     def merge_dataframe(self, data, field, suffix=""):
-        return data.merge(self.get_dataframe(field, suffix=suffix), how="left", left_on="mail", right_index=True)
+        return data.merge(
+            self.get_dataframe(field, suffix=suffix),
+            how="left",
+            left_on="mail",
+            right_index=True,
+        )

@@ -221,24 +221,21 @@ class WidgetDashboard(core.WidgetTextArea):
         if "is_locked" not in config[notebook_id]:
             config[notebook_id]["is_locked"] = ""
 
-        if (
-            self.ws["is_locked"].value
-            and config["virtual_room"] not in config[notebook_id]["is_locked"]
-        ):
-            print(
-                f"⚠️\x1b[31m\x1b[41m\x1b[37mStudents won't be able to submit answers anymore for '{notebook_id}/{config['virtual_room']}'\x1b[m⚠️"
-            )
-            config[notebook_id]["is_locked"] += config["virtual_room"] + ";"
-        elif (
-            not self.ws["is_locked"].value
-            and (config["virtual_room"] + ";") in config[notebook_id]["is_locked"]
-        ):
-            print(
-                f"⚠️\x1b[32m\x1b[1mStudents can submit answers for '{notebook_id}/{config['virtual_room']}'\x1b[m⚠️"
-            )
-            config[notebook_id]["is_locked"] = config[notebook_id]["is_locked"].replace(
-                config["virtual_room"] + ";", ""
-            )
+        if self.ws["is_locked"].value:
+            if (vrl := config["virtual_room"] + ";") not in config[notebook_id][
+                "is_locked"
+            ]:
+                print(
+                    f"⚠️\x1b[31m\x1b[41m\x1b[37mStudents won't be able to submit answers anymore for '{notebook_id}/{config['virtual_room']}'\x1b[m⚠️"
+                )
+                config[notebook_id]["is_locked"] += vrl
+            else:
+                print(
+                    f"⚠️\x1b[32m\x1b[1mStudents can submit answers for '{notebook_id}/{config['virtual_room']}'\x1b[m⚠️"
+                )
+                config[notebook_id]["is_locked"] = config[notebook_id][
+                    "is_locked"
+                ].replace(vrl, "")
 
         config[notebook_id].update(
             {
