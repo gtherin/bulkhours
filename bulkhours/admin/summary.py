@@ -8,9 +8,7 @@ from . import answers as aanswers
 from . import tools
 
 
-def get_num_answers():
-    cfg = core.tools.get_config(is_new_format=True)
-
+def get_num_answers(cfg):
     anscs = {}
     for e in cfg.n["exercices"].split(";"):
         anss = aanswers.get_answers(e)
@@ -21,29 +19,42 @@ def get_num_answers():
     return anscs
 
 
-def get_groups(aliases=None, virtual_rooms=[None]):
+def get_groups(aliases={}, virtual_rooms=[None]):
+    cfg = core.tools.get_config(is_new_format=True)
+
     for v in virtual_rooms:
         if v is not None:
             tools.switch_classroom(v)
 
-        anscs = get_num_answers()
+        anscs = get_num_answers(cfg)
 
+        data = tools.get_users_list()
         naliases = {}
         groups = aanswers.get_answers("mygroup")
         for k, v in groups.items():
             members = [p for p in v["answer"].split('"') if "@" in p]
             rm, an = k, 1
             for p in members:
+                if p in aliases:
+                    p = aliases[p]
+
+                if p not in data.mail.unique() and ".doe@" not in p:
+                    aanswers.user_is_unknown(cfg, p, "group")
                 if p in anscs and anscs[p] > an:
                     rm = p
                     an = anscs[p]
             for p in members:
+                if p in aliases:
+                    p = aliases[p]
                 if ".doe@" not in p and rm != p:
                     naliases[p] = rm
 
-        if aliases is not None:
-            naliases.update(aliases)
-    return naliases
+    aliases = {}
+    for k, v in naliases.items():
+        if k not in aliases.values():
+            aliases[k] = v
+
+    return dict(sorted(aliases.items(), key=lambda x: x[1]))
 
 
 def summary(

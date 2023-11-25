@@ -20,6 +20,14 @@ def get_cdata(cfg, cell_id):
     return {}
 
 
+def user_is_unknown(cfg, student_id, cell_id):
+    print(
+        f"\x1b[41m\x1B[37mL'étudiant \033[1m'{student_id}'\033[0m\x1b[41m\x1B[37m est inconnu ({cell_id}). Régularisez la situation depuis le menu dashboard: 'bulkhours.admin.dashboard()'\x1b[0m"
+        if cfg.language == "fr"
+        else f"\x1b[41m\x1B[37mStudent \033[1m'{student_id}'\033[0m\x1b[41m\x1B[37m is unknown ({cell_id}). Please fix the situation in the dashboard: 'bulkhours.admin.dashboard()'\x1b[0m"
+    )
+
+
 def get_answers(cell_id, update_git=False, verbose=False, aliases={}):
     cfg = core.tools.get_config(is_new_format=True)
     students_list = tools.get_users_list(no_admin=False)
@@ -36,11 +44,7 @@ def get_answers(cell_id, update_git=False, verbose=False, aliases={}):
             student_id = aliases[student_id]
 
         if students_list.query(f"mail == '{student_id}'").empty:
-            print(
-                f"\x1b[41m\x1B[37mL'étudiant \033[1m'{student_id}'\033[0m\x1b[41m\x1B[37m est inconnu ({cell_id}). Régularisez la situation depuis le menu dashboard: 'bulkhours.admin.dashboard()'\x1b[0m"
-                if cfg.language == "fr"
-                else f"\x1b[41m\x1B[37mStudent \033[1m'{student_id}'\033[0m\x1b[41m\x1B[37m is unknown ({cell_id}). Please fix the situation in the dashboard: 'bulkhours.admin.dashboard()'\x1b[0m"
-            )
+            user_is_unknown(cfg, student_id, cell_id)
 
         if student_id in cdata:
             cdata[student_id].update(answer.to_dict())
