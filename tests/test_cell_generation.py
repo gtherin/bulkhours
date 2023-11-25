@@ -25,19 +25,30 @@ def student_explanation_function():
 print("BK ROCKS")  # BKRESET.REPLACE:print("...COMMENT...")
 """
 
+
 def test_cell_reset_python():
     cinfo = bulkhours.core.LineParser.from_cell_id_user("synthetic", "solution")
-    teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(cinfo=cinfo, user="solution", data=cell_content)
+    teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(
+        cinfo=cinfo, user="solution", data=cell_content
+    )
     code = teacher_data.get_reset()
     print(code)
 
-    for s in ["BK ROCKS", "student_evaluation_function", "student_hint_function", "student_explanation_function"]:
+    for s in [
+        "BK ROCKS",
+        "student_evaluation_function",
+        "student_hint_function",
+        "student_explanation_function",
+    ]:
         if s in code:
             raise Exception(f"Should not be here ({s})")
 
+
 def test_cell_solution_python():
     cinfo = bulkhours.core.LineParser.from_cell_id_user("synthetic", "solution")
-    teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(cinfo=cinfo, user="solution", data=cell_content)
+    teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(
+        cinfo=cinfo, user="solution", data=cell_content
+    )
     code = teacher_data.get_solution()
     print(code)
 
@@ -49,7 +60,6 @@ def test_cell_solution_python():
 
     if "student_evaluation_function" in code:
         raise Exception("Should not be here")
-
 
 
 cell_content_cpp = """%%evaluation_cell_id -i encapsulation
@@ -88,20 +98,31 @@ int main() {
 }
 """
 
+
 def test_cell_reset_cpp():
     cinfo = bulkhours.core.LineParser.from_cell_id_user("synthetic", "solution")
-    teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(cinfo=cinfo, user="solution", data=cell_content_cpp)
+    teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(
+        cinfo=cinfo, user="solution", data=cell_content_cpp
+    )
     print(teacher_data.minfo)
     code = teacher_data.get_reset()
     print(code)
 
-    for s in ["BK ROCKS", "student_evaluation_function", "student_hint_function", "student_explanation_function"]:
+    for s in [
+        "BK ROCKS",
+        "student_evaluation_function",
+        "student_hint_function",
+        "student_explanation_function",
+    ]:
         if s in code:
             raise Exception(f"Should not be here ({s})")
 
+
 def test_cell_solution_cpp():
     cinfo = bulkhours.core.LineParser.from_cell_id_user("synthetic", "solution")
-    teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(cinfo=cinfo, user="solution", data=cell_content_cpp)
+    teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(
+        cinfo=cinfo, user="solution", data=cell_content_cpp
+    )
     code = teacher_data.get_solution()
     print(code)
 
