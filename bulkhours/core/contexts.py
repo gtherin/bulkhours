@@ -4,6 +4,7 @@ import io
 from contextlib import redirect_stdout
 from .cell_parser import CellParser
 
+
 def run_cell(code, stdout=True):
     if (ipp := IPython.get_ipython()) is None:
         print(f"No IPython instance found:\n{code}")
@@ -34,13 +35,17 @@ class CellContext:
 
 def add_variables_in_contexts(cell_id, configs):
     for context in ["student", "teacher"]:
-        run_cell(f"from argparse import Namespace\n{context}.{cell_id} = Namespace(**{configs})")
+        run_cell(
+            f"from argparse import Namespace\n{context}.{cell_id} = Namespace(**{configs})"
+        )
 
 
 def generate_context_code(code, context):
     code = CellParser.remove_meta_functions_execution(code)
+
     def tab(t):
         return "    " * t
+
     ncode = f"""\n
 class C{context}:
 {tab(1)}def __init__(self):
@@ -61,19 +66,38 @@ class C{context}:
     return ncode
 
 
-def build_context(data, code_label, context, do_evaluate, do_debug=False, use_context=True, user=""):
+def build_context(
+    data,
+    code_label,
+    context,
+    evaluation_code,
+    do_evaluate,
+    do_debug=False,
+    use_context=True,
+    user="",
+):
     output = ipywidgets.Output()
     if code_label not in data.minfo:
         return output
 
     code = CellParser.remove_meta_functions_execution(data.get_code(code_label))
 
+    if "bulkhours.admin.replace(" in evaluation_code:
+        replacements = evaluation_code.split("bulkhours.admin.replace(")
+        for r in replacements[1:]:
+            cmd = "code.replace(" + r.split("\n")[0]
+            code = eval(cmd)
+
     generate_empty_context(context)
     if not (code is None or len(code.replace("\n", "").replace(" ", "")) == 0):
-        fcode = code if not use_context or "compile_and_exec" in code else generate_context_code(code, context)
+        fcode = (
+            code
+            if not use_context or "compile_and_exec" in code
+            else generate_context_code(code, context)
+        )
 
-        #print(fcode)
+        # print(fcode)
         IPython.get_ipython().run_cell(fcode)
-        
-    #if data.is_cell_type():
+
+    # if data.is_cell_type():
     #    run_cell(f'{context}.answer={data["answer"]}')
