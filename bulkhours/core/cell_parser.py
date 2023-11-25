@@ -7,20 +7,20 @@ from . import tools
 
 def cell_reset(source):
     """
-# BKRESET.REMOVE:START
-    # This code won't appear in the reset generation
-    # It will appear on the solution though
-# BKRESET.REMOVE:END
+    # BKRESET.REMOVE:START
+        # This code won't appear in the reset generation
+        # It will appear on the solution though
+    # BKRESET.REMOVE:END
 
-# BKRESET.PRINT:raw_std = gdf[f"ret_{i}"].ewm(20).std()
-    # The previous line will be printed in the reset generation
-    # The previous line won't be printed in the solution generation
+    # BKRESET.PRINT:raw_std = gdf[f"ret_{i}"].ewm(20).std()
+        # The previous line will be printed in the reset generation
+        # The previous line won't be printed in the solution generation
 
-print(models["fit1"].forecast(3)) # BKRESET.REMOVE:LINE
-    # The previous line won't be printed in the reset generation
-    # The previous line will be printed in the solution generation
-    
-df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BKRESET.INIT:0
+    print(models["fit1"].forecast(3)) # BKRESET.REMOVE:LINE
+        # The previous line won't be printed in the reset generation
+        # The previous line will be printed in the solution generation
+
+    df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BKRESET.INIT:0
     """
 
     separator = "//" if "// BKRESET" in source else "#"
@@ -32,9 +32,19 @@ df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BKRESET.INIT:0
             l = s.split("BKRESET.")
             if "INIT:" in l[1]:
                 if "=" in s:
-                    s = s.split("=")[0] + "= " + l[1].replace("INIT:", "") + f"  {separator} ..."
+                    s = (
+                        s.split("=")[0]
+                        + "= "
+                        + l[1].replace("INIT:", "")
+                        + f"  {separator} ..."
+                    )
                 elif "return " in s:
-                    s = s.split("return ")[0] + "return " + l[1].replace("INIT:", "") + f"  {separator} ..."
+                    s = (
+                        s.split("return ")[0]
+                        + "return "
+                        + l[1].replace("INIT:", "")
+                        + f"  {separator} ..."
+                    )
             if "REMOVE" in l[1]:
                 if "START" in l[1]:
                     keep_line = False
@@ -46,7 +56,11 @@ df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BKRESET.INIT:0
                     s = (" " * indentation) + separator + " ..."
             if "REPLACE" in l[1]:
                 indentation = len(s) - len(s.lstrip())
-                s = (" " * indentation) + l[1].replace("REPLACE:", "") + f"  {separator} ..."
+                s = (
+                    (" " * indentation)
+                    + l[1].replace("REPLACE:", "")
+                    + f"  {separator} ..."
+                )
             if "PRINT" in l[1]:
                 indentation = len(s) - len(s.lstrip())
                 s = (" " * indentation) + l[1].replace("PRINT:", "")
@@ -58,11 +72,11 @@ df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BKRESET.INIT:0
     for _ in range(3):
         if len(code) > 0 and code[-1] == "\n":
             code = code[:-1]
-    #print(code)
+    # print(code)
     return code
 
-def cell_solution(source):
 
+def cell_solution(source):
     separator = "//" if "// BKRESET" not in source else "#"
     nsource = []
     for s in source.split("\n"):
@@ -71,7 +85,7 @@ def cell_solution(source):
             if "REMOVE:START" in l[1] or "REMOVE:END" in l[1] or "PRINT" in l[1]:
                 continue
             elif "INIT:" in l[1] or "REPLACE:" in l[1] or "REMOVE" in l[1]:
-                s = l[0][:l[0].rfind(separator)]
+                s = l[0][: l[0].rfind(separator)]
 
         nsource.append(s)
 
@@ -79,7 +93,7 @@ def cell_solution(source):
     for _ in range(3):
         if len(code) > 0 and code[-1] == "\n":
             code = code[:-1]
-    #print(code)
+    # print(code)
     return code
 
 
@@ -87,22 +101,31 @@ class CellParser:
     meta_modes = ["evaluation", "explanation", "hint"]
 
     @classmethod
-    def crunch_data(cls, cinfo=None, user=None, data=None):
-
+    def crunch_data(cls, cinfo=None, user=None, data=None, output=None):
         if data is None:
             from . import firebase
 
-            data = firebase.get_solution_from_corrector(cinfo.cell_id, corrector=user, cinfo=cinfo)
+            data = firebase.get_solution_from_corrector(
+                cinfo.cell_id, corrector=user, cinfo=cinfo
+            )
         if user is not None:
             cinfo.user = user
 
-        return cls(cinfo, data)
+        return cls(cinfo, data, output=output)
 
-    def __init__(self, cinfo, cell_source):
+    def __init__(self, cinfo, cell_source, output=None):
         self.parse_cell(cinfo, cell_source)
+        if output is not None and hasattr(output, "outputs"):
+            self.outputs = output.outputs
+        else:
+            self.outputs = []
 
     def get_update_time(self):
-        return self.minfo["update_time"] if "update_time" in  self.minfo else datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        return (
+            self.minfo["update_time"]
+            if "update_time" in self.minfo
+            else datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        )
 
     def store_info(self, key, val, ekey=None, verbose=False):
         if key not in self.minfo:
@@ -122,7 +145,7 @@ class CellParser:
 
     def get_code(self, c):
         # TODO: Fix this hack. Need to be run to avoid problems, if not launched, solution=user
-        #self.parse_cell(self.cinfo, self.cell_source)
+        # self.parse_cell(self.cinfo, self.cell_source)
         if c in self.minfo:
             if type(self.minfo[c]) == str:
                 return self.minfo[c]
@@ -135,7 +158,7 @@ class CellParser:
 
     def has_answer(self):
         return "answer" in self.minfo and self.minfo["answer"] != ""
-        
+
     @property
     def max_score(self):
         return (
@@ -167,7 +190,9 @@ class CellParser:
     def remove_meta_functions_execution(code):
         ncode = ""
         for l in code.splitlines():
-            if l.split("(")[0] not in [f"student_{m}_function" for m in CellParser.meta_modes]:
+            if l.split("(")[0] not in [
+                f"student_{m}_function" for m in CellParser.meta_modes
+            ]:
                 ncode += l + "\n"
         return ncode
 
@@ -195,7 +220,9 @@ class CellParser:
         return "hint" in self.minfo and self.minfo["hint"] != ""
 
     def block_is_start(self, l, func_id):
-        return f"def {func_id}(" in l or f"float {func_id}(" in l or f"int {func_id}(" in l
+        return (
+            f"def {func_id}(" in l or f"float {func_id}(" in l or f"int {func_id}(" in l
+        )
 
     def block_is_end(self, l):
         return len(l) > 0 and l[0] != " "
@@ -227,7 +254,9 @@ class CellParser:
         self.minfo[mode]["emp_max_score"] += args["max_score"]
 
         func = "bulkhours.is_equal"
-        l2 = l[: l.rfind(func) + len(func)] + "(%s)\n" % (", ".join([f"{k}={v}" for k, v in args.items()]),)
+        l2 = l[: l.rfind(func) + len(func)] + "(%s)\n" % (
+            ", ".join([f"{k}={v}" for k, v in args.items()]),
+        )
         # indent = " " * (re.sub(r"^([\s]*)[\s]+.*$", r"\g<1>", l).count(" ") + 1)
         # l = f"{indent}try:\n    {l}\n{indent}except:\n{indent}    print('FINAL_SCORE={min_score}/{max_score}')\n"
 
@@ -245,6 +274,10 @@ class CellParser:
         info["visible"] = True
         info["user"] = self.cinfo.user
 
+        for o in self.outputs:
+            if "name" in o and "text" in o:
+                info["output_" + o["name"]] = o["text"]
+
         return info
 
     def parse_cell(self, cinfo, cell_source):
@@ -255,9 +288,14 @@ class CellParser:
             self.minfo = cell_source
             if "main_execution" in self.minfo:
                 self.raw_exec_code = self.minfo["main_execution"]
-                self.raw_code = "\n".join([cell_source[e] for e in ["main_execution"] + CellParser.meta_modes if e in cell_source])
+                self.raw_code = "\n".join(
+                    [
+                        cell_source[e]
+                        for e in ["main_execution"] + CellParser.meta_modes
+                        if e in cell_source
+                    ]
+                )
             else:
-
                 self.raw_code, self.raw_exec_code = "", ""
             self.cinfo = self.minfo["cinfo"] if "cinfo" in self.minfo else cinfo
             return
@@ -314,6 +352,6 @@ class CellParser:
 
     def get_solution(self):
         return cell_solution(self.raw_exec_code)
-    
+
     def get_reset(self):
-        return cell_reset(self.raw_exec_code)        
+        return cell_reset(self.raw_exec_code)
