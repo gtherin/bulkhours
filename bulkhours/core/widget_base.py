@@ -39,7 +39,9 @@ class WidgetBase:
         return None
 
     def get_layout(self):
-        return ipywidgets.Layout(overflow="scroll hidden", width="auto", flex_flow="row", display="flex")
+        return ipywidgets.Layout(
+            overflow="scroll hidden", width="auto", flex_flow="row", display="flex"
+        )
 
     def get_answer(self):
         if self.widget is not None:
@@ -48,10 +50,14 @@ class WidgetBase:
 
     def display_ecorrection(self, output):
         teacher_data = CellParser.crunch_data(cinfo=self.cinfo, user=tools.REF_USER)
-        student_data = CellParser.crunch_data(cinfo=self.cinfo, user=self.cinfo.user, data=self.cell_source)
+        student_data = CellParser.crunch_data(
+            cinfo=self.cinfo, user=self.cinfo.user, data=self.cell_source
+        )
 
         if teacher_data.is_evaluation_available():
-            score = equals.evaluate_student(student_data, teacher_data, raw=False, user=self.cinfo.user)
+            score = equals.evaluate_student(
+                student_data, teacher_data, raw=False, user=self.cinfo.user
+            )
         else:
             score = ""
 
@@ -60,7 +66,9 @@ class WidgetBase:
 
         if teacher_data.is_explanation_available():
             print("")
-            equals.execute_teacher_code(student_data, teacher_data, raw=False, tmode="explanation")
+            equals.execute_teacher_code(
+                student_data, teacher_data, raw=False, tmode="explanation"
+            )
             if not teacher_data.is_evaluation_visible():
                 return
 
@@ -77,20 +85,24 @@ class WidgetBase:
 
         self.display_correction(student_data, teacher_data, output=output, score=score)
 
-
     def autocorrect(self, output):
-
         if 0:
             teacher_is_local, sort_by, verbose, duser = True, None, True, "Guillaume.T"
         else:
             teacher_is_local, sort_by, verbose, duser = True, None, False, None
 
         if teacher_is_local:
-            teacher_data = CellParser.crunch_data(cinfo=self.cinfo, user=self.cinfo.user, data=self.cell_source) # Get data from cell
+            teacher_data = CellParser.crunch_data(
+                cinfo=self.cinfo, user=self.cinfo.user, data=self.cell_source
+            )  # Get data from cell
         else:
-            teacher_data = CellParser.crunch_data(cinfo=self.cinfo, user=tools.REF_USER, data=None) # Get data from database
+            teacher_data = CellParser.crunch_data(
+                cinfo=self.cinfo, user=tools.REF_USER, data=None
+            )  # Get data from database
 
-        bot_correction = teacher_data.get_code("evaluation") == "" or "automatic_eval" in teacher_data.get_code("evaluation")
+        bot_correction = teacher_data.get_code(
+            "evaluation"
+        ) == "" or "automatic_eval" in teacher_data.get_code("evaluation")
 
         from .. import admin
 
@@ -108,7 +120,6 @@ class WidgetBase:
 
         answers = admin.answers.get_answers(self.cinfo.cell_id, verbose=False)
         for u in grades.index:
-
             mail, auser = grades["mail"][u], grades["auser"][u]
             if type(mail) == pd.Series:
                 mail, auser = mail.iloc[0], auser.iloc[0]
@@ -124,29 +135,40 @@ class WidgetBase:
                 continue
 
             # Get student data
-            student_data = CellParser.crunch_data(cinfo=self.cinfo, data=answers[mail], user=mail)
+            student_data = CellParser.crunch_data(
+                cinfo=self.cinfo, data=answers[mail], user=mail
+            )
 
-            # Don't manual data is available 
+            # Don't manual data is available
             if student_data.is_manual_note():
-                print(f"\x1b[35m\x1b[1m({student_data.minfo['grade_man']} [MAN]), \x1b[m", end="")
+                print(
+                    f"\x1b[35m\x1b[1m({student_data.minfo['grade_man']} [MAN]), \x1b[m",
+                    end="",
+                )
                 continue
 
             if bot_correction:
                 score = bot_evaluation(student_data, teacher_data)
             else:
-                score = equals.evaluate_student(student_data, teacher_data, raw=True, user=auser, verbose=verbose)
+                score = equals.evaluate_student(
+                    student_data, teacher_data, raw=True, user=auser, verbose=verbose
+                )
                 print(f"\x1b[35m\x1b[1m({score}), \x1b[m", end="")
 
             grades.loc[u, self.cinfo.cell_id + ".n"] = score
-     
+
         grad_name = "grade_bot" if bot_correction else "grade_ana"
 
         admin.answers.update_grades(self.cinfo.cell_id, grades, grad_name)
         grades = grades.drop(columns=["mail"]).set_index("auser").T
 
-        Grade.set_static_style_info(minvalue=0.0, cmap=(cmap:="RdBu"))
+        Grade.set_static_style_info(minvalue=0.0, cmap=(cmap := "RdBu"))
         fstyles = lambda v: Grade.apply_style(v, False)
-        grades = grades.style.format(precision=1).applymap(fstyles).background_gradient(cmap=cmap, vmin=0, vmax=max_score)
+        grades = (
+            grades.style.format(precision=1)
+            .applymap(fstyles)
+            .background_gradient(cmap=cmap, vmin=0, vmax=max_score)
+        )
         IPython.display.display(grades)
 
     def submit(self, output, user=None):
@@ -158,8 +180,13 @@ class WidgetBase:
                 output.clear_output()
                 tools.html(f"Nothing to send 🙈🙉🙊", display=True, style="body")
             return
-        local_data = CellParser.crunch_data(cinfo=self.cinfo, user=user, data=self.cell_source)
-        return firebase.send_answer_to_corrector(local_data.cinfo, **local_data.get_dbcell_decomposition())
+
+        local_data = CellParser.crunch_data(
+            cinfo=self.cinfo, user=user, data=self.cell_source, output=output
+        )
+        return firebase.send_answer_to_corrector(
+            local_data.cinfo, **local_data.get_dbcell_decomposition()
+        )
 
     def osubmit(self, output):
         return self.submit(output, user=tools.REF_USER)
@@ -167,7 +194,9 @@ class WidgetBase:
     def send_message(self, output):
         from . import firebase
 
-        data = firebase.get_solution_from_corrector(self.cinfo.cell_id, corrector=tools.REF_USER)
+        data = firebase.get_solution_from_corrector(
+            self.cinfo.cell_id, corrector=tools.REF_USER
+        )
         if (user := self.cinfo.user) in data or (user := "all") in data:
             tools.html(
                 f"Message ({self.cinfo.cell_id}, {user}) du correcteur"
@@ -190,7 +219,11 @@ class WidgetBase:
     def display_correction(self, student_data, teacher_data, output=None, score=""):
         codebody = "google.colab" in sys.modules and self.cinfo.user != tools.REF_USER
         kwargs = (
-            {"codebody" if codebody else "rawbody": teacher_data.get_code("main_execution")}
+            {
+                "codebody"
+                if codebody
+                else "rawbody": teacher_data.get_code("main_execution")
+            }
             if "main_execution" in teacher_data.minfo
             else {}
         )
@@ -209,14 +242,21 @@ class WidgetBase:
         note_auto = ""
 
         comment = (
-            "" if self.cinfo.type in ["bkcode", "bkscript"] else f": {teacher_data['answer']} VS {self.get_answer()}"
+            ""
+            if self.cinfo.type in ["bkcode", "bkscript"]
+            else f": {teacher_data['answer']} VS {self.get_answer()}"
         )
-        sources = ""  # f", {student_data.minfo['source']} VS {teacher_data.minfo['source']}"
+        sources = (
+            ""  # f", {student_data.minfo['source']} VS {teacher_data.minfo['source']}"
+        )
 
         with output:
             output.clear_output()
             tools.html(
-                f"Correction ({self.cinfo.cell_id}{note_auto}) {comment}", style="title", display=True, color=color
+                f"Correction ({self.cinfo.cell_id}{note_auto}) {comment}",
+                style="title",
+                display=True,
+                color=color,
             )
             tools.code(teacher_data.get_code("main_execution"), display=True)
 
@@ -242,7 +282,6 @@ class WidgetBase:
         return ask_chat_gpt(question=self.gtext.value, is_code=True)
 
     def evaluate_cell(self):
-    
         bbox = self.init_widgets()
 
         self.display_widgets(bbox, self.abuttons)
@@ -251,7 +290,9 @@ class WidgetBase:
         bbox = []
         ws = []
 
-        self.abuttons = buttons.get_buttons_list(self.cinfo.label, language=self.cinfo.language, user=self.cinfo.user)
+        self.abuttons = buttons.get_buttons_list(
+            self.cinfo.label, language=self.cinfo.language, user=self.cinfo.user
+        )
         self.gtext = ipywidgets.Text(self.cinfo.label)
 
         for w in self.cinfo.widgets:
@@ -275,10 +316,14 @@ class WidgetBase:
             return buttons.update_button(b, abuttons["m"], output, self, "send_message")
 
         def func_t(b):
-            return buttons.update_button(b, abuttons["t"], output, self, "write_exec_process")
+            return buttons.update_button(
+                b, abuttons["t"], output, self, "write_exec_process"
+            )
 
         def func_c(b):
-            return buttons.update_button(b, abuttons["c"], output, self, "display_ecorrection")
+            return buttons.update_button(
+                b, abuttons["c"], output, self, "display_ecorrection"
+            )
 
         def func_s(b):
             return buttons.update_button(b, abuttons["s"], output, self, "submit")
