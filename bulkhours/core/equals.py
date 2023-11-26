@@ -126,6 +126,10 @@ def execute_teacher_code(student_data, teacher_data, raw=False, tmode="explanati
 
 
 def get_evaluation_code(teacher_data):
+    evaluation_code = teacher_data.get_code("evaluation")
+    if "def student_evaluation_function" not in evaluation_code:
+        evaluation_code += """\ndef student_evaluation_function():\n    return bulkhours.admin.gpt_eval("syntax", max_score=10)"""
+
     return f""" 
 import os
 os.environ['FINAL_SCORE'] = "0"
