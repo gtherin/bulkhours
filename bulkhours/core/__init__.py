@@ -3,7 +3,6 @@ import sys
 import argparse
 import subprocess
 
-
 from .evaluation import Evaluation  # noqa
 from . import colors as c  # noqa
 from .puppets import *  # noqa
@@ -18,6 +17,7 @@ from .widget_texts import WidgetTextArea  # noqa
 from .keywords import get_wordscloud  # noqa
 from .cell_parser import CellParser  # noqa
 from .line_parser import LineParser  # noqa
+
 
 def git_push(argv=sys.argv[1:]):
     def get_nversion(version):
@@ -41,21 +41,34 @@ def git_push(argv=sys.argv[1:]):
         print("README was not updated")
 
     root_dir = "/home/guydegnol/projects"
-    ovs = open(filename := f"{root_dir}/bulkhours/bulkhours/__version__.py").readline().split('"')[1]
+    ovs = (
+        open(filename := f"{root_dir}/bulkhours/bulkhours/__version__.py")
+        .readline()
+        .split('"')[1]
+    )
     nvs = get_nversion(ovs)
 
     with open(filename, "w") as the_file:
         the_file.write(f"""__version__ = "{nvs}"\n""")
 
     with open("git_push.sh", "w") as f:
-        f.write(f"""python {root_dir}/puppeteer/puppeteer/generate_bulkhours_keys.py\n""")
+        f.write(
+            f"""python {root_dir}/puppeteer/puppeteer/generate_bulkhours_keys.py\n"""
+        )
         for p in [""]:  # , ".wiki"]:
             f.write(
                 f"""cd ../bulkhours{p} && git pull && git add . && git commit -m "{args.message}" && git push 2> /dev/null\n"""
             )
-        f.write(f"""python {root_dir}/puppeteer/puppeteer/generate_bulkhours_keys.py\n""")
+        f.write(
+            f"""python {root_dir}/puppeteer/puppeteer/generate_bulkhours_keys.py\n"""
+        )
     print(
-        subprocess.run("bash git_push.sh".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True).stdout
+        subprocess.run(
+            "bash git_push.sh".split(),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+        ).stdout
     )
 
     os.system("rm -rf git_push.sh")
