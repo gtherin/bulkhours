@@ -15,16 +15,16 @@ def format_with_black(cell):
 
     tabs = ipywidgets.HBox(
         [
-            out1 := ipywidgets.Output(layout={"width": "50%"}),
-            out2 := ipywidgets.Output(layout={"width": "50%"}),
+            out_left := ipywidgets.Output(layout={"width": "50%"}),
+            out_right := ipywidgets.Output(layout={"width": "50%"}),
         ]
     )
 
-    with out1:
+    with out_left:
         tools.html(f"Code (Raw)", color="red", use_ipywidgets=True, display=True)
         tools.code(cell, display=True)
 
-    with out2:
+    with out_right:
         tools.html(f"Code (PEP8)", color="green", use_ipywidgets=True, display=True)
         tools.code(black.format_str(cell, mode=black.FileMode()), display=True)
 

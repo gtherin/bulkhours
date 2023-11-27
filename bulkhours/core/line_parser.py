@@ -8,15 +8,16 @@ import IPython
 from . import tools
 from .cache_manager import CacheManager
 
+
 def format_opts(argv):
     """This function merges arguments together
-Example:
--i cell_d -c Salut les gars becomes
-['-i', 'cell_id', '-c', 'Salut__space__les__space__gars']
-instead of
-['-i', 'cell_id', '-c', 'Salut', 'les', 'gars']
-With format_func, it will become:
-['-i', 'cell_id', '-c', 'Salut les gars']
+    Example:
+    -i cell_d -c Salut les gars becomes
+    ['-i', 'cell_id', '-c', 'Salut__space__les__space__gars']
+    instead of
+    ['-i', 'cell_id', '-c', 'Salut', 'les', 'gars']
+    With format_func, it will become:
+    ['-i', 'cell_id', '-c', 'Salut les gars']
     """
     nargv = []
     for a in argv:
@@ -95,22 +96,44 @@ Il permet de faire correspondre la cellule avec sa solution"""
         default="",
         help=st("Fonctionnalité beta pour un serveur jupyter local"),
     )
+    basic.add_argument(
+        "-r",
+        "--rdir",
+        default="",
+        help=st("directory of the test"),
+    )
 
     if is_admin:
         admin = parser.add_argument_group("Options d'administration")
 
-        admin.add_argument("-u", "--user", default=None, help=st("Identifiant de l'utilisateur soumettant la réponse"))
-        admin.add_argument("-a", "--answer", default="", help=st("Fonctionnalité beta pour un serveur jupyter local"))
+        admin.add_argument(
+            "-u",
+            "--user",
+            default=None,
+            help=st("Identifiant de l'utilisateur soumettant la réponse"),
+        )
+        admin.add_argument(
+            "-a",
+            "--answer",
+            default="",
+            help=st("Fonctionnalité beta pour un serveur jupyter local"),
+        )
 
     meta_options = parser.add_argument_group("Options méta")
-    meta_options.add_argument("-h", "--help", dest="help", action="store_true", help=st("Affiche ce texte"))
-    meta_options.add_argument("-p", "--puppet", default="", help=st("Fonctionnalité beta pour un serveur jupyter local"))
+    meta_options.add_argument(
+        "-h", "--help", dest="help", action="store_true", help=st("Affiche ce texte")
+    )
+    meta_options.add_argument(
+        "-p",
+        "--puppet",
+        default="",
+        help=st("Fonctionnalité beta pour un serveur jupyter local"),
+    )
 
     return parser
 
 
 class LineParser:
-
     def __repr__(self):
         info = [
             f"{v}={getattr(self, v)}"
@@ -128,6 +151,7 @@ class LineParser:
                 "norm20",
                 "notebook_id",
                 "subject",
+                "rdir",
                 "virtual_room",
                 "user",
             ]
@@ -142,9 +166,8 @@ class LineParser:
         return cinfo
 
     def __init__(self, line, cell_source, is_cell=True):
-
-        # Get the options (The first "-" found") 
-        opts_line = line[line.find("-"):]
+        # Get the options (The first "-" found")
+        opts_line = line[line.find("-") :]
 
         # get options
         self.line, cell = line, cell_source
@@ -158,19 +181,25 @@ class LineParser:
                 parser.print_help()
 
             for k, v in vars(pdata).items():
-                setattr(self, k, tools.format_opt(v, raw2norm=False) if v and v is not None else v)
+                setattr(
+                    self,
+                    k,
+                    tools.format_opt(v, raw2norm=False) if v and v is not None else v,
+                )
         else:
-            #print("Line is empty")
+            # print("Line is empty")
             return
 
         available_widgets = get_available_widgets()
         if self.is_admin:
-            ewidgets = "oa"# if "def student_evaluation_function" in cell else "o"
+            ewidgets = "oa"  # if "def student_evaluation_function" in cell else "o"
             available_widgets = {k: v + ewidgets for k, v in available_widgets.items()}
 
         if not hasattr(self, "widgets") or self.widgets is None:
             self.widgets = (
-                available_widgets[self.type] if self.type in available_widgets else available_widgets["default"]
+                available_widgets[self.type]
+                if self.type in available_widgets
+                else available_widgets["default"]
             )
 
         for p in ["language", "restricted", "chatgpt", "norm20", "subject"]:
@@ -192,12 +221,17 @@ class LineParser:
         if not hasattr(self, "cell_id"):
             return
 
+        if IPython.get_ipython() and self.rdir != "":
+            IPython.get_ipython().run_cell(f"%cd {self.rdir}")
+
         for a in ["student", "teacher"]:
             o = f"{a}.{self.cell_id}"
             if o not in CacheManager.objects:
                 CacheManager.objects[o] = dict()
                 if IPython.get_ipython():
-                    IPython.get_ipython().run_cell(f"from argparse import Namespace\n{o} = Namespace()")
+                    IPython.get_ipython().run_cell(
+                        f"from argparse import Namespace\n{o} = Namespace()"
+                    )
 
             for l in cell_source.splitlines():
                 if o == l.replace(" ", "")[: len(o)]:
@@ -205,7 +239,9 @@ class LineParser:
                     if len(args) > 2:
                         v = args[2].split()[0]
                         ov = args[2].replace("'", '"').split('"')
-                        if len(ov := args[2].replace("'", '"').split('"')) == 3:  # For string
+                        if (
+                            len(ov := args[2].replace("'", '"').split('"')) == 3
+                        ):  # For string
                             CacheManager.objects[o][v] = ov[1]
                             setattr(self, v, ov[1])
                         elif len(ov := args[2].split("=")) == 2:  # Otherwise
@@ -254,5 +290,3 @@ class LineParser:
             fargs["data_ref"] = fargs["data_test"].replace("student.", "teacher.")
 
         return fargs
-
-
