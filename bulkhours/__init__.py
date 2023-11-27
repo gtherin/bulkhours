@@ -7,7 +7,14 @@ from .core import tools  # noqa
 from .core.tools import html  # noqa
 
 # from . import data  # noqa
-from .data import get_data, download_data, get_image, geo_plot, generate_header_links, DataParser  # noqa
+from .data import (
+    get_data,
+    download_data,
+    get_image,
+    geo_plot,
+    generate_header_links,
+    DataParser,
+)  # noqa
 
 from .core.gpt import ask_chat_gpt, ask_dall_e  # noqa
 from .core.equals import is_equal  # noqa
@@ -31,11 +38,13 @@ from .ecox.trading import *  # noqa
 
 from .core.logins import init_env  # noqa
 from .core.tools import dmd  # noqa
+from .core.black import format_with_black  # noqa
 
 if ipp := IPython.get_ipython():
     from .core.evaluation import Evaluation
+    from .core.black import Black
     from .hpc.compiler import CCPPlugin
 
     ipp.register_magics(CCPPlugin(ipp))
     ipp.register_magics(Evaluation(ipp))
-
+    ipp.register_magics(Black(ipp))
