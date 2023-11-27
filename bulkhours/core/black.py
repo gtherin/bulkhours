@@ -1,7 +1,6 @@
 import IPython
 from IPython.core.magic import (
     Magics,
-    cell_magic,
     magics_class,
     line_cell_magic,
     needs_local_scope,
@@ -10,32 +9,24 @@ from IPython.core.magic import (
 from . import tools
 
 
-def show_answer(out, cuser, code, style=None):
-    color = "red" if cuser == "Raw" else "green"
-    show_raw_code = (
-        style == "dark"
-    )  # not ("google.colab" in sys.modules and style != "dark")
-
-    with out:
-        # Show code
-        tools.html(
-            f"Code ({cuser})", size="4", color=color, use_ipywidgets=True, display=True
-        )
-        tools.code(code, display=True)  # , style=style)  # , raw=show_raw_code
-
-
 def format_with_black(cell):
     import black
     import ipywidgets
 
-    fcell = black.format_str(cell, mode=black.FileMode())
+    tabs = ipywidgets.HBox(
+        [
+            out1 := ipywidgets.Output(layout={"width": "50%"}),
+            out2 := ipywidgets.Output(layout={"width": "50%"}),
+        ]
+    )
 
-    out1 = ipywidgets.Output(layout={"width": "50%"})
-    out2 = ipywidgets.Output(layout={"width": "50%"})
-    tabs = ipywidgets.HBox([out1, out2])
+    with out1:
+        tools.html(f"Code (Raw)", color="red", use_ipywidgets=True, display=True)
+        tools.code(cell, display=True)
 
-    show_answer(out1, "Raw", cell, style="dark")
-    show_answer(out2, "PEP", fcell, style="dark")
+    with out2:
+        tools.html(f"Code (PEP8)", color="green", use_ipywidgets=True, display=True)
+        tools.code(black.format_str(cell, mode=black.FileMode()), display=True)
 
     IPython.display.display(tabs)
 
