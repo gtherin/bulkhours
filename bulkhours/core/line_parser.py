@@ -221,8 +221,9 @@ class LineParser:
         if not hasattr(self, "cell_id"):
             return
 
-        if IPython.get_ipython() and self.rdir != "" and os.environ["PWD"] != self.rdir:
-            IPython.get_ipython().run_cell(f"%cd {self.rdir}")
+        if IPython.get_ipython() and self.rdir != "":
+            with IPython.utils.io.capture_output() as captured:
+                IPython.get_ipython().run_cell(f"%cd {self.rdir}")
 
         for a in ["student", "teacher"]:
             o = f"{a}.{self.cell_id}"
