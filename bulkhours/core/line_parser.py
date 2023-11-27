@@ -221,7 +221,7 @@ class LineParser:
         if not hasattr(self, "cell_id"):
             return
 
-        if IPython.get_ipython() and self.rdir != "":
+        if IPython.get_ipython() and self.rdir != "" and os.environ["PWD"] != self.rdir:
             IPython.get_ipython().run_cell(f"%cd {self.rdir}")
 
         for a in ["student", "teacher"]:
