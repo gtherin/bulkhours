@@ -13,14 +13,22 @@ class CCPPlugin(Magics):
         super(CCPPlugin, self).__init__(shell)
         self.argparser = argparse.ArgumentParser(description="compile_and_exec params")
         self.argparser.add_argument(
-            "-t", "--timeit", action="store_true", help="flag to return timeit result instead of stdout"
+            "-t",
+            "--timeit",
+            action="store_true",
+            help="flag to return timeit result instead of stdout",
         )
-        self.argparser.add_argument("-c", "--compiler", default="nvcc", choices=["nvcc", "g++", "gcc"])
+        self.argparser.add_argument(
+            "-c", "--compiler", default="nvcc", choices=["nvcc", "g++", "gcc"]
+        )
+        self.argparser.add_argument("-r", "--rdir", default=None)
 
     def run(self, exec_file, timeit=False):
         if timeit:
             stmt = f"subprocess.check_output(['{exec_file}'], stderr=subprocess.STDOUT)"
-            output = self.shell.run_cell_magic(magic_name="timeit", line="-q -o import subprocess", cell=stmt)
+            output = self.shell.run_cell_magic(
+                magic_name="timeit", line="-q -o import subprocess", cell=stmt
+            )
         else:
             output = subprocess.check_output([exec_file], stderr=subprocess.STDOUT)
             output = output.decode("utf8")
@@ -32,12 +40,17 @@ class CCPPlugin(Magics):
         info = {}
         rawdata = self.cell_source if code is None else code
         if rawdata != "":
-            info.update({"main_execution": "", "evaluation": "", "explanation": "", "hint": ""})
+            info.update(
+                {"main_execution": "", "evaluation": "", "explanation": "", "hint": ""}
+            )
             mode = "main_execution"
             for l in rawdata.splitlines():
                 for tmode in ["evaluation", "explanation", "hint"]:
                     # Switch modes
-                    if f"def student_{tmode}_function(" in l or f"float student_{tmode}_function(" in l:
+                    if (
+                        f"def student_{tmode}_function(" in l
+                        or f"float student_{tmode}_function(" in l
+                    ):
                         mode = tmode
                     # elif mode == tmode and len(l) > 0 and l[0] != " ":
                     #    mode = "main_execution"
@@ -65,14 +78,21 @@ class CCPPlugin(Magics):
         with tempfile.TemporaryDirectory() as tmp_dir:
             try:
                 # Write code file in a temp file
-                file_path = os.path.join(tmp_dir, str(uuid.uuid4()))
-                file_code = file_path + (".c" if self.cinfo.compiler in ["g++", "gcc"] else ".cu")
+                if self.cinfo.rdir is None:
+                    file_path = os.path.join(tmp_dir, str(uuid.uuid4()))
+                else:
+                    file_path = os.path.join(self.cinfo.rdir)
+                file_code = file_path + (
+                    ".c" if self.cinfo.compiler in ["g++", "gcc"] else ".cu"
+                )
                 with open(file_code, "w") as f:
                     f.write(params["main_execution"])
 
                 # Compile file
                 if self.cinfo.compiler in ["g++", "gcc"]:
-                    cmd = f"/usr/bin/{self.cinfo.compiler} {file_code} -o {file_path}.out"
+                    cmd = (
+                        f"/usr/bin/{self.cinfo.compiler} {file_code} -o {file_path}.out"
+                    )
                 else:
                     cmd = f"/usr/local/cuda/bin/nvcc {file_code} -o {file_path}.out -Wno-deprecated-gpu-targets"
                 subprocess.check_output(cmd.split(), stderr=subprocess.STDOUT)
