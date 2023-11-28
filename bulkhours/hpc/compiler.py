@@ -88,6 +88,7 @@ class CCPPlugin(Magics):
                 with open(file_code, "w") as f:
                     f.write(params["main_execution"])
 
+                print(f"compiler {file_code} -o {file_path}.out")
                 # Compile file
                 if self.cinfo.compiler in ["g++", "gcc"]:
                     cmd = (
