@@ -199,7 +199,6 @@ def styles(
                 sdata[c] = sdata[c].where(sdata[c] < 0, other=np.nan)
 
     stylish = sdata.style.hide(axis="index").format(precision=1, subset=list(fcolumns))
-
     stylish = stylish.background_gradient(cmap=cmap, vmin=0, vmax=10)
 
     ccols = [
@@ -224,7 +223,9 @@ def styles(
 
     if "all" in sdata.columns:
         stylish = stylish.background_gradient(
-            cmap=cmap, subset=["all"], vmin=0, vmax=10.0
+            cmap=cmap, subset=["all"], vmin=0, vmax=20.0
         )
+        stylish = stylish.applymap(core.Grade.apply_all_style, subset=["all"])
+        # stylish = stylish.set_properties().format("{:.1f}", na_rep="✅", subset=["all"])
 
     return stylish.set_properties().format("{:.1f}", na_rep="✅", subset=nacolumns)
