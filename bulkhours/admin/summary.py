@@ -176,10 +176,12 @@ def summary(
     if apply is not None:
         data = apply(data, exos).copy()
 
-    for k, v in aliases.items():
-        if v in data.index and k in data.index:
-            for c in exos:
-                data.at[k, c] = data.at[v, c]
+    if aggregate is None:
+        # Aliases are only usable per notebook
+        for k, v in aliases.items():
+            if v in data.index and k in data.index:
+                for c in exos:
+                    data.at[k, c] = data.at[v, c]
 
     sdata = (
         tools.styles(data, cmap=cmap, hide_grades=hide_grades, sorted_by=sorted_by)
