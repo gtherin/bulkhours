@@ -62,6 +62,13 @@ class Grade:
         )
 
     @staticmethod
+    def apply_all_style(v):
+        if v != v or v == 0:  # Failure of automatic corrections
+            return f"color:#FF3B52;background-color:#FF3B52;opacity: 40%"
+        else:
+            return None
+
+    @staticmethod
     def apply_style(v, is_corrected):
         opacity = "40" if is_corrected else "60"
         if type(v) == str:
