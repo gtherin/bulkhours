@@ -174,7 +174,7 @@ def summary(
 
     data = data[["nom", "prenom", "all"] + exos] if columns is None else data[columns]
     if apply is not None:
-        data = apply(data, exos)
+        data = apply(data, exos).copy()
 
     for k, v in aliases.items():
         if v in data.index and k in data.index:
