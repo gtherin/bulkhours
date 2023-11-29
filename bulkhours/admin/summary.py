@@ -167,6 +167,7 @@ def summary(
             )
 
         data = data.set_index("mail")
+        data["all"] = data["all"].round(1)
         core.firebase.get_document(question="info", user="grades", cinfo=cfg).set(
             data["all"].to_dict()
         )
