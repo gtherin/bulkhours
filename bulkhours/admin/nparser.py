@@ -54,7 +54,7 @@ def nevaluate(filename, force=False):
                     info = core.installer.get_tokens(database)
             IPython.display.display(
                 IPython.display.Markdown(
-                    f"""* Analyzing data for '`{info["virtual_room"]}/{notebook_id}/{email}`'"""
+                    f"""* Aanalyzing file for '`{info["virtual_room"]}/{notebook_id}/{email}`'"""
                 )
             )
 
