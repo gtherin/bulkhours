@@ -12,27 +12,25 @@ def mount_gdrive():
     drive.mount("/content/gdrive/")
 
 
-def nevaluate(drive_rdir, filename, force=False):
+def nevaluate(filename, force=False):
     import IPython
     from subprocess import getoutput
     import nbformat
 
     # Get student reference notebook
-    ofilename = f"{drive_rdir}/{filename}"
-
     IPython.display.display(
         IPython.display.Markdown(
-            f"## Notebook submission(not yet evaluation) of '`{ofilename.split('/')[-1]}`'"
+            f"## Notebook submission(not yet evaluation) of '`{filename.split('/')[-1]}`'"
         )
     )
 
     # Mount google drive if needed
-    if "/content/gdrive" in drive_rdir:
+    if "/content/gdrive" in filename:
         mount_gdrive()
 
     email, notebook_id, database = None, None, None
     # Parse notebook
-    nb = nbformat.read(ofilename, nbformat.NO_CONVERT).copy()
+    nb = nbformat.read(filename, nbformat.NO_CONVERT).copy()
     for idx, cell in enumerate(nb.cells):
         if cell["cell_type"] != "code":
             continue
