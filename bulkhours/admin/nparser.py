@@ -20,7 +20,7 @@ def nevaluate(filename, force=False):
     # Get student reference notebook
     IPython.display.display(
         IPython.display.Markdown(
-            f"## Notebook submission(not yet evaluation) of '`{filename.split('/')[-1]}`'"
+            f"#### Notebook submission(not yet evaluation) of '`{filename.split('/')[-1]}`'"
         )
     )
 
@@ -77,7 +77,6 @@ def nevaluate(filename, force=False):
         answer = core.firebase.get_solution_from_corrector(
             cinfo.cell_id, corrector=email, cinfo=cinfo
         )
-        continue
         if answer is None or force:
             IPython.display.display(
                 IPython.display.Markdown(
