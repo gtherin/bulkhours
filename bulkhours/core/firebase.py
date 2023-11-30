@@ -342,7 +342,8 @@ def send_answer_to_corrector(
     config = add_user_to_virtual_room(config["email"], config)
 
     if "force" in kwargs and kwargs["force"]:
-        print("⚠️\x1b[31m\x1b[1mForce mode\x1b[m")
+        pass
+        # print("⚠️\x1b[31m\x1b[1mForce mode\x1b[m")
     elif (
         user != REF_USER
         and "is_locked" in config[config.notebook_id]
@@ -407,7 +408,16 @@ def send_answer_to_corrector(
                 f"\x1b[31m\x1b[1mSolution has been updated at {uptime} for {question_alias}"
             )
     else:
-        if cinfo.language == "fr":
+        if "force" in kwargs and kwargs["force"]:
+            import IPython
+
+            IPython.display.display(
+                IPython.display.Markdown(
+                    f"* \x1b[32m\x1b[1m submission of '{question_alias}/{alias}' at {uptime}\x1b[m"
+                )
+            )
+
+        elif cinfo.language == "fr":
             comment = (
                 "Réponse soumise à"
                 if comment == ""
