@@ -18,9 +18,6 @@ def nevaluate(filename, force=False, fake=False):
     import nbformat
 
     # Get student reference notebook
-    IPython.display.display(
-        IPython.display.Markdown(f"#### Parsing '`{filename.split('/')[-1]}`':")
-    )
 
     # Mount google drive if needed
     if "/content/gdrive" in filename:
@@ -52,9 +49,10 @@ def nevaluate(filename, force=False, fake=False):
                 if "database=" in s and notebook_id is None:
                     database = s[s.find("database=") :].replace("'", '"').split('"')[1]
                     info = core.installer.get_tokens(database)
+
             IPython.display.display(
                 IPython.display.Markdown(
-                    f"""* Aanalyzing file for '`{info["virtual_room"]}/{notebook_id}/{email}`'"""
+                    f"""#### Parsing '`{filename.split('/')[-1]}`': '`{info['virtual_room']}/{notebook_id}/{email}`'"""
                 )
             )
 
@@ -76,12 +74,6 @@ def nevaluate(filename, force=False, fake=False):
             cinfo.cell_id, corrector=email, cinfo=cinfo
         )
         if answer is None or force:
-            IPython.display.display(
-                IPython.display.Markdown(
-                    f"""* submission of '`{info["virtual_room"]}/{notebook_id}/{email}`'"""
-                )
-            )
-
             core.firebase.send_answer_to_corrector(
                 cinfo,
                 force=True,
