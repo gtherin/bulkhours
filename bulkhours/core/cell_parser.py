@@ -271,11 +271,13 @@ class CellParser:
             "explanation": self.get_code("explanation"),
             "hint": self.get_code("hint"),
             "evaluation": self.get_code("evaluation"),
-            "answer": self.minfo["answer"],
+            "answer": self.minfo["answer"]
+            if self.has_answer()
+            else self.get_code("main_execution"),
+            "atype": self.cinfo.type,
+            "visible": True,
+            "user": self.cinfo.user,
         }
-        info["atype"] = self.cinfo.type
-        info["visible"] = True
-        info["user"] = self.cinfo.user
 
         for o in self.outputs:
             if "name" in o and "text" in o:
