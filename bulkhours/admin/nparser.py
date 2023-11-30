@@ -12,7 +12,7 @@ def mount_gdrive():
     drive.mount("/content/gdrive/")
 
 
-def nevaluate(filename, force=False):
+def nevaluate(filename, force=False, fake=False):
     import IPython
     from subprocess import getoutput
     import nbformat
@@ -85,7 +85,7 @@ def nevaluate(filename, force=False):
             core.firebase.send_answer_to_corrector(
                 cinfo,
                 force=True,
-                fake=True,
+                fake=fake,
                 last_version="teacher",
                 **parsed_cell.get_dbcell_decomposition(),
             )
