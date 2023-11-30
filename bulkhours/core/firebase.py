@@ -413,7 +413,7 @@ def send_answer_to_corrector(
 
             IPython.display.display(
                 IPython.display.Markdown(
-                    f"* \x1b[32m\x1b[1m submission of '{question_alias}/{alias}' at {uptime}\x1b[m"
+                    f"* <font color='#581845'>submission of '{question_alias}/{alias}' at {uptime}</font>"
                 )
             )
 
