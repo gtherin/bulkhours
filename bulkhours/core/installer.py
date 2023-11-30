@@ -61,12 +61,16 @@ def install_dependencies(packages, start_time, is_admin):
         packages = ""
 
     import glob
+
     for filename in glob.glob(f"{bulk_dir}/bulkhours/data/exercices/*_sol.uno"):
         if get_platform() != "local" and not is_admin:
             os.system(f"rm -rf {filename}")
 
     if get_platform() == "sagemaker":
-        if "CONDA_PREFIX" in os.environ and "sagemaker-distribution" not in os.environ["CONDA_PREFIX"]:
+        if (
+            "CONDA_PREFIX" in os.environ
+            and "sagemaker-distribution" not in os.environ["CONDA_PREFIX"]
+        ):
             print(
                 f"""⚠️\x1b[33mFor sagemaker, please use the \033[1msagemaker-distribution:Python\x1b[0m\x1b[33m kernel (data science libraries are already installed) \x1b[0m"""
             )
@@ -81,7 +85,8 @@ def install_dependencies(packages, start_time, is_admin):
 
     # packages = "swig,cmake,python-opengl,ffmpeg,xvfb,gym==0.25.2,pyvirtualdisplay,stable-baselines3[extra],box2d,box2d-kengz,array2gif,huggingface_sb3,pyglet==1.5.1"
     packages = packages.replace(
-        "HUGGING_FACE", "swig,cmake,HF_UNIT1,apt-get,python-opengl,ffmpeg,xvfb,pyvirtualdisplay,shimmy>=0.2.1"
+        "HUGGING_FACE",
+        "swig,cmake,HF_UNIT1,apt-get,python-opengl,ffmpeg,xvfb,pyvirtualdisplay,shimmy>=0.2.1",
     )
     # if packages in ["rl", "reinforcement learning"]:
     #    rl.init_env(verbose=verbose)
@@ -105,14 +110,24 @@ def install_dependencies(packages, start_time, is_admin):
         elif package == "apt-get":
             os.system(f"sudo apt-get update > /dev/null 2>&1")
             status = "U"
-        elif package == "HF_UNIT1":  # stable-baselines3==2.0.0a5,gymnasium[box2d],huggingface_sb3
+        elif (
+            package == "HF_UNIT1"
+        ):  # stable-baselines3==2.0.0a5,gymnasium[box2d],huggingface_sb3
             os.system(
                 f"pip install -r https://raw.githubusercontent.com/huggingface/deep-rl-class/main/notebooks/unit1/requirements-unit1.txt > /dev/null 2>&1"
             )
             status = "M"
-        elif package not in "wkhtmltopdf,swig,cmake,python-opengl,ffmpeg,xvfb,git-lfs,xattr".split(","):
+        elif (
+            package
+            not in "wkhtmltopdf,swig,cmake,python-opengl,ffmpeg,xvfb,git-lfs,xattr".split(
+                ","
+            )
+        ):
             res = subprocess.run(
-                f"pip show {package}".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+                f"pip show {package}".split(),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
             ).stdout
             if "not found" in res:
                 os.system(f"pip install {package} > /dev/null 2>&1")
