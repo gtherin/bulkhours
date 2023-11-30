@@ -19,9 +19,7 @@ def nevaluate(filename, force=False):
 
     # Get student reference notebook
     IPython.display.display(
-        IPython.display.Markdown(
-            f"#### Notebook submission(not yet evaluation) of '`{filename.split('/')[-1]}`'"
-        )
+        IPython.display.Markdown(f"#### Parsing '`{filename.split('/')[-1]}`':")
     )
 
     # Mount google drive if needed
