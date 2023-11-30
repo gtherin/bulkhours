@@ -12,7 +12,9 @@ def get_paris_time():
 
     import zoneinfo
 
-    return datetime.datetime.now(tz=zoneinfo.ZoneInfo("Europe/Paris")).strftime("%Y-%m-%d %H:%M:%S")
+    return datetime.datetime.now(tz=zoneinfo.ZoneInfo("Europe/Paris")).strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
 
 
 def get_question_id(question, sep="_", cinfo=None):
@@ -21,7 +23,15 @@ def get_question_id(question, sep="_", cinfo=None):
     if type(cinfo) == dict:
         cinfo = Namespace(**cinfo)
 
-    return cinfo.subject + sep + cinfo.virtual_room + sep + cinfo.notebook_id + sep + question
+    return (
+        cinfo.subject
+        + sep
+        + cinfo.virtual_room
+        + sep
+        + cinfo.notebook_id
+        + sep
+        + question
+    )
 
 
 class DbDocument:
@@ -29,7 +39,15 @@ class DbDocument:
     data_base_info = None
 
     compliant_fields = {
-        "bkloud": ["type", "project_id", "private_key_id", "private_key", "client_email", "client_id", "auth_uri"]
+        "bkloud": [
+            "type",
+            "project_id",
+            "private_key_id",
+            "private_key",
+            "client_email",
+            "client_id",
+            "auth_uri",
+        ]
         + [
             "token_uri",
             "auth_provider_x509_cert_url",
@@ -45,7 +63,12 @@ class DbDocument:
             "virtual_rooms": "room1",
         },
         "notebook": {"exercices": "", "evaluation": "", "page": "", "is_locked": ""},
-        "session": dict(email="john.doe@un.known", notebook_id="n", database="data/cache/starwars.json", subject="s"),
+        "session": dict(
+            email="john.doe@un.known",
+            notebook_id="n",
+            database="data/cache/starwars.json",
+            subject="s",
+        ),
     }
 
     @staticmethod
@@ -56,7 +79,9 @@ class DbDocument:
 
     @staticmethod
     def read_cache_data() -> None:
-        if DbDocument.data_base_info is not None and os.path.exists(DbDocument.data_base_info):
+        if DbDocument.data_base_info is not None and os.path.exists(
+            DbDocument.data_base_info
+        ):
             with open(DbDocument.data_base_info) as json_file:
                 DbDocument.data_base_cache = json.load(json_file)
 
@@ -67,7 +92,9 @@ class DbDocument:
             DbDocument.data_base_cache = database
         elif type(database) == str:
             if not os.path.exists(os.path.dirname(database)):
-                database = os.path.abspath(os.path.dirname(__file__) + f"/../../{database}")
+                database = os.path.abspath(
+                    os.path.dirname(__file__) + f"/../../{database}"
+                )
             DbDocument.data_base_info = database
             DbDocument.read_cache_data()
         else:
@@ -124,7 +151,10 @@ class DbCollection:
         DbDocument.read_cache_data()
         if self.question not in DbDocument.data_base_cache:
             return []
-        return [DbDocument(self.question, user) for user in DbDocument.data_base_cache[self.question]]
+        return [
+            DbDocument(self.question, user)
+            for user in DbDocument.data_base_cache[self.question]
+        ]
 
 
 class DbClient:
@@ -143,7 +173,9 @@ class DbClient:
 
 
 def init_config(config_id, cfg):
-    collection = DbClient().collection(question_id=f"{cfg.subject}_info".replace("/", "_"))
+    collection = DbClient().collection(
+        question_id=f"{cfg.subject}_info".replace("/", "_")
+    )
     if config_id not in cfg:
         cfg[config_id] = {}
 
@@ -192,16 +224,27 @@ The database has been reset to the local file '{cfg["database"]}'.
     if "subject" not in cfg["global"]:
         cfg["global"]["subject"] = cfg["subject"]
 
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (cfilename := tools.abspath(".safe.pyc"))
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
+        cfilename := tools.abspath(".safe.pyc")
+    )
     if type(cfg.database) == dict:
         with open(cfilename, "w") as f:
             json.dump(cfg.database, f, ensure_ascii=False, indent=4)
     elif "bkloud@" in cfg.database:
         with open(cfilename, "w") as f:
             cols = DbDocument.compliant_fields["bkloud"]
-            json.dump({k: v for k, v in cfg["global"].items() if k in cols}, f, ensure_ascii=False, indent=4)
+            json.dump(
+                {k: v for k, v in cfg["global"].items() if k in cols},
+                f,
+                ensure_ascii=False,
+                indent=4,
+            )
     else:
-        datafile = cfg["global"]["data_cache"] if "data_cache" in cfg["global"] else cfg.database
+        datafile = (
+            cfg["global"]["data_cache"]
+            if "data_cache" in cfg["global"]
+            else cfg.database
+        )
         datafile = tools.abspath(datafile)
 
         DbDocument.set_cache_data(datafile)
@@ -276,7 +319,9 @@ def delete_documents(cinfo, questions, user=REF_USER, verbose=False):
     print(f"\x1b[31m\x1b[1m (cloud)\x1b[m")
 
 
-def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, **kwargs):
+def send_answer_to_corrector(
+    cinfo, update=True, comment="", update_time=True, fake=False, **kwargs
+):
     source = "local@" if DbDocument.data_base_info is not None else "cloud@"
     question_alias = source + get_question_id(cinfo.cell_id, sep="/", cinfo=cinfo)
     config = tools.get_config(is_new_format=True)
@@ -287,21 +332,36 @@ def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, *
         alias = alias.split(".")
         alias = alias[0] + "." + alias[1][0]
 
-    if config.security_level == 0 and cinfo.cell_id not in config[config.notebook_id]["exercices"]:
+    if (
+        config.security_level == 0
+        and cinfo.cell_id not in config[config.notebook_id]["exercices"]
+    ):
         config[config["notebook_id"]]["exercices"] += ";" + cinfo.cell_id
         save_config(config.notebook_id, config)
 
     config = add_user_to_virtual_room(config["email"], config)
 
-    if user != REF_USER and "is_locked" in config[config.notebook_id] and (config.virtual_room + ";") in config[config.notebook_id]["is_locked"]:
+    if "force" in kwargs and kwargs["force"]:
+        print("⚠️\x1b[31m\x1b[1mForce mode\x1b[m")
+    elif (
+        user != REF_USER
+        and "is_locked" in config[config.notebook_id]
+        and (config.virtual_room + ";") in config[config.notebook_id]["is_locked"]
+    ):
         if cinfo.language == "fr":
-            print("⚠️\x1b[31m\x1b[1mLes réponses ne peuvent plus être soumise dans ce notebook.\x1b[m")
+            print(
+                "⚠️\x1b[31m\x1b[1mLes réponses ne peuvent plus être soumise dans ce notebook.\x1b[m"
+            )
         else:
-            print("⚠️\x1b[31m\x1b[1mThe answers can not be submitted anymore for this notebook.\x1b[m")
+            print(
+                "⚠️\x1b[31m\x1b[1mThe answers can not be submitted anymore for this notebook.\x1b[m"
+            )
         return
 
-    if 1: # cinfo.restricted:
-        corr = get_solution_from_corrector(cinfo.cell_id, corrector=REF_USER, cinfo=cinfo)
+    if "force" not in kwargs or not kwargs["force"]:  # cinfo.restricted:
+        corr = get_solution_from_corrector(
+            cinfo.cell_id, corrector=REF_USER, cinfo=cinfo
+        )
         if corr is not None and user != REF_USER:
             if cinfo.language == "fr":
                 print(
@@ -320,26 +380,48 @@ def send_answer_to_corrector(cinfo, update=True, comment="", update_time=True, *
     if user == REF_USER and "grade_man" not in kwargs:
         kwargs.update({"grade_man": 10, "grade_man_upd": uptime})
     else:
-        kwargs = {k: v for k, v in kwargs.items() if k not in ["evaluation", "explanation", "hint", "visible"]}
+        kwargs = {
+            k: v
+            for k, v in kwargs.items()
+            if k not in ["evaluation", "explanation", "hint", "visible"]
+        }
 
-    if update and get_document(question=cinfo.cell_id, user=user, cinfo=cinfo).get().to_dict():
-        get_document(question=cinfo.cell_id, user=user, cinfo=cinfo).update(kwargs)
-    else:
-        get_document(question=cinfo.cell_id, user=user, cinfo=cinfo).set(kwargs)
+    if fake:
+        if (
+            update
+            and get_document(question=cinfo.cell_id, user=user, cinfo=cinfo)
+            .get()
+            .to_dict()
+        ):
+            get_document(question=cinfo.cell_id, user=user, cinfo=cinfo).update(kwargs)
+        else:
+            get_document(question=cinfo.cell_id, user=user, cinfo=cinfo).set(kwargs)
 
     if user == REF_USER:
         if cinfo.language == "fr":
-            print(f"\x1b[31m\x1b[1mLa solution a été soumise à {uptime} pour {question_alias}")
+            print(
+                f"\x1b[31m\x1b[1mLa solution a été soumise à {uptime} pour {question_alias}"
+            )
         else:
-            print(f"\x1b[31m\x1b[1mSolution has been updated at {uptime} for {question_alias}")
+            print(
+                f"\x1b[31m\x1b[1mSolution has been updated at {uptime} for {question_alias}"
+            )
     else:
         if cinfo.language == "fr":
-            comment = "Réponse soumise à" if comment == "" else "Réponse '" + comment + "' a été soumise à"
+            comment = (
+                "Réponse soumise à"
+                if comment == ""
+                else "Réponse '" + comment + "' a été soumise à"
+            )
             print(
                 f"\x1b[32m\x1b[1m{comment} {uptime} pour '{question_alias}/{alias}'. Vous pouvez soumettre plusieurs fois\x1b[m"
             )
         else:
-            comment = "Answer has been submited at" if comment == "" else "Answer " + comment + " has been submited"
+            comment = (
+                "Answer has been submited at"
+                if comment == ""
+                else "Answer " + comment + " has been submited"
+            )
             print(
                 f"\x1b[32m\x1b[1m{comment} {uptime} for '{question_alias}/{alias}'. You can resubmit it several times\x1b[m"
             )
@@ -362,7 +444,11 @@ def get_solution_from_corrector(question, corrector=REF_USER, cinfo=None):
 
 
 def save_config(label, config, verbose=False):
-    cols = DbDocument.compliant_fields["global"] if label == "global" else DbDocument.compliant_fields["notebook"]
+    cols = (
+        DbDocument.compliant_fields["global"]
+        if label == "global"
+        else DbDocument.compliant_fields["notebook"]
+    )
     cinfo = Namespace(**config)
 
     params = {k: config[label][k] if k in config[label] else v for k, v in cols.items()}
@@ -370,7 +456,9 @@ def save_config(label, config, verbose=False):
         for room in params["virtual_rooms"].split(";"):
             params[room] = config[label][room] if room in config[label] else ""
 
-    get_document(question_id=cinfo.subject + "_info", user=label, cinfo=Namespace(**config)).set(params)
+    get_document(
+        question_id=cinfo.subject + "_info", user=label, cinfo=Namespace(**config)
+    ).set(params)
     tools.update_config(config)
 
     if verbose:
