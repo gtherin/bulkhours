@@ -387,7 +387,7 @@ def send_answer_to_corrector(
             if k not in ["evaluation", "explanation", "hint", "visible"]
         }
 
-    if fake:
+    if not fake:
         if (
             update
             and get_document(question=cinfo.cell_id, user=user, cinfo=cinfo)
