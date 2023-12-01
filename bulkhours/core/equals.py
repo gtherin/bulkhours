@@ -5,6 +5,7 @@ import difflib
 import numpy as np
 import pandas as pd
 import os
+import matplotlib.pyplot as plt
 
 from . import contexts
 from .grade import Grade
@@ -200,6 +201,11 @@ def evaluate_student(
     # Get the formatted evaluation code
     evaluation_code = get_evaluation_code(teacher_data)
     do_debug = "debug=true" in evaluation_code.replace(" ", "").lower()
+    do_plot = "do_plot=true" in evaluation_code.replace(" ", "").lower()
+
+    # Hide plot by default
+    if not do_plot:
+        plt.ioff()
 
     # Run the teacher code and get max_score from it
     max_score = get_max_score(teacher_data)
@@ -238,6 +244,9 @@ def evaluate_student(
             score = float(os.environ["FINAL_SCORE"])
         except:
             score = Grade.EVALUATION_CRASHED
+
+    if not do_plot:
+        plt.ion()
 
     if raw:
         return score
