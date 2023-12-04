@@ -9,7 +9,13 @@ evaluation_openai_token = "YOUR_KEY"
 
 
 def ask_chat_gpt(
-    question="", openai_token="YOUR_KEY", model="gpt-3.5-turbo", temperature=0.5, is_code=False, size="256x256", raw=False
+    question="",
+    openai_token="YOUR_KEY",
+    model="gpt-3.5-turbo",
+    temperature=0.5,
+    is_code=False,
+    size="256x256",
+    raw=False,
 ):
     """
     temperature Conservative(0) => Creative(1)
@@ -42,7 +48,9 @@ Vous devez creer une clé d'API
 
     # Ask chat-gpt
     completion = openai.ChatCompletion.create(
-        model=model, messages=[{"role": "user", "content": (prompt := question)}], temperature=temperature
+        model=model,
+        messages=[{"role": "user", "content": (prompt := question)}],
+        temperature=temperature,
     )
 
     # Get content
@@ -73,28 +81,50 @@ Vous devez creer une clé d'API
 
 
 def ask_dall_e(question="", temperature=0.5, size="256x256"):
-    ask_chat_gpt(question, model="image", size=size, temperature=temperature, is_code=False)
+    ask_chat_gpt(
+        question, model="image", size=size, temperature=temperature, is_code=False
+    )
 
 
 def get_grade(student_data, teacher_data):
-    if "main_execution" in student_data.minfo and "main_execution" in teacher_data.minfo and evaluation_instructions is not None:
+    if (
+        "main_execution" in student_data.minfo
+        and "main_execution" in teacher_data.minfo
+        and evaluation_instructions is not None
+    ):
         prompt = f"""{evaluation_instructions}
 - question:\n<start>\n{teacher_data.get_reset()}\n</start>
 - actual solution:\n<end>\n{teacher_data.get_solution()}\n</end>
 - student's solution:\n<answer>\n{student_data.get_solution()}\n</answer>\n"""
-        
-        #print(prompt)
-        response = ask_chat_gpt(question=prompt, model="gpt-3.5-turbo", temperature=0., raw=True, openai_token=evaluation_openai_token)
+
+        # print(prompt)
+        response = ask_chat_gpt(
+            question=prompt,
+            model="gpt-3.5-turbo",
+            temperature=0.0,
+            raw=True,
+            openai_token=evaluation_openai_token,
+        )
 
         # Get student user
         user = student_data.minfo["user"]
         try:
             grade = float((response.split("<grade>"))[1].split("</grade>")[0])
-            grade_color = matplotlib.colors.rgb2hex(matplotlib.cm.get_cmap("RdBu")(grade/10.))
+            grade_color = matplotlib.colors.rgb2hex(
+                matplotlib.cm.get_cmap("RdBu")(grade / 10.0)
+            )
             comment = response.split("</grade>")[1]
-            IPython.display.display(IPython.display.Markdown(f"#### <b>{user}: <font color='{grade_color}'>grade={grade}</font></b>\n{response}"))        
+            IPython.display.display(
+                IPython.display.Markdown(
+                    f"#### <b>{user}: <font color='{grade_color}'>grade={grade}</font></b>\n{response}"
+                )
+            )
             return grade, comment
         except:
-            IPython.display.display(IPython.display.Markdown(f"#### <b>{user}: <font color='red'>grade is unknown</font></b>\n{response}"))
+            IPython.display.display(
+                IPython.display.Markdown(
+                    f"#### <b>{user}: <font color='red'>grade is unknown</font></b>\n{response}"
+                )
+            )
 
             return np.nan, response
