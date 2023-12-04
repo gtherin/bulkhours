@@ -93,7 +93,13 @@ class SwitchButton:
         elabel=None,
         l=None,
     ) -> None:
-        self.label, self.user, self.sleep_on, self.width, self.is_button = label, user, sleep_on, width, is_button
+        self.label, self.user, self.sleep_on, self.width, self.is_button = (
+            label,
+            user,
+            sleep_on,
+            width,
+            is_button,
+        )
         self.show_answer, self.is_on, self.b = True, True, None
         self.lan = language
         all_labels[f"{self.label}_o_style"] = bso
@@ -108,7 +114,12 @@ class SwitchButton:
         self.g()
 
     def d(self, blabel):
-        for label in [f"{blabel}_s{self.lan}", f"{blabel}_{self.lan}", f"{self.label}_{self.lan}", f"{self.label}_fr"]:
+        for label in [
+            f"{blabel}_s{self.lan}",
+            f"{blabel}_{self.lan}",
+            f"{self.label}_{self.lan}",
+            f"{self.label}_fr",
+        ]:
             if label in all_labels:
                 return all_labels[label]
 
@@ -116,14 +127,21 @@ class SwitchButton:
 
     def update_style(self, button, style=None):
         blabel = f"{self.label}_{style}" if style in ["o", "f"] else style
-        button.description, button.button_style = self.d(blabel), all_labels[f"{blabel}_style"]
+        button.description, button.button_style = (
+            self.d(blabel),
+            all_labels[f"{blabel}_style"],
+        )
         # button.disabled = style in ["warning", "danger"]
         # button.icon = "fa-spinner fa-pulse fa-1x fa-fw" if style in ["warning"] else ""
         # button.icon = button.icon.replace("/\b(\w)/g", "fa-$1")
         # icon.replace(/\b(\w)/g, 'fa-$1')
 
     def get_tootip(self):
-        for label in [f"{self.label}_d_{self.lan}", f"{self.label}_d_fr", f"{self.label}_d_en"]:
+        for label in [
+            f"{self.label}_d_{self.lan}",
+            f"{self.label}_d_fr",
+            f"{self.label}_d_en",
+        ]:
             if label in all_labels:
                 return all_labels[label]
         return self.d(f"{self.label}_o")
@@ -136,7 +154,9 @@ class SwitchButton:
                 flex_flow="column",
                 align_items="stretch",
                 tooltip=self.get_tootip(),
-                layout=ipywidgets.Layout(width=self.width if self.width is not None else "max-content"),
+                layout=ipywidgets.Layout(
+                    width=self.width if self.width is not None else "max-content"
+                ),
             )
         else:
             self.b = tools.html(self.elabel, size="4", color="black")
@@ -159,14 +179,22 @@ class SwitchButton:
 
 def get_all_buttons(label, **kwargs):
     return [
-        SwitchButton("autocorrect", l="a", sleep_on=2, width="150px", bso="danger", **kwargs),
+        SwitchButton(
+            "autocorrect", l="a", sleep_on=2, width="150px", bso="danger", **kwargs
+        ),
         SwitchButton("correct", l="c", width="150px", bsf="danger", **kwargs),
         SwitchButton("email", l="E", bso="info", bsf="danger", width="150px", **kwargs),
-        SwitchButton("evaluate", l="e", bso="info", sleep_on=3, width="150px", **kwargs),
+        SwitchButton(
+            "evaluate", l="e", bso="info", sleep_on=3, width="150px", **kwargs
+        ),
         SwitchButton("gpt", l="g", bso="info", bsf="danger", width="150px", **kwargs),
         SwitchButton("label", l="l", elabel=label, is_button=False, **kwargs),
-        SwitchButton("message", l="m", bso="info", bsf="danger", width="150px", **kwargs),
-        SwitchButton("solution", l="o", sleep_on=2, width="150px", bso="warning", **kwargs),
+        SwitchButton(
+            "message", l="m", bso="info", bsf="danger", width="150px", **kwargs
+        ),
+        SwitchButton(
+            "solution", l="o", sleep_on=2, width="150px", bso="warning", **kwargs
+        ),
         SwitchButton("Student", l="S", sleep_on=2, width="200px", **kwargs),
         SwitchButton("submit", l="s", sleep_on=2, width="200px", **kwargs),
         SwitchButton("test", l="t", is_button=True, **kwargs),
@@ -194,7 +222,9 @@ def update_button(b, button, output, widget, funct, kwargs=None):
 
         button.update_style(b, style="transition")
         if not button.is_on:
-            p1 = multiprocessing.Process(target=funct, args=[widget, output], kwargs=kwargs)
+            p1 = multiprocessing.Process(
+                target=funct, args=[widget, output], kwargs=kwargs
+            )
             p1.start()
             fun, sleep = ["🙈", "🙉", "🙊"], 0.3
             fun, sleep = ["🌑", "🌒", "🌓‍", "🌖", "🌗", "🌘"], 0.3
@@ -214,7 +244,14 @@ def update_button(b, button, output, widget, funct, kwargs=None):
         button.update_style(b, style="o" if button.is_on else "f")
 
 
-def get_export_button(filename, data=None, label="Download file", tooltip=None, style="bk_secondary", width="150px"):
+def get_export_button(
+    filename,
+    data=None,
+    label="Download file",
+    tooltip=None,
+    style="bk_secondary",
+    width="150px",
+):
     import base64
 
     if data is None:
