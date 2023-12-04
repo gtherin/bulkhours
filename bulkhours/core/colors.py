@@ -5,8 +5,10 @@ caliases = dict(
     )
 )
 
+
 def get(color):
     return caliases[color] if color in caliases else color
+
 
 for name, value in caliases.items():
     globals()[name] = value
@@ -24,7 +26,12 @@ def vizualize(colors=None, ncols=4):
     width, height = cell_width * 4 + 2 * margin, cell_height * nrows + 2 * margin
 
     fig, ax = plt.subplots(figsize=(width / dpi, height / dpi), dpi=dpi)
-    fig.subplots_adjust(margin / width, margin / height, (width - margin) / width, (height - margin) / height)
+    fig.subplots_adjust(
+        margin / width,
+        margin / height,
+        (width - margin) / width,
+        (height - margin) / height,
+    )
     ax.set_xlim(0, cell_width * 4)
     ax.set_ylim(cell_height * (nrows - 0.5), -cell_height / 2.0)
     ax.set_axis_off()
@@ -34,7 +41,10 @@ def vizualize(colors=None, ncols=4):
         ax.text(cell_width * col + swatch_width + 7, row * cell_height, name)
         ax.add_patch(
             Rectangle(
-                xy=(cell_width * col, row * cell_height - 9), width=swatch_width, height=18, facecolor=colors[name]
+                xy=(cell_width * col, row * cell_height - 9),
+                width=swatch_width,
+                height=18,
+                facecolor=colors[name],
             )
         )
 
@@ -61,7 +71,6 @@ bg = lambda i: color_maps("b")[i % len(color_maps("b"))]
 cg = lambda i: color_maps("c")[i % len(color_maps("c"))]
 tg = lambda i: color_maps("t")[i % len(color_maps("t"))]
 xg = lambda i: color_maps("x")[i % len(color_maps("x"))]
-
 
 
 def set_style(object, style):
@@ -247,5 +256,7 @@ def get_html_buttons_styles_code():
 def set_html_buttons_styles():
     import IPython
 
-    html_buttons_styles = f"""<html><head>{get_html_buttons_styles_code()}</head></html>"""
+    html_buttons_styles = (
+        f"""<html><head>{get_html_buttons_styles_code()}</head></html>"""
+    )
     IPython.display.display(IPython.display.HTML(html_buttons_styles))

@@ -12,7 +12,9 @@ class CacheManager:
             o = f"{args[0]}.{args[1]}"
             if o not in CacheManager.objects:
                 CacheManager.objects[o] = dict()
-                IPython.get_ipython().run_cell(f"from argparse import Namespace\n{o} = Namespace()")
+                IPython.get_ipython().run_cell(
+                    f"from argparse import Namespace\n{o} = Namespace()"
+                )
             v = args[2].split()[0]
             ov = args[2].replace("'", '"').split('"')
             if len(ov := args[2].replace("'", '"').split('"')) == 3:  # For string
