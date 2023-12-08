@@ -1,7 +1,29 @@
 caliases = dict(
     zip(
-        ["purple", "red", "orange", "blue", "green", "yellow", "black"],
-        ["#581845", "#C70039", "#FF5733", "#0097B2", "#52DE97", "#FBE555", "black"],
+        [
+            "purple",
+            "red",
+            "orange",
+            "blue",
+            "green",
+            "yellow",
+            "dblue",
+            "lpink",
+            "black",
+            "dpink",
+        ],
+        [
+            "#581845",
+            "#C70039",
+            "#FF5733",
+            "#0097B2",
+            "#52DE97",
+            "#FBE555",
+            "#053061",
+            "#FAACB5",
+            "black",
+            "#924A5F",
+        ],
     )
 )
 
