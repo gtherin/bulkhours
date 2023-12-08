@@ -115,6 +115,21 @@ class CellParser:
 
     def __init__(self, cinfo, cell_source, output=None):
         self.parse_cell(cinfo, cell_source)
+
+        if (
+            "atype" in self.minfo
+            and self.minfo["atype"] == "code_project"
+            and "Makefile" in self.minfo
+            and "answer" not in self.minfo
+        ):
+            self.minfo["answer"] = ""
+            for k, v in self.minfo.items():
+                if "_dot_h" in k or "_dot_cpp" in k:  # or "Makefile" in k:
+                    self.minfo["answer"] += f"//////// {k} ////////\n{v}\n"
+            self.raw_exec_code = self.minfo["answer"]
+            self.minfo["main_execution"] = self.minfo["answer"]
+            self.minfo["user"] = self.cinfo.user
+
         if output is not None and hasattr(output, "outputs"):
             self.outputs = output.outputs
         else:
@@ -151,6 +166,7 @@ class CellParser:
                 return self.minfo[c]
             if type(self.minfo[c]) == dict and "code" in self.minfo[c]:
                 return self.minfo[c]["code"]
+
         return ""
 
     def is_manual_note(self):
