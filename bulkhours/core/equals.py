@@ -131,15 +131,16 @@ def get_evaluation_code(teacher_data):
     if "def student_evaluation_function" not in evaluation_code:
         evaluation_code += """\ndef student_evaluation_function():\n    return bulkhours.admin.gpt_eval("syntax", max_score=10)"""
 
-    return f""" 
+    return (
+        f""" 
 import os
 os.environ['FINAL_SCORE'] = "0"
 %s
 global eresult
 eresult = student_evaluation_function()
 os.environ['FINAL_SCORE'] = str(eresult)
-""" % teacher_data.get_code(
-        "evaluation"
+"""
+        % evaluation_code
     )
 
 
@@ -195,6 +196,7 @@ def evaluate_student(
     """
 
     student_code = student_data.get_code("main_execution")
+
     if student_code == "":
         return Grade.NO_ANSWER_FOUND
 

@@ -120,17 +120,13 @@ class WidgetBase:
 
             # Don't manual data is available
             if student_data.is_manual_note():
-                print(
-                    f"\x1b[35m\x1b[1m({student_data.minfo['grade_man']} [MAN]), \x1b[m",
-                    end="",
+                score, src = student_data.minfo["grade_man"], " [MAN]"
+            else:
+                score = equals.evaluate_student(
+                    student_data, teacher_data, raw=True, user=auser, verbose=verbose
                 )
-                continue
-
-            score = equals.evaluate_student(
-                student_data, teacher_data, raw=True, user=auser, verbose=verbose
-            )
-            print(f"\x1b[35m\x1b[1m({score}), \x1b[m", end="")
-
+                src = ""
+            print(f"\x1b[35m\x1b[1m({score}{src}), \x1b[m", end="")
             grades.loc[u, self.cinfo.cell_id + ".n"] = score
 
         grad_name = (
