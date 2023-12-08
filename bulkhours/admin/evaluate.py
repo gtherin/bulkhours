@@ -257,3 +257,88 @@ def evaluate(
         else f"No possible treatment for {user}",
         use_ipywidgets=True,
     )
+
+
+def evaluate2(
+    cell_id,
+    style=None,
+    execute=True,
+    level=None,
+    teacher_data=None,
+    duser=None,
+    verbose=False,
+    force_grades=False,
+    normalize_score=True,
+):
+    import numpy as np
+    import pandas as pd
+
+    grades = tools.get_users_list(no_admin=False)
+
+    cinfo = core.LineParser.from_cell_id_user(cell_id, core.tools.REF_USER)
+
+    grades[cell_id + ".n"] = np.nan
+    grades = grades[["auser", "mail", cinfo.cell_id + ".n"]]
+
+    print(f"\x1b[35m\x1b[1mNotes for {cinfo.cell_id}: \x1b[m", end="")
+
+    if teacher_data is None:
+        teacher_data = core.CellParser.crunch_data(
+            cinfo=cinfo, user=core.tools.REF_USER, data=None
+        )
+
+    max_score = core.equals.get_max_score(teacher_data, execute=execute)
+
+    cell_answers = answers.get_answers(cinfo.cell_id, verbose=False)
+    for u in grades.index:
+        mail, auser = grades["mail"][u], grades["auser"][u]
+        if type(mail) == pd.Series:
+            mail, auser = mail.iloc[0], auser.iloc[0]
+
+        if duser is not None and auser != duser:
+            continue
+
+        print(f"\x1b[35m\x1b[1m{auser}, \x1b[m", end="")
+        if mail not in cell_answers:
+            print(f"\x1b[35m\x1b[1m(nan), \x1b[m", end="")
+            continue
+
+        # Get student data
+        student_data = core.CellParser.crunch_data(
+            cinfo=cinfo, data=cell_answers[mail], user=mail
+        )
+
+        # Don't manual data is available
+        if student_data.is_manual_note():
+            score, src = student_data.minfo["grade_man"], " [MAN]"
+        else:
+            score = core.equals.evaluate_student(
+                student_data,
+                teacher_data,
+                raw=True,
+                user=auser,
+                verbose=verbose,
+                execute=execute,
+                normalize_score=normalize_score,
+            )
+            src = ""
+        print(f"\x1b[35m\x1b[1m({score}{src}), \x1b[m", end="")
+        grades.loc[u, cinfo.cell_id + ".n"] = score
+
+    grad_name = (
+        "grade_bot"
+        if "admin.gpt_eval" in teacher_data.get_code("evaluation")
+        else "grade_ana"
+    )
+
+    answers.update_grades(cinfo.cell_id, grades, grad_name)
+    grades = grades.drop(columns=["mail"]).set_index("auser").T
+
+    core.Grade.set_static_style_info(minvalue=0.0, cmap=(cmap := "RdBu"))
+    fstyles = lambda v: core.Grade.apply_style(v, False)
+    grades = (
+        grades.style.format(precision=1)
+        .applymap(fstyles)
+        .background_gradient(cmap=cmap, vmin=0, vmax=max_score)
+    )
+    IPython.display.display(grades)

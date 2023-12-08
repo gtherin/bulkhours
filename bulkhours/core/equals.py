@@ -144,7 +144,7 @@ os.environ['FINAL_SCORE'] = str(eresult)
     )
 
 
-def get_max_score(teacher_data):
+def get_max_score(teacher_data, execute=True):
     # Get the formatted evaluation code
     evaluation_code = get_evaluation_code(teacher_data)
 
@@ -163,14 +163,15 @@ def get_max_score(teacher_data):
     do_debug = "debug=true" in evaluation_code.replace(" ", "").lower()
 
     # Run the teacher code if needed
-    contexts.build_context(
-        teacher_data,
-        "main_execution",
-        "teacher",
-        evaluation_code,
-        f"teacher." in evaluation_code,
-        do_debug=do_debug,
-    )
+    if execute:
+        contexts.build_context(
+            teacher_data,
+            "main_execution",
+            "teacher",
+            evaluation_code,
+            f"teacher." in evaluation_code,
+            do_debug=do_debug,
+        )
 
     try:
         evaluation_code = evaluation_code.replace("bulkhours.admin.replace(", "#")
@@ -187,6 +188,8 @@ def evaluate_student(
     use_student_context=True,
     user="",
     verbose=False,
+    execute=True,
+    normalize_score=True,
 ):
     """
     This function is used to evaluate the student code.
@@ -210,26 +213,30 @@ def evaluate_student(
         plt.ioff()
 
     # Run the teacher code and get max_score from it
-    max_score = get_max_score(teacher_data)
+    max_score = get_max_score(teacher_data, execute=execute)
 
     if "admin.gpt_eval" in evaluation_code:
-        score = max_score * gpt_evaluation(student_data, teacher_data)
+        score = gpt_evaluation(student_data, teacher_data)
+        if normalize_score:
+            score *= max_score
+
         if raw:
             return score
 
         return f"{score}/{max_score}"
 
     # Run the student code if needed
-    contexts.build_context(
-        student_data,
-        "main_execution",
-        "student",
-        evaluation_code,
-        f"student." in evaluation_code,
-        do_debug=do_debug,
-        use_context=use_student_context,
-        user=user,
-    )
+    if execute:
+        contexts.build_context(
+            student_data,
+            "main_execution",
+            "student",
+            evaluation_code,
+            f"student." in evaluation_code,
+            do_debug=do_debug,
+            use_context=use_student_context,
+            user=user,
+        )
     if not use_student_context:
         evaluation_code = evaluation_code.replace("student.", "")
 

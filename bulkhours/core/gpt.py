@@ -22,6 +22,7 @@ def ask_chat_gpt(
     """
 
     import openai
+    from openai import OpenAI
 
     if openai_token == "YOUR_KEY":
         openai_token = tools.get_value("openai_token")
@@ -38,8 +39,6 @@ Vous devez creer une clé d'API
         )
         return
 
-    openai.api_key = openai_token
-
     if model in ["image"]:
         response = openai.Image.create(prompt=question, n=1, size=size)
         image_url = response["data"][0]["url"]
@@ -47,14 +46,14 @@ Vous devez creer une clé d'API
         return
 
     # Ask chat-gpt
-    completion = openai.ChatCompletion.create(
-        model=model,
+    completion = OpenAI(api_key=openai_token).chat.completions.create(
         messages=[{"role": "user", "content": (prompt := question)}],
+        model=model,
         temperature=temperature,
     )
 
     # Get content
-    content = completion["choices"][0]["message"]["content"]
+    content = completion.choices[0].message.content
 
     # return raw data
     if raw:
