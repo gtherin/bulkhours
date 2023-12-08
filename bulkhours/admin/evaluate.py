@@ -184,6 +184,7 @@ def evaluate(
     execute=True,
     virtual_room=None,
     level=None,
+    normalize_score=False,
     **kwargs,
 ):
     if virtual_room is not None:
