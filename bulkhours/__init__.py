@@ -16,7 +16,7 @@ from .data import (
     DataParser,
 )  # noqa
 
-from .core.gpt import ask_chat_gpt, ask_dall_e  # noqa
+from .core.gpt import ask_gpt  # noqa
 from .core.equals import is_equal  # noqa
 
 from .core import colors as c  # noqa

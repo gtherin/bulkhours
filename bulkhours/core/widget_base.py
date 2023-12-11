@@ -202,10 +202,10 @@ class WidgetBase:
 
                 IPython.get_ipython().run_cell(teacher_data.get_code("main_execution"))
 
-    def ask_chat_gpt(self, output):
-        from .gpt import ask_chat_gpt
+    def ask_gpt(self, output):
+        from .gpt import ask_gpt
 
-        return ask_chat_gpt(question=self.gtext.value, is_code=True)
+        return ask_gpt(prompt=self.gtext.value, is_code=True)
 
     def evaluate_cell(self):
         bbox = self.init_widgets()
@@ -266,7 +266,7 @@ class WidgetBase:
             return buttons.update_button(b, abuttons["a"], output, self, "autocorrect")
 
         def func_g(b):
-            return buttons.update_button(b, abuttons["g"], output, self, "ask_chat_gpt")
+            return buttons.update_button(b, abuttons["g"], output, self, "ask_gpt")
 
         for w in self.cinfo.widgets:
             if w not in "l|w":
