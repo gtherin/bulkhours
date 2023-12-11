@@ -90,7 +90,6 @@ class WidgetBase:
             self.cinfo.cell_id,
             style=None,
             execute=True,
-            virtual_room=None,
             level=None,
             teacher_data=teacher_data,
             verbose=verbose,
