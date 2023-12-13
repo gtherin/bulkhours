@@ -209,6 +209,8 @@ def get_buttons_list(label=None, **kwargs):
 def update_button(b, button, output, widget, funct, kwargs=None):
     from . import colors
 
+    debug = True
+
     if kwargs is None:
         kwargs = {}
 
@@ -221,6 +223,13 @@ def update_button(b, button, output, widget, funct, kwargs=None):
         button.is_on = not button.is_on
 
         button.update_style(b, style="transition")
+
+        if debug:
+            import inspect
+
+            print("Info on:", funct)
+            lines = inspect.getsource(funct)
+            print(lines)
         if not button.is_on:
             p1 = multiprocessing.Process(
                 target=funct, args=[widget, output], kwargs=kwargs
@@ -234,7 +243,10 @@ def update_button(b, button, output, widget, funct, kwargs=None):
             fun, sleep = ["🟥", "🟧", "🟨‍", "🟩", "🟦", "🟪"], 0.3
             ii, description = 0, b.description
             while p1.is_alive():
-                b.description = fun[ii % len(fun)] + str(ii) + description
+                if debug:
+                    description = str(ii) + description
+
+                b.description = fun[ii % len(fun)] + description
                 time.sleep(sleep * np.abs((np.random.normal() + 1)))
                 ii += 1
 
