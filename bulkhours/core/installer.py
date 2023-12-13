@@ -131,8 +131,8 @@ def install_dependencies(packages, start_time, is_admin):
     #    rl.init_env(verbose=verbose)
 
     # Install the xattr package if admin
-    if is_admin and ",xattr" not in packages:
-        packages += ",xattr"
+    # if is_admin and ",xattr" not in packages:
+    #    packages += ",xattr"
 
     # Install packages
     for package in packages.split(","):
