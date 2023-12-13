@@ -103,6 +103,9 @@ class WidgetBase:
         grades = grades[["auser", "mail", self.cinfo.cell_id + ".n"]]
 
         print(f"\x1b[35m\x1b[1mNotes for {self.cinfo.cell_id}: \x1b[m", end="")
+        for u in grades.index:
+            print(f"\x1b[35m\x1b[1m(nan), \x1b[m", end="")
+        return
 
         max_score = equals.get_max_score(teacher_data)
 
