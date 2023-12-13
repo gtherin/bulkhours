@@ -148,6 +148,8 @@ def get_max_score(teacher_data, execute=True):
     # Get the formatted evaluation code
     evaluation_code = get_evaluation_code(teacher_data)
 
+    print(evaluation_code)
+    return
     # Include gpt instructions
     nevaluation_code = ""
     for e in evaluation_code.split("\n"):
