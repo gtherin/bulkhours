@@ -8,8 +8,17 @@ from . import tools
 from .. import core
 
 
-def get_drive_filename(filename):
-    from xattr import xattr
+def get_abs_filename(filename):
+    if "/content/gdrive" not in filename:
+        return filename
+
+    try:
+        from xattr import xattr
+
+    except ModuleNotFoundError:
+        os.system("apt install xattr > /dev/null 2>&1")
+        print("\x1b[37mapt install xattr\x1b[0m")
+        from xattr import xattr
 
     return f"https://colab.research.google.com/drive/" + (
         xattr(filename).get("user.drive.id").decode()
@@ -29,10 +38,18 @@ def mount_directory(mdir):
 
 
 def copy4students(email, drive_rdir, filename, cfg=None, **kwargs):
+    import IPython
+
     if cfg is None:
         cfg = core.tools.get_config(is_new_format=True)
     files = {}
     students_list = tools.get_users_list(cfg=cfg)
+
+    IPython.display.display(
+        IPython.display.Markdown(
+            f"## Notebook generation '`{filename.split('/')[-1]}`'"
+        )
+    )
 
     for _, student in students_list.iterrows():
         if student["mail"] == "solution":
@@ -47,8 +64,11 @@ def copy4students(email, drive_rdir, filename, cfg=None, **kwargs):
             student["mail"],
             cfilename=cfilename,
             cfg=cfg,
+            verbose=False,
             **kwargs,
         )
+        icon = "❌" if "/local" in files[student["mail"]] else "🌍"
+        core.tools.dmd(f"""* {icon} {student['auser']}, {files[student['mail']]}""")
 
     with open(
         f"{drive_rdir}/{cfg.virtual_room}/notebooks.json", "w", encoding="utf-8"
@@ -65,10 +85,10 @@ def copy(
     reset=True,
     debug=False,
     cfg=None,
+    verbose=True,
     cfilename=None,
 ):
     import IPython
-    from subprocess import getoutput
     import nbformat
 
     # Get student reference notebook
@@ -80,11 +100,12 @@ def copy(
             ".", f"_{cfg.virtual_room}." if reset else "_solution."
         )
 
-    IPython.display.display(
-        IPython.display.Markdown(
-            f"## Notebook generation '`{cfilename.split('/')[-1]}`'"
+    if verbose:
+        IPython.display.display(
+            IPython.display.Markdown(
+                f"## Notebook generation '`{cfilename.split('/')[-1]}`'"
+            )
         )
-    )
 
     # Mount directories
     mount_directory(drive_rdir)
@@ -149,26 +170,26 @@ def copy(
                 to_pop.append(idx)
 
     # Remove listed cells
-    print("Pop the following cells: ", to_pop)
-    for i in to_pop[::-1]:
-        nb.cells.pop(i)
+    if verbose:
+        print("Pop the following cells: ", to_pop)
+        for i in to_pop[::-1]:
+            nb.cells.pop(i)
 
     # Create the new notebook
     nbformat.write(nb, cfilename, version=nbformat.NO_CONVERT)
 
     # Get the filename if in google drive
-    dfilename = (
-        get_drive_filename(cfilename) if "/content/gdrive" in drive_rdir else cfilename
-    )
+    dfilename = get_abs_filename(cfilename)
 
     # Print info
-    if "/local" in dfilename:
-        core.tools.dmd(
-            f"""* 🌍 ❌<b><font color="red">File has not been yet mounted on the cloud. Please rerun🔄</font></b>❌\n* 📁 '`{cfilename}`'\n
-        """
-        )
-    else:
-        core.tools.dmd(f"""* 🌍 {dfilename}\n* 📁 '`{cfilename}`'\n""")
+    if verbose:
+        if "/local" in dfilename:
+            core.tools.dmd(
+                f"""* 🌍 ❌<b><font color="red">File has not been yet mounted on the cloud. Please rerun🔄</font></b>❌\n* 📁 '`{cfilename}`'\n
+            """
+            )
+        else:
+            core.tools.dmd(f"""* 🌍 {dfilename}\n* 📁 '`{cfilename}`'\n""")
     return dfilename
 
 
@@ -208,7 +229,7 @@ def prepare_mail(
             debug=debug,
         )
     else:
-        dnotebook_file = get_drive_filename(
+        dnotebook_file = get_abs_filename(
             f"{drive_rdir}/{notebook_file}".replace(".", f"_{cfg.virtual_room}.")
         )
 
