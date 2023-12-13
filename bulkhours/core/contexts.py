@@ -100,31 +100,27 @@ def build_context(
         fcode = """
 class Cteacher:
     def __init__(self):
+        print("AAAAAAAAAAAAAAAAAAA 1 ")
         self.stderr, self.stdout = "", ""
-        with redirect_stdout(stdout := io.StringIO()):
-            try:
-
-
-                import tensorflow as tf
-                tf.keras.utils.set_random_seed(42)
+        print("AAAAAAAAAAAAAAAAAAA 2")
+        import tensorflow as tf
+        print("AAAAAAAAAAAAAAAAAAA 3")
+        tf.keras.utils.set_random_seed(42)
+        
+        print("AAAAAAAAAAAAAAAAAAA 4 ")
+        model = tf.keras.Sequential([
+            tf.keras.layers.Flatten(input_shape=[12288]),
+            tf.keras.layers.Dense(100, activation="relu", kernel_initializer="he_normal", name="layer1"),
+            # Insert 3 hidden layers of sizes 80, 20, 5, with relu, and kernel_initializer="he_normal" (≈3 lines)
+            tf.keras.layers.Dense(80, activation="relu", kernel_initializer="he_normal", name="layer2"),
+            tf.keras.layers.Dense(20, activation="relu", kernel_initializer="he_normal", name="layer3"),
+            tf.keras.layers.Dense(5, activation="relu", kernel_initializer="he_normal", name="layer4"),
+            tf.keras.layers.Dense(1, activation="sigmoid", kernel_initializer="he_normal", name="layer5")])
+        
+        print("AAAAAAAAAAAAAAAAAAA 5")
+        for i in [2, 3, 4]:
+            print("model.layers[2].weights[0].shape=", np.array(model.layers[i].weights[0].shape))
                 
-                model = tf.keras.Sequential([
-                    tf.keras.layers.Flatten(input_shape=[12288]),
-                    tf.keras.layers.Dense(100, activation="relu", kernel_initializer="he_normal", name="layer1"),
-                    # Insert 3 hidden layers of sizes 80, 20, 5, with relu, and kernel_initializer="he_normal" (≈3 lines)
-                    tf.keras.layers.Dense(80, activation="relu", kernel_initializer="he_normal", name="layer2"),
-                    tf.keras.layers.Dense(20, activation="relu", kernel_initializer="he_normal", name="layer3"),
-                    tf.keras.layers.Dense(5, activation="relu", kernel_initializer="he_normal", name="layer4"),
-                    tf.keras.layers.Dense(1, activation="sigmoid", kernel_initializer="he_normal", name="layer5")])
-                
-                for i in [2, 3, 4]:
-                  print("model.layers[2].weights[0].shape=", np.array(model.layers[i].weights[0].shape))
-                
-
-            except Exception as e:
-                self.stderr = e
-            #for k, v in locals().items(): setattr(self, k, v)
-            #self.stdout = stdout.getvalue()
 teacher = Cteacher()
 
 """
