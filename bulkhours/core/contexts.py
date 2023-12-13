@@ -98,26 +98,14 @@ def build_context(
         )
 
         fcode = """
-class Cteacher:
-    def __init__(self):
-        print("AAAAAAAAAAAAAAAAAAA 1 ")
-        self.stderr, self.stdout = "", ""
-        print("AAAAAAAAAAAAAAAAAAA 2")
-        import tensorflow as tf
-        print("AAAAAAAAAAAAAAAAAAA 3")
-        tf.keras.utils.set_random_seed(42)
-        
-        print("AAAAAAAAAAAAAAAAAAA 4 ")
-        print(tf.executing_eagerly())
-        model = tf.keras.Sequential([
-            tf.keras.layers.Flatten(input_shape=[12288]),
-            tf.keras.layers.Dense(1, activation="sigmoid", kernel_initializer="he_normal", name="layer5")])
-        print(tf.executing_eagerly())
-        
-        print("AAAAAAAAAAAAAAAAAAA 5")
-                
-teacher = Cteacher()
+import tensorflow as tf
+tf.keras.utils.set_random_seed(42)
 
+print("AAAAAAAAAAAAAAAAAAA 4 ")
+model = tf.keras.Sequential([
+    tf.keras.layers.Flatten(input_shape=[12288]),
+    tf.keras.layers.Dense(1, activation="sigmoid", kernel_initializer="he_normal", name="layer5")])        
+print("AAAAAAAAAAAAAAAAAAA 5")
 """
 
         print("HHHHHHHHHHHHHHHHH")
