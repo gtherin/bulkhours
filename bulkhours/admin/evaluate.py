@@ -289,8 +289,6 @@ def evaluate2(
         )
 
     print("FFFFFFFFFFFFFFF2222")
-    for u in grades.index:
-        print(f"\x1b[35m\x1b[1m(nan), \x1b[m", end="")
     max_score = core.equals.get_max_score(teacher_data, execute=execute)
     print("FFFFFFFFFFFFFFF222", max_score)
     return
