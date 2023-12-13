@@ -35,6 +35,8 @@ def copy4students(email, drive_rdir, filename, cfg=None, **kwargs):
     students_list = tools.get_users_list(cfg=cfg)
 
     for _, student in students_list.iterrows():
+        if student["mail"] == "solution":
+            continue
         cfilename = f"{drive_rdir}/{cfg.virtual_room}/{filename}".replace(
             ".", f"_%s." % student["auser"].lower()
         )
@@ -42,7 +44,7 @@ def copy4students(email, drive_rdir, filename, cfg=None, **kwargs):
             email,
             drive_rdir,
             filename,
-            student["auser"],
+            student["mail"],
             cfilename=cfilename,
             cfg=cfg,
             **kwargs,
