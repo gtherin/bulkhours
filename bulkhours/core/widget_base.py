@@ -86,16 +86,15 @@ class WidgetBase:
 
         from .. import admin
 
-        if False:
-            return admin.evaluate2(
-                self.cinfo.cell_id,
-                style=None,
-                execute=True,
-                level=None,
-                teacher_data=teacher_data,
-                verbose=verbose,
-                duser=duser,
-            )
+        return admin.evaluate2(
+            self.cinfo.cell_id,
+            style=None,
+            execute=True,
+            level=None,
+            teacher_data=teacher_data,
+            verbose=verbose,
+            duser=duser,
+        )
 
         grades = admin.tools.get_users_list(no_admin=False, sort_by=sort_by)
 
