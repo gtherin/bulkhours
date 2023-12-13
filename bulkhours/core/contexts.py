@@ -75,6 +75,7 @@ def build_context(
     do_debug=False,
     use_context=True,
     user="",
+    execute=True,
 ):
     output = ipywidgets.Output()
     if code_label not in data.minfo:
@@ -96,8 +97,11 @@ def build_context(
             else generate_context_code(code, context)
         )
 
-        # print(fcode)
-        IPython.get_ipython().run_cell(fcode)
+        print("HHHHHHHHHHHHHHHHH")
+        print(fcode)
+        print("HHHHHHHHHHHHHHHHH")
+        if execute:
+            IPython.get_ipython().run_cell(fcode)
 
     # if data.is_cell_type():
     #    run_cell(f'{context}.answer={data["answer"]}')

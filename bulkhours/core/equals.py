@@ -173,15 +173,15 @@ def get_max_score(teacher_data, execute=True):
     print("DDDDDDDDDDDDD 44")
 
     # Run the teacher code if needed
-    if execute:
-        contexts.build_context(
-            teacher_data,
-            "main_execution",
-            "teacher",
-            evaluation_code,
-            f"teacher." in evaluation_code,
-            do_debug=do_debug,
-        )
+    contexts.build_context(
+        teacher_data,
+        "main_execution",
+        "teacher",
+        evaluation_code,
+        f"teacher." in evaluation_code,
+        do_debug=do_debug,
+        execute=execute,
+    )
 
     print("DDDDDDDDDDDDD 3")
     return
@@ -239,17 +239,17 @@ def evaluate_student(
         return f"{score}/{max_score}"
 
     # Run the student code if needed
-    if execute:
-        contexts.build_context(
-            student_data,
-            "main_execution",
-            "student",
-            evaluation_code,
-            f"student." in evaluation_code,
-            do_debug=do_debug,
-            use_context=use_student_context,
-            user=user,
-        )
+    contexts.build_context(
+        student_data,
+        "main_execution",
+        "student",
+        evaluation_code,
+        f"student." in evaluation_code,
+        do_debug=do_debug,
+        use_context=use_student_context,
+        user=user,
+        execute=execute,
+    )
     if not use_student_context:
         evaluation_code = evaluation_code.replace("student.", "")
 
