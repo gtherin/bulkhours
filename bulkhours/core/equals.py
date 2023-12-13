@@ -148,8 +148,6 @@ def get_max_score(teacher_data, execute=True):
     # Get the formatted evaluation code
     evaluation_code = get_evaluation_code(teacher_data)
 
-    print(evaluation_code)
-    return
     # Include gpt instructions
     nevaluation_code = ""
     for e in evaluation_code.split("\n"):
@@ -163,6 +161,9 @@ def get_max_score(teacher_data, execute=True):
 
     evaluation_code = nevaluation_code
     do_debug = "debug=true" in evaluation_code.replace(" ", "").lower()
+    print("DDDDDDDDDDDDD 1")
+    print(evaluation_code)
+    print("DDDDDDDDDDDDD 2")
 
     # Run the teacher code if needed
     if execute:
@@ -174,6 +175,9 @@ def get_max_score(teacher_data, execute=True):
             f"teacher." in evaluation_code,
             do_debug=do_debug,
         )
+
+    print("DDDDDDDDDDDDD 3")
+    return
 
     try:
         evaluation_code = evaluation_code.replace("bulkhours.admin.replace(", "#")
