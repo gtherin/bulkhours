@@ -282,16 +282,18 @@ def evaluate2(
     grades = grades[["auser", "mail", cinfo.cell_id + ".n"]]
 
     print(f"\x1b[35m\x1b[1mNotes for {cinfo.cell_id}: \x1b[m", end="")
-    for u in grades.index:
-        print(f"\x1b[35m\x1b[1m(nan), \x1b[m", end="")
-    return
 
     if teacher_data is None:
         teacher_data = core.CellParser.crunch_data(
             cinfo=cinfo, user=core.tools.REF_USER, data=None
         )
 
+    print("FFFFFFFFFFFFFFF2222")
+    for u in grades.index:
+        print(f"\x1b[35m\x1b[1m(nan), \x1b[m", end="")
     max_score = core.equals.get_max_score(teacher_data, execute=execute)
+    print("FFFFFFFFFFFFFFF222", max_score)
+    return
 
     cell_answers = answers.get_answers(cinfo.cell_id, verbose=False)
     for u in grades.index:
