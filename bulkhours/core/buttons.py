@@ -234,8 +234,7 @@ def update_button(b, button, output, widget, funct, kwargs=None):
             fun, sleep = ["🟥", "🟧", "🟨‍", "🟩", "🟦", "🟪"], 0.3
             ii, description = 0, b.description
             while p1.is_alive():
-                b.description = fun[ii % len(fun)] + description
-
+                b.description = fun[ii % len(fun)] + str(ii) + description
                 time.sleep(sleep * np.abs((np.random.normal() + 1)))
                 ii += 1
 
