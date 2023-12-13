@@ -159,11 +159,18 @@ def get_max_score(teacher_data, execute=True):
         else:
             nevaluation_code += e + "\n"
 
+    from .cell_parser import CellParser
+
     evaluation_code = nevaluation_code
     do_debug = "debug=true" in evaluation_code.replace(" ", "").lower()
     print("DDDDDDDDDDDDD 1")
     print(evaluation_code)
     print("DDDDDDDDDDDDD 2")
+    code = CellParser.remove_meta_functions_execution(
+        teacher_data.get_code("main_execution")
+    )
+    print(code)
+    print("DDDDDDDDDDDDD 44")
 
     # Run the teacher code if needed
     if execute:
