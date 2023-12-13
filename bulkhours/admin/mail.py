@@ -71,9 +71,16 @@ def copy4students(email, drive_rdir, filename, cfg=None, **kwargs):
         core.tools.dmd(f"""* {icon} {student['auser']}, {files[student['mail']]}""")
 
     with open(
-        f"{drive_rdir}/{cfg.virtual_room}/notebooks.json", "w", encoding="utf-8"
+        cfilename := f"{drive_rdir}/{cfg.virtual_room}/notebooks.json",
+        "w",
+        encoding="utf-8",
     ) as f:
         json.dump(files, f, ensure_ascii=False, indent=4)
+
+    # Get the summary file if in google drive
+    dfilename = get_abs_filename(cfilename)
+    core.tools.dmd(f"""### 🎓 Summary file: {cfilename}, {dfilename}""")
+
     return files
 
 
