@@ -1,8 +1,10 @@
+import json
 import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
+from . import tools
 from .. import core
 
 
@@ -14,23 +16,67 @@ def get_drive_filename(filename):
     )
 
 
-def mount_gdrive():
-    from google.colab import drive
+def mount_directory(mdir):
+    # Mount google drive if needed
+    if "/content/gdrive" in mdir:
+        from google.colab import drive
 
-    drive.mount("/content/gdrive/")
+        if not os.path.exists("/content/gdrive/"):
+            drive.mount("/content/gdrive/")
+
+    if not os.path.exists(mdir):
+        os.system(f"mkdir -p {mdir}")
 
 
-def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
+def copy4students(email, drive_rdir, filename, cfg=None, **kwargs):
+    if cfg is None:
+        cfg = core.tools.get_config(is_new_format=True)
+    files = {}
+    students_list = tools.get_users_list(cfg=cfg)
+
+    for _, student in students_list.iterrows():
+        cfilename = f"{drive_rdir}/{cfg.virtual_room}/{filename}".replace(
+            ".", f"_%s." % student["auser"].lower()
+        )
+        files[student["mail"]] = copy(
+            email,
+            drive_rdir,
+            filename,
+            student["auser"],
+            cfilename=cfilename,
+            cfg=cfg,
+            **kwargs,
+        )
+
+    with open(
+        f"{drive_rdir}/{cfg.virtual_room}/notebooks.json", "w", encoding="utf-8"
+    ) as f:
+        json.dump(files, f, ensure_ascii=False, indent=4)
+    return files
+
+
+def copy(
+    email,
+    drive_rdir,
+    filename,
+    student,
+    reset=True,
+    debug=False,
+    cfg=None,
+    cfilename=None,
+):
     import IPython
     from subprocess import getoutput
     import nbformat
 
     # Get student reference notebook
-    cfg = core.tools.get_config(is_new_format=True)
+    if cfg is None:
+        cfg = core.tools.get_config(is_new_format=True)
     ofilename = f"{drive_rdir}/{filename}"
-    cfilename = f"{drive_rdir}/{filename}".replace(
-        ".", f"_{cfg.virtual_room}." if reset else "_solution."
-    )
+    if cfilename is None:
+        cfilename = f"{drive_rdir}/{cfg.virtual_room}/{filename}".replace(
+            ".", f"_{cfg.virtual_room}." if reset else "_solution."
+        )
 
     IPython.display.display(
         IPython.display.Markdown(
@@ -38,9 +84,9 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
         )
     )
 
-    # Mount google drive if needed
-    if "/content/gdrive" in drive_rdir:
-        mount_gdrive()
+    # Mount directories
+    mount_directory(drive_rdir)
+    mount_directory(os.path.dirname(cfilename))
 
     # Get token
     ntoken = cfg.tokens[cfg.virtual_room]
@@ -61,7 +107,7 @@ def copy(email, drive_rdir, filename, default_student, reset=True, debug=False):
                     if s.startswith("database"):
                         s = f'database = "{ntoken}"'
                     if s.startswith("email"):
-                        s = s.replace(email, default_student)
+                        s = s.replace(email, student)
                     nsource.append(s)
                 cell["source"] = "\n".join(nsource)
                 if "outputs" in cell and len(cell["outputs"]) > 0:
@@ -131,10 +177,12 @@ def prepare_mail(
     generate_solution=True,
     notebook_file=None,
     drive_rdir=None,
+    cfg=None,
     debug=False,
 ):
     notebook_info = notebook_file.split(".")[0]
-    cfg = core.tools.get_config(is_new_format=True)
+    if cfg is None:
+        cfg = core.tools.get_config(is_new_format=True)
 
     if generate_solution:
         copy(
@@ -143,6 +191,7 @@ def prepare_mail(
             notebook_file,
             default_student,
             reset=False,
+            cfg=cfg,
             debug=debug,
         )
 
@@ -153,6 +202,7 @@ def prepare_mail(
             notebook_file,
             default_student,
             reset=True,
+            cfg=cfg,
             debug=debug,
         )
     else:
