@@ -109,7 +109,7 @@ class Cteacher:
         
         print("AAAAAAAAAAAAAAAAAAA 4 ")
         model = tf.keras.Sequential([
-            tf.keras.layers.Flatten(input_shape=[30]),
+            tf.keras.layers.Flatten(input_shape=[12288]),
             tf.keras.layers.Dense(1, activation="sigmoid", kernel_initializer="he_normal", name="layer5")])
         
         print("AAAAAAAAAAAAAAAAAAA 5")
