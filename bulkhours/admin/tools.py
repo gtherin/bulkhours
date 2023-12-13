@@ -36,15 +36,16 @@ def switch_classroom(virtual_room, verbose=True, **kwargs):
     return cfg
 
 
-def get_users_list(no_admin=True, sort_by=None, euser=None):
-    info = core.tools.get_config(is_new_format=True)
-    virtual_room = info["virtual_room"]
+def get_users_list(no_admin=True, sort_by=None, euser=None, cfg=None):
+    if cfg is None:
+        cfg = core.tools.get_config(is_new_format=True)
+    virtual_room = cfg["virtual_room"]
 
     users = []
     if not no_admin:
         users += [
             (k, 1)
-            for k in info.g["admins"]
+            for k in cfg.g["admins"]
             .replace(",", ";")
             .replace(" ", "")
             .replace(" ", "")
@@ -53,7 +54,7 @@ def get_users_list(no_admin=True, sort_by=None, euser=None):
         ]
     users += [
         (k, 0)
-        for k in info.g[virtual_room]
+        for k in cfg.g[virtual_room]
         .replace(",", ";")
         .replace(" ", "")
         .replace(" ", "")
