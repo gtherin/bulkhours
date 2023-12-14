@@ -86,8 +86,9 @@ class WidgetBase:
 
         from .. import admin
 
-        return admin.evaluate2(
+        return admin.evaluate(
             self.cinfo.cell_id,
+            user="ALL"
             style=None,
             execute=True,
             level=None,
