@@ -163,14 +163,16 @@ def get_max_score(teacher_data, execute=True):
 
     evaluation_code = nevaluation_code
     do_debug = "debug=true" in evaluation_code.replace(" ", "").lower()
-    print("DDDDDDDDDDDDD 1")
-    print(evaluation_code)
-    print("DDDDDDDDDDDDD 2")
+    if do_debug:
+        print("DDDDDDDDDDDDD 1")
+        print(evaluation_code)
+        print("DDDDDDDDDDDDD 2")
     code = CellParser.remove_meta_functions_execution(
         teacher_data.get_code("main_execution")
     )
-    print(code)
-    print("DDDDDDDDDDDDD 44")
+    if do_debug:
+        print(code)
+        print("DDDDDDDDDDDDD 44")
 
     # Run the teacher code if needed
     contexts.build_context(
@@ -183,8 +185,9 @@ def get_max_score(teacher_data, execute=True):
         execute=execute,
     )
 
-    print("DDDDDDDDDDDDD 3")
-    return
+    if debug:
+        print("DDDDDDDDDDDDD 3")
+        return
 
     try:
         evaluation_code = evaluation_code.replace("bulkhours.admin.replace(", "#")
