@@ -69,10 +69,14 @@ def is_equal(
     if type(data_test) != type(data_ref):
         return min_score
 
+    # Get data type
+    for func in ["numpy", "as_list"]:
+        if "tensorflow" in str(type(data_test)) and hasattr(data_test, func):
+            data_test, data_ref = getattr(data_test, func)(), getattr(data_ref, func)()
+
     # Get error from student
     if type(data_test) in [list, tuple]:
-        data_test = np.array(data_test)
-        data_ref = np.array(data_ref)
+        data_test, data_ref = np.array(data_test), np.array(data_ref)
 
     if type(data_test) == str:
         estimation_error = np.abs(
