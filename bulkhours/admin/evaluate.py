@@ -184,13 +184,33 @@ def evaluate(
     execute=True,
     virtual_room=None,
     level=None,
-    normalize_score=False,
+    teacher_data=None,
+    duser=None,
+    verbose=False,
+    force_grades=False,
+    normalize_score=True,
     **kwargs,
 ):
     if virtual_room is not None:
-        cfg = tools.switch_classroom(virtual_room, **kwargs)
+        cfg = tools.switch_classroom(virtual_room)
     else:
-        cfg = core.tools.get_config(is_new_format=True, **kwargs)
+        cfg = core.tools.get_config(is_new_format=True)
+
+    if user == "ALL":
+        return evaluate_all(
+            cell_id,
+            user=user,
+            show_correction=show_correction,
+            style=style,
+            execute=execute,
+            virtual_room=virtual_room,
+            level=level,
+            teacher_data=teacher_data,
+            duser=duser,
+            verbose=verbose,
+            force_grades=force_grades,
+            normalize_score=normalize_score,
+        )
 
     if cell_id == "NEXT":
         exos = cfg.n["exercices"].split(";")
@@ -260,10 +280,13 @@ def evaluate(
     )
 
 
-def evaluate2(
+def evaluate_all(
     cell_id,
+    user="ALL",
+    show_correction=True,
     style=None,
     execute=True,
+    virtual_room=None,
     level=None,
     teacher_data=None,
     duser=None,
