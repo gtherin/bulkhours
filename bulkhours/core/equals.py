@@ -185,7 +185,7 @@ def get_max_score(teacher_data, execute=True):
         execute=execute,
     )
 
-    if debug:
+    if do_debug:
         print("DDDDDDDDDDDDD 3")
         return
 
