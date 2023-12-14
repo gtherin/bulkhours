@@ -111,6 +111,8 @@ print("AAAAAAAAAAAAAAAAAAA 5")
             print("HHHHHHHHHHHHHHHHH")
             print(fcode)
             print("HHHHHHHHHHHHHHHHH")
+
+        print(fcode)
         if execute:
             IPython.get_ipython().run_cell(fcode)
 
