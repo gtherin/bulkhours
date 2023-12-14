@@ -88,7 +88,7 @@ class WidgetBase:
 
         return admin.evaluate(
             self.cinfo.cell_id,
-            user="ALL"
+            user="ALL",
             style=None,
             execute=True,
             level=None,
