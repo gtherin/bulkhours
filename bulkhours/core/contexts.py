@@ -97,7 +97,8 @@ def build_context(
             else generate_context_code(code, context)
         )
 
-        fcode = """
+        if do_debug:
+            fcode = """
 import tensorflow as tf
 tf.keras.utils.set_random_seed(42)
 
@@ -107,10 +108,9 @@ model = tf.keras.Sequential([
     tf.keras.layers.Dense(1, activation="sigmoid", kernel_initializer="he_normal", name="layer5")])        
 print("AAAAAAAAAAAAAAAAAAA 5")
 """
-
-        print("HHHHHHHHHHHHHHHHH")
-        print(fcode)
-        print("HHHHHHHHHHHHHHHHH")
+            print("HHHHHHHHHHHHHHHHH")
+            print(fcode)
+            print("HHHHHHHHHHHHHHHHH")
         if execute:
             IPython.get_ipython().run_cell(fcode)
 
