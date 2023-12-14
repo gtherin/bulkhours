@@ -209,7 +209,7 @@ def get_buttons_list(label=None, **kwargs):
 def update_button(b, button, output, widget, funct, kwargs=None):
     from . import colors
 
-    debug = True
+    debug = False
 
     if kwargs is None:
         kwargs = {}
