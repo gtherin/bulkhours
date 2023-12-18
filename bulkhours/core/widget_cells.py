@@ -17,13 +17,16 @@ class WidgetCode(WidgetBase):
         return self.cell_source
 
     def execute_raw_cell(self, bbox, output):
-
-        student_data = CellParser.crunch_data(cinfo=self.cinfo, user=self.cinfo.user, data=self.cell_source)
+        student_data = CellParser.crunch_data(
+            cinfo=self.cinfo, user=self.cinfo.user, data=self.cell_source
+        )
 
         if student_data.do_run_evaluation():
             teacher_data = student_data
             # teacher_data = CellParser.crunch_data(cinfo=self.cinfo, user="solution", data=None)
-            score = equals.evaluate_student(student_data, teacher_data, raw=False, user=self.cinfo.user)
+            score = equals.student_evaluation_function(
+                student_data, teacher_data, user=self.cinfo.user
+            ).score
             print(f"Estimated score: {score}")
         else:
             with output:
@@ -44,16 +47,22 @@ class WidgetScript(WidgetCode):
         return ncode
 
     def execute_raw_cell(self, bbox, output):
-        local_data = CellParser.crunch_data(cinfo=self.cinfo, user=self.cinfo.user, data=self.cell_source)
+        local_data = CellParser.crunch_data(
+            cinfo=self.cinfo, user=self.cinfo.user, data=self.cell_source
+        )
 
-        local_data.minfo["main_execution"]["code"] = self.fix_woptions(local_data.minfo["main_execution"]["code"])
+        local_data.minfo["main_execution"]["code"] = self.fix_woptions(
+            local_data.minfo["main_execution"]["code"]
+        )
 
         if local_data.do_run_evaluation():
             teacher_data, student_data = local_data, local_data
             # teacher_data = CellParser.crunch_data(cinfo=self.cinfo, user="solution", data=None)
             # student_data = CellParser.crunch_data(cinfo=self.cinfo, user=self.cinfo.user, data=self.cell_source)
 
-            score = equals.evaluate_student(student_data, teacher_data, raw=False, user=self.cinfo.user)
+            score = equals.student_evaluation_function(
+                student_data, teacher_data, user=self.cinfo.user
+            ).score
             print(f"Estimated score: {score}")
         else:
             with output:
@@ -78,11 +87,17 @@ class WidgetFormula(WidgetCode):
 
     def display_correction(self, student_data, teacher_data, output=None):
         with output:
-            tools.html(f"Correction ({self.cinfo.cell_id})", display=True, style="rheader")
-        IPython.display.display(IPython.display.Markdown("$" + teacher_data["answer"] + "$"))
+            tools.html(
+                f"Correction ({self.cinfo.cell_id})", display=True, style="rheader"
+            )
+        IPython.display.display(
+            IPython.display.Markdown("$" + teacher_data["answer"] + "$")
+        )
 
     def execute_raw_cell(self, bbox, output):
         with output:
-            IPython.display.display(IPython.display.Markdown("$" + self.cell_source + "$"))
+            IPython.display.display(
+                IPython.display.Markdown("$" + self.cell_source + "$")
+            )
             print("$" + self.cell_source[:-1] + "$")
         WidgetBase.execute_raw_cell(self, bbox, output)

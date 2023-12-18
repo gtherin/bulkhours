@@ -311,10 +311,7 @@ def evaluate_all(
             cinfo=cinfo, user=core.tools.REF_USER, data=None
         )
 
-    # print("FFFFFFFFFFFFFFF2222")
-    max_score = core.equals.get_max_score(teacher_data, execute=execute)
-    # print("FFFFFFFFFFFFFFF222", max_score)
-    # return
+    max_score = 10
 
     cell_answers = answers.get_answers(cinfo.cell_id, verbose=False)
     for u in grades.index:
@@ -339,18 +336,21 @@ def evaluate_all(
         if student_data.is_manual_note():
             score, src = student_data.minfo["grade_man"], " [MAN]"
         else:
-            score = core.equals.evaluate_student(
+            score = core.equals.student_evaluation_function(
                 student_data,
                 teacher_data,
-                raw=True,
                 user=auser,
                 verbose=verbose,
                 execute=execute,
                 normalize_score=normalize_score,
-            )
+            ).score
+
             src = ""
         print(f"\x1b[35m\x1b[1m({score}{src}), \x1b[m", end="")
         grades.loc[u, cinfo.cell_id + ".n"] = score
+
+        if user == "solution":
+            max_score = score
 
     grad_name = (
         "grade_bot"
