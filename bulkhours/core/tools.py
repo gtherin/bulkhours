@@ -7,6 +7,7 @@ from .config import Config
 
 REF_USER = "solution"
 
+
 def get_platform():
     if os.path.exists("/content"):
         return "colab"
@@ -36,20 +37,38 @@ def update_config(cfg):
     return cfg
 
 
-def html(label, size="4", color="black", use_ipywidgets=False, display=False, style="raw", font="FiraCode Nerd Font"):
+def html(
+    label,
+    size="4",
+    color="black",
+    use_ipywidgets=False,
+    display=False,
+    style="raw",
+    font="FiraCode Nerd Font",
+):
     if style in ["header", "title"]:
-        html_code = f"<b><font face='{font}' size=4 color='{color}'>{label}<font></b><br/>"
+        html_code = (
+            f"<b><font face='{font}' size=4 color='{color}'>{label}<font></b><br/>"
+        )
     elif style == "rheader":
         html_code = f"<b><font face='{font}' size=4 color='red'>{label}<font></b><br/>"
     elif style == "bheader":
-        html_code = f"<b><font face='{font}' size=4 color='black'>{label}<font></b><br/>"
+        html_code = (
+            f"<b><font face='{font}' size=4 color='black'>{label}<font></b><br/>"
+        )
     elif style == "raw":
         html_code = label
     else:
-        html_code = f"<b><font face='{font}' size={size} color='{color}'>{label}<font></b><br/>"
+        html_code = (
+            f"<b><font face='{font}' size={size} color='{color}'>{label}<font></b><br/>"
+        )
 
     # TODO: ipywidgets.HTML DISPLAY is BUGGY, use IPython.display.HTML when possible
-    w = ipywidgets.HTML(value=html_code) if use_ipywidgets else IPython.display.HTML(html_code)
+    w = (
+        ipywidgets.HTML(value=html_code)
+        if use_ipywidgets
+        else IPython.display.HTML(html_code)
+    )
     if display:
         print(" ", end="")
         IPython.display.display(w)
@@ -91,12 +110,22 @@ def code(codebody, raw=False, display=False, style=None):
 
 def dmd(*args, **kwargs):
     import IPython
+
     if IPython.get_ipython():
         IPython.display.display(IPython.display.Markdown(*args, **kwargs))
     else:
         print(args[0])
 
-def md(mdbody=None, header=None, rawbody=None, codebody=None, hc="red", bc="black", icon="📚"):
+
+def md(
+    mdbody=None,
+    header=None,
+    rawbody=None,
+    codebody=None,
+    hc="red",
+    bc="black",
+    icon="📚",
+):
     if header:
         html(header + "" + icon, size="4", color=hc, display=True)
 
@@ -121,7 +150,14 @@ def eval_code(code):
         return exec(code)
 
 
-def get_config(config=None, do_update=False, from_scratch=False, is_namespace=False, is_new_format=False, **kwargs):
+def get_config(
+    config=None,
+    do_update=False,
+    from_scratch=False,
+    is_namespace=False,
+    is_new_format=False,
+    **kwargs,
+):
     """Important to copy the config"""
     if config is None:
         config = {}  # Config()
@@ -170,6 +206,7 @@ def is_admin(cfg=None):
         and cfg.data["email"] in cfg.data["global"]["admins"]
     )
 
+
 def format_opt(label, raw2norm=True):
     rr = {"-": "__minus__", "@": "__at__", " ": "__space__", "/": "__slash__"}
     if len(label) > 0 and label[0] != "-":
@@ -177,3 +214,16 @@ def format_opt(label, raw2norm=True):
             label = label.replace(k, v) if raw2norm else label.replace(v, k)
     return label
 
+
+def install_if_needed(package):
+    try:
+        import importlib
+
+        return importlib.import_module(package)
+
+    except ModuleNotFoundError:
+        os.system(f"pip install {package} > /dev/null 2>&1")
+        print(f"\x1b[37mpip install {package}\x1b[0m")
+        import importlib
+
+        return importlib.import_module(package)
