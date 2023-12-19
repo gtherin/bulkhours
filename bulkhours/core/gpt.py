@@ -4,6 +4,7 @@ import matplotlib
 import os
 
 from . import tools
+from .grade import Grade
 
 evaluation_instructions = None
 evaluation_openai_token = "YOUR_KEY"
@@ -216,7 +217,7 @@ def get_grade(student_data, teacher_data):
                     f"#### <b>{user}: <font color='{grade_color}'>grade={grade}</font></b>\n{response}"
                 )
             )
-            return grade, comment
+            return Grade(score=grade, comment=comment)
         except:
             IPython.display.display(
                 IPython.display.Markdown(
@@ -224,4 +225,4 @@ def get_grade(student_data, teacher_data):
                 )
             )
 
-            return np.nan, response
+            return Grade(score=np.nan, comment=response)

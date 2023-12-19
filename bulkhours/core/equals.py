@@ -14,23 +14,15 @@ from .line_parser import LineParser
 from .cell_parser import CellParser
 
 
-class EvaluationResult:
-    def __init__(self, score=np.nan, max_score=np.nan, comment="") -> None:
-        self.score = score
-        self.max_score = max_score
-        self.comment = comment
-
-
 def gpt_evaluation(student_data, teacher_data):
     from . import gpt
 
     if gpt.evaluation_instructions is not None:
         print("")
-        grade, comment = gpt.get_grade(student_data, teacher_data)
-        return EvaluationResult(grade, np.nan, comment)
+        return gpt.get_grade(student_data, teacher_data)
 
     print("🚧Need to implement evaluation_instructions")
-    return EvaluationResult()
+    return Grade()
 
 
 def is_equal(
@@ -271,19 +263,20 @@ def student_evaluation_function(
     execute=True
 
     :param debug: this is a first param
-
-            :returns: this is a description of what is returned
+    :returns: this is a description of what is returned
     """
 
-    student_code = student_data.get_code("main_execution")
-
-    if student_code == "":
+    # Return default grade if Nothing available
+    if student_data.get_code("main_execution") == "":
         return Grade.NO_ANSWER_FOUND
 
     # Get the formatted codes
     student_code, teacher_code, evaluation_code = get_contexts_codes(
         student_data, teacher_data
     )
+
+    if "help=true" in evaluation_code.replace(" ", "").lower():
+        print(__doc__)
 
     do_debug = "debug=true" in evaluation_code.replace(" ", "").lower()
     do_plot = "do_plot=true" in evaluation_code.replace(" ", "").lower()
@@ -340,12 +333,10 @@ def student_evaluation_function(
     if not do_plot:
         plt.ion()
 
-    res = EvaluationResult(
-        score,
-        max_score,
-        """Analytical evaluation failed.
+    return Grade(
+        score=score,
+        max_score=max_score,
+        comment="""Analytical evaluation failed.
 Somme more comments should ba available soon.                           
 """,
     )
-
-    return res

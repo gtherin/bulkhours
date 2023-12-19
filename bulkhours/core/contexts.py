@@ -62,7 +62,7 @@ class C{context}:
         for c in evaluation_code.split("student."):
             o = ""
             for i in c:
-                if i.isalnum():
+                if i.isalnum() or i in ["_"]:
                     o += i
                 else:
                     if o != "":
