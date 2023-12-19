@@ -1,6 +1,8 @@
 import json
 import os
 import smtplib
+import ssl
+
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -12,16 +14,10 @@ def get_abs_filename(filename):
     if "/content/gdrive" not in filename:
         return filename
 
-    try:
-        from xattr import xattr
-
-    except ModuleNotFoundError:
-        os.system("apt install xattr > /dev/null 2>&1")
-        print("\x1b[37mapt install xattr\x1b[0m")
-        from xattr import xattr
+    xattr = tools.install_if_needed("xattr")
 
     return f"https://colab.research.google.com/drive/" + (
-        xattr(filename).get("user.drive.id").decode()
+        xattr.xattr(filename).get("user.drive.id").decode()
     )
 
 
@@ -288,38 +284,50 @@ def prepare_mail(
     IPython.display.display(IPython.display.HTML(html))
 
 
-def send_mail(me="g*@gmail.com", you="contact@bulkhours.eu"):
+def send_mail(
+    you="g*@gmail.com", me="no-reply@bulkhours.fr", password="****", message=""
+):
     """Example:
-    admin.send_mail(me="g*@gmail.com", you="s*@gmail.com")
+    admin.send_mail(you="s*@gmail.com", me="g*@gmail.com", )
     """
 
-    html = """
+    html = f"""
     <html>
     <head>
         <style> 
         table, th, td {{ border: 1px solid black; border-collapse: collapse; }} th, td {{ padding: 5px; }}
         </style>
     </head>
-    <body><p>Hello</p>
+    <body><p>{message}</p>
+    <img alt="" src="https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/BulkHours.png" width=100 />
     </body>
     </html> """
 
-    ImgFileName = "capture.png"
-    with open(ImgFileName, "rb") as f:
-        img_data = f.read()
-    image = MIMEImage(img_data, name=os.path.basename(ImgFileName))
+    # with open(img_filename := "bulkhours/data/BulkHours.png", "rb") as f:
+    #    img_data = f.read()
+    # image = MIMEImage(img_data, name=os.path.basename(img_filename))
 
     emailmultipart = MIMEMultipart()
     emailmultipart["From"] = me
     emailmultipart["To"] = you
     emailmultipart["Subject"] = "Subject"
     emailmultipart.attach(MIMEText(html, "html"))
-    emailmultipart.attach(image)
+    # emailmultipart.attach(image)
 
-    server = "smtp.gmail.com:587" if 1 else "smtpauth.online.net:2525"
-    server = smtplib.SMTP(server)
+    if "bulkhours.eu" in me:
+        server = "smtpauth.online.net:2525"
+    elif "gmail.com" in me:
+        server = "smtp.gmail.com:587"
+    else:
+        server = "ssl0.ovh.net:465"
+
+    # pro2.mail.ovh.net sur le port 587
+
+    context = ssl.create_default_context()
+    server = smtplib.SMTP_SSL("ssl0.ovh.net", 465, context=context)
+    if 0:
+        server.set_debuglevel(1)
     server.ehlo()
-    server.starttls()
-    server.login("g*@gmail.com", "****")
+    server.login(me, password)
     server.send_message(emailmultipart)
     server.quit()
