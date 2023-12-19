@@ -160,25 +160,22 @@ os.environ['FINAL_SCORE'] = str(eresult)
     )
 
 
-def get_max_score(evaluation_code, execute=True):
-    def replace(func_id):
+def get_max_score(revaluation_code, execute=True):
+    def comment_function_call(func_id):
         l = LineParser.get_func_args(e, func_id=func_id)
         max_score = l["max_score"] if "max_score" in l else "10"
         return e.replace(func_id, max_score + "  #") + "\n"
 
-    nevaluation_code = ""
-    for e in evaluation_code.split("\n"):
+    evaluation_code = ""
+    for e in revaluation_code.split("\n"):
         if "bulkhours.admin.gpt_eval" in e:
-            nevaluation_code += replace("bulkhours.admin.gpt_eval")
+            evaluation_code += comment_function_call("bulkhours.admin.gpt_eval")
         elif "bulkhours.is_equal" in e:
-            nevaluation_code += replace("bulkhours.is_equal")
+            evaluation_code += comment_function_call("bulkhours.is_equal")
         else:
-            nevaluation_code += e + "\n"
+            evaluation_code += e + "\n"
 
-    evaluation_code = nevaluation_code
-    do_debug = "debug=true" in evaluation_code.replace(" ", "").lower()
-
-    if do_debug:
+    if "show_max_score_code=true" in evaluation_code.replace(" ", "").lower():
         print(evaluation_code)
 
     try:
@@ -266,8 +263,16 @@ def student_evaluation_function(
     """
     This function is used to evaluate the student code.
 
+    show_max_score_code=False
+    show_student_code=False
+    show_teacher_code=False
+    show_evaluation_code=False
+    run=False
+    execute=True
+
     :param debug: this is a first param
-    :returns: this is a description of what is returned
+
+            :returns: this is a description of what is returned
     """
 
     student_code = student_data.get_code("main_execution")
@@ -283,7 +288,11 @@ def student_evaluation_function(
     do_debug = "debug=true" in evaluation_code.replace(" ", "").lower()
     do_plot = "do_plot=true" in evaluation_code.replace(" ", "").lower()
 
-    if verbose:
+    if "show_teacher_code=true" in evaluation_code.replace(" ", "").lower():
+        print("############# teacher_code ##################")
+        print(teacher_code)
+
+    if "show_student_code=true" in evaluation_code.replace(" ", "").lower():
         print("############# student_code ##################")
         print(student_code)
 
@@ -296,10 +305,6 @@ def student_evaluation_function(
 
     if execute:
         IPython.get_ipython().run_cell(student_code)
-
-    if verbose:
-        print("############# evaluation_code ##################")
-        print(evaluation_code)
 
     # Run the teacher code and get max_score from it
     max_score = get_max_score(evaluation_code, execute=execute)
@@ -318,8 +323,8 @@ def student_evaluation_function(
     if not use_student_context:
         evaluation_code = evaluation_code.replace("student.", "")
 
-    # evaluation_code = evaluation_code.replace("bulkhours.admin.replace(", "#")
-    if "show_code=true" in evaluation_code.replace(" ", "").lower():
+    if "show_evaluation_code=true" in evaluation_code.replace(" ", "").lower():
+        print("############# evaluation_code ##################")
         print(evaluation_code)
 
     if do_debug:
