@@ -10,6 +10,12 @@ class Grade:
     MAX_SCORE_NOT_AVAILABLE = -13
     grad_names = ["grade_man", "grade_ana", "grade_bot"]
 
+    def __init__(self, score=None, max_score=None, comment=None, src=None) -> None:
+        self.score = score if score is not None else Grade.NO_ANSWER_FOUND
+        self.max_score = max_score if max_score is not None else Grade.NO_ANSWER_FOUND
+        self.comment = comment if comment is not None else ""
+        self.src = src if src is not None else ""
+
     @staticmethod
     def check_gradname_validity(grade_name):
         if grade_name not in Grade.grad_names:

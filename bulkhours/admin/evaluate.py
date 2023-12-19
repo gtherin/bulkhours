@@ -83,10 +83,14 @@ def create_evaluation_buttonanswer(cell_id, cuser, cfg, student_data, teacher_da
             and core.gpt.evaluation_instructions is not None
         ):
             print("")
-            grade, response = core.gpt.get_grade(student_data, teacher_data)
+            grade = core.gpt.get_grade(student_data, teacher_data)
             if grade != grade:
                 answers.update_grade(
-                    cell_id, cuser, grade, grade_name="grade_bot", comment=response
+                    cell_id,
+                    cuser,
+                    grade.score,
+                    grade_name="grade_bot",
+                    comment=grade.comment,
                 )
             return
 
@@ -247,7 +251,7 @@ def evaluate(
         if (
             user == "NEXT"
             and student_data.has_answer()
-            and core.Grade.ANSWER_FOUND == int(student_data.get_grade(level))
+            and core.Grade.ANSWER_FOUND == int(student_data.get_grade(level).score)
         ):
             print(f"{e}/{len(users)}")
             return evaluate_student(
