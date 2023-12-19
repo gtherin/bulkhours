@@ -1,5 +1,4 @@
 import IPython
-import ipywidgets
 import io
 from contextlib import redirect_stdout
 from .cell_parser import CellParser
@@ -89,52 +88,3 @@ class C{context}:
 
     ncode += f"\n{context.lower()} = C{context}()\n"
     return ncode
-
-
-def build_context(
-    execution_code,
-    context,
-    evaluation_code,
-    do_debug=False,
-    use_context=True,
-    user="",
-    execute=True,
-):
-    output = ipywidgets.Output()
-    if execution_code == "":
-        return output
-
-    code = CellParser.remove_meta_functions_execution(execution_code)
-
-    if "bulkhours.admin.replace(" in evaluation_code:
-        replacements = evaluation_code.split("bulkhours.admin.replace(")
-        for r in replacements[1:]:
-            cmd = "code.replace(" + r.split("\n")[0]
-            code = eval(cmd)
-
-    generate_empty_context(context)
-    if not (code is None or len(code.replace("\n", "").replace(" ", "")) == 0):
-        fcode = (
-            code
-            if not use_context or "compile_and_exec" in code
-            else generate_context_code(code, evaluation_code, context)
-        )
-
-        if do_debug:
-            fcode = """
-import tensorflow as tf
-tf.keras.utils.set_random_seed(42)
-
-print("AAAAAAAAAAAAAAAAAAA 4 ")
-model = tf.keras.Sequential([
-    tf.keras.layers.Flatten(input_shape=[12288]),
-    tf.keras.layers.Dense(1, activation="sigmoid", kernel_initializer="he_normal", name="layer5")])        
-print("AAAAAAAAAAAAAAAAAAA 5")
-"""
-            print("HHHHHHHHHHHHHHHHH")
-            print(fcode)
-            print("HHHHHHHHHHHHHHHHH")
-
-        print(fcode)
-        if execute:
-            IPython.get_ipython().run_cell(fcode)
