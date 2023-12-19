@@ -69,6 +69,7 @@ class C{context}:
                         objs.add(o)
                     break
 
+        print(objs)
         for o in objs:
             ncode += f"{tab(4)}setattr(self, '{o}', {o})\n"
 
