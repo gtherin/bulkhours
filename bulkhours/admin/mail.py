@@ -285,7 +285,7 @@ def prepare_mail(
 
 
 def send_mail(
-    you="g*@gmail.com", me="no-reply@bulkhours.fr", password="****", message=""
+    you="g*@gmail.com", me="no-reply@bulkhours.fr", password=None, message=""
 ):
     """Example:
     admin.send_mail(you="s*@gmail.com", me="g*@gmail.com", )
@@ -321,7 +321,8 @@ def send_mail(
     else:
         server = "ssl0.ovh.net:465"
 
-    # pro2.mail.ovh.net sur le port 587
+    if password is None:
+        password = os.environ["NOREPLY_BULKHOURS_FR"]
 
     context = ssl.create_default_context()
     server = smtplib.SMTP_SSL("ssl0.ovh.net", 465, context=context)
