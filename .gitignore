@@ -11,6 +11,7 @@ docs/_build
 *.py[cod]
 .cookiecutter
 .vscode/*
+.vscode-server/**
 data/main/*
 data/cache/*
 
