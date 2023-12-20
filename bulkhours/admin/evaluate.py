@@ -1,5 +1,7 @@
 import IPython
 import ipywidgets
+import numpy as np
+import pandas as pd
 
 from .. import core
 from . import answers
@@ -298,8 +300,6 @@ def evaluate_all(
     force_grades=False,
     normalize_score=True,
 ):
-    import numpy as np
-    import pandas as pd
 
     grades = tools.get_users_list(no_admin=False)
 

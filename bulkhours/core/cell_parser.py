@@ -114,6 +114,7 @@ class CellParser:
         return cls(cinfo, data, output=output)
 
     def __init__(self, cinfo, cell_source, output=None):
+
         self.parse_cell(cinfo, cell_source)
 
         if (
@@ -161,6 +162,7 @@ class CellParser:
     def get_code(self, c):
         # TODO: Fix this hack. Need to be run to avoid problems, if not launched, solution=user
         # self.parse_cell(self.cinfo, self.cell_source)
+
         if c in self.minfo:
             if type(self.minfo[c]) == str:
                 return self.minfo[c]
@@ -201,16 +203,6 @@ class CellParser:
                         .replace("false", "False")
                     )
         return l
-
-    @staticmethod
-    def remove_meta_functions_execution(code):
-        ncode = ""
-        for l in code.splitlines():
-            if l.split("(")[0] not in [
-                f"student_{m}_function" for m in CellParser.meta_modes
-            ]:
-                ncode += l + "\n"
-        return ncode
 
     def is_evaluation_available(self):
         return "evaluation" in self.minfo and self.minfo["evaluation"] != ""

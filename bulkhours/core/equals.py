@@ -131,27 +131,6 @@ def execute_teacher_code(student_data, teacher_data, raw=False, tmode="explanati
         IPython.get_ipython().run_cell(f"student_{tmode}_function()")
 
 
-def get_evaluation_code(evaluation_code, enrich=True):
-    if type(evaluation_code) != str:
-        evaluation_code = evaluation_code.get_code("evaluation")
-    if "def student_evaluation_function" not in evaluation_code:
-        evaluation_code += """\ndef student_evaluation_function():\n    return bulkhours.admin.gpt_eval("syntax", max_score=10)"""
-    if not enrich:
-        return evaluation_code
-
-    return (
-        f""" 
-import os
-os.environ['FINAL_SCORE'] = "0"
-%s
-global eresult
-eresult = student_evaluation_function()
-os.environ['FINAL_SCORE'] = str(eresult)
-"""
-        % evaluation_code
-    )
-
-
 def get_max_score(revaluation_code, execute=True):
     def comment_function_call(func_id):
         l = LineParser.get_func_args(e, func_id=func_id)
@@ -177,71 +156,6 @@ def get_max_score(revaluation_code, execute=True):
         return Grade.MAX_SCORE_NOT_AVAILABLE
 
 
-def get_contexts_codes(student_data, teacher_data):
-    """
-    This function is used to evaluate the student code.
-
-    :param debug: this is a first param
-    :returns: this is a description of what is returned
-    """
-
-    student_code = student_data.get_code("main_execution")
-
-    if student_code == "":
-        return Grade.NO_ANSWER_FOUND
-
-    # Get the formatted evaluation code
-    evaluation_code = get_evaluation_code(teacher_data, enrich=False)
-
-    black = tools.install_if_needed("black")
-
-    evaluation_code = black.format_str(
-        evaluation_code, mode=black.Mode(line_length=500)
-    )
-
-    student_code = CellParser.remove_meta_functions_execution(
-        student_data.get_code("main_execution")
-    )
-    teacher_code = CellParser.remove_meta_functions_execution(
-        teacher_data.get_code("main_execution")
-    )
-
-    if "recreate_contexts" in evaluation_code:
-        icode, ecode, ecodes = [], [], evaluation_code.split("\n")
-        for e in ecodes[1:]:
-            if "recreate_contexts" in e:
-                ecode.append(ecodes[0])
-                rc = LineParser.get_func_args(e, "bulkhours.recreate_contexts")
-                if "replace" in rc:
-                    print(rc)
-                    rc["replace"] = eval(
-                        black.format_str(rc["replace"], mode=black.Mode())
-                    )
-            elif len(ecode) > 0:
-                ecode.append(e)
-            else:
-                icode.append(e[4:])
-
-        student_code = "\n".join(icode) + "\n" + student_code
-        teacher_code = "\n".join(icode) + "\n" + teacher_code
-        if "replace" in rc:
-            for r in rc["replace"]:
-                student_code = student_code.replace(r[0], r[1])
-                teacher_code = teacher_code.replace(r[0], r[1])
-
-        evaluation_code = get_evaluation_code("\n".join(ecode), enrich=True)
-    else:
-        evaluation_code = get_evaluation_code(evaluation_code, enrich=True)
-
-    student_code = contexts.generate_context_code(
-        student_code, evaluation_code, "student"
-    )
-    teacher_code = contexts.generate_context_code(
-        teacher_code, evaluation_code, "teacher"
-    )
-
-    return student_code, teacher_code, evaluation_code
-
 
 def student_evaluation_function(
     student_data,
@@ -255,14 +169,14 @@ def student_evaluation_function(
     """
     This function is used to evaluate the student code.
 
-    show_max_score_code=False
-    show_student_code=False
-    show_teacher_code=False
-    show_evaluation_code=False
-    run=False
-    execute=True
+    :param show_max_score_code=False
+    :param show_student_code=False
+    :param show_teacher_code=False
+    :param show_evaluation_code=False
+    :param run=False
+    :param execute=True
+    :param catch_error=True
 
-    :param debug: this is a first param
     :returns: this is a description of what is returned
     """
 
@@ -271,36 +185,44 @@ def student_evaluation_function(
         return Grade.NO_ANSWER_FOUND
 
     # Get the formatted codes
-    student_code, teacher_code, evaluation_code = get_contexts_codes(
-        student_data, teacher_data
+    student_code, teacher_code, evaluation_code = contexts.get_contexts_codes(
+        student_data, teacher_data, execute
     )
 
     if "help=true" in evaluation_code.replace(" ", "").lower():
-        print(__doc__)
+        print(student_evaluation_function.__doc__)
 
-    do_debug = "debug=true" in evaluation_code.replace(" ", "").lower()
-    do_plot = "do_plot=true" in evaluation_code.replace(" ", "").lower()
+    # Hide plot by default
+    if not (do_plot:="do_plot=true" in evaluation_code.replace(" ", "").lower()):
+        plt.ioff()
 
+    # 1. Teacher
     if "show_teacher_code=true" in evaluation_code.replace(" ", "").lower():
         print("############# teacher_code ##################")
         print(teacher_code)
 
+    # 2. Teacher
+    if execute:
+        IPython.get_ipython().run_cell(teacher_code)
+
+    # 3. Teacher
+    if "show_teacher_dir=true" in evaluation_code.replace(" ", "").lower():
+        print("############# teacher_dir ##################")
+        IPython.get_ipython().run_cell("[t for t in dir(teacher) if t[0] != '_']")
+
+    # 1. Student
     if "show_student_code=true" in evaluation_code.replace(" ", "").lower():
         print("############# student_code ##################")
         print(student_code)
 
-    # Hide plot by default
-    if not do_plot:
-        plt.ioff()
-
-    if execute:
-        IPython.get_ipython().run_cell(teacher_code)
-
+    # 2. Student
     if execute:
         IPython.get_ipython().run_cell(student_code)
 
-    if do_debug:
-        IPython.get_ipython().run_cell("dir(student)")
+    # 3. Student
+    if "show_student_dir=true" in evaluation_code.replace(" ", "").lower():
+        print("############# student_dir ##################")
+        IPython.get_ipython().run_cell("[s for s in dir(student) if s[0] != '_']")
 
     # Run the teacher code and get max_score from it
     max_score = get_max_score(evaluation_code, execute=execute)
@@ -320,12 +242,12 @@ def student_evaluation_function(
         print("############# evaluation_code ##################")
         print(evaluation_code)
 
-    if do_debug:
-        contexts.run_cell(evaluation_code, do_debug)
+    if "debug=true" in evaluation_code.replace(" ", "").lower():
+        contexts.run_cell(evaluation_code, True)
         score = float(os.environ["FINAL_SCORE"])
     else:
         try:
-            contexts.run_cell(evaluation_code, do_debug)
+            contexts.run_cell(evaluation_code, False)
             score = float(os.environ["FINAL_SCORE"])
         except:
             score = Grade.EVALUATION_CRASHED
