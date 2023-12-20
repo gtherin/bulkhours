@@ -244,21 +244,26 @@ def student_evaluation_function(
 
     if "debug=true" in evaluation_code.replace(" ", "").lower():
         contexts.run_cell(evaluation_code, True)
-        score = float(os.environ["FINAL_SCORE"])
-    else:
-        try:
-            contexts.run_cell(evaluation_code, False)
-            score = float(os.environ["FINAL_SCORE"])
-        except:
-            score = Grade.EVALUATION_CRASHED
-
-    if not do_plot:
-        plt.ion()
-
-    return Grade(
-        score=score,
-        max_score=max_score,
+        grade = Grade(
+        score=float(os.environ["FINAL_SCORE"]),
         comment="""Analytical evaluation failed.
 Somme more comments should ba available soon.                           
 """,
     )
+    else:
+        try:
+            contexts.run_cell(evaluation_code, False)
+            grade = Grade(
+        score=float(os.environ["FINAL_SCORE"]),
+        comment="""Analytical evaluation failed.
+Somme more comments should ba available soon.                           
+""",
+    )
+        except:
+            grade = Grade(score=Grade.EVALUATION_CRASHED, comment="No answer available")
+            
+
+    if not do_plot:
+        plt.ion()
+
+    return grade
