@@ -182,7 +182,7 @@ def student_evaluation_function(
 
     # Return default grade if Nothing available
     if student_data.get_code("main_execution") == "":
-        return Grade.NO_ANSWER_FOUND
+        return Grade(comment="No answer available")
 
     # Get the formatted codes
     student_code, teacher_code, evaluation_code = contexts.get_contexts_codes(
