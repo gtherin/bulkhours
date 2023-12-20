@@ -76,8 +76,9 @@ def is_equal(
             data_test, data_ref = getattr(data_test, func)(), getattr(data_ref, func)()
 
     # Get error from student
-    if type(data_test) in [list, tuple]:
+    if type(data_test) in [list, tuple]:        
         data_test, data_ref = np.array(data_test), np.array(data_ref)
+        data_test, data_ref = data_test[data_test != None], data_ref[data_ref != None]
 
     if type(data_test) == str:
         estimation_error = np.abs(

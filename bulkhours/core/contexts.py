@@ -113,7 +113,9 @@ class C{context}:
                     break
 
         for o in objs:
-            ncode += f"{tab(4)}setattr(self, '{o}', {o})\n"
+            ncode += f"{tab(4)}try:\n"
+            ncode += f"{tab(5)}setattr(self, '{o}', {o})\n"
+            ncode += f"{tab(4)}except Exception:\n{tab(5)}pass\n"
 
         if "catch_error=false" in evaluation_code.replace(" ", "").lower():
             ncode += f"""
