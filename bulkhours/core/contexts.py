@@ -185,8 +185,8 @@ def get_contexts_codes(student_data, teacher_data, execute):
             else:
                 icode.append(e[4:])
 
-        student_code = "\n".join(icode) + "\n" + student_code
-        teacher_code = "\n".join(icode) + "\n" + teacher_code
+        student_code = "\n".join(icode) + "\n" + black_format_str(student_code)
+        teacher_code = "\n".join(icode) + "\n" + black_format_str(teacher_code)
         if "replace" in rc:
             for r in rc["replace"]:
                 student_code = student_code.replace(r[0], r[1])
