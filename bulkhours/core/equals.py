@@ -299,11 +299,11 @@ def student_evaluation_function(
     if execute:
         IPython.get_ipython().run_cell(student_code)
 
-    # Run the teacher code and get max_score from it
-    max_score = get_max_score(evaluation_code, execute=execute)
-
     if do_debug:
         IPython.get_ipython().run_cell("dir(student)")
+
+    # Run the teacher code and get max_score from it
+    max_score = get_max_score(evaluation_code, execute=execute)
 
     if "admin.gpt_eval" in evaluation_code:
         res = gpt_evaluation(student_data, teacher_data)
