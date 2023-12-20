@@ -14,7 +14,7 @@ def get_abs_filename(filename):
     if "/content/gdrive" not in filename:
         return filename
 
-    xattr = tools.install_if_needed("xattr")
+    xattr = core.tools.install_if_needed("xattr")
 
     return f"https://colab.research.google.com/drive/" + (
         xattr.xattr(filename).get("user.drive.id").decode()
