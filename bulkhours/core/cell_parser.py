@@ -114,7 +114,6 @@ class CellParser:
         return cls(cinfo, data, output=output)
 
     def __init__(self, cinfo, cell_source, output=None):
-
         self.parse_cell(cinfo, cell_source)
 
         if (
@@ -208,10 +207,7 @@ class CellParser:
         return "evaluation" in self.minfo and self.minfo["evaluation"] != ""
 
     def get_grade(self, level=None):
-        return Grade.get(self.minfo, level=level)
-
-    def get_src(self):
-        return Grade.src(self.minfo)
+        return Grade.create_from_info(self.minfo, level=level)
 
     def do_run_evaluation(self):
         return self.is_evaluation_available() and (

@@ -16,9 +16,10 @@ class Exercice:
         from .. import core
 
         self.count = 1
-        self.src = core.Grade.src(adata)
-        self.grade = core.Grade.get(adata)
-        self.utime = core.Grade.upd(adata)
+        self.grade = core.Grade.create_from_info(adata)
+        self.src = self.grade.src
+        self.grade = self.grade.score
+        self.utime = self.grade.upd
 
 
 class Exercices:
