@@ -161,53 +161,55 @@ def get_contexts_codes(student_data, teacher_data, execute):
     # Format with black
     evaluation_code = black_format_str(evaluation_code)
 
+    # Define roles
+    codes, roles = {}, ["teacher", "student"]
+
     # Get teacher code
-    teacher_code = remove_meta_functions_execution(
+    codes["teacher"] = remove_meta_functions_execution(
         teacher_data.get_code("main_execution")
     )
 
     # Get student code
-    student_code = remove_meta_functions_execution(
+    codes["student"] = remove_meta_functions_execution(
         student_data.get_code("main_execution")
     )
 
     # Re-assign the code
     if "recreate_contexts" in evaluation_code:
-        icode, ecode, ecodes = [], [], evaluation_code.split("\n")
-        after = False
+        bcode, acode, ecode, ecodes = [], [], [], evaluation_code.split("\n")
         for e in ecodes[1:]:
             if "recreate_contexts" in e:
                 rc = LineParser.get_func_args(e, "bulkhours.recreate_contexts")
                 ecode.append(ecodes[0])
-                if "after" in rc and "True" in rc["after"]:
-                    after = True
                 if "replace" in rc:
                     rc["replace"] = eval(black_format_str(rc["replace"]))
             elif len(ecode) > 0:
                 ecode.append(e)
             else:
-                icode.append(e[4:])
+                if "BKCONTEXT.AFTER" in e:
+                    acode.append(e[4:])
+                else:
+                    bcode.append(e[4:])
 
-        if after:
-            student_code = black_format_str(student_code) + "\n".join(icode) + "\n"
-            teacher_code = black_format_str(teacher_code) + "\n".join(icode) + "\n"
-        else:
-            student_code = "\n".join(icode) + "\n" + black_format_str(student_code)
-            teacher_code = "\n".join(icode) + "\n" + black_format_str(teacher_code)
+        for r in roles:
+            codes[r] = (
+                "\n".join(bcode)
+                + "\n"
+                + black_format_str(codes[r])
+                + "\n".join(acode)
+                + "\n"
+            )
+
         if "replace" in rc:
             for r in rc["replace"]:
-                student_code = student_code.replace(r[0], r[1])
-                teacher_code = teacher_code.replace(r[0], r[1])
+                for r in roles:
+                    codes[r] = codes[r].replace(r[0], r[1])
 
         evaluation_code = enrich_evaluation_code("\n".join(ecode))
     else:
         evaluation_code = enrich_evaluation_code(evaluation_code)
 
-    student_code = generate_context_code(
-        student_code, evaluation_code, "student", execute
-    )
-    teacher_code = generate_context_code(
-        teacher_code, evaluation_code, "teacher", execute
-    )
+    for r in roles:
+        codes[r] = generate_context_code(codes[r], evaluation_code, r, execute)
 
-    return student_code, teacher_code, evaluation_code
+    return codes["student"], codes["teacher"], evaluation_code
