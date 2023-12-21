@@ -51,8 +51,6 @@ def get_evaluation_code(teacher_data):
     return evaluation_code
 
 
-
-
 def generate_empty_context(context):
     run_cell(
         f"""
@@ -94,7 +92,6 @@ class C{context}:
         ncode += f"""
 {tab(2)}with redirect_stdout(stdout := io.StringIO()):
 {tab(3)}try:\n{tab(4)}pass\n\n\n"""
-
 
     if not "execute=false" in evaluation_code.replace(" ", "").lower() or not execute:
         for l in code.splitlines():
@@ -140,6 +137,7 @@ class C{context}:
     ncode += f"\n{context.lower()} = C{context}()\n"
     return ncode
 
+
 def black_format_str(code, line_length=500):
     black = tools.install_if_needed("black")
 
@@ -176,19 +174,26 @@ def get_contexts_codes(student_data, teacher_data, execute):
     # Re-assign the code
     if "recreate_contexts" in evaluation_code:
         icode, ecode, ecodes = [], [], evaluation_code.split("\n")
+        after = False
         for e in ecodes[1:]:
             if "recreate_contexts" in e:
+                rc = LineParser.get_func_args(e, "bulkhours.recreate_contexts")
                 ecode.append(ecodes[0])
-                if "replace" in (rc:=LineParser.get_func_args(e, "bulkhours.recreate_contexts")):
-                    print(rc)
+                if "after" in rc and "True" in rc["after"]:
+                    after = True
+                if "replace" in rc:
                     rc["replace"] = eval(black_format_str(rc["replace"]))
             elif len(ecode) > 0:
                 ecode.append(e)
             else:
                 icode.append(e[4:])
 
-        student_code = "\n".join(icode) + "\n" + black_format_str(student_code)
-        teacher_code = "\n".join(icode) + "\n" + black_format_str(teacher_code)
+        if after:
+            student_code = black_format_str(student_code) + "\n".join(icode) + "\n"
+            teacher_code = black_format_str(teacher_code) + "\n".join(icode) + "\n"
+        else:
+            student_code = "\n".join(icode) + "\n" + black_format_str(student_code)
+            teacher_code = "\n".join(icode) + "\n" + black_format_str(teacher_code)
         if "replace" in rc:
             for r in rc["replace"]:
                 student_code = student_code.replace(r[0], r[1])
@@ -205,6 +210,4 @@ def get_contexts_codes(student_data, teacher_data, execute):
         teacher_code, evaluation_code, "teacher", execute
     )
 
-
     return student_code, teacher_code, evaluation_code
-
