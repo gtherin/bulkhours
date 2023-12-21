@@ -51,12 +51,12 @@ def create_evaluation_buttonanswer(cell_id, cuser, cfg, student_data, teacher_da
     )
     output = ipywidgets.Output()
 
-    grade = core.Grade.get(student_data)
+    grade = core.Grade.create_from_info(student_data)
 
     widget = ipywidgets.FloatSlider(
         min=0,
         max=10,
-        value=grade,
+        value=grade.score,
         step=0.5,
         continuous_update=True,
         orientation="horizontal",
@@ -300,7 +300,6 @@ def evaluate_all(
     force_grades=False,
     normalize_score=True,
 ):
-
     grades = tools.get_users_list(no_admin=False)
 
     cinfo = core.LineParser.from_cell_id_user(cell_id, core.tools.REF_USER)

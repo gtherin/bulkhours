@@ -10,11 +10,44 @@ class Grade:
     MAX_SCORE_NOT_AVAILABLE = -13
     grad_names = ["grade_man", "grade_ana", "grade_bot"]
 
-    def __init__(self, score=None, max_score=None, comment=None, src=None) -> None:
-        self.score = score if score is not None else Grade.NO_ANSWER_FOUND
-        self.max_score = max_score if max_score is not None else Grade.NO_ANSWER_FOUND
-        self.comment = comment if comment is not None else ""
-        self.src = src if src is not None else ""
+    def __init__(
+        self, score=None, max_score=None, comment="", src=None, upd=None
+    ) -> None:
+        self._score = score if score is not None else Grade.NO_ANSWER_FOUND
+        self._max_score = max_score if max_score is not None else Grade.NO_ANSWER_FOUND
+        self._src, self._upd, self._comment = src, upd, comment
+
+    @property
+    def score(self):
+        return float(self._score)
+
+    @property
+    def src(self):
+        return self._src
+
+    @property
+    def upd(self):
+        if self._upd is None:
+            return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        return self._upd
+
+    @staticmethod
+    def create_from_info(minfo, level=None):
+        # Get answers info
+        info, minfo = {}, minfo.minfo if type(minfo) != dict else minfo
+
+        # Get source
+        if level is None:
+            info["src"] = (src := Grade.get_default_source(minfo))
+
+        qties = {"upd": "_upd", "comment": "_comment", "score": ""}
+
+        for k, v in qties.items():
+            if f"{src}{v}" in minfo:
+                info[f"{src}_{k}"] = minfo[f"{src}{v}"]
+
+        return Grade(**info)
 
     @staticmethod
     def check_gradname_validity(grade_name):
@@ -24,21 +57,16 @@ class Grade:
             )
 
     @staticmethod
-    def src(answer):
-        if type(answer) != dict:
-            answer = answer.minfo
+    def get_default_source(minfo):
         for g in Grade.grad_names:
-            if g in answer:
+            if g in minfo:
                 return g
         return None
 
     @staticmethod
     def get(answer, level=None):
-        if type(answer) != dict:
-            answer = answer.minfo
-
-        src = Grade.src(answer)
-        if src is None or (level is not None and level not in answer):
+        grade = Grade.create_from_info(answer, level=level)
+        if grade.src is None or (level is not None and level not in answer):
             if "answer" in answer:
                 return Grade.ANSWER_FOUND
             if (
@@ -49,17 +77,7 @@ class Grade:
                 return Grade.ANSWER_FOUND
 
             return Grade.NO_ANSWER_FOUND
-        return float(answer[src])
-
-    @staticmethod
-    def upd(answer):
-        if type(answer) != dict:
-            answer = answer.minfo
-
-        src = Grade.src(answer)
-        if src is None:
-            return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        return answer[src + "_upd"]
+        return grade.score
 
     @staticmethod
     def set_static_style_info(minvalue=0.0, cmap="RdBu"):
