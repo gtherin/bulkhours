@@ -9,17 +9,25 @@ class Exercice:
         from .. import core
 
         self.user, self.exo, self.answer = user, exo, ""
-        self.utime, self.grade, self.count = np.nan, core.Grade.DEFAULT_GRADE, np.nan
-        self.src = ""
+        self.grade = core.Grade(score=core.Grade.DEFAULT_GRADE)
 
     def update_data(self, adata) -> None:
         from .. import core
 
         self.count = 1
         self.grade = core.Grade.create_from_info(adata)
-        self.src = self.grade.src
-        self.grade = self.grade.score
-        self.utime = self.grade.upd
+
+    def get(self, field):
+        if field not in Exercice.fields:
+            raise Exception(f"{field} is not known")
+        if field in ["score", "grade"]:
+            return self.grade.score
+        if field in ["count"]:
+            return self.count
+        if field in ["time"]:
+            return self.grade.upd
+
+        return getattr(self, field)
 
 
 class Exercices:
@@ -40,7 +48,7 @@ class Exercices:
     def get_dataframe(self, field, suffix=""):
         data = pd.DataFrame(
             {
-                e + suffix: [getattr(self.exercices[u][e], field) for u in self.users]
+                e + suffix: [self.exercices[u][e].get(field) for u in self.users]
                 for e in self.exos
             },
             index=self.users,
@@ -53,7 +61,7 @@ class Exercices:
 
         if field == "count":
             data["all.c"] = data[[e + ".c" for e in self.exos]].count(axis=1)
-        if field == "grade":
+        if field in ["grade", "score"]:
             ceval = self.cfg.n["evaluation"]
 
             data["all"] = np.round(data.fillna(0.0).clip(0).sum(axis=1), 1)
