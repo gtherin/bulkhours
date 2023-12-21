@@ -41,11 +41,9 @@ class Grade:
         if level is None:
             info["src"] = (src := Grade.get_default_source(minfo))
 
-        qties = {"upd": "_upd", "comment": "_comment", "score": ""}
-
-        for k, v in qties.items():
+        for k, v in {"upd": "_upd", "comment": "_comment", "score": ""}.items():
             if f"{src}{v}" in minfo:
-                info[f"{src}_{k}"] = minfo[f"{src}{v}"]
+                info[k] = minfo[f"{src}{v}"]
 
         return Grade(**info)
 
