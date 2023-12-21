@@ -13,17 +13,8 @@ class Grade:
     def __init__(
         self, score=None, max_score=None, comment="", src=None, upd=None
     ) -> None:
-        self._score = score if score is not None else Grade.NO_ANSWER_FOUND
-        self._max_score = max_score if max_score is not None else Grade.NO_ANSWER_FOUND
-        self._src, self._upd, self._comment = src, upd, comment
-
-    @property
-    def score(self):
-        return float(self._score)
-
-    @property
-    def src(self):
-        return self._src
+        self.score, self.max_score = score, max_score
+        self.src, self._upd, self.comment = src, upd, comment
 
     @property
     def upd(self):
@@ -31,6 +22,19 @@ class Grade:
             return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         return self._upd
+
+    @staticmethod
+    def get_default_score(minfo):
+        if "answer" in minfo:
+            return Grade.ANSWER_FOUND
+        elif (
+            "atype" in minfo
+            and minfo["atype"] == "code_project"
+            and "update_time" in minfo
+        ):
+            return Grade.ANSWER_FOUND
+        else:
+            return Grade.NO_ANSWER_FOUND
 
     @staticmethod
     def create_from_info(minfo, level=None):
@@ -44,6 +48,10 @@ class Grade:
         for k, v in {"upd": "_upd", "comment": "_comment", "score": ""}.items():
             if f"{src}{v}" in minfo:
                 info[k] = minfo[f"{src}{v}"]
+
+        info["score"] = (
+            float(info["score"]) if "score" in info else Grade.get_default_score(minfo)
+        )
 
         return Grade(**info)
 
@@ -60,22 +68,6 @@ class Grade:
             if g in minfo:
                 return g
         return None
-
-    @staticmethod
-    def get(answer, level=None):
-        grade = Grade.create_from_info(answer, level=level)
-        if grade.src is None or (level is not None and level not in answer):
-            if "answer" in answer:
-                return Grade.ANSWER_FOUND
-            if (
-                "atype" in answer
-                and answer["atype"] == "code_project"
-                and "update_time" in answer
-            ):
-                return Grade.ANSWER_FOUND
-
-            return Grade.NO_ANSWER_FOUND
-        return grade.score
 
     @staticmethod
     def set_static_style_info(minvalue=0.0, cmap="RdBu"):
