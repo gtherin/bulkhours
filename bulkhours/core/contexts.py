@@ -138,12 +138,6 @@ class C{context}:
     return ncode
 
 
-def black_format_str(code, line_length=500):
-    black = tools.install_if_needed("black")
-
-    return black.format_str(code, mode=black.Mode(line_length=line_length))
-
-
 def get_contexts_codes(student_data, teacher_data, execute):
     """
     This function is used to evaluate the student code.
@@ -159,7 +153,7 @@ def get_contexts_codes(student_data, teacher_data, execute):
     evaluation_code = get_evaluation_code(teacher_data)
 
     # Format with black
-    evaluation_code = black_format_str(evaluation_code)
+    evaluation_code = tools.black_format_str(evaluation_code)
 
     # Define roles
     codes, roles = {}, ["teacher", "student"]
@@ -182,7 +176,7 @@ def get_contexts_codes(student_data, teacher_data, execute):
                 rc = LineParser.get_func_args(e, "bulkhours.recreate_contexts")
                 ecode.append(ecodes[0])
                 if "replace" in rc:
-                    rc["replace"] = eval(black_format_str(rc["replace"]))
+                    rc["replace"] = eval(tools.black_format_str(rc["replace"]))
             elif len(ecode) > 0:
                 ecode.append(e)
             else:
@@ -195,7 +189,7 @@ def get_contexts_codes(student_data, teacher_data, execute):
             codes[r] = (
                 "\n".join(bcode)
                 + "\n"
-                + black_format_str(codes[r])
+                + tools.black_format_str(codes[r])
                 + "\n".join(acode)
                 + "\n"
             )
