@@ -88,7 +88,7 @@ def is_equal(
             ).ratio()
         )
     else:
-        if data_test.shape != data_ref.shape:
+        if hasattr(data_test, "shape") and data_test.shape != data_ref.shape:
             return min_score
 
         estimation_error = np.abs(data_test - data_ref)
