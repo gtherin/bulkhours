@@ -234,4 +234,7 @@ def black_format_str(code, line_length=500):
     if code.startswith("%%evaluation_cell_id"):
         code = code[code.find("\n") :]
 
-    return black.format_str(code, mode=black.Mode(line_length=line_length))
+    try:
+        return black.format_str(code, mode=black.Mode(line_length=line_length))
+    except:
+        return code
