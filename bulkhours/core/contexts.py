@@ -196,8 +196,8 @@ def get_contexts_codes(student_data, teacher_data, execute):
 
         if "replace" in rc:
             for r in rc["replace"]:
-                for r in roles:
-                    codes[r] = codes[r].replace(r[0], r[1])
+                for role in roles:
+                    codes[role] = codes[role].replace(r[0], r[1])
 
         evaluation_code = enrich_evaluation_code("\n".join(ecode))
     else:
