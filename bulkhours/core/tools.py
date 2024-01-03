@@ -227,3 +227,11 @@ def install_if_needed(package):
         import importlib
 
         return importlib.import_module(package)
+
+
+def black_format_str(code, line_length=500):
+    black = install_if_needed("black")
+    if code.startswith("%%evaluation_cell_id"):
+        code = code[code.find("\n") :]
+
+    return black.format_str(code, mode=black.Mode(line_length=line_length))

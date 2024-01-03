@@ -15,12 +15,15 @@ def get_alias_name(cuser):
     return cuser
 
 
-def show_answer(out, cuser, answer, style=None, execute=True):
+def show_answer(out, cuser, answer, style=None, execute=True, black_format=False):
     color = "green" if cuser == core.tools.REF_USER else "red"
     cuser = get_alias_name(cuser)
     show_raw_code = (
         style == "dark"
     )  # not ("google.colab" in sys.modules and style != "dark")
+
+    if black_format:
+        answer = core.tools.black_format_str(answer)
 
     with out:
         # Show code
@@ -149,6 +152,7 @@ def evaluate_student(
     show_correction=True,
     style=None,
     execute=True,
+    black_format=False,
 ):
     if show_correction and teacher_data.has_answer():
         out1 = ipywidgets.Output(layout={"width": "50%"})
@@ -156,7 +160,12 @@ def evaluate_student(
         tabs = ipywidgets.HBox([out1, out2])
 
         show_answer(
-            out1, cuser, student_data.get_solution(), style=style, execute=execute
+            out1,
+            cuser,
+            student_data.get_solution(),
+            style=style,
+            execute=execute,
+            black_format=black_format,
         )
         # bulkhours.c.set_style(out2, "sol_background")
         show_answer(
@@ -165,12 +174,18 @@ def evaluate_student(
             teacher_data.get_solution(),
             style=style,
             execute=execute,
+            black_format=black_format,
         )
 
     else:
         tabs = ipywidgets.Output(layout={"width": "100%"})
         show_answer(
-            tabs, cuser, student_data.get_solution(), style=style, execute=execute
+            tabs,
+            cuser,
+            student_data.get_solution(),
+            style=style,
+            execute=execute,
+            black_format=black_format,
         )
 
     out = ipywidgets.Output(layout={"border": "1px solid #CFCFCF", "width": "100%"})
@@ -195,6 +210,7 @@ def evaluate(
     verbose=False,
     force_grades=False,
     normalize_score=True,
+    black_format=False,
     **kwargs,
 ):
     if virtual_room is not None:
@@ -240,6 +256,11 @@ def evaluate(
     )
 
     users = tools.get_users_list(no_admin=False, euser=user)
+    uidx = (
+        int(uidx)
+        if user[:4] == "NEXT" and len(uidx := user.replace("NEXT", "")) > 0
+        else 0
+    )
 
     for e, u in enumerate(users.index):
         mail, auser = users["mail"][u], users["auser"][u]
@@ -251,10 +272,13 @@ def evaluate(
         )
 
         if (
-            user == "NEXT"
+            user[:4] == "NEXT"
             and student_data.has_answer()
             and core.Grade.ANSWER_FOUND == int(student_data.get_grade(level).score)
         ):
+            if uidx > 0:
+                uidx -= 1
+                continue
             print(f"{e}/{len(users)}")
             return evaluate_student(
                 cell_id,
@@ -265,6 +289,7 @@ def evaluate(
                 show_correction=show_correction,
                 style=style,
                 execute=execute,
+                black_format=black_format,
             )
         if user == mail or user == auser:
             return evaluate_student(
@@ -276,6 +301,7 @@ def evaluate(
                 show_correction=show_correction,
                 style=style,
                 execute=execute,
+                black_format=black_format,
             )
 
     core.tools.html(
