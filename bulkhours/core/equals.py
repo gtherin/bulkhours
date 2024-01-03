@@ -76,7 +76,7 @@ def is_equal(
             data_test, data_ref = getattr(data_test, func)(), getattr(data_ref, func)()
 
     # Get error from student
-    if type(data_test) in [list, tuple]:        
+    if type(data_test) in [list, tuple]:
         data_test, data_ref = np.array(data_test), np.array(data_ref)
         data_test, data_ref = data_test[data_test != None], data_ref[data_ref != None]
 
@@ -88,6 +88,9 @@ def is_equal(
             ).ratio()
         )
     else:
+        if data_test.shape != data_ref.shape:
+            return min_score
+
         estimation_error = np.abs(data_test - data_ref)
 
     if type(estimation_error) == pd.DataFrame:
@@ -157,7 +160,6 @@ def get_max_score(revaluation_code, execute=True):
         return Grade.MAX_SCORE_NOT_AVAILABLE
 
 
-
 def student_evaluation_function(
     student_data,
     teacher_data,
@@ -194,7 +196,7 @@ def student_evaluation_function(
         print(student_evaluation_function.__doc__)
 
     # Hide plot by default
-    if not (do_plot:="do_plot=true" in evaluation_code.replace(" ", "").lower()):
+    if not (do_plot := "do_plot=true" in evaluation_code.replace(" ", "").lower()):
         plt.ioff()
 
     # 1. Teacher
@@ -246,23 +248,22 @@ def student_evaluation_function(
     if "debug=true" in evaluation_code.replace(" ", "").lower():
         contexts.run_cell(evaluation_code, True)
         grade = Grade(
-        score=float(os.environ["FINAL_SCORE"]),
-        comment="""Analytical evaluation failed.
+            score=float(os.environ["FINAL_SCORE"]),
+            comment="""Analytical evaluation failed.
 Somme more comments should ba available soon.                           
 """,
-    )
+        )
     else:
         try:
             contexts.run_cell(evaluation_code, False)
             grade = Grade(
-        score=float(os.environ["FINAL_SCORE"]),
-        comment="""Analytical evaluation failed.
+                score=float(os.environ["FINAL_SCORE"]),
+                comment="""Analytical evaluation failed.
 Somme more comments should ba available soon.                           
 """,
-    )
+            )
         except:
             grade = Grade(score=Grade.EVALUATION_CRASHED, comment="No answer available")
-            
 
     if not do_plot:
         plt.ion()
