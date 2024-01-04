@@ -111,7 +111,7 @@ class WidgetDashboard(core.WidgetTextArea):
 
         for vroom in virtual_rooms.split(";") + ["admins"]:
             self.ws[vroom] = ipywidgets.Text(
-                value=config["global"][vroom],
+                value=config["global"][vroom] if vroom in config["global"] else "",
                 layout=ipywidgets.Layout(flex="4 1 0%", width="auto"),
             )
             xwidgets.append(

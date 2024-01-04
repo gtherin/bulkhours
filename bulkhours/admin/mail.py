@@ -46,11 +46,12 @@ def copy4students(email, drive_rdir, filename, cfg=None, **kwargs):
             f"## Notebook generation '`{filename.split('/')[-1]}`'"
         )
     )
+    sub_rdir = filename.replace(" ", "_").replace(".ipynb", "_" + cfg.virtual_room)
 
     for _, student in students_list.iterrows():
         if student["mail"] == "solution":
             continue
-        cfilename = f"{drive_rdir}/{cfg.virtual_room}/{filename}".replace(
+        cfilename = f"{drive_rdir}/{sub_rdir}/{filename}".replace(
             ".", f"_%s." % student["auser"].lower()
         )
         files[student["mail"]] = copy(
@@ -67,7 +68,7 @@ def copy4students(email, drive_rdir, filename, cfg=None, **kwargs):
         core.tools.dmd(f"""* {icon} {student['auser']}, {files[student['mail']]}""")
 
     with open(
-        cfilename := f"{drive_rdir}/{cfg.virtual_room}/notebooks.json",
+        cfilename := f"{drive_rdir}/{sub_rdir}/notebooks.json",
         "w",
         encoding="utf-8",
     ) as f:
