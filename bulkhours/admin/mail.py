@@ -285,11 +285,75 @@ def prepare_mail(
     IPython.display.display(IPython.display.HTML(html))
 
 
+def send_mails(
+    signature="The bulkHours team",
+    notebook_file=None,
+    drive_rdir=None,
+    password=None,
+    cfg=None,
+):
+    notebook_info = notebook_file.split(".")[0]
+    if cfg is None:
+        cfg = core.tools.get_config(is_new_format=True)
+
+    students_list = tools.get_users_list(cfg=cfg)
+    sub_rdir = notebook_file.replace(" ", "_").replace(".ipynb", "_" + cfg.virtual_room)
+
+    title = f"Notebook of the day: {notebook_info}"
+    intro = f"Dear STUDENT,<br/><br/>Here is the practical course of the day: "
+    end = f"Best regards"
+
+    if cfg.language == "fr":
+        title = f"Notebook du jour: {notebook_info}"
+        intro = f"Bonjour STUDENT,<br/><br/>Voici le lien vers le cours du jour: "
+        end = f"Cordialement"
+
+    if "@" in signature:
+        signature = signature.split("@")[0].replace(".", " ").title()
+
+    for _, student in students_list.iterrows():
+        if student["mail"] == "solution":
+            continue
+        cfilename = f"{drive_rdir}/{sub_rdir}/{notebook_file}".replace(
+            ".", f"_%s." % student["auser"].lower()
+        )
+        dnotebook_file = get_abs_filename(cfilename)
+        dnotebook_file = "https://colab.research.google.com/drive/1JE8WmO5V6N7cyp_R1wgHFjeZzn8sqll4#scrollTo=JiLGDaF4QfHB"
+
+        message = f"""
+    <p>{intro} :</p>
+
+    <ul><li><a href="{dnotebook_file}" style="font-size: 18px; margin: 4px 0;background-color: white; color: #4F77AA; padding: 5px 9px; text-align: center; text-decoration: none; display: inline-block;">Course of the day</a></li></ul>
+
+{end},<br/><br/>
+💡Notebooks are personal.💡<br/><br/>
+
+{signature}<br/>
+<A HREF="mailto:contact@bulkhours.fr">contact</A>
+""".replace(
+            "STUDENT", student["auser"]
+        )
+
+        send_mail(
+            to=student["mail"],
+            # cc="guillaume.therin@ipsa.fr",
+            message=message,
+            title=title,
+            password=password,
+        )
+
+
 def send_mail(
-    you="g*@gmail.com", me="no-reply@bulkhours.fr", password=None, message=""
+    to="g*@gmail.com",
+    me="no-reply@bulkhours.fr",
+    password=None,
+    message="",
+    title="Subject",
+    bcc=None,
+    cc=None,
 ):
     """Example:
-    admin.send_mail(you="s*@gmail.com", me="g*@gmail.com", )
+    admin.send_mail(to="s*@gmail.com", me="g*@gmail.com", )
     """
 
     html = f"""
@@ -304,29 +368,31 @@ def send_mail(
     </body>
     </html> """
 
-    # with open(img_filename := "bulkhours/data/BulkHours.png", "rb") as f:
-    #    img_data = f.read()
     # image = MIMEImage(img_data, name=os.path.basename(img_filename))
 
     emailmultipart = MIMEMultipart()
     emailmultipart["From"] = me
-    emailmultipart["To"] = you
-    emailmultipart["Subject"] = "Subject"
+    emailmultipart["To"] = to
+    if cc is not None:
+        emailmultipart["Cc"] = cc
+    if bcc is not None:
+        emailmultipart["Bcc"] = bcc
+    emailmultipart["Subject"] = title
     emailmultipart.attach(MIMEText(html, "html"))
     # emailmultipart.attach(image)
 
     if "bulkhours.eu" in me:
-        server = "smtpauth.online.net:2525"
+        server, port = "smtpauth.online.net:2525", 2525
     elif "gmail.com" in me:
-        server = "smtp.gmail.com:587"
+        server, port = "smtp.gmail.com:587", 587
     else:
-        server = "ssl0.ovh.net:465"
+        server, port = "ssl0.ovh.net", 465
 
     if password is None:
         password = os.environ["NOREPLY_BULKHOURS_FR"]
 
     context = ssl.create_default_context()
-    server = smtplib.SMTP_SSL("ssl0.ovh.net", 465, context=context)
+    server = smtplib.SMTP_SSL(server, port, context=context)
     if 0:
         server.set_debuglevel(1)
     server.ehlo()
