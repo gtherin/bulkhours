@@ -291,6 +291,8 @@ def send_mails(
     drive_rdir=None,
     password=None,
     cfg=None,
+    dnotebook_files=None,
+    fake=False,
 ):
     notebook_info = notebook_file.split(".")[0]
     if cfg is None:
@@ -311,14 +313,24 @@ def send_mails(
     if "@" in signature:
         signature = signature.split("@")[0].replace(".", " ").title()
 
+    if dnotebook_files is not None:
+        import json
+
+        with open(dnotebook_files) as json_file:
+            dnotebook_files = json.load(json_file)
+
     for _, student in students_list.iterrows():
         if student["mail"] == "solution":
             continue
         cfilename = f"{drive_rdir}/{sub_rdir}/{notebook_file}".replace(
             ".", f"_%s." % student["auser"].lower()
         )
-        dnotebook_file = get_abs_filename(cfilename)
-        dnotebook_file = "https://colab.research.google.com/drive/1JE8WmO5V6N7cyp_R1wgHFjeZzn8sqll4#scrollTo=JiLGDaF4QfHB"
+
+        dnotebook_file = (
+            dnotebook_files[student["mail"]]
+            if dnotebook_files is not None and student["mail"] in dnotebook_files
+            else get_abs_filename(cfilename)
+        )
 
         message = f"""
     <p>{intro} :</p>
@@ -333,14 +345,14 @@ def send_mails(
 """.replace(
             "STUDENT", student["auser"]
         )
-
-        send_mail(
-            to=student["mail"],
-            # cc="guillaume.therin@ipsa.fr",
-            message=message,
-            title=title,
-            password=password,
-        )
+        if not fake:
+            send_mail(
+                to=student["mail"],
+                # cc="guillaume.therin@ipsa.fr",
+                message=message,
+                title=title,
+                password=password,
+            )
 
 
 def send_mail(
