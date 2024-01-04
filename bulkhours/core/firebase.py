@@ -319,8 +319,21 @@ def delete_documents(cinfo, questions, user=REF_USER, verbose=False):
     print(f"\x1b[31m\x1b[1m (cloud)\x1b[m")
 
 
+def update_if_possible(document, kwargs):
+    try:
+        document.update(kwargs)
+    except:
+        document.set(kwargs)
+
+
 def send_answer_to_corrector(
-    cinfo, update=True, comment="", update_time=True, fake=False, **kwargs
+    cinfo,
+    update=True,
+    comment="",
+    update_time=True,
+    fake=False,
+    store_log=True,
+    **kwargs,
 ):
     source = "local@" if DbDocument.data_base_info is not None else "cloud@"
     question_alias = source + get_question_id(cinfo.cell_id, sep="/", cinfo=cinfo)
@@ -397,6 +410,19 @@ def send_answer_to_corrector(
             get_document(question=cinfo.cell_id, user=user, cinfo=cinfo).update(kwargs)
         else:
             get_document(question=cinfo.cell_id, user=user, cinfo=cinfo).set(kwargs)
+
+        if store_log:
+            for a in ["answer", "main_execution"]:
+                if a in kwargs:
+                    update_if_possible(
+                        get_document(
+                            question=cinfo.cell_id + "_log",
+                            user=kwargs["user"],
+                            cinfo=cinfo,
+                        ),
+                        {uptime: kwargs[a]},
+                    )
+                    break
 
     if user == REF_USER:
         if cinfo.language == "fr":
