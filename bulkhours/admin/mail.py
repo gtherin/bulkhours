@@ -198,7 +198,7 @@ def copy(
 
 
 def prepare_mail(
-    default_student="john.doe@bulkhours.eu",
+    default_student="john.doe@bulkhours.fr",
     signature="The bulkHours team",
     generate_file=True,
     generate_solution=True,

@@ -39,7 +39,10 @@ class Script:
 
         print(
             subprocess.run(
-                f"bash {self.fname}".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+                f"bash {self.fname}".split(),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
             ).stdout
         )
 
@@ -54,7 +57,7 @@ def get_header_links(
     kaggle=False,
     vstudio=True,
     jupyter=True,
-    jupyter_server="http://jupyter.bulkhours.eu",
+    jupyter_server="http://jupyter.bulkhours.fr",
 ):
     afilename = f"guydegnol/bulkhours/blob/main/{filename}"
     links = f"[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/{afilename}) "
@@ -81,7 +84,9 @@ def get_header_links(
 
 
 def generate_header_links(filename, **kwargs):
-    IPython.display.display(IPython.display.Markdown(get_header_links(filename, **kwargs)))
+    IPython.display.display(
+        IPython.display.Markdown(get_header_links(filename, **kwargs))
+    )
 
 
 def build_readme(category=None, load_data=True, save_datasets=True, save_examples=True):
@@ -158,10 +163,17 @@ def help(category=None, load_data=True, show_categories=False, save_datasets=Tru
         IPython.display.display(pd.DataFrame(datacategories))
 
     elif category is not None:
-        readme = build_readme(category=category, load_data=False, save_examples=False, save_datasets=save_datasets)
+        readme = build_readme(
+            category=category,
+            load_data=False,
+            save_examples=False,
+            save_datasets=save_datasets,
+        )
         IPython.display.display(IPython.display.Markdown(readme))
     else:
-        build_readme(category=category, load_data=load_data, save_datasets=save_datasets)
+        build_readme(
+            category=category, load_data=load_data, save_datasets=save_datasets
+        )
 
         readme = open(get_readme_filename()).readlines()
         IPython.display.display(IPython.display.Markdown("\n".join(readme)))
