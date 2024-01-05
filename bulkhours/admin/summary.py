@@ -82,7 +82,7 @@ def summary(
                     verbose=False,
                     aggregate=aggregate,
                     **kwargs,
-                ).assign(vroom=virtual_room)
+                ).assign(virtual_room=virtual_room)
             )
         data = pd.concat(data, axis=0)
 

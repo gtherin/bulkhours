@@ -193,7 +193,7 @@ def styles(
         sdata = sdata.drop(columns=["all"])
 
     fcolumns = [c.replace(".n", "") for c in sdata.columns if c not in icolumns]
-    nacolumns = [c for c in fcolumns if "all" not in c and c not in ["vroom"]]
+    nacolumns = [c for c in fcolumns if "all" not in c and c not in ["virtual_room"]]
 
     sdata = sort_by(sdata, icolumns=icolumns, sorted_by=sorted_by)
 
@@ -211,7 +211,7 @@ def styles(
     ccols = [
         c
         for c in list(fcolumns)
-        if c not in ["all", "vroom"]
+        if c not in ["all", "virtual_room"]
         and core.tools.REF_USER in sdata[c]
         and sdata[c][core.tools.REF_USER] > 0
     ]
@@ -228,14 +228,14 @@ def styles(
 
     stylish = stylish.applymap(interpret_ncorr, subset=nccols)
 
-    if "vroom" in sdata.columns:
-        vrooms = sdata["vroom"].unique()
+    if "virtual_room" in sdata.columns:
+        vrooms = sdata["virtual_room"].unique()
         cc = core.colors.color_maps(None)
         colors = {
-            v: "font-weight: bold;color: white;background-color: %s;" % cc[i]
+            v: f"opacity: 60%;font-weight: bold;color: white;background-color: {cc[i]};"
             for i, v in enumerate(vrooms)
         }
-        stylish = stylish.map(lambda v: colors[v], subset="vroom")
+        stylish = stylish.applymap(lambda v: colors[v], subset=["virtual_room"])
 
     if "all" in sdata.columns:
         stylish = stylish.background_gradient(
