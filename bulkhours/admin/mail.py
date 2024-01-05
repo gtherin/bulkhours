@@ -294,6 +294,8 @@ def send_mails(
     dnotebook_files=None,
     fake=False,
 ):
+    import IPython
+
     notebook_info = notebook_file.split(".")[0]
     if cfg is None:
         cfg = core.tools.get_config(is_new_format=True)
@@ -319,6 +321,10 @@ def send_mails(
         with open(dnotebook_files) as json_file:
             dnotebook_files = json.load(json_file)
 
+    IPython.display.display(
+        IPython.display.Markdown(f"## Send notebooks links for '`{notebook_info}`'")
+    )
+
     for _, student in students_list.iterrows():
         if student["mail"] == "solution":
             continue
@@ -332,6 +338,11 @@ def send_mails(
             else get_abs_filename(cfilename)
         )
 
+        icon = "❌" if "/local" in dnotebook_file else "📧"
+        core.tools.dmd(
+            f"""* {icon} {student['auser']}: sent mail with link '{dnotebook_file}' to '{student['mail']}' """
+        )
+
         message = f"""
     <p>{intro} :</p>
 
@@ -341,9 +352,10 @@ def send_mails(
 💡Notebooks are personal.💡<br/><br/>
 
 {signature}<br/>
-<A HREF="mailto:contact@bulkhours.fr">contact</A>
+<a href="mailto:contact@bulkhours.fr">contact</a>
+<img alt="" src="https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/BulkHours.png" width=100 />
 """.replace(
-            "STUDENT", student["auser"]
+            "STUDENT", student["prenom"]
         )
         if not fake:
             send_mail(
@@ -375,9 +387,7 @@ def send_mail(
         table, th, td {{ border: 1px solid black; border-collapse: collapse; }} th, td {{ padding: 5px; }}
         </style>
     </head>
-    <body><p>{message}</p>
-    <img alt="" src="https://raw.githubusercontent.com/guydegnol/bulkhours/main/data/BulkHours.png" width=100 />
-    </body>
+    <body>{message}</body>
     </html> """
 
     # image = MIMEImage(img_data, name=os.path.basename(img_filename))

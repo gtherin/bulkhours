@@ -58,6 +58,83 @@ def get_groups(aliases={}, virtual_rooms=[None]):
 
 
 def summary(
+    virtual_room=None,
+    cmap="RdBu",
+    export_notes=True,
+    sorted_by=True,
+    verbose=True,
+    aggregate=None,
+    homogen=None,
+    **kwargs,
+):
+    if virtual_room == "ALL":
+        cfg = core.tools.get_config(is_new_format=True, **kwargs)
+
+        virtual_rooms = cfg.virtual_rooms.split(";")
+
+        data = []
+        for virtual_room in virtual_rooms:
+            data.append(
+                summary_vroom(
+                    virtual_room=virtual_room,
+                    cmap=None,
+                    export_notes=False,
+                    verbose=False,
+                    aggregate=aggregate,
+                    **kwargs,
+                ).assign(vroom=virtual_room)
+            )
+        data = pd.concat(data, axis=0)
+
+        IPython.display.display(
+            IPython.display.Markdown(f"## ALL: {len(data)} students")
+        )
+
+        if homogen is not None:
+            data = homogen(data, aggregate).copy()
+
+        return make_me_beautiful(
+            cfg,
+            data,
+            cmap=cmap,
+            export_notes=export_notes,
+            sorted_by=sorted_by,
+            filename=f"notes_{cfg.subject}_ALL_ALL.csv",
+        )
+
+
+def make_me_beautiful(
+    cfg,
+    data,
+    cmap="RdBu",
+    export_notes=True,
+    hide_grades=False,
+    sorted_by=True,
+    filename=None,
+):
+    sdata = (
+        tools.styles(data, cmap=cmap, hide_grades=hide_grades, sorted_by=sorted_by)
+        if cmap is not None
+        else tools.sort_by(data, sorted_by=sorted_by)
+    )
+
+    if filename is None:
+        filename = f"notes_{cfg.subject}_{cfg.virtual_room}_{cfg.notebook_id}.csv"
+
+    if export_notes:
+        IPython.display.display(sdata)
+        return core.buttons.get_export_button(
+            filename,
+            data=data.sort_values(sorted_by).round(1).to_csv(index=False),
+            label="Export notes📝",
+            tooltip="""⚠️Seulement disponible pour l'évaluateur⚠️.
+💾Envoi de la réponse (contenu de la cellule actuelle) comme solution officielle.""",
+        )
+
+    return sdata
+
+
+def summary_vroom(
     no_admin=False,
     reload_cache=True,
     cinfo="*.g",
@@ -70,6 +147,7 @@ def summary(
     aggregate=None,
     apply=None,
     sorted_by=True,
+    virtual_room=None,
     **kwargs,
 ):
     """Permet de faire un point sur
@@ -85,7 +163,7 @@ def summary(
     :return: a grade between the minimal grade and maximal grade
     """
 
-    cfg = core.tools.get_config(is_new_format=True, **kwargs)
+    cfg = tools.switch_classroom(virtual_room, **kwargs)
     if not core.tools.is_admin(cfg=cfg):
         raise Exception("Only available for the admins🎓")
 
@@ -121,11 +199,12 @@ def summary(
 
     data = tools.get_users_list(no_admin=no_admin)
 
-    IPython.display.display(
-        IPython.display.Markdown(
-            f"## {cfg.virtual_room}: {(1-data['is_admin']).sum()} students"
+    if "verbose" in kwargs and kwargs["verbose"]:
+        IPython.display.display(
+            IPython.display.Markdown(
+                f"## {cfg.virtual_room}: {(1-data['is_admin']).sum()} students"
+            )
         )
-    )
 
     if aggregate is not None:
         grades = pd.DataFrame(
@@ -183,20 +262,12 @@ def summary(
                 for c in exos:
                     data.at[k, c] = data.at[v, c]
 
-    sdata = (
-        tools.styles(data, cmap=cmap, hide_grades=hide_grades, sorted_by=sorted_by)
-        if cmap is not None
-        else data
+    return make_me_beautiful(
+        cfg,
+        data,
+        cmap=cmap,
+        export_notes=export_notes,
+        hide_grades=hide_grades,
+        sorted_by=sorted_by,
+        filename=None,
     )
-
-    if export_notes:
-        IPython.display.display(sdata)
-        return core.buttons.get_export_button(
-            f"notes_{cfg.subject}_{cfg.virtual_room}_{cfg.notebook_id}.csv",
-            data=data.to_csv(index=False),
-            label="Export notes📝",
-            tooltip="""⚠️Seulement disponible pour l'évaluateur⚠️.
-💾Envoi de la réponse (contenu de la cellule actuelle) comme solution officielle.""",
-        )
-
-    return sdata

@@ -111,6 +111,7 @@ def get_users_list(no_admin=True, sort_by=None, euser=None, cfg=None):
     users["auser"] = users["auser"].where(
         ~users["auser"].duplicated(), other=users["prenom"] + "." + users["nom"]
     )
+    users["auser"] = users["auser"].fillna(users["prenom"])
 
     for c in ["prenom", "nom", "mail", "auser"]:
         users[c] = users[c].astype(str)
@@ -174,6 +175,15 @@ git pull 2> /dev/null
         print(f"\x1b[32m\x1b[1m{msg}{cmd}\x1b[m")
 
 
+def sort_by(sdata, icolumns=["nom", "prenom"], sorted_by=True):
+    if sorted_by:
+        if type(sorted_by) in [str, list]:
+            sdata = sdata.sort_values(sorted_by)
+        else:
+            sdata = sdata.sort_values(icolumns)
+    return sdata
+
+
 def styles(
     sdata, cmap="RdBu", icolumns=["nom", "prenom"], sorted_by=True, hide_grades=False
 ):
@@ -183,13 +193,9 @@ def styles(
         sdata = sdata.drop(columns=["all"])
 
     fcolumns = [c.replace(".n", "") for c in sdata.columns if c not in icolumns]
-    nacolumns = [c for c in fcolumns if "all" not in c]
+    nacolumns = [c for c in fcolumns if "all" not in c and c not in ["vroom"]]
 
-    if sorted_by:
-        if type(sorted_by) in [str, list]:
-            sdata = sdata.sort_values(sorted_by)
-        else:
-            sdata = sdata.sort_values(icolumns)
+    sdata = sort_by(sdata, icolumns=icolumns, sorted_by=sorted_by)
 
     sdata = sdata.rename(columns={c + ".n": c for c in fcolumns})
 
@@ -205,7 +211,7 @@ def styles(
     ccols = [
         c
         for c in list(fcolumns)
-        if c != "all"
+        if c not in ["all", "vroom"]
         and core.tools.REF_USER in sdata[c]
         and sdata[c][core.tools.REF_USER] > 0
     ]
@@ -222,11 +228,13 @@ def styles(
 
     stylish = stylish.applymap(interpret_ncorr, subset=nccols)
 
+    if "vroom" in sdata.columns:
+        print(sdata["vroom"].unique())
+
     if "all" in sdata.columns:
         stylish = stylish.background_gradient(
             cmap=cmap, subset=["all"], vmin=0, vmax=20.0
         )
         stylish = stylish.applymap(core.Grade.apply_all_style, subset=["all"])
-        # stylish = stylish.set_properties().format("{:.1f}", na_rep="✅", subset=["all"])
 
     return stylish.set_properties().format("{:.1f}", na_rep="✅", subset=nacolumns)
