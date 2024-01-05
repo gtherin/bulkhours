@@ -229,7 +229,13 @@ def styles(
     stylish = stylish.applymap(interpret_ncorr, subset=nccols)
 
     if "vroom" in sdata.columns:
-        print(sdata["vroom"].unique())
+        vrooms = sdata["vroom"].unique()
+        cc = core.colors.color_maps(None)
+        colors = {
+            v: "font-weight: bold;color: white;background-color: %s;" % cc[i]
+            for i, v in enumerate(vrooms)
+        }
+        stylish = stylish.map(lambda v: colors[v], subset="vroom")
 
     if "all" in sdata.columns:
         stylish = stylish.background_gradient(
