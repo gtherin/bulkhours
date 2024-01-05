@@ -48,11 +48,13 @@ def nevaluate(filename, force=False, fake=False):
                     )
                 if "database=" in s and notebook_id is None:
                     database = s[s.find("database=") :].replace("'", '"').split('"')[1]
-                    info = core.installer.get_tokens(database)
+                    virtual_room = core.installer.get_tokens(database)["virtual_room"]
+                else:
+                    virtual_room = "Rdx"
 
             IPython.display.display(
                 IPython.display.Markdown(
-                    f"""#### Parsing '`{filename.split('/')[-1]}`': '`{info['virtual_room']}/{notebook_id}/{email}`'"""
+                    f"""#### Parsing '`{filename.split('/')[-1]}`': '`{virtual_room}/{notebook_id}/{email}`'"""
                 )
             )
 
@@ -64,7 +66,7 @@ def nevaluate(filename, force=False, fake=False):
         cinfo.user, cinfo.notebook_id, cinfo.virtual_room = (
             email,
             notebook_id,
-            info["virtual_room"],
+            virtual_room,
         )
         parsed_cell = core.cell_parser.CellParser.crunch_data(
             cinfo=cinfo, user=email, data=cell["source"]

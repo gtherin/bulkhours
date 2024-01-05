@@ -14,7 +14,7 @@ def test_copy_notebook():
         debug=False,
     )
 
-    os.system("rm -rf examples/2_Course_Edition_3*.ipynb")
+    os.system(f"rm -rf examples/{cfg.virtual_room}")
 
 
 def test_copy4students():
@@ -22,10 +22,9 @@ def test_copy4students():
     bulkhours.admin.copy4students(
         "yo.da@jedi.com", "examples", "2_Course_Edition.ipynb", cfg=cfg
     )
-    os.system(f"rm -rf examples/{cfg.virtual_room}")
+    os.system(f"rm -rf examples/2_Course_Edition_{cfg.virtual_room}")
 
 
 def test_evaluate_notebook():
     bulkhours.core.firebase.init_database({})
-
-    bulkhours.admin.nevaluate("tests/TP5_Music_generation_TISA.ipynb", fake=True)
+    bulkhours.admin.nevaluate("examples/2_Course_Edition.ipynb", fake=True)

@@ -1,13 +1,23 @@
+import json
+import os
 import bulkhours
 
 
 def test_mails():
+    with open(filename := "notebooks.json", "w", encoding="utf-8") as f:
+        json.dump(
+            {f"k{l}@bulkhours.fr": "https://bulkhours.fr" for l in "eio"},
+            f,
+            ensure_ascii=False,
+        )
+
     bulkhours.admin.send_mails(
         notebook_file="TP1b_Logistic_Regression.ipynb",
         drive_rdir="tests",
-        dnotebook_files="tests/notebooks.json",
+        dnotebook_files=filename,
         fake=False,
     )
+    os.system(f"rm -rf {filename}")
 
 
 # Test the get_data functions
