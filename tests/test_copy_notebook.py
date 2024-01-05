@@ -8,7 +8,7 @@ def test_copy_notebook():
         "yo.da@jedi.com",
         "examples",
         "2_Course_Edition.ipynb",
-        "john.doe@bulkhours.eu",
+        "john.doe@bulkhours.fr",
         reset=True,
         cfg=cfg,
         debug=False,

@@ -207,7 +207,7 @@ def init_database(config) -> None:
 
             print(
                 f"""⚠️\x1b[41m\x1b[37mYour token does not seem to be valid anymore.\x1b[0m⚠️ 
-Check that your token is still valid (contact: contact@bulkhours.eu).
+Check that your token is still valid (contact: contact@bulkhours.fr).
 The database has been reset to the local file '{cfg["database"]}'.
 """
             )

@@ -46,7 +46,7 @@ def get_tokens(token, raise_error=False, verbose=True):
                             pass
     if verbose:
         print(
-            f"""⚠️\x1b[41m\x1b[37mYour token was not found. Check that your token is still valid (contact: contact@bulkhours.eu)\x1b[0m⚠️"""
+            f"""⚠️\x1b[41m\x1b[37mYour token was not found. Check that your token is still valid (contact: contact@bulkhours.fr)\x1b[0m⚠️"""
         )
 
     return {}
