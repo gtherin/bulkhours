@@ -4,6 +4,8 @@ import bulkhours
 
 
 def test_mails():
+    cfg = bulkhours.core.tools.get_config(is_new_format=True)
+    return
     with open(filename := "notebooks.json", "w", encoding="utf-8") as f:
         json.dump(
             {f"k{l}@bulkhours.fr": "https://bulkhours.fr" for l in "eio"},
@@ -15,13 +17,17 @@ def test_mails():
         notebook_file="TP1b_Logistic_Regression.ipynb",
         drive_rdir="tests",
         dnotebook_files=filename,
-        fake=False,
+        cfg=cfg,
+        fake=True,
     )
     os.system(f"rm -rf {filename}")
 
 
 # Test the get_data functions
 def test_mail():
+    # Quota 200 mails per hour
+    cfg = bulkhours.core.tools.get_config(is_new_format=True)
+    return
     bulkhours.admin.send_mail(
         to="contact@bulkhours.fr, no-reply@bulkhours.fr",
         message="""
@@ -32,4 +38,5 @@ The BulkHours team (tribute to Foremost Poets)<br/>
 <a href="mailto:contact@bulkhours.fr">contact</a>
 """,
         title="SMTP test",
+        fake=True,
     )

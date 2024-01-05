@@ -303,14 +303,16 @@ def send_mails(
     students_list = tools.get_users_list(cfg=cfg)
     sub_rdir = notebook_file.replace(" ", "_").replace(".ipynb", "_" + cfg.virtual_room)
 
-    title = f"Notebook of the day: {notebook_info}"
+    title = f"Notebook {notebook_info} (lien)"
     intro = f"Dear STUDENT,<br/><br/>Here is the practical course of the day: "
-    end = f"Best regards"
+    end = f"""Best regards,<br/><br/>
+💡Notebooks can not be shared. Ask the teacher in case of problem💡"""
 
     if cfg.language == "fr":
-        title = f"Notebook du jour: {notebook_info}"
+        title = f"Notebook {notebook_info} (lien)"
         intro = f"Bonjour STUDENT,<br/><br/>Voici le lien vers le cours du jour: "
-        end = f"Cordialement"
+        end = """"Cordialement,<br/><br/>
+💡Les notebooks ne peuvent être partagées. S'adresser au prof en cas de probleme💡"""
 
     if "@" in signature:
         signature = signature.split("@")[0].replace(".", " ").title()
@@ -348,8 +350,7 @@ def send_mails(
 
     <ul><li><a href="{dnotebook_file}" style="font-size: 18px; margin: 4px 0;background-color: white; color: #4F77AA; padding: 5px 9px; text-align: center; text-decoration: none; display: inline-block;">Course of the day</a></li></ul>
 
-{end},<br/><br/>
-💡Notebooks are personal.💡<br/><br/>
+{end}<br/><br/>
 
 {signature}<br/>
 <a href="mailto:contact@bulkhours.fr">contact</a>
@@ -375,6 +376,8 @@ def send_mail(
     title="Subject",
     bcc=None,
     cc=None,
+    debug=False,
+    fake=False,
 ):
     """Example:
     admin.send_mail(to="s*@gmail.com", me="g*@gmail.com", )
@@ -415,9 +418,10 @@ def send_mail(
 
     context = ssl.create_default_context()
     server = smtplib.SMTP_SSL(server, port, context=context)
-    if 0:
+    if debug:
         server.set_debuglevel(1)
     server.ehlo()
     server.login(me, password)
-    server.send_message(emailmultipart)
+    if not fake:
+        server.send_message(emailmultipart)
     server.quit()
