@@ -67,9 +67,8 @@ def summary(
     homogen=None,
     **kwargs,
 ):
+    cfg = core.tools.get_config(is_new_format=True, **kwargs)
     if virtual_room == "ALL":
-        cfg = core.tools.get_config(is_new_format=True, **kwargs)
-
         virtual_rooms = cfg.virtual_rooms.split(";")
 
         data = []
@@ -100,6 +99,16 @@ def summary(
             export_notes=export_notes,
             sorted_by=sorted_by,
             filename=f"notes_{cfg.subject}_ALL_ALL.csv",
+        )
+    else:
+        return summary_vroom(
+            virtual_room=virtual_room,
+            sorted_by=sorted_by,
+            cmap=cmap,
+            export_notes=export_notes,
+            verbose=verbose,
+            aggregate=aggregate,
+            **kwargs,
         )
 
 
