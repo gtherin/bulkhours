@@ -293,6 +293,7 @@ def send_mails(
     cfg=None,
     dnotebook_files=None,
     fake=False,
+    cc=None,
 ):
     import IPython
 
@@ -361,7 +362,7 @@ def send_mails(
         if not fake:
             send_mail(
                 to=student["mail"],
-                # cc="guillaume.therin@ipsa.fr",
+                cc=cc,
                 message=message,
                 title=title,
                 password=password,
