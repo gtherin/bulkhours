@@ -176,8 +176,8 @@ def copy(
     # Remove listed cells
     if verbose:
         print("Pop the following cells: ", to_pop)
-        for i in to_pop[::-1]:
-            nb.cells.pop(i)
+    for i in to_pop[::-1]:
+        nb.cells.pop(i)
 
     # Create the new notebook
     nbformat.write(nb, cfilename, version=nbformat.NO_CONVERT)
