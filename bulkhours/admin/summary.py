@@ -131,10 +131,14 @@ def make_me_beautiful(
         filename = f"notes_{cfg.subject}_{cfg.virtual_room}_{cfg.notebook_id}.csv"
 
     if export_notes:
+        if type(sorted_by) is bool and sorted_by:
+            data = data.sort_values("nom")
+        elif type(sorted_by) in [list, str]:
+            data = data.sort_values(sorted_by)
         IPython.display.display(sdata)
         return core.buttons.get_export_button(
             filename,
-            data=data.sort_values(sorted_by).round(1).to_csv(index=False),
+            data=data.round(1).to_csv(index=False),
             label="Export notes📝",
             tooltip="""⚠️Seulement disponible pour l'évaluateur⚠️.
 💾Envoi de la réponse (contenu de la cellule actuelle) comme solution officielle.""",
