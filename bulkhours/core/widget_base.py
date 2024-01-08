@@ -42,13 +42,6 @@ class WidgetBase:
             cinfo=self.cinfo, user=self.cinfo.user, data=self.cell_source
         )
 
-        if teacher_data.is_evaluation_available():
-            score = equals.student_evaluation_function(
-                student_data, teacher_data, user=self.cinfo.user
-            ).score
-        else:
-            score = ""
-
         if teacher_data.is_hint_available():
             equals.hint_student(student_data, teacher_data, raw=False, tmode="hint")
 
@@ -71,7 +64,7 @@ class WidgetBase:
                 )
                 return
 
-        self.display_correction(student_data, teacher_data, output=output, score=score)
+        self.display_correction(student_data, teacher_data, output=output)
 
     def autocorrect(self, output):
         if 0:
@@ -142,47 +135,19 @@ class WidgetBase:
 
         IPython.display.display(bbox, output)
 
-    def display_correction(self, student_data, teacher_data, output=None, score=""):
-        codebody = "google.colab" in sys.modules and self.cinfo.user != tools.REF_USER
-        kwargs = (
-            {
-                "codebody"
-                if codebody
-                else "rawbody": teacher_data.get_code("main_execution")
-            }
-            if "main_execution" in teacher_data.minfo
-            else {}
-        )
-        color = "black"
-        kwargs = {}
-
-        if 0:
-            if score == "":
-                note_auto = score
-            else:
-                score, max_score = score.split("/")
-                if float(score) > 0.6 * float(max_score):
-                    note_auto, color = f", note={score}🥳", "green"
-                else:
-                    note_auto, color = f", note={score}😔", "red"
-        note_auto = ""
-
+    def display_correction(self, student_data, teacher_data, output=None):
         comment = (
             ""
             if self.cinfo.type in ["bkcode", "bkscript"]
             else f": {teacher_data['answer']} VS {self.get_answer()}"
         )
-        sources = (
-            ""  # f", {student_data.minfo['source']} VS {teacher_data.minfo['source']}"
-        )
 
         with output:
             output.clear_output()
             tools.html(
-                f"Correction ({self.cinfo.cell_id}{note_auto}) {comment}",
+                f"Correction ({self.cinfo.cell_id}) {comment}",
                 style="title",
                 display=True,
-                color=color,
             )
 
             tools.code(scode := teacher_data.get_solution(), display=True)
@@ -193,12 +158,11 @@ class WidgetBase:
                 and "main_execution" in teacher_data.minfo
             ):
                 tools.html(
-                    f"""Execution du code ({self.cinfo.cell_id}{note_auto}{sources}) 💻"""
+                    f"""Execution du code ({self.cinfo.cell_id}) 💻"""
                     if self.cinfo.language == "fr"
-                    else f"""Let's execute the code ({self.cinfo.cell_id}{note_auto}{sources}) 💻""",
+                    else f"""Let's execute the code ({self.cinfo.cell_id}) 💻""",
                     style="title",
                     display=True,
-                    color=color,
                 )
 
                 IPython.get_ipython().run_cell(scode)
