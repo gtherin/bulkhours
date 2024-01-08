@@ -44,7 +44,7 @@ class WidgetBase:
 
         if teacher_data.is_evaluation_available():
             score = equals.student_evaluation_function(
-                student_data, teacher_data, raw=False, user=self.cinfo.user
+                student_data, teacher_data, user=self.cinfo.user
             ).score
         else:
             score = ""
