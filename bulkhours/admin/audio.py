@@ -119,11 +119,21 @@ def estimate_grade(text, exo, cinfo=None):
             s = students["nom"][i] + " " + students["prenom"][i]
             r_dist = difflib.SequenceMatcher(None, str(s).lower(), sname).ratio()
             if r_dist > ref_dist["dist"]:
-                grade = rep[oral_name[-1]] if oral_name[-1] in rep else float(oral_name[-1].replace(",", "."))
-                ref_dist = dict(dist=r_dist, name=str(s), login=i, grade=grade, raw=text)
+                grade = (
+                    rep[oral_name[-1]]
+                    if oral_name[-1] in rep
+                    else float(oral_name[-1].replace(",", "."))
+                )
+                ref_dist = dict(
+                    dist=r_dist, name=str(s), login=i, grade=grade, raw=text
+                )
     if ref_dist["login"] != "Nope":
         # students.at[ref_dist["login"], exo] = float(ref_dist["grade"])
-        answers.update_grade(cinfo.notebook_id + "_" + exo, ref_dist["login"], float(ref_dist["grade"], grade="grade_man"))
+        answers.update_grade(
+            cinfo.notebook_id + "_" + exo,
+            ref_dist["login"],
+            float(ref_dist["grade"], grade="grade_man"),
+        )
 
     return ref_dist
 
@@ -152,11 +162,19 @@ def get_audio(exo, output, update_git=False):
     process = (
         ffmpeg.input("pipe:0")
         .output("pipe:1", format="wav")
-        .run_async(pipe_stdin=True, pipe_stdout=True, pipe_stderr=True, quiet=True, overwrite_output=True)
+        .run_async(
+            pipe_stdin=True,
+            pipe_stdout=True,
+            pipe_stderr=True,
+            quiet=True,
+            overwrite_output=True,
+        )
     )
     output, err = process.communicate(input=binary)
 
-    riff_chunk_size = len(output) - 8  # Break up the chunk size into four bytes, held in b.
+    riff_chunk_size = (
+        len(output) - 8
+    )  # Break up the chunk size into four bytes, held in b.
     q = riff_chunk_size
     b = []
     for i in range(4):
@@ -187,5 +205,7 @@ def play_message(msg):
     import gtts
 
     tts = gtts.gTTS(msg, lang="fr")  # Provide the string to convert to speech
-    tts.save(sound_file := "last_read_message.wav")  # save the string converted to speech as a .wav file
+    tts.save(
+        sound_file := "last_read_message.wav"
+    )  # save the string converted to speech as a .wav file
     IPython.display.display(IPython.display.Audio(sound_file, autoplay=True))
