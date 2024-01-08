@@ -185,7 +185,6 @@ class WidgetBase:
                 color=color,
             )
 
-            # tools.code(teacher_data.get_code("main_execution"), display=True)
             tools.code(scode := teacher_data.get_solution(), display=True)
 
             if (
