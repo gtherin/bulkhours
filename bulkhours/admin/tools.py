@@ -115,6 +115,7 @@ def get_users_list(no_admin=True, sort_by=None, euser=None, cfg=None):
 
     for c in ["prenom", "nom", "mail", "auser"]:
         users[c] = users[c].astype(str)
+    users["prenom"] = users["auser"]
 
     users = users[["auser", "prenom", "nom", "mail", "is_admin"]]
     if sort_by is not None:
