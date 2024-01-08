@@ -264,7 +264,7 @@ def summary_vroom(
             data["all"].to_dict()
         )
 
-    data = data[["nom", "prenom", "all"] + exos] if columns is None else data[columns]
+    data = data[["nom", "auser", "all"] + exos] if columns is None else data[columns]
     if apply is not None:
         data = apply(data, exos).copy()
 
