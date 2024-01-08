@@ -184,7 +184,9 @@ class WidgetBase:
                 display=True,
                 color=color,
             )
-            tools.code(teacher_data.get_code("main_execution"), display=True)
+
+            # tools.code(teacher_data.get_code("main_execution"), display=True)
+            tools.code(scode := teacher_data.get_solution(), display=True)
 
             if (
                 self.cinfo.type in ["bkcode", "bkscript"]
@@ -200,7 +202,7 @@ class WidgetBase:
                     color=color,
                 )
 
-                IPython.get_ipython().run_cell(teacher_data.get_code("main_execution"))
+                IPython.get_ipython().run_cell(scode)
 
     def ask_gpt(self, output):
         from .gpt import ask_gpt
