@@ -115,7 +115,6 @@ def get_users_list(no_admin=True, sort_by=None, euser=None, cfg=None):
 
     for c in ["prenom", "nom", "mail", "auser"]:
         users[c] = users[c].astype(str)
-    users["prenom"] = users["auser"]
 
     users = users[["auser", "prenom", "nom", "mail", "is_admin"]]
     if sort_by is not None:
@@ -176,7 +175,7 @@ git pull 2> /dev/null
         print(f"\x1b[32m\x1b[1m{msg}{cmd}\x1b[m")
 
 
-def sort_by(sdata, icolumns=["nom", "prenom"], sorted_by=True):
+def sort_by(sdata, icolumns=["nom", "auser"], sorted_by=True):
     if sorted_by:
         if type(sorted_by) in [str, list]:
             sdata = sdata.sort_values(sorted_by)
@@ -186,7 +185,7 @@ def sort_by(sdata, icolumns=["nom", "prenom"], sorted_by=True):
 
 
 def styles(
-    sdata, cmap="RdBu", icolumns=["nom", "prenom"], sorted_by=True, hide_grades=False
+    sdata, cmap="RdBu", icolumns=["nom", "auser"], sorted_by=True, hide_grades=False
 ):
     core.Grade.set_static_style_info(minvalue=0.0, cmap=cmap)
 
