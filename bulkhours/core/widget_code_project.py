@@ -26,23 +26,28 @@ def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
     os.system(f"mkdir -p {cinfo.cell_id}")
 
     if show_solution:
-        solution = firebase.get_solution_from_corrector(cinfo.cell_id, corrector="solution", cinfo=cinfo)
+        solution = firebase.get_solution_from_corrector(
+            cinfo.cell_id, corrector="solution", cinfo=cinfo
+        )
         solution = {k.replace("_dot_", "."): v for k, v in solution.items()}
 
-    if os.path.exists(rfilename := tools.abspath(f"data/exercices/{cinfo.cell_id}.uno")):
+    if os.path.exists(
+        rfilename := tools.abspath(f"data/exercices/{cinfo.cell_id}.uno")
+    ):
         code = installer.unobscure(open(rfilename, "r").read())
-    elif os.path.exists(rfilename := tools.abspath(f"data/exercices/{cinfo.cell_id}_reset.txt")):
+    elif os.path.exists(
+        rfilename := tools.abspath(f"data/exercices/{cinfo.cell_id}_reset.txt")
+    ):
         code = open(rfilename, "r").read()
 
     files_code = code.split("// BKRESET.SPLIT:")[1:]
-    rfiles = {f[:f.find("\n")]: f[f.find("\n")+1:] for f in files_code}
+    rfiles = {f[: f.find("\n")]: f[f.find("\n") + 1 :] for f in files_code}
 
     files = []
     for t, f in enumerate(filenames):
         ff = f.split(":")
         cfilename = f"{cinfo.cell_id}/{ff[0]}"
         if not os.path.exists(cfilename := f"{cinfo.cell_id}/{ff[0]}"):
-
             if verbose:
                 print(f"Generate {cfilename} from {rfilename}")
 
@@ -55,22 +60,28 @@ def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
             if os.path.exists("/content"):
                 data1 = ipywidgets.Output(layout={"height": height, "width": midwidth})
                 with data1:
-                    IPython.display.display(IPython.display.Code(open(cfilename, "r").read()))
+                    IPython.display.display(
+                        IPython.display.Code(open(cfilename, "r").read())
+                    )
 
                 data2 = ipywidgets.Output(layout={"height": height, "width": midwidth})
                 with data2:
                     IPython.display.display(IPython.display.Code(solution[f]))
             else:
                 data1 = ipywidgets.Textarea(
-                    open(cfilename, "r").read(), layout=ipywidgets.Layout(height=height, width=midwidth)
+                    open(cfilename, "r").read(),
+                    layout=ipywidgets.Layout(height=height, width=midwidth),
                 )
-                data2 = ipywidgets.Textarea(solution[f], layout=ipywidgets.Layout(height=height, width=midwidth))
+                data2 = ipywidgets.Textarea(
+                    solution[f], layout=ipywidgets.Layout(height=height, width=midwidth)
+                )
 
             data = ipywidgets.HBox([data1, data2])
 
         else:
             data = ipywidgets.Textarea(
-                open(cfilename, "r").read(), layout=ipywidgets.Layout(height=height, width=width)
+                open(cfilename, "r").read(),
+                layout=ipywidgets.Layout(height=height, width=width),
             )
 
         files.append(data)
@@ -86,7 +97,9 @@ class WidgetCodeProject(widget_base.WidgetBase):
     widget_comp = "w|tsc"
 
     def init_widget(self):
-        self.widget, self.files = evaluate_core_cpp_project(self.cinfo, show_solution=False)
+        self.widget, self.files = evaluate_core_cpp_project(
+            self.cinfo, show_solution=False
+        )
         return self.widget
 
     def get_answer(self):
@@ -101,11 +114,18 @@ class WidgetCodeProject(widget_base.WidgetBase):
                 f.write(files[t].value)
 
         if exec_process:
-            print(f"Save files {self.cinfo.cell_id}/{filenames}, compile and execute program")
-            os.system(f'echo "cd {self.cinfo.cell_id} && make all && ./main" > {self.cinfo.cell_id}/main.sh && chmod 777 {self.cinfo.cell_id}/main.sh')
+            print(
+                f"Save files {self.cinfo.cell_id}/{filenames}, compile and execute program"
+            )
+            os.system(
+                f'echo "cd {self.cinfo.cell_id} && make all && ./main" > {self.cinfo.cell_id}/main.sh && chmod 777 {self.cinfo.cell_id}/main.sh'
+            )
             print(
                 subprocess.run(
-                    f"bash {self.cinfo.cell_id}/main.sh".split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+                    f"bash {self.cinfo.cell_id}/main.sh".split(),
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    text=True,
                 ).stdout
             )
 
@@ -138,7 +158,10 @@ class WidgetCodeProject(widget_base.WidgetBase):
             output.clear_output()
 
             self.write_exec_process(output, exec_process=False)
-            pams = {fn.replace(".", "_dot_"): files[t].value for t, fn in enumerate(filenames)}
+            pams = {
+                fn.replace(".", "_dot_"): files[t].value
+                for t, fn in enumerate(filenames)
+            }
             pams.update(dict(atype=cinfo.type))
 
             return firebase.send_answer_to_corrector(cinfo, **pams)
