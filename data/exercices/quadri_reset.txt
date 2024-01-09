@@ -1,0 +1,30 @@
+// BKRESET.SPLIT:quadrilater.h
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Quadrilateral {
+  public:
+    void properties() {cout << "Quadrilateral: Je suis une figure à quatre côté quelconque." << endl;}
+};
+// Define Trapezoid, Rectangle and Square classes: ...
+
+// BKRESET.SPLIT:quadrilater.cpp
+#include "quadrilater.h"
+
+int main() {
+  Quadrilateral().properties();
+  // Trapezoid().properties(); // ...
+  // Rectangle().properties(); // ...
+  // Square().properties(); // ...
+
+  return 0;
+}
+// BKRESET.SPLIT:Makefile
+quadrilater.o: quadrilater.h quadrilater.cpp
+	@g++ -c quadrilater.cpp
+
+all: quadrilater.o
+	@echo "- Compile and execute:"
+	@/usr/bin/g++ -o main quadrilater.o

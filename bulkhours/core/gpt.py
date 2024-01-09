@@ -33,13 +33,7 @@ def ask_opensource_gpt(
     if token != "YOUR_KEY":
         os.environ["REPLICATE_API_TOKEN"] = token
 
-    try:
-        import replicate
-
-    except ModuleNotFoundError:
-        os.system("pip install replicate > /dev/null 2>&1")
-        print("\x1b[37mpip install replicate👾\x1b[0m")
-        import replicate
+    replicate = tools.install_if_needed("replicate")
 
     # Generate LLM response
     output = replicate.run(
@@ -69,15 +63,7 @@ def ask_chat_gpt(
     top_p=1,
     size="256x256",
 ):
-    try:
-        import openai
-
-    except ModuleNotFoundError:
-        os.system("pip install openai > /dev/null 2>&1")
-        print("\x1b[37mpip install openai🤖\x1b[0m")
-        import openai
-
-    from openai import OpenAI
+    openai = tools.install_if_needed("openai")
 
     if token == "YOUR_KEY":
         token = tools.get_value("openai_token")
@@ -101,7 +87,7 @@ Vous devez créer une clé d'API
         return
 
     # Ask chat-gpt
-    completion = OpenAI(api_key=token).chat.completions.create(
+    completion = openai.OpenAI(api_key=token).chat.completions.create(
         messages=[{"role": "user", "content": prompt}],
         model=model,
         temperature=temperature,
@@ -113,9 +99,9 @@ Vous devez créer une clé d'API
 
 
 def ask_gpt(
-    token="YOUR_KEY",
-    model="gpt-4-1106-preview",
     prompt="",
+    model="gpt-4-1106-preview",
+    token="YOUR_KEY",
     is_code=False,
     raw=False,
     temperature=0.5,
@@ -140,7 +126,6 @@ def ask_gpt(
     You can include end-user IDs in your API requests via the user parameter as follows:
 
     """
-    print(token)
 
     if model in [
         "gpt-4-1106-preview",
