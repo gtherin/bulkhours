@@ -1,7 +1,13 @@
 import sys, inspect
 import json
 
-from IPython.core.magic import Magics, cell_magic, magics_class, line_cell_magic, needs_local_scope
+from IPython.core.magic import (
+    Magics,
+    cell_magic,
+    magics_class,
+    line_cell_magic,
+    needs_local_scope,
+)
 
 from .widget_base import WidgetBase  # noqa
 from .widget_table import WidgetTable  # noqa
@@ -9,7 +15,12 @@ from .widget_code_project import WidgetCodeProject  # noqa
 from .widget_sliders import WidgetFloatSlider, WidgetIntSlider  # noqa
 from .widget_texts import WidgetCodeText, WidgetTextArea  # noqa
 from .widget_selectors import WidgetCheckboxes, WidgetRadios  # noqa
-from .widget_cells import WidgetCode, WidgetMarkdown, WidgetFormula, WidgetScript  # noqa
+from .widget_cells import (
+    WidgetCode,
+    WidgetMarkdown,
+    WidgetFormula,
+    WidgetScript,
+)  # noqa
 
 from .line_parser import LineParser
 from . import tools
@@ -46,13 +57,26 @@ bulkhours.init_env(\033[1memail\033[0m="name@institute.ac")  # To be run in an i
 
     wclass = WidgetBase
     for _, obj in inspect.getmembers(sys.modules[__name__]):
-        if inspect.isclass(obj) and hasattr(obj, "widget_id") and obj.widget_id == linfo.type:
+        if (
+            inspect.isclass(obj)
+            and hasattr(obj, "widget_id")
+            and obj.widget_id == linfo.type
+        ):
             wclass = obj
 
     return wclass(line, cell).evaluate_cell()
 
 
 enumerate_widgets()
+
+
+from IPython.core.magic import (
+    Magics,
+    cell_magic,
+    magics_class,
+    line_cell_magic,
+    needs_local_scope,
+)
 
 
 @magics_class
@@ -64,6 +88,6 @@ class Evaluation(Magics):
     @needs_local_scope
     def evaluation_cell_id(self, line, cell="", local_ns=None):
         """
-        my doc string
+        evaluation cell method
         """
         evaluate_cell(line, cell)
