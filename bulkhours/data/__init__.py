@@ -10,7 +10,7 @@ modules = [
 ]
 __all__ = modules
 from . import *
-from .help import build_readme, help, generate_header_links  # noqa
+from .help import build_readme, help, generate_header_links, get_header_links  # noqa
 from .data_parser import DataParser  # noqa
 
 
