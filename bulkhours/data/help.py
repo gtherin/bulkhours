@@ -55,6 +55,10 @@ def get_header_links(
     github=True,
     sagemaker=True,
     kaggle=False,
+    ovh=False,
+    ovh_gpu=False,
+    bk=False,
+    bk_gpu=False,
     vstudio=True,
     jupyter=True,
     jupyter_server="http://jupyter.bulkhours.fr",
@@ -70,6 +74,18 @@ def get_header_links(
 
     if vstudio:
         links += f"[![Open in Visual Studio Code](https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio&labelColor=2c2c32&color=007acc&logoColor=007acc)](https://vscode.dev/github/{afilename}) "
+
+    if ovh:
+        links += f"[![Open in OVH Cloud](https://img.shields.io/static/v1?logo=ovh&label=&message=Open%20in%20OVH&labelColor=f1f1f1&color=007acc&logoColor=007acc)](https://vscode.dev/github/{afilename}) "
+
+    if ovh_gpu:
+        links += f"[![Open in OVH Cloud (GPU)](https://img.shields.io/static/v1?logo=ovh&label=&message=Open%20in%20OVH%F0%9F%94%A5&labelColor=f1f1f1&color=400acc&logoColor=400acc)](https://vscode.dev/github/{afilename}) "
+
+    if bk:
+        links += f"[![Open with BulkHours](https://img.shields.io/static/v1?logo=ovh&label=&message=Open%20with%20BulkHours&labelColor=f1f1f1&color=007acc&logoColor=007acc)](https://vscode.dev/github/{afilename}) "
+
+    if bk_gpu:
+        links += f"[![Open with BulkHours (GPU)](https://img.shields.io/static/v1?logo=ovh&label=&message=Open%20with%20BulkHours%F0%9F%94%A5&labelColor=f1f1f1&color=400acc&logoColor=400acc)](https://vscode.dev/github/{afilename}) "
 
     if kaggle:
         links += f"[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/{afilename}) "
