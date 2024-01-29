@@ -6,18 +6,49 @@ import pandas as pd
 def md(data, size="+4", prefix="* "):
     import IPython
 
-    IPython.display.display(IPython.display.Markdown(r"%s<font size='%s'>%s</font>" % (prefix, size, data)))
+    IPython.display.display(
+        IPython.display.Markdown(r"%s<font size='%s'>%s</font>" % (prefix, size, data))
+    )
 
 
 default_configs = {
-    "Albedo": {"c": "Albedo", "u": "Sans unité (entre 0 et 1)", "l": r"$A_{\mathrm{PAR}} = VAL$", "r": 2},
-    "Serre": {"c": "Effet de serre", "u": "Sans unité (entre 0 et 1)", "l": r"$S_{\mathrm{PAR}} = VAL$"},
-    "d_ua": {"c": "Distance au soleil", "u": "ua", "l": r"$d_{\mathrm{soleil} \mathrm{PAR}} = VALUNI$", "r": 2},
+    "Albedo": {
+        "c": "Albedo",
+        "u": "Sans unité (entre 0 et 1)",
+        "l": r"$A_{\mathrm{PAR}} = VAL$",
+        "r": 2,
+    },
+    "Serre": {
+        "c": "Effet de serre",
+        "u": "Sans unité (entre 0 et 1)",
+        "l": r"$S_{\mathrm{PAR}} = VAL$",
+    },
+    "d_ua": {
+        "c": "Distance au soleil",
+        "u": "ua",
+        "l": r"$d_{\mathrm{soleil} \mathrm{PAR}} = VALUNI$",
+        "r": 2,
+    },
     "R_km": {"c": "Rayon", "u": "km", "l": r"$R_{\mathrm{PAR}} = VALUNI$", "r": 0},
-    "d_solm": {"c": "Distance au soleil", "u": "m", "l": r"$d_{\mathrm{soleil} \mathrm{PAR}} = VALUNI$", "r": 2},
+    "d_solm": {
+        "c": "Distance au soleil",
+        "u": "m",
+        "l": r"$d_{\mathrm{soleil} \mathrm{PAR}} = VALUNI$",
+        "r": 2,
+    },
     "M_kg": {"c": "Masse", "u": "kg", "l": r"$M_{\mathrm{PAR}} = VALUNI$"},
-    "T_C": {"c": "Temperature moyenne", "u": "°C", "l": r"$T_{\mathrm{PAR}} = VALUNI$", "r": 1},
-    "T_K": {"c": "Temperature moyenne", "u": "°K", "l": r"$T_{\mathrm{PAR}} = VALUNI$", "r": 1},
+    "T_C": {
+        "c": "Temperature moyenne",
+        "u": "°C",
+        "l": r"$T_{\mathrm{PAR}} = VALUNI$",
+        "r": 1,
+    },
+    "T_K": {
+        "c": "Temperature moyenne",
+        "u": "°K",
+        "l": r"$T_{\mathrm{PAR}} = VALUNI$",
+        "r": 1,
+    },
     "L_W": {"c": "Luminosité", "u": "W", "l": r"$L_{\mathrm{PAR}} = VALUNI$"},
 }
 
@@ -29,7 +60,11 @@ class Constant:
             return "0"
         elif np.abs(v) > 1e5 or np.abs(v) < 1e-5:
             val = "%.{0}e".format(r) % v
-            return "%s \cdot 10^{%s}" % (val.split("e")[0], int(val.split("e")[1])) if latex else val
+            return (
+                "%s \cdot 10^{%s}" % (val.split("e")[0], int(val.split("e")[1]))
+                if latex
+                else val
+            )
         else:
             return "%.{0}f".format(r) % v
 
@@ -57,21 +92,63 @@ class Constant:
                 du.append(u)
         return "\cdot ".join(du)
 
-    def __init__(self, v, l=r"$ID = VALUNI$", u="", c="", s=np.nan, i="", p="", r=3, a=[], title=None) -> None:
+    def __init__(
+        self,
+        v,
+        l=r"$ID = VALUNI$",
+        u="",
+        c="",
+        s=np.nan,
+        i="",
+        p="",
+        r=3,
+        a=[],
+        title=None,
+    ) -> None:
         self.v, self.i, self.r, self.a = v, i, r, a
-        self.latex = default_configs[c]["l"] if c in default_configs and "l" in default_configs[c] else l
-        self.u = default_configs[c]["u"] if c in default_configs and "u" in default_configs[c] else u
-        self.c = default_configs[c]["c"] if c in default_configs and "c" in default_configs[c] else c
-        self.p = default_configs[c]["p"] if c in default_configs and "p" in default_configs[c] else p
-        self.s = default_configs[c]["s"] if c in default_configs and "s" in default_configs[c] else s
-        self.r = default_configs[c]["r"] if c in default_configs and "r" in default_configs[c] else r
+        self.latex = (
+            default_configs[c]["l"]
+            if c in default_configs and "l" in default_configs[c]
+            else l
+        )
+        self.u = (
+            default_configs[c]["u"]
+            if c in default_configs and "u" in default_configs[c]
+            else u
+        )
+        self.c = (
+            default_configs[c]["c"]
+            if c in default_configs and "c" in default_configs[c]
+            else c
+        )
+        self.p = (
+            default_configs[c]["p"]
+            if c in default_configs and "p" in default_configs[c]
+            else p
+        )
+        self.s = (
+            default_configs[c]["s"]
+            if c in default_configs and "s" in default_configs[c]
+            else s
+        )
+        self.r = (
+            default_configs[c]["r"]
+            if c in default_configs and "r" in default_configs[c]
+            else r
+        )
 
         if title and title == "mathrm":
             self.latex = self.latex.replace("ID", "\mathrm{%s}" % self.i)
         elif title:
             self.latex = self.latex.replace("ID", title)
-        self.latex = self.latex.replace("ID", self.i).replace("VAL", self.fv()).replace("UNI", self.fu())
-        self.latex = self.latex.replace("PAR", str(self.p)).replace("\mathrm{soleil}", "\odot")
+        self.latex = (
+            self.latex.replace("ID", self.i)
+            .replace("VAL", self.fv())
+            .replace("UNI", self.fu())
+        )
+        self.latex = self.latex.replace("PAR", str(self.p)).replace(
+            "\mathrm{soleil}", "\odot"
+        )
 
     def help(self, size="+3", code=True, markdown=True, latex=False, as_str=False):
         if markdown or latex:
@@ -132,9 +209,22 @@ class Units:
         self.acsts, self.csts, self.csts2d = {}, {}, {}
 
         self.add_constant(
-            "c2k", sc.zero_Celsius, l=r"$VAL°K=0°C$", u="K.C-1", c="Celsius en Kelvin", r=2, a=["kelvin"]
+            "c2k",
+            sc.zero_Celsius,
+            l=r"$VAL°K=0°C$",
+            u="K.C-1",
+            c="Celsius en Kelvin",
+            r=2,
+            a=["kelvin"],
         )
-        self.add_constant("c", 300_000, u="m.s-1", c="Celerité de la lumière", r=0, a=["vitesse_lumiere"])
+        self.add_constant(
+            "c",
+            300_000,
+            u="m.s-1",
+            c="Celerité de la lumière",
+            r=0,
+            a=["vitesse_lumiere"],
+        )
         self.add_constant(
             "al",
             sc.light_year,
@@ -157,10 +247,25 @@ class Units:
             l=r"$1kpc \equiv \frac{1000\cdot180\cdot60\cdot60}{\pi}$",
         )
 
-        self.add_constant("G", 6.67e-11, u="N.m2.kg-2", c="Constante de la gravitation", s=sc.G, r=2)
-        self.add_constant("g", 9.8, u="m.s-2", c="Acceleration standard de la gravitation", s=sc.g, r=1)
+        self.add_constant(
+            "G", 6.67e-11, u="N.m2.kg-2", c="Constante de la gravitation", s=sc.G, r=2
+        )
+        self.add_constant(
+            "g",
+            9.8,
+            u="m.s-2",
+            c="Acceleration standard de la gravitation",
+            s=sc.g,
+            r=1,
+        )
         self.add_constant("h", 6.626e-34, u="J.s", c="Constante de Planck", s=sc.h)
-        self.add_constant("hbar", sc.hbar, l=r"$\bar{h} = \frac{h}{2\pi}$", c="Constante de Planck réduite", u="J.s")
+        self.add_constant(
+            "hbar",
+            sc.hbar,
+            l=r"$\bar{h} = \frac{h}{2\pi}$",
+            c="Constante de Planck réduite",
+            u="J.s",
+        )
         self.add_constant(
             "N_A",
             sc.N_A,
@@ -208,8 +313,17 @@ class Units:
             a=["ev"],
             title="mathrm",
         )
-        self.add_constant("m_e", 9.109e-31, c="Masse electron", u="kg", s=sc.electron_mass)
-        self.add_constant("r_bohr", 5.3e-11, l=r"$a = 5.3 \cdot 10^{-11} m$", c="Rayon de Bohr", u="m", a=["a"])
+        self.add_constant(
+            "m_e", 9.109e-31, c="Masse electron", u="kg", s=sc.electron_mass
+        )
+        self.add_constant(
+            "r_bohr",
+            5.3e-11,
+            l=r"$a = 5.3 \cdot 10^{-11} m$",
+            c="Rayon de Bohr",
+            u="m",
+            a=["a"],
+        )
 
         self.add_constant("m_p", 1.6726e-27, c="Masse proton", u="kg", s=sc.proton_mass)
         self.add_constant(
@@ -286,12 +400,14 @@ class Units:
 
         self.add_constant("M_soleil", 1.988e30, c="M_kg", p="soleil")
         self.add_constant("R_soleil", 696_000, c="R_km", p="soleil")
-        self.add_constant("L_soleil", 3.83e26, c="L_W", p="soleil", r=2, a=["L_sol", "L_sun"])
+        self.add_constant(
+            "L_soleil", 3.83e26, c="L_W", p="soleil", r=2, a=["L_sol", "L_sun"]
+        )
         self.add_constant("T_soleil", 5800, c="T_C", p="soleil")
 
         self.add_constant("M_lune", 7.35e22, c="M_kg", p="lune")
         self.add_constant("d_lune", 1.00, c="d_ua", p="lune")
-        self.add_constant("R_lune", 6371, c="R_km", p="lune")
+        self.add_constant("R_lune", 1737, c="R_km", p="lune")
         self.add_constant("A_lune", 0.11, c="Albedo", p="lune")
         self.add_constant(
             "d_terre_lune",
@@ -341,7 +457,9 @@ class Units:
     def info(self, size="+3", code=True, markdown=True, latex=False):
         output = "\n"
         for k, v in self.csts.items():
-            output += v.help(size=size, code=code, markdown=markdown, latex=latex, as_str=True)
+            output += v.help(
+                size=size, code=code, markdown=markdown, latex=latex, as_str=True
+            )
 
         return output
 
