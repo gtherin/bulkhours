@@ -2,6 +2,7 @@ import os
 import json
 import ipywidgets
 import IPython
+from pathlib import Path
 from argparse import Namespace
 from .config import Config
 
@@ -24,7 +25,7 @@ def abspath(filename="", rdir=None, create_dir=True):
         rdir = os.path.dirname(__file__) + f"/../../../bulkhours/"
 
     if create_dir and not os.path.exists(directory := os.path.dirname(rdir + filename)):
-        os.system(f"mkdir -p {directory}")
+        Path(directory).mkdir(parents=True, exist_ok=True)
 
     return os.path.abspath(rdir + filename)
 

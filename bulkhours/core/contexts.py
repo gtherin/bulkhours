@@ -87,11 +87,11 @@ class C{context}:
     if "catch_error=false" in evaluation_code.replace(" ", "").lower():
         ncode += f"""
 {tab(2)}if True:
-{tab(3)}if True:\n{tab(4)}pass\n\n\n"""
+{tab(3)}if True:\n{tab(4)}pass\n\n"""
     else:
         ncode += f"""
 {tab(2)}with redirect_stdout(stdout := io.StringIO()):
-{tab(3)}try:\n{tab(4)}pass\n\n\n"""
+{tab(3)}try:\n{tab(4)}pass\n\n"""
 
     if not "execute=false" in evaluation_code.replace(" ", "").lower() or not execute:
         for l in code.splitlines():
@@ -127,11 +127,13 @@ class C{context}:
     """
 
     else:
-        ncode += f"{tab(3)}for k, v in locals().items(): setattr(self, k, v)\n"
+        ncode += f"{tab(4)}for k, v in locals().items():\n"
+        ncode += f"{tab(5)}setattr(self, k, v)\n"
+        ncode += f"{tab(5)}pass\n"
         ncode += f"""
-    {tab(3)}except Exception as e:
-    {tab(4)}self.stderr = e
-    {tab(3)}self.stdout = stdout.getvalue()
+{tab(3)}except Exception as e:
+{tab(4)}self.stderr = e
+{tab(3)}self.stdout = stdout.getvalue()
 """
 
     ncode += f"\n{context.lower()} = C{context}()\n"
