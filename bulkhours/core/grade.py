@@ -44,6 +44,8 @@ class Grade:
         # Get source
         if level is None:
             info["src"] = (src := Grade.get_default_source(minfo))
+        else:
+            info["src"] = (src := level)
 
         for k, v in {"upd": "_upd", "comment": "_comment", "score": ""}.items():
             if f"{src}{v}" in minfo:
@@ -52,7 +54,6 @@ class Grade:
         info["score"] = (
             float(info["score"]) if "score" in info else Grade.get_default_score(minfo)
         )
-
         return Grade(**info)
 
     @staticmethod

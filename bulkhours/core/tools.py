@@ -9,6 +9,19 @@ from .config import Config
 REF_USER = "solution"
 
 
+def safe(ext=False):
+
+    # TODO: Create a unique key with email and notebookid, to avoid usage collisions
+    # Might be solved by a unique token per notebook
+    #data = "tester@bulkhours.fr_flops"
+    #ukey = b64e(zlib.compress(data.encode("utf-8"), 1)).decode("utf-8")
+
+    ukey = ""
+
+    filename = f".safe{ukey}.pyc" if ext else f".safe{ukey}"
+    return abspath(filename)
+
+
 def get_platform():
     if os.path.exists("/content"):
         return "colab"
@@ -33,7 +46,7 @@ def abspath(filename="", rdir=None, create_dir=True):
 def update_config(cfg):
     data = cfg.data if hasattr(cfg, "data") else cfg
 
-    with open(abspath(".safe"), "w", encoding="utf-8") as f:
+    with open(safe(), "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
     return cfg
 
@@ -162,7 +175,7 @@ def get_config(
     """Important to copy the config"""
     if config is None:
         config = {}  # Config()
-        if os.path.exists(jsonfile := abspath(".safe")) and not from_scratch:
+        if os.path.exists(jsonfile := safe()) and not from_scratch:
             with open(jsonfile) as json_file:
                 config.update(json.load(json_file))
 
@@ -175,7 +188,7 @@ def get_config(
         config["email"] = config["email"].lower()
 
     if do_update:
-        with open(abspath(".safe"), "w", encoding="utf-8") as f:
+        with open(safe(), "w", encoding="utf-8") as f:
             json.dump(config, f, ensure_ascii=False, indent=4)
 
     if is_namespace:

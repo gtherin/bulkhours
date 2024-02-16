@@ -8,6 +8,8 @@ from . import answers as aanswers
 from . import tools
 
 
+
+
 def get_num_answers(cfg):
     anscs = {}
     for e in cfg.n["exercices"].split(";"):
@@ -57,6 +59,25 @@ def get_groups(aliases={}, virtual_rooms=[None]):
     return dict(sorted(aliases.items(), key=lambda x: x[1]))
 
 
+def store_grades(grades, cfg=None):
+
+    import os
+    import sqlalchemy as sa
+    import datetime
+
+    if "BULK_PWD" not in os.environ or "BULK_DBS" not in os.environ:
+        print(f"Database is not setup {question}")
+
+    pwd, dbs = os.environ["BULK_PWD"], os.environ["BULK_DBS"]
+    
+    if cfg is None:
+        cfg = core.tools.get_config(is_new_format=True)
+    engine = sa.create_engine(f"mariadb+mariadbconnector://moodle_user:{pwd}@{dbs}:3306/moodle", echo=True)
+
+    uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    grades.assign(uptime=uptime).to_sql(table_name, engine, if_exists="replace")
+
+
 def summary(
     virtual_room=None,
     cmap="RdBu",
@@ -65,6 +86,7 @@ def summary(
     verbose=True,
     aggregate=None,
     homogen=None,
+    db_storage=False,
     **kwargs,
 ):
     cfg = core.tools.get_config(is_new_format=True, **kwargs)
@@ -96,6 +118,7 @@ def summary(
             cfg,
             data,
             cmap=cmap,
+            db_storage=db_storage,
             export_notes=export_notes,
             sorted_by=sorted_by,
             filename=f"notes_{cfg.subject}_ALL_ALL.csv",
@@ -107,6 +130,7 @@ def summary(
             cmap=cmap,
             export_notes=export_notes,
             verbose=verbose,
+            db_storage=db_storage,
             aggregate=aggregate,
             **kwargs,
         )
@@ -119,6 +143,7 @@ def make_me_beautiful(
     export_notes=True,
     hide_grades=False,
     sorted_by=True,
+    db_storage=False,
     filename=None,
 ):
     sdata = (
@@ -126,6 +151,9 @@ def make_me_beautiful(
         if cmap is not None
         else tools.sort_by(data, sorted_by=sorted_by)
     )
+
+    if db_storage:
+        store_grades(data, cfg=cfg)
 
     if filename is None:
         filename = f"notes_{cfg.subject}_{cfg.virtual_room}_{cfg.notebook_id}.csv"
@@ -160,6 +188,7 @@ def summary_vroom(
     aggregate=None,
     apply=None,
     sorted_by=True,
+    db_storage=False,
     virtual_room=None,
     **kwargs,
 ):
@@ -282,5 +311,6 @@ def summary_vroom(
         export_notes=export_notes,
         hide_grades=hide_grades,
         sorted_by=sorted_by,
+        db_storage=db_storage,
         filename=None,
     )
