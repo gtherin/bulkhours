@@ -55,10 +55,11 @@ def create_evaluation_buttonanswer(cell_id, cuser, cfg, student_data, teacher_da
     output = ipywidgets.Output()
 
     grade = core.Grade.create_from_info(student_data)
+    max_score = 10
 
     widget = ipywidgets.FloatSlider(
         min=0,
-        max=10,
+        max=max_score,
         value=grade.score,
         step=0.5,
         continuous_update=True,
@@ -88,7 +89,7 @@ def create_evaluation_buttonanswer(cell_id, cuser, cfg, student_data, teacher_da
             and core.gpt.evaluation_instructions is not None
         ):
             print("")
-            grade = core.gpt.get_grade(student_data, teacher_data)
+            grade = core.gpt.get_grade(student_data, teacher_data, max_score)
             if grade != grade:
                 answers.update_grade(
                     cell_id,
