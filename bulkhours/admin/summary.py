@@ -77,6 +77,7 @@ def store_grades(grades, cfg=None):
     engine = mariadbconnector.connect(host=dbs, database='moodle', user='moodle_user', password=pwd)
 
     uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    table_name = f"bulk_{cfg.subject}_{cfg.virtual_room}_{cfg.notebook_id}__grades"
     grades.assign(uptime=uptime).to_sql(table_name, engine, if_exists="replace")
 
 
