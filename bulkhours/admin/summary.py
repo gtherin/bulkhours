@@ -62,7 +62,8 @@ def get_groups(aliases={}, virtual_rooms=[None]):
 def store_grades(grades, cfg=None):
 
     import os
-    import sqlalchemy as sa
+    #import sqlalchemy as sa
+    import mysql.connector as mariadbconnector
     import datetime
 
     if "BULK_PWD" not in os.environ or "BULK_DBS" not in os.environ:
@@ -72,7 +73,8 @@ def store_grades(grades, cfg=None):
     
     if cfg is None:
         cfg = core.tools.get_config(is_new_format=True)
-    engine = sa.create_engine(f"mariadb+mariadbconnector://moodle_user:{pwd}@{dbs}:3306/moodle", echo=True)
+    #engine = sa.create_engine(f"mariadb+mariadbconnector://moodle_user:{pwd}@{dbs}:3306/moodle", echo=True)
+    engine = mariadbconnector.connector.connect(host=dbs, database='moodle', user='moodle_user', password=pwd)
 
     uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     grades.assign(uptime=uptime).to_sql(table_name, engine, if_exists="replace")
