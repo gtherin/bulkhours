@@ -19,7 +19,7 @@ def gpt_evaluation(student_data, teacher_data, max_score=10):
 
     if gpt.evaluation_instructions is not None:
         print("")
-        return gpt.get_grade(student_data, teacher_data, max_score=max_score)
+        return gpt.get_grade(student_data, teacher_data, max_score)
 
     print("🚧Need to implement evaluation_instructions")
     return Grade()
