@@ -9,7 +9,7 @@ from .grade import Grade
 evaluation_instructions = None
 evaluation_openai_token = "YOUR_KEY"
 evaluation_replicate_token = "YOUR_KEY"
-evaluation_model = "gpt-3.5-turbo"
+evaluation_model = "gpt-3.5-turbo-0125"
 
 # fmt: off
 llms = {
@@ -131,7 +131,7 @@ def ask_gpt(
         "gpt-4-1106-preview",
         "gpt-4",
         "gpt-4-32k-0613",
-        "gpt-3.5-turbo-1106",
+        "gpt-3.5-turbo-0125",
         "image",
     ]:
         rofunc = ask_chat_gpt
@@ -174,11 +174,13 @@ def ask_gpt(
 
 
 def get_grade(student_data, teacher_data):
+
     if (
         "main_execution" in student_data.minfo
         and "main_execution" in teacher_data.minfo
         and evaluation_instructions is not None
     ):
+    
         prompt = f"""{evaluation_instructions}
 - question:\n<start>\n{teacher_data.get_reset()}\n</start>
 - actual solution:\n<end>\n{teacher_data.get_solution()}\n</end>
@@ -196,10 +198,11 @@ def get_grade(student_data, teacher_data):
             grade_color = matplotlib.colors.rgb2hex(
                 matplotlib.cm.get_cmap("RdBu")(grade / 10.0)
             )
-            comment = response.split("</grade>")[1]
+            comment = (response.split("<summary>"))[1].split("</summary>")[0]
+            #comment = response.split("</grade>")[1]
             IPython.display.display(
                 IPython.display.Markdown(
-                    f"#### <b>{user}: <font color='{grade_color}'>grade={grade}</font></b>\n{response}"
+                    f"#### <b>{user}: <font color='{grade_color}'>grade={grade}</font></b>\n{comment}"
                 )
             )
             return Grade(score=grade, comment=comment)

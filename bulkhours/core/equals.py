@@ -14,12 +14,12 @@ from .line_parser import LineParser
 from .cell_parser import CellParser
 
 
-def gpt_evaluation(student_data, teacher_data):
+def gpt_evaluation(student_data, teacher_data, max_score=10):
     from . import gpt
 
     if gpt.evaluation_instructions is not None:
         print("")
-        return gpt.get_grade(student_data, teacher_data)
+        return gpt.get_grade(student_data, teacher_data, max_score=max_score)
 
     print("🚧Need to implement evaluation_instructions")
     return Grade()
@@ -231,9 +231,9 @@ def student_evaluation_function(
     max_score = get_max_score(evaluation_code, execute=execute)
 
     if "admin.gpt_eval" in evaluation_code:
-        res = gpt_evaluation(student_data, teacher_data)
-        if normalize_score:
-            res.score *= max_score
+        res = gpt_evaluation(student_data, teacher_data, max_score=max_score)
+        #if normalize_score:
+        #    res.score *= max_score
 
         return res
 

@@ -363,23 +363,25 @@ def evaluate_all(
 
         # Don't manual data is available
         if student_data.is_manual_note():
-            score, src = student_data.minfo["grade_man"], " [MAN]"
+            comment = student_data.minfo["grade_man_comment"] if "grade_man_comment" in student_data.minfo else "To be discussed with evaluator"
+            grade = core.Grade(score=student_data.minfo["grade_man"], src="man", comment=comment)
         else:
-            score = core.equals.student_evaluation_function(
+            grade = core.equals.student_evaluation_function(
                 student_data,
                 teacher_data,
                 user=auser,
                 verbose=verbose,
                 execute=execute,
                 normalize_score=normalize_score,
-            ).score
+            )
 
             src = ""
-        print(f"\x1b[35m\x1b[1m({score}{src}), \x1b[m", end="")
-        grades.loc[u, cinfo.cell_id + ".n"] = score
+        print(f"\x1b[35m\x1b[1m({grade.score}{src}), \x1b[m", end="")
+        grades.loc[u, cinfo.cell_id + ".n"] = grade.score
+        grades.loc[u, cinfo.cell_id + ".c"] = grade.comment
 
         if user == "solution":
-            max_score = score
+            max_score = grade.score
 
     grad_name = (
         "grade_bot"
@@ -388,6 +390,8 @@ def evaluate_all(
     )
 
     answers.update_grades(cinfo.cell_id, grades, grad_name)
+
+    del grades[cinfo.cell_id + ".c"]
     grades = grades.drop(columns=["mail"]).set_index("auser").T
 
     core.Grade.set_static_style_info(minvalue=0.0, cmap=(cmap := "RdBu"))

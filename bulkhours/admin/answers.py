@@ -61,11 +61,33 @@ def get_answers(cell_id, update_git=False, verbose=False, aliases={}):
 
     return data
 
+def store_grades(grades, question, cfg=None):
 
-def update_grades(cell_id, grades, grade_name):
+    import os
+    import sqlalchemy as sa
+    import datetime
+
+    if "BULK_PWD" not in os.environ or "BULK_DBS" not in os.environ:
+        print(f"Database is not setup {question}")
+
+    pwd, dbs = os.environ["BULK_PWD"], os.environ["BULK_DBS"]
+    
+    if cfg is None:
+        cfg = core.tools.get_config(is_new_format=True)
+    engine = sa.create_engine(f"mariadb+mariadbconnector://moodle_user:{pwd}@{dbs}:3306/moodle", echo=True)
+    table_name = "bulk_" + core.firebase.get_question_id(question=question, cinfo=cfg)
+    uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    grades.assign(uptime=uptime).to_sql(table_name, engine, if_exists="replace")
+
+
+def update_grades(cell_id, grades, grade_name, db_storage=True):
     cfg = core.tools.get_config(is_new_format=True)
 
     uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+ 
+    if db_storage:
+        store_grades(grades, cell_id, cfg=cfg)
+
     for k in grades.index:
         update_note_in_db(
             cell_id,
@@ -74,16 +96,17 @@ def update_grades(cell_id, grades, grade_name):
             uptime,
             cfg=cfg,
             grade_name=grade_name,
+            grade_comment=grades[cell_id + ".c"][k],
         )
 
 
-def update_note_in_db(cell_id, user, grade, uptime, grade_name="grade", cfg=None):
+def update_note_in_db(cell_id, user, grade, uptime, grade_name="grade", grade_comment="", cfg=None):
     core.Grade.check_gradname_validity(grade_name)
 
     if not core.Grade.is_valid(grade):
         return
 
-    info = {grade_name: grade, grade_name + "_upd": uptime}
+    info = {grade_name: grade, grade_name + "_upd": uptime, grade_name + "_comment": grade_comment}
 
     try:
         return core.firebase.get_document(
@@ -130,4 +153,4 @@ def update_grade(cell_id, user, grade, verbose=True, grade_name="grade", comment
     with open(get_cfilename(cfg, cell_id), "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
-    update_note_in_db(cell_id, user, grade, uptime, grade_name=grade_name, cfg=cfg)
+    update_note_in_db(cell_id, user, grade, uptime, grade_name=grade_name, grade_comment=comment, cfg=cfg)

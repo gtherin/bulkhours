@@ -225,7 +225,7 @@ The database has been reset to the local file '{cfg["database"]}'.
         cfg["global"]["subject"] = cfg["subject"]
 
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
-        cfilename := tools.abspath(".safe.pyc")
+        cfilename := tools.safe(ext=True)
     )
     if type(cfg.database) == dict:
         with open(cfilename, "w") as f:
@@ -392,6 +392,7 @@ def send_answer_to_corrector(
     if update_time:
         kwargs.update({"update_time": uptime})
     if user == REF_USER and "grade_man" not in kwargs:
+        #TODO: CHANGE THAT SHITTY 10
         kwargs.update({"grade_man": 10, "grade_man_upd": uptime})
     else:
         kwargs = {
