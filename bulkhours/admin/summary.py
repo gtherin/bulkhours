@@ -65,13 +65,14 @@ def store_grades(grades, cfg=None):
     import sqlalchemy as sa
     import datetime
 
+    if cfg is None:
+        cfg = core.tools.get_config(is_new_format=True)
+
     if "BULK_PWD" not in os.environ or "BULK_DBS" not in os.environ:
-        print(f"Database is not setup {question}")
+        print(f"Database is not setup {cfg.subject}_{cfg.virtual_room}_{cfg.notebook_id}")
 
     pwd, dbs = os.environ["BULK_PWD"], os.environ["BULK_DBS"]
     
-    if cfg is None:
-        cfg = core.tools.get_config(is_new_format=True)
     engine = sa.create_engine(f"mariadb+mariadbconnector://moodle_user:{pwd}@{dbs}:3306/moodle", echo=False)
 
     uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
