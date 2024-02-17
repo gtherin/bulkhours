@@ -184,7 +184,7 @@ def get_grade(student_data, teacher_data, max_score):
         prompt = f"""{evaluation_instructions}
 - question:\n<start>\n{teacher_data.get_reset()}\n</start>
 - actual solution:\n<end>\n{teacher_data.get_solution()}\n</end>
-- student's solution:\n<answer>\n{student_data.get_solution()}\n</answer>\n""".replace("MAX_SCORE", max_score)
+- student's solution:\n<answer>\n{student_data.get_solution()}\n</answer>\n""".replace("MAX_SCORE", str(max_score))
 
         # print(prompt)
         response = ask_gpt(
