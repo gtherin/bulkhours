@@ -64,8 +64,8 @@ def get_answers(cell_id, update_git=False, verbose=False, aliases={}):
 def store_grades(grades, question, cfg=None):
 
     import os
-    #import sqlalchemy as sa
-    import mysql.connector as mariadbconnector
+    import sqlalchemy as sa
+    #import mysql.connector as mariadbconnector
     import datetime
 
     if "BULK_PWD" not in os.environ or "BULK_DBS" not in os.environ:
@@ -75,8 +75,9 @@ def store_grades(grades, question, cfg=None):
     
     if cfg is None:
         cfg = core.tools.get_config(is_new_format=True)
-    # engine = sa.create_engine(f"mariadb+mariadbconnector://moodle_user:{pwd}@{dbs}:3306/moodle", echo=True)
-    engine = mariadbconnector.connect(host=dbs, database='moodle', user='moodle_user', password=pwd)
+    engine = sa.create_engine(f"mariadb+mariadbconnector://moodle_user:{pwd}@{dbs}:3306/moodle", echo=True)
+    #engine = sa.create_engine(f"mysql+mysqlconnector://moodle_user:{pwd}@{dbs}:3306/moodle", echo=True)
+    #engine = mariadbconnector.connect(host=dbs, database='moodle', user='moodle_user', password=pwd)
     table_name = "bulk_" + core.firebase.get_question_id(question=question, cinfo=cfg)
     uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     grades.assign(uptime=uptime).to_sql(table_name, engine, if_exists="replace")
