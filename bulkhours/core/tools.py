@@ -236,6 +236,10 @@ def install_if_needed(package):
         return importlib.import_module(package)
 
     except ModuleNotFoundError:
+
+        if package == "mariadb":
+            os.system("sudo apt-get install -y libmariadb3 libmariadb-dev > /dev/null 2>&1")
+
         os.system(f"pip install {package} > /dev/null 2>&1")
         print(f"\x1b[37mpip install {package}\x1b[0m")
         import importlib
