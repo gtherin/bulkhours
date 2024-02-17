@@ -366,6 +366,7 @@ def evaluate_all(
         if student_data.is_manual_note():
             comment = student_data.minfo["grade_man_comment"] if "grade_man_comment" in student_data.minfo else "To be discussed with evaluator"
             grade = core.Grade(score=student_data.minfo["grade_man"], src="man", comment=comment)
+            comment = " [MAN]"
         else:
             grade = core.equals.student_evaluation_function(
                 student_data,
@@ -376,8 +377,8 @@ def evaluate_all(
                 normalize_score=normalize_score,
             )
 
-            src = ""
-        print(f"\x1b[35m\x1b[1m({grade.score}{src}), \x1b[m", end="")
+            comment = ""
+        print(f"\x1b[35m\x1b[1m({grade.score}{comment}), \x1b[m", end="")
         grades.loc[u, cinfo.cell_id + ".n"] = grade.score
         grades.loc[u, cinfo.cell_id + ".c"] = grade.comment
 
