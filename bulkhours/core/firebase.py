@@ -33,7 +33,25 @@ def get_question_id(question, sep="_", cinfo=None):
         + question
     )
 
+def get_engine(user=None, database=None, echo=False):
+    import sqlalchemy as sa
 
+    if user is None:
+        user = os.environ['BULK_DBU']
+    if database is None:
+        database = os.environ['BULK_DBT']
+    dbs = os.environ['BULK_DBS']
+    dbk = os.environ['BULK_DBK']
+    
+    return sa.create_engine(f"mariadb+mariadbconnector://{user}:{dbk}@{dbs}:3306/{database}", echo=echo)
+
+def read_sql(table_name, **kwargs):
+    return pd.read_sql(table_name, get_engine(**kwargs), index_col=0)
+
+def to_sql(df, table_name, if_exists="replace", **kwargs):
+    df.to_sql(table_name, get_engine(**kwargs), if_exists=if_exists)
+
+    
 class DbDocument:
     data_base_cache = None
     data_base_info = None
