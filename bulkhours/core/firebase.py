@@ -35,6 +35,7 @@ def get_question_id(question, sep="_", cinfo=None):
 
 def get_engine(user=None, database=None, echo=False):
     import sqlalchemy as sa
+    tools.install_if_needed("mariadb")
 
     if user is None:
         user = os.environ['BULK_DBU']
@@ -51,7 +52,7 @@ def read_sql(table_name, **kwargs):
 def to_sql(df, table_name, if_exists="replace", **kwargs):
     df.to_sql(table_name, get_engine(**kwargs), if_exists=if_exists)
 
-    
+
 class DbDocument:
     data_base_cache = None
     data_base_info = None
