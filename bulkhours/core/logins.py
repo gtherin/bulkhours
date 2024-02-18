@@ -94,6 +94,15 @@ def commercial(language="en", **kwargs):
         )
     )
 
+def init_from_token(token, ktoken, packages=None):
+
+    import jwt
+
+    # Get data
+    data = jwt.decode(jwt=token, key=ktoken, algorithms=["HS256"])
+
+    init_env(email=data["email"], notebook_id=data["notebook_id"], database=data["database"], packages=packages)
+
 
 def init_env(packages=None, plt_style="default", **kwargs):
     """Initialize the environment of the user
@@ -137,10 +146,10 @@ def init_env(packages=None, plt_style="default", **kwargs):
     info = init_prems(cfg)
     start_time = time.time()
 
-    if "BLK_PACKAGES_STATUS" not in os.environ:
+    if "BULK_PACKAGES_STATUS" not in os.environ:
         installer.install_dependencies(packages, start_time, tools.is_admin(cfg=cfg))
-        os.environ["BLK_PACKAGES_STATUS"] = "INITIALIZED"
-        os.environ["BLK_ROOT_DIR"] = os.environ["PWD"] if "PWD" in os.environ else os.environ["HOME"] + "/bulkhours"
+        os.environ["BULK_PACKAGES_STATUS"] = "INITIALIZED"
+        os.environ["BULK_ROOT_DIR"] = os.environ["PWD"] if "PWD" in os.environ else os.environ["HOME"] + "/bulkhours"
 
     colors.set_plt_style(plt_style)
     version = open(tools.abspath("bulkhours/__version__.py")).readlines()[0].split('"')[1]
@@ -187,7 +196,7 @@ except ModuleNotFoundError:
         import ipywidgets
         from .. import ml
 
-        os.environ["BLK_HUGGINGFACE_TOKEN"] = tools.get_value("huggingface_token")
+        os.environ["BULK_HUGGINGFACE_TOKEN"] = tools.get_value("huggingface_token")
         external_services += "huggingface 🤗"
 
         with ipywidgets.Output():
@@ -198,4 +207,4 @@ except ModuleNotFoundError:
             print(external_services + "\033[00m")
     contexts.generate_empty_context("student")
     contexts.generate_empty_context("teacher")
-    os.environ["BLK_GLOBAL_STATUS"] = f"INITIALIZED"
+    os.environ["BULK_GLOBAL_STATUS"] = f"INITIALIZED"
