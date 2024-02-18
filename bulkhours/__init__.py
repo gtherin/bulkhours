@@ -36,7 +36,7 @@ from . import math  # noqa
 
 from .ecox.trading import *  # noqa
 
-from .core.logins import init_env  # noqa
+from .core.logins import init_env, init_from_token  # noqa
 from .core.tools import dmd  # noqa
 from .core.black import format_with_black  # noqa
 
