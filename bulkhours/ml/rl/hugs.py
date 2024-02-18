@@ -2,7 +2,7 @@ import os
 
 
 def is_huggingface_installed(verbose=False):
-    if "BLK_HUGGINGFACE_TOKEN" not in os.environ:
+    if "BULK_HUGGINGFACE_TOKEN" not in os.environ:
         return False
     try:
         import huggingface_hub
@@ -60,7 +60,7 @@ class PPOHugs:
         print("\033[92mConnexion opened to huggingface 🤗 hub\033[00m")
 
         if is_huggingface_installed(verbose=verbose):
-            self.login(pass_code=os.environ["BLK_HUGGINGFACE_TOKEN"] if pass_code is None else pass_code)
+            self.login(pass_code=os.environ["BULK_HUGGINGFACE_TOKEN"] if pass_code is None else pass_code)
             # self.env = self.make_vec_env()
             if type(init) == str:
                 self.pull(init)

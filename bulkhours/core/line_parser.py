@@ -253,7 +253,7 @@ class LineParser:
 
         if is_cell:
             CacheManager.objects["current_cell"] = self.cell_id
-            os.environ["BLK_CELL_ID"] = self.cell_id
+            os.environ["BULK_CELL_ID"] = self.cell_id
 
     @staticmethod
     def get_func_args(code, func_id="bulkhours.is_equal"):
