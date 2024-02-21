@@ -230,7 +230,7 @@ def student_evaluation_function(
     # Run the teacher code and get max_score from it
     max_score = get_max_score(evaluation_code, execute=execute)
 
-    if "admin.gpt_eval" in evaluation_code:
+    if "admin.gpt_eval" in evaluation_code or "bulkhours.gpt_evaluation" in evaluation_code:
         res = gpt_evaluation(student_data, teacher_data, max_score=max_score)
         #if normalize_score:
         #    res.score *= max_score
@@ -250,7 +250,7 @@ def student_evaluation_function(
         grade = Grade(
             score=float(os.environ["FINAL_SCORE"]),
             comment="""Analytical evaluation failed.
-Somme more comments should ba available soon.                           
+Some more comments should be available soon.                           
 """,
         )
     else:
@@ -259,11 +259,11 @@ Somme more comments should ba available soon.
             grade = Grade(
                 score=float(os.environ["FINAL_SCORE"]),
                 comment="""Analytical evaluation failed.
-Somme more comments should ba available soon.                           
+Some more comments should be available soon.                           
 """,
             )
         except:
-            grade = Grade(score=Grade.EVALUATION_CRASHED, comment="No answer available")
+            grade = Grade(score=Grade.EVALUATION_CRASHED, comment="Automatic evaluation was not performed.\nPlease have a closer look to the answer")
 
     if not do_plot:
         plt.ion()
