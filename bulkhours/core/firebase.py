@@ -52,10 +52,11 @@ def get_engine(user=None, database=None, echo=False):
     
     return sa.create_engine(f"mariadb+mariadbconnector://{user}:{dbk}@{dbs}:3306/{database}", echo=echo)
 
-def read_sql(table_name, index_col=0, **kwargs):
+def read_sql(table_name, index_col=None, **kwargs):
     return pd.read_sql(table_name, get_engine(**kwargs), index_col=index_col)
 
 def to_sql(df, table_name, if_exists="replace", **kwargs):
+    df = df.rename(columns={"mail": "email", "uptime": "update_time"})
     df.to_sql(table_name, get_engine(**kwargs), if_exists=if_exists)
 
 
