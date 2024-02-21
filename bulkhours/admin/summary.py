@@ -131,11 +131,11 @@ def make_me_beautiful(
         if cmap is not None
         else tools.sort_by(data, sorted_by=sorted_by)
     )
-    uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    update_time = core.firebase.get_paris_time()
 
     if db_storage:
         print("Summary saving to db...")
-        core.firebase.to_sql(data.assign(uptime=uptime), f"{cfg.notebook_id}__grades", database=f"bulk_{cfg.subject}_{cfg.virtual_room}", if_exists="replace", echo=True)
+        core.firebase.to_sql(data.assign(update_time=update_time), f"{cfg.notebook_id}__grades", database=f"bulk_{cfg.subject}_{cfg.virtual_room}", if_exists="replace", echo=True)
 
     if filename is None:
         filename = f"notes_{cfg.subject}_{cfg.virtual_room}_{cfg.notebook_id}.csv"
