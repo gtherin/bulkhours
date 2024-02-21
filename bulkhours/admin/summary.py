@@ -1,13 +1,12 @@
 import json
 import IPython
 import pandas as pd
+import datetime
 
 from .. import core
 from .exercice import Exercices, Exercice
 from . import answers as aanswers
 from . import tools
-
-
 
 
 def get_num_answers(cfg):
@@ -57,27 +56,6 @@ def get_groups(aliases={}, virtual_rooms=[None]):
             aliases[k] = v
 
     return dict(sorted(aliases.items(), key=lambda x: x[1]))
-
-
-def store_grades(grades, cfg=None):
-
-    import os
-    import sqlalchemy as sa
-    import datetime
-
-    if cfg is None:
-        cfg = core.tools.get_config(is_new_format=True)
-
-    if "BULK_PWD" not in os.environ or "BULK_DBS" not in os.environ:
-        print(f"Database is not setup {cfg.subject}_{cfg.virtual_room}_{cfg.notebook_id}")
-
-    pwd, dbs = os.environ["BULK_PWD"], os.environ["BULK_DBS"]
-    
-    engine = sa.create_engine(f"mariadb+mariadbconnector://moodle_user:{pwd}@{dbs}:3306/moodle", echo=False)
-
-    uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    table_name = f"bulk_{cfg.subject}_{cfg.virtual_room}_{cfg.notebook_id}__grades"
-    grades.assign(uptime=uptime).to_sql(table_name, engine, if_exists="replace")
 
 
 def summary(
@@ -153,9 +131,11 @@ def make_me_beautiful(
         if cmap is not None
         else tools.sort_by(data, sorted_by=sorted_by)
     )
+    uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     if db_storage:
-        store_grades(data, cfg=cfg)
+        print("Summary saving to db...")
+        core.firebase.to_sql(data.assign(uptime=uptime), f"{cfg.notebook_id}__grades", database=f"bulk_{cfg.subject}_{cfg.virtual_room}", if_exists="replace", echo=True)
 
     if filename is None:
         filename = f"notes_{cfg.subject}_{cfg.virtual_room}_{cfg.notebook_id}.csv"
