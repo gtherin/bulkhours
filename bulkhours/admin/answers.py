@@ -61,24 +61,6 @@ def get_answers(cell_id, update_git=False, verbose=False, aliases={}):
 
     return data
 
-def store_grades(grades, question, cfg=None):
-
-    import os
-    import sqlalchemy as sa
-    import datetime
-
-    if "BULK_PWD" not in os.environ or "BULK_DBS" not in os.environ:
-        print(f"Database is not setup {question}")
-
-    pwd, dbs = os.environ["BULK_PWD"], os.environ["BULK_DBS"]
-    
-    if cfg is None:
-        cfg = core.tools.get_config(is_new_format=True)
-    engine = sa.create_engine(f"mariadb+mariadbconnector://moodle_user:{pwd}@{dbs}:3306/moodle", echo=False)
-    table_name = "bulk_" + core.firebase.get_question_id(question=question, cinfo=cfg)
-    uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    grades.assign(uptime=uptime).to_sql(table_name, engine, if_exists="replace")
-
 
 def update_grades(cell_id, grades, grade_name, db_storage=True):
     cfg = core.tools.get_config(is_new_format=True)
@@ -86,7 +68,8 @@ def update_grades(cell_id, grades, grade_name, db_storage=True):
     uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
  
     if db_storage:
-        store_grades(grades, cell_id, cfg=cfg)
+        raise Error("Should be deprecated.")
+        core.firebase.to_sql(grades.assign(uptime=uptime), f"{cfg.notebook_id}_{cell_id}_grades", database=f"bulk_{cfg.subject}_{cfg.virtual_room}", if_exists="replace", echo=True)
 
     for k in grades.index:
         update_note_in_db(

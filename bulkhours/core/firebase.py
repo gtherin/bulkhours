@@ -1,6 +1,7 @@
 import os
 import json
 import datetime
+import pandas as pd
 from argparse import Namespace
 from . import tools
 from .tools import REF_USER
@@ -37,17 +38,22 @@ def get_engine(user=None, database=None, echo=False):
     import sqlalchemy as sa
     tools.install_if_needed("mariadb")
 
-    if user is None:
+    if user is None and "BULK_DBU" in os.environ:
         user = os.environ['BULK_DBU']
-    if database is None:
+    elif user is None and "BULK_DBU" not in os.environ:
+        user = "moodle_user"
+    if database is None and "BULK_DBT" in os.environ:
         database = os.environ['BULK_DBT']
+    elif database is None and "BULK_DBT" not in os.environ:
+        database = "moodle"
+
     dbs = os.environ['BULK_DBS']
     dbk = os.environ['BULK_DBK']
     
     return sa.create_engine(f"mariadb+mariadbconnector://{user}:{dbk}@{dbs}:3306/{database}", echo=echo)
 
-def read_sql(table_name, **kwargs):
-    return pd.read_sql(table_name, get_engine(**kwargs), index_col=0)
+def read_sql(table_name, index_col=0, **kwargs):
+    return pd.read_sql(table_name, get_engine(**kwargs), index_col=index_col)
 
 def to_sql(df, table_name, if_exists="replace", **kwargs):
     df.to_sql(table_name, get_engine(**kwargs), if_exists=if_exists)

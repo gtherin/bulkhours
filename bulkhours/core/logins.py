@@ -208,3 +208,4 @@ except ModuleNotFoundError:
     contexts.generate_empty_context("student")
     contexts.generate_empty_context("teacher")
     os.environ["BULK_GLOBAL_STATUS"] = f"INITIALIZED"
+    return cfg
