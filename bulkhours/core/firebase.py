@@ -53,11 +53,16 @@ def get_engine(user=None, database=None, echo=False):
     return sa.create_engine(f"mariadb+mariadbconnector://{user}:{dbk}@{dbs}:3306/{database}", echo=echo)
 
 def read_sql(table_name, index_col=None, **kwargs):
-    return pd.read_sql(table_name, get_engine(**kwargs), index_col=index_col)
+    engine = get_engine(**kwargs)
+    df = pd.read_sql(table_name, get_engine(**kwargs), index_col=index_col)
+    engine.dispose()
+    return df
 
 def to_sql(df, table_name, if_exists="replace", **kwargs):
     df = df.rename(columns={"mail": "email", "uptime": "update_time"})
-    df.to_sql(table_name, get_engine(**kwargs), if_exists=if_exists)
+    engine = get_engine(**kwargs)
+    df.to_sql(table_name, engine, if_exists=if_exists)
+    engine.dispose()
 
 
 class DbDocument:
