@@ -34,7 +34,7 @@ def get_question_id(question, sep="_", cinfo=None):
         + question
     )
 
-def get_engine(user=None, database=None, echo=False):
+def get_engine(user=None, database=None, **kwargs):
     import sqlalchemy as sa
     tools.install_if_needed("mariadb")
 
@@ -48,20 +48,25 @@ def get_engine(user=None, database=None, echo=False):
         database = "moodle"
 
     dbs = os.environ['BULK_DBS']
-    dbk = os.environ['BULK_DBK']
+    dbk = os.environ['BULK_PWD']
     
-    return sa.create_engine(f"mariadb+mariadbconnector://{user}:{dbk}@{dbs}:3306/{database}", echo=echo)
+    return sa.create_engine(f"mariadb+mariadbconnector://{user}:{dbk}@{dbs}:3306/{database}", **kwargs)
 
-def read_sql(table_name, index_col=None, **kwargs):
-    engine = get_engine(**kwargs)
-    df = pd.read_sql(table_name, get_engine(**kwargs), index_col=index_col)
+
+ENGINE = get_engine()
+
+def read_sql(request, echo=False, **kwargs):
+    engine = ENGINE # get_engine(echo=echo, pool_size=10, max_overflow=20)
+    with engine.connect() as connection:
+        df = pd.read_sql(request, connection, **kwargs)
     engine.dispose()
     return df
 
 def to_sql(df, table_name, if_exists="replace", **kwargs):
     df = df.rename(columns={"mail": "email", "uptime": "update_time"})
-    engine = get_engine(**kwargs)
-    df.to_sql(table_name, engine, if_exists=if_exists)
+    engine = ENGINE
+    with engine.begin() as connection:
+        df.to_sql(table_name, connection, if_exists=if_exists)
     engine.dispose()
 
 
