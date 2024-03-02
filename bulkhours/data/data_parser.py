@@ -107,6 +107,8 @@ def get_data_from_file(raw_data, **kwargs):
         return pd.read_csv(f"https://docs.google.com/spreadsheets/d/{info[0]}/export?gid={info[1]}&format=csv")
     elif ext in ["csv"]:
         return pd.read_csv(filename)
+    elif ext in ["json"]:
+        return pd.read_json(filename)
     elif ext in ["h5"]:
         if "key" in kwargs:
             return np.array(h5py.File(filename, "r")[kwargs["key"]][:])

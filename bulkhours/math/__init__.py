@@ -48,3 +48,23 @@ Merci beaucoup de reporter les erreurs à <A HREF="mailto:guillaume.therin@ipsa.
 </table>
 """
         )
+
+
+def plot_month_temperatures(month):
+    import geopandas
+    import calendar
+    from .. import data
+
+    months_names = dict(zip([calendar.month_name[i] for i in range(1, 13)], range(1, 13)))
+
+    if type(month) == str:
+        if month not in months_names:
+            print(f"Pick a month in the following list: {months_names[month]}")
+            return 
+        month = months_names[month]
+        
+    #cities_data = cities
+    geo_data = data.get_data("climate.mapeuropemonthly", credit=False)
+    ax = data.geo_plot(data=geo_data, timeopt="last", column=month, figsize=(10, 5))
+    gdf = geopandas.GeoDataFrame(geo_data[["City"]], geometry=geopandas.points_from_xy(geo_data.Longitude, geo_data.Latitude)).dropna()
+    gdf.plot(color="#00A099", ax=ax, alpha=0.4);
