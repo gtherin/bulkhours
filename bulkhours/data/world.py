@@ -9,6 +9,7 @@ def get_mapgeneric(df):
     if "continent" in df.columns:
         del df["continent"]
 
+    df = df.rename(columns={"Country": "country"})
     df["country"] = df["country"].str.replace("United States", "United States of America")
     df["country"] = df["country"].str.replace("Democratic Republic of Congo", "Dem. Rep. Congo")
 
