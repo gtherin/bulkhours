@@ -34,39 +34,48 @@ def get_question_id(question, sep="_", cinfo=None):
         + question
     )
 
-def get_engine(user=None, database=None, **kwargs):
+def get_engine(database=None, **kwargs):
     import sqlalchemy as sa
     tools.install_if_needed("mariadb")
 
-    if user is None and "BULK_DBU" in os.environ:
-        user = os.environ['BULK_DBU']
-    elif user is None and "BULK_DBU" not in os.environ:
-        user = "moodle_user"
-    if database is None and "BULK_DBT" in os.environ:
-        database = os.environ['BULK_DBT']
-    elif database is None and "BULK_DBT" not in os.environ:
-        database = "moodle"
-
-    dbs = os.environ['BULK_DBS']
-    dbk = os.environ['BULK_PWD']
-    
+    user, dbs,dbk  = os.environ['BULK_DUSER'], os.environ['BULK_DBS'], os.environ['BULK_DTOKEN']
     return sa.create_engine(f"mariadb+mariadbconnector://{user}:{dbk}@{dbs}:3306/{database}", **kwargs)
 
 
-ENGINE = get_engine()
+ENGINE = get_engine(database="moodle", echo=False)
+BENGINE = get_engine(database="bulkdb", echo=True)
 
-def read_sql(request, echo=False, **kwargs):
-    engine = ENGINE # get_engine(echo=echo, pool_size=10, max_overflow=20)
+def read_sql(request, echo=False, usebkdb=False, **kwargs):
+    engine = BENGINE if usebkdb else ENGINE # get_engine(echo=echo, pool_size=10, max_overflow=20)
     with engine.connect() as connection:
         df = pd.read_sql(request, connection, **kwargs)
     engine.dispose()
     return df
 
-def to_sql(df, table_name, if_exists="replace", **kwargs):
+def to_sql(df, table_name, usebkdb=False, if_exists="replace", **kwargs):
+    engine = BENGINE if usebkdb else ENGINE # get_engine(echo=echo, pool_size=10, max_overflow=20)
+    print("DEBUG", engine, table_name, if_exists)
     df = df.rename(columns={"mail": "email", "uptime": "update_time"})
-    engine = ENGINE
-    with engine.begin() as connection:
-        df.to_sql(table_name, connection, if_exists=if_exists)
+
+    if if_exists == "update_or_insert":
+        dfold = read_sql(table_name, engine)
+        indexes = df.index.names
+        if not dfold.empty:
+            df = pd.concat([dfold.set_index(indexes).assign(new=0), df.assign(new=1)], axis=1)
+
+        # TODO: make it work
+        with engine.begin() as connection:
+            #df.to_sql(table_name + "_tmp", connection, if_exists="replace")
+            df.to_sql(table_name, connection, if_exists="replace")
+        #engine.dispose()
+
+        #with engine.begin() as connection:
+        #    sql = f"""update moodle.{table_name} as f set token = t.token FROM {table_name}_tmp as t where f.subject = t.subject and f.key = t.key"""
+        #    connection.execute(sql)
+
+    else:
+        with engine.begin() as connection:
+            df.to_sql(table_name, connection, if_exists=if_exists)
     engine.dispose()
 
 
