@@ -50,7 +50,7 @@ Merci beaucoup de reporter les erreurs à <A HREF="mailto:guillaume.therin@ipsa.
         )
 
 
-def plot_month_temperatures(month):
+def plot_month_temperatures(month, **kwargs):
     import geopandas
     import calendar
     from .. import data
@@ -65,6 +65,6 @@ def plot_month_temperatures(month):
         
     #cities_data = cities
     geo_data = data.get_data("climate.mapeuropemonthly", credit=False)
-    ax = data.geo_plot(data=geo_data, timeopt="last", column=month, figsize=(10, 5))
+    ax = data.geo_plot(data=geo_data, timeopt="last", column=month, figsize=(10, 5), **kwargs)
     gdf = geopandas.GeoDataFrame(geo_data[["City"]], geometry=geopandas.points_from_xy(geo_data.Longitude, geo_data.Latitude)).dropna()
     gdf.plot(color="#00A099", ax=ax, alpha=0.4);
