@@ -38,9 +38,10 @@ def get_engine(database=None, **kwargs):
     import sqlalchemy as sa
     tools.install_if_needed("mariadb")
 
-    user, dbs,dbk  = os.environ['BULK_DUSER'], os.environ['BULK_DBS'], os.environ['BULK_DTOKEN']
+    if "BULK_DUSER" not in os.environ:
+        return None
+    user, dbs, dbk  = os.environ['BULK_DUSER'], os.environ['BULK_DBS'], os.environ['BULK_DTOKEN']
     return sa.create_engine(f"mariadb+mariadbconnector://{user}:{dbk}@{dbs}:3306/{database}", **kwargs)
-
 
 ENGINE = get_engine(database="moodle", echo=False)
 BENGINE = get_engine(database="bulkdb", echo=True)
