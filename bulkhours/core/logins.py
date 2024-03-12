@@ -103,12 +103,7 @@ def init_from_token(token, ktoken, packages=None):
     if data["email"] != data["email"]:
         raise Exception(f"Identity {data['email']}is not the expected one")
 
-    init_env(subject=data["subject"], 
-             notebook_id=data["notebook_id"], 
-             email=data["email"], 
-             database=data["database"], 
-             virtual_room=data["virtual_room"], 
-             packages=packages)
+    init_env(packages=packages, **data)
 
 
 def init_env(packages=None, plt_style="default", **kwargs):
