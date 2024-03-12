@@ -212,13 +212,7 @@ def is_admin(cfg=None):
     if cfg is None:
         cfg = get_config(is_new_format=True)
 
-    if "is_demo_admin" in cfg.data and cfg.data["is_demo_admin"]:
-        return True
-    return (
-        "admin_token" in cfg.data["global"]
-        and "admins" in cfg.data["global"]
-        and cfg.data["email"] in cfg.data["global"]["admins"]
-    )
+    return "admins" in cfg.data["global"] and cfg.data["email"] in cfg.data["global"]["admins"]
 
 
 def format_opt(label, raw2norm=True):

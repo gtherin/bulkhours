@@ -237,8 +237,6 @@ def init_database(config) -> None:
 
     cfg = tools.get_config(is_new_format=True, **config)
 
-    if "is_admin" in cfg:
-        cfg["is_demo_admin"] = cfg["is_admin"]
 
     if "global" not in cfg:
         cfg["global"] = {}
@@ -304,27 +302,8 @@ The database has been reset to the local file '{cfg["database"]}'.
 
     if cfg.notebook_id:
         cfg = init_config(cfg.notebook_id, cfg)
-    if "security_level" not in cfg:
-        cfg["security_level"] = 0
 
-    cfg = add_user_to_virtual_room(cfg["email"], cfg)
     return tools.update_config(cfg)
-
-
-def add_user_to_virtual_room(user, cfg):
-    if cfg["security_level"] == 0 or user == REF_USER:
-        return cfg
-
-    def get_users(user, vroom):
-        return user if vroom == "" else vroom + ";" + user
-
-    if "is_demo_admin" in cfg and user not in cfg.g["admins"]:
-        cfg["global"]["admins"] = get_users(user, cfg.g["admins"])
-    if "is_demo_admin" not in cfg and user not in cfg.g[cfg.virtual_room]:
-        cfg["global"][cfg.virtual_room] = get_users(user, cfg.g[cfg.virtual_room])
-
-    save_config("global", cfg)
-    return cfg
 
 
 def get_collection(question=None, question_id=None, cinfo=None):
@@ -397,8 +376,6 @@ def send_answer_to_corrector(
     ):
         config[config["notebook_id"]]["exercices"] += ";" + cinfo.cell_id
         save_config(config.notebook_id, config)
-
-    config = add_user_to_virtual_room(config["email"], config)
 
     if "force" in kwargs and kwargs["force"]:
         pass
