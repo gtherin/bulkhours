@@ -100,8 +100,15 @@ def init_from_token(token, ktoken, packages=None):
 
     # Get data
     data = jwt.decode(jwt=token, key=ktoken, algorithms=["HS256"])
+    if data["email"] != data["email"]:
+        raise Exception(f"Identity {data['email']}is not the expected one")
 
-    init_env(email=data["email"], notebook_id=data["notebook_id"], database=data["database"], packages=packages)
+    init_env(subject=data["subject"], 
+             notebook_id=data["notebook_id"], 
+             email=data["email"], 
+             database=data["database"], 
+             virtual_room=data["virtual_room"], 
+             packages=packages)
 
 
 def init_env(packages=None, plt_style="default", **kwargs):
