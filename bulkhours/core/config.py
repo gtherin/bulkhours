@@ -6,9 +6,12 @@ class Config:
     def __init__(self, config={}):
         # Convert from Namespace
         self.data = vars(config) if type(config) != dict else config
-        self.data["isfr"] = True
-        if "global" in self.data and "language" in self.data["global"] and self.data["global"]["language"] != "fr":
+        if "global" not in self.data:
+            self.data["global"] = {}
+        if "language" in self.data["global"] and self.data["global"]["language"] != "fr":
             self.data["isfr"] = False
+        else:
+            self.data["isfr"] = True
 
     @property
     def show_help(self):
@@ -32,7 +35,10 @@ class Config:
         self.data[key] = item
 
     def __getitem__(self, key):
-        return self.data[key]
+        if self.has_key(key):
+            return self.data[key]
+        else:
+            return None
 
     def __repr__(self):
         return repr(self.data)

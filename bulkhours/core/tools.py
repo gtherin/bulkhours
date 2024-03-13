@@ -174,10 +174,11 @@ def get_config(
 ):
     """Important to copy the config"""
     if config is None:
-        config = {}  # Config()
+        config = {}
         if os.path.exists(jsonfile := safe()) and not from_scratch:
             with open(jsonfile) as json_file:
                 config.update(json.load(json_file))
+        config = Config()
 
     # Convert from Namespace
     if type(config) != dict:
@@ -211,6 +212,8 @@ def get_value(key, config=None):
 def is_admin(cfg=None):
     if cfg is None:
         cfg = get_config(is_new_format=True)
+    if cfg is None or "global" not in cfg.data:
+        return False
 
     return "admins" in cfg.data["global"] and cfg.data["email"] in cfg.data["global"]["admins"]
 
