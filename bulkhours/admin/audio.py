@@ -149,7 +149,7 @@ def get_audio(exo, output, update_git=False):
     https://air.ghost.io/recording-to-an-audio-file-using-html5-and-js/
     https://stackoverflow.com/a/49019356
     """
-    cinfo = core.tools.get_config(is_namespace=True)
+    cinfo = core.tools.get_config()
 
     import IPython
     import ffmpeg

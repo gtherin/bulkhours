@@ -164,38 +164,11 @@ def eval_code(code):
         return exec(code)
 
 
-def get_config(
-    config=None,
-    do_update=False,
-    from_scratch=False,
-    is_namespace=False,
-    is_new_format=False,
-    **kwargs,
-):
-    """Important to copy the config"""
+def get_config(config=None, is_new_format=False, **kwargs):
     if config is None:
-        config = {}
-        if os.path.exists(jsonfile := safe()) and not from_scratch:
+        if os.path.exists(jsonfile := safe()):
             with open(jsonfile) as json_file:
-                config.update(json.load(json_file))
-        config = Config()
-
-    # Convert from Namespace
-    if type(config) != dict:
-        config = vars(config)
-
-    config.update(kwargs)
-    if "email" in config:
-        config["email"] = config["email"].lower()
-
-    if do_update:
-        with open(safe(), "w", encoding="utf-8") as f:
-            json.dump(config, f, ensure_ascii=False, indent=4)
-
-    if is_namespace:
-        return Namespace(**config)
-    if is_new_format:
-        return Config(config)
+                return Config(json.load(json_file))
 
     return config
 
@@ -203,11 +176,9 @@ def get_config(
 def get_value(key, config=None):
     if config is None:
         config = get_config()
-    # return config.get(key)
     if key in config:
         return config.get(key)
     if type(config) == dict:
-        print(config)
         return config["global"].get(key)
     else:
         return config.g.get(key)
@@ -216,10 +187,11 @@ def get_value(key, config=None):
 def is_admin(cfg=None):
     if cfg is None:
         cfg = get_config(is_new_format=True)
-    if cfg is None or "global" not in cfg.data:
+    if cfg is None:
         return False
-
-    return "admins" in cfg.data["global"] and cfg.data["email"] in cfg.data["global"]["admins"]
+    
+    data = cfg if type(cfg) == dict else cfg.data
+    return "global" in data and "admins" in data["global"] and data["email"] in data["global"]["admins"]
 
 
 def format_opt(label, raw2norm=True):

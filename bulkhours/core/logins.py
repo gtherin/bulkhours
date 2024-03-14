@@ -31,9 +31,10 @@ def init_prems(config):
         info += " = %s" % str(join.join(vals))
         return info
 
-    path["db"] = (
-        config["database"].split("@")[0] + "@" if "@" in config["database"] else config["database"].split("/")[-1]
-    )
+    if 0:
+        path["db"] = (
+            config["database"].split("@")[0] + "@" if "@" in config["database"] else config["database"].split("/")[-1]
+        )
     path["subject"] = config["subject"]
     path["virtual_room"] = config["virtual_room"]
     path["nb_id"] = config["notebook_id"]
