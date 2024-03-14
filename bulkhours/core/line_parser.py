@@ -171,7 +171,7 @@ class LineParser:
 
         # get options
         self.line, cell = line, cell_source
-        cfg = tools.get_config(is_new_format=True)
+        cfg = tools.get_config()
         self.is_admin = tools.is_admin(cfg=cfg)
 
         if opts_line != "":
