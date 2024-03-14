@@ -1,4 +1,4 @@
-// BKRESET.SPLIT:efree.h
+// BULKHOURS.SPLIT:efree.h
 #include <iostream>
 using namespace std;
 
@@ -6,20 +6,20 @@ using namespace std;
 class EFree {
   // ...
 };
-// BKRESET.SPLIT:efree.cpp
+// BULKHOURS.SPLIT:efree.cpp
 #include "efree.h"
 
 // Function can be implemented from outside the declaration
 // ...
 
-// BKRESET.SPLIT:main.cpp
+// BULKHOURS.SPLIT:main.cpp
 #include "efree.h"
 
 int main() {
   EFree myObj;
   // ...
 }
-// BKRESET.SPLIT:Makefile
+// BULKHOURS.SPLIT:Makefile
 efree.o: efree.h efree.cpp
 	@g++ -c efree.cpp
 

@@ -1,4 +1,4 @@
-// BKRESET.SPLIT:quadrilater.h
+// BULKHOURS.SPLIT:quadrilater.h
 #include <iostream>
 #include <string>
 
@@ -10,7 +10,7 @@ class Quadrilateral {
 };
 // Define Trapezoid, Rectangle and Square classes: ...
 
-// BKRESET.SPLIT:quadrilater.cpp
+// BULKHOURS.SPLIT:quadrilater.cpp
 #include "quadrilater.h"
 
 int main() {
@@ -21,7 +21,7 @@ int main() {
 
   return 0;
 }
-// BKRESET.SPLIT:Makefile
+// BULKHOURS.SPLIT:Makefile
 quadrilater.o: quadrilater.h quadrilater.cpp
 	@g++ -c quadrilater.cpp
 
