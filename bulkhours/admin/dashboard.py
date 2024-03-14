@@ -189,7 +189,7 @@ class WidgetDashboard(core.WidgetTextArea):
         )
 
     def delete_solution_on_click(self, output, update_git=True, update_db=True):
-        cinfo = core.tools.get_config(is_namespace=True)
+        cinfo = core.tools.get_config()
         core.firebase.delete_documents(cinfo, self.ws["exercices"].value, verbose=True)
 
     def submit_on_click(self, output):

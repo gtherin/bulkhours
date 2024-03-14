@@ -232,76 +232,43 @@ def init_config(config_id, cfg):
     return cfg
 
 
-def init_database(config) -> None:
+def init_database(cfg) -> None:
     from .installer import get_tokens
 
-    cfg = tools.get_config(is_new_format=True, **config)
-
-
-    if "global" not in cfg:
-        cfg["global"] = {}
-
-    if "database" not in cfg or cfg["database"] is None:
-        cfg["database"] = DbDocument.compliant_fields["session"]["database"]
-
-    if "bkache@" in cfg["database"] or "bkloud@" in cfg["database"]:
-        tokens = get_tokens(cfg["database"], verbose=False)
-        if len(tokens) == 0:
-            cfg["database"] = DbDocument.compliant_fields["session"]["database"]
-
-            print(
-                f"""⚠️\x1b[41m\x1b[37mYour token does not seem to be valid anymore.\x1b[0m⚠️ 
+    tokens = get_tokens(cfg["database"], verbose=False)
+    if len(tokens) == 0:
+        print(
+            f"""⚠️\x1b[41m\x1b[37mYour token does not seem to be valid anymore.\x1b[0m⚠️ 
 Check that your token is still valid (contact: contact@bulkhours.fr).
 The database has been reset to the local file '{cfg["database"]}'.
 """
-            )
-        else:
-            cfg.data["global"].update(**tokens)
-
-    for k, v in DbDocument.compliant_fields["session"].items():
-        if k not in cfg:
-            if k in cfg["global"]:
-                cfg[k] = cfg["global"][k]
-            else:
-                cfg[k] = v
-
-    if "subject" not in cfg["global"]:
-        cfg["global"]["subject"] = cfg["subject"]
-
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
-        cfilename := tools.safe(ext=True)
-    )
-    if type(cfg.database) == dict:
-        with open(cfilename, "w") as f:
-            json.dump(cfg.database, f, ensure_ascii=False, indent=4)
-    elif "bkloud@" in cfg.database:
-        with open(cfilename, "w") as f:
-            cols = DbDocument.compliant_fields["bkloud"]
-            json.dump(
-                {k: v for k, v in cfg["global"].items() if k in cols},
-                f,
-                ensure_ascii=False,
-                indent=4,
-            )
-    else:
-        datafile = (
-            cfg["global"]["data_cache"]
-            if "data_cache" in cfg["global"]
-            else cfg.database
         )
-        datafile = tools.abspath(datafile)
+        return
 
-        DbDocument.set_cache_data(datafile)
+    # Configure  database
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (cfilename := tools.safe(ext=True))
+    with open(cfilename, "w") as f:
+        json.dump({k: tokens[k] for k in DbDocument.compliant_fields["bkloud"]}, f, ensure_ascii=False, indent=4)
 
-    cfg = init_config("global", cfg)
-    if "virtual_room" not in cfg:
-        if "virtual_room" in cfg["global"]:
-            cfg["virtual_room"] = cfg["global"]["virtual_room"]
-        else:
-            cfg["virtual_room"] = cfg["global"]["virtual_rooms"].split(";")[0]
+    # Get global info
+    cfg["global"] = get_document(question_id=cfg["subject"] + "_info", user="global").get().to_dict()
+    #cfg["language"] = cfg["global"]["language"]
 
-    if cfg.notebook_id:
-        cfg = init_config(cfg.notebook_id, cfg)
+    # Get notebook info
+    ndata = get_document(question_id=cfg["subject"] + "_info", user=cfg["notebook_id"]).get().to_dict()
+    for k, v in DbDocument.compliant_fields["notebook"].items():
+        cfg[k] = ndata[k] if k in ndata else v
+
+
+    tools.update_config(cfg)
+
+    #for k, v in DbDocument.compliant_fields["session"].items():
+    #    cfg[k] = cfg[k] if k in cfg else tokens[k]
+
+    #cfg = init_config("global", cfg)
+
+    #if cfg.notebook_id:
+    #    cfg = init_config(cfg.notebook_id, cfg)
 
     return tools.update_config(cfg)
 
