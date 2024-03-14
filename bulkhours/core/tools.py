@@ -207,6 +207,7 @@ def get_value(key, config=None):
     if key in config:
         return config.get(key)
     if type(config) == dict:
+        print(config)
         return config["global"].get(key)
     else:
         return config.g.get(key)
