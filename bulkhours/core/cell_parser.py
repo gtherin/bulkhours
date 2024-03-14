@@ -7,29 +7,30 @@ from . import tools
 
 def cell_reset(source):
     """
-    # BKRESET.REMOVE:START
+    # BULKHOURS.REMOVE:START
         # This code won't appear in the reset generation
         # It will appear on the solution though
-    # BKRESET.REMOVE:END
+    # BULKHOURS.REMOVE:END
 
-    # BKRESET.PRINT:raw_std = gdf[f"ret_{i}"].ewm(20).std()
+    # BULKHOURS.PRINT:raw_std = gdf[f"ret_{i}"].ewm(20).std()
         # The previous line will be printed in the reset generation
         # The previous line won't be printed in the solution generation
 
-    print(models["fit1"].forecast(3)) # BKRESET.REMOVE:LINE
+    print(models["fit1"].forecast(3)) # BULKHOURS.REMOVE:LINE
         # The previous line won't be printed in the reset generation
         # The previous line will be printed in the solution generation
 
-    df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BKRESET.INIT:0
+    df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BULKHOURS.INIT:0
     """
 
-    separator = "//" if "// BKRESET" in source else "#"
+    separator = "//" if "// BULKHOURS" in source else "#"
     nsource = []
     keep_line = True
 
     for s in source.split("\n"):
-        if "BKRESET." in s:
-            l = s.split("BKRESET.")
+        s = s.replace("BKRESET", "BULKHOURS")
+        if "BULKHOURS." in s:
+            l = s.split("BULKHOURS.")
             if "INIT:" in l[1]:
                 if "=" in s:
                     s = (
@@ -77,11 +78,12 @@ def cell_reset(source):
 
 
 def cell_solution(source):
-    separator = "//" if "// BKRESET" not in source else "#"
+    separator = "//" if "// BULKHOURS" not in source else "#"
     nsource = []
     for s in source.split("\n"):
-        if "BKRESET." in s:
-            l = s.split("BKRESET.")
+        s = s.replace("BKRESET", "BULKHOURS")
+        if "BULKHOURS." in s:
+            l = s.split("BULKHOURS.")
             if "REMOVE:START" in l[1] or "REMOVE:END" in l[1] or "PRINT" in l[1]:
                 continue
             elif "INIT:" in l[1] or "REPLACE:" in l[1] or "REMOVE" in l[1]:

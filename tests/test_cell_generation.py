@@ -3,14 +3,14 @@ import bulkhours
 
 cell_content = """%%evaluation_cell_id -i synthetic
 def generate_data(n=40):
-    df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BKRESET.INIT:0
+    df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BULKHOURS.INIT:0
     return df
 
 for i, variable in enumerate(["noise", "trend", "seasonal", "trend+seasonal"]):
     ax = axes[i]
-    # BKRESET.REMOVE:START
+    # BULKHOURS.REMOVE:START
     a = 3
-    # BKRESET.REMOVE:END
+    # BULKHOURS.REMOVE:END
 
 def student_evaluation_function():
     return bulkhours.is_equal(student.flops, max_score=3)
@@ -22,7 +22,7 @@ def student_explanation_function():
     return tametre
 
 # 5. Comment
-print("BK ROCKS")  # BKRESET.REPLACE:print("...COMMENT...")
+print("BK ROCKS")  # BULKHOURS.REPLACE:print("...COMMENT...")
 """
 
 
@@ -52,7 +52,7 @@ def test_cell_solution_python():
     code = teacher_data.get_solution()
     print(code)
 
-    if "BKRESET." in code:
+    if "BULKHOURS." in code:
         raise Exception("Should not be here")
 
     if "...COMMENT..." in code:
@@ -74,21 +74,21 @@ class MyClass {
     int myNum;        // Attribute (int variable)
 
   public:
-    // BKRESET.REMOVE:START
+    // BULKHOURS.REMOVE:START
     MyClass(int yourNum) {myNum = yourNum;}
     void getLastName() {cout <<"Doe" << endl;}
-    // BKRESET.REMOVE:END
+    // BULKHOURS.REMOVE:END
 
     void setMyNum(int yourNum) {myNum = yourNum;}
     int getMyNum() {return myNum;}
 };
 
 void MyClass::getFirstName(){
-    cout << "John" << endl;  // BKRESET.REPLACE:cout << "..." << endl;
+    cout << "John" << endl;  // BULKHOURS.REPLACE:cout << "..." << endl;
 }
 
 MyClass::MyClass(string yourString) {
-    myString = yourString; // BKRESET.INIT:"";
+    myString = yourString; // BULKHOURS.INIT:"";
     }
 
 int main() {
@@ -126,7 +126,7 @@ def test_cell_solution_cpp():
     code = teacher_data.get_solution()
     print(code)
 
-    if "BKRESET." in code:
+    if "BULKHOURS." in code:
         raise Exception("Should not be here")
 
     if "...COMMENT..." in code:

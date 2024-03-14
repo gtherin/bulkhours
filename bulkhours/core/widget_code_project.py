@@ -40,7 +40,7 @@ def evaluate_core_cpp_project(cinfo, show_solution=False, verbose=False):
     ):
         code = open(rfilename, "r").read()
 
-    files_code = code.split("// BKRESET.SPLIT:")[1:]
+    files_code = code.replace("BKRESET", "BULKHOURS").split("// BULKHOURS.SPLIT:")[1:]
     rfiles = {f[: f.find("\n")]: f[f.find("\n") + 1 :] for f in files_code}
 
     files = []

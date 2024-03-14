@@ -1,4 +1,4 @@
-// BKRESET.SPLIT:myclass.h
+// BULKHOURS.SPLIT:myclass.h
 #include <iostream>
 using namespace std;
 
@@ -23,7 +23,7 @@ class MyClass {
     void setMyNum(int yourNum) {myNum = yourNum;}
     int getMyNum() {return myNum;}
 };
-// BKRESET.SPLIT:myclass.cpp
+// BULKHOURS.SPLIT:myclass.cpp
 #include "myclass.h"
 
 // Function can be implemented from outside the declaration
@@ -38,7 +38,7 @@ MyClass::MyClass(string yourString, int yourNum) {
     myString = yourString;
         myNum = yourNum;
     }
-// BKRESET.SPLIT:main.cpp
+// BULKHOURS.SPLIT:main.cpp
 #include "myclass.h"
 
 int main() {
@@ -65,7 +65,7 @@ int main() {
   //cout << myObj.myString <<endl; 
   return 0;
 }
-// BKRESET.SPLIT:Makefile
+// BULKHOURS.SPLIT:Makefile
 myclass.o: myclass.h myclass.cpp
 	@g++ -c myclass.cpp
 
