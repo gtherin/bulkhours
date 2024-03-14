@@ -206,7 +206,10 @@ def get_value(key, config=None):
     # return config.get(key)
     if key in config:
         return config.get(key)
-    return config["global"].get(key)
+    if type(config) == dict:
+        return config["global"].get(key)
+    else:
+        return config.g.get(key)
 
 
 def is_admin(cfg=None):
