@@ -5,6 +5,7 @@ from .core.tools import get_config, get_value  # noqa
 from .core.timeit import timeit  # noqa
 from .core import tools  # noqa
 from .core.tools import html  # noqa
+from .math import ma325
 
 # from . import data  # noqa
 from .data import (
