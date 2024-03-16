@@ -161,7 +161,7 @@ def init_env(packages=None, plt_style="default", **kwargs):
     if not quiet_mode:
         print(f"Import BULK Helper cOURSe (\x1b[0m\x1b[36mversion='{version}'\x1b[0m🚀{einfo}):", end="")
     if tools.is_admin(cfg=cfg) and (ipp := IPython.get_ipython()):
-        IPython.display.display(IPython.display.Markdown("""Pour administrer le notebook et suivre vos élèves, veuillez-vous connecter sur le portail <a href="https//appv14.bulkhours.fr">bulkhours.fr</a> Pour activer votre compte, veuillez <a href="mailto:contact@bulkhours.fr">nous contacter</a> ici."""))
+        IPython.display.display(IPython.display.Markdown("""Pour administrer le notebook et suivre vos élèves, veuillez-vous connecter sur le portail <a href="https://appv14.bulkhours.fr">bulkhours.fr</a> Pour activer votre compte, veuillez <a href="mailto:contact@bulkhours.fr">nous contacter</a> ici."""))
 
     if "bkloud" not in cfg["database"]:
         if not quiet_mode:
