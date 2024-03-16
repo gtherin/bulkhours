@@ -5,7 +5,6 @@ from .math_table import MathTable
 from . import td1
 from . import td2
 from .vector import Vector, VectorGrid
-from .decision import get_wisc_results, get_wisc_saturations, get_grades
 
 def display_warning(language = "fr"):
     if language == "fr":
