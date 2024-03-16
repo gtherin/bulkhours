@@ -44,7 +44,7 @@ I15 0,4957 -0,5591 0,50 1,13 0,1151 0,1464""".replace(",", "."))
 
 
 def get_grades():
-    return StringIO(
+    grades = StringIO(
         """ Maths Sciences French Latin Music
 Jean 6 6 5 5,5 8
 Aline 8 8 8 8 9
@@ -55,3 +55,5 @@ André 11 10 5,5 7 13
 Pierre 5,5 7 14 11,5 10
 Brigitte 13 12,5 8,5 9,5 12
 Evelyne 9 9,5 12,5 12 18""".replace(",", "."))
+    return pd.read_csv(data, sep=" ", index_col=0)
+
