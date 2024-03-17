@@ -69,7 +69,6 @@ def update_grades(cell_id, grades, grade_name, db_storage=True):
  
     if db_storage:
         raise Exception("Should be deprecated.")
-        core.firebase.to_sql(grades.assign(update_time=update_time), f"{cfg.notebook_id}_{cell_id}_grades", database=f"bulk_{cfg.subject}_{cfg.virtual_room}", if_exists="replace", echo=True)
 
     for k in grades.index:
         update_note_in_db(

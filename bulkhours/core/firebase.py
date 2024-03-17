@@ -35,6 +35,8 @@ def get_question_id(question, sep="_", cinfo=None):
     )
 
 def get_engine(database=None, **kwargs):
+    if "BULK_DUSER" not in os.environ:
+        return None
     import sqlalchemy as sa
     tools.install_if_needed("mariadb")
 
