@@ -82,36 +82,10 @@ def get_users_list(no_admin=True, sort_by=None, euser=None, cfg=None):
             ]
         )
 
-    new = (
-        users["mail"]
-        .str.split("@", n=1, expand=True)[0]
-        .str.split(".", n=1, expand=True)
-    )
 
-    users["prenom"] = new[0].str.capitalize()
-    users["nom"] = new[1].str.capitalize()
-
-    users = pd.concat(
-        [
-            users,
-            pd.DataFrame.from_records(
-                [
-                    {
-                        "mail": core.tools.REF_USER,
-                        "is_admin": 1,
-                        "prenom": "Sol",
-                        "nom": "Ution",
-                    }
-                ]
-            ),
-        ]
-    )
-
-    users["auser"] = users["prenom"] + "." + users["nom"].str[0]
-    users["auser"] = users["auser"].where(
-        ~users["auser"].duplicated(), other=users["prenom"] + "." + users["nom"]
-    )
-    users["auser"] = users["auser"].fillna(users["prenom"])
+    users["auser"] = users["mail"].str.split("@", n=1, expand=True)[0].str.capitalize()
+    users["prenom"] = users["auser"]
+    users["nom"] = ""
 
     for c in ["prenom", "nom", "mail", "auser"]:
         users[c] = users[c].astype(str)
@@ -175,7 +149,7 @@ git pull 2> /dev/null
         print(f"\x1b[32m\x1b[1m{msg}{cmd}\x1b[m")
 
 
-def sort_by(sdata, icolumns=["nom", "auser"], sorted_by=True):
+def sort_by(sdata, icolumns=["auser"], sorted_by=True):
     if sorted_by:
         if type(sorted_by) in [str, list]:
             sdata = sdata.sort_values(sorted_by)
@@ -184,16 +158,16 @@ def sort_by(sdata, icolumns=["nom", "auser"], sorted_by=True):
     return sdata
 
 
-def styles(sdata, cmap="RdBu", icolumns=[], sorted_by=True, hide_grades=False):
+def styles(sdata, cmap="RdBu", icolumns=["auser"], sorted_by=True, hide_grades=False):
 
-    sdata = sdata.drop(columns=["nom", "auser"])
+    sdata = sdata.drop(columns=["nom"])
 
     core.Grade.set_static_style_info(minvalue=0.0, cmap=cmap)
 
     if hide_grades:
         sdata = sdata.drop(columns=["all"])
 
-    fcolumns = [c.replace(".n", "") for c in sdata.columns]
+    fcolumns = [c.replace(".n", "") for c in sdata.columns if c not in icolumns]
     nacolumns = [c for c in fcolumns if "all" not in c and c not in ["virtual_room"]]
     sdata = sdata.sort_index()
     sdata = sdata.rename(columns={c + ".n": c for c in fcolumns})
@@ -204,7 +178,7 @@ def styles(sdata, cmap="RdBu", icolumns=[], sorted_by=True, hide_grades=False):
             if hide_grades:
                 sdata[c] = sdata[c].where(sdata[c] < 0, other=np.nan)
 
-    stylish = sdata.style.format(precision=1, subset=list(fcolumns))
+    stylish = sdata.style.hide(axis="index").format(precision=1, subset=list(fcolumns))
     stylish = stylish.background_gradient(cmap=cmap, vmin=0, vmax=10)
 
     ccols = [
