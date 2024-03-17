@@ -297,9 +297,13 @@ def send_mails(
 ):
     import IPython
 
+
+
     notebook_info = notebook_file.split(".")[0]
     if cfg is None:
         cfg = core.tools.get_config(is_new_format=True)
+
+    mailing_list = bulkhours.core.firebase.get_document(cshortname + "_info", user=shortname + "_emails_" + cfg.virtualroom).get()
 
     students_list = tools.get_users_list(cfg=cfg)
     sub_rdir = notebook_file.replace(" ", "_").replace(".ipynb", "_" + cfg.virtual_room)
@@ -367,6 +371,22 @@ def send_mails(
                 title=title,
                 password=password,
             )
+
+
+def email_links_2students(virtual_room, title="", message="", cc="", fake=False):
+    import os
+    cfg = bulkhours.core.tools.get_config(is_new_format=True)
+    mailing_list = bulkhours.core.firebase.get_document(cfg.subject + "_info", user=cfg.notebook_id + "_emails_" + virtual_room).get().to_dict()
+    os.environ["NOREPLY_BULKHOURS_FR"] = mailing_list["mysterium"]
+
+    for email, link in mailing_list.items():
+        if "@" not in email:
+            continue
+        umessage = message.replace("SUBJECT", email.split("@")[0].replace(".", " ").capitalize()).replace("LINK", link)
+        if fake:
+            print(umessage)
+        else:
+            bulkhours.admin.send_mail(to=email, cc=cc, message=umessage, title=title)
 
 
 def send_mail(
