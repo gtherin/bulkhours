@@ -149,7 +149,7 @@ def make_me_beautiful(
         return core.buttons.get_export_button(
             filename,
             data=data.round(1).to_csv(index=False),
-            label="Export notes📝",
+            label="Export des notes📝",
             tooltip="""⚠️Seulement disponible pour l'évaluateur⚠️.
 💾Envoi de la réponse (contenu de la cellule actuelle) comme solution officielle.""",
         )

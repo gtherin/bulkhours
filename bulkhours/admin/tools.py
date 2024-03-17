@@ -184,19 +184,18 @@ def sort_by(sdata, icolumns=["nom", "auser"], sorted_by=True):
     return sdata
 
 
-def styles(
-    sdata, cmap="RdBu", icolumns=["nom", "auser"], sorted_by=True, hide_grades=False
-):
+def styles(sdata, cmap="RdBu", icolumns=[], sorted_by=True, hide_grades=False):
+
+    sdata = sdata.drop(columns=["nom", "auser"])
+
     core.Grade.set_static_style_info(minvalue=0.0, cmap=cmap)
 
     if hide_grades:
         sdata = sdata.drop(columns=["all"])
 
-    fcolumns = [c.replace(".n", "") for c in sdata.columns if c not in icolumns]
+    fcolumns = [c.replace(".n", "") for c in sdata.columns]
     nacolumns = [c for c in fcolumns if "all" not in c and c not in ["virtual_room"]]
-
-    sdata = sort_by(sdata, icolumns=icolumns, sorted_by=sorted_by)
-
+    sdata = sdata.sort_index()
     sdata = sdata.rename(columns={c + ".n": c for c in fcolumns})
 
     for c in nacolumns:
@@ -205,7 +204,7 @@ def styles(
             if hide_grades:
                 sdata[c] = sdata[c].where(sdata[c] < 0, other=np.nan)
 
-    stylish = sdata.style.hide(axis="index").format(precision=1, subset=list(fcolumns))
+    stylish = sdata.style.format(precision=1, subset=list(fcolumns))
     stylish = stylish.background_gradient(cmap=cmap, vmin=0, vmax=10)
 
     ccols = [
