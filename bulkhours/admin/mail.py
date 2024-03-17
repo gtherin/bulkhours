@@ -375,8 +375,8 @@ def send_mails(
 
 def email_links_2students(virtual_room, title="", message="", cc="", fake=False):
     import os
-    cfg = bulkhours.core.tools.get_config(is_new_format=True)
-    mailing_list = bulkhours.core.firebase.get_document(cfg.subject + "_info", user=cfg.notebook_id + "_emails_" + virtual_room).get().to_dict()
+    cfg = core.tools.get_config(is_new_format=True)
+    mailing_list = core.firebase.get_document(cfg.subject + "_info", user=cfg.notebook_id + "_emails_" + virtual_room).get().to_dict()
     os.environ["NOREPLY_BULKHOURS_FR"] = mailing_list["mysterium"]
 
     for email, link in mailing_list.items():
@@ -386,7 +386,13 @@ def email_links_2students(virtual_room, title="", message="", cc="", fake=False)
         if fake:
             print(umessage)
         else:
-            bulkhours.admin.send_mail(to=email, cc=cc, message=umessage, title=title)
+            icon = "❌" if "Missing" in dnotebook_file else "📧"
+            core.tools.dmd(
+                f"""* 📧 {student['auser']}: sent mail with link '{dnotebook_file}' to '{student['mail']}' """
+            )
+            send_mail(to=email, cc=cc, message=umessage, title=title)
+
+
 
 
 def send_mail(
