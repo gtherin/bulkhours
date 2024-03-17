@@ -121,7 +121,7 @@ def make_me_beautiful(
     data,
     cmap="RdBu",
     export_notes=True,
-    hide_grades=False,
+    hide_grades=True,
     sorted_by=True,
     db_storage=False,
     filename=None,
@@ -166,7 +166,7 @@ def summary_vroom(
     cmap="RdBu",  # bwr_r RdBu
     export_notes=True,
     aliases={},
-    hide_grades=False,
+    hide_grades=True,
     aggregate=None,
     apply=None,
     sorted_by=True,
