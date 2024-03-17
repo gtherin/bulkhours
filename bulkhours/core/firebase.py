@@ -381,6 +381,10 @@ def send_answer_to_corrector(
 
     uptime = get_paris_time()
 
+    if "IPADDRESS" in os.environ:
+        kwargs.update({"ip": os.environ["IPADDRESS"]})
+    else:
+        kwargs.update({"ip": "unknown"})
     if update_time:
         kwargs.update({"update_time": uptime})
     if user == REF_USER and "grade_man" not in kwargs:
