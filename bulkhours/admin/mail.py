@@ -386,9 +386,9 @@ def email_links_2students(virtual_room, title="", message="", cc="", fake=False)
         if fake:
             print(umessage)
         else:
-            icon = "❌" if "Missing" in dnotebook_file else "📧"
+            icon = "❌" if "Missing" in link else "📧"
             core.tools.dmd(
-                f"""* 📧 {student['auser']}: sent mail with link '{dnotebook_file}' to '{student['mail']}' """
+                f"""* 📧 {student['auser']}: sent mail with link '{link}' to '{student['mail']}' """
             )
             send_mail(to=email, cc=cc, message=umessage, title=title)
 
