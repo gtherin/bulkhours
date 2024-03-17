@@ -62,28 +62,9 @@ class Exercices:
         if field == "count":
             data["all.c"] = data[[e + ".c" for e in self.exos]].count(axis=1)
         if field in ["grade", "score"]:
-            ceval = self.cfg.n["evaluation"]
-
             data["all"] = np.round(data.fillna(0.0).clip(0).sum(axis=1), 1)
             if "norm20" in self.cfg["global"] and self.cfg["global"]["norm20"]:
                 data["all"] = data["all"] * 20 / data["all"].max()
-
-            if 0:
-                try:
-                    data["all"] = (
-                        np.round(data.fillna(0.0).clip(0).mean(axis=1), 1)
-                        if ceval == ""
-                        else data.fillna(0.0)
-                        .clip(0)
-                        .rename(columns=lambda value: value.replace(".", "_"))
-                        .eval(ceval)
-                    )
-                except:
-                    print(
-                        f"\x1b[41mEvaluation function '{ceval}' can not be interpreted. Please change it in the dashboard:\nbulkhours.admin.dashboard()\x1b[0m"
-                    )
-
-                    data["all"] = np.nan
 
         return data
 
