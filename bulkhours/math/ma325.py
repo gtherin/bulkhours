@@ -55,5 +55,4 @@ André 11 10 5,5 7 13
 Pierre 5,5 7 14 11,5 10
 Brigitte 13 12,5 8,5 9,5 12
 Evelyne 9 9,5 12,5 12 18""".replace(",", "."))
-    return pd.read_csv(data, sep=" ", index_col=0)
-
+    return pd.read_csv(grades, sep=" ", index_col=0)
