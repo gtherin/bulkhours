@@ -377,6 +377,8 @@ def email_links_2students(virtual_room, title="", message="", cc="", fake=False)
     import os
     cfg = core.tools.get_config(is_new_format=True)
     mailing_list = core.firebase.get_document(cfg.subject + "_info", user=cfg.notebook_id + "_emails_" + virtual_room).get().to_dict()
+    if "mysterium" not in mailing_list:
+        print("Mails not sent")
     os.environ["NOREPLY_BULKHOURS_FR"] = mailing_list["mysterium"]
 
     for email, link in mailing_list.items():
