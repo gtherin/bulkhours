@@ -160,7 +160,8 @@ def sort_by(sdata, icolumns=["auser"], sorted_by=True):
 
 def styles(sdata, cmap="RdBu", icolumns=["auser"], sorted_by=True, hide_grades=False):
 
-    sdata = sdata.drop(columns=["nom"])
+    if "nom" in sdata:
+        sdata = sdata.drop(columns=["nom"])
 
     core.Grade.set_static_style_info(minvalue=0.0, cmap=cmap)
 
