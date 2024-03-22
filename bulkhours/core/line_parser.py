@@ -160,6 +160,15 @@ class LineParser:
         return ", ".join(info)
 
     @classmethod
+    def from_bkc(cls, exercise, cshortname, shortname, groupname, user=tools.REF_USER):
+        cinfo = cls(f"%%evaluation_cell_id -i {exercise}", "\n", is_cell=True)
+        cinfo.subject = cshortname
+        cinfo.notebook_id = shortname
+        cinfo.virtual_room = groupname
+        cinfo.user = user
+        return cinfo
+
+    @classmethod
     def from_cell_id_user(cls, cell_id, user=tools.REF_USER):
         cinfo = cls(f"%%evaluation_cell_id -i {cell_id}", "\n", is_cell=True)
         cinfo.user = user

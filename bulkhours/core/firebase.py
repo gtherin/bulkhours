@@ -309,6 +309,7 @@ def delete_documents(cinfo, questions, user=REF_USER, verbose=False):
             print(f"\x1b[31m\x1b[1m{question_id},\x1b[m", end="")
 
         get_document(question_id=question_id, user=user, cinfo=cinfo).delete()
+        get_document(question_id=question_id + "_log", user=user, cinfo=cinfo).delete()
 
     print(f"\x1b[31m\x1b[1m (cloud)\x1b[m")
 
