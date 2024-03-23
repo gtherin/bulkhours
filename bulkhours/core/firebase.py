@@ -382,10 +382,11 @@ def send_answer_to_corrector(
 
     uptime = get_paris_time()
 
-    if "IPADDRESS" in os.environ:
-        kwargs.update({"ip": os.environ["IPADDRESS"]})
-    else:
-        kwargs.update({"ip": "unknown"})
+    def get_info(field):
+        return os.environ[field] if field in os.environ else "unknown"
+
+
+    kwargs.update({"ip": get_info("IPADDRESS")}, {"host": get_info("HOSTNAME")})
     if update_time:
         kwargs.update({"update_time": uptime})
     if user == REF_USER and "grade_man" not in kwargs:
@@ -399,12 +400,7 @@ def send_answer_to_corrector(
         }
 
     if not fake:
-        if (
-            update
-            and get_document(question=cinfo.cell_id, user=user, cinfo=cinfo)
-            .get()
-            .to_dict()
-        ):
+        if (update and get_document(question=cinfo.cell_id, user=user, cinfo=cinfo).get().to_dict()):
             get_document(question=cinfo.cell_id, user=user, cinfo=cinfo).update(kwargs)
         else:
             get_document(question=cinfo.cell_id, user=user, cinfo=cinfo).set(kwargs)
@@ -413,12 +409,8 @@ def send_answer_to_corrector(
             for a in ["answer", "main_execution"]:
                 if a in kwargs:
                     update_if_possible(
-                        get_document(
-                            question=cinfo.cell_id + "_log",
-                            user=kwargs["user"],
-                            cinfo=cinfo,
-                        ),
-                        {uptime: kwargs[a]},
+                        get_document(question=cinfo.cell_id + "_log", user=kwargs["user"], cinfo=cinfo),
+                        {uptime: f"# BULKHOURS.ENVINFO: IPADDRESS={get_info('IPADDRESS')} HOSTNAME={get_info('HOSTNAME')}\n" + kwargs[a]},
                     )
                     break
 
