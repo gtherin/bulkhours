@@ -386,7 +386,7 @@ def send_answer_to_corrector(
         return os.environ[field] if field in os.environ else "unknown"
 
 
-    kwargs.update({"ip": get_info("IPADDRESS")}, {"host": get_info("HOSTNAME")})
+    kwargs.update({"ip": get_info("IPADDRESS"), "host": get_info("HOSTNAME")})
     if update_time:
         kwargs.update({"update_time": uptime})
     if user == REF_USER and "grade_man" not in kwargs:
