@@ -23,7 +23,7 @@ class WidgetCode(WidgetBase):
 
         if student_data.do_run_evaluation():
             teacher_data = student_data
-            # teacher_data = CellParser.crunch_data(cinfo=self.cinfo, user="solution", data=None)
+            # teacher_data = CellParser.crunch_data(cinfo=self.cinfo, user="solution@bulkhours.fr", data=None)
             score = equals.student_evaluation_function(
                 student_data, teacher_data, user=self.cinfo.user
             ).score
@@ -57,7 +57,7 @@ class WidgetScript(WidgetCode):
 
         if local_data.do_run_evaluation():
             teacher_data, student_data = local_data, local_data
-            # teacher_data = CellParser.crunch_data(cinfo=self.cinfo, user="solution", data=None)
+            # teacher_data = CellParser.crunch_data(cinfo=self.cinfo, user="solution@bulkhours.fr", data=None)
             # student_data = CellParser.crunch_data(cinfo=self.cinfo, user=self.cinfo.user, data=self.cell_source)
 
             score = equals.student_evaluation_function(
