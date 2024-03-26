@@ -49,7 +49,7 @@ def copy4students(email, drive_rdir, filename, cfg=None, **kwargs):
     sub_rdir = filename.replace(" ", "_").replace(".ipynb", "_" + cfg.virtual_room)
 
     for _, student in students_list.iterrows():
-        if student["mail"] == "solution":
+        if student["mail"] in ["solution", "solution@bulhours.fr"]:
             continue
         cfilename = f"{drive_rdir}/{sub_rdir}/{filename}".replace(
             ".", f"_%s." % student["auser"].lower()
@@ -147,7 +147,7 @@ def copy(
                 if reset:
                     to_pop.append(idx)
                 else:  # is_solution
-                    cell["source"] = cell["source"].replace(" -u solution", "")
+                    cell["source"] = cell["source"].replace("@bulkhours.fr", "").replace(" -u solution", "")
             # Format cells with reset info
             elif " -u reset" in source[0]:
                 if reset:
@@ -333,7 +333,7 @@ def send_mails(
     )
 
     for _, student in students_list.iterrows():
-        if student["mail"] == "solution":
+        if student["mail"] in ["solution", "solution@bulhours.fr"]:
             continue
         cfilename = f"{drive_rdir}/{sub_rdir}/{notebook_file}".replace(
             ".", f"_%s." % student["auser"].lower()

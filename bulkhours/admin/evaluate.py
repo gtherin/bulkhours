@@ -382,7 +382,7 @@ def evaluate_all(
         grades.loc[u, cinfo.cell_id + ".n"] = grade.score
         grades.loc[u, cinfo.cell_id + ".c"] = grade.comment
 
-        if user == "solution":
+        if user in ["solution", "solution@bulhours.fr"]:
             max_score = grade.score
 
     grad_name = (

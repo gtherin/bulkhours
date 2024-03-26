@@ -47,7 +47,7 @@ def init_prems(config):
     is_known_student = (
         ("virtual_room" in config and email in config["global"][config["virtual_room"]])
         or email in config["global"]["admins"]
-        or email == "solution"
+        or email in ["solution", "solution@bulhours.fr"]
     )
     language = config["global"].get("language")
     if config["global"]["admins"] == "":
