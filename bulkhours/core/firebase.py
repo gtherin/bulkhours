@@ -55,7 +55,8 @@ def read_sql(request, echo=False, usebkdb=False, **kwargs):
     engine.dispose()
     return df
 
-def to_sql(df, table_name, usebkdb=False, if_exists="replace", **kwargs):
+
+def to_sql(df, table_name, usebkdb=False, index=True, if_exists="replace", **kwargs):
     engine = BENGINE if usebkdb else ENGINE # get_engine(echo=echo, pool_size=10, max_overflow=20)
     print("DEBUG", engine, table_name, if_exists)
     df = df.rename(columns={"mail": "email", "uptime": "update_time"})
@@ -69,7 +70,7 @@ def to_sql(df, table_name, usebkdb=False, if_exists="replace", **kwargs):
         # TODO: make it work
         with engine.begin() as connection:
             #df.to_sql(table_name + "_tmp", connection, if_exists="replace")
-            df.to_sql(table_name, connection, if_exists="replace")
+            df.to_sql(table_name, connection, if_exists="replace", index=index)
         #engine.dispose()
 
         #with engine.begin() as connection:
@@ -78,7 +79,7 @@ def to_sql(df, table_name, usebkdb=False, if_exists="replace", **kwargs):
 
     else:
         with engine.begin() as connection:
-            df.to_sql(table_name, connection, if_exists=if_exists)
+            df.to_sql(table_name, connection, if_exists=if_exists, index=index)
     engine.dispose()
 
 
