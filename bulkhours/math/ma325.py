@@ -61,3 +61,24 @@ Evelyne 9 9,5 12,5 12 18""".replace(",", "."))
 def get_london_bombing():
     return pd.DataFrame([229, 211, 93, 35, 7, 1], columns=["Nk"]).T
 
+
+def plot_london_bombing_dynamics(lambdas=None, frames=None, interval=100):
+    from matplotlib.animation import FuncAnimation
+
+    # Set up the figure and axis
+    fig, ax = plt.subplots()
+    if lambdas is None:
+        lambdas = np.arange(0, 10, 1)
+    line, = ax.plot(lambdas, sp.stats.poisson.pmf(lambdas, mu=0))
+
+    # Initial legend
+    legend = ax.legend([f'lambda = {0}'])
+
+    def update(num):
+        line.set_ydata(sp.stats.poisson.pmf(lambdas, mu=num))
+        legend.get_texts()[0].set_text(f'#bombs/districts = lambda = {num:.2f}')
+        return line,
+
+    if frames is None:
+        frames = np.linspace(0, 5, 50)
+    return fig, lambdas, frames, interval, update
