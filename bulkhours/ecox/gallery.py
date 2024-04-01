@@ -171,6 +171,38 @@ def annotate(ax, label, x, y, c="#C70039", r=0):
     ax.annotate(label, (x, y), color=c, rotation=r, **opts)
 
 
+def plot_ci(ax=None, nob=100):
+
+    if ax is None:
+        fig, ax = plt.subplots(1, 3, figsize=(6, 4))
+        fig.subplots_adjust(wspace=0.01, hspace=0.3)
+
+    x = np.linspace(-4, 4, nob)
+    pdf = sp.stats.norm()
+    ax.plot(x, pdf.pdf(x), "r", lw=5, alpha=0.6)
+
+    x = np.linspace(-1, 1, nob)
+    ax.fill_between(x, 0.0 * x, pdf.pdf(x), label="", alpha=0.2)
+
+    x = np.linspace(-2, 2, nob)
+    ax.fill_between(x, 0.0 * x, pdf.pdf(x), label="", alpha=0.2)
+
+    x = np.linspace(-3, 3, nob)
+    ax.fill_between(x, 0.0 * x, pdf.pdf(x), label="", alpha=0.2)
+
+    annotate(ax, "$1\sigma=68.27\%$", -2.8, 0.40, c="#C70039")
+    annotate(ax, "$2\sigma=95.45\%$", -2.8, 0.35, c="#581845")
+    annotate(ax, "$3\sigma=99.73\%$", -2.8, 0.3, c="#FF5733")
+
+    annotate(ax, "$1.96\sigma=95\%$", 2.8, 0.35, c="#581845")
+    annotate(ax, "$2.58\sigma=99\%$", 2.8, 0.3, c="#FF5733")
+
+    set_title(ax, "Norm: Confidence Intervals", yvisible=True)
+    ax.set_xticks(
+        [-3, -2, -1, 1, 2, 3],
+        ["-$3\sigma$", "$-2\sigma$", "$-1\sigma$", "$1\sigma$", "$2\sigma$", "$3\sigma$"],
+    )
+
 def plot_gallery_r3(axes=None):
     if axes is None:
         fig, axes = plt.subplots(1, 3, figsize=(15, 4))
@@ -205,33 +237,7 @@ def plot_gallery_r3(axes=None):
     ax = plot_sigma(ax, dx=0.59)
 
     set_title(ax, "Skew, Kurtosis")
-
-    ax, nob = axes[2], 100
-    x = np.linspace(-4, 4, nob)
-    pdf = sp.stats.norm()
-    ax.plot(x, pdf.pdf(x), "r", lw=5, alpha=0.6)
-
-    x = np.linspace(-1, 1, nob)
-    ax.fill_between(x, 0.0 * x, pdf.pdf(x), label="", alpha=0.2)
-
-    x = np.linspace(-2, 2, nob)
-    ax.fill_between(x, 0.0 * x, pdf.pdf(x), label="", alpha=0.2)
-
-    x = np.linspace(-3, 3, nob)
-    ax.fill_between(x, 0.0 * x, pdf.pdf(x), label="", alpha=0.2)
-
-    annotate(ax, "$1\sigma=68.27\%$", -2.8, 0.40, c="#C70039")
-    annotate(ax, "$2\sigma=95.45\%$", -2.8, 0.35, c="#581845")
-    annotate(ax, "$3\sigma=99.73\%$", -2.8, 0.3, c="#FF5733")
-
-    annotate(ax, "$1.96\sigma=95\%$", 2.8, 0.35, c="#581845")
-    annotate(ax, "$2.58\sigma=99\%$", 2.8, 0.3, c="#FF5733")
-
-    set_title(ax, "Norm: Confidence Intervals", yvisible=True)
-    ax.set_xticks(
-        [-3, -2, -1, 1, 2, 3],
-        ["-$3\sigma$", "$-2\sigma$", "$-1\sigma$", "$1\sigma$", "$2\sigma$", "$3\sigma$"],
-    )
+    plot_ci(ax=ax)
 
 
 def plot_celestine(seed=42, sample=1000):
