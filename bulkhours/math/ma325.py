@@ -61,7 +61,7 @@ Evelyne 9 9,5 12,5 12 18""".replace(",", "."))
 
 
 def get_london_bombing():
-    return pd.DataFrame([229, 211, 93, 35, 7, 1], columns=["Nk"]).T
+    return pd.DataFrame({"Number_of_bombs": range(6), "Nk": [229, 211, 93, 35, 7, 1]})
 
 
 def plot_london_bombing_dynamics(lambdas=None, frames=None, interval=100):
