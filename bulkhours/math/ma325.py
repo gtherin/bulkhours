@@ -1,5 +1,7 @@
 from io import StringIO
+import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 
 def get_wisc_results():
     data = StringIO(
@@ -64,6 +66,7 @@ def get_london_bombing():
 
 def plot_london_bombing_dynamics(lambdas=None, frames=None, interval=100):
     from matplotlib.animation import FuncAnimation
+    import scipy as sp
 
     # Set up the figure and axis
     fig, ax = plt.subplots()
