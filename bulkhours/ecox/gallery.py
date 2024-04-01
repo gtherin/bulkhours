@@ -237,7 +237,9 @@ def plot_gallery_r3(axes=None):
     ax = plot_sigma(ax, dx=0.59)
 
     set_title(ax, "Skew, Kurtosis")
-    plot_ci(ax=ax)
+
+    # Plot confidence interval
+    plot_ci(ax=axes[2])
 
 
 def plot_celestine(seed=42, sample=1000):
