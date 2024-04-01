@@ -79,7 +79,7 @@ def plot_london_bombing_dynamics(lambdas=None, frames=None, interval=100):
 
     def update(num):
         line.set_ydata(sp.stats.poisson.pmf(lambdas, mu=num))
-        legend.get_texts()[0].set_text(f'#bombs/districts = lambda = {num:.2f}')
+        legend.get_texts()[0].set_text(f'λ = #bombs/districts = {num:.2f}')
         return line,
 
     if frames is None:
