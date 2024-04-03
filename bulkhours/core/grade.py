@@ -92,6 +92,8 @@ class Grade:
             return (
                 f"color:{Grade.mincolor};background-color:{Grade.mincolor};opacity: 70%"
             )
+        elif int(v) in [Grade.NO_ANSWER_FOUND]:
+            return "color:#FF3B52;background-color:#FF3B52;opacity: 40%"
         elif int(v) in [
             Grade.DEFAULT_GRADE,
             Grade.EVALUATION_CRASHED,
