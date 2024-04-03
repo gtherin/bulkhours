@@ -7,15 +7,14 @@ from . import tools
 from .tools import REF_USER
 
 
-def get_paris_time():
+def get_paris_time(ftime="%Y-%m-%d %H:%M:%S"):
+
     if tools.get_platform() == "sagemaker":
-        return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        return datetime.datetime.now().strftime(ftime)
 
     import zoneinfo
 
-    return datetime.datetime.now(tz=zoneinfo.ZoneInfo("Europe/Paris")).strftime(
-        "%Y-%m-%d %H:%M:%S"
-    )
+    return datetime.datetime.now(tz=zoneinfo.ZoneInfo("Europe/Paris")).strftime(ftime)
 
 
 def get_question_id(question, sep="_", cinfo=None):
