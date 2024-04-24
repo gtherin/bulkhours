@@ -68,7 +68,7 @@ def ask_chat_gpt(
     if token == "YOUR_KEY":
         token = tools.get_value("openai_token")
 
-    if token in ["YOUR_KEY", ""]:
+    if token in ["YOUR_KEY", "", None]:
         IPython.display.display(
             IPython.display.Markdown(
                 """## Interroger Chat-GPT
@@ -173,7 +173,7 @@ def ask_gpt(
                 IPython.display.display(IPython.display.Code(c))
 
 
-def get_grade(student_data, teacher_data, max_score):
+def get_grade(student_data, teacher_data, max_score, token="YOUR_KEY", evalcode=None):
 
     if (
         "main_execution" in student_data.minfo
@@ -186,8 +186,9 @@ def get_grade(student_data, teacher_data, max_score):
 - actual solution:\n<end>\n{teacher_data.get_solution()}\n</end>
 - student's solution:\n<answer>\n{student_data.get_solution()}\n</answer>\n""".replace("MAX_SCORE", "10")#str(max_score))
 
+        evaluation_model = "gpt-3.5-turbo-0125" if evalcode is None else evalcode
         response = ask_gpt(
-            prompt=prompt, model=evaluation_model, temperature=0.01, raw=True
+            prompt=prompt, model=evaluation_model, temperature=0.01, raw=True, token=token
         )
 
         # Get student user
