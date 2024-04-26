@@ -73,7 +73,7 @@ Elève 64	10,3	12,91	10,3	14,09	14,65	5,23	11,81	13	18,8
 Elève 65	10,59	13,18	9,8	12,29	10,45	6,53	6,88	10	13,45
 Elève 66	13,75	18,91	13,7	19,56	20	14,7	17,78	16,5	16,05""")
 
-    return pd.read_csv(data, sep="	", index_col=0)
+    return pd.read_csv(data.replace(",", "."), sep="	", index_col=0)
 
 
 def get_wisc_results():
