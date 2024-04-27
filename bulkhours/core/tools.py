@@ -196,7 +196,7 @@ def is_admin(cfg=None):
 
 def format_opt(label, raw2norm=True):
     rr = {"-": "__minus__", "@": "__at__", " ": "__space__", "/": "__slash__"}
-    if len(label) > 0 and label[0] != "-":
+    if type(label) == str and len(label) > 0 and label[0] != "-":
         for k, v in rr.items():
             label = label.replace(k, v) if raw2norm else label.replace(v, k)
     return label
