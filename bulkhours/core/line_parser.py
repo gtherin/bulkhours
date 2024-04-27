@@ -66,6 +66,12 @@ Il permet de faire correspondre la cellule avec sa solution"""
     )
 
     basic.add_argument(
+        "--tags",
+        default="",
+        help=st("Tags caracteristiques de l'exercice"),
+    )
+
+    basic.add_argument(
         "-w",
         "--widgets",
         default=None,
@@ -101,6 +107,10 @@ Il permet de faire correspondre la cellule avec sa solution"""
         "--rdir",
         default="",
         help=st("directory of the test"),
+    )
+
+    basic.add_argument(
+        "--hide", dest="hide", action="store_true", help=st("L'exercice est caché initialement")
     )
 
     if is_admin:
