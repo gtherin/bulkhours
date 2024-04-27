@@ -9,6 +9,7 @@ class Grade:
     ANSWER_FOUND = -12
     MAX_SCORE_NOT_AVAILABLE = -13
     EXERCISE_IS_AVAILABLE = -14
+    EXERCISE_IS_HIDDEN = -15
     grad_names = ["grade_man", "grade_ana", "grade_bot"]
 
     def __init__(

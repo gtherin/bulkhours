@@ -153,6 +153,7 @@ class LineParser:
                 "answer",
                 "default",
                 "label",
+                "hide",
                 "options",
                 "language",
                 "restricted",
