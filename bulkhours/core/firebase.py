@@ -13,8 +13,11 @@ def get_paris_time(ftime="%Y-%m-%d %H:%M:%S"):
         return datetime.datetime.now().strftime(ftime)
 
     import zoneinfo
+    dt =  datetime.datetime.now(tz=zoneinfo.ZoneInfo("Europe/Paris"))
+    if ftime is None:
+        return dt
 
-    return datetime.datetime.now(tz=zoneinfo.ZoneInfo("Europe/Paris")).strftime(ftime)
+    return dt.strftime(ftime)
 
 
 def get_question_id(question, sep="_", cinfo=None):
