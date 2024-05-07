@@ -333,6 +333,10 @@ def send_answer_to_corrector(
     store_log=True,
     **kwargs,
 ):
+    import warnings
+
+    warnings.filterwarnings(action='ignore', category=RuntimeWarning, message='os.fork')
+
     source = "local@" if DbDocument.data_base_info is not None else "cloud@"
     question_alias = source + get_question_id(cinfo.cell_id, sep="/", cinfo=cinfo)
     config = tools.get_config(is_new_format=True)
@@ -343,10 +347,7 @@ def send_answer_to_corrector(
         alias = alias.split(".")
         alias = alias[0] + "." + alias[1][0]
 
-    if (
-        config.security_level == 0
-        and cinfo.cell_id not in config[config.notebook_id]["exercices"]
-    ):
+    if cinfo.cell_id not in config[config.notebook_id]["exercices"]:
         config[config["notebook_id"]]["exercices"] += ";" + cinfo.cell_id
         save_config(config.notebook_id, config)
 
@@ -356,11 +357,11 @@ def send_answer_to_corrector(
     elif (
         user != REF_USER
         and "is_locked" in config[config.notebook_id]
-        and (config.virtual_room + ";") in config[config.notebook_id]["is_locked"]
+        and (";" + config.virtual_room) in config[config.notebook_id]["is_locked"]
     ):
         if cinfo.language == "fr":
             print(
-                "⚠️\x1b[31m\x1b[1mLes réponses ne peuvent plus être soumise dans ce notebook.\x1b[m"
+                "⚠️\x1b[31m\x1b[1mLes réponses ne peuvent plus être soumise pour ce notebook.\x1b[m"
             )
         else:
             print(
