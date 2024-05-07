@@ -91,6 +91,11 @@ class WidgetBase:
         )
 
     def submit(self, output, user=None):
+        import warnings
+
+        warnings.filterwarnings(action='ignore', category=RuntimeWarning, message='os.fork')
+
+
         from . import firebase
 
         answer = self.get_answer()

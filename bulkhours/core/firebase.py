@@ -333,10 +333,6 @@ def send_answer_to_corrector(
     store_log=True,
     **kwargs,
 ):
-    import warnings
-
-    warnings.filterwarnings(action='ignore', category=RuntimeWarning, message='os.fork')
-
     source = "local@" if DbDocument.data_base_info is not None else "cloud@"
     question_alias = source + get_question_id(cinfo.cell_id, sep="/", cinfo=cinfo)
     config = tools.get_config(is_new_format=True)
