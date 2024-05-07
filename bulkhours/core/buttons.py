@@ -231,6 +231,10 @@ def update_button(b, button, output, widget, funct, kwargs=None):
             lines = inspect.getsource(funct)
             print(lines)
         if not button.is_on:
+            import warnings
+
+            warnings.filterwarnings(action='ignore', category=RuntimeWarning, message='os.fork')
+
             p1 = multiprocessing.Process(
                 target=funct, args=[widget, output], kwargs=kwargs
             )
