@@ -157,9 +157,9 @@ def init_env(packages=None, link=None, plt_style="default", **kwargs):
     colors.set_plt_style(plt_style)
     version = open(tools.abspath("bulkhours/__version__.py")).readlines()[0].split('"')[1]
 
-    einfo = f", ⚠️\x1b[31m\x1b[41m\x1b[37m in admin/teacher🎓 mode\x1b[0m⚠️" if tools.is_admin(cfg=cfg) else ""
-    if not tools.is_admin(cfg=cfg) and not quiet_mode:
-        print(f"Import BULK Helper cOURSe (\x1b[0m\x1b[36mversion='{version}'\x1b[0m🚀{einfo}):", end="")
+    #einfo = f", ⚠️\x1b[31m\x1b[41m\x1b[37m in admin/teacher🎓 mode\x1b[0m⚠️" if tools.is_admin(cfg=cfg) else ""
+    #if not tools.is_admin(cfg=cfg) and not quiet_mode:
+    #    print(f"Import BULK Helper cOURSe (\x1b[0m\x1b[36mversion='{version}'\x1b[0m🚀{einfo}):", end="")
     if tools.is_admin(cfg=cfg) and (ipp := IPython.get_ipython()):
         monitoring_link = "https://bulkhours.fr" if link is None else link
         IPython.display.display(IPython.display.Markdown(f"""
@@ -168,9 +168,20 @@ def init_env(packages=None, link=None, plt_style="default", **kwargs):
     <td><a href="{monitoring_link}"><figure><img src='https://huggingface.co/datasets/guydegnol/bulkhours/resolve/main/logo_green.png?download=true' width="60px" align="center" /></figure></a>
     </td>
     <td>
-Import BULK Helper cOURSe (<font color="#00A099">version='5.9.0'</font>🚀, ⚠️ <font color="#F23030">in admin/teacher🎓 mode</font>⚠️)<br/>
-<pre>course/groupname/nb_id/user = bulk/toy/01_Introduction/solution@bulkhours.fr</pre>
+Import BULK Helper cOURSe (<font color="#00A099">version='{version}'</font>🚀, ⚠️ <font color="#F23030">in admin/teacher🎓 mode</font>⚠️)<br/>
+<pre>{info}</pre>
 <a href="{monitoring_link}"><font color="#294D9">Administration du notebook sur le portail bulkhours.fr</font></a><br/><a href="mailto:contact@bulkhours.fr"><font color="#4C5E6D">📧Contact</font></a>
+</td></tr></table>"""))
+    if not tools.is_admin(cfg=cfg) and (ipp := IPython.get_ipython()):
+        monitoring_link = "https://bulkhours.fr" if link is None else link
+        IPython.display.display(IPython.display.Markdown(f"""
+<table>
+  <tr>
+    <td><a href="{monitoring_link}"><figure><img src='https://huggingface.co/datasets/guydegnol/bulkhours/resolve/main/logo_green.png?download=true' width="40px" align="center" /></figure></a>
+    </td>
+    <td>
+Import BULK Helper cOURSe (<font color="#00A099">version='{version}'</font>🚀)<br/>
+<pre>{info}</pre>
 </td></tr></table>"""))
 
     if "bkloud" not in cfg["database"]:
@@ -187,7 +198,7 @@ import ipywidgets
         )
 
         if tools.get_platform() == "colab":
-            ipp.run_cell("%cd /content")
+            ipp.run_cell("%cd -q /content")
 
     if not tools.is_admin(cfg=cfg) and not quiet_mode:
         print("\n- session-info: " + info)
