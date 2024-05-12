@@ -177,7 +177,7 @@ Import BULK Helper cOURSe (<font color="#00A099">version='{version}'</font>🚀,
         IPython.display.display(IPython.display.Markdown(f"""
 <table>
   <tr>
-    <td><a href="{monitoring_link}"><figure><img src='https://huggingface.co/datasets/guydegnol/bulkhours/resolve/main/logo_green.png?download=true' width="40px" align="center" /></figure></a>
+    <td><a href="{monitoring_link}"><figure><img src='https://huggingface.co/datasets/guydegnol/bulkhours/resolve/main/logo_green.png?download=true' width="35px" align="center" /></figure></a>
     </td>
     <td>
 Import BULK Helper cOURSe (<font color="#00A099">version='{version}'</font>🚀)<br/>
@@ -200,8 +200,8 @@ import ipywidgets
         if tools.get_platform() == "colab":
             ipp.run_cell("%cd -q /content")
 
-    if not tools.is_admin(cfg=cfg) and not quiet_mode:
-        print("\n- session-info: " + info)
+    #if not tools.is_admin(cfg=cfg) and not quiet_mode:
+    #    print("\n- session-info: " + info)
 
     if tools.get_value("openai_token") is not None or tools.get_value("huggingface_token") is not None:
         external_services = "- extra-services:\033[92m"
