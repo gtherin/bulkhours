@@ -163,9 +163,9 @@ def init_env(packages=None, link=None, plt_style="default", **kwargs):
     if tools.is_admin(cfg=cfg) and (ipp := IPython.get_ipython()):
         monitoring_link = "https://bulkhours.fr" if link is None else link
         IPython.display.display(IPython.display.Markdown(f"""
-<table>
+<a href="{monitoring_link}"><table>
   <tr>
-    <td><a href="{monitoring_link}"><figure><img src='https://huggingface.co/datasets/guydegnol/bulkhours/resolve/main/logo_green.png?download=true' width="60px" align="center" /></figure>
+    <td><figure><img src='https://huggingface.co/datasets/guydegnol/bulkhours/resolve/main/logo_green.png?download=true' width="60px" align="center" /></figure>
     </td>
     <td>
 Import BULK Helper cOURSe (<font color="#00A099">version='{version}'🚀, ⚠️ </font><font color="#F23030">in admin/teacher🎓 mode</font><font color="#212121">⚠️)</font><br/>
@@ -175,9 +175,9 @@ Import BULK Helper cOURSe (<font color="#00A099">version='{version}'🚀, ⚠️
     if not tools.is_admin(cfg=cfg) and (ipp := IPython.get_ipython()):
         monitoring_link = "https://bulkhours.fr" if link is None else link
         IPython.display.display(IPython.display.Markdown(f"""
-<table>
+<a href="{monitoring_link}"><table>
   <tr>
-    <td><a href="{monitoring_link}"><figure><img src='https://huggingface.co/datasets/guydegnol/bulkhours/resolve/main/logo_green.png?download=true' width="35px" align="center" /></figure>
+    <td><figure><img src='https://huggingface.co/datasets/guydegnol/bulkhours/resolve/main/logo_green.png?download=true' width="35px" align="center" /></figure>
     </td>
     <td>
 <font color="#212121">Import BULK Helper cOURSe (</font><font color="#00A099">version='{version}'</font><font color="#212121">🚀)</font><br/>
