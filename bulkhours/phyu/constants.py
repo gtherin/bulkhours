@@ -380,6 +380,7 @@ class Units:
         self.add_constant("A_terre", 0.300, c="Albedo", p="terre")
         self.add_constant("S_terre", 0.394, c="Serre", p="terre")
         self.add_constant("T_terre", 15, c="T_C", p="terre")
+        self.add_constant("ppm_ref_terre", 280, c="ppm_ref", p="terre")
         self.add_constant(
             "d_terre_solm",
             150e9,

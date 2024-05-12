@@ -1,3 +1,4 @@
+import pandas as pd
 import numpy as np
 
 from .data_parser import DataParser
@@ -173,3 +174,16 @@ def get_corruption(self, show_truth=False, **data_info):
 )
 def get_life_expectancy_vs_gdp_2018(self, **data_info):
     return self.read_raw_data(self.raw_data)  # .dropna()
+
+
+@DataParser.register_dataset(
+    label="ww2.slbombing",
+    summary="South London bombing data during World War II. The districts are 576, of equal sizes (0.25km²)",
+    columns_description="""| Column   |      Info |
+|-----------|:-----------|
+| Number_of_bombs   |  Numbers of bombs hit k |         
+| Nk                |  Numbers of districts hit by k bombs |""",
+)
+def get_londonbombing(self, **kwargs):
+    return pd.DataFrame({"Number_of_bombs": range(6), "Nk": [229, 211, 93, 35, 7, 1]})
+
