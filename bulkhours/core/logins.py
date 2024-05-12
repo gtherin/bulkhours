@@ -163,26 +163,28 @@ def init_env(packages=None, link=None, plt_style="default", **kwargs):
     if tools.is_admin(cfg=cfg) and (ipp := IPython.get_ipython()):
         monitoring_link = "https://bulkhours.fr" if link is None else link
         IPython.display.display(IPython.display.Markdown(f"""
-<a href="{monitoring_link}"><table>
+<table>
   <tr>
-    <td><figure><img src='https://huggingface.co/datasets/guydegnol/bulkhours/resolve/main/logo_green.png?download=true' width="60px" align="center" /></figure>
-    </td>
-    <td>
+    <td><a href="{monitoring_link}"><figure><img src='https://huggingface.co/datasets/guydegnol/bulkhours/resolve/main/logo_green.png?download=true' width="60px" align="center" /></figure>
+    </a>
+</td><td>
+<a href="{monitoring_link}">
 Import BULK Helper cOURSe (<font color="#00A099">version='{version}'🚀, ⚠️ </font><font color="#F23030">in admin/teacher🎓 mode</font><font color="#212121">⚠️)</font><br/>
 <pre><font color="#212121">{info}</font></pre>
 <font color="#294D9">Administration du notebook sur le portail bulkhours.fr</font>
-</td></tr></table></a>"""))
+</a>
+</td></tr></table>"""))
     if not tools.is_admin(cfg=cfg) and (ipp := IPython.get_ipython()):
         monitoring_link = "https://bulkhours.fr" if link is None else link
         IPython.display.display(IPython.display.Markdown(f"""
-<a href="{monitoring_link}"><table>
+<table>
   <tr>
-    <td><figure><img src='https://huggingface.co/datasets/guydegnol/bulkhours/resolve/main/logo_green.png?download=true' width="35px" align="center" /></figure>
+    <td><a href="{monitoring_link}"><figure><img src='https://huggingface.co/datasets/guydegnol/bulkhours/resolve/main/logo_green.png?download=true' width="35px" align="center" /></figure></a>
     </td>
     <td>
 <font color="#212121">Import BULK Helper cOURSe (</font><font color="#00A099">version='{version}'</font><font color="#212121">🚀)</font><br/>
 <pre><font color="#212121">{info}</font></pre>
-</td></tr></table></a>"""))
+</td></tr></table>"""))
 
     if "bkloud" not in cfg["database"]:
         if not quiet_mode:
