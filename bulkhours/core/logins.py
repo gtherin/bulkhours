@@ -95,7 +95,7 @@ def commercial(language="en", **kwargs):
         )
     )
 
-def init_from_token(token, ktoken, packages=None):
+def init_from_token(token, ktoken, packages=None, link=None):
 
     import jwt
 
@@ -104,10 +104,10 @@ def init_from_token(token, ktoken, packages=None):
     if data["email"] != data["email"]:
         raise Exception(f"Identity {data['email']}is not the expected one")
 
-    init_env(packages=packages, **data)
+    init_env(packages=packages, link=link, **data)
 
 
-def init_env(packages=None, plt_style="default", **kwargs):
+def init_env(packages=None, link=None, plt_style="default", **kwargs):
     """Initialize the environment of the user
 
         Parameters:
@@ -158,10 +158,20 @@ def init_env(packages=None, plt_style="default", **kwargs):
     version = open(tools.abspath("bulkhours/__version__.py")).readlines()[0].split('"')[1]
 
     einfo = f", ⚠️\x1b[31m\x1b[41m\x1b[37m in admin/teacher🎓 mode\x1b[0m⚠️" if tools.is_admin(cfg=cfg) else ""
-    if not quiet_mode:
+    if not tools.is_admin(cfg=cfg) and not quiet_mode:
         print(f"Import BULK Helper cOURSe (\x1b[0m\x1b[36mversion='{version}'\x1b[0m🚀{einfo}):", end="")
     if tools.is_admin(cfg=cfg) and (ipp := IPython.get_ipython()):
-        IPython.display.display(IPython.display.Markdown("""Pour administrer le notebook et suivre vos élèves, veuillez-vous connecter sur le portail <a href="https://appv14.bulkhours.fr">bulkhours.fr</a> Pour activer votre compte, veuillez <a href="mailto:contact@bulkhours.fr">nous contacter</a> ici."""))
+        monitoring_link = "https://bulkhours.fr" if link is None else link
+        IPython.display.display(IPython.display.Markdown(f"""
+<table>
+  <tr>
+    <td><a href="{monitoring_link}"><figure><img src='https://huggingface.co/datasets/guydegnol/bulkhours/resolve/main/logo_green.png?download=true' width="60px" align="center" /></figure></a>
+    </td>
+    <td>
+Import BULK Helper cOURSe (<font color="#00A099">version='5.9.0'</font>🚀, ⚠️ <font color="#F23030">in admin/teacher🎓 mode</font>⚠️)<br/>
+<pre>course/groupname/nb_id/user = bulk/toy/01_Introduction/solution@bulkhours.fr</pre>
+<a href="{monitoring_link}"><font color="#294D9">Administration du notebook sur le portail bulkhours.fr</font></a><br/><a href="mailto:contact@bulkhours.fr"><font color="#4C5E6D">📧Contact</font></a>
+</td></tr></table>"""))
 
     if "bkloud" not in cfg["database"]:
         if not quiet_mode:
@@ -179,7 +189,7 @@ import ipywidgets
         if tools.get_platform() == "colab":
             ipp.run_cell("%cd /content")
 
-    if not quiet_mode:
+    if not tools.is_admin(cfg=cfg) and not quiet_mode:
         print("\n- session-info: " + info)
 
     if tools.get_value("openai_token") is not None or tools.get_value("huggingface_token") is not None:
