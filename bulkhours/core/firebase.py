@@ -14,6 +14,10 @@ def get_paris_time(ftime="%Y-%m-%d %H:%M:%S"):
 
     import zoneinfo
     dt =  datetime.datetime.now(tz=zoneinfo.ZoneInfo("Europe/Paris"))
+
+    if ftime in ["unix"]:
+        return int(dt.timestamp())
+
     if ftime is None:
         return dt
 
