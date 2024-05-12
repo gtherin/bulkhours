@@ -178,7 +178,7 @@ def get_life_expectancy_vs_gdp_2018(self, **data_info):
 
 @DataParser.register_dataset(
     label="ww2.slbombing",
-    summary="South London bombing data during World War II. The districts are 576, of equal sizes (0.25km²)",
+    summary="South London bombing data during World War II for 576 districts (of equal sizes 0.25km²)",
     columns_description="""| Column   |      Info |
 |-----------|:-----------|
 | Number_of_bombs   |  Numbers of bombs hit k |         
