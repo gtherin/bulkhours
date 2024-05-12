@@ -169,9 +169,9 @@ def init_env(packages=None, link=None, plt_style="default", **kwargs):
     </a>
 </td><td>
 <a href="{monitoring_link}">
-Import BULK Helper cOURSe (<font color="#00A099">version='{version}'🚀, ⚠️ </font><font color="#F23030">in admin/teacher🎓 mode</font><font color="#212121">⚠️)</font><br/>
+<font color="#212121">Import BULK Helper cOURSe (</font><font color="#00A099">version='{version}'🚀, ⚠️ </font><font color="#F23030">in admin/teacher🎓 mode</font><font color="#212121">⚠️)</font><br/>
 <pre><font color="#212121">{info}</font></pre>
-<font color="#294D9">Administration du notebook sur le portail bulkhours.fr</font>
+<font color="#294D9">Cliquer 👆 pour administrer ce notebook</font>
 </a>
 </td></tr></table>"""))
     if not tools.is_admin(cfg=cfg) and (ipp := IPython.get_ipython()):
