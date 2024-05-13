@@ -67,8 +67,12 @@ def summary(
     aggregate=None,
     homogen=None,
     db_storage=False,
+    groupname=None,
     **kwargs,
 ):
+    if groupname is not None and virtual_room is None:
+        virtual_room = groupname
+
     cfg = core.tools.get_config(is_new_format=True, **kwargs)
     if virtual_room == "ALL":
         virtual_rooms = cfg.virtual_rooms.split(";")
