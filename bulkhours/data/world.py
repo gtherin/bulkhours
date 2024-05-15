@@ -181,8 +181,8 @@ def get_life_expectancy_vs_gdp_2018(self, **data_info):
     summary="South London bombing data during World War II for 576 districts (of equal sizes 0.25km²)",
     columns_description="""| Column   |      Info |
 |-----------|:-----------|
-| Number_of_bombs   |  Numbers of bombs hit k |         
-| Nk                |  Numbers of districts hit by k bombs |""",
+| k   |  Nombre de bombes tombées dans chaque quartier |         
+| Nk                |  Nombre de quartiers touchés par K bombes |""",
 )
 def get_londonbombing(self, **kwargs):
     return pd.DataFrame({"Number_of_bombs": range(6), "Nk": [229, 211, 93, 35, 7, 1]})
