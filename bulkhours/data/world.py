@@ -182,8 +182,8 @@ def get_life_expectancy_vs_gdp_2018(self, **data_info):
     columns_description="""| Column   |      Info |
 |-----------|:-----------|
 | k   |  Nombre de bombes tombées dans chaque quartier |         
-| Nk                |  Nombre de quartiers touchés par K bombes |""",
+| Nk                |  Nombre de quartiers touchés par k bombes |""",
 )
 def get_londonbombing(self, **kwargs):
-    return pd.DataFrame({"Number_of_bombs": range(6), "Nk": [229, 211, 93, 35, 7, 1]})
+    return pd.DataFrame({"Number_of_bombs": range(6), "Nk": [229, 211, 93, 35, 7, 1]}).set_index("Number_of_bombs")
 
