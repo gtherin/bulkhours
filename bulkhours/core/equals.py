@@ -260,9 +260,7 @@ Some more comments should be available soon.
             contexts.run_cell(evaluation_code, False)
             grade = Grade(
                 score=float(os.environ["FINAL_SCORE"]),
-                comment="""Analytical evaluation failed.
-Some more comments should be available soon.                           
-""",
+                comment="""Based on an automatic analytic evaluation""",
             )
         except:
             grade = Grade(score=Grade.EVALUATION_CRASHED, comment="Automatic evaluation was not performed.\nPlease have a closer look to the answer")
