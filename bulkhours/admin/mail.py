@@ -49,7 +49,7 @@ def copy4students(email, drive_rdir, filename, cfg=None, **kwargs):
     sub_rdir = filename.replace(" ", "_").replace(".ipynb", "_" + cfg.virtual_room)
 
     for _, student in students_list.iterrows():
-        if student["mail"] in ["solution", "solution@bulhours.fr"]:
+        if student["mail"] == core.tools.REF_USER:
             continue
         cfilename = f"{drive_rdir}/{sub_rdir}/{filename}".replace(
             ".", f"_%s." % student["auser"].lower()
@@ -333,7 +333,7 @@ def send_mails(
     )
 
     for _, student in students_list.iterrows():
-        if student["mail"] in ["solution", "solution@bulhours.fr"]:
+        if student["mail"]  == core.tools.REF_USER:
             continue
         cfilename = f"{drive_rdir}/{sub_rdir}/{notebook_file}".replace(
             ".", f"_%s." % student["auser"].lower()

@@ -27,9 +27,9 @@ print("BK ROCKS")  # BULKHOURS.REPLACE:print("...COMMENT...")
 
 
 def test_cell_reset_python():
-    cinfo = bulkhours.core.LineParser.from_cell_id_user("synthetic", "solution")
+    cinfo = bulkhours.core.LineParser.from_cell_id_user("synthetic", bulkhours.core.tools.REF_USER)
     teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(
-        cinfo=cinfo, user="solution", data=cell_content
+        cinfo=cinfo, user=bulkhours.core.tools.REF_USER, data=cell_content
     )
     code = teacher_data.get_reset()
     print(code)
@@ -45,9 +45,9 @@ def test_cell_reset_python():
 
 
 def test_cell_solution_python():
-    cinfo = bulkhours.core.LineParser.from_cell_id_user("synthetic", "solution")
+    cinfo = bulkhours.core.LineParser.from_cell_id_user("synthetic", bulkhours.core.tools.REF_USER)
     teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(
-        cinfo=cinfo, user="solution", data=cell_content
+        cinfo=cinfo, user=bulkhours.core.tools.REF_USER, data=cell_content
     )
     code = teacher_data.get_solution()
     print(code)
@@ -100,9 +100,9 @@ int main() {
 
 
 def test_cell_reset_cpp():
-    cinfo = bulkhours.core.LineParser.from_cell_id_user("synthetic", "solution")
+    cinfo = bulkhours.core.LineParser.from_cell_id_user("synthetic", bulkhours.core.tools.REF_USER)
     teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(
-        cinfo=cinfo, user="solution", data=cell_content_cpp
+        cinfo=cinfo, user=bulkhours.core.tools.REF_USER, data=cell_content_cpp
     )
     print(teacher_data.minfo)
     code = teacher_data.get_reset()
@@ -119,9 +119,9 @@ def test_cell_reset_cpp():
 
 
 def test_cell_solution_cpp():
-    cinfo = bulkhours.core.LineParser.from_cell_id_user("synthetic", "solution")
+    cinfo = bulkhours.core.LineParser.from_cell_id_user("synthetic", bulkhours.core.tools.REF_USER)
     teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(
-        cinfo=cinfo, user="solution", data=cell_content_cpp
+        cinfo=cinfo, user=bulkhours.core.tools.REF_USER, data=cell_content_cpp
     )
     code = teacher_data.get_solution()
     print(code)
