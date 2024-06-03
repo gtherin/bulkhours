@@ -62,14 +62,11 @@ def get_answers(cell_id, update_git=False, verbose=False, aliases={}):
     return data
 
 
-def update_grades(cell_id, grades, grade_name, db_storage=True):
+def update_grades(cell_id, grades, grade_name):
     cfg = core.tools.get_config(is_new_format=True)
 
     uptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
  
-    if db_storage:
-        raise Exception("Should be deprecated.")
-
     for k in grades.index:
         update_note_in_db(
             cell_id,
@@ -89,15 +86,13 @@ def update_note_in_db(cell_id, user, grade, uptime, grade_name="grade", grade_co
         return
 
     info = {grade_name: grade, grade_name + "_upd": uptime, grade_name + "_comment": grade_comment}
+    print(info)
+    return
 
     try:
-        return core.firebase.get_document(
-            question=cell_id, user=user, cinfo=cfg
-        ).update(info)
+        return core.firebase.get_document(question=cell_id, user=user, cinfo=cfg).update(info)
     except:
-        return core.firebase.get_document(question=cell_id, user=user, cinfo=cfg).set(
-            info
-        )
+        return core.firebase.get_document(question=cell_id, user=user, cinfo=cfg).set(info)
 
 
 def update_grade(cell_id, user, grade, verbose=True, grade_name="grade", comment=""):
