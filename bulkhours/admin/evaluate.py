@@ -363,7 +363,7 @@ def evaluate_all(
         )
 
         # Don't manual data is available
-        if student_data.is_manual_note():
+        if student_data.is_manual_note() and user != core.tools.REF_USER:
             comment = student_data.minfo["grade_man_comment"] if "grade_man_comment" in student_data.minfo else "To be discussed with evaluator"
             grade = core.Grade(score=student_data.minfo["grade_man"], src="man", comment=comment)
             comment = " [MAN]"
