@@ -345,25 +345,25 @@ def evaluate_all(
 
     cell_answers = answers.get_answers(cinfo.cell_id, verbose=False)
     for u in grades.index:
-        mail, auser = grades["mail"][u], grades["auser"][u]
-        if type(mail) == pd.Series:
-            mail, auser = mail.iloc[0], auser.iloc[0]
+        email, auser = grades["mail"][u], grades["auser"][u]
+        if type(email) == pd.Series:
+            email, auser = email.iloc[0], auser.iloc[0]
 
         if duser is not None and auser != duser:
             continue
 
         # print(f"\x1b[35m\x1b[1m{auser}, \x1b[m", end="")
-        if mail not in cell_answers:
+        if email not in cell_answers:
             print(f"\x1b[35m\x1b[1m(nan), \x1b[m", end="")
             continue
 
         # Get student data
         student_data = core.CellParser.crunch_data(
-            cinfo=cinfo, data=cell_answers[mail], user=mail
+            cinfo=cinfo, data=cell_answers[email], user=email
         )
 
         # Don't manual data is available
-        if student_data.is_manual_note() and user != core.tools.REF_USER:
+        if student_data.is_manual_note() and email != core.tools.REF_USER:
             comment = student_data.minfo["grade_man_comment"] if "grade_man_comment" in student_data.minfo else "To be discussed with evaluator"
             grade = core.Grade(score=student_data.minfo["grade_man"], src="man", comment=comment)
             comment = " [MAN]"
@@ -382,7 +382,7 @@ def evaluate_all(
         grades.loc[u, cinfo.cell_id + ".n"] = grade.score
         grades.loc[u, cinfo.cell_id + ".c"] = grade.comment
 
-        if user == core.tools.REF_USER:
+        if email == core.tools.REF_USER:
             max_score = grade.score
 
     grad_name = (
