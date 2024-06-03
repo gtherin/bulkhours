@@ -23,9 +23,13 @@ def cell_reset(source):
     df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BULKHOURS.INIT:0
     """
 
-    separator = "//" if "// BULKHOURS" in source else "#"
+    separator = "//" if "//BULKHOURS" in source.replace(" ", "") else "#"
     nsource = []
     keep_line = True
+
+
+    message = "❗A vous de jouer❗" if 1 else "❗Your code❗"
+    message = "" if "//BULKHOURS" in source.replace(" ", "") in source else message
 
     for s in source.split("\n"):
         s = s.replace("BKRESET", "BULKHOURS")
@@ -37,24 +41,24 @@ def cell_reset(source):
                         s.split("=")[0]
                         + "= "
                         + l[1].replace("INIT:", "")
-                        + f"  {separator} ..."
+                        + f"  {separator} ...{message}"
                     )
                 elif "return " in s:
                     s = (
                         s.split("return ")[0]
                         + "return "
                         + l[1].replace("INIT:", "")
-                        + f"  {separator} ..."
+                        + f"  {separator} ...{message}"
                     )
             if "REMOVE" in l[1]:
                 if "START" in l[1]:
                     keep_line = False
                 elif "END" in l[1]:
                     keep_line = True
-                    s = s.split(separator)[0] + separator + " ..."
+                    s = s.split(separator)[0] + separator + " ...{message}"
                 else:
                     indentation = len(s) - len(s.lstrip())
-                    s = (" " * indentation) + separator + " ..."
+                    s = (" " * indentation) + separator + " ...{message}"
             if "REPLACE" in l[1]:
                 indentation = len(s) - len(s.lstrip())
                 s = (

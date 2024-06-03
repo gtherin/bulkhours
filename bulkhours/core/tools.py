@@ -6,7 +6,7 @@ from pathlib import Path
 from argparse import Namespace
 from .config import Config
 
-REF_USER = "solution"
+REF_USER = "solution@bulkhours.fr"
 
 
 def safe(ext=False):
