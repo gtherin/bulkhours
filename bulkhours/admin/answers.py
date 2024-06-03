@@ -86,8 +86,6 @@ def update_note_in_db(cell_id, user, grade, uptime, grade_name="grade", grade_co
         return
 
     info = {grade_name: grade, grade_name + "_upd": uptime, grade_name + "_comment": grade_comment}
-    print(info)
-    return
 
     try:
         return core.firebase.get_document(question=cell_id, user=user, cinfo=cfg).update(info)
