@@ -47,7 +47,7 @@ def init_prems(config):
     is_known_student = (
         ("virtual_room" in config and email in config["global"][config["virtual_room"]])
         or email in config["global"]["admins"]
-        or email in ["solution", "solution@bulhours.fr"]
+        or email == tools.REF_USER
     )
     language = config["global"].get("language")
     if config["global"]["admins"] == "":
@@ -120,7 +120,7 @@ def init_env(packages=None, link=None, plt_style="default", **kwargs):
     database ="data/cache/course2.json"
     database ="/content/mydatabase.json"
      - A string with an identifier token. This token gives you access to: a real-time database (with id check), api to openai, huggingface, etc.
-     As this solution might generate reasonable costs, you should contact contact@bulkhours.eu to get a token.
+     As this solution might generate reasonable costs, you should contact contact@bulkhours.fr to get a token.
     database = "bkloud@SUBJECT/teacher::eNq-XXXXXXXXXXXHXXXXX-L29tB"
     database = "bkloud@SUBJECT/CLASSROOM_student::eNq-XXXXXXXXXXXHXXXXX-9tB"
      - A dict of config information. Only firestore config are functional for the moment. Examples:

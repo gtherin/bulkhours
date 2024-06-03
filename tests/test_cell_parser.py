@@ -58,9 +58,9 @@ def student_evaluation_function():
 print("... COMMENT...")  # BULKHOURS.REPLACE:print("... COMMENT...")
 """
 
-    cinfo = bulkhours.core.LineParser.from_cell_id_user("synthetic", "solution")
+    cinfo = bulkhours.core.LineParser.from_cell_id_user("synthetic", bulkhours.core.tools.REF_USER)
     teacher_data = bulkhours.core.cell_parser.CellParser.crunch_data(
-        cinfo=cinfo, data=cell_content, user="solution"
+        cinfo=cinfo, data=cell_content, user=bulkhours.core.tools.REF_USER
     )
     print(teacher_data.minfo.keys())
     print(teacher_data.get_solution())
