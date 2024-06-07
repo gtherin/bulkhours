@@ -55,10 +55,10 @@ def cell_reset(source):
                     keep_line = False
                 elif "END" in l[1]:
                     keep_line = True
-                    s = s.split(separator)[0] + separator + " ...{message}"
+                    s = s.split(separator)[0] + separator + f" ...{message}"
                 else:
                     indentation = len(s) - len(s.lstrip())
-                    s = (" " * indentation) + separator + " ...{message}"
+                    s = (" " * indentation) + separator + f" ...{message}"
             if "REPLACE" in l[1]:
                 indentation = len(s) - len(s.lstrip())
                 s = (
