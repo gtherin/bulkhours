@@ -176,7 +176,7 @@ def get_config(config=None, is_new_format=False, **kwargs):
 def get_value(key, config=None):
     if config is None:
         config = get_config()
-    if key is None:
+    if key is None or config is None:
         return None
     if key in config:
         return config.get(key)
