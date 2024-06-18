@@ -35,10 +35,10 @@ def init_prems(config):
         path["db"] = (
             config["database"].split("@")[0] + "@" if "@" in config["database"] else config["database"].split("/")[-1]
         )
-    path["subject"] = config["subject"]
-    path["virtual_room"] = config["virtual_room"]
-    path["nb_id"] = config["notebook_id"]
-    path["user"] = (email := config["email"])
+    path["subject"] = config["subject"] if "subject" in config else "None"
+    path["virtual_room"] = config["virtual_room"] if "virtual_room" in config else "None"
+    path["nb_id"] = config["notebook_id"] if "notebook_id" in config else "None"
+    path["user"] = (email := config["email"] if "email" in config else "None")
 
     if email is None:
         path["user"] = f"None ❌\x1b[41m\x1b[37m, email not configured\x1b[0m"
