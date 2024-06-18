@@ -56,18 +56,11 @@ def init_prems(config):
     config["eparams"] = False
 
     if not is_known_student:
-        if 0 and config["global"]["restricted"]:
-            raise Exception.IndexError(
-                f"❌\x1b[41m\x1b[37mL'email '{email}' n'est pas configuré dans la base de données. Contacter le professeur svp\x1b[0m"
-                if language == "fr"
-                else f"❌\x1b[41m\x1b[37mEmail '{email}' is not configured in the database. Please contact the teacher\x1b[0m"
-            )
         path["user"] += (
             "❌ (\x1b[41m\x1b[37memail inconnu: contacter le professeur svp\x1b[0m), "
             if language == "fr"
             else "❌ (\x1b[41m\x1b[37munknown email: please contact the teacher\x1b[0m), "
         )
-
     else:
         path["user"] += "🎓" if email in config["global"]["admins"] or tools.is_admin(config) else "✅"
 
@@ -146,10 +139,10 @@ def init_env(packages=None, link=None, plt_style="default", **kwargs):
 
     if "database" in kwargs:
         cfg = firebase.init_database(kwargs)
+        info = init_prems(cfg)
     else:
         cfg = kwargs
-    
-    info = init_prems(cfg)
+        info = "None"
     start_time = time.time()
 
     if "BULK_PACKAGES_STATUS" not in os.environ:
