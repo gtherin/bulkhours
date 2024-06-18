@@ -144,7 +144,10 @@ def init_env(packages=None, link=None, plt_style="default", **kwargs):
 
     quiet_mode = mode == "passive"
 
-    cfg = firebase.init_database(kwargs)
+    if "database" in kwargs:
+        cfg = firebase.init_database(kwargs)
+    else:
+        cfg = tools.get_config(is_new_format=False)
     
     info = init_prems(cfg)
     start_time = time.time()
