@@ -182,12 +182,6 @@ def init_env(packages=None, link=None, plt_style="default", **kwargs):
 <pre><font color="#212121">{info}</font></pre>
 </td></tr></table>"""))
 
-    if "bkloud" not in cfg["database"]:
-        if not quiet_mode:
-            print(
-                f"⚠️\x1b[31mDatabase is local (security_level={cfg['security_level']}). Export your config file if you need persistency.\x1b[0m⚠️",
-                end="",
-            )
     if ipp := IPython.get_ipython():
         ipp.run_cell(
             """import IPython
