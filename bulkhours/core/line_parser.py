@@ -221,18 +221,19 @@ class LineParser:
                 if self.type in available_widgets
                 else available_widgets["default"]
             )
+        
+        if cfg is not None:
+            for p in ["language", "restricted", "chatgpt", "norm20", "subject"]:
+                if p in cfg.g:
+                    setattr(self, p, cfg.g[p])
 
-        for p in ["language", "restricted", "chatgpt", "norm20", "subject"]:
-            if p in cfg.g:
-                setattr(self, p, cfg.g[p])
+            if not hasattr(self, "user") or self.user is None:
+                self.user = cfg.email
 
-        if not hasattr(self, "user") or self.user is None:
-            self.user = cfg.email
+            for p in ["notebook_id", "virtual_room"]:
+                setattr(self, p, cfg[p])
 
-        for p in ["notebook_id", "virtual_room"]:
-            setattr(self, p, cfg[p])
-
-        mode = "production" if "mode" not in cfg else cfg["mode"]
+        mode = "production" if cfg is None or "mode" not in cfg else cfg["mode"]
         if mode == "passive":
             self.widgets = self.widgets.replace("s", "")
         if mode == "production" and self.is_admin:
