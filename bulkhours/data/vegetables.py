@@ -1,9 +1,9 @@
 import os
+import sys
 import pandas as pd
 import datetime
 
 from .data_parser import DataParser
-from .world import get_mapgeneric, geo_format
 
 
 DataParser.register_dataset(
