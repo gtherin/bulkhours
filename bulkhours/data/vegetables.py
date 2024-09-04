@@ -53,7 +53,7 @@ def download_kaggle_data(filename, chunck_size=40960):
 
     from pathlib import Path
 
-    path = Path("vegetables.py")
+    path = Path(os.path.abspath("vegetables.py"))
     destination_path = path.parent.parent.absolute()
 
     print(destination_path)
