@@ -64,7 +64,7 @@ def install_package(package, if_needed=False):
         os.system(f"sudo apt-get update > /dev/null 2>&1")
         status = "U"
     elif package == "vegetables":
-        from .data.vegetables import download_kaggle_data
+        from ..data.vegetables import download_kaggle_data
         download_kaggle_data(package)
     elif (
         package == "HF_UNIT1"
