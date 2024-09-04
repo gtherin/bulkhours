@@ -42,6 +42,7 @@ def download_data(filename, directory=None):
         dirname = os.path.dirname(filename) if "/" in filename else "model_weights"
         cmd = f"curl {url}{dirname}/raw/main/{bfilename} --output {bfilename}"
 
+    print(cmd)
     os.system(cmd)
 
     if directory is not None:
