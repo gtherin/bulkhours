@@ -29,7 +29,10 @@ def get_data(label, **kwargs):
 
 def download_data(filename):
     if filename == "vegetables":
-        return vegetables.download_kaggle_data(filename)
+        d = vegetables.download_kaggle_data(filename)
+        download_data("vege.cnn.hist.json")
+        download_data("vege.cnn.weights.h5")
+        return d
 
     url = "https://huggingface.co/datasets/guydegnol/"
     bfilename = os.path.basename(filename)

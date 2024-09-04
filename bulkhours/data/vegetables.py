@@ -18,6 +18,7 @@ DataParser.register_dataset(
 def plot_images(sample):
 
     import tensorflow as tf
+    import matplotlib.pyplot as plt
 
     image_categories = os.listdir('/root/bulkhours/data/vegetables/train')
 
@@ -50,7 +51,7 @@ def download_kaggle_data(filename, chunck_size=40960):
     from zipfile import ZipFile
     import tarfile
 
-    bfilename = os.path.basename("vegetables.py")
+    bfilename = os.path.basename(os.path.basename("vegetables.py"))
     print(bfilename)
 
     destination_path = '/root/bulkhours/data/'
