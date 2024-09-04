@@ -1,4 +1,5 @@
 import os
+import sys
 import glob
 
 
@@ -40,7 +41,7 @@ def download_kaggle_data(filename, chunck_size=40960):
     filename = urlparse(download_url).path
     with urlopen(download_url) as fileres, NamedTemporaryFile() as tfile:
         total_length = fileres.headers['content-length']
-        print(f'Downloading {total_length} bytes compressed')
+        print(f'\033[36mDownloading {total_length} bytes compressed\033[39m')
         dl = 0
         data = fileres.read(chunck_size)
         while len(data) > 0:
