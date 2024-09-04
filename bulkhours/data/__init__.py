@@ -27,13 +27,11 @@ def get_data(label, **kwargs):
     return DataParser(**data_info).get_data()
 
 
-def download_data(filename):
+def download_data(filename, directory=None):
     if filename == "vegetables":
         d = vegetables.download_kaggle_data(filename)
         for f in ["vege.cnn.hist.json", "vege.cnn.weights.h5"]:
-            localfilename = download_data(f)
-            print(f"mv {localfilename} {d}")
-            #os.system(cmd)
+            download_data(f, directory=d)
         return d
 
     url = "https://huggingface.co/datasets/guydegnol/"
@@ -45,6 +43,11 @@ def download_data(filename):
         cmd = f"curl {url}{dirname}/raw/main/{bfilename} --output {bfilename}"
 
     os.system(cmd)
+
+    if directory is not None:
+        print(f"mv {bfilename} {directory}")
+        #os.system(f"mv {bfilename} {directory}")
+
     return bfilename
 
 
