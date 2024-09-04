@@ -63,9 +63,10 @@ def install_package(package, if_needed=False):
     elif package == "apt-get":
         os.system(f"sudo apt-get update > /dev/null 2>&1")
         status = "U"
-    elif package == "vegetables":
-        from ..data.vegetables import download_kaggle_data
-        download_kaggle_data(package)
+    elif package in ["vegetables"]:
+        from ..data import download_data
+
+        download_data(package)
     elif (
         package == "HF_UNIT1"
     ):  # stable-baselines3==2.0.0a5,gymnasium[box2d],huggingface_sb3
