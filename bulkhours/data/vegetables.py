@@ -55,7 +55,7 @@ def download_kaggle_data(filename, chunck_size=40960):
     from pathlib import Path
 
     path = Path("vegetables.py")
-    print(path.parent.absolute())
+    print(path.parent.parent.absolute())
 
     destination_path2 = os.path.abspath(os.path.join(os.path.basename("vegetables.py"), os.pardir))
     print(destination_path2)
@@ -66,7 +66,7 @@ def download_kaggle_data(filename, chunck_size=40960):
     filename = urlparse(download_url).path
     with urlopen(download_url) as fileres, NamedTemporaryFile() as tfile:
         total_length = fileres.headers['content-length']
-        print(f'\033[36mDownloading {total_length} bytes compressed\033[39m')
+        print(f'\033[36mDownloading {filename} data ({total_length} bytes compressed)\033[39m')
         dl = 0
         data = fileres.read(chunck_size)
         while len(data) > 0:
