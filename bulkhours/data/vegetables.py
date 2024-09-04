@@ -54,13 +54,13 @@ def download_kaggle_data(filename, chunck_size=40960):
     from pathlib import Path
 
     path = Path(os.path.dirname(__file__))
-    destination_path = path.parent.absolute()
+    destination_path = path.parent.parent.absolute() + "/data"
 
     print(destination_path)
     destination_path = '/root/bulkhours/data/'
     print(destination_path)
 
-    destination_path2 = f'/root/bulkhours/data/{filename}'
+    destination_path2 = f'{destination_path}{filename}'
     print(destination_path2)
 
     download_url = "https://storage.googleapis.com/kaggle-data-sets/1817999/2965251/bundle/archive.zip?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20240903%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20240903T114415Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=54863d9aab9113332f639e5f141b72361f8d184e885a1a77ad65d035fde5f9e5e2759b2cab289f8c22ed3befe0b3b28f88d1bf957f6d9d3dbd707101984359b488848d0fb3b896694a72a67b4a872d895288e0ea08d413754c1e6db69a64ad3a7d3c22e8a2d06a05515dcd107af66eee290ad42e485d345e18490c55836c0ff520eb460503aa666e2a12b00919f32baf72e2d14450d506a28c606b05711a8b8437aa1ddcacaf97059273b14c7a0c938049e0525508ff1d27bd53726217632cce253134558805700c5e8a83e359621960b73b6fc48f9e43fd834728c9510459514e9bb01b60ba659d34e75d6f3117e65a7e7e8570fba95b5efafc56f89b7fff15"
