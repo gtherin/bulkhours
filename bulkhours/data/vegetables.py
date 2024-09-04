@@ -53,8 +53,8 @@ def download_kaggle_data(filename, chunck_size=40960):
 
     from pathlib import Path
 
-    path = Path(os.path.abspath("vegetables.py"))
-    destination_path = path.parent.parent.absolute()
+    path = Path(os.path.dirname(__file__))
+    destination_path = path.parent.absolute()
 
     print(destination_path)
     destination_path = '/root/bulkhours/data/'
