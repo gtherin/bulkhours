@@ -45,7 +45,6 @@ def download_data(filename, directory=None):
     os.system(cmd)
 
     if directory is not None:
-        print(f"mv {bfilename} {directory}")
         os.system(f"mv {bfilename} {directory}")
 
     return bfilename
