@@ -31,9 +31,8 @@ def download_data(filename):
     if filename == "vegetables":
         d = vegetables.download_kaggle_data(filename)
         for f in ["vege.cnn.hist.json", "vege.cnn.weights.h5"]:
-            download_data(f)
-            bfilename = os.path.basename(filename)
-            print(bfilename)
+            localfilename = download_data(f)
+            print(f"mv {localfilename} {d}")
             #os.system(cmd)
         return d
 
