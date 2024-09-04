@@ -60,14 +60,14 @@ def download_kaggle_data(filename, chunck_size=40960):
     dfilename = urlparse(download_url).path
     with urlopen(download_url) as fileres, NamedTemporaryFile() as tfile:
         total_length = int(fileres.headers['content-length'])
-        print(f'\033[36mDownloading {destination_path}{filename} data ({total_length*1e-6:.0f} MO compressed)\033[39m')
+        print(f'\033[36mDownloading {destination_path}{filename} data ({total_length:.0f} MO compressed)\033[39m')
         dl = 0
         data = fileres.read(chunck_size)
         while len(data) > 0:
             dl += len(data)
             tfile.write(data)
             done = int(50 * dl / total_length)
-            sys.stdout.write(f"\033[36m\r[{'=' * done}{' ' * (50-done)}] {dl*1e-6:.0f} MO downloaded\033[39m")
+            sys.stdout.write(f"\033[36m\r[{'=' * done}{' ' * (50-done)}] {dl:.0f} MO downloaded\033[39m")
             sys.stdout.flush()
             data = fileres.read(chunck_size)
         if dfilename.endswith('.zip'):
