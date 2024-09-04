@@ -51,7 +51,12 @@ def download_kaggle_data(filename, chunck_size=40960):
     from zipfile import ZipFile
     import tarfile
 
-    bfilename = os.path.basename(os.path.basename("vegetables.py"))
+
+    from pathlib import Path
+
+    path = Path("vegetables.py")
+    print(path.parent.absolute())
+
     destination_path2 = os.path.abspath(os.path.join(os.path.basename("vegetables.py"), os.pardir))
     print(destination_path2)
 
