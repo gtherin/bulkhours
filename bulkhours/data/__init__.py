@@ -46,7 +46,7 @@ def download_data(filename, directory=None):
 
     if directory is not None:
         print(f"mv {bfilename} {directory}")
-        #os.system(f"mv {bfilename} {directory}")
+        os.system(f"mv {bfilename} {directory}")
 
     return bfilename
 
