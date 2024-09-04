@@ -60,7 +60,7 @@ def download_kaggle_data(filename, chunck_size=40960):
     filename = urlparse(download_url).path
     with urlopen(download_url) as fileres, NamedTemporaryFile() as tfile:
         total_length = fileres.headers['content-length']
-        print(f'\033[36mDownloading {filename} data ({total_length} bytes compressed)\033[39m')
+        print(f'\033[36mDownloading {destination_path}{filename} data ({total_length} bytes compressed)\033[39m')
         dl = 0
         data = fileres.read(chunck_size)
         while len(data) > 0:
@@ -77,7 +77,6 @@ def download_kaggle_data(filename, chunck_size=40960):
             with tarfile.open(tfile.name) as tarfile:
                 tarfile.extractall(destination_path)            
         os.system(f"mv {destination_path}Vegetable\ Images {destination_path}{filename}")
-        print(f"mv {destination_path}Vegetable\ Images {destination_path}{filename}")
 
         return f'{destination_path}{filename}'
 
