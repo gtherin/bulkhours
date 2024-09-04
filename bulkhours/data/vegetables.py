@@ -54,7 +54,7 @@ def download_kaggle_data(filename, chunck_size=40960):
     from pathlib import Path
 
     path = Path(os.path.dirname(__file__))
-    destination_path = path.parent.parent.absolute() + "/data"
+    destination_path = str(path.parent.parent.absolute()) + "/data"
 
     print(destination_path)
     destination_path = '/root/bulkhours/data/'
