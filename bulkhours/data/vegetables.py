@@ -52,7 +52,7 @@ def download_kaggle_data(filename, chunck_size=40960):
     import tarfile
 
     bfilename = os.path.basename(os.path.basename("vegetables.py"))
-    destination_path2 = os.path.abspath(os.path.join(os.path.basename("vegetables.py", os.pardir)))
+    destination_path2 = os.path.abspath(os.path.join(os.path.basename("vegetables.py"), os.pardir))
     print(destination_path2)
 
     destination_path = '/root/bulkhours/data/'
