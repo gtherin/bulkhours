@@ -15,32 +15,53 @@ DataParser.register_dataset(
 )
 
 
-def plot_images(sample):
 
-    import tensorflow as tf
-    import matplotlib.pyplot as plt
+def draw_images(num_of_pics=25, directory="test", seed=42, model=None, is_fr=True):
 
-    image_categories = os.listdir('/root/bulkhours/data/vegetables/train')
+    import glob
+    import random
 
-    # Create a figure
-    plt.figure(figsize=(12, 12))
-    for i, cat in enumerate(image_categories):
+    # Print the class encodings done by the generators
+    class_map = dict([(v, k) for k, v in train_image_generator.class_indices.items()])
+    rimages = glob.glob(f'{data_directory}/{directory}/*/*.jpg')
+    labels = {0 : 'Haricot', 1 : 'Concombre amère', 2 : "Courgette", 3 : "Aubergine", 4 : "Brocoli", 5 : "Chou", 
+              6 : "Poivron", 7 : "Carotte", 8 : "Chou-fleur", 9 : "Concombre", 10 : "Papaye", 11 : "Pomme de terre", 
+              12 : "Citrouille", 13 : "Radis", 14 : "Tomate"} if is_fr else class_map
 
-        # Load images for the ith category
-        image_path = f"/root/bulkhours/data/vegetables/{sample}" + '/' + cat
-        images_in_folder = os.listdir(image_path)
-        first_image_of_folder = images_in_folder[0]
-        first_image_path = image_path + '/' + first_image_of_folder
-        img = tf.keras.preprocessing.image.load_img(first_image_path)
-        img_arr = tf.keras.preprocessing.image.img_to_array(img) / 255.0
+    ncols = int(np.sqrt(num_of_pics)+0.2)
 
-        # Create Subplot and plot the images
-        plt.subplot(4, 4, i+1)
-        plt.imshow(img_arr)
-        plt.title(cat)
-        plt.axis('off')
+    random.seed(seed)
+    fig, ax = plt.subplots(nrows=ncols, ncols=ncols, figsize=(12, 12))
+    for col in range(ncols):
+        for row in range(ncols):
+            ax[col][row].set_axis_off()
 
-    plt.show()
+    for index in range(num_of_pics):
+
+        # 1. Get graph info
+        row, col = index % ncols, index // ncols
+        y = index%len(class_map)
+        rimages = glob.glob(f'{data_directory}/{directory}/{class_map[y]}/*.jpg')
+        image_path = random.choice(rimages)
+
+        # 2. Load and preprocess the image
+        test_img = tf.keras.preprocessing.image.load_img(image_path, target_size=(150, 150))
+        test_img_arr = tf.keras.preprocessing.image.img_to_array(test_img) / 255.0
+        test_img_input = test_img_arr.reshape((1, test_img_arr.shape[0], test_img_arr.shape[1], test_img_arr.shape[2]))
+
+        # 3. Plot the image
+        ax[col][row].imshow(test_img_arr)
+        ax[col][row].set_axis_off()
+
+        # 4. Make Predictions
+        if model is None:
+            ax[col][row].set_title(f"y={y}-{labels[y]}", backgroundcolor='white', fontsize=11, x=0.5, y=0.85)
+        else:
+            yhat = np.argmax(model.predict(test_img_input, verbose=0))
+            ax[col][row].set_title(f"y={y}-{labels[y]}\nyhat={yhat}-{labels[yhat]}", backgroundcolor='white', 
+                                  color="#52DE97" if yhat == y else "#C70039", fontsize=11, x=0.5, y=0.75)
+
+    plt.subplots_adjust(wspace=0, hspace=0)
 
 
 def download_kaggle_data(filename, chunck_size=40960):
