@@ -23,6 +23,7 @@ def draw_images(num_of_pics=25, directory="test", seed=42, model=None, is_fr=Tru
     import numpy as np
     import matplotlib.pyplot as plt
     from pathlib import Path
+    import tensorflow as tf
 
     path = Path(os.path.dirname(__file__))
     data_directory = str(path.parent.parent.absolute()) + "/data/vegetables"
