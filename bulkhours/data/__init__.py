@@ -27,6 +27,19 @@ def get_data(label, **kwargs):
     return DataParser(**data_info).get_data()
 
 
+def save_model(model_name, model, history, data_directory):
+    # Create a checkpoint callback that saves the model after every epoch
+    model.save_weights(f'{data_directory}/{model_name}.weights.h5')
+
+    with open(f'{data_directory}/{model_name}.hist.json', 'r') as f:
+        h = json.load(f)
+        fit_history = {k: h[k] + history[k] for k in ["accuracy", "loss", "val_accuracy", "val_loss"]}
+
+    with open(f'{data_directory}/{model_name}.hist.json', 'w') as f:
+        json.dump(fit_history, f)
+
+
+
 def download_data(filename, directory=None):
     if filename == "vegetables":
         d = vegetables.download_kaggle_data(filename)
