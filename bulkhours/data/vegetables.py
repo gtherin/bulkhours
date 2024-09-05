@@ -21,10 +21,11 @@ def draw_images(num_of_pics=25, directory="test", seed=42, model=None, is_fr=Tru
     import glob
     import random
     import numpy as np
+    import matplotlib.pyplot as plt
     from pathlib import Path
 
     path = Path(os.path.dirname(__file__))
-    data_directory = str(path.parent.parent.absolute()) + "/data/"
+    data_directory = str(path.parent.parent.absolute()) + "/data/vegetables"
 
     # Print the class encodings done by the generators
     class_map = {k: v.split("/")[-1] for k, v in enumerate(sorted(glob.glob(f'{data_directory}/{directory}/*')))}
