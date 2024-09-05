@@ -20,14 +20,15 @@ def draw_images(num_of_pics=25, directory="test", seed=42, model=None, is_fr=Tru
 
     import glob
     import random
+    import numpy as np
     from pathlib import Path
 
     path = Path(os.path.dirname(__file__))
     data_directory = str(path.parent.parent.absolute()) + "/data/"
 
     # Print the class encodings done by the generators
-    class_map = {k: v.split("/")[-1] for k, v in enumerate(sorted(glob.glob(f'{data_directory}/{directory}/train/*')))}
-    print(data_directory)
+    class_map = {k: v.split("/")[-1] for k, v in enumerate(sorted(glob.glob(f'{data_directory}/{directory}/*')))}
+    print(f'{data_directory}/{directory}/*')
     print(class_map)
 
     labels = {0 : 'Haricot', 1 : 'Concombre amère', 2 : "Courgette", 3 : "Aubergine", 4 : "Brocoli", 5 : "Chou", 
