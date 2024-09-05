@@ -28,6 +28,9 @@ def get_data(label, **kwargs):
 
 
 def save_model(model_name, model, history, data_directory):
+
+    import json
+
     # Create a checkpoint callback that saves the model after every epoch
     model.save_weights(f'{data_directory}/{model_name}.weights.h5')
 
@@ -39,13 +42,9 @@ def save_model(model_name, model, history, data_directory):
         json.dump(fit_history, f)
 
 
-
 def download_data(filename, directory=None):
     if filename == "vegetables":
-        d = vegetables.download_kaggle_data(filename)
-        for f in ["vege.cnn.hist.json", "vege.cnn.weights.h5"]:
-            download_data(f, directory=d)
-        return d
+        return vegetables.download_kaggle_data(filename)
 
     url = "https://huggingface.co/datasets/guydegnol/"
     bfilename = os.path.basename(filename)

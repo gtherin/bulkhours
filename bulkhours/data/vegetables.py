@@ -50,6 +50,7 @@ def download_kaggle_data(filename, chunck_size=40960):
     from urllib.parse import unquote, urlparse
     from zipfile import ZipFile
     import tarfile
+    import huggingface_hub
 
     from pathlib import Path
 
@@ -77,6 +78,9 @@ def download_kaggle_data(filename, chunck_size=40960):
             with tarfile.open(tfile.name) as tarfile:
                 tarfile.extractall(destination_path)            
         os.system(f"mv {destination_path}Vegetable\ Images {destination_path}{filename}")
+
+        huggingface_hub.snapshot_download(repo_id="guydegnol/vegetables", repo_type="model", 
+                                          allow_patterns=["*.h5", "*.json"], local_dir=f"{destination_path}{filename}")
 
         return f'{destination_path}{filename}'
 
