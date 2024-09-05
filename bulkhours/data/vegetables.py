@@ -22,8 +22,8 @@ def draw_images(num_of_pics=25, directory="test", seed=42, model=None, is_fr=Tru
     import random
 
     # Print the class encodings done by the generators
-    class_map = dict([(v, k) for k, v in train_image_generator.class_indices.items()])
-    rimages = glob.glob(f'{data_directory}/{directory}/*/*.jpg')
+    class_map = {k: v.split("/")[-1] for k, v in enumerate(sorted(glob.glob(f'{data_directory}/train/*')))}
+
     labels = {0 : 'Haricot', 1 : 'Concombre amère', 2 : "Courgette", 3 : "Aubergine", 4 : "Brocoli", 5 : "Chou", 
               6 : "Poivron", 7 : "Carotte", 8 : "Chou-fleur", 9 : "Concombre", 10 : "Papaye", 11 : "Pomme de terre", 
               12 : "Citrouille", 13 : "Radis", 14 : "Tomate"} if is_fr else class_map
