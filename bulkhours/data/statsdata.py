@@ -4,14 +4,15 @@ import pandas as pd
 from .data_parser import DataParser
 
 
-DataParser.register_dataset(
+@DataParser.register_dataset(
     label="media.adds",
     summary="Media Advertising impact",
     category="Economics",
     raw_data="https://raw.githubusercontent.com/llSourcell/ISL-Ridge-Lasso/master/data/Advertising.csv",    
     enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
 )
-
+def get_media_adds(self, **data_info):
+    return self.read_raw_data(self.raw_data).drop(['Unnamed: 0'], axis=1)
 
 
 @DataParser.register_dataset(
