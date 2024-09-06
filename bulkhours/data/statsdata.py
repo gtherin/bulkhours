@@ -4,6 +4,16 @@ import pandas as pd
 from .data_parser import DataParser
 
 
+DataParser.register_dataset(
+    label="media.adds",
+    summary="Media Advertising impact",
+    category="Economics",
+    raw_data="https://raw.githubusercontent.com/llSourcell/ISL-Ridge-Lasso/master/data/Advertising.csv",    
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
+)
+
+
+
 @DataParser.register_dataset(
     label="scipy_distributions_list",
     summary="Scipy list of available distributions",
