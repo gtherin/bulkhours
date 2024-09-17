@@ -255,3 +255,40 @@ def sigmoid(Z):
     cache = Z
 
     return A, cache
+
+def knn_2dplot(knn, X, y, ax=None):
+
+    import numpy as np
+    import matplotlib
+    import matplotlib.pyplot as plt
+
+    # Create graph if needed
+    if ax is None:
+        fig, ax = plt.subplots(ncols=1, figsize=(4, 4))
+
+    num_clusters = len(np.unique(y))
+    colors = ['#581845', '#C70039', '#FF5733', "#0097B2", "#52DE97", "#FBE555", "#053061", "#FAACB5", "black", "#924A5F"]
+    labels = [f'Cluster {c}' for c in range(num_clusters)]
+
+    # Create a mesh grid
+    h = 0.05  # Step size in the mesh
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+    Z = knn.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+    ax.contourf(xx, yy, Z, cmap=matplotlib.colors.ListedColormap([colors[c] + "44" for c in range(num_clusters)]))
+
+    # Plot the data points and color them according to their cluster
+    for i, color in zip(range(num_clusters), colors):
+        idx = np.where(y == i)
+        ax.scatter(X[idx, 0], X[idx, 1], c=color, label=labels[i], edgecolor='k', s=50)
+
+    ax.set_xlim(xx.min(), xx.max())
+    ax.set_ylim(yy.min(), yy.max())
+    ax.set_title(f"K-Nearest Neighbors (K={knn.n_neighbors}) Decision Boundary")
+    ax.set_xlabel("Feature 1")
+    ax.set_ylabel("Feature 2")
+    ax.legend()
+
+    return ax
