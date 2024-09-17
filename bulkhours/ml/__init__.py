@@ -256,7 +256,10 @@ def sigmoid(Z):
 
     return A, cache
 
-def knn_2dplot(knn, X, y, ax=None):
+def knn_2dplot(knn, X, y, 
+               ax=None, # Axis
+               h=0.1  # Step size in the mesh
+               ):
 
     import numpy as np
     import matplotlib
@@ -271,7 +274,6 @@ def knn_2dplot(knn, X, y, ax=None):
     labels = [f'Cluster {c}' for c in range(num_clusters)]
 
     # Create a mesh grid
-    h = 0.05  # Step size in the mesh
     x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
     y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
     xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
