@@ -56,7 +56,7 @@ Ireland,51350.744000000006,7.0
 Denmark,52114.165,7.5
 United States,55805.204000000005,7.2"""
         ),
-        sep=" ",
+        sep=",",
     )#.set_index("Country")
 
 
