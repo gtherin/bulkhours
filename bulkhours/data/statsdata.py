@@ -72,6 +72,27 @@ def get_scipy_distributions_list(self):
 
     return [d for d in dir(sp.stats._continuous_distns) if not d in ["levy_stable", "studentized_range"]]
 
+@DataParser.register_dataset(
+    label="iris",
+    summary="Iris data",
+    category="ml",
+    ref_source="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_iris.html",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
+)
+def get_iris_data(self):
+    import sklearn as sk
+    import sklearn.datasets
+
+    iris = sk.datasets.load_iris()
+
+    # Convert to DataFrame for easier handling
+    df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+
+    # Add the target variable (species)
+    df['species'] = iris.target
+
+    return df
+
 
 @DataParser.register_dataset(
     label="statsdata.oil",
