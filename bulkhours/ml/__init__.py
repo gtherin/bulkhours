@@ -264,6 +264,7 @@ def knn_2dplot(knn, X, y,
                h=0.2  # Step size in the mesh
                ):
 
+    import pandas as pd
     import numpy as np
     import matplotlib
     import matplotlib.pyplot as plt
