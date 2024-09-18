@@ -258,6 +258,7 @@ def sigmoid(Z):
 
 def knn_2dplot(knn, X, y, 
                ax=None, # Axis
+               title=None, # Title
                h=0.2  # Step size in the mesh
                ):
 
@@ -288,7 +289,10 @@ def knn_2dplot(knn, X, y,
 
     ax.set_xlim(xx.min(), xx.max())
     ax.set_ylim(yy.min(), yy.max())
-    ax.set_title(f"{knn.n_neighbors}-Nearest Neighbors Classifier", fontsize=14)
+
+    if title is not None:
+        ax.set_title(title, fontsize=14)
+    #ax.set_title(f"{knn.n_neighbors}-Nearest Neighbors Classifier", fontsize=14)
     #ax.set_xlabel("Feature 1")
     #ax.set_ylabel("Feature 2")
     #ax.legend()
