@@ -264,10 +264,19 @@ def classifier_2dplot(knn, X, y,
                h=0.2  # Step size in the mesh
                ):
 
+
     import pandas as pd
     import numpy as np
     import matplotlib
     import matplotlib.pyplot as plt
+
+    # Convert to numpy array
+    if type(X) == pd.DataFrame:
+        X = X.values
+
+    if X.shape[1] != 2:
+        print(f"Bad shape for X: {X.shape}")
+        return
 
     # Create graph if needed
     if ax is None:
@@ -276,11 +285,6 @@ def classifier_2dplot(knn, X, y,
     num_clusters = len(np.unique(y))
     colors = ['#581845', '#C70039', '#FF5733', "#0097B2", "#52DE97", "#FBE555", "#053061", "#FAACB5", "black", "#924A5F"]
     labels = [f'Cluster {c}' for c in range(num_clusters)]
-
-    # Convert to numpy array
-    if type(X) == pd.DataFrame:
-        X = X.values
-
 
     # Create a mesh grid
     x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
