@@ -256,6 +256,25 @@ def sigmoid(Z):
 
     return A, cache
 
+
+def format_tree(clf, artists, ax):
+    import pandas as pd
+    import numpy as np
+    import matplotlib
+    import matplotlib.pyplot as plt
+
+    colors = ['#581845', '#C70039', '#FF5733']
+    for artist, f, value in zip(artists, clf.tree_.impurity, clf.tree_.value):
+        r, g, b = matplotlib.colors.to_rgb(colors[np.argmax(value)])
+        artist.get_bbox_patch().set_facecolor((f + (1-f)*r, f + (1-f)*g, f + (1-f)*b))
+        artist.get_bbox_patch().set_edgecolor((f + (1-f)*r, f + (1-f)*g, f + (1-f)*b))
+
+    for text in ax.texts:
+        bbox = text.get_bbox_patch()
+        if bbox:
+            text.set_color('white')
+
+
 def classifier_2dplot(knn, X, y, 
                ax=None, # Axis
                title=None, # Title
