@@ -256,7 +256,7 @@ def sigmoid(Z):
 
     return A, cache
 
-def knn_2dplot(knn, X, y, 
+def classifier_2dplot(knn, X, y, 
                ax=None, # Axis
                title=None, # Title
                xlabel=None, # Title
