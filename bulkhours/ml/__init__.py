@@ -303,10 +303,11 @@ def classifier_2dplot(knn, X, y,
     #ax.set_title(f"{knn.n_neighbors}-Nearest Neighbors Classifier", fontsize=14)
     if xlabel is not None:
         ax.set_xlabel(xlabel)
+    else:
+        ax.axis('off')
+
     if ylabel is not None:
         ax.set_ylabel(ylabel)
 
     #ax.legend()
-    ax.axis('off')
-
     return ax
