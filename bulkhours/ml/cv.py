@@ -4,7 +4,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 
-def create_fold(left, width, label, y=0, color=None):
+def create_fold(left, width, label, y=0, color=None, ax=ax):
     colors = {"Train": "#581845", "Validation": "#C70039", "Test": '#FF5733', 'Fold': "#52DE97", 'All data': "#0097B2", 'Empty': "white"}
 
     if color is None:
@@ -22,10 +22,10 @@ def rolling_cross(ax=None):
 
     for y, width in enumerate(widths:=[0.3, 0.5, 0.7, 0.9]):
         left, y = 0, len(widths)-y-1
-        left = create_fold(left, width, 'Train', y=y)
-        left = create_fold(left, 0.3, 'Validation', y=y)
-        left = create_fold(left, 0.3, 'Test', y=y)
-    left = create_fold(0, left, 'All data', y=len(widths))
+        left = create_fold(left, width, 'Train', y=y, ax=ax)
+        left = create_fold(left, 0.3, 'Validation', y=y, ax=ax)
+        left = create_fold(left, 0.3, 'Test', y=y, ax=ax)
+    left = create_fold(0, left, 'All data', y=len(widths), ax=ax)
     plt.axis('off')
     return ax
 
@@ -38,8 +38,8 @@ def lpo_cross(p=1, ax=None):
     for y in range(al:=10):
       left = 0
       for k in range(11):
-          left = create_fold(left, 0.04, k+1, y=y, color="#C70039" if np.abs(k-y) < p else "#581845")
-      left = create_fold(left, 0.3, 'Test', y=y)
-    left = create_fold(0, left, 'All data', y=al)
+          left = create_fold(left, 0.04, k+1, y=y, color="#C70039" if np.abs(k-y) < p else "#581845", ax=ax)
+      left = create_fold(left, 0.3, 'Test', y=y, ax=ax)
+    left = create_fold(0, left, 'All data', y=al, ax=ax)
     plt.axis('off')
     return ax
