@@ -4,7 +4,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 
-def create_fold(left, width, label, y=0, color=None, ax=ax):
+def create_fold(left, width, label, y=0, color=None, ax=None):
     colors = {"Train": "#581845", "Validation": "#C70039", "Test": '#FF5733', 'Fold': "#52DE97", 'All data': "#0097B2", 'Empty': "white"}
 
     if color is None:
