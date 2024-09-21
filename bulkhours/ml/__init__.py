@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from . import lxmert  # noqa: F401
 from .rl.hugs import PPOHugs  # noqa
 from .viz import vizualize  # noqa
+from .cv import create_fold, rolling_cross, lpo_cross  # noqa
 
 def runrealcmd(command, verbose=True):
     logfile = open("install.log", "w")
@@ -263,7 +264,7 @@ def format_tree(clf, artists, ax):
     import matplotlib
     import matplotlib.pyplot as plt
 
-    colors = ['#581845', '#C70039', '#FF5733']
+    colors = ['#581845', '#C70039', '#FF5733', "#0097B2", "#52DE97", "#FBE555", "#053061", "#FAACB5", "black", "#924A5F"]
     for artist, f, value in zip(artists, clf.tree_.impurity, clf.tree_.value):
         r, g, b = matplotlib.colors.to_rgb(colors[np.argmax(value)])
         artist.get_bbox_patch().set_facecolor((f + (1-f)*r, f + (1-f)*g, f + (1-f)*b))
