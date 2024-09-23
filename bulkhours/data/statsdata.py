@@ -4,6 +4,7 @@ from .data_parser import DataParser
 
 
 def download_data(filename, directory=None):
+    import os
     from . import vegetables
 
     if filename == "vegetables":
@@ -14,8 +15,10 @@ def download_data(filename, directory=None):
     print(bfilename)
     print(filename)
     if "http" in filename:
+        bfilename = os.path.basename(filename)
         cmd = f"curl {filename} --output {bfilename}"
     else:
+        bfilename = os.path.basename(filename)
         dirname = os.path.dirname(filename) if "/" in filename else "model_weights"
         cmd = f"curl {url}{dirname}/raw/main/{bfilename} --output {bfilename}"
 
