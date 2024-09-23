@@ -12,8 +12,7 @@ __all__ = modules
 from . import *
 from .help import build_readme, help, generate_header_links, get_header_links  # noqa
 from .data_parser import DataParser  # noqa
-from . import vegetables
-
+from .statsdata import download_data  # noqa
 
 def get_data(label, **kwargs):
     DataParser.build_clean_datasets()
@@ -41,26 +40,6 @@ def save_model(model_name, model, history, data_directory):
     with open(f'{data_directory}/{model_name}.hist.json', 'w') as f:
         json.dump(fit_history, f)
 
-
-def download_data(filename, directory=None):
-    if filename == "vegetables":
-        return vegetables.download_kaggle_data(filename)
-
-    url = "https://huggingface.co/datasets/guydegnol/"
-    bfilename = os.path.basename(filename)
-    if "http" in filename:
-        cmd = f"curl {filename} --output {bfilename}"
-    else:
-        dirname = os.path.dirname(filename) if "/" in filename else "model_weights"
-        cmd = f"curl {url}{dirname}/raw/main/{bfilename} --output {bfilename}"
-
-    print(cmd)
-    os.system(cmd)
-
-    if directory is not None:
-        os.system(f"mv {bfilename} {directory}")
-
-    return bfilename
 
 
 def get_image(label, ax=None):

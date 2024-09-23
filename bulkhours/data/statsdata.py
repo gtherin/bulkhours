@@ -1,8 +1,31 @@
 import pandas as pd
 from io import StringIO
-
-
 from .data_parser import DataParser
+
+
+def download_data(filename, directory=None):
+    from . import vegetables
+
+    if filename == "vegetables":
+        return vegetables.download_kaggle_data(filename)
+
+    url = "https://huggingface.co/datasets/guydegnol/"
+    bfilename = os.path.basename(filename)
+    print(bfilename)
+    print(filename)
+    if "http" in filename:
+        cmd = f"curl {filename} --output {bfilename}"
+    else:
+        dirname = os.path.dirname(filename) if "/" in filename else "model_weights"
+        cmd = f"curl {url}{dirname}/raw/main/{bfilename} --output {bfilename}"
+
+    print(cmd)
+    os.system(cmd)
+
+    if directory is not None:
+        os.system(f"mv {bfilename} {directory}")
+
+    return bfilename
 
 
 @DataParser.register_dataset(
@@ -14,6 +37,39 @@ from .data_parser import DataParser
 )
 def get_media_adds(self, **data_info):
     return self.read_raw_data(self.raw_data).drop(['Unnamed: 0'], axis=1)
+
+
+@DataParser.register_dataset(
+    label="housing",
+    summary="Housing",
+    category="Economics",
+    raw_data="https://raw.githubusercontent.com/ageron/handson-ml/master/datasets/housing/housing.tgz",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
+)
+def fetch_housing_data(self, **data_info):
+
+    import os
+    import tarfile
+    from six.moves import urllib
+
+    housing_path = download_data(self.raw_data)
+    return None
+
+    housing_path = os.path.join("datasets", "housing")
+
+
+    if not os.path.isdir(housing_path):
+        os.makedirs(housing_path)
+    tgz_path = os.path.join(housing_path, "housing.tgz")
+    urllib.request.urlretrieve(self.raw_data, tgz_path)
+    housing_tgz = tarfile.open(tgz_path)
+    housing_tgz.extractall(path=housing_path)
+    housing_tgz.close()
+
+    csv_path = os.path.join(housing_path, "housing.csv")
+    return pd.read_csv(csv_path)
+
+    return self.read_raw_data(self.raw_data)
 
 
 @DataParser.register_dataset(
