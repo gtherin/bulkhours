@@ -280,10 +280,10 @@ def format_tree(clf, artists, ax):
 
 
 def classifier_2dplot(knn, X, y, 
-               ax=None, # Axis
-               title=None, # Title
-               xlabel=None, # Title
-               ylabel=None, # Title
+               ax=None,
+               title=None,
+               xlabel=None,
+               ylabel=None,
                h=0.2  # Step size in the mesh
                ):
 
