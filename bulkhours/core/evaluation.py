@@ -42,7 +42,11 @@ def enumerate_widgets():
 
 
 def evaluate_cell(line, cell):
-    linfo = LineParser(line, cell)
+    try:
+        linfo = LineParser(line, cell)
+    except:
+        print("""⚠️\x1b[37mConnection to bulkhours database is not set-up. Service might be limited\x1b[0m⛓️‍💥""")
+        return
 
     wclass = WidgetBase
     for _, obj in inspect.getmembers(sys.modules[__name__]):
