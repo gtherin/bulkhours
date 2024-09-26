@@ -266,7 +266,7 @@ The database has been reset to the local file '{cfg["database"]}'.
     # Get notebook info
     ndata = get_document(question_id=cfg["subject"] + "_info", user=cfg["notebook_id"]).get().to_dict()
     for k, v in DbDocument.compliant_fields["notebook"].items():
-        cfg[k] = ndata[k] if k in ndata else v
+        cfg[k] = ndata[k] if ndata is not None and k in ndata else v
     cfg[cfg["notebook_id"]] = ndata
 
     tools.update_config(cfg)
