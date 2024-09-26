@@ -143,9 +143,12 @@ def init_env(packages=None, link=None, plt_style="default", **kwargs):
     if "database" in kwargs:
         cfg = firebase.init_database(kwargs)
         info = init_prems(cfg)
+        info = f'<pre><font color="#212121">{info}</font></pre>'
+
     else:
         cfg = kwargs
-        info = "None"
+        info = """<span><font color="#212121">Your token does not seem to be valid⛓️‍💥<br/>Services might be limited⚠️</font>"""
+
     start_time = time.time()
 
     if "BULK_PACKAGES_STATUS" not in os.environ:
@@ -156,9 +159,6 @@ def init_env(packages=None, link=None, plt_style="default", **kwargs):
     colors.set_plt_style(plt_style)
     version = open(tools.abspath("bulkhours/__version__.py")).readlines()[0].split('"')[1]
 
-    #einfo = f", ⚠️\x1b[31m\x1b[41m\x1b[37m in admin/teacher🎓 mode\x1b[0m⚠️" if tools.is_admin(cfg=cfg) else ""
-    #if not tools.is_admin(cfg=cfg) and not quiet_mode:
-    #    print(f"Import BULK Helper cOURSe (\x1b[0m\x1b[36mversion='{version}'\x1b[0m🚀{einfo}):", end="")
     if tools.is_admin(cfg=cfg) and (ipp := IPython.get_ipython()):
         monitoring_link = "https://bulkhours.fr" if link is None else link
         IPython.display.display(IPython.display.Markdown(f"""
@@ -169,7 +169,7 @@ def init_env(packages=None, link=None, plt_style="default", **kwargs):
 </td><td>
 <a href="{monitoring_link}">
 <font color="#212121">Import BULK Helper cOURSe (</font><font color="#00A099">version='{version}'🚀, ⚠️ </font><font color="#F23030">in admin/teacher🎓 mode</font><font color="#212121">⚠️)</font><br/>
-<pre><font color="#212121">{info}</font></pre>
+{info}
 <font color="#294D9">Cliquer 👆 pour administrer ce notebook</font>
 </a>
 </td></tr></table>"""))
@@ -182,8 +182,7 @@ def init_env(packages=None, link=None, plt_style="default", **kwargs):
     </td>
     <td>
 <font color="#212121">Import BULK Helper cOURSe (</font><font color="#00A099">version='{version}'</font><font color="#212121">🚀)</font><br/>
-<pre><font color="#212121">{info}</font></pre>
-</td></tr></table>"""))
+{info}</td></tr></table>"""))
 
     if ipp := IPython.get_ipython():
         ipp.run_cell(
