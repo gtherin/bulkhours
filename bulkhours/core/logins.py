@@ -94,12 +94,13 @@ def init_from_token(token, ktoken, packages=None, link=None):
 
         # Get data
         data = jwt.decode(jwt=token, key=ktoken, algorithms=["HS256"])
-        if data["email"] != data["email"]:
-            raise Exception(f"Identity {data['email']}is not the expected one")
-
+        #if data["email"] == data["email"]:
         init_env(packages=packages, link=link, **data)
+        return
+        #raise Exception(f"Identity {data['email']}is not the expected one")
     except:
-        print(f"""⚠️\x1b[41m\x1b[37mYour token does not seem to be valid. Service might be limited\x1b[0m⚠️""")
+        pass
+    print(f"""⚠️\x1b[41m\x1b[37mYour token does not seem to be valid. Service might be limited\x1b[0m⚠️""")
 
 
 def init_env(packages=None, link=None, plt_style="default", **kwargs):
