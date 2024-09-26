@@ -147,7 +147,7 @@ def init_env(packages=None, link=None, plt_style="default", **kwargs):
 
     else:
         cfg = kwargs
-        info = """<span><font color="#212121">Your token does not seem to be valid⛓️‍💥<br/>Services might be limited⚠️</font>"""
+        info = """<span><font color="#BBBBBB">Your token does not seem to be valid⛓️‍💥<br/>Services might be limited⚠️</font>"""
 
     start_time = time.time()
 
