@@ -48,6 +48,9 @@ def evaluate_cell(line, cell):
         print("""⚠️\x1b[37mConnection to bulkhours database is not set-up. Service might be limited\x1b[0m⛓️‍💥""")
         return
 
+    print(linfo, linfo.cinfo)
+
+
     wclass = WidgetBase
     for _, obj in inspect.getmembers(sys.modules[__name__]):
         if (
