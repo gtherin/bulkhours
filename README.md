@@ -15,3 +15,5 @@
 [![CC-by-nc-sa license](https://badgen.net/badge/icon/CC%20by-nc-sa?label=Licence)](https://creativecommons.org/licenses/by-nc-sa/4.0)
 
 https://github.com/gtherin/bulkhours/assets/82407580/d9f71881-1d0a-4d00-8e3c-bd5c84a9974e
+
+examples/jupyter_notebooks/simple_analysis_visu.ipynb
