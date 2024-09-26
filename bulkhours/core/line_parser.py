@@ -186,6 +186,9 @@ class LineParser:
         return cinfo
 
     def __init__(self, line, cell_source, is_cell=True):
+        self.init()
+
+    def init(self, line, cell_source, is_cell=True):
         # Get the options (The first "-" found")
         opts_line = line[line.find("-") :]
 
