@@ -43,17 +43,6 @@ def enumerate_widgets():
 
 def evaluate_cell(line, cell):
     linfo = LineParser(line, cell)
-    print(linfo)
-
-    #try:
-    #    linfo = LineParser(line, cell)
-    #    print(linfo)
-
-        # If cinfo is not defined, crash
-    #    linfo.cinfo
-    #except:
-    #    print("""⚠️\x1b[37mConnection to bulkhours database is not set-up. Service might be limited\x1b[0m⛓️‍💥""")
-    #    return
 
     wclass = WidgetBase
     for _, obj in inspect.getmembers(sys.modules[__name__]):
@@ -64,7 +53,11 @@ def evaluate_cell(line, cell):
         ):
             wclass = obj
 
-    return wclass(line, cell).evaluate_cell()
+    try:
+        return wclass(line, cell).evaluate_cell()
+    except:
+        print("""⚠️\x1b[37mConnection to bulkhours database is not set-up. Service might be limited\x1b[0m⛓️‍💥""")
+        return
 
 
 enumerate_widgets()
