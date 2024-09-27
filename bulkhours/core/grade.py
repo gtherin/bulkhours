@@ -1,4 +1,5 @@
 import matplotlib
+import matplotlib.pyplot as plt
 import datetime
 
 
@@ -75,7 +76,7 @@ class Grade:
     @staticmethod
     def set_static_style_info(minvalue=0.0, cmap="RdBu"):
         Grade.mincolor = matplotlib.colors.rgb2hex(
-            matplotlib.cm.get_cmap(cmap)(minvalue)
+            plt.get_cmap(cmap)(minvalue)
         )
 
     @staticmethod

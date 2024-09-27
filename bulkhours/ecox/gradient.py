@@ -41,7 +41,7 @@ def get_grad(seed=1, epochs=10, learnRate=0.003, theta0=0.04, theta1=0.8, theta2
         dym1 = dp2(x0, *cfit) * (xt - x0) + p2(x0, *cfit)
         return xt, dym1
 
-    cmap = plt.cm.get_cmap("jet")
+    cmap = plt.get_cmap("jet")
 
     theta_1 = 0.5
     plot_fit(axes[2], theta0, theta1, theta2, ls="solid")

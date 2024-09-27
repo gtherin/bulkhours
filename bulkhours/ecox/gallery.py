@@ -25,7 +25,7 @@ def plot1(ax):
     ax.hlines(y=0.2, xmin=xmin, xmax=xmax, color="g")
 
     if 0:
-        cmap = plt.cm.get_cmap("jet")
+        cmap = plt.get_cmap("jet")
         ax.annotate(
             "Start",
             (x2[0], y2[0]),
@@ -248,7 +248,7 @@ def plot_celestine(seed=42, sample=1000):
 
     def plot6(ax, col, palette="jet"):
         xs = np.random.randn(sample)
-        cmap = plt.cm.get_cmap(palette)
+        cmap = plt.get_cmap(palette)
         ax.hist(xs, bins=50, color=matplotlib.colors.rgb2hex(cmap(col)))
         ax.set_axis_off()
         ax.set_title("X,Y move histogram\n(Y_pos_diff)")
