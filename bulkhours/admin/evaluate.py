@@ -400,7 +400,7 @@ def evaluate_all(
     fstyles = lambda v: core.Grade.apply_style(v, False)
     grades = (
         grades.style.format(precision=1)
-        .applymap(fstyles)
+        .map(fstyles)
         .background_gradient(cmap=cmap, vmin=0, vmax=max_score)
     )
     IPython.display.display(grades)

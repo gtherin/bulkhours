@@ -193,14 +193,14 @@ def styles(sdata, cmap="RdBu", icolumns=["auser"], sorted_by=True, hide_grades=F
     def interpret_corr(v):
         return core.Grade.apply_style(v, True)
 
-    stylish = stylish.applymap(interpret_corr, subset=ccols)
+    stylish = stylish.map(interpret_corr, subset=ccols)
 
     nccols = [c for c in list(fcolumns) if c not in ccols]
 
     def interpret_ncorr(v):
         return core.Grade.apply_style(v, False)
 
-    stylish = stylish.applymap(interpret_ncorr, subset=nccols)
+    stylish = stylish.map(interpret_ncorr, subset=nccols)
 
     if "virtual_room" in sdata.columns:
         vrooms = sdata["virtual_room"].unique()
@@ -209,12 +209,12 @@ def styles(sdata, cmap="RdBu", icolumns=["auser"], sorted_by=True, hide_grades=F
             v: f"opacity: 60%;font-weight: bold;color: white;background-color: {cc[i]};"
             for i, v in enumerate(vrooms)
         }
-        stylish = stylish.applymap(lambda v: colors[v], subset=["virtual_room"])
+        stylish = stylish.map(lambda v: colors[v], subset=["virtual_room"])
 
     if "all" in sdata.columns:
         stylish = stylish.background_gradient(
             cmap=cmap, subset=["all"], vmin=0, vmax=20.0
         )
-        stylish = stylish.applymap(core.Grade.apply_all_style, subset=["all"])
+        stylish = stylish.map(core.Grade.apply_all_style, subset=["all"])
 
     return stylish.set_properties().format("{:.1f}", na_rep="✅", subset=nacolumns)
