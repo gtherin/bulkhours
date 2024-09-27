@@ -113,7 +113,7 @@ class Boid:
 
 class Simulation:
     def __init__(self, n: int, ax, seed: int = 2042, cmap: string = "jet") -> None:
-        cmap = plt.cm.get_cmap(cmap)
+        cmap = plt.get_cmap(cmap)
         np.random.seed(seed)
         self.boids = list(Boid(color=cmap(i / n)) for i in range(n))
         self.artists = list()

@@ -23,7 +23,7 @@ class Brown:
         return np.interp(np.arange(self.sample * self.k), np.arange(self.sample) * self.k, self.y + factor)
 
     def get_2d_plot(self, ax, csample=30, cmap=None, factor=1.0):
-        cmap = plt.cm.get_cmap(cmap if cmap else self.cmap)
+        cmap = plt.get_cmap(cmap if cmap else self.cmap)
         ax.scatter(
             self.get_int_x(),
             self.get_int_y(factor),
@@ -67,7 +67,7 @@ class Brown:
         return ax
 
     def get_1d_plot(self, ax, csample=30, cmap=None, factor=1.0):
-        cmap = plt.cm.get_cmap(cmap if cmap else self.cmap)
+        cmap = plt.get_cmap(cmap if cmap else self.cmap)
         xs = pd.Series(self.y) + factor
         d = 0
         if self.sample > 10 * csample:
@@ -84,8 +84,9 @@ class Brown:
 
     def get_hist(self, ax, cmap=None, cval=0.38):
         import matplotlib
+        import matplotlib.pyplot as plt
 
-        cmap = plt.cm.get_cmap(cmap if cmap else self.cmap)
+        cmap = plt.get_cmap(cmap if cmap else self.cmap)
 
         xs = pd.concat([pd.Series(self.y).diff(), pd.Series(self.x).diff()])
         ax.hist(xs, bins=50, color=matplotlib.colors.rgb2hex(cmap(cval)))

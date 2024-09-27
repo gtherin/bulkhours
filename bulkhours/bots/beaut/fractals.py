@@ -62,6 +62,6 @@ class Mandel:
     def show(self, ax, iters, cmap):
         import matplotlib.pyplot as plt
 
-        ax.imshow(self.get(iters), cmap=plt.cm.get_cmap(cmap))
+        ax.imshow(self.get(iters), cmap=plt.get_cmap(cmap))
         ax.set_axis_off()
         return ax
