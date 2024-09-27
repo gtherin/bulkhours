@@ -1,6 +1,7 @@
 import IPython
 import numpy as np
 import matplotlib
+import matplotlib.pyplot as plt
 import os
 
 from . import tools
@@ -196,7 +197,7 @@ def get_grade(student_data, teacher_data, max_score, token="YOUR_KEY", evalcode=
         try:
             grade = float((response.split("<grade>"))[1].split("</grade>")[0])
             grade_color = matplotlib.colors.rgb2hex(
-                matplotlib.cm.get_cmap("RdBu")(grade / 10.0)
+                plt.get_cmap("RdBu")(grade / 10.0)
             )
             comment = (response.split("<summary>"))[1].split("</summary>")[0]
             #comment = response.split("</grade>")[1]

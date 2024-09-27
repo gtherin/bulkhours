@@ -43,8 +43,8 @@ def geo_plot(
     )
     ax.set_axis_off()
 
-    hcmap = plt.cm.get_cmap("jet")
-    ccmap = plt.cm.get_cmap(cmap)
+    hcmap = plt.get_cmap("jet")
+    ccmap = plt.get_cmap(cmap)
 
     legend_elements = []
     for ic, country in enumerate(hightlight):
