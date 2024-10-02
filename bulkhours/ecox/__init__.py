@@ -23,7 +23,7 @@ def sampler(samples_number, sample_size, **kwargs):
     return random(samples_number, sample_size, **kwargs)
 
 
-def plot_ob_bars(ax, df, title=None, sleep=None):
+def plot_ob_bars(ax, df, title=None, sleep=None, xlim=None, ylim=None):
     import time
     import datetime
 
@@ -44,6 +44,12 @@ def plot_ob_bars(ax, df, title=None, sleep=None):
     ax.set_xticks(df_equidistant["layer"])
     ax.set_xticklabels(df_equidistant["price"].round(2))
     ax.tick_params(axis='x', labelrotation=15)
+
+    if xlim is not None:
+        ax.set_xlim(xlim)
+
+    if ylim is not None:
+        ax.set_ylim(ylim)
 
     if sleep is not None:
         time.sleep(sleep)
