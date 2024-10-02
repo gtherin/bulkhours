@@ -113,35 +113,32 @@ def build_pnls(gdf, my_trading_algo, plot_pnl=True):
     check_outsample(my_trading_algo)
 
 
-
-
 @DataParser.register_dataset(
-    label="ob.appl",
-    summary="Get Apple Order Book data [2012-06-21 1hour]",
+    label="rt.btc",
+    summary="Get BTC-UUD RT Order Book data",
     category="Economics",
-    ref_source="https://lobsterdata.com/info/DataSamples.php",
+    ref_source="https://api.binance.com/api/v3/depth?symbol=BTCUSDT&limit=100",
     enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
 )
-def get_aapl_ob_data(self):
-    # Read the data
-    msg = pd.read_csv('https://github.com/bigfatwhale/orderbook/raw/refs/heads/master/juypter/AAPL_2012-06-21_message_50.csv')
-    ob = pd.read_csv('https://github.com/bigfatwhale/orderbook/raw/refs/heads/master/juypter/AAPL_2012-06-21_orderbook_50.csv')
-    df = pd.concat([ob, msg], axis=1)
-    df.columns =  ['ask', 'ask_vol', 'bid', 'bid_vol', 'ts', 'EventType', 'OrderID', 'trade_vol', 'trade', 'trade_side']
+def get_binance_ob_data(self):
+    # Get Level 2 order book data from Binance
+    data = requests.get(f'https://api.binance.com/api/v3/depth?symbol=BTCUSDT&limit=100').json()
 
-    # Convert data and set the right date
-    df['ts'] = pd.to_datetime(df["ts"], unit='s').apply(lambda x: x.replace(year=2012, month=6, day=21))
+    # Extract bids and asks
+    bids = pd.DataFrame(data['bids'], columns=['price', 'volume']).astype(float)
+    asks = pd.DataFrame(data['asks'], columns=['price', 'volume']).astype(float)
+    bids["layer"] = -(bids.index + 1)
+    asks["layer"] = asks.index + 1
 
-    # Set index
-    df = df.set_index('ts').sort_index()
+    df = [bids.head(nlayers), asks.head(nlayers)]
 
-    # Remove unregular trades data
-    df.loc[~df["EventType"].isin([4, 5]), ['trade', 'trade_vol', 'trade_side']] = np.nan
+    include_mid = self.data_info["include_mid"] if "include_mid" in self.data_info else True
 
-    # Convert prices to $
-    df[['ask', 'bid', 'trade']] /= 10000
+    if include_mid:
+        df.append(pd.DataFrame({"price": [0.5*(bids["price"].iloc[0]+asks["price"].iloc[0])], "volume": [0], "layer": [0]}))
 
-    return df
+    return pd.concat(df).sort_values("price").reset_index(drop=True)
+
 
 @DataParser.register_dataset(
     label="lobster",
@@ -180,7 +177,6 @@ def get_stocks(self):
     # Load the message file (trades) into a DataFrame
     message_columns = ['time', 'event_type', 'order_id', 'trade_vol', 'trade', 'trade_side']
     df_messages = pd.read_csv(message_file, header=None, names=message_columns)
-    print(df_messages)
 
     # Step 5: Load the order book file
     price_columns = ["trade"]
