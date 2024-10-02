@@ -230,7 +230,6 @@ def get_stocks(self):
     import requests
     import zipfile
     import io
-    import pandas as pd
 
     ticker = self.data_info["ticker"] if "ticker" in self.data_info else "GOOG"
     depth = self.data_info["depth"] if "depth" in self.data_info else 1
