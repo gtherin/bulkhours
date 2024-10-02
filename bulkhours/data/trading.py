@@ -151,7 +151,7 @@ def get_aapl_ob_data(self):
     enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
 )
 def get_stocks(self):
-    # ticker in GOOG AAPL AMZN INTC MSFT
+    # ticker in GOOG AAPL AMZN INTC MSFT SPY
     # depth 1 5 10 30 50
 
     import requests
@@ -163,14 +163,9 @@ def get_stocks(self):
     depth = self.data_info["depth"] if "depth" in self.data_info else 1
     date = "2012-06-21"
 
-    print(ticker, depth)
-    print(self.data_info)
-
     # Step 1: Download the zip file from the URL
     url = f"https://lobsterdata.com/info/sample/LOBSTER_SampleFile_{ticker}_{date}_{depth}.zip"
-    print(url)
     response = requests.get(url)
-    print(response)
 
     # Step 2: Unzip the downloaded file
     with zipfile.ZipFile(io.BytesIO(response.content)) as z:
@@ -205,7 +200,7 @@ def get_stocks(self):
     df[price_columns] /= 10000
 
     # Remove unregular trades
-    df.loc[~df["event_type"].isin([4, 5]), ['trade', 'trade_vol', 'trade_side']] = np.nan
+    #df.loc[~df["event_type"].isin([4, 5]), ['trade', 'trade_vol', 'trade_side']] = np.nan
 
     # Convert data and set the right date
     df['time'] = pd.to_datetime(df["time"], unit='s').apply(lambda x: x.replace(year=2012, month=6, day=21))
