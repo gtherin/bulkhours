@@ -30,8 +30,8 @@ def plot_ob_bars(ax, df, title=None, sleep=None, xlim=None, ylim=None):
     # Clear the axis
     ax.cla()
 
-    ax.bar(df[df["layer"]<0]["layer"], df[df["layer"]<0]["volume"], color="#C70039", width=1)
-    ax.bar(df[df["layer"]>0]["layer"], df[df["layer"]>0]["volume"], color="#52DE97", width=1)
+    ax.bar(df[df["layer"]<0]["layer"], df[df["layer"]<0]["volume"], color="#52DE97", width=1)
+    ax.bar(df[df["layer"]>0]["layer"], df[df["layer"]>0]["volume"], color="#C70039", width=1)
 
     if title is not None:
         now = (datetime.datetime.now()+datetime.timedelta(hours=2)).strftime('%H:%M:%S')
