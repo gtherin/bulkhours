@@ -37,6 +37,12 @@ def plot_ob_bars(ax, df, title=None, sleep=None, xlim=None, ylim=None):
         now = (datetime.datetime.now()+datetime.timedelta(hours=2)).strftime('%H:%M:%S')
         ax.set_title(title.replace("NOW", now))
 
+    if xlim is not None:
+        ax.set_xlim(xlim)
+
+    if ylim is not None:
+        ax.set_ylim(ylim)
+
     # Use slicing to select equidistant rows
     n = 5
     step = len(df) // (n - 1)
@@ -45,11 +51,6 @@ def plot_ob_bars(ax, df, title=None, sleep=None, xlim=None, ylim=None):
     ax.set_xticklabels(df_equidistant["price"].round(2))
     ax.tick_params(axis='x', labelrotation=15)
 
-    if xlim is not None:
-        ax.set_xlim(xlim)
-
-    if ylim is not None:
-        ax.set_ylim(ylim)
 
     if sleep is not None:
         time.sleep(sleep)
