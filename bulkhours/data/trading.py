@@ -114,15 +114,18 @@ def build_pnls(gdf, my_trading_algo, plot_pnl=True):
 
 
 @DataParser.register_dataset(
-    label="rt.btc",
+    label="binance",
     summary="Get BTC-UUD RT Order Book data",
     category="Economics",
     ref_source="https://api.binance.com/api/v3/depth?symbol=BTCUSDT&limit=100",
     enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
 )
 def get_binance_ob_data(self):
+
+    ticker = self.data_info["ticker"] if "ticker" in self.data_info else "BTCUSDT"
+
     # Get Level 2 order book data from Binance
-    data = requests.get(f'https://api.binance.com/api/v3/depth?symbol=BTCUSDT&limit=100').json()
+    data = requests.get(f'https://api.binance.com/api/v3/depth?symbol={ticker}&limit=100').json()
 
     # Extract bids and asks
     bids = pd.DataFrame(data['bids'], columns=['price', 'volume']).astype(float)
