@@ -39,18 +39,17 @@ def plot_ob_bars(ax, df, title=None, sleep=None, xlim=None, ylim=None):
 
     if xlim is not None:
         ax.set_xlim(xlim)
+    else:
+        # Use slicing to select equidistant rows
+        n = 5
+        step = len(df) // (n - 1)
+        df_equidistant = df.iloc[::step][:n]
+        ax.set_xticks(df_equidistant["layer"])
+        ax.set_xticklabels(df_equidistant["price"].round(2))
+        ax.tick_params(axis='x', labelrotation=15)
 
     if ylim is not None:
         ax.set_ylim(ylim)
-
-    # Use slicing to select equidistant rows
-    n = 5
-    step = len(df) // (n - 1)
-    df_equidistant = df.iloc[::step][:n]
-    ax.set_xticks(df_equidistant["layer"])
-    ax.set_xticklabels(df_equidistant["price"].round(2))
-    ax.tick_params(axis='x', labelrotation=15)
-
 
     if sleep is not None:
         time.sleep(sleep)
