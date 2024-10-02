@@ -143,6 +143,9 @@ def get_aapl_ob_data(self):
 
 
 def merge_ob_data(bids, asks, include_mid):
+    bids["layer"] = -(bids.index + 1)
+    asks["layer"] = asks.index + 1
+
     df = [bids, asks]
     if include_mid:
         df.append(pd.DataFrame({"price": [0.5*(bids["price"].iloc[0]+asks["price"].iloc[0])], "volume": [0], "layer": [0]}))
@@ -159,13 +162,8 @@ def get_ob_slice(hdf, depth):
                         "volume": [hdf[f"ask{l+1}_vol"] for l in range(depth)],
                         })#.sort_values("price", ascending=False)
 
-    bids["layer"] = (bids.index + 1)
-    asks["layer"] = -(asks.index + 1)
-
-    df = [bids, asks]
-    df.append(pd.DataFrame({"price": [0.5*(bids["price"].iloc[0]+asks["price"].iloc[0])], "volume": [0], "layer": [0]}))
-
-    return pd.concat(df).sort_values("price").reset_index(drop=True)
+    # Merge both tables
+    return merge_ob_data(bids, asks, include_mid)
 
 
 @DataParser.register_dataset(
@@ -190,9 +188,6 @@ def get_binance_ob_data(self):
     # Extract bids and asks
     bids = pd.DataFrame(data['bids'], columns=['price', 'volume']).astype(float).head(nlayers)
     asks = pd.DataFrame(data['asks'], columns=['price', 'volume']).astype(float).head(nlayers)
-
-    bids["layer"] = -(bids.index + 1)
-    asks["layer"] = asks.index + 1
 
     # Merge both tables
     return merge_ob_data(bids, asks, include_mid)
