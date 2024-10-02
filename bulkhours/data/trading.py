@@ -168,6 +168,7 @@ def get_stocks(self):
 
     # Step 1: Download the zip file from the URL
     url = f"https://lobsterdata.com/info/sample/LOBSTER_SampleFile_{ticker}_{date}_{depth}.zip"
+    print(url)
     response = requests.get(url)
     print(response)
 
