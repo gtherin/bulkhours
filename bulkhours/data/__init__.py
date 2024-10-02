@@ -13,6 +13,8 @@ from . import *
 from .help import build_readme, help, generate_header_links, get_header_links  # noqa
 from .data_parser import DataParser  # noqa
 from .statsdata import download_data  # noqa
+from .trading import merge_ob_data, get_ob_slice  # noqa
+
 
 def get_data(label, **kwargs):
     DataParser.build_clean_datasets()
@@ -22,7 +24,7 @@ def get_data(label, **kwargs):
         if label in DataParser.clean_datasets
         else {"label": label, "raw_data": label, **kwargs}
     )
-
+    
     return DataParser(**data_info).get_data()
 
 
