@@ -35,7 +35,7 @@ def plot_ob_bars(ax, df, title=None, sleep=None):
 
     if title is not None:
         now = (datetime.datetime.now()+datetime.timedelta(hours=2)).strftime('%H:%M:%S')
-        ax.set_title(title.replace("NOW", npw))
+        ax.set_title(title.replace("NOW", now))
 
     # Use slicing to select equidistant rows
     n = 5
