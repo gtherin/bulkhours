@@ -354,6 +354,7 @@ def get_hhousing(self):
     housing = 100 * housing.asfreq("MS")
     return housing.to_frame()
 
+
 @DataParser.register_dataset(
     label="ob.appl",
     summary="Get Apple Order Book data [2012-06-21 1hour]",
@@ -361,7 +362,7 @@ def get_hhousing(self):
     ref_source="""https://lobsterdata.com/""",
     enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
 )
-def get_aapl_ob_data():
+def get_aapl_ob_data(self):
     # Read the data
     msg = pd.read_csv('https://github.com/bigfatwhale/orderbook/raw/refs/heads/master/juypter/AAPL_2012-06-21_message_50.csv')
     ob = pd.read_csv('https://github.com/bigfatwhale/orderbook/raw/refs/heads/master/juypter/AAPL_2012-06-21_orderbook_50.csv')
