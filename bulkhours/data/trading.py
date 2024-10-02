@@ -114,6 +114,61 @@ def build_pnls(gdf, my_trading_algo, plot_pnl=True):
 
 
 @DataParser.register_dataset(
+    label="ob.appl",
+    summary="Get Apple Order Book data [2012-06-21 1hour]",
+    category="Economics",
+    ref_source="https://api.binance.com/api/v3/depth?symbol=BTCUSDT&limit=100",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
+)
+def get_aapl_ob_data(self):
+    # Read the data
+    msg = pd.read_csv('https://github.com/bigfatwhale/orderbook/raw/refs/heads/master/juypter/AAPL_2012-06-21_message_50.csv')
+    ob = pd.read_csv('https://github.com/bigfatwhale/orderbook/raw/refs/heads/master/juypter/AAPL_2012-06-21_orderbook_50.csv')
+    df = pd.concat([ob, msg], axis=1)
+    df.columns =  ['ask', 'ask_vol', 'bid', 'bid_vol', 'ts', 'EventType', 'OrderID', 'trade_vol', 'trade', 'trade_side']
+
+    # Convert data and set the right date
+    df['ts'] = pd.to_datetime(df["ts"], unit='s').apply(lambda x: x.replace(year=2012, month=6, day=21))
+
+    # Set index
+    df = df.set_index('ts').sort_index()
+
+    # Remove unregular trades data
+    df.loc[~df["EventType"].isin([4, 5]), ['trade', 'trade_vol', 'trade_side']] = np.nan
+
+    # Convert prices to $
+    df[['ask', 'bid', 'trade']] /= 10000
+
+    return df
+
+
+def merge_ob_data(bids, asks, include_mid):
+    df = [bids, asks]
+    if include_mid:
+        df.append(pd.DataFrame({"price": [0.5*(bids["price"].iloc[0]+asks["price"].iloc[0])], "volume": [0], "layer": [0]}))
+
+    return pd.concat(df).sort_values("price").reset_index(drop=True)
+
+
+def get_ob_slice(hdf, depth):
+    bids = pd.DataFrame({"price": [hdf[f"bid{l+1}"] for l in range(depth)], 
+                        "volume": [hdf[f"bid{l+1}_vol"] for l in range(depth)],
+                        })#.sort_values("price", ascending=False)
+
+    asks = pd.DataFrame({"price": [hdf[f"ask{l+1}"] for l in range(depth)], 
+                        "volume": [hdf[f"ask{l+1}_vol"] for l in range(depth)],
+                        })#.sort_values("price", ascending=False)
+
+    bids["layer"] = (bids.index + 1)
+    asks["layer"] = -(asks.index + 1)
+
+    df = [bids, asks]
+    df.append(pd.DataFrame({"price": [0.5*(bids["price"].iloc[0]+asks["price"].iloc[0])], "volume": [0], "layer": [0]}))
+
+    return pd.concat(df).sort_values("price").reset_index(drop=True)
+
+
+@DataParser.register_dataset(
     label="binance",
     summary="Get BTCUSDT RT Order Book data",
     category="Economics",
@@ -133,16 +188,14 @@ def get_binance_ob_data(self):
     data = requests.get(f'https://api.binance.com/api/v3/depth?symbol={ticker}&limit=100').json()
 
     # Extract bids and asks
-    bids = pd.DataFrame(data['bids'], columns=['price', 'volume']).astype(float)
-    asks = pd.DataFrame(data['asks'], columns=['price', 'volume']).astype(float)
+    bids = pd.DataFrame(data['bids'], columns=['price', 'volume']).astype(float).head(nlayers)
+    asks = pd.DataFrame(data['asks'], columns=['price', 'volume']).astype(float).head(nlayers)
+
     bids["layer"] = -(bids.index + 1)
     asks["layer"] = asks.index + 1
 
-    df = [bids.head(nlayers), asks.head(nlayers)]
-    if include_mid:
-        df.append(pd.DataFrame({"price": [0.5*(bids["price"].iloc[0]+asks["price"].iloc[0])], "volume": [0], "layer": [0]}))
-
-    return pd.concat(df).sort_values("price").reset_index(drop=True)
+    # Merge both tables
+    return merge_ob_data(bids, asks, include_mid)
 
 
 @DataParser.register_dataset(
