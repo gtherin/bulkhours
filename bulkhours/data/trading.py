@@ -159,10 +159,11 @@ def get_stocks(self):
     import io
     import pandas as pd
 
-    ticker = "GOOG"
+    ticker = self.data_info["ticker"] if "ticker" in self.data_info else "GOOG"
+    depth = self.data_info["depth"] if "depth" in self.data_info else 1
     date = "2012-06-21"
-    depth = 1
 
+    print(ticker, depth)
     print(self.data_info)
 
     # Step 1: Download the zip file from the URL
@@ -204,9 +205,9 @@ def get_stocks(self):
     df.loc[~df["event_type"].isin([4, 5]), ['trade', 'trade_vol', 'trade_side']] = np.nan
 
     # Convert data and set the right date
-    df['ts'] = pd.to_datetime(df["ts"], unit='s').apply(lambda x: x.replace(year=2012, month=6, day=21))
+    df['time'] = pd.to_datetime(df["time"], unit='s').apply(lambda x: x.replace(year=2012, month=6, day=21))
 
     # Set index
-    df = df.set_index('ts').sort_index()
+    df = df.set_index('time').sort_index()
 
     return df
