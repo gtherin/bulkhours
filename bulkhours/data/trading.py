@@ -169,6 +169,7 @@ def get_stocks(self):
     # Step 1: Download the zip file from the URL
     url = f"https://lobsterdata.com/info/sample/LOBSTER_SampleFile_{ticker}_{date}_{depth}.zip"
     response = requests.get(url)
+    print(response)
 
     # Step 2: Unzip the downloaded file
     with zipfile.ZipFile(io.BytesIO(response.content)) as z:
@@ -183,6 +184,7 @@ def get_stocks(self):
     # Load the message file (trades) into a DataFrame
     message_columns = ['time', 'event_type', 'order_id', 'trade_vol', 'trade', 'trade_side']
     df_messages = pd.read_csv(message_file, header=None, names=message_columns)
+    print(df_messages)
 
     # Step 5: Load the order book file
     price_columns = ["trade"]
