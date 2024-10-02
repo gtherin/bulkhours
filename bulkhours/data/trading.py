@@ -259,7 +259,7 @@ def get_stocks(self):
     orderbook_columns = []
     for i in range(1, depth + 1):
         price_columns += [f'bid{i}', f'ask{i}']
-        orderbook_columns += [f'bid{i}', f'bid{i}_vol', f'ask{i}', f'ask{i}_vol']
+        orderbook_columns += [f'ask{i}', f'ask{i}_vol', f'bid{i}', f'bid{i}_vol']
 
     # Load the order book file into a DataFrame
     df_orderbook = pd.read_csv(orderbook_file, header=None, names=orderbook_columns)
