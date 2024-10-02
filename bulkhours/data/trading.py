@@ -153,7 +153,7 @@ def merge_ob_data(bids, asks, include_mid):
     return pd.concat(df).sort_values("price").reset_index(drop=True)
 
 
-def get_ob_slice(hdf, depth):
+def get_ob_slice(hdf, depth, include_mid=True):
     bids = pd.DataFrame({"price": [hdf[f"bid{l+1}"] for l in range(depth)], 
                         "volume": [hdf[f"bid{l+1}_vol"] for l in range(depth)],
                         })#.sort_values("price", ascending=False)
