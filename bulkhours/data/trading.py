@@ -111,3 +111,90 @@ def build_pnls(gdf, my_trading_algo, plot_pnl=True):
     if plot_pnl:
         pnls.cumsum().plot()
     check_outsample(my_trading_algo)
+
+
+
+
+@DataParser.register_dataset(
+    label="ob.appl",
+    summary="Get Apple Order Book data [2012-06-21 1hour]",
+    category="Economics",
+    ref_source="https://lobsterdata.com/info/DataSamples.php",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
+)
+def get_aapl_ob_data(self):
+    # Read the data
+    msg = pd.read_csv('https://github.com/bigfatwhale/orderbook/raw/refs/heads/master/juypter/AAPL_2012-06-21_message_50.csv')
+    ob = pd.read_csv('https://github.com/bigfatwhale/orderbook/raw/refs/heads/master/juypter/AAPL_2012-06-21_orderbook_50.csv')
+    df = pd.concat([ob, msg], axis=1)
+    df.columns =  ['ask', 'ask_vol', 'bid', 'bid_vol', 'ts', 'EventType', 'OrderID', 'trade_vol', 'trade', 'trade_side']
+
+    # Convert data and set the right date
+    df['ts'] = pd.to_datetime(df["ts"], unit='s').apply(lambda x: x.replace(year=2012, month=6, day=21))
+
+    # Set index
+    df = df.set_index('ts').sort_index()
+
+    # Remove unregular trades data
+    df.loc[~df["EventType"].isin([4, 5]), ['trade', 'trade_vol', 'trade_side']] = np.nan
+
+    # Convert prices to $
+    df[['ask', 'bid', 'trade']] /= 10000
+
+    return df
+
+@DataParser.register_dataset(
+    label="lobster",
+    summary="Get Order Book data from LOBSTER [2012-06-21 1hour]",
+    category="Economics",
+    ref_source="https://lobsterdata.com/info/DataSamples.php",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
+)
+def get_stocks(self, ticker="GOOG", date="2012-06-21", depth=1):
+    # ticker in GOOG AAPL AMZN INTC MSFT
+    # depth 1 5 10 30 50
+
+    import requests
+    import zipfile
+    import io
+    import pandas as pd
+
+    # Step 1: Download the zip file from the URL
+    url = f"https://lobsterdata.com/info/sample/LOBSTER_SampleFile_{ticker}_{date}_{depth}.zip"
+    response = requests.get(url)
+
+    # Step 2: Unzip the downloaded file
+    with zipfile.ZipFile(io.BytesIO(response.content)) as z:
+        # Extract the list of files in the zip
+        z.extractall()
+
+    # The LOBSTER file usually contains multiple files like message files and order book files
+    # Assuming we have the message file and order book file (adjust based on actual file names)
+    message_file = f'{ticker}_{date}_34200000_57600000_message_{depth}.csv'
+    orderbook_file = f'{ticker}_{date}_34200000_57600000_orderbook_{depth}.csv'
+
+    # Load the message file (trades) into a DataFrame
+    message_columns = ['time', 'event_type', 'order_id', 'trade_vol', 'trade', 'trade_side']
+    df_messages = pd.read_csv(message_file, header=None, names=message_columns)
+
+    # Step 5: Load the order book file
+    price_columns = ["trade"]
+    # Generate column names for order book levels
+    orderbook_columns = []
+    for i in range(1, depth + 1):
+        price_columns += [f'bid{i}', f'ask{i}']
+        orderbook_columns += [f'bid{i}', f'bid{i}_vol', f'ask{i}', f'ask{i}_vol']
+
+    # Load the order book file into a DataFrame
+    df_orderbook = pd.read_csv(orderbook_file, header=None, names=orderbook_columns)
+
+    # Merge data
+    df = pd.concat([df_messages, df_orderbook], axis=1)
+
+    # Convert prices to $
+    df[price_columns] /= 10000
+
+    # Remove unregular trades
+    df.loc[~df["event_type"].isin([4, 5]), ['trade', 'trade_vol', 'trade_side']] = np.nan
+
+    return df
