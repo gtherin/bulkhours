@@ -217,10 +217,10 @@ def get_binance_ob_data(self):
 | trade_vol   | size of the order |         
 | trade   | price at which the order is placed |         
 | trade_side   | 1 for buy, -1 for sell, 0 Unknown |         
-| bid1   | Level 1 Bid Price  |         
-| bid1_vol   | Level 1 Bid Volume |         
-| ask1   | Level 1 Ask Price |         
-| ask1_vol   | Level 1 Ask Volume |         
+| bidX   | Level X Bid Price  |         
+| bidX_vol   | Level X Bid Volume |         
+| askX   | Level X Ask Price |         
+| askX_vol   | Level X Ask Volume |         
 """,
 )
 def get_stocks(self):
