@@ -204,6 +204,24 @@ def get_binance_ob_data(self):
     category="Economics",
     ref_source="https://lobsterdata.com/info/DataSamples.php",
     enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
+    columns_description="""| Column   |      Info |
+|-----------|:-----------|
+| time [index]  | Time in seconds since the start of the trading day |         
+| event_type:=1   | Submission of a new limit order. |
+| event_type:=2   | Cancellation of an existing limit order. The cancellation can be partial or complete. |
+| event_type:=3   | Execution of a visible limit order (market order against a limit order) |
+| event_type:=4   | Execution of a hidden limit order. This event occurs when a market order is executed against a hidden (iceberg) limit order. Hidden orders are not visible in the public order book. The trade is executed at the hidden order’s price, and part of the hidden liquidity is revealed. |
+| event_type:=5   | Deletion of a limit order due to a trade. This event type occurs when a limit order is deleted from the order book because it has been fully executed in a trade. It removes the order from the order book after it has been fully filled, reducing the remaining liquidity at that price level. |
+| event_type:=6   | Trading halt or other administrative event |
+| order_id   | unique identifier for the order |         
+| trade_vol   | size of the order |         
+| trade   | price at which the order is placed |         
+| trade_side   | 1 for buy, -1 for sell, 0 Unknown |         
+| bid1   | Level 1 Bid Price  |         
+| bid1_vol   | Level 1 Bid Volume |         
+| ask1   | Level 1 Ask Price |         
+| ask1_vol   | Level 1 Ask Volume |         
+""",
 )
 def get_stocks(self):
     # ticker in GOOG AAPL AMZN INTC MSFT SPY
