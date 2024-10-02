@@ -21,3 +21,29 @@ def random(samples_number, sample_size, mu=4, distrib="bimodal", seed=42):
 
 def sampler(samples_number, sample_size, **kwargs):
     return random(samples_number, sample_size, **kwargs)
+
+
+def plot_ob_bars(ax, df, title=None, sleep=None):
+    import time
+    import datetime
+
+    # Clear the axis
+    ax.cla()
+
+    ax.bar(df[df["layer"]<0]["layer"], df[df["layer"]<0]["volume"], color="#C70039", width=1)
+    ax.bar(df[df["layer"]>0]["layer"], df[df["layer"]>0]["volume"], color="#52DE97", width=1)
+
+    if title is not None:
+        now = (datetime.datetime.now()+datetime.timedelta(hours=2)).strftime('%H:%M:%S')
+        ax.set_title(title.replace("NOW", npw))
+
+    # Use slicing to select equidistant rows
+    n = 5
+    step = len(df) // (n - 1)
+    df_equidistant = df.iloc[::step][:n]
+    ax.set_xticks(df_equidistant["layer"])
+    ax.set_xticklabels(df_equidistant["price"].round(2))
+    ax.tick_params(axis='x', labelrotation=15)
+
+    if sleep is not None:
+        time.sleep(sleep)
