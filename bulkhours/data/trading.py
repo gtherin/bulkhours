@@ -113,35 +113,6 @@ def build_pnls(gdf, my_trading_algo, plot_pnl=True):
     check_outsample(my_trading_algo)
 
 
-@DataParser.register_dataset(
-    label="ob.appl",
-    summary="Get Apple Order Book data [2012-06-21 1hour]",
-    category="Economics",
-    ref_source="https://api.binance.com/api/v3/depth?symbol=BTCUSDT&limit=100",
-    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/statsdata.py",
-)
-def get_aapl_ob_data(self):
-    # Read the data
-    msg = pd.read_csv('https://github.com/bigfatwhale/orderbook/raw/refs/heads/master/juypter/AAPL_2012-06-21_message_50.csv')
-    ob = pd.read_csv('https://github.com/bigfatwhale/orderbook/raw/refs/heads/master/juypter/AAPL_2012-06-21_orderbook_50.csv')
-    df = pd.concat([ob, msg], axis=1)
-    df.columns =  ['ask', 'ask_vol', 'bid', 'bid_vol', 'ts', 'EventType', 'OrderID', 'trade_vol', 'trade', 'trade_side']
-
-    # Convert data and set the right date
-    df['ts'] = pd.to_datetime(df["ts"], unit='s').apply(lambda x: x.replace(year=2012, month=6, day=21))
-
-    # Set index
-    df = df.set_index('ts').sort_index()
-
-    # Remove unregular trades data
-    df.loc[~df["EventType"].isin([4, 5]), ['trade', 'trade_vol', 'trade_side']] = np.nan
-
-    # Convert prices to $
-    df[['ask', 'bid', 'trade']] /= 10000
-
-    return df
-
-
 def merge_ob_data(bids, asks, include_mid):
 
     # Define layers
