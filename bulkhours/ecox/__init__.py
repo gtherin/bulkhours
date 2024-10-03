@@ -23,15 +23,16 @@ def sampler(samples_number, sample_size, **kwargs):
     return random(samples_number, sample_size, **kwargs)
 
 
-def plot_ob_bars(ax, df, title=None, sleep=None, xlim=None, ylim=None):
+def plot_ob_bars(ax, df, title=None, sleep=None, xlim=None, ylim=None, cumsum=False):
     import time
     import datetime
 
     # Clear the axis
     ax.cla()
+    column = "volume_cum" if cumsum else "volume"
 
-    ax.bar(df[df["layer"]<0]["layer"], df[df["layer"]<0]["volume"], color="#52DE97", width=1)
-    ax.bar(df[df["layer"]>0]["layer"], df[df["layer"]>0]["volume"], color="#C70039", width=1)
+    ax.bar(df[df["layer"]<0]["layer"], df[df["layer"]<0][column], color="#52DE97", width=1)
+    ax.bar(df[df["layer"]>0]["layer"], df[df["layer"]>0][column], color="#C70039", width=1)
 
     if title is not None:
         now = (datetime.datetime.now()+datetime.timedelta(hours=2)).strftime('%H:%M:%S')
