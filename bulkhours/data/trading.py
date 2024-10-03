@@ -143,8 +143,14 @@ def get_aapl_ob_data(self):
 
 
 def merge_ob_data(bids, asks, include_mid):
+
+    # Define layers
     bids["layer"] = -(bids.index + 1)
     asks["layer"] = asks.index + 1
+
+    # Add cumulative volumes
+    bids["volume_cum"] = bids["volume"].cumsum()
+    asks["volume_cum"] = asks["volume"].cumsum()
 
     df = [bids, asks]
     if include_mid:
