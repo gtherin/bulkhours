@@ -24,6 +24,21 @@ def sampler(samples_number, sample_size, **kwargs):
 
 
 def plot_ob_bars(ax, df, title=None, sleep=None, xlim=None, ylim=None, cumsum=False):
+    """
+    Plots order book bars on the given axis.
+
+    Parameters:
+    ax (matplotlib.axes.Axes): The axis on which to plot the bars.
+    df (pandas.DataFrame): The data frame containing the order book data.
+    title (str, optional): The title of the plot. If 'NOW' is included in the title, it will be replaced with the current time.
+    sleep (int or float, optional): Time in seconds to sleep after plotting.
+    xlim (tuple, optional): The x-axis limits for the plot.
+    ylim (tuple, optional): The y-axis limits for the plot.
+    cumsum (bool, optional): If True, use cumulative volume for the bars. Defaults to False.
+
+    Returns:
+    None
+    """
     import time
     import datetime
 
