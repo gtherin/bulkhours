@@ -282,3 +282,12 @@ def set_html_buttons_styles():
         f"""<html><head>{get_html_buttons_styles_code()}</head></html>"""
     )
     IPython.display.display(IPython.display.HTML(html_buttons_styles))
+
+
+def get_mpf_style(base_mpf_style='charles'):
+    import mplfinance as mpf
+    
+    return mpf.make_mpf_style(
+        marketcolors=mpf.make_marketcolors(
+            up='#52DE97',down='#C70039', edge='inherit', wick='black', volume='in', ohlc='i', inherit=True
+            ), mavcolors=['#581845', '#FF5733', '#0097B2', "#FAACB5", "#924A5F"], base_mpf_style=base_mpf_style)
