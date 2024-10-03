@@ -2,7 +2,7 @@ import bulkhours
 
 import pytest
 import pandas as pd
-from ecox import plot_ob_bars
+from bulkhours.ecox import plot_ob_bars
 
 import matplotlib.pyplot as plt
 
