@@ -51,10 +51,10 @@ def get_engine(database=None, **kwargs):
     user, dbs, dbk  = os.environ['BULK_DUSER'], os.environ['BULK_DBS'], os.environ['BULK_DTOKEN']
     return sa.create_engine(f"mariadb+mariadbconnector://{user}:{dbk}@{dbs}:3306/{database}", **kwargs)
 
-ENGINE = get_engine(database="moodle", echo=False)
-BENGINE = get_engine(database="bulkdb", echo=True)
+ENGINE = None #get_engine(database="moodle", echo=False)
+BENGINE = None # get_engine(database="bulkdb", echo=True)
 
-def read_sql(request, echo=False, usebkdb=False, **kwargs):
+def read_sql_deprecated(request, echo=False, usebkdb=False, **kwargs):
     engine = BENGINE if usebkdb else ENGINE # get_engine(echo=echo, pool_size=10, max_overflow=20)
     with engine.connect() as connection:
         df = pd.read_sql(request, connection, **kwargs)
@@ -62,7 +62,7 @@ def read_sql(request, echo=False, usebkdb=False, **kwargs):
     return df
 
 
-def to_sql(df, table_name, usebkdb=False, index=True, if_exists="replace", **kwargs):
+def to_sql_deprecated(df, table_name, usebkdb=False, index=True, if_exists="replace", **kwargs):
     engine = BENGINE if usebkdb else ENGINE # get_engine(echo=echo, pool_size=10, max_overflow=20)
     print("DEBUG", engine, table_name, if_exists)
     df = df.rename(columns={"mail": "email", "uptime": "update_time"})
@@ -388,7 +388,6 @@ def send_answer_to_corrector(
 
     def get_info(field):
         return os.environ[field] if field in os.environ else "unknown"
-
 
     kwargs.update({"ip": get_info("IPADDRESS"), "host": get_info("HOSTNAME"), "submitted": 1})
     if update_time:

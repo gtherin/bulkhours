@@ -113,7 +113,7 @@ Il permet de faire correspondre la cellule avec sa solution"""
         "--hide", dest="hide", action="store_true", help=st("L'exercice est caché initialement")
     )
 
-    basic.add_argument("--autorun", type=str, default="", help=st("Automatic run"))
+    basic.add_argument("--autorun", dest="autorun", default="", help=st("Automatic run"))
 
 
     if is_admin:
