@@ -176,7 +176,6 @@ class WidgetBase:
         bbox = self.init_widgets()
 
         if self.cinfo.autorun == "publish":
-            print("AAAAAAAAAAAAA")
             from . import firebase
             output = ipywidgets.Output()
             local_data = CellParser.crunch_data(
@@ -185,8 +184,6 @@ class WidgetBase:
             return firebase.send_answer_to_corrector(
                 local_data.cinfo, **local_data.get_dbcell_decomposition()
             )
-
-            #self.submit()
 
         self.display_widgets(bbox, self.abuttons)
 
