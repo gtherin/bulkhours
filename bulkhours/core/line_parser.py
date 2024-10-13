@@ -168,6 +168,7 @@ class LineParser:
                 "subject",
                 "rdir",
                 "virtual_room",
+                "virtual_rooms",
                 "user",
                 "autorun",
             ]
