@@ -90,14 +90,6 @@ Il permet de faire correspondre la cellule avec sa solution"""
     )
 
     basic.add_argument(
-        "-f",
-        "--autorun",
-        type=str,
-        default="",
-        help=st("Automatic run"),
-    )
-
-    basic.add_argument(
         "-o",
         "--options",
         default="",
@@ -120,6 +112,9 @@ Il permet de faire correspondre la cellule avec sa solution"""
     basic.add_argument(
         "--hide", dest="hide", action="store_true", help=st("L'exercice est caché initialement")
     )
+
+    basic.add_argument("--autorun", type=str, default="", help=st("Automatic run"))
+
 
     if is_admin:
         admin = parser.add_argument_group("Options d'administration")
