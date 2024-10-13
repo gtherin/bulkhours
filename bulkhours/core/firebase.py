@@ -335,11 +335,17 @@ def send_answer_to_corrector(
     update_time=True,
     fake=False,
     store_log=True,
+    virtual_room=None,
     **kwargs,
 ):
     source = "local@" if DbDocument.data_base_info is not None else "cloud@"
     question_alias = source + get_question_id(cinfo.cell_id, sep="/", cinfo=cinfo)
     config = tools.get_config(is_new_format=True)
+
+    if virtual_room is None:
+        virtual_room = config.virtual_room
+    else:
+        cinfo.virtual_room = virtual_room
 
     user = kwargs["user"] if "user" in kwargs else cinfo.user
     alias = user.split("@")[0]
@@ -357,7 +363,7 @@ def send_answer_to_corrector(
     elif (
         user != REF_USER
         and "is_locked" in config[config.notebook_id]
-        and (";" + config.virtual_room) in config[config.notebook_id]["is_locked"]
+        and (";" + virtual_room) in config[config.notebook_id]["is_locked"]
     ):
         if cinfo.language == "fr":
             print(

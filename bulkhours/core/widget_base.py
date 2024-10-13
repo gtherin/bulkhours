@@ -181,9 +181,12 @@ class WidgetBase:
             local_data = CellParser.crunch_data(
                 cinfo=self.cinfo, user=self.user, data=self.cell_source, output=output
             )
-            return firebase.send_answer_to_corrector(
-                local_data.cinfo, **local_data.get_dbcell_decomposition()
-            )
+            print(self.cinfo)
+
+            for virtual_room in ["toy", "TISA"]:
+                return firebase.send_answer_to_corrector(
+                    local_data.cinfo, virtual_room=virtual_room, **local_data.get_dbcell_decomposition()
+                )
 
         self.display_widgets(bbox, self.abuttons)
 
