@@ -182,10 +182,10 @@ class WidgetBase:
                 cinfo=self.cinfo, user=self.user, data=self.cell_source, output=output
             )
             print(self.cinfo)
+            print(self.cinfo.virtual_rooms)
             virtual_rooms = [self.cinfo.virtual_room] if virtual_rooms == "" else self.cinfo.virtual_rooms.split(",")
 
             print(virtual_rooms)
-            print(self.cinfo.virtual_rooms)
             virtual_rooms = ["toy", "TISA"]
 
             for virtual_room in virtual_rooms:
