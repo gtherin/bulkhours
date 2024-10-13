@@ -183,7 +183,7 @@ class WidgetBase:
             )
             print(self.cinfo)
             print(self.cinfo.virtual_rooms)
-            virtual_rooms = [self.cinfo.virtual_room] if virtual_rooms == "" else self.cinfo.virtual_rooms.split(",")
+            virtual_rooms = [self.cinfo.virtual_room] if self.cinfo.virtual_rooms == "" else self.cinfo.virtual_rooms.split(",")
 
             print(virtual_rooms)
             virtual_rooms = ["toy", "TISA"]
