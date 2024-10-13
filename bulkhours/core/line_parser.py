@@ -114,6 +114,7 @@ Il permet de faire correspondre la cellule avec sa solution"""
     )
 
     basic.add_argument("--autorun", dest="autorun", default="", help=st("Automatic run"))
+    basic.add_argument("--virtual_rooms", dest="virtual_rooms", default="", help=st("Automatic run"))
 
 
     if is_admin:
