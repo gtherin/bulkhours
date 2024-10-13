@@ -90,6 +90,14 @@ Il permet de faire correspondre la cellule avec sa solution"""
     )
 
     basic.add_argument(
+        "-f",
+        "--autorun",
+        type=str,
+        default="",
+        help=st("Automatic run"),
+    )
+
+    basic.add_argument(
         "-o",
         "--options",
         default="",
@@ -165,6 +173,7 @@ class LineParser:
                 "rdir",
                 "virtual_room",
                 "user",
+                "autorun",
             ]
             if hasattr(self, v)
         ]
