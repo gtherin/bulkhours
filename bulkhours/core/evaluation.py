@@ -53,8 +53,7 @@ def evaluate_cell(line, cell):
         ):
             wclass = obj
 
-    print("HHHHHHHHHHHHHHHHHHHHHH")
-    return wclass(line, cell).evaluate_cell()
+    #return wclass(line, cell).evaluate_cell()
 
     try:
         return wclass(line, cell).evaluate_cell()
