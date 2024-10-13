@@ -186,8 +186,7 @@ class WidgetBase:
             for virtual_room in virtual_rooms:
                 if len(virtual_room) > 0:
                     local_data.cinfo.virtual_room = virtual_room
-                    print(local_data.cinfo)
-                    return firebase.send_answer_to_corrector(
+                    firebase.send_answer_to_corrector(
                         local_data.cinfo, virtual_room=virtual_room, **local_data.get_dbcell_decomposition()
                     )
 
