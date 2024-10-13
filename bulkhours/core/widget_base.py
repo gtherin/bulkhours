@@ -182,17 +182,19 @@ class WidgetBase:
                 cinfo=self.cinfo, user=self.user, data=self.cell_source, output=output
             )
             print(self.cinfo)
-            virtual_rooms = [self.cinfo.virtual_room] if virtual_rooms == "" else self.cinfo.virtual_rooms.split(",")
+            virtual_rooms = [self.cinfo.virtual_room]# if virtual_rooms == "" else self.cinfo.virtual_rooms.split(",")
 
             print(virtual_rooms)
             print(self.cinfo.virtual_rooms)
             virtual_rooms = ["toy", "TISA"]
 
-            for virtual_room in ["toy", "TISA"]:
-                #cinfo = local_data.cinfo.virtual_room = virtual_room
-                return firebase.send_answer_to_corrector(
-                    local_data.cinfo, virtual_room=virtual_room, **local_data.get_dbcell_decomposition()
-                )
+            for virtual_room in virtual_rooms:
+                if len(virtual_room)>0:
+                    cinfo = local_data.cinfo.virtual_room = virtual_room
+                    print(cinfo)
+                    #return firebase.send_answer_to_corrector(
+                    #    local_data.cinfo, virtual_room=virtual_room, **local_data.get_dbcell_decomposition()
+                    #)
 
         self.display_widgets(bbox, self.abuttons)
 
