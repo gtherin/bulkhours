@@ -181,18 +181,12 @@ class WidgetBase:
             local_data = CellParser.crunch_data(
                 cinfo=self.cinfo, user=self.user, data=self.cell_source, output=output
             )
-            print(self.cinfo)
-            print(self.cinfo.virtual_rooms)
             virtual_rooms = [self.cinfo.virtual_room] if self.cinfo.virtual_rooms == "" else self.cinfo.virtual_rooms.split(",")
-
-            print(virtual_rooms)
-            virtual_rooms = ["toy", "TISA"]
 
             for virtual_room in virtual_rooms:
                 if len(virtual_room) > 0:
-                    print(virtual_room)
-                    cinfo = local_data.cinfo.virtual_room = virtual_room
-                    print(cinfo)
+                    local_data.cinfo.virtual_room = virtual_room
+                    print(local_data.cinfo)
                     #return firebase.send_answer_to_corrector(
                     #    local_data.cinfo, virtual_room=virtual_room, **local_data.get_dbcell_decomposition()
                     #)
