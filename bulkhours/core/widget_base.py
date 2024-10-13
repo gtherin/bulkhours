@@ -188,9 +188,9 @@ class WidgetBase:
             virtual_rooms = ["toy", "TISA"]
 
             for virtual_room in ["toy", "TISA"]:
-                cinfo = local_data.cinfo.virtual_room = virtual_room
+                #cinfo = local_data.cinfo.virtual_room = virtual_room
                 return firebase.send_answer_to_corrector(
-                    cinfo, virtual_room=virtual_room, **local_data.get_dbcell_decomposition()
+                    local_data.cinfo, virtual_room=virtual_room, **local_data.get_dbcell_decomposition()
                 )
 
         self.display_widgets(bbox, self.abuttons)
