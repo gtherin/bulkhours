@@ -187,9 +187,9 @@ class WidgetBase:
                 if len(virtual_room) > 0:
                     local_data.cinfo.virtual_room = virtual_room
                     print(local_data.cinfo)
-                    #return firebase.send_answer_to_corrector(
-                    #    local_data.cinfo, virtual_room=virtual_room, **local_data.get_dbcell_decomposition()
-                    #)
+                    return firebase.send_answer_to_corrector(
+                        local_data.cinfo, virtual_room=virtual_room, **local_data.get_dbcell_decomposition()
+                    )
 
         self.display_widgets(bbox, self.abuttons)
 
