@@ -175,6 +175,10 @@ class WidgetBase:
     def evaluate_cell(self):
         bbox = self.init_widgets()
 
+        if self.cinfo.autorun == "publish":
+            print("AAAAAAAAAAAAA")
+            self.submit()
+
         self.display_widgets(bbox, self.abuttons)
 
     def init_widgets(self):
