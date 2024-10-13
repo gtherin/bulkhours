@@ -212,6 +212,7 @@ def evaluate(
     force_grades=False,
     normalize_score=True,
     black_format=False,
+    delete_solution=False,
     **kwargs,
 ):
     if virtual_room is not None:
@@ -233,6 +234,7 @@ def evaluate(
             verbose=verbose,
             force_grades=force_grades,
             normalize_score=normalize_score,
+            delete_solution=delete_solution,
         )
 
     if cell_id == "NEXT":
@@ -326,6 +328,7 @@ def evaluate_all(
     verbose=False,
     force_grades=False,
     normalize_score=True,
+    delete_solution=False,
 ):
     grades = tools.get_users_list(no_admin=False)
 
@@ -404,3 +407,6 @@ def evaluate_all(
         .background_gradient(cmap=cmap, vmin=0, vmax=max_score)
     )
     IPython.display.display(grades)
+    if delete_solution:
+        core.firebase.delete_documents(cinfo, cinfo.cell_id, verbose=True)
+
