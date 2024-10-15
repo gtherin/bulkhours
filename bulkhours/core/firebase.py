@@ -40,54 +40,6 @@ def get_question_id(question, sep="_", cinfo=None):
         + question
     )
 
-def get_engine(database=None, **kwargs):
-    if "BULK_DUSER" not in os.environ:
-        return None
-    import sqlalchemy as sa
-    tools.install_if_needed("mariadb")
-
-    if "BULK_DUSER" not in os.environ:
-        return None
-    user, dbs, dbk  = os.environ['BULK_DUSER'], os.environ['BULK_DBS'], os.environ['BULK_DTOKEN']
-    return sa.create_engine(f"mariadb+mariadbconnector://{user}:{dbk}@{dbs}:3306/{database}", **kwargs)
-
-ENGINE = None #get_engine(database="moodle", echo=False)
-BENGINE = None # get_engine(database="bulkdb", echo=True)
-
-def read_sql_deprecated(request, echo=False, usebkdb=False, **kwargs):
-    engine = BENGINE if usebkdb else ENGINE # get_engine(echo=echo, pool_size=10, max_overflow=20)
-    with engine.connect() as connection:
-        df = pd.read_sql(request, connection, **kwargs)
-    engine.dispose()
-    return df
-
-
-def to_sql_deprecated(df, table_name, usebkdb=False, index=True, if_exists="replace", **kwargs):
-    engine = BENGINE if usebkdb else ENGINE # get_engine(echo=echo, pool_size=10, max_overflow=20)
-    print("DEBUG", engine, table_name, if_exists)
-    df = df.rename(columns={"mail": "email", "uptime": "update_time"})
-
-    if if_exists == "update_or_insert":
-        dfold = read_sql(table_name, engine)
-        indexes = df.index.names
-        if not dfold.empty:
-            df = pd.concat([dfold.set_index(indexes).assign(new=0), df.assign(new=1)], axis=1)
-
-        # TODO: make it work
-        with engine.begin() as connection:
-            #df.to_sql(table_name + "_tmp", connection, if_exists="replace")
-            df.to_sql(table_name, connection, if_exists="replace", index=index)
-        #engine.dispose()
-
-        #with engine.begin() as connection:
-        #    sql = f"""update moodle.{table_name} as f set token = t.token FROM {table_name}_tmp as t where f.subject = t.subject and f.key = t.key"""
-        #    connection.execute(sql)
-
-    else:
-        with engine.begin() as connection:
-            df.to_sql(table_name, connection, if_exists=if_exists, index=index)
-    engine.dispose()
-
 
 class DbDocument:
     data_base_cache = None
@@ -261,23 +213,19 @@ The database has been reset to the local file '{cfg["database"]}'.
 
     # Get global info
     cfg["global"] = get_document(question_id=cfg["subject"] + "_info", user="global").get().to_dict()
+    if cfg["global"] is None:
+        cfg["global"] = DbDocument.compliant_fields["global"]
+        cfg["global"]['virtual_rooms'] = cfg['virtual_room']
     cfg["global"]["subject"] = cfg["subject"]
 
     # Get notebook info
     ndata = get_document(question_id=cfg["subject"] + "_info", user=cfg["notebook_id"]).get().to_dict()
+    if ndata is None:
+        ndata = DbDocument.compliant_fields["notebook"]
+
     for k, v in DbDocument.compliant_fields["notebook"].items():
         cfg[k] = ndata[k] if ndata is not None and k in ndata else v
     cfg[cfg["notebook_id"]] = ndata
-
-    tools.update_config(cfg)
-
-    #for k, v in DbDocument.compliant_fields["session"].items():
-    #    cfg[k] = cfg[k] if k in cfg else tokens[k]
-
-    #cfg = init_config("global", cfg)
-
-    #if cfg.notebook_id:
-    #    cfg = init_config(cfg.notebook_id, cfg)
 
     return tools.update_config(cfg)
 
