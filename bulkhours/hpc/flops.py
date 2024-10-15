@@ -117,7 +117,7 @@ def get_tf_flops(model_name, batch_size=None, verbose=True, summary=False, weigh
         batch_size = 1
 
     real_model = tf.function(model).get_concrete_function(
-        tf.TensorSpec([batch_size] + model.inputs[0].shape[1:], model.inputs[0].dtype)
+        tf.TensorSpec([batch_size] + list(model.inputs[0].shape[1:]), model.inputs[0].dtype)
     )
     frozen_func, graph_def = convert_variables_to_constants_v2_as_graph(real_model)
 
