@@ -45,6 +45,7 @@ def get_engraving_scale(verbose=False):
 
 def get_table_from_wiki(wpage, in_table, columns=None, wsite="https://en.wikipedia.org/wiki/", verbose=False):
     url = wsite + wpage
+    from io import StringIO
 
     print(f"""From {url}, getting data table whith string "{in_table}" in it""")
     # Get the page in the form of html
@@ -58,7 +59,8 @@ def get_table_from_wiki(wpage, in_table, columns=None, wsite="https://en.wikiped
         if verbose:
             print(f"# New table: \n {str(table)}")
         if in_table in str(table):
-            data = pd.DataFrame(pd.read_html(str(table))[0])
+            table_io = StringIO(str(table))
+            data = pd.DataFrame(pd.read_html(table_io)[0])
             if columns is not None:
                 data.columns = columns
             return data
