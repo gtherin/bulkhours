@@ -34,6 +34,30 @@ def get_apple(self):
     return apple
 
 
+@DataParser.register_dataset(
+    label="us_composition",
+    summary="Us composition moves of the day for sp500 nasdaq100 dowjones currency bonds]",
+    category="Economics",
+    ref_source="https://www.slickcharts.com/",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/trading.py",
+)
+def get_us_composite(self):
+    # sp500 nasdaq100 dowjones currency bonds
+    import requests
+    from bs4 import BeautifulSoup as bs
+
+    index = self.data_info["index"] if "index" in self.data_info else "sp500"
+
+    request = requests.get(f'https://www.slickcharts.com/{index}', headers={'User-Agent': 'Mozilla/5.0'})
+    stats = bs(request.text, "lxml").find('table', class_='table table-hover table-borderless table-sm')
+    df = pd.read_html(str(stats))[0]
+    df['% Chg'] = df['% Chg'].str.strip('()-%')
+    df['% Chg'] = pd.to_numeric(df['% Chg'].replace('NaN', np.nan))
+    df['Chg'] = pd.to_numeric(df['Chg'].replace('NaN', np.nan))
+
+    return df
+
+
 def display_sharpe_ratios(srs):
     import IPython
 
