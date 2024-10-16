@@ -45,12 +45,16 @@ def get_us_composite(self):
     # sp500 nasdaq100 dowjones currency bonds
     import requests
     from bs4 import BeautifulSoup as bs
+    from io import StringIO
 
     index = self.data_info["index"] if "index" in self.data_info else "sp500"
 
     request = requests.get(f'https://www.slickcharts.com/{index}', headers={'User-Agent': 'Mozilla/5.0'})
     stats = bs(request.text, "lxml").find('table', class_='table table-hover table-borderless table-sm')
-    df = pd.read_html(str(stats))[0]
+
+    table_io = StringIO(str(stats))
+    df = pd.DataFrame(pd.read_html(table_io)[0])
+
     df['% Chg'] = df['% Chg'].str.strip('()-%')
     df['% Chg'] = pd.to_numeric(df['% Chg'].replace('NaN', np.nan))
     df['Chg'] = pd.to_numeric(df['Chg'].replace('NaN', np.nan))
