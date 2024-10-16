@@ -47,9 +47,9 @@ def get_us_composite(self):
     from bs4 import BeautifulSoup as bs
     from io import StringIO
 
-    index = self.data_info["index"] if "index" in self.data_info else "sp500"
+    mkt_index = self.data_info["mkt_index"] if "mkt_index" in self.data_info else "sp500"
 
-    request = requests.get(f'https://www.slickcharts.com/{index}', headers={'User-Agent': 'Mozilla/5.0'})
+    request = requests.get(f'https://www.slickcharts.com/{mkt_index}', headers={'User-Agent': 'Mozilla/5.0'})
     stats = bs(request.text, "lxml").find('table', class_='table table-hover table-borderless table-sm')
 
     table_io = StringIO(str(stats))
