@@ -48,6 +48,7 @@ def get_us_composite(self):
     from io import StringIO
 
     mkt_index = self.data_info["mkt_index"] if "mkt_index" in self.data_info else "sp500"
+    drop_list = self.data_info["drop_list"] if "drop_list" in self.data_info else ['KVUE', 'VLTO', 'BRK.B', 'BF.B', 'SW', 'AMTM', 'GEV', 'SOLV']
 
     request = requests.get(f'https://www.slickcharts.com/{mkt_index}', headers={'User-Agent': 'Mozilla/5.0'})
     stats = bs(request.text, "lxml").find('table', class_='table table-hover table-borderless table-sm')
@@ -58,6 +59,8 @@ def get_us_composite(self):
     df['% Chg'] = df['% Chg'].str.strip('()-%')
     df['% Chg'] = pd.to_numeric(df['% Chg'].replace('NaN', np.nan))
     df['Chg'] = pd.to_numeric(df['Chg'].replace('NaN', np.nan))
+
+    df = df[df["Symbol"].isin(drop_list)]
 
     return df
 
