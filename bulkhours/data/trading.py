@@ -60,7 +60,7 @@ def get_us_composite(self):
     df['% Chg'] = pd.to_numeric(df['% Chg'].replace('NaN', np.nan))
     df['Chg'] = pd.to_numeric(df['Chg'].replace('NaN', np.nan))
 
-    df = df[df["Symbol"].isin(drop_list)]
+    df = df[~df["Symbol"].isin(drop_list)]
 
     return df
 
