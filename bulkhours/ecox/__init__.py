@@ -46,8 +46,13 @@ def plot_ob_bars(ax, df, title=None, sleep=None, xlim=None, ylim=None, cumsum=Fa
     ax.cla()
     column = "volume_cum" if cumsum else "volume"
 
-    ax.bar(df[df["layer"]<0]["layer"], df[df["layer"]<0][column], color="#52DE97", width=1)
-    ax.bar(df[df["layer"]>0]["layer"], df[df["layer"]>0][column], color="#C70039", width=1)
+    dfb = df[df["layer"]<0]
+    if not dfb.empty:
+        ax.bar(dfb["layer"], dfb[column], color="#52DE97", width=1)
+        
+    dfa = df[df["layer"]>0]
+    if not dfa.empty:
+        ax.bar(dfa["layer"], dfa[column], color="#C70039", width=1)
 
     if title is not None:
         now = (datetime.datetime.now()+datetime.timedelta(hours=2)).strftime('%H:%M:%S')
