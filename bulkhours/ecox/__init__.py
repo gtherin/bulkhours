@@ -3,6 +3,7 @@ from .gallery import *  # noqa
 from . import regression  # noqa
 from . import gradient  # noqa
 from . import trading  # noqa
+from . import agents  # noqa
 
 from .block import Block, BlockCoin, BlockMsg  # noqa
 from .blockchain import BlockChain  # noqa
@@ -46,13 +47,17 @@ def plot_ob_bars(ax, df, title=None, sleep=None, xlim=None, ylim=None, cumsum=Fa
     ax.cla()
     column = "volume_cum" if cumsum else "volume"
 
+    xaxis = "layer"
+    if xlim is not None:
+        xaxis = "price"
+
     dfb = df[df["layer"]<0]
     if not dfb.empty:
-        ax.bar(dfb["layer"], dfb[column], color="#52DE97", width=1)
+        ax.bar(dfb[xaxis], dfb[column], color="#52DE97", width=1)
         
     dfa = df[df["layer"]>0]
     if not dfa.empty:
-        ax.bar(dfa["layer"], dfa[column], color="#C70039", width=1)
+        ax.bar(dfa[xaxis], dfa[column], color="#C70039", width=1)
 
     if title is not None:
         now = (datetime.datetime.now()+datetime.timedelta(hours=2)).strftime('%H:%M:%S')
@@ -64,10 +69,11 @@ def plot_ob_bars(ax, df, title=None, sleep=None, xlim=None, ylim=None, cumsum=Fa
         # Use slicing to select equidistant rows
         n = 5
         step = len(df) // (n - 1)
-        df_equidistant = df.iloc[::step][:n]
-        ax.set_xticks(df_equidistant["layer"])
-        ax.set_xticklabels(df_equidistant["price"].round(2))
-        ax.tick_params(axis='x', labelrotation=15)
+        if step > 0:
+            df_equidistant = df.iloc[::step][:n]
+            ax.set_xticks(df_equidistant[xaxis])
+            ax.set_xticklabels(df_equidistant["price"].round(2))
+            ax.tick_params(axis='x', labelrotation=15)
 
     if ylim is not None:
         ax.set_ylim(ylim)
