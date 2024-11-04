@@ -2,12 +2,9 @@ import pandas as pd
 import numpy as np
 
 
-
 try:
     from mesa import Agent, Model
-        
 except ImportError:
-    # Define a dummy class if the library is not available
     class Agent:
         def __init__(self, unique_id, model):
             print("mesa is not available. Using dummy class.")
@@ -15,9 +12,11 @@ except ImportError:
         def perform_action(self, *args, **kwargs):
             print("Dummy action performed")
             return None
+
     class Model:
         def __init__(self, *args, **kwargs):
             print("mesa is not available. Using dummy class.")        
+
 
 class Order:
     """Represents a single order (buy or sell) in the order book."""
@@ -40,6 +39,7 @@ class Buyer(Agent):
         self.model.bids.append(order)
         #print(f"Buyer {self.unique_id} placed a bid: Price={price}, Quantity={quantity}")
 
+
 class Seller(Agent):
     """A seller places an ask order in the stock market."""
     def __init__(self, unique_id, model):
@@ -52,6 +52,7 @@ class Seller(Agent):
         order = Order(order_type="sell", price=price, quantity=quantity)
         self.model.asks.append(order)
         #print(f"Seller {self.unique_id} placed an ask: Price={price}, Quantity={quantity}")
+
 
 class MarketMaker(Agent):
     """A market maker places both bid and ask orders around the estimated market price."""
@@ -77,7 +78,6 @@ class MarketMaker(Agent):
         ask_order = Order(order_type="sell", price=ask_price, quantity=quantity)
         self.model.bids.append(bid_order)
         self.model.asks.append(ask_order)
-
         #print(f"Market Maker {self.unique_id} placed a bid: Price={bid_price}, Quantity={quantity}")
         #print(f"Market Maker {self.unique_id} placed an ask: Price={ask_price}, Quantity={quantity}")
 
@@ -100,8 +100,7 @@ class SniperAgent(Agent):
                 # Place a buy order at the best ask price
                 sniper_order = Order(order_type="buy", price=best_ask, quantity=quantity)
                 self.model.bids.append(sniper_order)
-
-                print(f"Sniper {self.unique_id} placed a snipe bid at Price={best_ask} for Quantity={quantity}")
+                #print(f"Sniper {self.unique_id} placed a snipe bid at Price={best_ask} for Quantity={quantity}")
 
 
 class GuerillaAgent(Agent):
@@ -129,8 +128,8 @@ class GuerillaAgent(Agent):
             # Place a buy order (for simplicity, this example uses buy orders)
             guerilla_order = Order(order_type="buy", price=limit_price, quantity=chunk_size)
             self.model.bids.append(guerilla_order)
+            #print(f"Guerilla Agent {self.unique_id} placed a buy order: Price={limit_price}, Quantity={chunk_size}")
 
-            print(f"Guerilla Agent {self.unique_id} placed a buy order: Price={limit_price}, Quantity={chunk_size}")
 
 class BlastAgent(Agent):
     """A blast agent places a large order all at once, impacting the market."""
@@ -144,7 +143,7 @@ class BlastAgent(Agent):
             best_ask = min(self.model.asks, key=lambda x: x.price).price
             blast_order = Order(order_type="buy", price=best_ask, quantity=quantity)
             self.model.bids.append(blast_order)
-            print(f"Blast Agent {self.unique_id} placed a large buy order at Price={best_ask}, Quantity={quantity}")
+            #print(f"Blast Agent {self.unique_id} placed a large buy order at Price={best_ask}, Quantity={quantity}")
 
 
 class IcebergAgent(Agent):
@@ -162,7 +161,7 @@ class IcebergAgent(Agent):
                 best_ask = min(self.model.asks, key=lambda x: x.price).price
                 iceberg_order = Order(order_type="buy", price=best_ask, quantity=chunk_size)
                 self.model.bids.append(iceberg_order)
-                print(f"Iceberg Agent {self.unique_id} placed a chunk buy order at Price={best_ask}, Quantity={chunk_size}")
+                #print(f"Iceberg Agent {self.unique_id} placed a chunk buy order at Price={best_ask}, Quantity={chunk_size}")
 
 
 class SharkAgent(Agent):
@@ -179,7 +178,7 @@ class SharkAgent(Agent):
             shark_price = target_order.price * 1.01  # Slightly above the large order price
             shark_order = Order(order_type="sell", price=shark_price, quantity=5)
             self.model.asks.append(shark_order)
-            print(f"Shark Agent {self.unique_id} placed a sell order at Price={shark_price}, Quantity=5")
+            #print(f"Shark Agent {self.unique_id} placed a sell order at Price={shark_price}, Quantity=5")
 
 
 class StealthAgent(Agent):
@@ -195,7 +194,7 @@ class StealthAgent(Agent):
                 best_ask = min(self.model.asks, key=lambda x: x.price).price
                 stealth_order = Order(order_type="buy", price=best_ask, quantity=quantity)
                 self.model.bids.append(stealth_order)
-                print(f"Stealth Agent {self.unique_id} placed a small buy order at Price={best_ask}, Quantity={quantity}")
+                #print(f"Stealth Agent {self.unique_id} placed a small buy order at Price={best_ask}, Quantity={quantity}")
 
 
 class SumoAgent(Agent):
@@ -210,5 +209,4 @@ class SumoAgent(Agent):
             best_ask = min(self.model.asks, key=lambda x: x.price).price
             sumo_order = Order(order_type="buy", price=best_ask, quantity=quantity)
             self.model.bids.append(sumo_order)
-            print(f"Sumo Agent {self.unique_id} placed an aggressive buy order at Price={best_ask}, Quantity={quantity}")
-
+            #print(f"Sumo Agent {self.unique_id} placed an aggressive buy order at Price={best_ask}, Quantity={quantity}")
