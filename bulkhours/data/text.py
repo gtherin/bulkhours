@@ -132,8 +132,8 @@ def en2fr(emotions):
     return [en2fr[e] for e in emotions]
 
 def en2icons(emotions):
-    # 🤢 is replaced by X ERROR: {NAUSEATED FACE}
-    en2icons = {'anger': '😠', 'disgust': 'X', 'fear': '😨', 'joy': '😄', 'neutral': '😐', 'sadness': '😢', 'surprise': '😲', 'anticipation': '👍', 'trust': '🤝'}
+    # 🤢 is replaced by 😡 ERROR: {NAUSEATED FACE}
+    en2icons = {'anger': '😠', 'disgust': '😡', 'fear': '😨', 'joy': '😄', 'neutral': '😐', 'sadness': '😢', 'surprise': '😲', 'anticipation': '👍', 'trust': '🤝'}
     if type(emotions) == str:
         return en2icons[emotions]
     return [en2icons[e] for e in emotions]
