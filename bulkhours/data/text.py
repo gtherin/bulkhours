@@ -6,7 +6,7 @@ from .data_parser import DataParser
 
 
 def _clean_tweet(text):
-    import emoji
+    #import emoji
     import html.parser
     
     output = re.sub('http[\w\d\D./]+', '', text).strip() #remove url
@@ -97,10 +97,10 @@ def get_retweets(df):
 def get_tweets(self, timeopt=None):
 
     import kagglehub
-    from transformers import pipeline
-    import pandas as pd
-    import html.parser
-    pd.set_option('display.max_colwidth', None)
+    #from transformers import pipeline
+    #import pandas as pd
+    #import html.parser
+    #pd.set_option('display.max_colwidth', None)
 
     # Get the Donald_Trump's_Tweets data
     df = pd.read_csv(kagglehub.dataset_download('codebreaker619/donald-trump-tweets-dataset') + "/tweets.csv")
@@ -132,7 +132,8 @@ def en2fr(emotions):
     return [en2fr[e] for e in emotions]
 
 def en2icons(emotions):
-    en2icons = {'anger': '😠', 'disgust': '🤢', 'fear': '😨', 'joy': '😄', 'neutral': '😐', 'sadness': '😢', 'surprise': '😲', 'anticipation': '👍', 'trust': '🤝'}
+    # 🤢 is replaced by X ERROR: {NAUSEATED FACE}
+    en2icons = {'anger': '😠', 'disgust': 'X', 'fear': '😨', 'joy': '😄', 'neutral': '😐', 'sadness': '😢', 'surprise': '😲', 'anticipation': '👍', 'trust': '🤝'}
     if type(emotions) == str:
         return en2icons[emotions]
     return [en2icons[e] for e in emotions]
