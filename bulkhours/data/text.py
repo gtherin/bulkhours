@@ -117,18 +117,25 @@ def get_tweets(self, timeopt=None):
 
 
 def get_sentiments(hf_pipeline, text_lists):
-    emotions_data, emotions_labels = [], []
+    emotions_data = []
     for t in text_lists:
-        raw_data = hf_pipeline(t)[0]
-        emotions_labels = list(pd.DataFrame(raw_data)["label"])
-        emotions_data.append(pd.DataFrame(raw_data)["score"])
-    data = pd.concat(emotions_data, axis=1).T.reset_index(drop=True)
-    data.columns = emotions_labels
+        emotions_data.append(pd.DataFrame(hf_pipeline(t)[0]).set_index("label").T)
+    data = pd.concat(emotions_data, axis=0).reset_index(drop=True)
     return data
 
 
 def en2fr(emotions):
     en2fr = {'anger': 'colère', 'disgust': 'dégout', 'fear': 'peur', 'joy': 'joie', 'neutral': 'neutre', 'sadness': 'tristesse', 'surprise': 'surprise', 
             'anticipation':'anticipation', 'trust':'confiance'}
+    if type(emotions) == str:
+        return en2fr[emotions]
     return [en2fr[e] for e in emotions]
+
+def en2icons(emotions):
+    en2icons = {'anger': '😠', 'disgust': '🤢', 'fear': '😨', 'joy': '😄', 'neutral': '😐', 'sadness': '😢', 'surprise': '😲', 'anticipation': '👍', 'trust': '🤝'}
+    if type(emotions) == str:
+        return en2icons[emotions]
+    return [en2icons[e] for e in emotions]
+
+
 
