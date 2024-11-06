@@ -14,7 +14,7 @@ from .help import build_readme, help, generate_header_links, get_header_links  #
 from .data_parser import DataParser  # noqa
 from .statsdata import download_data  # noqa
 from .trading import merge_ob_data, get_ob_slice  # noqa
-from .text import get_sentiments, en2fr  # noqa
+from .text import get_sentiments, en2fr, en2icons  # noqa
 
 
 def get_data(label, **kwargs):
