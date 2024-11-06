@@ -142,6 +142,8 @@ def set_plt_style(style="default", cmap="default"):
         plt.rcParams["grid.linewidth"] = 0.8
         plt.rcParams["lines.linewidth"] = 3
         plt.rcParams["font.size"] = 10
+    elif style == "zeer":
+        axis_color = "white"
     else:
         axis_color = caliases["blue"]
         plt.rcParams["grid.color"] = "white"
