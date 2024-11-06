@@ -116,12 +116,9 @@ def get_tweets(self, timeopt=None):
     return df
 
 
-def get_sentiments(hf_pipeline, df):
-    emotions_data = []
-    emotions_labels = []
-    tweets = df['clean_text'].to_list()
-
-    for t in tweets:
+def get_sentiments(hf_pipeline, text_lists):
+    emotions_data, emotions_labels = [], []
+    for t in text_lists:
         raw_data = hf_pipeline(t)[0]
         emotions_labels = list(pd.DataFrame(raw_data)["label"])
         emotions_data.append(pd.DataFrame(raw_data)["score"])
