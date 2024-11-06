@@ -94,7 +94,7 @@ def get_retweets(df):
     ref_source="https://www.kaggle.com/code/edwintyh/donald-trump-s-tweets-sentiment-analysis-model",
     enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/text.py",
 )
-def get_poverty(self, timeopt=None):
+def get_tweets(self, timeopt=None):
 
     import kagglehub
     from transformers import pipeline
@@ -114,4 +114,24 @@ def get_poverty(self, timeopt=None):
       .pipe(get_retweets)
       .pipe(drop_tweets))
     return df
+
+
+def get_sentiments(hf_pipeline, df):
+    emotions_data = []
+    emotions_labels = []
+    tweets = df['clean_text'].to_list()
+
+    for t in tweets:
+        raw_data = hf_pipeline(t)[0]
+        emotions_labels = list(pd.DataFrame(raw_data)["label"])
+        emotions_data.append(pd.DataFrame(raw_data)["score"])
+    data = pd.concat(emotions_data, axis=1).T.reset_index(drop=True)
+    data.columns = emotions_labels
+    return data
+
+
+def en2fr(emotions):
+    en2fr = {'anger': 'colère', 'disgust': 'dégout', 'fear': 'peur', 'joy': 'joie', 'neutral': 'neutre', 'sadness': 'tristesse', 'surprise': 'surprise', 
+            'anticipation':'anticipation', 'trust':'confiance'}
+    return [en2fr[e] for e in emotions]
 
