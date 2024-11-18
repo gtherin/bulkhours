@@ -218,3 +218,21 @@ def styles(sdata, cmap="RdBu", icolumns=["auser"], sorted_by=True, hide_grades=F
         stylish = stylish.map(core.Grade.apply_all_style, subset=["all"])
 
     return stylish.set_properties().format("{:.1f}", na_rep="✅", subset=nacolumns)
+
+
+def call_webhooks(whid):
+    import os
+    import requests
+
+    url = whid.format(BULK_DBS=os.environ["BULK_DBS"], IPADDRESS=os.environ["IPADDRESS"])
+    response = requests.get(url)
+
+    # Check the status code
+    if response.status_code == 200:
+      # Request was successful
+      data = response.json()  # If the response is JSON
+      # Process the data
+      print(data)  
+    else:
+      # Request failed
+      print(f"Request failed with status code: {response.status_code}")
