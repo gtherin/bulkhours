@@ -230,9 +230,7 @@ def call_webhooks(whid):
     # Check the status code
     if response.status_code == 200:
       # Request was successful
-      data = response.json()  # If the response is JSON
-      # Process the data
-      print(data)  
+      return response.json()  # If the response is JSON
     else:
       # Request failed
       print(f"Request failed with status code: {response.status_code}")
