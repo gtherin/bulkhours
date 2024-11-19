@@ -220,7 +220,7 @@ def styles(sdata, cmap="RdBu", icolumns=["auser"], sorted_by=True, hide_grades=F
     return stylish.set_properties().format("{:.1f}", na_rep="✅", subset=nacolumns)
 
 
-def call_webhooks(whid):
+def webhooks(whid):
     import os
     import requests
 
