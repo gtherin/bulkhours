@@ -61,3 +61,24 @@ def geo_plot(label=None, timeopt="last", data=None, **kwargs):
         data = get_data(label, timeopt=timeopt) if type(label) is str else label
 
     return geo.geo_plot(data=data, timeopt=timeopt, **kwargs)
+
+
+def download_from_gdrive(*, file_id, destination):
+    import requests
+    from tqdm import tqdm
+
+    # Make the initial request to get file size
+    response = requests.get(f"https://drive.google.com/uc?export=download&id={file_id}", stream=True)
+    if response.status_code != 200:
+        print(f"Failed to download file. HTTP status code: {response.status_code}")
+        return
+
+    # Get total file size from headers
+    total_size = int(response.headers.get('content-length', 0))
+
+    # Progress bar setup
+    with open(destination, "wb") as file, tqdm(desc=f"Downloading {destination}", total=total_size, unit="B", unit_scale=True, unit_divisor=1024) as progress_bar:
+        for chunk in response.iter_content(chunk_size=1024):
+            if chunk:  # Filter out keep-alive chunks
+                file.write(chunk)
+                progress_bar.update(len(chunk))
