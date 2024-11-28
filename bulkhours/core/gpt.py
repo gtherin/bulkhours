@@ -243,7 +243,6 @@ def evaluate_with_gpt(messages):
             grade_match = re.search(r"<grade>(\d+)</grade>", block)
             grade = int(grade_match.group(1)) if grade_match else np.nan
 
-            print(email, grade, summary)
             students[email] = Grade(score=grade, src="bot", comment=summary)
 
     return students

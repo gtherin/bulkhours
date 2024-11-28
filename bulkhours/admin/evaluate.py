@@ -396,7 +396,6 @@ def evaluate_all(
         comment = ""
         if is_gpt:
             if email in grades_gpt:
-                print(email, grades_gpt[email])
                 grade = grades_gpt[email]
             else:
                 continue
