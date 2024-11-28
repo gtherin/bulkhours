@@ -316,6 +316,10 @@ def evaluate(
     )
 
 
+def is_automatic_evaluation(evaluation_code=""):
+    return "def student_evaluation_function" not in evaluation_code or "admin.gpt_eval" in evaluation_code or "gpt_evaluation" in evaluation_code
+
+
 def evaluate_all(
     cell_id,
     user="ALL",
@@ -358,19 +362,20 @@ def evaluate_all(
     # Get answers
     cell_answers = answers.get_answers(cinfo.cell_id, verbose=False)
 
-    is_gpt = "def student_evaluation_function" not in evaluation_code or "admin.gpt_eval" in evaluation_code or "gpt_evaluation" in evaluation_code
+    is_gpt = is_automatic_evaluation(evaluation_code)
     if is_gpt:
         messages=[
-            {"role": "system", "content": core.gpt.evaluation_instructions.replace("MAX_SCORE", "20")},
+            {"role": "system", "content": core.gpt.evaluation_instructions.replace("MAX_SCORE", max_score)},
             {"role": "user", "content": "Here is the expected solution:\n%s" % teacher_data.get_solution()},
         ]
         for stu in cell_answers:
             student_data = core.CellParser.crunch_data(cinfo=cinfo, data=cell_answers[stu], user=stu)
             messages.append({"role": "user", "content": "Here is the answer of student '%s':\n%s" % (stu, student_data.get_solution())})
 
-        print("AAAAAAAAAAAAA", evaluation_code)
-        grades_gpt = core.gpt.evaluate_with_gpt(grades, messages)
+        grades_gpt = core.gpt.evaluate_with_gpt(messages)
 
+
+    print("AAAAAAAAAAAAA", evaluation_code)
 
     for u in grades.index:
         email, auser = grades["mail"][u], grades["auser"][u]
