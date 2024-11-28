@@ -41,6 +41,7 @@ def get_users_list(no_admin=True, sort_by=None, euser=None, cfg=None):
         cfg = core.tools.get_config(is_new_format=True)
     virtual_room = cfg["virtual_room"]
 
+
     users = []
     if not no_admin:
         users += [
@@ -52,15 +53,16 @@ def get_users_list(no_admin=True, sort_by=None, euser=None, cfg=None):
             .split(";")
             if k != ""
         ]
-    users += [
-        (k, 0)
-        for k in cfg.g[virtual_room]
-        .replace(",", ";")
-        .replace(" ", "")
-        .replace(" ", "")
-        .split(";")
-        if k != ""
-    ]
+    if "virtual_room" in cfg.g:
+        users += [
+            (k, 0)
+            for k in cfg.g[virtual_room]
+            .replace(",", ";")
+            .replace(" ", "")
+            .replace(" ", "")
+            .split(";")
+            if k != ""
+        ]
 
     users = pd.DataFrame(users, columns=["mail", "is_admin"]).drop_duplicates(
         subset=["mail"]
