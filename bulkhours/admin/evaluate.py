@@ -354,7 +354,7 @@ def evaluate_all(
 
     # Get max_pos of evaluation_code
     match = re.search(r"max_score\s*=\s*(\d+)", evaluation_code)
-    max_score = 10. if match is None else float(match.group(1))
+    max_score = int(10) if match is None else int(match.group(1))
 
     if verbose:
         print(evaluation_code)
