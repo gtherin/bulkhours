@@ -135,10 +135,10 @@ def execute_teacher_code(student_data, teacher_data, raw=False, tmode="explanati
         IPython.get_ipython().run_cell(f"student_{tmode}_function()")
 
 
-def get_max_score(revaluation_code, execute=True):
+def get_max_score(revaluation_code, execute=True, max_score="10"):
     def comment_function_call(func_id):
         l = LineParser.get_func_args(e, func_id=func_id)
-        max_score = l["max_score"] if "max_score" in l else "10"
+        max_score = l["max_score"] if "max_score" in l else max_score
         return e.replace(func_id, max_score + "  #") + "\n"
 
     evaluation_code = ""
@@ -170,6 +170,7 @@ def student_evaluation_function(
     normalize_score=True,
     token=None,
     evalcode=None,
+    max_score=None,
 ):
     """
     This function is used to evaluate the student code.
@@ -230,7 +231,7 @@ def student_evaluation_function(
         IPython.get_ipython().run_cell("[s for s in dir(student) if s[0] != '_']")
 
     # Run the teacher code and get max_score from it
-    max_score = get_max_score(evaluation_code, execute=execute)
+    max_score = get_max_score(evaluation_code, execute=execute, max_score=max_score)
 
     if "admin.gpt_eval" in evaluation_code or "bulkhours.gpt_evaluation" in evaluation_code:
         res = gpt_evaluation(student_data, teacher_data, max_score=max_score, token=token, evalcode=evalcode)
