@@ -143,8 +143,8 @@ def get_max_score(revaluation_code, execute=True, max_score="10"):
 
     evaluation_code = ""
     for e in revaluation_code.split("\n"):
-        if "bulkhours.admin.gpt_eval" in e:
-            evaluation_code += comment_function_call("bulkhours.admin.gpt_eval")
+        if "bulkhours.gpt_eval" in e:
+            evaluation_code += comment_function_call("bulkhours.gpt_eval")
         elif "bulkhours.is_equal" in e:
             evaluation_code += comment_function_call("bulkhours.is_equal")
         else:
@@ -233,7 +233,7 @@ def student_evaluation_function(
     # Run the teacher code and get max_score from it
     max_score = get_max_score(evaluation_code, execute=execute, max_score=max_score)
 
-    if "admin.gpt_eval" in evaluation_code or "bulkhours.gpt_evaluation" in evaluation_code:
+    if ".gpt_eval" in evaluation_code or ".gpt_evaluation" in evaluation_code:
         res = gpt_evaluation(student_data, teacher_data, max_score=max_score, token=token, evalcode=evalcode)
         #if normalize_score:
         #    res.score *= max_score

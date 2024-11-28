@@ -317,7 +317,7 @@ def evaluate(
 
 
 def is_automatic_evaluation(evaluation_code=""):
-    return "def student_evaluation_function" not in evaluation_code or "admin.gpt_eval" in evaluation_code or "gpt_evaluation" in evaluation_code
+    return "def student_evaluation_function" not in evaluation_code or ".gpt_eval" in evaluation_code or ".gpt_evaluation" in evaluation_code
 
 
 def evaluate_all(

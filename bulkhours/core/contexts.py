@@ -46,7 +46,7 @@ os.environ['FINAL_SCORE'] = str(eresult)
 def get_evaluation_code(teacher_data):
     evaluation_code = teacher_data.get_code("evaluation")
     if "def student_evaluation_function" not in evaluation_code:
-        evaluation_code += """\ndef student_evaluation_function():\n    return bulkhours.admin.gpt_eval("syntax", max_score=10)"""
+        evaluation_code += """\ndef student_evaluation_function():\n    return bulkhours.gpt_eval("syntax", max_score=10)"""
 
     return evaluation_code
 
