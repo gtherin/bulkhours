@@ -352,17 +352,13 @@ def evaluate_all(
     # Get basic evaluation code
     evaluation_code = teacher_data.get_code("evaluation")
 
-
-    # Get parameters of evaluation_code
-    matches = re.findall(r"(\w+)\s*=\s*([^\),\s]+)", evaluation_code)
-    evaluation_params = {name: value for name, value in matches}
+    # Get max_pos of evaluation_code
+    match = re.search(r"max_score\s*=\s*(\d+)", evaluation_code)
+    max_score = 10. if match is None else float(match.group(1))
 
     if verbose:
         print(evaluation_code)
-        print(evaluation_params)
-
-    # Get default max_score
-    max_score = float(evaluation_params["max_score"]) if "max_score" in evaluation_params else 10.
+        print(max_score)
 
     # Get answers
     cell_answers = answers.get_answers(cinfo.cell_id, verbose=False)
