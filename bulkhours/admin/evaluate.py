@@ -396,7 +396,8 @@ def evaluate_all(
         comment = ""
         if is_gpt:
             if email in grades_gpt:
-                grade = core.Grade(score=grades_gpt[email]["grade"], src="bot", comment=grades_gpt[email]["summary"])
+                print(email, grades_gpt[email])
+                grade = grades_gpt[email]
             else:
                 continue
         elif student_data.is_manual_note() and email != core.tools.REF_USER:
