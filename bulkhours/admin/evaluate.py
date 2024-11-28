@@ -393,9 +393,10 @@ def evaluate_all(
         )
 
         # Don't manual data is available
+        comment = ""
         if is_gpt:
             if email in grades_gpt:
-                grade = core.Grade(score=grades_gpt["grade"], src="bot", comment=grades_gpt["summary"])
+                grade = core.Grade(score=grades_gpt[email]["grade"], src="bot", comment=grades_gpt[email]["summary"])
             else:
                 continue
         elif student_data.is_manual_note() and email != core.tools.REF_USER:
@@ -412,7 +413,7 @@ def evaluate_all(
                 normalize_score=normalize_score,
             )
 
-            comment = ""
+
         print(f"\x1b[35m\x1b[1m({grade.score}{comment}), \x1b[m", end="")
         grades.loc[u, cinfo.cell_id + ".n"] = grade.score
         grades.loc[u, cinfo.cell_id + ".c"] = grade.comment
