@@ -338,6 +338,7 @@ def evaluate_all(
     grades = grades[["auser", "mail", cinfo.cell_id + ".n"]]
 
     print(f"\x1b[35m\x1b[1mNotes for {cinfo.cell_id}: \x1b[m", end="")
+    print(grades)
 
     if teacher_data is None:
         teacher_data = core.CellParser.crunch_data(
