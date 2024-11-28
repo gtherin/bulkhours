@@ -344,8 +344,19 @@ def evaluate_all(
             cinfo=cinfo, user=core.tools.REF_USER, data=None
         )
 
-    max_score = 10
+    # evaluate_all
+    # Get the formatted evaluation code
+    evaluation_code = core.get_evaluation_code(teacher_data)
+    evaluation_code = tools.black_format_str(evaluation_code)
+    print("AAAAAAAAAAAAA", evaluation_code)
 
+    if "admin.gpt_eval" in evaluation_code or "bulkhours.gpt_evaluation" in evaluation_code:
+        print("BBBBBBBBBBBBBBBBBBBBBB")
+        #res = gpt_evaluation(student_data, teacher_data, max_score=max_score, token=token, evalcode=evalcode)
+        return
+
+
+    max_score = 10
     cell_answers = answers.get_answers(cinfo.cell_id, verbose=False)
     for u in grades.index:
         email, auser = grades["mail"][u], grades["auser"][u]
