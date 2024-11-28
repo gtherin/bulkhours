@@ -374,9 +374,6 @@ def evaluate_all(
 
         grades_gpt = core.gpt.evaluate_with_gpt(messages)
 
-
-    print("AAAAAAAAAAAAA", evaluation_code)
-
     for u in grades.index:
         email, auser = grades["mail"][u], grades["auser"][u]
         if type(email) == pd.Series:
@@ -399,6 +396,8 @@ def evaluate_all(
         if is_gpt:
             if email in grades_gpt:
                 grade = core.Grade(score=grades_gpt["grade"], src="bot", comment=grades_gpt["summary"])
+            else:
+                continue
         elif student_data.is_manual_note() and email != core.tools.REF_USER:
             comment = student_data.minfo["grade_man_comment"] if "grade_man_comment" in student_data.minfo else "To be discussed with evaluator"
             grade = core.Grade(score=student_data.minfo["grade_man"], src="man", comment=comment)
