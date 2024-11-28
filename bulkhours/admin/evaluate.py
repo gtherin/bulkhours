@@ -357,6 +357,7 @@ def evaluate_all(
     evaluation_params = {name: value for name, value in matches}
 
     # Get defualt max_score
+    print(evaluation_params)
     max_score = int(evaluation_params["max_score"]) if "max_score" in evaluation_params else 10
     print(max_score)
 
