@@ -352,7 +352,7 @@ def evaluate_all(
     # Get basic evaluation code
     evaluation_code = teacher_data.get_code("evaluation")
 
-    # get paramters of evaluation_code
+    # Get parameters of evaluation_code
     matches = re.findall(r"(\w+)\s*=\s*([^\),\s]+)", evaluation_code)
     evaluation_params = {name: value for name, value in matches}
 
@@ -364,6 +364,8 @@ def evaluate_all(
 
     is_gpt = is_automatic_evaluation(evaluation_code)
     if is_gpt:
+        if verbose:
+            print(core.gpt.evaluation_instructions.replace("MAX_SCORE", str(max_score)))
         messages=[
             {"role": "system", "content": core.gpt.evaluation_instructions.replace("MAX_SCORE", str(max_score))},
             {"role": "user", "content": "Here is the expected solution:\n%s" % teacher_data.get_solution()},
