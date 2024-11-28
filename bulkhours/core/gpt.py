@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 import os
+import re
 
 from . import tools
 from .grade import Grade
@@ -221,3 +222,29 @@ def get_grade(student_data, teacher_data, max_score, token="YOUR_KEY", evalcode=
             )
 
             return Grade(score=np.nan, comment=response)
+
+def parse_grades(data):
+    student_blocks = data.split("<student>")
+    students = {}
+
+    for block in student_blocks:
+        if block.strip():  # Skip empty blocks
+            email_match = re.search(r"<email>(.*?)</email>", block)
+            email = email_match.group(1) if email_match else None
+
+            summary_match = re.search(r"<summary>(.*?)</summary>", block, re.DOTALL)
+            summary = summary_match.group(1).strip() if summary_match else None
+
+            grade_match = re.search(r"<grade>(\d+)</grade>", block)
+            grade = int(grade_match.group(1)) if grade_match else None
+
+            students[email] = {"summary": summary, "grade": grade}
+
+    return students
+
+
+def evaluate_with_gpt(messages):
+
+    completion = evaluation_client.chat.completions.create(model="gpt-4o-mini", messages=messages, temperature=0, top_p=0.5)
+    answers = completion.choices[0].message.content
+    return parse_grades(answers)

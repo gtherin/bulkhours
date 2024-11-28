@@ -2,6 +2,7 @@ import IPython
 import ipywidgets
 import numpy as np
 import pandas as pd
+import re
 
 from .. import core
 from . import answers
@@ -344,20 +345,33 @@ def evaluate_all(
             cinfo=cinfo, user=core.tools.REF_USER, data=None
         )
 
-    # evaluate_all
-    # Get the formatted evaluation code
-    evaluation_code = core.get_evaluation_code(teacher_data)
-    evaluation_code = tools.black_format_str(evaluation_code)
-    print("AAAAAAAAAAAAA", evaluation_code)
+    # Get basic evaluation code
+    evaluation_code = teacher_data.get_code("evaluation")
 
-    if "admin.gpt_eval" in evaluation_code or "bulkhours.gpt_evaluation" in evaluation_code:
-        print("BBBBBBBBBBBBBBBBBBBBBB")
-        #res = gpt_evaluation(student_data, teacher_data, max_score=max_score, token=token, evalcode=evalcode)
-        return
+    # get paramters of evaluation_code
+    matches = re.findall(r"(\w+)\s*=\s*([^\),\s]+)", evaluation_code)
+    evaluation_params = {name: value for name, value in matches}
 
+    # Get defualt max_score
+    max_score = evaluation_params["max_score"] if "max_score" in evaluation_params else 10
 
-    max_score = 10
+    # Get answers
     cell_answers = answers.get_answers(cinfo.cell_id, verbose=False)
+
+    is_gpt = "def student_evaluation_function" not in evaluation_code or "admin.gpt_eval" in evaluation_code or "gpt_evaluation" in evaluation_code
+    if is_gpt:
+        messages=[
+            {"role": "system", "content": core.gpt.evaluation_instructions.replace("MAX_SCORE", "20")},
+            {"role": "user", "content": "Here is the expected solution:\n%s" % teacher_data.get_solution()},
+        ]
+        for stu in cell_answers:
+            student_data = core.CellParser.crunch_data(cinfo=cinfo, data=cell_answers[stu], user=stu)
+            messages.append({"role": "user", "content": "Here is the answer of student '%s':\n%s" % (stu, student_data.get_solution())})
+
+        print("AAAAAAAAAAAAA", evaluation_code)
+        grades_gpt = core.gpt.evaluate_with_gpt(grades, messages)
+
+
     for u in grades.index:
         email, auser = grades["mail"][u], grades["auser"][u]
         if type(email) == pd.Series:
@@ -377,7 +391,10 @@ def evaluate_all(
         )
 
         # Don't manual data is available
-        if student_data.is_manual_note() and email != core.tools.REF_USER:
+        if is_gpt:
+            if email in grades_gpt:
+                grade = core.Grade(score=grades_gpt["grade"], src="bot", comment=grades_gpt["summary"])
+        elif student_data.is_manual_note() and email != core.tools.REF_USER:
             comment = student_data.minfo["grade_man_comment"] if "grade_man_comment" in student_data.minfo else "To be discussed with evaluator"
             grade = core.Grade(score=student_data.minfo["grade_man"], src="man", comment=comment)
             comment = " [MAN]"
@@ -401,7 +418,7 @@ def evaluate_all(
 
     grad_name = (
         "grade_bot"
-        if "admin.gpt_eval" in teacher_data.get_code("evaluation")
+        if is_gpt in teacher_data.get_code("evaluation")
         else "grade_ana"
     )
 
