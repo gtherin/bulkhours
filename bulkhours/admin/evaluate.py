@@ -357,9 +357,7 @@ def evaluate_all(
     evaluation_params = {name: value for name, value in matches}
 
     # Get defualt max_score
-    print(evaluation_params)
     max_score = int(evaluation_params["max_score"]) if "max_score" in evaluation_params else 10
-    print(max_score)
 
     # Get answers
     cell_answers = answers.get_answers(cinfo.cell_id, verbose=False)
@@ -367,7 +365,7 @@ def evaluate_all(
     is_gpt = is_automatic_evaluation(evaluation_code)
     if is_gpt:
         messages=[
-            {"role": "system", "content": core.gpt.evaluation_instructions.replace("MAX_SCORE", max_score)},
+            {"role": "system", "content": core.gpt.evaluation_instructions.replace("MAX_SCORE", str(max_score))},
             {"role": "user", "content": "Here is the expected solution:\n%s" % teacher_data.get_solution()},
         ]
         for stu in cell_answers:
