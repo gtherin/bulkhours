@@ -53,7 +53,7 @@ def get_users_list(no_admin=True, sort_by=None, euser=None, cfg=None):
             .split(";")
             if k != ""
         ]
-    if "virtual_room" in cfg.g:
+    if virtual_room in cfg.g:
         users += [
             (k, 0)
             for k in cfg.g[virtual_room]
