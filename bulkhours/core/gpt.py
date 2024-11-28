@@ -10,7 +10,8 @@ from .grade import Grade
 evaluation_instructions = None
 evaluation_openai_token = "YOUR_KEY"
 evaluation_replicate_token = "YOUR_KEY"
-evaluation_model = "gpt-3.5-turbo-0125"
+evaluation_model = "gpt-4o-mini"
+evaluation_client = None
 
 # fmt: off
 llms = {
@@ -59,7 +60,7 @@ def ask_opensource_gpt(
 def ask_chat_gpt(
     prompt="",
     token="YOUR_KEY",
-    model="gpt-4-1106-preview",
+    model="gpt-4o-mini",
     temperature=0.5,
     top_p=1,
     size="256x256",
@@ -88,20 +89,19 @@ Vous devez créer une clé d'API
         return
 
     # Ask chat-gpt
-    completion = openai.OpenAI(api_key=token).chat.completions.create(
-        messages=[{"role": "user", "content": prompt}],
+    completion = evaluation_client.chat.completions.create(
         model=model,
+        messages=[{"role": "system", "content": evaluation_instructions}, {"role": "user", "content": prompt}],
         temperature=temperature,
         top_p=top_p,
     )
-
     # Get content
     return completion.choices[0].message.content
 
 
 def ask_gpt(
     prompt="",
-    model="gpt-4-1106-preview",
+    model="gpt-4o-mini",
     token="YOUR_KEY",
     is_code=False,
     raw=False,
@@ -130,7 +130,7 @@ def ask_gpt(
 
     if model in [
         "gpt-4-1106-preview",
-        "gpt-4",
+        "gpt-4o-mini",
         "gpt-4-32k-0613",
         "gpt-3.5-turbo-0125",
         "image",
@@ -187,7 +187,7 @@ def get_grade(student_data, teacher_data, max_score, token="YOUR_KEY", evalcode=
 - actual solution:\n<end>\n{teacher_data.get_solution()}\n</end>
 - student's solution:\n<answer>\n{student_data.get_solution()}\n</answer>\n""".replace("MAX_SCORE", "10")#str(max_score))
 
-        evaluation_model = "gpt-3.5-turbo-0125" if evalcode is None else evalcode
+        evaluation_model = "gpt-4o-mini" if evalcode is None else evalcode
         response = ask_gpt(
             prompt=prompt, model=evaluation_model, temperature=0.01, raw=True, token=token
         )
