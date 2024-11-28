@@ -356,6 +356,9 @@ def evaluate_all(
     matches = re.findall(r"(\w+)\s*=\s*([^\),\s]+)", evaluation_code)
     evaluation_params = {name: value for name, value in matches}
 
+    if verbose:
+        print(evaluation_params)
+
     # Get default max_score
     max_score = float(evaluation_params["max_score"]) if "max_score" in evaluation_params else 10.
 
