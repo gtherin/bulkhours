@@ -420,13 +420,7 @@ def evaluate_all(
         if email == core.tools.REF_USER:
             max_score = grade.score
 
-    grad_name = (
-        "grade_bot"
-        if is_gpt in teacher_data.get_code("evaluation")
-        else "grade_ana"
-    )
-
-    answers.update_grades(cinfo.cell_id, grades, grad_name)
+    answers.update_grades(cinfo.cell_id, grades, "grade_bot" if is_gpt else "grade_ana")
 
     del grades[cinfo.cell_id + ".c"]
     grades = grades.drop(columns=["mail"]).set_index("auser").T
