@@ -418,6 +418,7 @@ def evaluate_all(
                 verbose=verbose,
                 execute=execute,
                 normalize_score=normalize_score,
+                max_score=max_score,
             )
 
 
