@@ -74,6 +74,7 @@ def nevaluate(filename, force=False, fake=False):
         answer = core.firebase.get_solution_from_corrector(
             cinfo.cell_id, corrector=email, cinfo=cinfo
         )
+        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAaa")
         print(parsed_cell.get_dbcell_decomposition())
         if answer is None or force:
             core.firebase.send_answer_to_corrector(
