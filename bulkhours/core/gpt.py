@@ -74,7 +74,7 @@ def ask_chat_gpt(
         IPython.display.display(
             IPython.display.Markdown(
                 """## Interroger Chat-GPT
-Apres la creation d'un compte ChatGpt:
+Après la creation d'un compte ChatGpt:
 * https://platform.openai.com/ai-text-classifier
 Vous devez créer une clé d'API
 """
@@ -89,6 +89,7 @@ Vous devez créer une clé d'API
         return
 
     # Ask chat-gpt
+    print(prompt)
     completion = evaluation_client.chat.completions.create(
         model=model,
         messages=[{"role": "system", "content": evaluation_instructions}, {"role": "user", "content": prompt}],
