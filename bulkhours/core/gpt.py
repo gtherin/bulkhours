@@ -232,6 +232,7 @@ def evaluate_with_gpt(messages, max_score):
     student_blocks = data.split("<student>")
     students = {}
 
+    min_score, max_score = 1000, 0
     for block in student_blocks:
         if block.strip():  # Skip empty blocks
             email_match = re.search(r"<email>(.*?)</email>", block)
@@ -242,20 +243,23 @@ def evaluate_with_gpt(messages, max_score):
 
             grade_match = re.search(r"<grade>(\d+)</grade>", block)
             grade = int(grade_match.group(1)) if grade_match else np.nan
+            if min_score > grade:
+                min_score = grade
+            if max_score < grade:
+                max_score = grade
 
             students[email] = Grade(score=grade, src="bot", comment=summary)
-            grade_color = 2*(grade / float(max_score) - 0.5)
-            if grade_color >= 0.5:
-                grade_color += 0.25
-            else:
-                grade_color -= 0.25
 
-            grade_color = matplotlib.colors.rgb2hex(plt.get_cmap("RdBu")(grade_color))
-            IPython.display.display(
-                IPython.display.Markdown(
-                    f"#### <b>{email}: <font color='{grade_color}'>grade={grade}</font></b>\n{summary}"
-                )
+    for email, grade in students.items():
+        #grade_color = (grade - min_score) / (max_score - min_score)
+        grade_color = grade.score / float(max_score)
+        grade_color = grade_color + 0.25 * (1. if grade_color >= 0.5 else -1.)
+
+        grade_color = matplotlib.colors.rgb2hex(plt.get_cmap("RdBu")(grade_color))
+        IPython.display.display(
+            IPython.display.Markdown(
+                f"#### <b>{email}: <font color='{grade_color}'>grade={grade.score}</font></b>\n{grade.comment}"
             )
-
+        )
 
     return students
