@@ -224,7 +224,7 @@ def get_grade(student_data, teacher_data, max_score, token="YOUR_KEY", evalcode=
             return Grade(score=np.nan, comment=response)
 
 
-def evaluate_with_gpt(messages):
+def evaluate_with_gpt(messages, max_score):
 
     completion = evaluation_client.chat.completions.create(model="gpt-4o-mini", messages=messages, temperature=0, top_p=0.5)
     data = completion.choices[0].message.content
@@ -244,5 +244,12 @@ def evaluate_with_gpt(messages):
             grade = int(grade_match.group(1)) if grade_match else np.nan
 
             students[email] = Grade(score=grade, src="bot", comment=summary)
+            grade_color = matplotlib.colors.rgb2hex(plt.get_cmap("RdBu")(grade / float(max_score)))
+            IPython.display.display(
+                IPython.display.Markdown(
+                    f"#### <b>{email}: <font color='{grade_color}'>grade={grade}</font></b>\n{summary}"
+                )
+            )
+
 
     return students

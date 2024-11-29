@@ -375,7 +375,7 @@ def evaluate_all(
             student_data = core.CellParser.crunch_data(cinfo=cinfo, data=cell_answers[stu], user=stu)
             messages.append({"role": "user", "content": "Here is the answer of student '%s':\n%s" % (stu, student_data.get_solution())})
 
-        grades_gpt = core.gpt.evaluate_with_gpt(messages)
+        grades_gpt = core.gpt.evaluate_with_gpt(messages, max_score)
 
     for u in grades.index:
         email, auser = grades["mail"][u], grades["auser"][u]
