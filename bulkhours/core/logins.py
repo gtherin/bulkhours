@@ -94,7 +94,6 @@ def init_from_token(token, ktoken, packages=None, link=None):
 
         # Get data
         data = jwt.decode(jwt=token, key=ktoken, algorithms=["HS256"])
-        #if data["email"] == data["email"]:
         init_env(packages=packages, link=link, **data)
         return
         #raise Exception(f"Identity {data['email']}is not the expected one")
