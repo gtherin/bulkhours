@@ -246,9 +246,9 @@ def evaluate_with_gpt(messages, max_score):
             students[email] = Grade(score=grade, src="bot", comment=summary)
             grade_color = grade / float(max_score)
             if grade_color >= 0.5:
-                grade_color += 0.15
+                grade_color += 0.25
             else:
-                grade_color -= 0.15
+                grade_color -= 0.25
 
             grade_color = matplotlib.colors.rgb2hex(plt.get_cmap("RdBu")(grade_color))
             IPython.display.display(
