@@ -244,7 +244,7 @@ def evaluate_with_gpt(messages, max_score):
             grade = int(grade_match.group(1)) if grade_match else np.nan
 
             students[email] = Grade(score=grade, src="bot", comment=summary)
-            grade_color = grade / float(max_score)
+            grade_color = 2*(grade / float(max_score) - 0.5)
             if grade_color >= 0.5:
                 grade_color += 0.25
             else:
