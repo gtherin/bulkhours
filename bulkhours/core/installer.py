@@ -139,7 +139,7 @@ def install_dependencies(packages, start_time, is_admin):
     #    packages += ",xattr"
 
     # Install packages
-    for package in packages.split(","):
+    for package in packages.replace(";", ",").split(","):
         if package == "":
             continue
 
