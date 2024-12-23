@@ -29,9 +29,11 @@ def get_gold_spot(self):
 
     if "latest" in self.data_info and self.data_info["latest"]:
         print("AAAAAAAAAAAAAAA")
-        import yfinance
-        df2 = yf.download("GC=F", start="2024-01-01")
-
+        import yfinance as yf
+        # df data ends on the 2024-12-20
+        df2 = yf.download("GC=F", start="2024-12-21")["Close"]
+        df2.columns = ["Close"]
+        df = pd.concat([df, df2]).sort_index()
 
     return df
 
