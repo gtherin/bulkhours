@@ -26,9 +26,10 @@ Sampler.outsample_dt = time.time() - 300
 )
 def get_gold_spot(self):
     df = self.read_raw_data(self.raw_data)
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index("date", inplace=True)
 
     if "latest" in self.data_info and self.data_info["latest"]:
-        print("AAAAAAAAAAAAAAA")
         import yfinance as yf
         # df data ends on the 2024-12-20
         df2 = yf.download("GC=F", start="2024-12-21")["Close"]
