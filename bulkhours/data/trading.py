@@ -17,6 +17,26 @@ Sampler.outsample_dt = time.time() - 300
 
 
 @DataParser.register_dataset(
+    label="trading.gold",
+    summary="Gold Spot price",
+    category="Economics",
+    raw_data="https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/Gold.csv",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/trading.py",
+    kwargs=dict(zone="World"),
+)
+def get_gold_spot(self):
+    df = self.read_raw_data(self.raw_data)
+
+    if "latest" in self.data_info and self.data_info["latest"]:
+        print("AAAAAAAAAAAAAAA")
+        import yfinance
+        df2 = yf.download("GC=F", start="2024-01-01")
+
+
+    return df
+
+
+@DataParser.register_dataset(
     label="trading.apple",
     summary="Statement of Apple stock (Quarterly)",
     category="Economics",
