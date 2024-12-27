@@ -365,7 +365,7 @@ def calculate_statements(self):
     from transformers import pipeline              
 
     # Statement is necessary
-    if "statements" in self.data_info:
+    if "statements" not in self.data_info:
         return pd.DataFrame()
 
     # Get statements
@@ -373,8 +373,6 @@ def calculate_statements(self):
         statements = pd.DataFrame({"statements": self.data_info["statements"]})
     else:
         statements = self.data_info["statements"]
-
-    print(statements)
 
     # Filter wanted statements
     model = self.data_info["model"] if "model" in self.data_info else "gtfintechlab/FOMC-RoBERTa"
@@ -387,8 +385,6 @@ def calculate_statements(self):
     for k in list(keys.values()) + ["DoveCheersUpBull"]:
         statements[k] = 0.
 
-    print(statements)
-
     ani = {"Neutral": 0, "Hawkish": -1, "Dovish": 1}
     for index in statements.index:
         response = roberta(statements["statements"][index], truncation="only_first")[0]
@@ -397,5 +393,4 @@ def calculate_statements(self):
             statements.loc[index, k] = results[k]
         statements.loc[index, "DoveCheersUpBull"] = ani[max(results, key=results.get)]
 
-    print(statements)
     return statements
