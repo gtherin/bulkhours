@@ -369,7 +369,7 @@ def calculate_statements(self):
         return pd.DataFrame()
 
     # Get statements
-    if type(self.data_info) == list:
+    if type(self.data_info["statements"]) == list:
         statements = pd.DataFrame({"statements": self.data_info["statements"]})
     else:
         statements = self.data_info["statements"]
