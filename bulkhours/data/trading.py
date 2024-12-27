@@ -377,9 +377,6 @@ def calculate_statements(self):
     # Filter wanted statements
     model = self.data_info["model"] if "model" in self.data_info else "gtfintechlab/FOMC-RoBERTa"
 
-    # Filter wanted statements
-    statements = int(self.data_info["statements"]) if "statements" in self.data_info else 2024
-
     # Get model and labels
     roberta = pipeline("text-classification", model=model, top_k=None)#, device=0)
     keys = {"LABEL_2": "Neutral", "LABEL_1": "Hawkish", "LABEL_0": "Dovish"}
@@ -395,4 +392,5 @@ def calculate_statements(self):
         for k in keys.values():
             statements.loc[index, k] = results[k]
         statements.loc[index, "DoveCheersUpBull"] = ani[max(results, key=results.get)]
+
     return statements
