@@ -90,7 +90,6 @@ Vous devez créer une clé d'API
         return
 
     # Ask chat-gpt
-    print(prompt)
     completion = evaluation_client.chat.completions.create(
         model=model,
         messages=[{"role": "system", "content": evaluation_instructions}, {"role": "user", "content": prompt}],
