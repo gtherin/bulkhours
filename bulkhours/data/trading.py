@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import time
+import re
 
 from .data_parser import DataParser
 
@@ -306,3 +307,92 @@ def get_stocks(self):
     df = df.set_index('time').sort_index()
 
     return df
+
+
+def get_soup(url: str) -> str:
+    from bs4 import BeautifulSoup
+    import requests
+    # request = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+    return BeautifulSoup(requests.get(url).text, 'html.parser')
+
+
+@DataParser.register_dataset(
+    label="fomc.minutes",
+    summary="Federal Open Market Commitee statement",
+    category="Economics",
+    ref_source="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/trading.py",
+)
+def find_statements(self):
+
+    # Get minutes press realese links
+    soup = get_soup('https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm')
+    policy_statements = soup.find_all('a', href=re.compile('^/newsevents/pressreleases/monetary\\d{8}a.htm'))
+    df = pd.DataFrame({"links": [policy_statement.attrs['href'] for policy_statement in policy_statements],
+                        "dates": [pd.to_datetime(policy_statement.attrs['href'][-13:-5]) for policy_statement in policy_statements],
+                        }).assign(statements="")
+
+    # Filter wanted statements
+    start_year = int(self.data_info["start_year"]) if "start_year" in self.data_info else 2024
+    df = df[df["dates"] >= str(start_year)]
+
+    # Deal with old format
+    if start_year <= 2014:
+        for year in range(start_year, 2014 + 1):
+            annual_soup = get_soup('https://www.federalreserve.gov/monetarypolicy/fomchistorical' + str(year) + '.htm')
+            for statement_link in annual_soup.findAll('a', text='Statement'):
+                print("WONT BE LOADED: ", statement_link.attrs['href'])
+
+    # Get statements
+    for index in df.index:
+        soup = get_soup('https://www.federalreserve.gov' + df["links"][index])
+        statement = soup.find('div', class_='col-xs-12 col-sm-8 col-md-8').text
+        df.loc[index, "statements"] = statement.replace('\n', ' ').replace('\r', ' ').replace('\t', '').replace('\xa0', '')
+
+    return df
+
+
+@DataParser.register_dataset(
+    label="huggingface.fomc.roberta",
+    summary="huggingface.fomc.roberta",
+    category="Economics",
+    ref_source="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/trading.py",
+)
+def calculate_statements(self):
+
+    # To download pipeline from hugging face
+    from transformers import pipeline              
+
+    # Statement is necessary
+    if "statements" in self.data_info:
+        return pd.DataFrame()
+
+    # Get statements
+    if type(self.data_info) == list:
+        statements = pd.DataFrame({"statements": self.data_info["statements"]})
+    else:
+        statements = self.data_info["statements"]
+
+    # Filter wanted statements
+    model = self.data_info["model"] if "model" in self.data_info else "gtfintechlab/FOMC-RoBERTa"
+
+    # Filter wanted statements
+    statements = int(self.data_info["statements"]) if "statements" in self.data_info else 2024
+
+    # Get model and labels
+    roberta = pipeline("text-classification", model=model, top_k=None)#, device=0)
+    keys = {"LABEL_2": "Neutral", "LABEL_1": "Hawkish", "LABEL_0": "Dovish"}
+
+    # Init new columns
+    for k in list(keys.values()) + ["DoveCheersUpBull"]:
+        statements[k] = 0.
+
+    ani = {"Neutral": 0, "Hawkish": -1, "Dovish": 1}
+    for index in statements.index:
+        response = roberta(statements["statements"][index], truncation="only_first")[0]
+        results = {keys[k["label"]]: k["score"] for k in response}
+        for k in keys.values():
+            statements.loc[index, k] = results[k]
+        statements.loc[index, "DoveCheersUpBull"] = ani[max(results, key=results.get)]
+    return statements
