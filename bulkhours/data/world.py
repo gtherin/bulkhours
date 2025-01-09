@@ -1,12 +1,14 @@
 import pandas as pd
 import numpy as np
-from io import StringIO
+from io import StringIO, BytesIO
 
 from .data_parser import DataParser
 
 
 def get_mapgeneric(df):
-    import geopandas as gpd
+    import requests
+    import zipfile
+    import geopandas
 
     if "continent" in df.columns:
         del df["continent"]
@@ -15,14 +17,21 @@ def get_mapgeneric(df):
     df["country"] = df["country"].str.replace("United States", "United States of America")
     df["country"] = df["country"].str.replace("Democratic Republic of Congo", "Dem. Rep. Congo")
 
-    filepath = gpd.datasets.get_path("naturalearth_lowres")
-    world = gpd.read_file(filepath)
+    # Download and Unzip
+    response = requests.get("https://huggingface.co/datasets/guydegnol/bulkhours/resolve/main/ne_110m_admin_0_countries.zip")
 
-    # world = gpd.read_file(gpd.datasets.get_path(""))
+    # Step 2: Unzip the downloaded file
+    with zipfile.ZipFile(BytesIO(response.content)) as z:
+        z.extractall("/root/bulkhours/data")
 
-    world = world[(world.pop_est > 0) & (world.name != "Antarctica")]
+    # Load the dataset using geopandas
+    world = geopandas.read_file("/root/bulkhours/data/ne_110m_admin_0_countries.shp")
+    world["name"] = world["SOVEREIGNT"]
+
+    world = world.merge(df.set_index("country"), how="left", left_on="name", right_index=True)
+    # world = world[(world.pop_est > 0) & (world.name != "Antarctica")]
     # world[world.continent == 'South America']
-    return world.merge(df.set_index("country"), how="left", left_on="name", right_index=True)
+    return world
 
 
 def geo_format(df, timeopt):
