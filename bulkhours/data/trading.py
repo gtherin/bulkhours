@@ -214,11 +214,13 @@ def get_binance_ob_data(self):
     nlayers = self.data_info["nlayers"] if "nlayers" in self.data_info else 5
     include_mid = self.data_info["include_mid"] if "include_mid" in self.data_info else True
     frame = int(self.data_info["frame"]) if "frame" in self.data_info else 0
+    quiet = bool(self.data_info["quiet"]) if "quiet" in self.data_info else False
 
     # Get Level 2 order book data from Binance
     data = requests.get(request:=f'https://api.binance.com/api/v3/depth?symbol={ticker}&limit=100').json()
     if "code" in data and data["code"] == 0:
-        print(f"Request '{request}' failed:\n{data['msg']}. Display old data")
+        if not quiet:
+            print(f"Request '{request}' failed:\n{data['msg']}. Display old data")
         adata = requests.get(f"https://huggingface.co/datasets/guydegnol/bulkhours/raw/main/{ticker}.json").json()
         data = adata[frame]
 
