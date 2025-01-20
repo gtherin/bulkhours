@@ -1,7 +1,7 @@
 caliases = dict(
     zip(
         [
-            "purple",
+            "purple",   
             "red",
             "orange",
             "blue",
@@ -13,12 +13,12 @@ caliases = dict(
             "dpink",
         ],
         [
-            "#581845",
-            "#C70039",
-            "#FF5733",
-            "#0097B2",
-            "#52DE97",
-            "#FBE555",
+            "#581845", # purple
+            "#C70039", # red
+            "#FF5733", # orange
+            "#0097B2", # blue
+            "#52DE97", # green
+            "#FBE555", # yellow
             "#053061",
             "#FAACB5",
             "black",
@@ -34,6 +34,14 @@ def get(color):
 
 for name, value in caliases.items():
     globals()[name] = value
+
+
+def get_mpf_style():
+    import mplfinance as mpf
+    return mpf.make_mpf_style(
+        marketcolors=mpf.make_marketcolors(
+            up='#52DE97',down='#C70039', edge='inherit', wick='black', volume='in', ohlc='i', inherit=True
+            ), mavcolors=['#581845', '#FF5733', '#0097B2', "#FAACB5", "#924A5F"], base_mpf_style='charles')
 
 
 def vizualize(colors=None, ncols=4):
