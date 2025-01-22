@@ -20,6 +20,22 @@ class OrderBook:
             heapq.heappush(self.asks, (price, quantity))  # Min-heap for asks
         self.match_orders()
 
+    def place_order(self, traderid, ordertype, quantity, price_level=-1, verbose=False):
+        if ordertype == 'BID_MKT_ORDER':
+            self.place_market_order('bid', quantity, self.get_best_ask())
+        elif ordertype == 'ASK_MKT_ORDER':
+            self.place_market_order('ask', quantity, self.get_best_bid())
+        elif ordertype == 'BID_LMT_ORDER':
+            self.place_limit_order('bid', quantity, price_level)
+        elif ordertype == 'ASK_LMT_ORDER':
+            self.place_limit_order('ask', quantity, price_level)
+        elif ordertype == 'BID_CCL_ORDER':
+            self.update_aggob('bid', -quantity, price_level)
+        elif ordertype == 'ASK_CCL_ORDER':
+            self.update_aggob('ask', -quantity, price_level)
+        if verbose:
+            print(f"'{traderid}' order {quantity}@{price_level} on side {ordertype} {self.get_best_bid()} {self.get_best_ask()}") 
+
     def place_market_order(self, side, quantity):
         """Place a market order, matching with the best available prices."""
         if side == "bid":
@@ -27,6 +43,26 @@ class OrderBook:
         elif side == "ask":
             self.match_market_order(self.bids, quantity, "bid")
 
+    def cancel_order(self, side, price, quantity):
+        """Cancel a specific quantity of a limit order at a given price."""
+        if side == "bid":
+            self.bids = self._cancel_from_heap(self.bids, -price, quantity)
+        elif side == "ask":
+            self.asks = self._cancel_from_heap(self.asks, price, quantity)
+
+    def _cancel_from_heap(self, heap, target_price, quantity):
+        """Helper function to cancel an order from a heap."""
+        new_heap = []
+        for price, qty in heap:
+            if price == target_price:
+                qty -= quantity
+                if qty > 0:
+                    new_heap.append((price, qty))
+            else:
+                new_heap.append((price, qty))
+        heapq.heapify(new_heap)
+        return new_heap
+    
     def match_orders(self):
         """Match limit orders in the book."""
         while self.bids and self.asks:
@@ -101,18 +137,30 @@ class OrderBook:
             return mid_price, spread
         return None, None  # If either side is empty
 
-    def plot(self) -> None:
+    def get_best_bid(self):
+        return -self.bids[0][0]
+
+    def get_best_ask(self):
+        return self.asks[0][0]
+
+    def get_mid_price(self):
+        return (self.get_best_bid() + self.get_best_ask()) / 2
+
+    def get_spread(self):
+        return self.get_best_ask() - self.get_best_bid()
+
+    def plot(self, width=1) -> None:
         # Plot the order book
         bids_df, asks_df = self.get_order_book_as_dataframe()
-        width=1
+        self.width = width
 
         fig, ax = plt.subplots(figsize=(10, 6))
 
         # Plot bids
-        ax.bar(bids_df["Price"], bids_df["Quantity"], color='#52DE97', edgecolor='black', label="Waiting limit Bid Orders", width=width)
+        ax.bar(bids_df["Price"], bids_df["Quantity"], color='#52DE97', edgecolor='black', label="Waiting limit Bid Orders", width=self.width)
 
         # Plot asks
-        ax.bar(asks_df["Price"], asks_df["Quantity"], color='#C70039', edgecolor='black', label="Waiting limit Ask Orders", width=width)
+        ax.bar(asks_df["Price"], asks_df["Quantity"], color='#C70039', edgecolor='black', label="Waiting limit Ask Orders", width=self.width)
 
         # Customize the plot
         ax.axhline(0, color='black', linestyle='--', linewidth=0.5)  # Separate bid and ask sides
@@ -154,7 +202,7 @@ class OrderBook:
         labels = {"BID_LMT_ORDER": "New limit order", "BID_MKT_ORDER": "New market order", "BID_CCL_ORDER": "Cancellation",
                   "ASK_LMT_ORDER": "New limit order", "ASK_MKT_ORDER": "New market order", "ASK_CCL_ORDER": "Cancellation"}
         label = labels[ttype]
-        width=1
+        width = self.width
 
         bids_df, asks_df = self.get_order_book_as_dataframe()
         lobdata = bids_df if "BID" in ttype else asks_df
@@ -168,16 +216,16 @@ class OrderBook:
         bottom = abottom + rbottom
 
         if "CCL" in ttype:
-            ax.bar([price], [size], bottom=abottom, color=color, alpha=0.2, edgecolor='gray', width=width, hatch="///")
+            ax.bar([price], [size], bottom=abottom, color=color, alpha=0.2, edgecolor='gray', width=self.width, hatch="///")
             plt.annotate('', xy=(price, abottom+size), xytext=(price, bottom), arrowprops=dict(arrowstyle=arrowstyle))
             plt.text(x=price, y=bottom+5, s=label, ha='center')
         elif "MKT" in ttype:
-            ax.bar([price], [size], bottom=abottom, color=color, alpha=0.2, edgecolor='gray', width=width, hatch="///")
-            ax.bar([price], [size], bottom=bottom, color=color, alpha=0.4, edgecolor='black', width=width)
+            ax.bar([price], [size], bottom=abottom, color=color, alpha=0.2, edgecolor='gray', width=self.width, hatch="///")
+            ax.bar([price], [size], bottom=bottom, color=color, alpha=0.4, edgecolor='black', width=self.width)
             plt.annotate('', xy=(price, abottom+size), xytext=(price, bottom), arrowprops=dict(arrowstyle=arrowstyle))
             plt.text(x=price, y=bottom+size+5, s=label, ha='center')
         else:
-            ax.bar([price], [size], bottom=bottom, color=color, alpha=0.2, edgecolor='black', width=width, hatch="///")
-            ax.bar([price], [size], bottom=abottom, color=color, alpha=0.4, edgecolor='black', width=width)
+            ax.bar([price], [size], bottom=bottom, color=color, alpha=0.2, edgecolor='black', width=self.width, hatch="///")
+            ax.bar([price], [size], bottom=abottom, color=color, alpha=0.4, edgecolor='black', width=self.width)
             plt.annotate('', xy=(price, abottom+size), xytext=(price, bottom), arrowprops=dict(arrowstyle=arrowstyle))
             plt.text(x=price, y=bottom+size+5, s=label, ha='center')
