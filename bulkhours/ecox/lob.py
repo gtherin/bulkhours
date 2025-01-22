@@ -22,17 +22,17 @@ class OrderBook:
 
     def place_order(self, traderid, ordertype, quantity, price_level=-1, verbose=False):
         if ordertype == 'BID_MKT_ORDER':
-            self.place_market_order('bid', quantity, self.get_best_ask())
+            self.place_market_order('bid', quantity)
         elif ordertype == 'ASK_MKT_ORDER':
-            self.place_market_order('ask', quantity, self.get_best_bid())
+            self.place_market_order('ask', quantity)
         elif ordertype == 'BID_LMT_ORDER':
-            self.place_limit_order('bid', quantity, price_level)
+            self.place_limit_order('bid', price_level, quantity)
         elif ordertype == 'ASK_LMT_ORDER':
-            self.place_limit_order('ask', quantity, price_level)
+            self.place_limit_order('ask', price_level, quantity)
         elif ordertype == 'BID_CCL_ORDER':
-            self.update_aggob('bid', -quantity, price_level)
+            self.cancel_order('bid', price_level, quantity)
         elif ordertype == 'ASK_CCL_ORDER':
-            self.update_aggob('ask', -quantity, price_level)
+            self.cancel_order('ask', price_level, quantity)
         if verbose:
             print(f"'{traderid}' order {quantity}@{price_level} on side {ordertype} {self.get_best_bid()} {self.get_best_ask()}") 
 
@@ -136,6 +136,28 @@ class OrderBook:
             spread = best_ask - best_bid
             return mid_price, spread
         return None, None  # If either side is empty
+
+    def add_lobdata(self, nlobdata):
+        # Plot bids
+
+        nlobdata["price"] = nlobdata["price"].round(1)
+        self.lobdata["price"] = self.lobdata["price"].round(1)
+
+        if "bid_new" in self.lobdata.columns:
+            del self.lobdata["bid_new"]
+        if "ask_new" in self.lobdata.columns:
+            del self.lobdata["ask_new"]
+
+        self.lobdata = self.lobdata.merge(nlobdata, on="price", how="outer", suffixes=("", "_new")).fillna(0)
+
+        p = self.ax.bar(self.lobdata["price"], self.lobdata["bid_new"], bottom=self.lobdata["bid"], color='#52DE97', edgecolor='black', label="Waiting limit Bid Orders", width=0.08)
+        self.ax.bar_label(p, labels=[str(self.counter) if self.lobdata["bid_new"][e]!= 0.0 else "" for e in self.lobdata.index], label_type='center', color="white")
+        p = self.ax.bar(self.lobdata["price"], self.lobdata["ask_new"], bottom=self.lobdata["ask"], color='#C70039', edgecolor='black', label="Waiting limit Ask Orders", width=0.08)
+        self.ax.bar_label(p, labels=[str(self.counter) if self.lobdata["ask_new"][e]!= 0.0 else "" for e in self.lobdata.index], label_type='center', color="white")
+
+        self.lobdata["bid"] = self.lobdata["bid_new"]
+        self.lobdata["ask"] = self.lobdata["ask_new"]
+        self.counter += 1
 
     def get_best_bid(self):
         return -self.bids[0][0]
