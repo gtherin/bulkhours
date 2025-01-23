@@ -1,9 +1,13 @@
 import pandas as pd
 import numpy as np
-
+from .lob import OrderBook
 
 try:
     from mesa import Agent, Model
+    from mesa.time import RandomActivation
+    from mesa.datacollection import DataCollector
+
+
 except ImportError:
     class Agent:
         def __init__(self, unique_id, model):
@@ -14,6 +18,14 @@ except ImportError:
             return None
 
     class Model:
+        def __init__(self, *args, **kwargs):
+            print("mesa is not available. Using dummy class.")        
+
+    class RandomActivation:
+        def __init__(self, *args, **kwargs):
+            print("mesa is not available. Using dummy class.")        
+
+    class DataCollector:
         def __init__(self, *args, **kwargs):
             print("mesa is not available. Using dummy class.")        
 
@@ -210,3 +222,152 @@ class SumoAgent(Agent):
             sumo_order = Order(order_type="buy", price=best_ask, quantity=quantity)
             self.model.bids.append(sumo_order)
             #print(f"Sumo Agent {self.unique_id} placed an aggressive buy order at Price={best_ask}, Quantity={quantity}")
+
+
+
+class PartialActivation(RandomActivation):
+    """Custom scheduler that activates only a subset of agents randomly."""
+
+    def __init__(self, model, activation_percentage=1.0):
+        super().__init__(model)
+        self.activation_percentage = activation_percentage
+
+    def step(self):
+        """Activate a subset of agents during each step."""
+        # Calculate how many agents to activate
+        num_agents_to_activate = int(len(self.agents) * self.activation_percentage)
+
+        # Randomly select a subset of agents
+        agents_to_activate = np.random.choice(self.agents, num_agents_to_activate, replace=False)
+
+        # Step through the selected agents
+        for agent in agents_to_activate:
+            agent.step()
+
+
+class Market1(Model):
+    """A simple stock market model with buyers, sellers, and a market maker."""
+    def __init__(self, num_buyers, num_sellers, num_market_makers=1):
+        super().__init__()
+        self.num_buyers = num_buyers
+        self.num_sellers = num_sellers
+        self.num_market_makers = num_market_makers
+
+        # Initialize custom scheduler
+        self.schedule = PartialActivation(self, activation_percentage=0.5)
+
+        # Order books for bids and asks
+        self.bids = []  # List of buy orders
+        self.asks = []  # List of sell orders
+
+        # Create buyer and seller agents
+        for i in range(self.num_buyers):
+            buyer = Buyer(i, self)
+            self.schedule.add(buyer)
+
+        for i in range(self.num_sellers):
+            seller = Seller(i + self.num_buyers, self)
+            self.schedule.add(seller)
+
+        # Create market maker agents
+        for i in range(self.num_market_makers):
+            market_maker = MarketMaker(i + self.num_buyers + self.num_sellers, self)
+            self.schedule.add(market_maker)
+
+        # Create sniper agents
+        self.num_snipers = 1
+        for i in range(self.num_snipers):
+            sniper = SniperAgent(i + self.num_buyers + self.num_sellers + self.num_market_makers, self)
+            self.schedule.add(sniper)
+
+        # Data collector to record the state of the order book at each step
+        self.datacollector = DataCollector(
+            model_reporters={"Order Book": self.collect_order_book}
+        )
+
+    def step(self):
+        """Advance the model by one step."""
+        self.datacollector.collect(self)
+        self.schedule.step()
+        self.match_orders()  # Match buy and sell orders after each step
+
+    def match_orders(self):
+        """Match buy and sell orders if the bid >= ask."""
+        self.bids.sort(key=lambda x: x.price, reverse=True)  # Highest price first
+        self.asks.sort(key=lambda x: x.price)  # Lowest price first
+
+        while self.bids and self.asks and self.bids[0].price >= self.asks[0].price:
+            # Match the highest bid with the lowest ask
+            bid = self.bids.pop(0)
+            ask = self.asks.pop(0)
+
+            # Execute the trade at the ask price
+            trade_price = ask.price
+            trade_quantity = min(bid.quantity, ask.quantity)
+
+            # Adjust quantities if partial trade
+            bid.quantity -= trade_quantity
+            ask.quantity -= trade_quantity
+
+            if bid.quantity > 0:
+                self.bids.insert(0, bid)  # Put the remaining part of the bid back
+
+            if ask.quantity > 0:
+                self.asks.insert(0, ask)  # Put the remaining part of the ask back
+
+            print(f"Trade executed: Price={trade_price}, Quantity={trade_quantity}")
+
+    def collect_order_book(self):
+        """Collect the current state of the order book (bids and asks)."""
+        bid_orders = [(order.price, order.quantity) for order in self.bids]
+        ask_orders = [(order.price, order.quantity) for order in self.asks]
+        return {"bids": bid_orders, "asks": ask_orders}
+
+agents = {
+   "Buyer": Buyer,
+   "Seller": Seller,
+   "MarketMaker": MarketMaker,
+   "SniperAgent": SniperAgent,
+}
+
+
+class Market(Model):
+    def __init__(self, lob=None):
+        super().__init__()
+        if lob is None:
+            self.lob = OrderBook()
+        else:
+            self.lob = lob
+
+        # Initialize custom scheduler
+        #self.schedule = PartialActivation(self, activation_percentage=1)
+        self.schedule = RandomActivation(self)
+
+        # Data collector to record the state of the order book at each step
+        self.datacollector = DataCollector(model_reporters={
+            "mid_price": lambda m: m.lob.get_mid_price_and_spread()[0], 
+            "spread": lambda m: m.lob.get_mid_price_and_spread()[1]
+            })
+
+    def collect_events(self):
+        """Collect the current state of the order book (bids and asks)."""
+        mid_price, spread = self.lob.get_mid_price_and_spread()
+        return {"mid_price": mid_price, "spread": spread}
+
+    def step(self):
+        self.datacollector.collect(self)
+        self.schedule.step()
+
+    def add_agent(self, name, clone=1):
+        if clone == 1:
+            return self.schedule.add(agents[name](name, self) if name in agents else name)
+
+        if name in agents:
+            agent_class = agents[name]
+            aname = name
+        else:
+            aname = type(name).__name__
+        for i in range(clone):
+            print("gzehgze", aname)
+            #self.schedule.add(agent_class(f"{aname}{i+1}", self))
+
