@@ -1,8 +1,9 @@
 import matplotlib.pyplot as plt
-import pandas as pd
 import heapq
 import numpy as np                             # Python basic data science library
 import pandas as pd                            # Python standard data science library
+import datetime
+import time
 
 
 class OrderBook:
@@ -150,13 +151,11 @@ class OrderBook:
         if self.bids:
             return max([-price for price, _, _ in self.bids])  # Correct highest bid
         return -1
-        return -self.bids[0][0]
 
     def get_best_ask(self):
         if self.asks:
             return min([price for price, _, _ in self.asks])   # Correct lowest ask
         return -1
-        return self.asks[0][0]
 
     def get_mid_price(self):
         return (self.get_best_bid() + self.get_best_ask()) / 2
@@ -164,7 +163,7 @@ class OrderBook:
     def get_spread(self):
         return self.get_best_ask() - self.get_best_bid()
 
-    def plot_bars(self, side, dfs):
+    def plot_bars(self, side, dfs, cumsum=False):
         color = "#52DE97" if side == "bid" else "#C70039"
 
         bottom, label = None, f"Waiting limit {side.capitalize()} Orders"
@@ -173,6 +172,8 @@ class OrderBook:
             tcolor = self.traders_style[tradeid][f"{side}_color"] if tradeid in self.traders_style and f"{side}_color" in self.traders_style[tradeid] else color
 
             qty = df.groupby("Price")["Quantity"].sum()
+            if cumsum:
+                qty = qty.cumsum()
             p = self.ax.bar(qty.index, qty, color=tcolor, bottom=bottom, edgecolor='black', label=label, width=self.width, alpha=talpha)
 
             if tradeid in self.traders_style and "label" in self.traders_style[tradeid]:
@@ -182,24 +183,52 @@ class OrderBook:
                 bottom, label = 0.*qty, ""
             bottom += qty
 
-    def plot(self, width=1) -> None:
+    def plot(self, width=1, ax=None, cumsum=False, title=None, sleep=None, xlim=None, ylim=None) -> None:
+
         # Plot the order book
         bids_df, asks_df = self.get_order_book_as_dataframe()
         self.width = width
 
-        fig, self.ax = plt.subplots(figsize=(10, 6))
+        if ax is None:
+            fig, self.ax = plt.subplots(figsize=(10, 6))
+        else:
+            self.ax = ax
+            self.ax.cla()
 
         # Plot bids
-        self.plot_bars("bid", bids_df)
+        self.plot_bars("bid", bids_df, cumsum=cumsum)
 
         # Plot asks
-        self.plot_bars("ask", asks_df)
+        self.plot_bars("ask", asks_df, cumsum=cumsum)
+
+        if xlim is not None:
+            self.ax.set_xlim(xlim)
+        else:
+            # Use slicing to select equidistant rows
+            if 0:
+                n = 5
+                step = len(df) // (n - 1)
+                if step > 0:
+                    df_equidistant = df.iloc[::step][:n]
+                    ax.set_xticks(df_equidistant[xaxis])
+                    ax.set_xticklabels(df_equidistant["Price"].round(2))
+                    ax.tick_params(axis='x', labelrotation=15)
+
+        if ylim is not None:
+            ax.set_ylim(ylim)
+
+        if sleep is not None:
+            time.sleep(sleep)
 
         # Customize the plot
         self.ax.axhline(0, color='black', linestyle='--', linewidth=0.5)  # Separate bid and ask sides
         self.ax.set_ylabel("Volume available", fontsize=12)
         self.ax.set_xlabel("Price", fontsize=12)
-        self.ax.set_title("Limit Order Book", fontsize=14)
+
+        if title is not None:
+            now = (datetime.datetime.now() + datetime.timedelta(hours=2)).strftime('%H:%M:%S')
+            self.ax.set_title(title.replace("NOW", now)) # "Limit Order Book", fontsize=14
+
         self.ax.legend(loc=1)
         self.ax.grid(True, color='lightgray', linestyle='--', linewidth=0.5)
 
