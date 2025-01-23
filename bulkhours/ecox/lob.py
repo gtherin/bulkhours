@@ -16,9 +16,12 @@ class OrderBook:
 
     def place_order(self, traderid, ordertype, quantity, price_level=-1, verbose=False):
         if ordertype == 'BID_MKT_ORDER':
-            price_level = self.match_market_order(self.asks, quantity, "ask", traderid)  # Place a market order, matching with the best available prices (opposite)
-        elif ordertype == 'ASK_MKT_ORDER':
+            #price_level = self.match_market_order(self.asks, quantity, "ask", traderid)  # Place a market order, matching with the best available prices (opposite)
             price_level = self.match_market_order(self.bids, quantity, "bid", traderid)  # Place a market order, matching with the best available prices (opposite)
+            #price_level = self.match_market_order(self.asks, quantity, "ask", traderid)  # Place a market order, matching with the best available prices (opposite)
+        elif ordertype == 'ASK_MKT_ORDER':
+            price_level = self.match_market_order(self.asks, quantity, "ask", traderid)  # Place a market order, matching with the best available prices (opposite)
+            #price_level = self.match_market_order(self.bids, quantity, "bid", traderid)  # Place a market order, matching with the best available prices (opposite)
         elif ordertype == 'BID_LMT_ORDER':
             self.place_limit_order('bid', price_level, quantity, traderid=traderid)
         elif ordertype == 'ASK_LMT_ORDER':
