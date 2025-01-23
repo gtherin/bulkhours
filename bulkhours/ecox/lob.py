@@ -11,95 +11,98 @@ class OrderBook:
         self.bids = []  # Max-heap for bids (negate prices for max-heap behavior)
         self.asks = []  # Min-heap for asks
         self.trade_history = []  # Store trade executions
-
-    def place_limit_order(self, side, price, quantity):
-        """Place a limit order in the order book."""
-        if side == "bid":
-            heapq.heappush(self.bids, (-price, quantity))  # Max-heap for bids
-        elif side == "ask":
-            heapq.heappush(self.asks, (price, quantity))  # Min-heap for asks
-        self.match_orders()
+        self.traders_style = {}
 
     def place_order(self, traderid, ordertype, quantity, price_level=-1, verbose=False):
         if ordertype == 'BID_MKT_ORDER':
-            self.place_market_order('bid', quantity)
+            self.place_market_order('bid', quantity, traderid=traderid)
         elif ordertype == 'ASK_MKT_ORDER':
-            self.place_market_order('ask', quantity)
+            self.place_market_order('ask', quantity, traderid=traderid)
         elif ordertype == 'BID_LMT_ORDER':
-            self.place_limit_order('bid', price_level, quantity)
+            self.place_limit_order('bid', price_level, quantity, traderid=traderid)
         elif ordertype == 'ASK_LMT_ORDER':
-            self.place_limit_order('ask', price_level, quantity)
+            self.place_limit_order('ask', price_level, quantity, traderid=traderid)
         elif ordertype == 'BID_CCL_ORDER':
-            self.cancel_order('bid', price_level, quantity)
+            self.cancel_order('bid', price_level, quantity, traderid=traderid)
         elif ordertype == 'ASK_CCL_ORDER':
-            self.cancel_order('ask', price_level, quantity)
+            self.cancel_order('ask', price_level, quantity, traderid=traderid)
         if verbose:
             print(f"'{traderid}' order {quantity}@{price_level} on side {ordertype} {self.get_best_bid()} {self.get_best_ask()}") 
 
-    def place_market_order(self, side, quantity):
+
+    def place_limit_order(self, side, price, quantity, traderid="anonymous"):
+        """Place a limit order in the order book."""
+        if side == "bid":
+            heapq.heappush(self.bids, (-price, quantity, traderid))  # Max-heap for bids
+        elif side == "ask":
+            heapq.heappush(self.asks, (price, quantity, traderid))  # Min-heap for asks
+        self.match_orders()
+
+    def place_market_order(self, side, quantity, traderid="anonymous"):
         """Place a market order, matching with the best available prices."""
         if side == "bid":
-            self.match_market_order(self.asks, quantity, "ask")
+            self.match_market_order(self.asks, quantity, "ask", traderid)
         elif side == "ask":
-            self.match_market_order(self.bids, quantity, "bid")
+            self.match_market_order(self.bids, quantity, "bid", traderid)
 
-    def cancel_order(self, side, price, quantity):
+    def cancel_order(self, side, price, quantity, traderid):
         """Cancel a specific quantity of a limit order at a given price."""
         if side == "bid":
-            self.bids = self._cancel_from_heap(self.bids, -price, quantity)
+            self.bids = self._cancel_from_heap(self.bids, -price, quantity, traderid)
         elif side == "ask":
-            self.asks = self._cancel_from_heap(self.asks, price, quantity)
+            self.asks = self._cancel_from_heap(self.asks, price, quantity, traderid)
 
-    def _cancel_from_heap(self, heap, target_price, quantity):
+    def _cancel_from_heap(self, heap, target_price, quantity, traderid):
         """Helper function to cancel an order from a heap."""
         new_heap = []
-        for price, qty in heap:
-            if price == target_price:
+        for price, qty, tid in heap:
+            if price == target_price and tid == traderid:
                 qty -= quantity
                 if qty > 0:
-                    new_heap.append((price, qty))
+                    new_heap.append((price, qty, tid))
             else:
-                new_heap.append((price, qty))
+                new_heap.append((price, qty, tid))
         heapq.heapify(new_heap)
         return new_heap
-    
+
     def match_orders(self):
         """Match limit orders in the book."""
         while self.bids and self.asks:
-            bid_price, bid_qty = -self.bids[0][0], self.bids[0][1]
-            ask_price, ask_qty = self.asks[0][0], self.asks[0][1]
+            bid_price, bid_qty, bid_traderid = -self.bids[0][0], self.bids[0][1], self.bids[0][2]
+            ask_price, ask_qty, ask_traderid = self.asks[0][0], self.asks[0][1], self.asks[0][2]
 
             if bid_price >= ask_price:
                 trade_qty = min(bid_qty, ask_qty)
-                self.trade_history.append((ask_price, trade_qty))
+                self.trade_history.append((ask_price, trade_qty, bid_traderid, ask_traderid))
 
                 # Update or remove the top bid
                 if bid_qty > trade_qty:
-                    self.bids[0] = (-bid_price, bid_qty - trade_qty)
+                    self.bids[0] = (-bid_price, bid_qty - trade_qty, bid_traderid)
                     heapq.heapify(self.bids)
                 else:
                     heapq.heappop(self.bids)
 
                 # Update or remove the top ask
                 if ask_qty > trade_qty:
-                    self.asks[0] = (ask_price, ask_qty - trade_qty)
+                    self.asks[0] = (ask_price, ask_qty - trade_qty, ask_traderid)
                     heapq.heapify(self.asks)
                 else:
                     heapq.heappop(self.asks)
             else:
                 break
 
-    def match_market_order(self, opposite_book, quantity, opposite_side):
+
+    def match_market_order(self, opposite_book, quantity, opposite_side, traderid):
         """Match a market order with the opposite side of the book."""
         while quantity > 0 and opposite_book:
-            best_price, best_qty = opposite_book[0]
+            best_price, best_qty, best_tid = opposite_book[0]
 
             trade_qty = min(quantity, best_qty)
-            self.trade_history.append((best_price, trade_qty))
+            self.trade_history.append((best_price, trade_qty, traderid, best_tid))
 
             # Update or remove the top order
             if best_qty > trade_qty:
-                opposite_book[0] = (best_price, best_qty - trade_qty)
+                opposite_book[0] = (best_price, best_qty - trade_qty, best_tid)
                 heapq.heapify(opposite_book)
             else:
                 heapq.heappop(opposite_book)
@@ -112,20 +115,20 @@ class OrderBook:
     def get_order_book_as_dataframe(self):
         """Retrieve the order book as a pandas DataFrame."""
         bids_df = pd.DataFrame(
-            [(-price, quantity) for price, quantity in self.bids],
-            columns=["Price", "Quantity"]
+            [(-price, quantity, traderid) for price, quantity, traderid in self.bids],
+            columns=["Price", "Quantity", "TraderID"]
         ).sort_values(by="Price", ascending=False)
 
         asks_df = pd.DataFrame(
-            [(price, quantity) for price, quantity in self.asks],
-            columns=["Price", "Quantity"]
+            [(price, quantity, traderid) for price, quantity, traderid in self.asks],
+            columns=["Price", "Quantity", "TraderID"]
         ).sort_values(by="Price", ascending=True)
 
         return bids_df, asks_df
 
     def get_trade_history(self):
         """Retrieve the trade history as a pandas DataFrame."""
-        return pd.DataFrame(self.trade_history, columns=["Price", "Quantity"])
+        return pd.DataFrame(self.trade_history, columns=["Price", "Quantity", "BidTraderID", "AskTraderID"])
 
     def get_mid_price_and_spread(self):
         """Calculate and return the mid-price and spread."""
@@ -136,28 +139,6 @@ class OrderBook:
             spread = best_ask - best_bid
             return mid_price, spread
         return None, None  # If either side is empty
-
-    def add_lobdata(self, nlobdata):
-        # Plot bids
-
-        nlobdata["price"] = nlobdata["price"].round(1)
-        self.lobdata["price"] = self.lobdata["price"].round(1)
-
-        if "bid_new" in self.lobdata.columns:
-            del self.lobdata["bid_new"]
-        if "ask_new" in self.lobdata.columns:
-            del self.lobdata["ask_new"]
-
-        self.lobdata = self.lobdata.merge(nlobdata, on="price", how="outer", suffixes=("", "_new")).fillna(0)
-
-        p = self.ax.bar(self.lobdata["price"], self.lobdata["bid_new"], bottom=self.lobdata["bid"], color='#52DE97', edgecolor='black', label="Waiting limit Bid Orders", width=0.08)
-        self.ax.bar_label(p, labels=[str(self.counter) if self.lobdata["bid_new"][e]!= 0.0 else "" for e in self.lobdata.index], label_type='center', color="white")
-        p = self.ax.bar(self.lobdata["price"], self.lobdata["ask_new"], bottom=self.lobdata["ask"], color='#C70039', edgecolor='black', label="Waiting limit Ask Orders", width=0.08)
-        self.ax.bar_label(p, labels=[str(self.counter) if self.lobdata["ask_new"][e]!= 0.0 else "" for e in self.lobdata.index], label_type='center', color="white")
-
-        self.lobdata["bid"] = self.lobdata["bid_new"]
-        self.lobdata["ask"] = self.lobdata["ask_new"]
-        self.counter += 1
 
     def get_best_bid(self):
         return -self.bids[0][0]
@@ -171,27 +152,45 @@ class OrderBook:
     def get_spread(self):
         return self.get_best_ask() - self.get_best_bid()
 
+    def plot_bars(self, side, dfs):
+        color = "#52DE97" if side == "bid" else "#C70039"
+
+        bottom, label = None, f"Waiting limit {side.capitalize()} Orders"
+        for tradeid, df in dfs.groupby("TraderID"):
+            talpha = self.traders_style[tradeid]["alpha"] if tradeid in self.traders_style and "alpha" in self.traders_style[tradeid] else 1
+            tcolor = self.traders_style[tradeid][f"{side}_color"] if tradeid in self.traders_style and f"{side}_color" in self.traders_style[tradeid] else color
+
+            qty = df.groupby("Price")["Quantity"].sum()
+            p = self.ax.bar(qty.index, qty, color=tcolor, bottom=bottom, edgecolor='black', label=label, width=self.width, alpha=talpha)
+
+            if tradeid in self.traders_style and "label" in self.traders_style[tradeid]:
+                print(tradeid, self.traders_style[tradeid]["label"])
+                self.ax.bar_label(p, labels=[self.traders_style[tradeid]["label"]]*len(qty.index), label_type='center', color="white")
+
+            if bottom is None:
+                bottom, label = 0.*qty, ""
+            bottom += qty
+
     def plot(self, width=1) -> None:
         # Plot the order book
         bids_df, asks_df = self.get_order_book_as_dataframe()
         self.width = width
 
-        fig, ax = plt.subplots(figsize=(10, 6))
+        fig, self.ax = plt.subplots(figsize=(10, 6))
 
         # Plot bids
-        ax.bar(bids_df["Price"], bids_df["Quantity"], color='#52DE97', edgecolor='black', label="Waiting limit Bid Orders", width=self.width)
+        self.plot_bars("bid", bids_df)
 
         # Plot asks
-        ax.bar(asks_df["Price"], asks_df["Quantity"], color='#C70039', edgecolor='black', label="Waiting limit Ask Orders", width=self.width)
+        self.plot_bars("ask", asks_df)
 
         # Customize the plot
-        ax.axhline(0, color='black', linestyle='--', linewidth=0.5)  # Separate bid and ask sides
-        ax.set_ylabel("Volume available", fontsize=12)
-        ax.set_xlabel("Price", fontsize=12)
-        ax.set_title("Limit Order Book", fontsize=14)
-        ax.legend(loc=1)
-        ax.grid(True, color='lightgray', linestyle='--', linewidth=0.5)
-        self.ax = ax
+        self.ax.axhline(0, color='black', linestyle='--', linewidth=0.5)  # Separate bid and ask sides
+        self.ax.set_ylabel("Volume available", fontsize=12)
+        self.ax.set_xlabel("Price", fontsize=12)
+        self.ax.set_title("Limit Order Book", fontsize=14)
+        self.ax.legend(loc=1)
+        self.ax.grid(True, color='lightgray', linestyle='--', linewidth=0.5)
 
     def add_plot_spread(self, y=None):
         if y is None:
