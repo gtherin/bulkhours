@@ -16,9 +16,9 @@ class OrderBook:
 
     def place_order(self, traderid, ordertype, quantity, price_level=-1, verbose=False):
         if ordertype == 'BID_MKT_ORDER':
-            self.match_market_order(self.asks, quantity, "ask", traderid)  # Place a market order, matching with the best available prices (opposite)
+            price_level = self.match_market_order(self.asks, quantity, "ask", traderid)  # Place a market order, matching with the best available prices (opposite)
         elif ordertype == 'ASK_MKT_ORDER':
-            self.match_market_order(self.bids, quantity, "bid", traderid)  # Place a market order, matching with the best available prices (opposite)
+            price_level = self.match_market_order(self.bids, quantity, "bid", traderid)  # Place a market order, matching with the best available prices (opposite)
         elif ordertype == 'BID_LMT_ORDER':
             self.place_limit_order('bid', price_level, quantity, traderid=traderid)
         elif ordertype == 'ASK_LMT_ORDER':
@@ -37,13 +37,6 @@ class OrderBook:
         elif side == "ask":
             heapq.heappush(self.asks, (price, quantity, traderid))  # Min-heap for asks
         self.match_orders()
-
-    def place_market_order(self, side, quantity, traderid="anonymous"):
-        """Place a market order, matching with the best available prices."""
-        if side == "bid":
-            self.match_market_order(self.asks, quantity, "ask", traderid)
-        elif side == "ask":
-            self.match_market_order(self.bids, quantity, "bid", traderid)
 
     def cancel_order(self, side, price, quantity, traderid):
         """Cancel a specific quantity of a limit order at a given price."""
@@ -67,9 +60,15 @@ class OrderBook:
 
     def match_orders(self):
         """Match limit orders in the book."""
+
+        # Sort the opposite book to ensure it is in the correct order
+        self.bids.sort(key=lambda x: x[0])  # Sort by ascending price
+        self.asks.sort(key=lambda x: x[0])  # Sort by ascending price
+
         while self.bids and self.asks:
-            bid_price, bid_qty, bid_traderid = -self.bids[0][0], self.bids[0][1], self.bids[0][2]
-            ask_price, ask_qty, ask_traderid = self.asks[0][0], self.asks[0][1], self.asks[0][2]
+            bid_price, bid_qty, bid_traderid = self.bids[0]
+            ask_price, ask_qty, ask_traderid = self.asks[0]
+            bid_price *= -1
 
             if bid_price >= ask_price:
                 trade_qty = min(bid_qty, ask_qty)
@@ -95,13 +94,12 @@ class OrderBook:
         """Match a market order with the opposite side of the book."""
 
         # Sort the opposite book to ensure it is in the correct order
-        if opposite_side == "ask":
-            opposite_book.sort(key=lambda x: x[0])  # Sort asks by ascending price
-        elif opposite_side == "bid":
-            opposite_book.sort(key=lambda x: -x[0])  # Sort bids by descending price
+        opposite_book.sort(key=lambda x: x[0])  # Sort by ascending price
 
         while quantity > 0 and opposite_book:
             best_price, best_qty, best_tid = opposite_book[0]
+            if opposite_side == "bid":
+                best_price *= -1
 
             trade_qty = min(quantity, best_qty)
             self.trade_history.append((best_price, trade_qty, traderid, best_tid))
@@ -117,6 +115,7 @@ class OrderBook:
 
         if quantity > 0:
             print(f"Market order of {quantity} {opposite_side} could not be fully filled.")
+        return best_price
 
     def get_order_book_as_dataframe(self):
         """Retrieve the order book as a pandas DataFrame."""
