@@ -68,15 +68,14 @@ class OrderBook:
         while self.bids and self.asks:
             bid_price, bid_qty, bid_traderid = self.bids[0]
             ask_price, ask_qty, ask_traderid = self.asks[0]
-            bid_price *= -1
 
-            if bid_price >= ask_price:
+            if -bid_price >= ask_price:
                 trade_qty = min(bid_qty, ask_qty)
                 self.trade_history.append((ask_price, trade_qty, bid_traderid, ask_traderid))
 
                 # Update or remove the top bid
                 if bid_qty > trade_qty:
-                    self.bids[0] = (-bid_price, bid_qty - trade_qty, bid_traderid)
+                    self.bids[0] = (bid_price, bid_qty - trade_qty, bid_traderid)
                     heapq.heapify(self.bids)
                 else:
                     heapq.heappop(self.bids)
@@ -96,13 +95,13 @@ class OrderBook:
         # Sort the opposite book to ensure it is in the correct order
         opposite_book.sort(key=lambda x: x[0])  # Sort by ascending price
 
+        sign = -1 if opposite_side == "bid" else 1 
+
         while quantity > 0 and opposite_book:
             best_price, best_qty, best_tid = opposite_book[0]
-            if opposite_side == "bid":
-                best_price *= -1
 
             trade_qty = min(quantity, best_qty)
-            self.trade_history.append((best_price, trade_qty, traderid, best_tid))
+            self.trade_history.append((sign*best_price, trade_qty, traderid, best_tid))
 
             # Update or remove the top order
             if best_qty > trade_qty:
@@ -115,7 +114,7 @@ class OrderBook:
 
         if quantity > 0:
             print(f"Market order of {quantity} {opposite_side} could not be fully filled.")
-        return best_price
+        return sign*best_price
 
     def get_order_book_as_dataframe(self):
         """Retrieve the order book as a pandas DataFrame."""
