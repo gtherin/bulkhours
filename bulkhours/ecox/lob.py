@@ -5,12 +5,12 @@ import datetime
 import time
 
 class OrderBook:
-    def __init__(self, price_rounding=1):
+    def __init__(self, price_rounding=1, traders_style={}):
         self.data = pd.DataFrame(columns=["Side", "Price", "Quantity", "TraderID", "EventTime"])
         self.trade_history = []  # Store executed trades
         self.price_rounding = price_rounding
         self.order_counter = 0  # To keep track of order timestamps
-        self.traders_style = {}
+        self.traders_style = traders_style
 
     def round_price(self, price):
         return round(price, self.price_rounding)
