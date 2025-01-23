@@ -94,6 +94,13 @@ class OrderBook:
 
     def match_market_order(self, opposite_book, quantity, opposite_side, traderid):
         """Match a market order with the opposite side of the book."""
+
+        # Sort the opposite book to ensure it is in the correct order
+        if opposite_side == "ask":
+            opposite_book.sort(key=lambda x: x[0])  # Sort asks by ascending price
+        elif opposite_side == "bid":
+            opposite_book.sort(key=lambda x: -x[0])  # Sort bids by descending price
+
         while quantity > 0 and opposite_book:
             best_price, best_qty, best_tid = opposite_book[0]
 
@@ -133,17 +140,19 @@ class OrderBook:
     def get_mid_price_and_spread(self):
         """Calculate and return the mid-price and spread."""
         if self.bids and self.asks:
-            best_bid = -self.bids[0][0]  # Highest bid
-            best_ask = self.asks[0][0]  # Lowest ask
+            best_bid = self.get_best_bid()
+            best_ask = self.get_best_ask()
             mid_price = (best_bid + best_ask) / 2
             spread = best_ask - best_bid
             return mid_price, spread
         return None, None  # If either side is empty
 
     def get_best_bid(self):
+        return max([-price for price, _, _ in self.bids])  # Correct highest bid
         return -self.bids[0][0]
 
     def get_best_ask(self):
+        return min([price for price, _, _ in self.asks])   # Correct lowest ask
         return self.asks[0][0]
 
     def get_mid_price(self):
