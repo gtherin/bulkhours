@@ -100,6 +100,7 @@ class OrderBook:
 
         sign = -1 if opposite_side == "bid" else 1 
 
+        best_price = np.nan
         while quantity > 0 and opposite_book:
             best_price, best_qty, best_tid = opposite_book[0]
 
