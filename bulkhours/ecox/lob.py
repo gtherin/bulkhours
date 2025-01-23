@@ -16,9 +16,9 @@ class OrderBook:
 
     def place_order(self, traderid, ordertype, quantity, price_level=-1, verbose=False):
         if ordertype == 'BID_MKT_ORDER':
-            self.place_market_order('bid', quantity, traderid=traderid)
+            self.match_market_order(self.asks, quantity, "ask", traderid)  # Place a market order, matching with the best available prices (opposite)
         elif ordertype == 'ASK_MKT_ORDER':
-            self.place_market_order('ask', quantity, traderid=traderid)
+            self.match_market_order(self.bids, quantity, "bid", traderid)  # Place a market order, matching with the best available prices (opposite)
         elif ordertype == 'BID_LMT_ORDER':
             self.place_limit_order('bid', price_level, quantity, traderid=traderid)
         elif ordertype == 'ASK_LMT_ORDER':
@@ -29,7 +29,6 @@ class OrderBook:
             self.cancel_order('ask', price_level, quantity, traderid=traderid)
         if verbose:
             print(f"'{traderid}' order {quantity}@{price_level} on side {ordertype} {self.get_best_bid()} {self.get_best_ask()}") 
-
 
     def place_limit_order(self, side, price, quantity, traderid="anonymous"):
         """Place a limit order in the order book."""
