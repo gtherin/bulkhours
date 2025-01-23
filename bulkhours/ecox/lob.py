@@ -91,7 +91,6 @@ class OrderBook:
             else:
                 break
 
-
     def match_market_order(self, opposite_book, quantity, opposite_side, traderid):
         """Match a market order with the opposite side of the book."""
 
@@ -148,11 +147,15 @@ class OrderBook:
         return None, None  # If either side is empty
 
     def get_best_bid(self):
-        return max([-price for price, _, _ in self.bids])  # Correct highest bid
+        if self.bids:
+            return max([-price for price, _, _ in self.bids])  # Correct highest bid
+        return -1
         return -self.bids[0][0]
 
     def get_best_ask(self):
-        return min([price for price, _, _ in self.asks])   # Correct lowest ask
+        if self.asks:
+            return min([price for price, _, _ in self.asks])   # Correct lowest ask
+        return -1
         return self.asks[0][0]
 
     def get_mid_price(self):
@@ -173,7 +176,6 @@ class OrderBook:
             p = self.ax.bar(qty.index, qty, color=tcolor, bottom=bottom, edgecolor='black', label=label, width=self.width, alpha=talpha)
 
             if tradeid in self.traders_style and "label" in self.traders_style[tradeid]:
-                print(tradeid, self.traders_style[tradeid]["label"])
                 self.ax.bar_label(p, labels=[self.traders_style[tradeid]["label"]]*len(qty.index), label_type='center', color="white")
 
             if bottom is None:
@@ -232,7 +234,6 @@ class OrderBook:
         labels = {"BID_LMT_ORDER": "New limit order", "BID_MKT_ORDER": "New market order", "BID_CCL_ORDER": "Cancellation",
                   "ASK_LMT_ORDER": "New limit order", "ASK_MKT_ORDER": "New market order", "ASK_CCL_ORDER": "Cancellation"}
         label = labels[ttype]
-        width = self.width
 
         bids_df, asks_df = self.get_order_book_as_dataframe()
         lobdata = bids_df if "BID" in ttype else asks_df
