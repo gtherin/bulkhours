@@ -38,17 +38,13 @@ class OrderBook:
             print(f"{trader_id} placed {order_type} for {quantity}@{price_level}")
 
     def place_limit_order(self, side, price, quantity, trader_id):
+        price, quantity = self.round_price(price), int(quantity)
         self.order_counter += 1
-        new_order = {
-            "Side": side,
-            "Price": price,
-            "Quantity": quantity,
-            "TraderID": trader_id,
-            "EventTime": self.order_counter
-        }
+        new_order = {"Side": side, "Price": price, "Quantity": quantity, "TraderID": trader_id, "EventTime": self.order_counter}
         self.data = pd.concat([self.data, pd.DataFrame([new_order])], ignore_index=True)
 
     def cancel_order(self, side, price, quantity, trader_id):
+        price, quantity = self.round_price(price), int(quantity)
         matching_orders = (self.data["Side"] == side) & (self.data["Price"] == price) & (self.data["TraderID"] == trader_id)
         
         for idx in self.data[matching_orders].index:
@@ -60,6 +56,7 @@ class OrderBook:
                 self.data.drop(idx, inplace=True)
 
     def match_market_order(self, opposite_side, quantity, trader_id):
+        quantity = int(quantity)
         side = "ask" if opposite_side == "bid" else "bid"
         side = opposite_side
         available_orders = self.data[self.data["Side"] == opposite_side].sort_values(by="Price", ascending=(side == "ask"))
