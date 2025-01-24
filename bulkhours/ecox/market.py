@@ -3,7 +3,7 @@ import numpy as np
 from .lob import OrderBook
 from . import agents
 
-agents = {
+known_agents = {
    "Buyer": agents.Buyer,
    "Seller": agents.Buyer,
    "MarketMaker": agents.Buyer,
@@ -114,7 +114,7 @@ class Market(agents.Model):
     def create_agents(self, agent_class, n=1):
 
         if type(agent_class) == str:
-            agent_class = agents[agent_class]
+            agent_class = known_agents[agent_class]
 
         # Create n agents
         agent_class.create_agents(model=self, n=n)
