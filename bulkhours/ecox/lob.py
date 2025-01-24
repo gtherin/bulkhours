@@ -13,7 +13,7 @@ class OrderBook:
         self.traders_style = traders_style
 
     def round_price(self, price):
-        return round(price, self.price_rounding)
+        return round(float(price), self.price_rounding)
 
     def place_order(self, trader_id, order_type, quantity, price_level=None, verbose=False):
         if order_type == 'MKT_ORDER':
