@@ -15,7 +15,7 @@ class OrderBook:
     def round_price(self, price):
         return round(float(price), self.price_rounding)
 
-    def place_order(self, trader_id, order_type, quantity, price_level=None, verbose=False, quiet=False):
+    def place_order(self, trader_id, order_type, quantity, price_level=None, verbose=False, quiet=True):
         if order_type == 'MKT_ORDER':
             if quantity > 0:
                 self.match_market_order("ask", quantity, trader_id, quiet=quiet)
@@ -57,7 +57,7 @@ class OrderBook:
                 quantity -= self.data.at[idx, "Quantity"]
                 self.data.drop(idx, inplace=True)
 
-    def match_market_order(self, opposite_side, quantity, trader_id, quiet=False):
+    def match_market_order(self, opposite_side, quantity, trader_id, quiet=True):
         quantity = int(quantity)
         side = "ask" if opposite_side == "bid" else "bid"
         side = opposite_side
