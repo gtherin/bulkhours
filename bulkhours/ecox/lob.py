@@ -40,9 +40,13 @@ class OrderBook:
 
     def place_limit_order(self, side, price, quantity, trader_id):
         price, quantity = self.round_price(price), int(quantity)
+    
         self.order_counter += 1
         new_order = {"Side": side, "Price": price, "Quantity": quantity, "TraderID": trader_id, "EventTime": self.order_counter}
-        self.data = pd.concat([self.data, pd.DataFrame([new_order])], ignore_index=True)
+        if self.data.empty:
+            self.data = pd.DataFrame([new_order])
+        else:
+            self.data = pd.concat([self.data, pd.DataFrame([new_order])], ignore_index=True)
         self.match_orders_at_same_price(price)
 
     def cancel_order(self, side, price, quantity, trader_id):
