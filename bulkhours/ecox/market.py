@@ -48,10 +48,11 @@ class Market1(bkXmesa.Model):
             model_reporters={"Order Book": self.collect_order_book}
         )
 
-    def step(self):
+    def trade_round(self):
         """Advance the model by one step."""
         self.datacollector.collect(self)
-        self.schedule.step()
+        self.agents.shuffle_do("trade_round")
+        # self.agents.do("trade_round")
         self.match_orders()  # Match buy and sell orders after each step
 
     def match_orders(self):
