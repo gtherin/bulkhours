@@ -4,7 +4,6 @@ from .lob import OrderBook
 
 try:
     from mesa import Agent, Model
-    from mesa.time import RandomActivation
     from mesa.datacollection import DataCollector
 
 except ImportError:
@@ -12,15 +11,7 @@ except ImportError:
         def __init__(self, unique_id, model):
             print("mesa is not available. Using dummy class.")
 
-        def perform_action(self, *args, **kwargs):
-            print("Dummy action performed")
-            return None
-
     class Model:
-        def __init__(self, *args, **kwargs):
-            print("mesa is not available. Using dummy class.")        
-
-    class RandomActivation:
         def __init__(self, *args, **kwargs):
             print("mesa is not available. Using dummy class.")        
 
