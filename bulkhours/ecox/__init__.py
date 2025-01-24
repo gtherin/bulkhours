@@ -3,7 +3,7 @@ from .gallery import *  # noqa
 from . import regression  # noqa
 from . import gradient  # noqa
 from . import trading  # noqa
-from . import agents  # noqa
+#from . import agents  # noqa
 
 from .block import Block, BlockCoin, BlockMsg  # noqa
 from .blockchain import BlockChain  # noqa
