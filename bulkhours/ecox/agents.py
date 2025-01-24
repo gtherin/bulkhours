@@ -33,7 +33,7 @@ class TradingAgent(Agent):
             return np.random.random() < heads_bias
         return np.random.choice([True, False])
 
-    def send_order(self, quantity, price_info, verbose=False, quiet=False):
+    def send_order(self, quantity, price_info, verbose=False, quiet=True):
         if quantity > 0: # You want to buy
             if type(price_info) in [float, int]:
                 self.model.lob.place_order(self.unique_name, "BID_LMT_ORDER", quantity, price_level=float(price_info), verbose=verbose, quiet=quiet)
