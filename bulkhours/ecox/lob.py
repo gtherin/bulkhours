@@ -34,14 +34,16 @@ class OrderBook:
         elif order_type == 'ASK_CCL_ORDER':
             self.cancel_order("ask", self.round_price(price_level), quantity, trader_id)
 
-        if verbose:
+        if verbose and not quiet:
             print(f"{trader_id} placed {order_type} for {quantity}@{price_level}")
+
 
     def place_limit_order(self, side, price, quantity, trader_id):
         price, quantity = self.round_price(price), int(quantity)
         self.order_counter += 1
         new_order = {"Side": side, "Price": price, "Quantity": quantity, "TraderID": trader_id, "EventTime": self.order_counter}
         self.data = pd.concat([self.data, pd.DataFrame([new_order])], ignore_index=True)
+        self.match_orders_at_same_price(price)
 
     def cancel_order(self, side, price, quantity, trader_id):
         price, quantity = self.round_price(price), int(quantity)
@@ -79,6 +81,36 @@ class OrderBook:
 
         if quantity > 0 and not quiet:
             print(f"Market order for {quantity} {side} could not be fully filled.")
+
+    def match_orders_at_same_price(self, price):
+        bids = self.data[(self.data["Side"] == "bid") & (self.data["Price"] == price)].sort_values(by="EventTime")
+        asks = self.data[(self.data["Side"] == "ask") & (self.data["Price"] == price)].sort_values(by="EventTime")
+
+        while not bids.empty and not asks.empty:
+            bid = bids.iloc[0]
+            ask = asks.iloc[0]
+            trade_qty = min(bid["Quantity"], ask["Quantity"])
+
+            self.trade_history.append({
+                "Price": price,
+                "Quantity": trade_qty,
+                "Buyer": bid["TraderID"],
+                "Seller": ask["TraderID"]
+            })
+
+            if bid["Quantity"] > trade_qty:
+                self.data.at[bid.name, "Quantity"] -= trade_qty
+                bids = bids.iloc[1:]
+            else:
+                self.data.drop(bid.name, inplace=True)
+                bids = bids.iloc[1:]
+
+            if ask["Quantity"] > trade_qty:
+                self.data.at[ask.name, "Quantity"] -= trade_qty
+                asks = asks.iloc[1:]
+            else:
+                self.data.drop(ask.name, inplace=True)
+                asks = asks.iloc[1:]
 
     def get_order_book_as_dataframe(self):
         bids = self.data[self.data["Side"] == "bid"].sort_values(by="Price", ascending=False)
