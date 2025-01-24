@@ -1,17 +1,17 @@
 import pandas as pd
 import numpy as np
 from .lob import OrderBook
-from . import agents
+from . import agents as bkXmesa
 
 known_agents = {
-   "Buyer": agents.Buyer,
-   "Seller": agents.Buyer,
-   "MarketMaker": agents.Buyer,
-   "SniperAgent": agents.Buyer,
+   "Buyer": bkXmesa.Buyer,
+   "Seller": bkXmesa.Buyer,
+   "MarketMaker": bkXmesa.Buyer,
+   "SniperAgent": bkXmesa.Buyer,
 }
 
 
-class Market1(agents.Model):
+class Market1(bkXmesa.Model):
     """A simple stock market model with buyers, sellers, and a market maker."""
     def __init__(self, num_buyers, num_sellers, num_market_makers=1):
         super().__init__()
@@ -25,26 +25,26 @@ class Market1(agents.Model):
 
         # Create buyer and seller agents
         for i in range(self.num_buyers):
-            buyer = agents.Buyer(i, self)
+            buyer = bkXmesa.Buyer(i, self)
             self.schedule.add(buyer)
 
         for i in range(self.num_sellers):
-            seller = agents.Seller(i + self.num_buyers, self)
+            seller = bkXmesa.Seller(i + self.num_buyers, self)
             self.schedule.add(seller)
 
         # Create market maker agents
         for i in range(self.num_market_makers):
-            market_maker = agents.MarketMaker(i + self.num_buyers + self.num_sellers, self)
+            market_maker = bkXmesa.MarketMaker(i + self.num_buyers + self.num_sellers, self)
             self.schedule.add(market_maker)
 
         # Create sniper agents
         self.num_snipers = 1
         for i in range(self.num_snipers):
-            sniper = agents.SniperAgent(i + self.num_buyers + self.num_sellers + self.num_market_makers, self)
+            sniper = bkXmesa.SniperAgent(i + self.num_buyers + self.num_sellers + self.num_market_makers, self)
             self.schedule.add(sniper)
 
         # Data collector to record the state of the order book at each step
-        self.datacollector = agents.DataCollector(
+        self.datacollector = bkXmesa.DataCollector(
             model_reporters={"Order Book": self.collect_order_book}
         )
 
@@ -87,20 +87,19 @@ class Market1(agents.Model):
         return {"bids": bid_orders, "asks": ask_orders}
 
 
-class Market(agents.Model):
+class Market(bkXmesa.Model):
+
     def __init__(self, lob=None, seed=None):
         super().__init__(seed=seed)
         self.lob = OrderBook() if lob is None else lob
-        self.num_agents = 0
+
+        self.mid_price, self.spread = self.lob.get_mid_price_and_spread()
+        self.datacollector = bkXmesa.DataCollector(model_reporters={"mid_price": "mid_price", "spread": "spread"}, 
+                                                   agent_reporters={"position": "position", "wanted_position": "wanted_position"}
+                                                   )
 
     def get_name(self, agent):
         return type(agent).__name__ + str(agent.unique_id)
-
-    def init_collector(self):
-        self.mid_price, self.spread = self.lob.get_mid_price_and_spread()
-        model_reporters = {"mid_price": lambda m: self.mid_price, "spread": lambda m: self.spread}
-        model_reporters.update({self.get_name(a): lambda m: a.wanted_position for a in self.agents})
-        self.datacollector = agents.DataCollector(model_reporters=model_reporters)
 
     def lob_snapshot(self):
         self.mid_price, self.spread = self.lob.get_mid_price_and_spread()
@@ -112,13 +111,8 @@ class Market(agents.Model):
         # self.agents.do("trade_round")
 
     def create_agents(self, agent_class, n=1):
-
         if type(agent_class) == str:
             agent_class = known_agents[agent_class]
 
         # Create n agents
         agent_class.create_agents(model=self, n=n)
-        self.num_agents += n
-
-        # Init data collector to record the state of the order book at each step
-        self.init_collector()
