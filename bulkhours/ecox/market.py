@@ -4,10 +4,17 @@ from .lob import OrderBook
 from . import agents as bkXmesa
 
 known_agents = {
-   "Buyer": bkXmesa.Buyer,
-   "Seller": bkXmesa.Buyer,
-   "MarketMaker": bkXmesa.Buyer,
-   "SniperAgent": bkXmesa.Buyer,
+   "BuyerAgent": bkXmesa.BuyerAgent,
+   "SellerAgent": bkXmesa.SellerAgent,
+   "MarketMaker": bkXmesa.MarketMaker,
+   "SniperAgent": bkXmesa.SniperAgent,
+   "GuerillaAgent": bkXmesa.GuerillaAgent,
+   "BlastAgent": bkXmesa.BlastAgent,
+   "IcebergAgent": bkXmesa.IcebergAgent,
+   "SharkAgent": bkXmesa.SharkAgent,
+   "StealthAgent": bkXmesa.StealthAgent,
+   "SumoAgent": bkXmesa.SumoAgent,
+   "FundamentalAgent": bkXmesa.FundamentalAgent,
 }
 
 

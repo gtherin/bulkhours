@@ -20,7 +20,7 @@ class OrderBook:
             if quantity > 0:
                 self.match_market_order("ask", quantity, trader_id, quiet=quiet)
             else:
-                self.match_market_order("bid", quantity, trader_id, quiet=quiet)
+                self.match_market_order("bid", -quantity, trader_id, quiet=quiet)
         elif order_type == 'BID_MKT_ORDER':
             self.match_market_order("bid", quantity, trader_id)
         elif order_type == 'ASK_MKT_ORDER':
