@@ -7,7 +7,6 @@ try:
     from mesa.time import RandomActivation
     from mesa.datacollection import DataCollector
 
-
 except ImportError:
     class Agent:
         def __init__(self, unique_id, model):
