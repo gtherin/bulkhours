@@ -197,28 +197,28 @@ class OrderBook:
         self.ax.legend(loc=1)
         self.ax.grid(True, color='lightgray', linestyle='--', linewidth=0.5)
 
-    def add_plot_spread(self, y=None):
+    def add_plot_spread(self, y=None, yspace=0.5):
         if y is None:
             y = 8
         mid_price, spread = self.get_mid_price_and_spread()
         best_bid = -self.bids[0][0]  # Highest bid
         best_ask = self.asks[0][0]  # Lowest ask
 
-        plt.text(x=best_bid, y=self.bids[0][1]+0.5, s='bid', color='#52DE97', ha='center', fontweight='bold')
+        plt.text(x=best_bid, y=self.bids[0][1]+yspace, s='bid', color='#52DE97', ha='center', fontweight='bold')
 
-        plt.text(x=best_ask, y=self.asks[0][1]+0.5, s='ask', color='#C70039', ha='center', fontweight='bold')
+        plt.text(x=best_ask, y=self.asks[0][1]+yspace, s='ask', color='#C70039', ha='center', fontweight='bold')
 
-        plt.text(x=mid_price, y=y+0.5, s='spread', ha='center', fontweight='bold')
+        plt.text(x=mid_price, y=y+yspace, s='spread', ha='center', fontweight='bold')
         plt.annotate('', xy=(best_bid, y), xytext=(best_ask, y), arrowprops=dict(arrowstyle='<|-|>'))
 
         #plt.text(x=104.5, y=9.3, s='tick', ha='center', fontweight='bold')
         #plt.annotate('', xy=(104, 9), xytext=(105, 9), arrowprops=dict(arrowstyle='<|-|>'))
 
-    def add_plot_mid(self, y=None):
+    def add_plot_mid(self, y=None, xspace=0.03):
         if y is None:
             y = 8
         mid_price, spread = self.get_mid_price_and_spread()
-        plt.text(x=mid_price-0.03, y=y, s='mid', ha='center', color="gray", fontweight='bold', rotation=90)
+        plt.text(x=mid_price-xspace, y=y, s='mid', ha='center', color="gray", fontweight='bold', rotation=90)
         plt.axvline(mid_price, color='lightgray', linestyle='--', linewidth=2)
 
     def add_plot_order(self, price, size, rbottom=50, ttype="BID_LMT_ORDER"):
