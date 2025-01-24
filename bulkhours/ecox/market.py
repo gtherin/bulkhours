@@ -89,11 +89,12 @@ class Market1(bkXmesa.Model):
 
 class Market(bkXmesa.Model):
 
-    def __init__(self, lob=None, seed=None):
+    def __init__(self, lob=None, seed=None, mid_price=None, spread=None):
         super().__init__(seed=seed)
         self.lob = OrderBook() if lob is None else lob
 
-        self.mid_price, self.spread = self.lob.get_mid_price_and_spread()
+        self.mid_price, self.spread, self.prev_mid_price = mid_price, spread, mid_price
+        self.lob_snapshot()
         self.datacollector = bkXmesa.DataCollector(model_reporters={"mid_price": "mid_price", "spread": "spread"}, 
                                                    agent_reporters={"position": "position", "wanted_position": "wanted_position"}
                                                    )
@@ -102,7 +103,12 @@ class Market(bkXmesa.Model):
         return type(agent).__name__ + str(agent.unique_id)
 
     def lob_snapshot(self):
-        self.mid_price, self.spread = self.lob.get_mid_price_and_spread()
+        mid_price, spread = self.lob.get_mid_price_and_spread()
+        if mid_price is not None:
+            self.prev_mid_price = self.mid_price
+            self.mid_price = mid_price
+        if spread is not None:
+            self.spread = spread
 
     def trade_round(self):
         self.lob_snapshot()
