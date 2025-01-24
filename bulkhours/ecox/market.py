@@ -97,11 +97,18 @@ class Market1(bkXmesa.Model):
 
 class Market(bkXmesa.Model):
 
-    def __init__(self, lob=None, seed=None, mid_price=None, spread=None):
+    def __init__(self, lob=None, seed=None, mid_price=100., spread=0.1, pop_volume=None):
         super().__init__(seed=seed)
         self.lob = OrderBook() if lob is None else lob
 
-        self.mid_price, self.spread, self.prev_mid_price = mid_price, spread, mid_price
+        self.mid_price100, self.mid_price, self.spread, self.prev_mid_price = mid_price, mid_price, spread, mid_price
+
+        if pop_volume is not None:
+            self.lob.place_order("MarketMaker0", "BID_LMT_ORDER", pop_volume // 4, self.mid_price-2*self.spread)
+            self.lob.place_order("MarketMaker0", "BID_LMT_ORDER", pop_volume // 4, self.mid_price-self.spread)
+            self.lob.place_order("MarketMaker0", "ASK_LMT_ORDER", pop_volume // 4, self.mid_price+self.spread)
+            self.lob.place_order("MarketMaker0", "ASK_LMT_ORDER", pop_volume // 4, self.mid_price+2*self.spread)
+
         self.lob_snapshot()
         self.datacollector = bkXmesa.DataCollector(model_reporters={"mid_price": "mid_price", "spread": "spread"}, 
                                                    agent_reporters={"position": "position", "wanted_position": "wanted_position"}
@@ -115,6 +122,7 @@ class Market(bkXmesa.Model):
         if mid_price is not None:
             self.prev_mid_price = self.mid_price
             self.mid_price = mid_price
+            self.mid_price100 = mid_price*0.01 + 0.99*self.mid_price100
         if spread is not None:
             self.spread = spread
 
