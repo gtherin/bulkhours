@@ -117,9 +117,9 @@ class Market(bkXmesa.Model):
         self.agents.shuffle_do("trade_round")
         # self.agents.do("trade_round")
 
-    def create_agents(self, agent_class, n=1):
+    def create_agents(self, agent_class, n=1, **kwargs):
         if type(agent_class) == str:
             agent_class = known_agents[agent_class]
 
         # Create n agents
-        agent_class.create_agents(model=self, n=n)
+        agent_class.create_agents(model=self, n=n, **kwargs)
