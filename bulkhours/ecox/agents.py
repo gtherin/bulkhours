@@ -20,20 +20,39 @@ except ImportError:
             print("mesa is not available. Using dummy class.")        
 
 
-class BkAgent(Agent):
-    """Handle wanted position"""
-    def __init__(self, model, hit_rate=1, max_position=500, max_trade=20, alpha=1):
+class TradingAgent(Agent):
+    def __init__(self, model, hit_rate=1, max_position=500, max_trade=20, order_duration=None):
         super().__init__(model)
         self.position, self.wanted_position = 0., 0.
         self.max_position, self.max_trade = max_position, max_trade
-        self.alpha, self.hit_rate = alpha, hit_rate
+        self.hit_rate, self.order_duration = hit_rate, order_duration
+        self.unique_name = type(self).__name__ + str(self.unique_id)
 
-    def trade(self, trade, price=None):
-        self.wanted_position = self.position + trade
-        if price is None:
-            self.model.lob.place_order(self.unique_id, 'MKT_ORDER', trade, quiet=True)
-        else:
-            self.model.lob.place_order(self.unique_id, 'LMT_ORDER', trade, quiet=True)
+    def heads_or_tails(self, heads_bias=None):
+        if heads_bias is not None:
+            return np.random.random() < heads_bias
+        return np.random.choice([True, False])
+
+    def send_order(self, quantity, price_info, verbose=False, quiet=False):
+        if quantity > 0: # You want to buy
+            if type(price_info) in [float, int]:
+                self.model.lob.place_order(self.unique_name, "BID_LMT_ORDER", quantity, price_level=float(price_info), verbose=verbose, quiet=quiet)
+            elif "BID" in price_info:
+                price_level = self.model.mid_price - int(price_info[3:]) * self.model.spread
+                self.model.lob.place_order(self.unique_name, "BID_LMT_ORDER", quantity, price_level=price_level, verbose=verbose, quiet=quiet)
+            else:
+                self.model.lob.place_order(self.unique_name, "ASK_MKT_ORDER", quantity, verbose=verbose, quiet=quiet)
+        elif quantity < 0: # You want to sell
+            if type(price_info) in [float, int]:
+                self.model.lob.place_order(self.unique_name, "ASK_LMT_ORDER", -quantity, price_level=float(price_info), verbose=verbose, quiet=quiet)
+            elif "ASK" in price_info:
+                price_level = self.model.mid_price + int(price_info[3:]) * self.model.spread
+                self.model.lob.place_order(self.unique_name, "ASK_LMT_ORDER", -quantity, price_level=price_level, verbose=verbose, quiet=quiet)
+            else:
+                self.model.lob.place_order(self.unique_name, "BID_MKT_ORDER", -quantity, verbose=verbose, quiet=quiet)
+
+    def place_order(self, order_type, quantity, price_level=None, verbose=False, quiet=False):
+        self.model.lob.place_order(self.unique_name, order_type, quantity, price_level=price_level, verbose=verbose, quiet=quiet)
 
     def trade_round(self):
         # Trade hit_rate% of time
@@ -45,11 +64,16 @@ class BkAgent(Agent):
         # Fundamental value increase with time
         self.position = self.wanted_position
 
+        # Delete old trades
+        if self.order_duration is not None:
+            old_trades = self.market.lob.data[(self.market.lob.data["TraderID"] == self.unique_name) & (self.market.lob.order_counter-self.market.lob.data["EventTime"] > self.order_duration)]
+            self.market.lob.data.drop(old_trades.index, inplace=True)
 
-class FundamentalAgent(BkAgent):
+
+class FundamentalAgent(TradingAgent):
     """Wants to go back to a fundamental value"""
-    def __init__(self, model, fundamental_price=4, long_term_drift=0.1):
-        super().__init__(model, hit_rate=0.3)
+    def __init__(self, model, fundamental_price=4, long_term_drift=0.1, **kwargs):
+        super().__init__(model, **kwargs)
         self.fundamental_price = fundamental_price
         self.long_term_drift = long_term_drift
 
@@ -61,32 +85,97 @@ class FundamentalAgent(BkAgent):
         self.wanted_position = self.fundamental_price - self.model.mid_price
 
         # Trade signal
-        self.model.lob.place_order(self.unique_id, 'MKT_ORDER', self.wanted_position-self.position)
+        self.place_order('MKT_ORDER', self.wanted_position-self.position)
 
 
-class BuyerAgent(BkAgent):
-    def __init__(self, model, **kwargs):
-        super().__init__(model, hit_rate=0.6, **kwargs)
-
+class BuyerAgent(TradingAgent):
     def trade_round(self):
         # Fundamental value increase with time
         self.wanted_position = min(self.max_position - self.position, self.max_trade)
+        if self.heads_or_tails():
+            self.send_order(self.wanted_position-self.position, "BID1", quiet=True)
+        else:
+            self.send_order(self.wanted_position-self.position, "ASK1", quiet=True)
 
-        # Trade signal
-        self.model.lob.place_order(self.unique_id, 'MKT_ORDER', self.wanted_position-self.position, quiet=True)
-
-
-class SellerAgent(BkAgent):
-    def __init__(self, model, **kwargs):
-        super().__init__(model, hit_rate=0.6, **kwargs)
-
+class SellerAgent(TradingAgent):
     def trade_round(self):
         # Fundamental value increase with time
         self.wanted_position = -min(self.max_position + self.position, self.max_trade)
+        if self.heads_or_tails():
+            self.send_order(self.wanted_position-self.position, "ASK1", quiet=True)
+        else:
+            self.send_order(self.wanted_position-self.position, "BID1", quiet=True)
+
+class RandomAgent(TradingAgent):
+    def trade_round(self):
+        # Get random trade
+        random_trade_2_cancel = self.model.lob.data.sample()
+
+        # Drop random trade
+        self.model.lob.data.drop(random_trade_2_cancel.index, inplace=True)
+
+        # 
+        side = random_trade_2_cancel.Side.iloc[0]
+        self.place_order("BID_LMT_ORDER" if side == "bid" else "ASK_LMT_ORDER", 
+                               int(np.random.uniform(5, 15)),
+                               round(self.model.mid_price + (-1 if side == "bid" else 1) * np.random.choice([1, 2, 3]) * self.model.spread, 0))
+
+class BuyerAgent(TradingAgent):
+    def trade_round(self):
+        # Fundamental value increase with time
+        self.wanted_position = min(self.max_position - self.position, self.max_trade)
+        if self.heads_or_tails():
+            self.send_order(self.wanted_position-self.position, "BID1")
+        else:
+            self.send_order(self.wanted_position-self.position, "ASK1")
+
+class SellerAgent(TradingAgent):
+    def trade_round(self):
+        # Fundamental value increase with time
+        self.wanted_position = -min(self.max_position + self.position, self.max_trade)
+        if self.heads_or_tails():
+            self.send_order(self.wanted_position-self.position, "ASK1")
+        else:
+            self.send_order(self.wanted_position-self.position, "BID1")
+
+
+class TrendingAgent(TradingAgent):
+    def __init__(self, model, trend_force=100, **kwargs):
+        super().__init__(model, **kwargs)
+        self.trend_force = trend_force
+
+    def trade_round(self):
+        # Fundamental value increase with time
+        if self.model.mid_price is None or self.model.prev_mid_price is None:
+            return
+
+        predictor = 10*(self.model.mid_price - self.model.prev_mid_price)
+        self.wanted_position = 20 if predictor > 0 else -20
 
         # Trade signal
-        self.model.lob.place_order(self.unique_id, 'MKT_ORDER', self.wanted_position-self.position, quiet=True)
+        self.place_order('MKT_ORDER', self.wanted_position-self.position, quiet=True)
 
+
+class MarketMaker(TradingAgent):
+    def __init__(self, model, spread=0.5, **kwargs):
+        super().__init__(model, **kwargs)
+        self.position, self.wanted_position = 0., 0.
+        self.spread = spread
+        self.min_qty = 15
+
+    def trade_round(self):
+        qtys = self.model.lob.data[self.model.lob.data["TraderID"] == self.unique_name].groupby("Side")["Quantity"].sum()
+        bid_volume = qtys["bid"] if "bid" in qtys.index else 0
+        if bid_volume < self.min_qty:
+            qty = np.random.choice(range(10, 20))
+            for l in range(1, 10):
+                self.place_order('BID_LMT_ORDER', qty, self.model.mid_price-l*self.spread, verbose=False)
+
+        ask_volume = qtys["ask"] if "ask" in qtys.index else 0
+        if ask_volume < self.min_qty:
+            qty = np.random.choice(range(10, 20))
+            for l in range(1, 10):
+                self.place_order('ASK_LMT_ORDER', qty, self.model.mid_price+l*self.spread, verbose=False)
 
 
 class Order:
@@ -97,40 +186,10 @@ class Order:
         self.quantity = quantity
 
 
-class MarketMaker(Agent):
-    """A market maker places both bid and ask orders around the estimated market price."""
-    def __init__(self, unique_id, model):
-        super().__init__(unique_id, model)
 
-    def step(self):
-        # Estimate a market price as the midpoint between highest bid and lowest ask
-        if self.model.bids and self.model.asks:
-            best_bid = max(self.model.bids, key=lambda x: x.price).price
-            best_ask = min(self.model.asks, key=lambda x: x.price).price
-            market_price = (best_bid + best_ask) / 2
-        else:
-            market_price = np.random.uniform(95, 105)  # Default to a random market price
-
-        # Place bid and ask orders around the market price
-        bid_price = market_price * np.random.uniform(0.99, 1.01)  # Slightly below market price
-        ask_price = market_price * np.random.uniform(1.01, 1.03)  # Slightly above market price
-        quantity = np.random.randint(1, 10)  # Random quantity
-
-        # Create and submit the orders
-        bid_order = Order(order_type="buy", price=bid_price, quantity=quantity)
-        ask_order = Order(order_type="sell", price=ask_price, quantity=quantity)
-        self.model.bids.append(bid_order)
-        self.model.asks.append(ask_order)
-        #print(f"Market Maker {self.unique_id} placed a bid: Price={bid_price}, Quantity={quantity}")
-        #print(f"Market Maker {self.unique_id} placed an ask: Price={ask_price}, Quantity={quantity}")
-
-
-class SniperAgent(Agent):
+class SniperAgent(TradingAgent):
     """A sniper agent waits for favorable market conditions and places large orders opportunistically."""
-    def __init__(self, unique_id, model):
-        super().__init__(unique_id, model)
-
-    def step(self):
+    def trade_round(self):
         # The sniper monitors the market and waits for favorable conditions
         if self.model.bids and self.model.asks:
             best_bid = max(self.model.bids, key=lambda x: x.price).price
@@ -146,13 +205,13 @@ class SniperAgent(Agent):
                 #print(f"Sniper {self.unique_id} placed a snipe bid at Price={best_ask} for Quantity={quantity}")
 
 
-class GuerillaAgent(Agent):
+class GuerillaAgent(TradingAgent):
     """A guerilla agent breaks large orders into smaller chunks and executes them stealthily."""
-    def __init__(self, unique_id, model):
-        super().__init__(unique_id, model)
+    def __init__(self, model, **kwargs):
+        super().__init__(model, **kwargs)
         self.remaining_quantity = np.random.randint(20, 50)  # Initial large order quantity
 
-    def step(self):
+    def trade_round(self):
         if self.remaining_quantity > 0:
             # Determine chunk size (small random portion of remaining order)
             chunk_size = min(self.remaining_quantity, np.random.randint(1, 5))
@@ -174,12 +233,9 @@ class GuerillaAgent(Agent):
             #print(f"Guerilla Agent {self.unique_id} placed a buy order: Price={limit_price}, Quantity={chunk_size}")
 
 
-class BlastAgent(Agent):
+class BlastAgent(TradingAgent):
     """A blast agent places a large order all at once, impacting the market."""
-    def __init__(self, unique_id, model):
-        super().__init__(unique_id, model)
-
-    def step(self):
+    def trade_round(self):
         # Place a large buy order with significant quantity at the best ask price
         quantity = np.random.randint(50, 100)
         if self.model.asks:
@@ -189,14 +245,14 @@ class BlastAgent(Agent):
             #print(f"Blast Agent {self.unique_id} placed a large buy order at Price={best_ask}, Quantity={quantity}")
 
 
-class IcebergAgent(Agent):
+class IcebergAgent(TradingAgent):
     """An iceberg agent hides part of a large order by placing smaller chunks over time."""
-    def __init__(self, unique_id, model):
-        super().__init__(unique_id, model)
+    def __init__(self, model, **kwargs):
+        super().__init__(model, **kwargs)
         self.remaining_quantity = np.random.randint(100, 200)  # Large initial order size
         self.visible_chunk_size = 10  # Size of each visible portion of the order
 
-    def step(self):
+    def trade_round(self):
         if self.remaining_quantity > 0:
             chunk_size = min(self.visible_chunk_size, self.remaining_quantity)
             self.remaining_quantity -= chunk_size
@@ -207,12 +263,9 @@ class IcebergAgent(Agent):
                 #print(f"Iceberg Agent {self.unique_id} placed a chunk buy order at Price={best_ask}, Quantity={chunk_size}")
 
 
-class SharkAgent(Agent):
+class SharkAgent(TradingAgent):
     """A shark agent detects large orders and trades around them to profit."""
-    def __init__(self, unique_id, model):
-        super().__init__(unique_id, model)
-
-    def step(self):
+    def trade_round(self):
         # Detect if there are large orders in the order book
         large_orders = [order for order in self.model.bids if order.quantity > 20]
         if large_orders:
@@ -224,12 +277,9 @@ class SharkAgent(Agent):
             #print(f"Shark Agent {self.unique_id} placed a sell order at Price={shark_price}, Quantity=5")
 
 
-class StealthAgent(Agent):
+class StealthAgent(TradingAgent):
     """A stealth agent executes small trades at random intervals to avoid detection."""
-    def __init__(self, unique_id, model):
-        super().__init__(unique_id, model)
-
-    def step(self):
+    def trade_round(self):
         # Randomly decide if the agent should trade in this step
         if np.random.rand() < 0.5:  # 50% chance to place an order
             quantity = np.random.randint(1, 3)  # Small quantity for stealth
@@ -240,12 +290,9 @@ class StealthAgent(Agent):
                 #print(f"Stealth Agent {self.unique_id} placed a small buy order at Price={best_ask}, Quantity={quantity}")
 
 
-class SumoAgent(Agent):
+class SumoAgent(TradingAgent):
     """A sumo agent aggressively places large orders to impact market direction."""
-    def __init__(self, unique_id, model):
-        super().__init__(unique_id, model)
-
-    def step(self):
+    def trade_round(self):
         # Place a large bid to push the market in a certain direction
         quantity = np.random.randint(20, 50)  # Large quantity for impact
         if self.model.asks:

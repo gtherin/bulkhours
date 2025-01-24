@@ -4,8 +4,10 @@ from .lob import OrderBook
 from . import agents as bkXmesa
 
 known_agents = {
+   "FundamentalAgent": bkXmesa.FundamentalAgent,
    "BuyerAgent": bkXmesa.BuyerAgent,
    "SellerAgent": bkXmesa.SellerAgent,
+   "RandomAgent": bkXmesa.RandomAgent,
    "MarketMaker": bkXmesa.MarketMaker,
    "SniperAgent": bkXmesa.SniperAgent,
    "GuerillaAgent": bkXmesa.GuerillaAgent,
@@ -14,7 +16,6 @@ known_agents = {
    "SharkAgent": bkXmesa.SharkAgent,
    "StealthAgent": bkXmesa.StealthAgent,
    "SumoAgent": bkXmesa.SumoAgent,
-   "FundamentalAgent": bkXmesa.FundamentalAgent,
 }
 
 
