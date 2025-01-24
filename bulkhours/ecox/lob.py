@@ -15,12 +15,12 @@ class OrderBook:
     def round_price(self, price):
         return round(float(price), self.price_rounding)
 
-    def place_order(self, trader_id, order_type, quantity, price_level=None, verbose=False):
+    def place_order(self, trader_id, order_type, quantity, price_level=None, verbose=False, quiet=False):
         if order_type == 'MKT_ORDER':
             if quantity > 0:
-                self.match_market_order("ask", quantity, trader_id)
+                self.match_market_order("ask", quantity, trader_id, quiet=quiet)
             else:
-                self.match_market_order("bid", quantity, trader_id)
+                self.match_market_order("bid", quantity, trader_id, quiet=quiet)
         elif order_type == 'BID_MKT_ORDER':
             self.match_market_order("bid", quantity, trader_id)
         elif order_type == 'ASK_MKT_ORDER':
@@ -55,7 +55,7 @@ class OrderBook:
                 quantity -= self.data.at[idx, "Quantity"]
                 self.data.drop(idx, inplace=True)
 
-    def match_market_order(self, opposite_side, quantity, trader_id):
+    def match_market_order(self, opposite_side, quantity, trader_id, quiet=False):
         quantity = int(quantity)
         side = "ask" if opposite_side == "bid" else "bid"
         side = opposite_side
@@ -77,7 +77,7 @@ class OrderBook:
                 quantity -= order["Quantity"]
                 self.data.drop(idx, inplace=True)
 
-        if quantity > 0:
+        if quantity > 0 and not quiet:
             print(f"Market order for {quantity} {side} could not be fully filled.")
 
     def get_order_book_as_dataframe(self):
