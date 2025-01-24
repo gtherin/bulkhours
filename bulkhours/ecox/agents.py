@@ -212,3 +212,34 @@ class SumoAgent(Agent):
             sumo_order = Order(order_type="buy", price=best_ask, quantity=quantity)
             self.model.bids.append(sumo_order)
             #print(f"Sumo Agent {self.unique_id} placed an aggressive buy order at Price={best_ask}, Quantity={quantity}")
+
+
+class FundamentalAgent(Agent):
+    """A sumo agent aggressively places large orders to impact market direction."""
+    def __init__(self, model, fundamental_price=4, long_term_drift=0.1):
+        super().__init__(model)
+        self.position, self.wanted_position = 0., 0.
+        self.fundamental_price = fundamental_price
+        self.long_term_drift = long_term_drift
+
+    def make_signal_noisy(self):
+        # Fundamental value increase with time
+        self.fundamental_price += self.long_term_drift + np.random.normal(self.model.mid_price, 0.1)
+
+    def trade_round(self):
+
+        # Add noise to the signal
+        self.make_signal_noisy()
+
+        # Fundamental value increase with time
+        self.wanted_position = self.fundamental_price - self.model.mid_price
+
+        # Trade 20% of time
+        if np.random.random() > 0.3:
+            return
+
+        # Trade signal
+        self.model.lob.place_order(self.unique_id, 'MKT_ORDER', self.wanted_position-self.position)
+
+        # Fundamental value increase with time
+        self.position = self.wanted_position
