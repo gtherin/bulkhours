@@ -16,7 +16,12 @@ class OrderBook:
         return round(price, self.price_rounding)
 
     def place_order(self, trader_id, order_type, quantity, price_level=None, verbose=False):
-        if order_type == 'BID_MKT_ORDER':
+        if order_type == 'MKT_ORDER':
+            if quantity > 0:
+                self.match_market_order("ask", quantity, trader_id)
+            else:
+                self.match_market_order("bid", quantity, trader_id)
+        elif order_type == 'BID_MKT_ORDER':
             self.match_market_order("bid", quantity, trader_id)
         elif order_type == 'ASK_MKT_ORDER':
             self.match_market_order("ask", quantity, trader_id)
