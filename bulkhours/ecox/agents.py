@@ -51,7 +51,7 @@ class TradingAgent(Agent):
             else:
                 self.model.lob.place_order(self.unique_name, "BID_MKT_ORDER", -quantity, verbose=verbose, quiet=quiet)
 
-    def place_order(self, order_type, quantity, price_level=None, verbose=False, quiet=False):
+    def place_order(self, order_type, quantity, price_level=None, verbose=False, quiet=True):
         self.model.lob.place_order(self.unique_name, order_type, quantity, price_level=price_level, verbose=verbose, quiet=quiet)
 
     def trade_round(self):
