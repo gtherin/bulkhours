@@ -4,13 +4,52 @@ import matplotlib.pyplot as plt
 import datetime
 import time
 
+
 class OrderBook:
-    def __init__(self, price_rounding=1, traders_style={}):
+    def __init__(self, price_rounding=1, traders_style={}, mid_price=100., tick_size=0.1, data=None, log_trades=False):
         self.data = pd.DataFrame(columns=["Side", "Price", "Quantity", "TraderID", "EventTime"])
         self.trade_history = []  # Store executed trades
         self.price_rounding = price_rounding
         self.order_counter = 0  # To keep track of order timestamps
         self.traders_style = traders_style
+        self.history = pd.DataFrame(columns=["mid_price", "spread"])
+        self.hdata = pd.DataFrame()
+        self.mid_price100, self.mid_price, self.spread, self.prev_mid_price = mid_price, mid_price, tick_size, mid_price
+
+    def snapshot(self, lob=False):
+        # Data collector to record the state of the order book at each step
+        mid_price, spread = self.get_mid_price_and_spread()
+        if mid_price is not None:
+            self.prev_mid_price = self.mid_price
+            self.mid_price = mid_price
+            self.mid_price100 = mid_price*0.01 + 0.99*self.mid_price100
+        if spread is not None:
+            self.spread = spread
+
+        if self.history.empty:
+            self.history = pd.DataFrame([self.mid_price, self.spread])
+        else:
+            self.history = pd.concat([self.history, pd.DataFrame([self.mid_price, self.spread])], ignore_index=True)
+
+        if lob:
+            bids, asks = self.get_order_book_as_dataframe()
+            bids = bids.groupby("Price", as_index=False)["Quantity"].sum()
+            asks = asks.groupby("Price", as_index=False)["Quantity"].sum()
+
+            ob = {}
+            ob.update({f"bid{k+1}": [v] for k, v in enumerate(bids["Price"].values[::-1])})
+            ob.update({f"ask{k+1}": [v] for k, v in enumerate(asks["Price"])})
+            ob.update({f"bid{k+1}_vol": [v] for k, v in enumerate(bids["Quantity"].values[::-1])})
+            ob.update({f"ask{k+1}_vol": [v] for k, v in enumerate(asks["Quantity"])})
+            if 0:
+                ob.update({"event_type": 0, "order_id": 0, "trade_vol": 0, "trade": 0, "trade_side": 0})
+
+            ob = pd.DataFrame(ob)
+            if self.hdata.empty:
+                self.hdata = ob
+            else:
+                self.hdata = pd.concat([self.hdata, ob], ignore_index=True)
+
 
     def round_price(self, price):
         return round(float(price), self.price_rounding)
@@ -154,9 +193,9 @@ class OrderBook:
 
             bottom, label = bottom.add(qty, fill_value=0), ""
 
-    def plot(self, width=1, ax=None, cumsum=False, title=None, sleep=None, xlim=None, ylim=None) -> None:
+    def plot(self, width=None, ax=None, cumsum=False, title=None, sleep=None, xlim=None, ylim=None) -> None:
         bids, asks = self.get_order_book_as_dataframe()
-        self.width = width
+        self.width = width if width is not None else self.tick_size
 
         if ax is None:
             fig, self.ax = plt.subplots(figsize=(10, 6))
