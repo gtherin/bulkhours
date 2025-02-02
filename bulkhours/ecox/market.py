@@ -127,11 +127,13 @@ class Market(bkXmesa.Model):
         if spread is not None:
             self.spread = spread
 
-    def trade_round(self):
-        self.lob_snapshot()
-        self.datacollector.collect(self)
+    def trade_round(self, do_old_snapshot=True, do_lob_snapshot=False):
+        if do_old_snapshot:
+            self.lob_snapshot()
+            self.datacollector.collect(self)
         self.agents.shuffle_do("trade_round")
         # self.agents.do("trade_round")
+        self.lob.snapshot(lob=do_lob_snapshot)
 
     def create_agents(self, agent_class, n=1, **kwargs):
         if type(agent_class) == str:

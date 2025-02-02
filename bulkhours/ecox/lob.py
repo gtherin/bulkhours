@@ -1,8 +1,11 @@
 import pandas as pd
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 import datetime
 import time
+from ..core import colors
+
 
 
 class OrderBook:
@@ -297,3 +300,31 @@ class OrderBook:
             ax.bar([price], [size], bottom=abottom, color=color, alpha=0.4, edgecolor='black', width=self.width)
             plt.annotate('', xy=(price, abottom+size), xytext=(price, bottom), arrowprops=dict(arrowstyle=arrowstyle))
             plt.text(x=price, y=bottom+size+5, s=label, ha='center')
+
+
+    def plot(self, depth5, ax=None) -> None:
+        # 5. Create a matplotlib plot
+        fig, ax = plt.subplots()
+        depth = 5
+        # 6. Loop over all layers
+        for l in range(depth):
+            # 7. Plot the bid value for the layer l+1
+            if f'bid{l+1}' in self.hdata.columns:
+                self.hdata.plot(y=f'bid{l+1}', use_index=True, color=colors.green, ax=ax, alpha=0.6**l)
+            # 8. Plot the ask value for the layer l+1
+            if f'ask{l+1}' in self.hdata.columns:
+                self.hdata.plot(y=f'ask{l+1}', use_index=True, color=colors.red, ax=ax, alpha=0.6**l)
+
+        handles = [matplotlib.lines.Line2D([], [], color=colors.green, label='Bid (layer 1)'), matplotlib.lines.Line2D([], [], color=colors.red, label='Ask (layer 1)')]
+        # 9. Do a scatter plot of the trades (Buy side)
+        if f'trade_side' in self.hdata.columns:
+            data2plot_buy_side = self.hdata[self.hdata['trade_side'] == 1]
+            s1 = ax.scatter(data2plot_buy_side.index, data2plot_buy_side.trade, c='#FF5733', marker='o', label='Buy trades', s=4, zorder=5, alpha=0.5)
+
+            # 10. Do a scatter plot of the trades (Sell side)
+            data2plot_sell_side = self.hdata[self.hdata['trade_side'] == -1]
+            s2 = ax.scatter(data2plot_sell_side.index, data2plot_sell_side.trade, c='#0097B2', marker='o', label='Sell trades', s=4, zorder=5, alpha=0.5)
+            handles += [s1, s2]
+
+        # 11. Add the manual legend
+        ax.legend(handles=handles)

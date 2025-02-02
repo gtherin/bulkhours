@@ -37,6 +37,9 @@ def is_equal(
 ):
     """Return the student score compared to a benchmark value
 
+    https://en.wikipedia.org/wiki/Gestalt_pattern_matching
+    Ratcliff/Obershelp pattern recognition
+
     Parameters:
     :param data_test: data to be checked
     :param data_ref: by default teacher.data
