@@ -1,30 +1,17 @@
+purple = "#581845"
+red = "#C70039"
+orange = "#FF5733"
+blue = "#0097B2"
+green = "#52DE97"
+yellow = "#FBE555"
+dblue = "#053061"
+lpink = "#FAACB5"
+black = "black"
+dpink = "#924A5F"
+
 caliases = dict(
-    zip(
-        [
-            "purple",   
-            "red",
-            "orange",
-            "blue",
-            "green",
-            "yellow",
-            "dblue",
-            "lpink",
-            "black",
-            "dpink",
-        ],
-        [
-            "#581845", # purple
-            "#C70039", # red
-            "#FF5733", # orange
-            "#0097B2", # blue
-            "#52DE97", # green
-            "#FBE555", # yellow
-            "#053061",
-            "#FAACB5",
-            "black",
-            "#924A5F",
-        ],
-    )
+    zip(["purple", "red", "orange", "blue", "green", "yellow", "dblue", "lpink", "black", "dpink"],
+        [purple, red, orange, blue, green, yellow, dblue, lpink, black, dpink])
 )
 
 
