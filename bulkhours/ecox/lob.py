@@ -302,10 +302,9 @@ class OrderBook:
             plt.text(x=price, y=bottom+size+5, s=label, ha='center')
 
 
-    def plot(self, depth5, ax=None) -> None:
+    def hplot(self, depth=5, ax=None) -> None:
         # 5. Create a matplotlib plot
         fig, ax = plt.subplots()
-        depth = 5
         # 6. Loop over all layers
         for l in range(depth):
             # 7. Plot the bid value for the layer l+1
