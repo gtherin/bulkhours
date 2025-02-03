@@ -300,3 +300,26 @@ class SumoAgent(TradingAgent):
             sumo_order = Order(order_type="buy", price=best_ask, quantity=quantity)
             self.model.bids.append(sumo_order)
             #print(f"Sumo Agent {self.unique_id} placed an aggressive buy order at Price={best_ask}, Quantity={quantity}")
+
+# Function to generate a random process
+def generate_poisson_process(rate, duration, value=True):
+    time_intervals = np.arange(0, duration, 1)
+
+    event_counts = np.random.poisson(rate, size=len(time_intervals))
+    event_times = []
+    for t, count in zip(time_intervals, event_counts):
+        event_times.extend(np.random.uniform(t, t + 1, size=count))  # Distribute events randomly within the interval
+
+    return pd.Series(value, index=np.sort(event_times))
+
+
+def update_santafe_lob(lob, df, frame, ref_price=100):
+    layer, order = df.iloc[frame].split("_")
+    pside = "BID_" if int(layer) < 0 else "ASK_"
+    oside = "ASK_" if int(layer) < 0 else "BID_"
+    if order == "Limit":
+        lob.place_order("guy", f"{pside}LMT_ORDER", 1, int(layer)+ref_price, verbose=True)
+    elif order == "Cancel":
+        lob.place_order("guy", f"{pside}CCL_ORDER", 1, int(layer)+ref_price, verbose=True)
+    elif order == "Market":
+        lob.place_order("guy", f"{oside}MKT_ORDER", 1, verbose=True)

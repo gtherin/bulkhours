@@ -28,7 +28,8 @@ def cell_reset(source):
     keep_line = True
 
 
-    message = "❗A vous de jouer❗" if 1 else "❗Your code❗"
+    message = "❗A compléter❗" if 2 else "❗To be filled❗"
+    message = "❗To be filled❗"
     message = "" if "//BULKHOURS" in source.replace(" ", "") in source else message
 
     for s in source.split("\n"):
