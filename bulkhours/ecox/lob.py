@@ -9,14 +9,15 @@ from ..core import colors
 
 
 class OrderBook:
-    def __init__(self, price_rounding=1, traders_style={}, mid_price=100., tick_size=0.1, data=None, log_trades=False):
+    def __init__(self, price_rounding=1, traders_style={}, mid_price=100., tick_size=0.1, data=None, 
+                 log_trades=False, hdata=pd.DataFrame()):
         self.data = pd.DataFrame(columns=["Side", "Price", "Quantity", "TraderID", "EventTime"])
         self.trade_history = []  # Store executed trades
         self.price_rounding = price_rounding
         self.order_counter = 0  # To keep track of order timestamps
         self.traders_style = traders_style
         self.history = pd.DataFrame(columns=["mid_price", "spread"])
-        self.hdata = pd.DataFrame()
+        self.hdata = hdata
         self.mid_price100, self.mid_price, self.spread, self.prev_mid_price = mid_price, mid_price, tick_size, mid_price
 
     def snapshot(self, lob=False):
@@ -302,17 +303,17 @@ class OrderBook:
             plt.text(x=price, y=bottom+size+5, s=label, ha='center')
 
 
-    def hplot(self, depth=5, ax=None) -> None:
+    def hplot(self, depth=5, ax=None, alpha=0.6) -> None:
         # 5. Create a matplotlib plot
         fig, ax = plt.subplots()
         # 6. Loop over all layers
         for l in range(depth):
             # 7. Plot the bid value for the layer l+1
             if f'bid{l+1}' in self.hdata.columns:
-                self.hdata.plot(y=f'bid{l+1}', use_index=True, color=colors.green, ax=ax, alpha=0.6**l)
+                self.hdata.plot(y=f'bid{l+1}', use_index=True, color=colors.green, ax=ax, alpha=alpha**l)
             # 8. Plot the ask value for the layer l+1
             if f'ask{l+1}' in self.hdata.columns:
-                self.hdata.plot(y=f'ask{l+1}', use_index=True, color=colors.red, ax=ax, alpha=0.6**l)
+                self.hdata.plot(y=f'ask{l+1}', use_index=True, color=colors.red, ax=ax, alpha=alpha**l)
 
         handles = [matplotlib.lines.Line2D([], [], color=colors.green, label='Bid (layer 1)'), matplotlib.lines.Line2D([], [], color=colors.red, label='Ask (layer 1)')]
         # 9. Do a scatter plot of the trades (Buy side)
