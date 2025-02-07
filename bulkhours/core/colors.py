@@ -9,26 +9,28 @@ lpink = "#FAACB5"
 black = "black"
 dpink = "#924A5F"
 
-caliases = dict(
-    zip(["purple", "red", "orange", "blue", "green", "yellow", "dblue", "lpink", "black", "dpink"],
-        [purple, red, orange, blue, green, yellow, dblue, lpink, black, dpink])
-)
+bmaps = [
+    ["purple", "red", "orange", "blue", "green", "yellow", "dblue", "lpink", "black", "dpink"],
+    [purple, red, orange, blue, green, yellow, dblue, lpink, black, dpink]
+]
+
+caliases = dict(zip(bmaps[0], bmaps[1]))
 
 
 def get(color):
-    return caliases[color] if color in caliases else color
-
-
-for name, value in caliases.items():
-    globals()[name] = value
+    if type(color) == str:
+        return caliases[color] if color in caliases else color
+    if type(color)==int:
+        return bmaps[1][color%len(bmaps)-1]
+    raise Exception("Type is not taken in charge")
 
 
 def get_mpf_style():
     import mplfinance as mpf
     return mpf.make_mpf_style(
         marketcolors=mpf.make_marketcolors(
-            up='#52DE97',down='#C70039', edge='inherit', wick='black', volume='in', ohlc='i', inherit=True
-            ), mavcolors=['#581845', '#FF5733', '#0097B2', "#FAACB5", "#924A5F"], base_mpf_style='charles')
+            up=green, down=red, edge='inherit', wick='black', volume='in', ohlc='i', inherit=True
+            ), mavcolors=[purple, orange, blue, lpink, dpink], base_mpf_style='charles')
 
 
 def vizualize(colors=None, ncols=4):
