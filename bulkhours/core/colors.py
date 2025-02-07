@@ -21,7 +21,7 @@ def get(color):
     if type(color) == str:
         return caliases[color] if color in caliases else color
     if type(color)==int:
-        return bmaps[1][color%len(bmaps)-1]
+        return bmaps[1][color%(len(bmaps[1])-1)]
     raise Exception("Type is not taken in charge")
 
 
