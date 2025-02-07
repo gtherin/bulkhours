@@ -143,9 +143,12 @@ def set_plt_style(style="default", cmap="default"):
         axis_color = "white"
     else:
         axis_color = caliases["blue"]
-        plt.rcParams["grid.color"] = "white"
+        plt.rcParams["grid.color"] = "lightgray"
+        plt.rcParams["grid.linestyle"] = "--"
+        plt.rcParams["grid.linewidth"] = 0.5
         plt.rcParams["lines.linewidth"] = 4
         plt.rcParams["font.size"] = 14
+
 
     plt.rcParams["axes.grid"] = True
     plt.rcParams["axes.edgecolor"] = axis_color
