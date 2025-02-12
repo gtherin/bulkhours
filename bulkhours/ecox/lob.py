@@ -6,6 +6,22 @@ import datetime
 import time
 from ..core import colors
 
+def merge_ob_data(bids, asks, include_mid):
+
+    # Define layers
+    bids["layer"] = -(bids.index + 1)
+    asks["layer"] = asks.index + 1
+
+    # Add cumulative volumes
+    bids["volume_cum"] = bids["volume"].cumsum()
+    asks["volume_cum"] = asks["volume"].cumsum()
+
+    df = [bids, asks]
+    if include_mid:
+        df.append(pd.DataFrame({"price": [0.5*(bids["price"].iloc[0]+asks["price"].iloc[0])], "volume": [0], "volume_cum": [0.0], "layer": [0]}))
+
+    return pd.concat(df).sort_values("price").reset_index(drop=True)
+
 
 
 class OrderBook:
@@ -20,7 +36,7 @@ class OrderBook:
         self.hdata = hdata
         self.mid_price100, self.mid_price, self.spread, self.prev_mid_price = mid_price, mid_price, tick_size, mid_price
 
-    def snapshot(self, lob=False):
+    def snapshot(self, lob=False, new_order=None):
         # Data collector to record the state of the order book at each step
         mid_price, spread = self.get_mid_price_and_spread()
         if mid_price is not None:
@@ -45,8 +61,9 @@ class OrderBook:
             ob.update({f"ask{k+1}": [v] for k, v in enumerate(asks["Price"])})
             ob.update({f"bid{k+1}_vol": [v] for k, v in enumerate(bids["Quantity"].values[::-1])})
             ob.update({f"ask{k+1}_vol": [v] for k, v in enumerate(asks["Quantity"])})
-            if 0:
+            if new_order is not None:
                 ob.update({"event_type": 0, "order_id": 0, "trade_vol": 0, "trade": 0, "trade_side": 0})
+                #new_order = {"Side": side, "Price": price, "Quantity": quantity, "TraderID": trader_id, "EventTime": self.order_counter}
 
             ob = pd.DataFrame(ob)
             if self.hdata.empty:
@@ -268,13 +285,14 @@ class OrderBook:
         plt.text(x=mid_price-xspace, y=y, s='mid', ha='center', color="gray", fontweight='bold', rotation=90)
         plt.axvline(mid_price, color='lightgray', linestyle='--', linewidth=2)
 
-    def add_plot_order(self, price, size, rbottom=50, ttype="BID_LMT_ORDER"):
+    def add_plot_order(self, price, size, rbottom=50, ttype="BID_LMT_ORDER", label=None):
         ax = self.ax
         color = '#52DE97' if "BID" in ttype else '#C70039'
         arrowstyle = '-|>' if "LMT" in ttype else '<|-'
-        labels = {"BID_LMT_ORDER": "New limit order", "BID_MKT_ORDER": "New market order", "BID_CCL_ORDER": "Cancellation",
-                  "ASK_LMT_ORDER": "New limit order", "ASK_MKT_ORDER": "New market order", "ASK_CCL_ORDER": "Cancellation"}
-        label = labels[ttype]
+        if label is None:
+            labels = {"BID_LMT_ORDER": "New limit order", "BID_MKT_ORDER": "New market order", "BID_CCL_ORDER": "Cancellation",
+                    "ASK_LMT_ORDER": "New limit order", "ASK_MKT_ORDER": "New market order", "ASK_CCL_ORDER": "Cancellation"}
+            label = labels[ttype]
 
         bids_df, asks_df = self.get_order_book_as_dataframe()
         lobdata = bids_df if "BID" in ttype else asks_df
@@ -283,7 +301,7 @@ class OrderBook:
         if bottoms.empty:
             abottom = 0
         else:
-            abottom = bottoms.bid.iloc[0] if "BID" in ttype else bottoms.ask.iloc[0]
+            abottom = bottoms.Quantity.iloc[0] if "BID" in ttype else bottoms.Quantity.iloc[0]
 
         bottom = abottom + rbottom
 
@@ -328,3 +346,19 @@ class OrderBook:
 
         # 11. Add the manual legend
         ax.legend(handles=handles)
+
+    def get_ob_slice(self, iloc=None, loc=None, depth=5, include_mid=True):
+        if iloc is not None:
+            hdf = self.hdata.iloc[iloc]
+        if loc is not None:
+            hdf = self.hdata.loc[loc]
+        bids = pd.DataFrame({"price": [hdf[f"bid{l+1}"] for l in range(depth)], 
+                            "volume": [hdf[f"bid{l+1}_vol"] for l in range(depth)],
+                            })#.sort_values("price", ascending=False)
+
+        asks = pd.DataFrame({"price": [hdf[f"ask{l+1}"] for l in range(depth)], 
+                            "volume": [hdf[f"ask{l+1}_vol"] for l in range(depth)],
+                            })#.sort_values("price", ascending=False)
+
+        # Merge both tables
+        return merge_ob_data(bids, asks, include_mid)
