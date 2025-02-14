@@ -323,3 +323,24 @@ def update_santafe_lob(lob, df, frame, ref_price=100):
         lob.place_order("guy", f"{pside}CCL_ORDER", 1, int(layer)+ref_price, verbose=True)
     elif order == "Market":
         lob.place_order("guy", f"{oside}MKT_ORDER", 1, verbose=True)
+
+# Re-importing the necessary libraries due to environment reset
+def generate_random_walks(*, n_walks, n_steps, correlation, drift, seed=42):
+    
+    np.random.seed(seed)
+
+    # Generate a correlated random noise matrix
+    mean = np.zeros(n_walks)
+    cov_matrix = np.full((n_walks, n_walks), correlation)
+    np.fill_diagonal(cov_matrix, 1.0)  # Diagonal elements are 1 (variance of each walk)
+
+    # Generate correlated random noise using multivariate normal
+    random_noise = np.random.multivariate_normal(mean, cov_matrix, size=n_steps)
+
+    # Initialize random walks with drift
+    drifts = drift*(np.random.random(n_walks)-0.4)
+
+    random_walks = np.cumsum(random_noise + drifts, axis=0)
+
+    # Convert to DataFrame for analysis
+    return pd.DataFrame(random_walks, columns=[f"Walk_{i+1}" for i in range(n_walks)])
