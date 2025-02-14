@@ -11,6 +11,7 @@ from .weather_data import get_wheather_data  # noqa
 from .lob import OrderBook  # noqa
 from .market import Market  # noqa
 from . import agents  # noqa
+from agents import generate_random_walks  # noqa
 
 def random(samples_number, sample_size, mu=4, distrib="bimodal", seed=42):
     """return a dataframe of exp(-X/scale)/scale for random X"""
