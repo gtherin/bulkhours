@@ -72,7 +72,7 @@ def get_us_composite(self):
     from io import StringIO
 
     mkt_index = self.data_info["mkt_index"] if "mkt_index" in self.data_info else "sp500"
-    drop_list = self.data_info["drop_list"] if "drop_list" in self.data_info else ['KVUE', 'VLTO', 'BRK.B', 'BF.B', 'SW', 'AMTM', 'GEV', 'SOLV']
+    drop_list = self.data_info["drop_list"] if "drop_list" in self.data_info else ['KVUE', 'VLTO', 'BRK.B', 'BF.B', 'SW', 'AMTM', 'GEV', 'SOLV', 'ETR']
 
     request = requests.get(f'https://www.slickcharts.com/{mkt_index}', headers={'User-Agent': 'Mozilla/5.0'})
     stats = bs(request.text, "lxml").find('table', class_='table table-hover table-borderless table-sm')
@@ -81,7 +81,7 @@ def get_us_composite(self):
     df = pd.DataFrame(pd.read_html(table_io)[0])
 
     df['% Chg'] = df['% Chg'].str.strip('()-%')
-    df['% Chg'] = pd.to_numeric(df['% Chg'].replace('NaN', np.nan))
+    #df['% Chg'] = pd.to_numeric(df['% Chg'].replace('NaN', np.nan))
     df['Chg'] = pd.to_numeric(df['Chg'].replace('NaN', np.nan))
 
     df = df[~df["Symbol"].isin(drop_list)]
@@ -383,6 +383,49 @@ def calculate_statements(self):
 
     # Filter wanted statements
     model = self.data_info["model"] if "model" in self.data_info else "gtfintechlab/FOMC-RoBERTa"
+
+    # Get model and labels
+    roberta = pipeline("text-classification", model=model, top_k=None)#, device=0)
+    keys = {"LABEL_2": "Neutral", "LABEL_1": "Hawkish", "LABEL_0": "Dovish"}
+
+    # Init new columns
+    for k in list(keys.values()) + ["DoveCheersUpBull"]:
+        statements[k] = 0.
+
+    ani = {"Neutral": 0, "Hawkish": -1, "Dovish": 1}
+    for index in statements.index:
+        response = roberta(statements["statements"][index], truncation="only_first")[0]
+        results = {keys[k["label"]]: k["score"] for k in response}
+        for k in keys.values():
+            statements.loc[index, k] = results[k]
+        statements.loc[index, "DoveCheersUpBull"] = ani[max(results, key=results.get)]
+
+    return statements
+
+@DataParser.register_dataset(
+    label="huggingface.deepseek.tiny",
+    summary="huggingface.deepseek.tiny",
+    category="ml",
+    ref_source="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+    enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/trading.py",
+)
+def calculate_statements(self):
+
+    # To download pipeline from hugging face
+    from transformers import pipeline              
+
+    # Statement is necessary
+    if "statements" not in self.data_info:
+        return pd.DataFrame()
+
+    # Get statements
+    if type(self.data_info["statements"]) == list:
+        statements = pd.DataFrame({"statements": self.data_info["statements"]})
+    else:
+        statements = self.data_info["statements"]
+
+    # Filter wanted statements
+    model = self.data_info["model"] if "model" in self.data_info else "deepseek-ai/deepseek-vl2-tiny"
 
     # Get model and labels
     roberta = pipeline("text-classification", model=model, top_k=None)#, device=0)
