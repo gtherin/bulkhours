@@ -35,12 +35,11 @@ def get_token(tokenkey, token="YOUR_KEY"):
     if tokenkey in tokens:
         return tokens[tokenkey]
 
-    #try:
-    if 1:
+    try:
         from google.colab import userdata
         return userdata.get(tokenkey)
-    #except:
-    #    pass
+    except:
+        pass
 
     return tools.get_value(tokenkey)
 
