@@ -94,9 +94,9 @@ def ask_chat_gpt(
     openai = tools.install_if_needed("openai")
 
     if token == "YOUR_KEY":
-        token = get_token('openai_token', token=token)
-    if token is None:
         token = get_token('OPENAI_API_KEY', token=token)
+    if token is None or token == "YOUR_KEY":
+        token = get_token('openai_token', token=token)
 
     if token in ["YOUR_KEY", "", None]:
         IPython.display.display(
