@@ -95,7 +95,8 @@ def ask_chat_gpt(
 
     if token == "YOUR_KEY":
         token = get_token('openai_token', token=token)
-
+    if token is None:
+        token = get_token('OPENAI_API_KEY', token=token)
 
     if token in ["YOUR_KEY", "", None]:
         IPython.display.display(
