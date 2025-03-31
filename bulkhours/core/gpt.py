@@ -4,6 +4,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import os
 import re
+import requests
 
 from . import tools
 from .grade import Grade
@@ -11,6 +12,7 @@ from .grade import Grade
 evaluation_instructions = None
 evaluation_openai_token = "YOUR_KEY"
 evaluation_replicate_token = "YOUR_KEY"
+tokens = {}
 evaluation_model = "gpt-4o-mini"
 evaluation_client = None
 
@@ -23,19 +25,48 @@ llms = {
 # fmt: on
 
 
+def get_token(tokenkey, token="YOUR_KEY"):
+    if token != "YOUR_KEY":
+        return token
+
+    if tokenkey in os.environ:
+        return os.environ[tokenkey]
+
+    if tokenkey in tokens:
+        return tokens[tokenkey]
+
+    try:
+        from google.colab import userdata
+        return userdata.get(tokenkey)
+    except:
+        pass
+
+    return tools.get_value(tokenkey)
+
+
+def ask_deepseek_gpt(prompt="",
+    token="YOUR_KEY",
+    model="deepseek-chat",
+    temperature=0.5,
+    top_p=1,
+    size="256x256"
+    ):
+    response = requests.post("https://api.deepseek.com/v1/chat/completions", 
+                             headers={"Authorization": f"Bearer {get_token('DEEPSEEK_API_KEY', token=token)}"}, 
+                             json={"model": "deepseek-chat", "messages": [{"role": "user", "content": prompt}]})
+
+    return response.json()["choices"][0]["message"]["content"]
+
+
 def ask_opensource_gpt(
     prompt="",
     token="YOUR_KEY",
-    model="gpt-4-1106-preview",  # gpt-4-1106-preview  gpt-4
+    model="mistral-7b",
     temperature=0.5,
     top_p=1,
     size="256x256",
 ):
-    if evaluation_replicate_token != "YOUR_KEY":
-        os.environ["REPLICATE_API_TOKEN"] = evaluation_replicate_token
-    if token != "YOUR_KEY":
-        os.environ["REPLICATE_API_TOKEN"] = token
-
+    os.environ["REPLICATE_API_TOKEN"] = get_token('REPLICATE_API_TOKEN', token=token)
     replicate = tools.install_if_needed("replicate")
 
     # Generate LLM response
@@ -69,7 +100,8 @@ def ask_chat_gpt(
     openai = tools.install_if_needed("openai")
 
     if token == "YOUR_KEY":
-        token = tools.get_value("openai_token")
+        token = get_token('openai_token', token=token)
+
 
     if token in ["YOUR_KEY", "", None]:
         IPython.display.display(
@@ -137,6 +169,8 @@ def ask_gpt(
         "image",
     ]:
         rofunc = ask_chat_gpt
+    elif model in ['deepseek-r1']:
+        rofunc = ask_deepseek_gpt
     elif model in llms:
         rofunc = ask_opensource_gpt
     else:
