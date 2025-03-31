@@ -48,6 +48,9 @@ def get_evaluation_code(teacher_data):
     if "def student_evaluation_function" not in evaluation_code:
         evaluation_code += """\ndef student_evaluation_function():\n    return bulkhours.gpt_eval("syntax", max_score=10)"""
 
+    # Remove_gpt:
+    evaluation_code = "\n".join([e for e in evaluation_code.split("\n") if ".gpt_eval" not in e])
+
     return evaluation_code
 
 

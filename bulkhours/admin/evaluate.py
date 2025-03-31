@@ -364,7 +364,7 @@ def evaluate_all(
     cell_answers = answers.get_answers(cinfo.cell_id, verbose=False)
 
     is_gpt = is_automatic_evaluation(evaluation_code)
-    if is_gpt:
+    if is_gpt and core.gpt.evaluation_instructions:
         if verbose:
             print(core.gpt.evaluation_instructions.replace("MAX_SCORE", str(max_score)))
         messages=[
@@ -376,6 +376,7 @@ def evaluate_all(
             messages.append({"role": "user", "content": "Here is the answer of student '%s':\n%s" % (stu, student_data.get_solution())})
 
         grades_gpt = core.gpt.evaluate_with_gpt(messages, max_score)
+
 
     for u in grades.index:
         email, auser = grades["mail"][u], grades["auser"][u]
@@ -416,7 +417,6 @@ def evaluate_all(
                 normalize_score=normalize_score,
                 max_score=max_score,
             )
-
 
         print(f"\x1b[35m\x1b[1m({grade.score}{comment}), \x1b[m", end="")
         grades.loc[u, cinfo.cell_id + ".n"] = grade.score

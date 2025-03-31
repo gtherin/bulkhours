@@ -400,7 +400,8 @@ def email_links_2students(virtual_room, title="", message="", cc="", fake=False)
 
 def send_mail(
     to="g*@gmail.com",
-    me="no-reply@bulkhours.fr",
+    #me="no-reply@bulkhours.fr",
+    me="bulkhours@gmail.com",
     password=None,
     message="",
     title="Subject",
