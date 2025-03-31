@@ -72,13 +72,7 @@ def ask_opensource_gpt(
     # Generate LLM response
     output = replicate.run(
         llms[model],
-        input={
-            "prompt": prompt,
-            "temperature": temperature,
-            "top_p": top_p,
-            "max_length": 512,
-            "repetition_penalty": 1,
-        },
+        input={"prompt": prompt, "temperature": temperature, "top_p": top_p, "max_length": 512, "repetition_penalty": 1},
     )
 
     full_response = ""
