@@ -38,22 +38,29 @@ def get_token(tokenkey, token="YOUR_KEY"):
     return tools.get_value(tokenkey)
 
 
-def ask_deepseek_gpt(prompt="",
+def ask_deepseek_gpt(
+    prompt="",
+    messages={},
     token="YOUR_KEY",
     model="deepseek-chat",
     temperature=0.5,
     top_p=1,
     size="256x256"
     ):
+
+    if messages is None:
+        messages = [{"role": "system", "content": evaluation_instructions}, {"role": "user", "content": prompt}]
+
     response = requests.post("https://api.deepseek.com/v1/chat/completions", 
                              headers={"Authorization": f"Bearer {get_token('DEEPSEEK_API_KEY', token=token)}"}, 
-                             json={"model": "deepseek-chat", "messages": [{"role": "user", "content": prompt}]})
+                             json={"model": "deepseek-chat", "messages": messages})
 
     return response.json()["choices"][0]["message"]["content"]
 
 
 def ask_opensource_gpt(
     prompt="",
+    messages=None,
     token="YOUR_KEY",
     model="mistral-7b",
     temperature=0.5,
@@ -70,14 +77,13 @@ def ask_opensource_gpt(
     }):
         full_response += str(event)
 
-    #input={"prompt": prompt, "temperature": temperature, "top_p": top_p, "max_length": 512, "repetition_penalty": 1},
-
     return full_response
 
 
 # https://stackoverflow.com/questions/75396481/openai-gpt-3-api-error-this-models-maximum-context-length-is-4097-tokens
 def ask_chat_gpt(
     prompt="",
+    messages=None,
     token="YOUR_KEY",
     model="gpt-4o-mini",
     temperature=0.5,
@@ -109,19 +115,18 @@ Vous devez créer une clé d'API
         IPython.display.display(IPython.display.Image(url=image_url))
         return
 
+    if messages is None:
+        messages = [{"role": "system", "content": evaluation_instructions}, {"role": "user", "content": prompt}]
+
     # Ask chat-gpt
-    completion = evaluation_client.chat.completions.create(
-        model=model,
-        messages=[{"role": "system", "content": evaluation_instructions}, {"role": "user", "content": prompt}],
-        temperature=temperature,
-        top_p=top_p,
-    )
+    completion = evaluation_client.chat.completions.create(model=model, messages=messages, temperature=temperature, top_p=top_p)
     # Get content
     return completion.choices[0].message.content
 
 
 def ask_gpt(
     prompt="",
+    messages=None,
     model="gpt-4o-mini",
     token="YOUR_KEY",
     is_code=False,
@@ -164,8 +169,12 @@ def ask_gpt(
     else:
         raise Exception(f"Model {model} is unknown.")
 
+    if messages is None:
+        messages = [{"role": "system", "content": evaluation_instructions}, {"role": "user", "content": prompt}]
+
     content = rofunc(
         prompt=prompt,
+        messages=messages,
         token=token,
         model=model,
         temperature=temperature,
