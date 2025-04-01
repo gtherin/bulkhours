@@ -16,7 +16,7 @@ tokens = {}
 evaluation_model = "gpt-4o-mini"
 evaluation_client = None
 
-llms = {"mistral-7b": "mistral-7b-v0.1", "llama-3-8b": "meta/meta-llama-3-8b-instruct"}
+llms = {"mistral-7b": "mistralai/mistral-7b-v0.1", "llama-3-8b": "meta/meta-llama-3-8b-instruct"}
 
 
 def get_token(tokenkey, token="YOUR_KEY"):
@@ -66,9 +66,9 @@ def ask_opensource_gpt(
     full_response = ""
     for event in replicate.stream(llms[model], input={
         "prompt": prompt,
-        "max_new_tokens": 512, "temperature": temperature, "top_p": top_p, "repetition_penalty": 1
+        "max_new_tokens": 512, #"temperature": temperature, "top_p": top_p, "repetition_penalty": 1
     }):
-        full_response += event
+        full_response += str(event)
 
     #input={"prompt": prompt, "temperature": temperature, "top_p": top_p, "max_length": 512, "repetition_penalty": 1},
 
