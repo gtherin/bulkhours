@@ -16,7 +16,7 @@ tokens = {}
 evaluation_model = "gpt-4o-mini"
 evaluation_client = None
 
-llms = {"mistral-7b": "mistralai/mistral-7b-v0.1", "llama-3-8b": "meta/meta-llama-3-8b-instruct"}
+llms = {"llama-3-8b": "meta/meta-llama-3-8b-instruct"}
 
 
 def get_token(tokenkey, token="YOUR_KEY"):
@@ -45,15 +45,21 @@ def ask_deepseek_gpt(
     model="deepseek-chat",
     temperature=0.5,
     top_p=1,
-    size="256x256"
+    size="256x256",
     ):
 
     if messages is None:
         messages = [{"role": "user", "content": prompt}]
 
-    response = requests.post("https://api.deepseek.com/v1/chat/completions", 
-                             headers={"Authorization": f"Bearer {get_token('DEEPSEEK_API_KEY', token=token)}"}, 
-                             json={"model": "deepseek-chat", "messages": messages})
+    if "mistral" in model: 
+        server = "https://api.mistral.ai/v1/chat/completions"
+        stoken = get_token('MISTRAL_API_KEY', token=token)
+    else:
+        server = "https://api.deepseek.com/v1/chat/completions"
+        stoken = get_token('DEEPSEEK_API_KEY', token=token)
+        model = "deepseek-chat"
+
+    response = requests.post(server, headers={"Authorization": f"Bearer {stoken}"}, json={"model": model, "messages": messages})
 
     return response.json()["choices"][0]["message"]["content"]
 
@@ -161,7 +167,7 @@ def ask_gpt(
         "image",
     ]:
         rofunc = ask_chat_gpt
-    elif model in ['deepseek-r1']:
+    elif model in ['deepseek-r1'] or "mistral" in model:
         rofunc = ask_deepseek_gpt
     elif model in llms:
         rofunc = ask_opensource_gpt
@@ -253,11 +259,7 @@ def get_grade(student_data, teacher_data, max_score, token="YOUR_KEY", evalcode=
 def evaluate_with_gpt(messages, max_score, model, temperature=0, top_p=0.5):
 
     if model != "chat-gpt":
-        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        print(messages)
         data = ask_gpt(messages=messages, model=model, raw=True, temperature=temperature, top_p=top_p)
-        print("HHHHHHHHHHHHHHHHHHHH")
-        print(data)
     else:
         completion = evaluation_client.chat.completions.create(model="gpt-4o-mini", messages=messages, temperature=temperature, top_p=top_p)
         data = completion.choices[0].message.content
