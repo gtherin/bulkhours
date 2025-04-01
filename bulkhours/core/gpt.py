@@ -9,20 +9,14 @@ import requests
 from . import tools
 from .grade import Grade
 
-evaluation_instructions = None
+evaluation_instructions = ""
 evaluation_openai_token = "YOUR_KEY"
 evaluation_replicate_token = "YOUR_KEY"
 tokens = {}
 evaluation_model = "gpt-4o-mini"
 evaluation_client = None
 
-# fmt: off
-llms = {
-    "mistral-7b": "mistralai/mistral-7b-instruct-v0.1:83b6a56e7c828e667f21fd596c338fd4f0039b46bcfa18d973e8e70e455fda70",
-    "llama-2-70b": "meta/llama-2-70b-chat:2d19859030ff705a87c746f7e96eea03aefb71f166725aee39692f1476566d48",
-    "llama-2-13b": "a16z-infra/llama13b-v2-chat:df7690f1994d94e96ad9d568eac121aecf50684a0b0963b25a41cc40061269e5",
-}
-# fmt: on
+llms = {"mistral-7b": "mistral-7b-v0.1", "llama-3-8b": "meta/meta-llama-3-8b-instruct"}
 
 
 def get_token(tokenkey, token="YOUR_KEY"):
