@@ -167,7 +167,7 @@ def ask_gpt(
         "image",
     ]:
         rofunc = ask_chat_gpt
-    elif model in ['deepseek-r1'] or "mistral" in model:
+    elif model in ['deepseek-r1'] or "istral" in model or "ixtral" in model or "estral" in model:
         rofunc = ask_deepseek_gpt
     elif model in llms:
         rofunc = ask_opensource_gpt
