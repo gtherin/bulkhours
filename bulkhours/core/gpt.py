@@ -49,7 +49,7 @@ def ask_deepseek_gpt(
     ):
 
     if messages is None:
-        messages = [{"role": "system", "content": evaluation_instructions}, {"role": "user", "content": prompt}]
+        messages = [{"role": "user", "content": prompt}]
 
     response = requests.post("https://api.deepseek.com/v1/chat/completions", 
                              headers={"Authorization": f"Bearer {get_token('DEEPSEEK_API_KEY', token=token)}"}, 
@@ -72,8 +72,7 @@ def ask_opensource_gpt(
 
     full_response = ""
     for event in replicate.stream(llms[model], input={
-        "prompt": prompt,
-        "max_new_tokens": 512, #"temperature": temperature, "top_p": top_p, "repetition_penalty": 1
+        "prompt": prompt, "max_new_tokens": 512, #"temperature": temperature, "top_p": top_p, "repetition_penalty": 1
     }):
         full_response += str(event)
 
@@ -116,7 +115,7 @@ Vous devez créer une clé d'API
         return
 
     if messages is None:
-        messages = [{"role": "system", "content": evaluation_instructions}, {"role": "user", "content": prompt}]
+        messages = [{"role": "user", "content": prompt}]
 
     # Ask chat-gpt
     completion = evaluation_client.chat.completions.create(model=model, messages=messages, temperature=temperature, top_p=top_p)
@@ -168,9 +167,6 @@ def ask_gpt(
         rofunc = ask_opensource_gpt
     else:
         raise Exception(f"Model {model} is unknown.")
-
-    if messages is None:
-        messages = [{"role": "system", "content": evaluation_instructions}, {"role": "user", "content": prompt}]
 
     content = rofunc(
         prompt=prompt,
@@ -257,8 +253,10 @@ def get_grade(student_data, teacher_data, max_score, token="YOUR_KEY", evalcode=
 def evaluate_with_gpt(messages, max_score, model, temperature=0, top_p=0.5):
 
     if model != "chat-gpt":
+        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         print(messages)
-        data = ask_gpt(messages, model=model, raw=True, temperature=temperature, top_p=top_p)
+        data = ask_gpt(messages=messages, model=model, raw=True, temperature=temperature, top_p=top_p)
+        print("HHHHHHHHHHHHHHHHHHHH")
         print(data)
     else:
         completion = evaluation_client.chat.completions.create(model="gpt-4o-mini", messages=messages, temperature=temperature, top_p=top_p)
