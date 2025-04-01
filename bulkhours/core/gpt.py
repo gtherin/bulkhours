@@ -248,7 +248,7 @@ def get_grade(student_data, teacher_data, max_score, token="YOUR_KEY", evalcode=
 def evaluate_with_gpt(messages, max_score, model, temperature=0, top_p=0.5):
 
     if model != "chat-gpt":
-        data = bulkhours.core.gpt.ask_gpt(messages, model=model, raw=True, temperature=temperature, top_p=top_p)
+        data = ask_gpt(messages, model=model, raw=True, temperature=temperature, top_p=top_p)
     else:
         completion = evaluation_client.chat.completions.create(model="gpt-4o-mini", messages=messages, temperature=temperature, top_p=top_p)
         data = completion.choices[0].message.content
