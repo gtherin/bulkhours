@@ -63,15 +63,14 @@ def ask_opensource_gpt(
     os.environ["REPLICATE_API_TOKEN"] = get_token('REPLICATE_API_TOKEN', token=token)
     replicate = tools.install_if_needed("replicate")
 
-    # Generate LLM response
-    output = replicate.run(
-        llms[model],
-        input={"prompt": prompt, "temperature": temperature, "top_p": top_p, "max_length": 512, "repetition_penalty": 1},
-    )
-
     full_response = ""
-    for item in output:
-        full_response += item
+    for event in replicate.stream(llms[model], input={
+        "prompt": prompt,
+        "max_new_tokens": 512, "temperature": temperature, "top_p": top_p, "repetition_penalty": 1
+    }):
+        full_response += event
+
+    #input={"prompt": prompt, "temperature": temperature, "top_p": top_p, "max_length": 512, "repetition_penalty": 1},
 
     return full_response
 
