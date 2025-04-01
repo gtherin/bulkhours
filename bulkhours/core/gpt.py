@@ -159,13 +159,7 @@ def ask_gpt(
 
     """
 
-    if model in [
-        "gpt-4-1106-preview",
-        "gpt-4o-mini",
-        "gpt-4-32k-0613",
-        "gpt-3.5-turbo-0125",
-        "image",
-    ]:
+    if model in ["gpt-4-1106-preview", "gpt-4o-mini", "gpt-4-32k-0613", "gpt-3.5-turbo-0125", "image"]:
         rofunc = ask_chat_gpt
     elif model in ['deepseek-r1'] or "istral" in model or "ixtral" in model or "estral" in model:
         rofunc = ask_deepseek_gpt
