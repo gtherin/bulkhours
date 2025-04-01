@@ -214,6 +214,7 @@ def evaluate(
     normalize_score=True,
     black_format=False,
     delete_solution=False,
+    model="chat-gpt",
     **kwargs,
 ):
     if virtual_room is not None:
@@ -236,6 +237,7 @@ def evaluate(
             force_grades=force_grades,
             normalize_score=normalize_score,
             delete_solution=delete_solution,
+            model=model,
         )
 
     if cell_id == "NEXT":
@@ -334,6 +336,7 @@ def evaluate_all(
     force_grades=False,
     normalize_score=True,
     delete_solution=False,
+    model="chat-gpt",
 ):
     grades = tools.get_users_list(no_admin=False)
 
@@ -375,8 +378,7 @@ def evaluate_all(
             student_data = core.CellParser.crunch_data(cinfo=cinfo, data=cell_answers[stu], user=stu)
             messages.append({"role": "user", "content": "Here is the answer of student '%s':\n%s" % (stu, student_data.get_solution())})
 
-        grades_gpt = core.gpt.evaluate_with_gpt(messages, max_score)
-
+        grades_gpt = core.gpt.evaluate_with_gpt(messages, max_score, model)
 
     for u in grades.index:
         email, auser = grades["mail"][u], grades["auser"][u]
