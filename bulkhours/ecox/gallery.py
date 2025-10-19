@@ -78,7 +78,7 @@ def plot_mean_median(ax, pdf, fac=1.2, mean=True):
     # Accentuate diff between mean and median
     cartoon_median = pdf.median() + fac * (pdf.median() - pdf.mean())
     if mean:
-        ax.vlines(x=pdf.mean(), ymin=0, ymax=pdf.pdf(pdf.mean()), color="#C70039", ls="dashed", label=" $\mu$: mean")
+        ax.vlines(x=pdf.mean(), ymin=0, ymax=pdf.pdf(pdf.mean()), color=r"#C70039", ls=r"dashed", label=r" $\mu$: mean")
     ax.vlines(
         x=cartoon_median, ymin=0, ymax=pdf.pdf(cartoon_median), color="#581845", ls="dotted", label=r"$\nu$: median"
     )
@@ -190,17 +190,17 @@ def plot_ci(ax=None, nob=100):
     x = np.linspace(-3, 3, nob)
     ax.fill_between(x, 0.0 * x, pdf.pdf(x), label="", alpha=0.2)
 
-    annotate(ax, "$1\sigma=68.27\%$", -2.8, 0.40, c="#C70039")
-    annotate(ax, "$2\sigma=95.45\%$", -2.8, 0.35, c="#581845")
-    annotate(ax, "$3\sigma=99.73\%$", -2.8, 0.3, c="#FF5733")
+    annotate(ax, r"$1\sigma=68.27\%$", -2.8, 0.40, c=r"#C70039")
+    annotate(ax, r"$2\sigma=95.45\%$", -2.8, 0.35, c=r"#581845")
+    annotate(ax, r"$3\sigma=99.73\%$", -2.8, 0.3, c=r"#FF5733")
 
-    annotate(ax, "$1.96\sigma=95\%$", 2.8, 0.35, c="#581845")
-    annotate(ax, "$2.58\sigma=99\%$", 2.8, 0.3, c="#FF5733")
+    annotate(ax, r"$1.96\sigma=95\%$", 2.8, 0.35, c=r"#581845")
+    annotate(ax, r"$2.58\sigma=99\%$", 2.8, 0.3, c=r"#FF5733")
 
     set_title(ax, "Norm: Confidence Intervals", yvisible=True)
     ax.set_xticks(
         [-3, -2, -1, 1, 2, 3],
-        ["-$3\sigma$", "$-2\sigma$", "$-1\sigma$", "$1\sigma$", "$2\sigma$", "$3\sigma$"],
+        ["-$3\sigma$", r"$-2\sigma$", r"$-1\sigma$", r"$1\sigma$", r"$2\sigma$", r"$3\sigma$"],
     )
 
 def plot_gallery_r3(axes=None):

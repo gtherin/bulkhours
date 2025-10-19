@@ -65,8 +65,8 @@ class Poly2dr:
 
         text = f"""### Tableau de signes:\n"""
 
-        labels = "|$x$|$-\infty$| |"
-        signs = "|$f(x)$| |"
+        labels = r"|$x$|$-\infty$| |"
+        signs = r"|$f(x)$| |"
 
         if self.delta >= 0:
             labels += f"${self.sx1}$| |"
@@ -76,7 +76,7 @@ class Poly2dr:
             labels += f"${self.sx2}$| |"
             signs += f"{ms}|0|"
 
-        labels += "$+\infty$|"
+        labels += r"$+\infty$|"
         signs += f"{s}| |"
 
         separators = "---".join(["|"] * labels.count("|"))
