@@ -29,14 +29,14 @@ default_configs = {
         "l": r"$d_{\mathrm{soleil} \mathrm{PAR}} = VALUNI$",
         "r": 2,
     },
-    "R_km": {"c": "Rayon", "u": "km", "l": r"$R_{\mathrm{PAR}} = VALUNI$", "r": 0},
+    "R_km": {"c": "Rayon", r"u": "km", r"l": r"$R_{\mathrm{PAR}} = VALUNI$", r"r": 0},
     "d_solm": {
         "c": "Distance au soleil",
         "u": "m",
         "l": r"$d_{\mathrm{soleil} \mathrm{PAR}} = VALUNI$",
         "r": 2,
     },
-    "M_kg": {"c": "Masse", "u": "kg", "l": r"$M_{\mathrm{PAR}} = VALUNI$"},
+    "M_kg": {"c": "Masse", r"u": "kg", r"l": r"$M_{\mathrm{PAR}} = VALUNI$"},
     "T_C": {
         "c": "Temperature moyenne",
         "u": "°C",
@@ -49,7 +49,7 @@ default_configs = {
         "l": r"$T_{\mathrm{PAR}} = VALUNI$",
         "r": 1,
     },
-    "L_W": {"c": "Luminosité", "u": "W", "l": r"$L_{\mathrm{PAR}} = VALUNI$"},
+    "L_W": {"c": "Luminosité", r"u": "W", r"l": r"$L_{\mathrm{PAR}} = VALUNI$"},
 }
 
 
@@ -61,7 +61,7 @@ class Constant:
         elif np.abs(v) > 1e5 or np.abs(v) < 1e-5:
             val = "%.{0}e".format(r) % v
             return (
-                "%s \cdot 10^{%s}" % (val.split("e")[0], int(val.split("e")[1]))
+                "%s \cdot 10^{%s}" % (val.split(r"e")[0], int(val.split(r"e")[1]))
                 if latex
                 else val
             )
@@ -138,7 +138,7 @@ class Constant:
         )
 
         if title and title == "mathrm":
-            self.latex = self.latex.replace("ID", "\mathrm{%s}" % self.i)
+            self.latex = self.latex.replace(r"ID", r"\mathrm{%s}" % self.i)
         elif title:
             self.latex = self.latex.replace("ID", title)
         self.latex = (
@@ -147,7 +147,7 @@ class Constant:
             .replace("UNI", self.fu())
         )
         self.latex = self.latex.replace("PAR", str(self.p)).replace(
-            "\mathrm{soleil}", "\odot"
+            "\mathrm{soleil}", r"\odot"
         )
 
     def help(self, size="+3", code=True, markdown=True, latex=False, as_str=False):

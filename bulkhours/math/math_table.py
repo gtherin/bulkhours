@@ -49,11 +49,11 @@ class MathTable:
             return md
 
     def to_latex(self, size=4, display=False):
-        sizes = {1: "\small", 2: "\normalsize", 3: "\large", 4: "\Large", 5: "\LARGE", 6: "\huge"}
+        sizes = {1: r"\small", 2: r"\normalsize", 3: r"\large", 4: r"\Large", 5: r"\LARGE", 6: r"\huge"}
 
-        md = """{%s \displaystyle \\\\
-  \\begin{array}{%s}
-  \hline \\\\
+        md = r"""{%s \displaystyle \\
+  \begin{array}{%s}
+  \hline \\
 """ % (
             sizes[size],
             "c".join(["|"] * (self.cols + 1)),
@@ -63,16 +63,16 @@ class MathTable:
             for col in range(self.cols):
                 md += r"%s & " % (self.header[col])
             md = md[:-2]
-            md += " \\\\ \\\\ \hline  \n"
+            md += r" \\ \hline  " + "\n"
 
         for row in range(len(self.data)):
             md += ""
             for col in range(self.cols):
                 md += r"%s & " % (self.data.loc[row, col].replace("$", ""))
             md = md[:-2]
-            md += " \\\\ \\\\ \hline  \n"
+            md += r" \\ \hline  " + "\n"
 
-        md += "\end{array}\\\\ \n}"
+        md += r"\end{array}\\ " + "\n}"
 
         if display:
             IPython.display.display(IPython.display.Math(md))

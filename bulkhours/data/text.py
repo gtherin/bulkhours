@@ -9,9 +9,9 @@ def _clean_tweet(text):
     #import emoji
     import html.parser
     
-    output = re.sub('http[\w\d\D./]+', '', text).strip() #remove url
+    output = re.sub(r'http[\w\d\D./]+', r'', text).strip() #remove url
     output = output.encode('ascii', 'ignore').decode('ascii') # remove emoji
-    output = re.sub('\s\s+', ' ', output).strip() # remove white spaces
+    output = re.sub(r'\s\s+', r' ', output).strip() # remove white spaces
     output = html.unescape(output) # escape html
     output = output.lower() # lower case
 
@@ -24,7 +24,7 @@ def clean_tweet(df):
 
 
 def _get_mention_handle(text):
-    output = list(set(re.findall('@\w+', text)))
+    output = list(set(re.findall(r'@\w+', text)))
     
     return output
 
@@ -34,7 +34,7 @@ def get_mention_handle(df):
     return df
 
 def _get_hashtag(text):    
-    output = list(set(re.findall('#\w+', text)))
+    output = list(set(re.findall(r'#\w+', text)))
     return output
 
 def get_hashtag(df):
