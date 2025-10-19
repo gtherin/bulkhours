@@ -6,7 +6,7 @@ import time
 
 """
 sudo ufw allow 8678
-cd /home/ubuntu/bulkhours && streamlit run evaluate.py --server.address appv26.bulkhours.fr --server.port 8678
+cd /home/ubuntu/bulkhours && streamlit run evaluate.py --server.address appv27.bulkhours.fr --server.port 8678
 cd /home/ubuntu/bulkhours && streamlit run evaluate.py --server.address 0.0.0.0 --server.port 8678
 """
 
