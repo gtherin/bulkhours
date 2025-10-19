@@ -61,7 +61,7 @@ class Constant:
         elif np.abs(v) > 1e5 or np.abs(v) < 1e-5:
             val = "%.{0}e".format(r) % v
             return (
-                "%s \cdot 10^{%s}" % (val.split(r"e")[0], int(val.split(r"e")[1]))
+                r"%s \cdot 10^{%s}" % (val.split("e")[0], int(val.split("e")[1]))
                 if latex
                 else val
             )
@@ -90,7 +90,7 @@ class Constant:
                 du.append(u.replace(u[-1], f"^{u[-1]}"))
             else:
                 du.append(u)
-        return "\cdot ".join(du)
+    return r"\cdot ".join(du)
 
     def __init__(
         self,
@@ -147,7 +147,7 @@ class Constant:
             .replace("UNI", self.fu())
         )
         self.latex = self.latex.replace("PAR", str(self.p)).replace(
-            "\mathrm{soleil}", r"\odot"
+            r"\mathrm{soleil}", r"\odot"
         )
 
     def help(self, size="+3", code=True, markdown=True, latex=False, as_str=False):

@@ -368,22 +368,22 @@ Longue_duree,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,nd,n
     category="Economics",
     enrich_data="https://github.com/gtherin/bulkhours/blob/main/bulkhours/data/gmacro.py",
     ref_source="https://www.statsmodels.org/0.6.1/datasets/generated/macrodata.html",
-    columns_description="""| Column   |      Info |
+    columns_description=r"""| Column   |      Info |
 |-----------|:-----------|
 | year      |  1959q1 - 2009q3 |
 | quarter   |    1-4 |
-| realgdp   | Real gross domestic product (Bil. of chained 2005\$, seasonally adjusted annual rate) |         
-| realcons  |  Real personal consumption expenditures (Bil. of chained 2005\$, seasonally adjusted annual rate)| 
-| realinv   |  Real gross private domestic investment (Bil. of chained 2005\$, seasonally adjusted annual rate)| 
-| realgovt  |  Real federal consumption expenditures & gross investment(Bil. of chained 2005 US$, seasonally adjusted annual rate)| 
-| realdpi   |  Real private disposable income (Bil. of chained 2005 US$, seasonally adjusted annual rate)| 
-| cpi       |  End of the quarter consumer price index for all urban consumers: all items (1982-84 = 100, seasonally adjusted).| 
-| m1        |  End of the quarter M1 nominal money stock (Seasonally adjusted)| 
-| tbilrate  |  Quarterly monthly average of the monthly 3-month treasury bill: secondary market rate| 
-| unemp     |  Seasonally adjusted unemployment rate (%)| 
-| pop       |  End of the quarter total population: all ages incl. armed forces over seas| 
-| infl      |  Inflation rate (ln(cpi_{t}/cpi_{t-1}) * 400)| 
-| realint   |  Real interest rate (tbilrate - infl)| 
+| realgdp   | Real gross domestic product (Bil. of chained 2005\$, seasonally adjusted annual rate) |
+| realcons  |  Real personal consumption expenditures (Bil. of chained 2005\$, seasonally adjusted annual rate)|
+| realinv   |  Real gross private domestic investment (Bil. of chained 2005\$, seasonally adjusted annual rate)|
+| realgovt  |  Real federal consumption expenditures & gross investment(Bil. of chained 2005 US\$, seasonally adjusted annual rate)|
+| realdpi   |  Real private disposable income (Bil. of chained 2005 US\$, seasonally adjusted annual rate)|
+| cpi       |  End of the quarter consumer price index for all urban consumers: all items (1982-84 = 100, seasonally adjusted).|
+| m1        |  End of the quarter M1 nominal money stock (Seasonally adjusted)|
+| tbilrate  |  Quarterly monthly average of the monthly 3-month treasury bill: secondary market rate|
+| unemp     |  Seasonally adjusted unemployment rate (%)|
+| pop       |  End of the quarter total population: all ages incl. armed forces over seas|
+| infl      |  Inflation rate (ln(cpi_{t}/cpi_{t-1}) * 400)|
+| realint   |  Real interest rate (tbilrate - infl)|
 """,
 )
 def get_us_gdp(self, simplify=True):

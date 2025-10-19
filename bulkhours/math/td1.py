@@ -35,7 +35,7 @@ def get_solution2(self, x2=None, y2=None):
     # Center points are solutions
     if (">" in self.constraint and self.a < 0) or ("<" in self.constraint and self.a > 0):
         tail_color, middle_color = colors["is_out"], colors["is_in"]
-        gleg, lleg = Line2D([0], [0], color=colors["is_in"]), "$x \> %s$ et $x < %s$" % (self.sx1, self.sx2)
+        gleg, lleg = Line2D([0], [0], color=colors["is_in"]), r"$x \> %s$ et $x < %s$" % (self.sx1, self.sx2)
 
     ax.plot(df[df["x"] < self.x1]["x"], df[df["x"] < self.x1]["y"] * 0, color=tail_color)
     ax.plot(df[self.a * df["y"] < 0]["x"], df[self.a * df["y"] < 0]["y"] * 0, color=middle_color)
@@ -46,9 +46,9 @@ def get_solution2(self, x2=None, y2=None):
         ax.plot([self.x2], [0], "o", markersize=20, color=colors["is_in"])
         if gleg is None:
             if self.sx1 == self.sx2:
-                gleg, lleg = Line2D([], [], color=colors["is_in"]), "$x \in \{%s\}$" % (self.sx1)
+                gleg, lleg = Line2D([], [], color=colors["is_in"]), r"$x \in \{%s\}$" % (self.sx1)
             else:
-                gleg, lleg = Line2D([], [], color=colors["is_in"]), "$x \in \{%s, %s\}$" % (self.sx1, self.sx2)
+                gleg, lleg = Line2D([], [], color=colors["is_in"]), r"$x \in \{%s, %s\}$" % (self.sx1, self.sx2)
         else:
             gleg, lleg = Line2D([0], [0], color=colors["is_in"], marker="o", markersize=20), lleg.replace(
                 "<", " <= "

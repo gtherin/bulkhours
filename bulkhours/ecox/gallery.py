@@ -200,7 +200,7 @@ def plot_ci(ax=None, nob=100):
     set_title(ax, "Norm: Confidence Intervals", yvisible=True)
     ax.set_xticks(
         [-3, -2, -1, 1, 2, 3],
-        ["-$3\sigma$", r"$-2\sigma$", r"$-1\sigma$", r"$1\sigma$", r"$2\sigma$", r"$3\sigma$"],
+        [r"-$3\sigma$", r"$-2\sigma$", r"$-1\sigma$", r"$1\sigma$", r"$2\sigma$", r"$3\sigma$"]
     )
 
 def plot_gallery_r3(axes=None):
