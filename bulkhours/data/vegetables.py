@@ -90,7 +90,7 @@ def download_kaggle_data(filename, chunck_size=40960):
     print(dfilename, destination_path)
     with ZipFile(dfilename) as zfile:
         zfile.extractall(destination_path)
-    os.system(f"mv {destination_path}Vegetable\ Images {destination_path}{filename}")
+    os.system(f'mv "{destination_path}Vegetable Images" "{destination_path}{filename}"')
 
     #huggingface_hub.snapshot_download(repo_id="guydegnol/vegetables", repo_type="model",
     #                                  allow_patterns=["*.h5", "*.json"], local_dir=f"{destination_path}{filename}")
