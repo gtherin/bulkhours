@@ -1,7 +1,6 @@
 pandas
 ipython
 lxml
-tensorflow
 graphviz
 bs4
 scipy
@@ -16,3 +15,4 @@ ipywidgets
 jinja2
 PyJWT
 Pyarrow
+#tensorflow
