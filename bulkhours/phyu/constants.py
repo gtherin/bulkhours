@@ -90,7 +90,7 @@ class Constant:
                 du.append(u.replace(u[-1], f"^{u[-1]}"))
             else:
                 du.append(u)
-    return r"\cdot ".join(du)
+        return r"\cdot ".join(du)
 
     def __init__(
         self,
