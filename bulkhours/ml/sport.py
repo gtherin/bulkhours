@@ -76,3 +76,37 @@ def get_activities() -> pd.DataFrame:
             df[col] = (df[col].astype(str).str.replace(",", ".").astype(float, errors="ignore"))
 
     return df
+
+
+def read_fit_file(activity):
+
+    path = Path(f"/content/drive/MyDrive/bulkcats/sport/strava/{activity.filename}")
+
+    # Open the gzip file and read its content into memory
+    with gzip.open(path, 'rb') as f:
+        fit_content = f.read()
+
+    # Parse the FIT data from the content in memory
+    fitfile = FitFile(fit_content)
+
+    # Get all data messages that are of type 'record'
+    records = []
+    for record in fitfile.get_messages('record'):
+        # Get all data fields from the record
+        record_data = {}
+        for data_field in record.fields:
+            record_data[data_field.name] = data_field.value
+        records.append(record_data)
+
+    # Create a pandas DataFrame
+    return pd.DataFrame(records)
+
+def get_activity(index, atype):
+    # ['course_a_pied', 'natation', 'velo', 'randonnee', 'velo_virtuel', 'kayak', 'entra_nement', 'stand_up_paddle']
+    activity = activities.iloc[index].dropna()
+    print(activity)
+    if '.fit' in activity.filename:
+        df = read_fit_file(activity)
+        df = df[[c for c in df.columns if not c.startswith('unknown_')]]
+        return df
+    error
