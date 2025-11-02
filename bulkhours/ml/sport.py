@@ -6,6 +6,13 @@ import matplotlib.pyplot as plt
 def get_activities() -> pd.DataFrame:
     """Clean and compact Strava French export column names."""
 
+    from pathlib import Path
+    import gzip
+    from fitparse import FitFile
+    import re
+    import dateparser
+
+
     df = pd.read_csv("/content/drive/MyDrive/bulkcats/sport/strava/activities.csv")
 
     mapping = {
