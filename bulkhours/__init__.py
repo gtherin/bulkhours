@@ -6,7 +6,7 @@ from .core.timeit import timeit  # noqa
 from .core import tools  # noqa
 from .core.tools import html  # noqa
 from .math import ma325
-from .rl import sport  # noqa
+from .ml import sport  # noqa
 
 # from . import data  # noqa
 from .data import (
