@@ -12,8 +12,7 @@ def get_activities(folder_name) -> pd.DataFrame:
     import re
     import dateparser
 
-
-    df = pd.read_csv("{folder_name}/activities.csv")
+    df = pd.read_csv(f"{folder_name}/activities.csv")
 
     mapping = {
         "ID de l'activité": "activity_id",
