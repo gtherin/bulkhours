@@ -123,12 +123,13 @@ class Activities:#(pd.DataFrame):
     def __init__(self, folder_name, *args, athlete_name=None, **kwargs):
         #super().__init__(*args, **kwargs)
         self.athlete_name = athlete_name
-        self._folder_name = _folder_name
-        self._activities = get_activities(self._folder_name)
+        self.folder_name = folder_name
+        self.df = get_activities(self.folder_name)
 
     def get_activity(self, index, atype=None):
         # ['course_a_pied', 'natation', 'velo', 'randonnee', 'velo_virtuel', 'kayak', 'entra_nement', 'stand_up_paddle']
         if atype is not None:
-            print('aaaa')
-        activity = self._activities.iloc[index].dropna()
-        return Activity(self._folder_name, activity, atype)
+            activity = self.df[self.df['type'] == atype].iloc[index].dropna()
+        else:
+            activity = self.df.iloc[index].dropna()
+        return Activity(self.folder_name, activity, atype)
