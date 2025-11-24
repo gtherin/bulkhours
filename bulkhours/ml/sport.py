@@ -80,6 +80,12 @@ def get_activities() -> pd.DataFrame:
 
 def read_fit_file(activity):
 
+    from pathlib import Path
+    import gzip
+    from fitparse import FitFile
+    import re
+    import dateparser
+
     path = Path(f"/content/drive/MyDrive/bulkcats/sport/strava/{activity.filename}")
 
     # Open the gzip file and read its content into memory
@@ -101,12 +107,23 @@ def read_fit_file(activity):
     # Create a pandas DataFrame
     return pd.DataFrame(records)
 
-def get_activity(index, atype):
-    # ['course_a_pied', 'natation', 'velo', 'randonnee', 'velo_virtuel', 'kayak', 'entra_nement', 'stand_up_paddle']
-    activity = activities.iloc[index].dropna()
-    print(activity)
-    if '.fit' in activity.filename:
-        df = read_fit_file(activity)
-        df = df[[c for c in df.columns if not c.startswith('unknown_')]]
-        return df
-    error
+class Activity(pd.DataFrame):
+    def __init__(self, *args, atype=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.atype = atype
+
+class Activities(pd.DataFrame):
+    def __init__(self, *args, athlete_name=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.athlete_name = athlete_name
+        self.activities = get_activities()
+
+    def get_activity(self, index, atype):
+        # ['course_a_pied', 'natation', 'velo', 'randonnee', 'velo_virtuel', 'kayak', 'entra_nement', 'stand_up_paddle']
+        activity = self.activities.iloc[index].dropna()
+        print(activity)
+        if '.fit' in activity.filename:
+            df = read_fit_file(activity)
+            df = df[[c for c in df.columns if not c.startswith('unknown_')]]
+            return df
+        error
