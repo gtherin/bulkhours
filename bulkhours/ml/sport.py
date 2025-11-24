@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def get_activities() -> pd.DataFrame:
+def get_activities(folder_name) -> pd.DataFrame:
     """Clean and compact Strava French export column names."""
 
     from pathlib import Path
@@ -13,7 +13,7 @@ def get_activities() -> pd.DataFrame:
     import dateparser
 
 
-    df = pd.read_csv("/content/drive/MyDrive/bulkcats/sport/strava/activities.csv")
+    df = pd.read_csv("{folder_name}/activities.csv")
 
     mapping = {
         "ID de l'activité": "activity_id",
@@ -78,7 +78,7 @@ def get_activities() -> pd.DataFrame:
     return df
 
 
-def read_fit_file(activity):
+def read_fit_file(folder_name, activity):
 
     from pathlib import Path
     import gzip
@@ -86,7 +86,7 @@ def read_fit_file(activity):
     import re
     import dateparser
 
-    path = Path(f"/content/drive/MyDrive/bulkcats/sport/strava/{activity.filename}")
+    path = Path(f"{folder_name}/{activity.filename}")
 
     # Open the gzip file and read its content into memory
     with gzip.open(path, 'rb') as f:
@@ -107,23 +107,28 @@ def read_fit_file(activity):
     # Create a pandas DataFrame
     return pd.DataFrame(records)
 
-class Activity(pd.DataFrame):
-    def __init__(self, *args, atype=None, **kwargs):
-        super().__init__(*args, **kwargs)
+class Activity:
+    def __init__(self, folder_name, info, atype=None, *args, **kwargs):
+        #super().__init__(*args, **kwargs)
         self.atype = atype
+        self.info = info
+        if '.fit' in self.info.filename:
+            df = read_fit_file(folder_name, self.info)
+            self.df = df[[c for c in df.columns if not c.startswith('unknown_')]]
+        else:
+            error
 
-class Activities(pd.DataFrame):
-    def __init__(self, *args, athlete_name=None, **kwargs):
-        super().__init__(*args, **kwargs)
+
+class Activities:#(pd.DataFrame):
+    def __init__(self, folder_name, *args, athlete_name=None, **kwargs):
+        #super().__init__(*args, **kwargs)
         self.athlete_name = athlete_name
-        self.activities = get_activities()
+        self._folder_name = _folder_name
+        self._activities = get_activities(self._folder_name)
 
-    def get_activity(self, index, atype):
+    def get_activity(self, index, atype=None):
         # ['course_a_pied', 'natation', 'velo', 'randonnee', 'velo_virtuel', 'kayak', 'entra_nement', 'stand_up_paddle']
-        activity = self.activities.iloc[index].dropna()
-        print(activity)
-        if '.fit' in activity.filename:
-            df = read_fit_file(activity)
-            df = df[[c for c in df.columns if not c.startswith('unknown_')]]
-            return df
-        error
+        if atype is not None:
+            print('aaaa')
+        activity = self._activities.iloc[index].dropna()
+        return Activity(self._folder_name, activity, atype)
