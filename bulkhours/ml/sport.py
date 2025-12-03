@@ -48,9 +48,10 @@ def format_activities(df) -> pd.DataFrame:
         'Fréquence cardiaque max..1': 'max_hr1',
         'Fréquence cardiaque moyenne': 'avg_hr',
         'Vitesse moyenne ajustée selon la pente': 'vmean_adjslope',
+
     }
 
-    columns = set(['Effort relatif', 'Température moyenne', 'Effort relatif.1', 'Puissance moyenne pondérée',
+    columns = set(['id', 'Effort relatif', 'Température moyenne', 'Effort relatif.1', 'Puissance moyenne pondérée',
        'Distance ajustée selon la pente', 'Intensité des précipitations', 'Couverture nuageuse', 'Signalé', 'Vitesse moyenne (temps écoulé)',
        'Longueur de piscine'] + list(mapping.keys()))
     df = df[list(columns)]
@@ -116,10 +117,9 @@ class Activity:
             error
 
 
-class Activities:#(pd.DataFrame):
+class Activities:
 
     def __init__(self, folder_name=None, gid=None, aid=None, athlete_name=None):
-        #super().__init__(*args, **kwargs)
         self.athlete_name = athlete_name
         self.folder_name = folder_name
 
