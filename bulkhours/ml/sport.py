@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def get_activities(folder_name) -> pd.DataFrame:
+def format_activities(df) -> pd.DataFrame:
     """Clean and compact Strava French export column names."""
 
     from pathlib import Path
@@ -11,8 +11,6 @@ def get_activities(folder_name) -> pd.DataFrame:
     from fitparse import FitFile
     import re
     import dateparser
-
-    df = pd.read_csv(f"{folder_name}/activities.csv")
 
     mapping = {
         "ID de l'activité": "activity_id",
@@ -119,11 +117,20 @@ class Activity:
 
 
 class Activities:#(pd.DataFrame):
-    def __init__(self, folder_name, *args, athlete_name=None, **kwargs):
+
+    def __init__(self, folder_name=None, gid=None, aid=None, athlete_name=None):
         #super().__init__(*args, **kwargs)
         self.athlete_name = athlete_name
         self.folder_name = folder_name
-        self.df = get_activities(self.folder_name)
+
+        if folder_name is not None:
+            self.df = pd.read_csv(f"{folder_name}/activities.csv")
+        else:
+            self.df = pd.read_csv(f"https://drive.google.com/uc?export=download&id={aid}")
+            alist = pd.read_json(f"https://drive.google.com/uc?export=download&id={gid}")
+            self.df = self.df.merge(alist.T, how='left', left_on="Nom du fichier", right_index=True)
+
+        self.df = format_activities(self.df)
 
     def get_activity(self, index, atype=None):
         # ['course_a_pied', 'natation', 'velo', 'randonnee', 'velo_virtuel', 'kayak', 'entra_nement', 'stand_up_paddle']
