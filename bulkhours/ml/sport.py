@@ -143,3 +143,23 @@ class Activities:
         else:
             activity = self.df.iloc[index].dropna()
         return Activity(self.folder_name, activity, atype)
+
+
+def get_vo2max_synthetic_data(n=200, random_state=42):
+    np.random.seed(random_state)
+
+    speed_5min = np.random.normal(15, 2, n)
+    hr_max = np.random.normal(185, 8, n)
+    age = np.random.normal(35, 10, n)
+    weight = np.random.normal(72, 10, n)   # <<< nouvelle variable
+
+    # VO2max synthétique (relation linéaire + bruit)
+    vo2max = 3.5 * speed_5min + 0.15 * hr_max - 0.2 * age - 0.1 * weight + np.random.normal(0, 3, n)
+
+    return pd.DataFrame({
+        "speed_5min": speed_5min,
+        "hr_max": hr_max,
+        "age": age,
+        "weight": weight,
+        "vo2max": vo2max
+    })
