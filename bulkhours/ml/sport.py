@@ -77,20 +77,22 @@ def format_activities(df) -> pd.DataFrame:
 
 def read_fit_file(folder_name, activity):
 
-    from pathlib import Path
+    import requests
     import gzip
+    import io
     from fitparse import FitFile
-    import re
-    import dateparser
 
-    path = Path(f"{folder_name}/{activity.filename}")
+    url = f"https://drive.google.com/uc?export=download&id={activity.id}"
 
-    # Open the gzip file and read its content into memory
-    with gzip.open(path, 'rb') as f:
-        fit_content = f.read()
+    # Download file bytes
+    response = requests.get(url)
+    data = response.content
 
-    # Parse the FIT data from the content in memory
-    fitfile = FitFile(fit_content)
+    # If file is gzipped, decompress it
+    fit_bytes = gzip.decompress(data)
+
+    # Load FIT
+    fitfile = FitFile(io.BytesIO(fit_bytes))
 
     # Get all data messages that are of type 'record'
     records = []
@@ -103,6 +105,7 @@ def read_fit_file(folder_name, activity):
 
     # Create a pandas DataFrame
     return pd.DataFrame(records)
+
 
 class Activity:
     def __init__(self, folder_name, info, atype=None, *args, **kwargs):
