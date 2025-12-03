@@ -48,7 +48,6 @@ def format_activities(df) -> pd.DataFrame:
         'Fréquence cardiaque max..1': 'max_hr1',
         'Fréquence cardiaque moyenne': 'avg_hr',
         'Vitesse moyenne ajustée selon la pente': 'vmean_adjslope',
-
     }
 
     columns = set(['id', 'Effort relatif', 'Température moyenne', 'Effort relatif.1', 'Puissance moyenne pondérée',
@@ -127,8 +126,10 @@ class Activities:
             self.df = pd.read_csv(f"{folder_name}/activities.csv")
         else:
             self.df = pd.read_csv(f"https://drive.google.com/uc?export=download&id={aid}")
-            alist = pd.read_json(f"https://drive.google.com/uc?export=download&id={gid}")
-            self.df = self.df.merge(alist.T, how='left', left_on="Nom du fichier", right_index=True)
+            alist = pd.read_json(f"https://drive.google.com/uc?export=download&id={gid}").T
+            alist['Nom du fichier'] = 'activities/' + alist.index
+
+            self.df = self.df.merge(alist, how='left', on="Nom du fichier")
 
         self.df = format_activities(self.df)
 
