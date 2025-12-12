@@ -203,7 +203,7 @@ def get_vo2max_synthetic_data(n=200, random_state=42):
         "vo2max": vo2max
     })
 
-def get_vo2max_synthetic_data(n=200, random_state=42):
+def get_pca_synthetic_data(n=200, random_state=42):
     rng = np.random.default_rng(0)
     n = 300
 
@@ -227,3 +227,4 @@ def get_vo2max_synthetic_data(n=200, random_state=42):
         "cadence":   X[:,3] * 4 + 88,
         "speed_5km": X[:,4] * 1.2 + 16
     })
+    return df
