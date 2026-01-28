@@ -3,20 +3,20 @@ import numpy as np
 
 
 class Athlete:
-    def __init__(self, *, is_female=True, age=46, 
-                 hr_max=None, vo2_max=52, weight=80, hr_rest=48, ftp=210):
+    def __init__(self, *, is_female=True, age=30, css=0.86
+                 hr_max=None, vo2_max=52, weight=70, hr_rest=48, ftp=210, v_max=27):
         # Basic
         self.is_female = is_female
         self.hr_max = hr_max if hr_max is not None else 220-age   # bpm
-        self.hr_rest = hr_rest   # bpm
-        self.weight = weight
+        self.hr_rest = hr_rest          # bpm
+        self.weight = weight            # kg
         # Performance
-        self.vo2_max = vo2_max # ml /kg / min
-        self.ftp = ftp # Watts
-        self.vma = self.vo2_max / 3.5
-        self.css = 450 / (12*60 + 55 - 4*60-12) # m/s
-        self.v_max = 3.6 * 100 / 13 # km/h
-        self.ASR = self.v_max - self.vma
+        self.vo2_max = vo2_max           # ml /kg / min
+        self.ftp = ftp                   # Watts
+        self.vma = self.vo2_max / 3.5    # km/h
+        self.css = css                   # m/s
+        self.v_max = v_max               # km/h
+        self.ASR = self.v_max - self.vma # km/h
         # Zones and efforts
         self.zones = [0.0, 0.6, 0.7, 0.8, 0.9, 1.05]
         self.trimp_a, self.trimp_b = (0.86, 1.67) if is_male else (0.64, 1.92)
