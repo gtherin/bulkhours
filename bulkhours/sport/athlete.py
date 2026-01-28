@@ -3,8 +3,8 @@ import numpy as np
 
 
 class Athlete:
-    def __init__(self, *, is_female=True, age=30, css=0.86
-                 hr_max=None, vo2_max=52, weight=70, hr_rest=48, ftp=210, v_max=27):
+    def __init__(self, *, is_female=True, age=30, css=1.0,
+                 hr_max=None, vo2_max=50, weight=70, hr_rest=450 ftp=200, v_max=20):
         # Basic
         self.is_female = is_female
         self.hr_max = hr_max if hr_max is not None else 220-age   # bpm
