@@ -18,7 +18,7 @@ class Athlete:
         self.ASR = self.v_max - self.vma # km/h
         # Zones and efforts
         self.zones = [0.0, 0.6, 0.7, 0.8, 0.9, 1.05]
-        self.trimp_a, self.trimp_b = (0.86, 1.67) if is_male else (0.64, 1.92)
+        self.trimp_a, self.trimp_b = (0.86, 1.67) if self.is_male else (0.64, 1.92)
 
     @property
     def is_male(self):
