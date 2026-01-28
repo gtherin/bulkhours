@@ -135,7 +135,7 @@ class Activities:
             self.df = self.df.merge(alist, how='left', on="Nom du fichier")
 
         self.df = format_activities(self.df)
-        self.format_date(df)
+        self.format_date()
 
     def format_date(self):
         months = {"janv.": "Jan", "févr.": "Feb", "mars": "Mar", "avr.": "Apr", "mai": "May", "juin": "Jun", 
