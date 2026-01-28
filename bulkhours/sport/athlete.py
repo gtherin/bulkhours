@@ -24,8 +24,8 @@ class Athlete:
     def is_male(self):
         return not self.is_female
 
-    def trimp_from_df(a, df):
-        df["IFC"] = (df["avg_hr"]-a.hr_rest) / (a.hr_max-a.hr_rest)
+    def trimp_from_df(self, df):
+        df["IFC"] = (df["avg_hr"]-self.hr_rest) / (self.hr_max-self.hr_rest)
         df["k"] = self.trimp_a * np.exp(self.trimp_b * df["IFC"])
         return df["elapsed_s"] / 60 * df["k"] * df["IFC"]
 
