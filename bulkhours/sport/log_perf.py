@@ -103,8 +103,8 @@ class Bike(Discipline):
         self.raw = LogModel(name='bike0', intercept=1.00, slope=-0.05)
 
     def predict_speed(self, athlete, df):
-        df['Speed (km/h)'] = ftp_to_speed(mbike0.predict(df[['Distance (km)']]) * ftp)
-        df['TriSpeed (km/h)'] = ftp_to_speed(mbike3.predict(df[['Distance (km)']]) * ftp)
+        df['Speed (km/h)'] = ftp_to_speed(self.raw.predict(df[['Distance (km)']]) * self.perf_max(athlete))
+        df['TriSpeed (km/h)'] = ftp_to_speed(self.min3.predict(df[['Distance (km)']]) * self.perf_max(athlete))
         return df
 
     def perf_max(self, athlete):
