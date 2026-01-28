@@ -135,6 +135,16 @@ class Activities:
             self.df = self.df.merge(alist, how='left', on="Nom du fichier")
 
         self.df = format_activities(self.df)
+        format_date(self.df)
+
+    def format_date(self):
+        months = {"janv.": "Jan", "févr.": "Feb", "mars": "Mar", "avr.": "Apr", "mai": "May", "juin": "Jun", 
+        "juil.": "Jul", "août": "Aug", "sept.": "Sep", "oct.": "Oct", "nov.": "Nov", "déc.": "Dec"}
+
+        s = self.df["date"]
+        for fr, en in months.items():
+            s = s.str.replace(fr, en, regex=False)
+        self.df["date"] = pd.to_datetime(s, format="%d %b %Y, %H:%M:%S")
 
     def get_activity(self, index, atype=None):
         # ['course_a_pied', 'natation', 'velo', 'randonnee', 'velo_virtuel', 'kayak', 'entra_nement', 'stand_up_paddle']
