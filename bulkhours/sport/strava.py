@@ -127,10 +127,12 @@ class Activities:
             self.df = pd.read_csv(f"{folder_name}/activities.csv")
         else:
             self.df = pd.read_csv(f"https://drive.google.com/uc?export=download&id={aid}")
-            self.df = self.df.merge(self.read_list(), how='left', on="filename")
 
         self.df = format_activities(self.df)
         self.format_date()
+        # Add app ids
+        self.df = self.df.merge(self.read_list(), how='left', on="filename")
+
 
     def read_list(self):
         alist = pd.read_json(f"https://drive.google.com/uc?export=download&id={self.gid}").T
