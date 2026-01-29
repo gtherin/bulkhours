@@ -37,10 +37,23 @@ class Athlete:
     def get_hr_zone_ts(self, hr):
         return pd.cut(hr, bins=self.zones, labels=["Z1", "Z2", "Z3", "Z4", "Z5"], right=False)
 
-    def plot_hr_zone(self, ax):
+    def plot_hr_zone(self, df):
+        fig, ax = plt.subplots(figsize=(14, 5))
         # Karvonen formula
         hr = lambda x: x * (self.hr_max - self.hr_rest) + self.hr_rest
         for i, name, color in zip(range(5),
                                   ["Z1 - Very light", "Z2 - Light", "Z3 - Moderate", "Z4 - Hard", "Z5 - Maximum"],
                                   ["#dddddd", "#b5d6ea", "#7fd47f", "#f0b04a", "#e05b4f"]):
             ax.axhspan(hr(self.zones[i]), hr(self.zones[i+1]), facecolor=color, alpha=0.6, label=name)
+        # HR time-series
+        avg_hr = df["heart_rate"].mean()
+        trimp = athlete.trimp(df.index[-1], avg_hr)
+        ax.plot(df.index, df["heart_rate"], color="red", linewidth=1.4, label=f"Heart rate (Avg HR = {avg_hr:.1f} trimp={trimp:.0f})")
+        ax.axhline(avg_hr, color="purple", linestyle="--", linewidth=1, alpha=0.8)
+        # Formatting
+        ax.set_title("Heart Rate with Training Zones", fontsize=16)
+        ax.set_ylabel("HR (bpm)")
+        ax.set_xlabel("Time")
+        ax.set_ylim(0, athlete.hr_max * 1.05)
+        ax.legend()
+
