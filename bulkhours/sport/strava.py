@@ -50,7 +50,7 @@ def format_activities(df) -> pd.DataFrame:
         'Vitesse moyenne ajustée selon la pente': 'vmean_adjslope',
     }
 
-    columns = set(['id', 'Effort relatif', 'Température moyenne', 'Effort relatif.1', 'Puissance moyenne pondérée',
+    columns = set(['Effort relatif', 'Température moyenne', 'Effort relatif.1', 'Puissance moyenne pondérée',
        'Distance ajustée selon la pente', 'Intensité des précipitations', 'Couverture nuageuse', 'Signalé', 'Vitesse moyenne (temps écoulé)',
        'Longueur de piscine'] + list(mapping.keys()))
     df = df[list(columns)]
