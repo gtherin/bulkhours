@@ -37,7 +37,7 @@ class Athlete:
     def get_hr_zone_ts(self, hr):
         return pd.cut(hr, bins=self.zones, labels=["Z1", "Z2", "Z3", "Z4", "Z5"], right=False)
 
-    def plot_hr_zone(self, df):
+    def plot_hr_zone(self, athlete, df):
         import matplotlib.pyplot as plt
 
         fig, ax = plt.subplots(figsize=(14, 5))
