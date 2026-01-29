@@ -113,9 +113,7 @@ class Activity:
         self.info = info
         if '.fit' in self.info.filename:
             df = read_fit_file(folder_name, self.info)
-            df = df[[c for c in df.columns if not c.startswith('unknown_')]]
-            print(df.columns)
-            df = df.set_index('timestamp')
+            df = df[[c for c in df.columns if not c.startswith('unknown_')]].set_index('timestamp')
             df["minutes"] = (df.index - df.index[0]).total_seconds() / 60.
             df["heart_rate"] = df["heart_rate"].replace(0, np.nan)
             self.df = df

@@ -38,6 +38,8 @@ class Athlete:
         return pd.cut(hr, bins=self.zones, labels=["Z1", "Z2", "Z3", "Z4", "Z5"], right=False)
 
     def plot_hr_zone(self, df):
+        import matplotlib.pyplot as plt
+
         fig, ax = plt.subplots(figsize=(14, 5))
         # Karvonen formula
         hr = lambda x: x * (self.hr_max - self.hr_rest) + self.hr_rest
