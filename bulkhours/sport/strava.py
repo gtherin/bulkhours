@@ -133,7 +133,6 @@ class Activities:
         # Add app ids
         self.df = self.df.merge(self.read_list(), how='left', on="filename")
 
-
     def read_list(self):
         alist = pd.read_json(f"https://drive.google.com/uc?export=download&id={self.gid}").T
         alist['filename'] = 'activities/' + alist.index
