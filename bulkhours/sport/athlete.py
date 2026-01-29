@@ -39,7 +39,7 @@ class Athlete:
 
     def plot_hr_zone(self, ax):
         # Karvonen formula
-        hr = lambda x: x * (hr_max - HRrest) + HRrest
+        hr = lambda x: x * (self.hr_max - self.hr_rest) + self.hr_rest
         for i, name, color in zip(range(5),
                                   ["Z1 - Very light", "Z2 - Light", "Z3 - Moderate", "Z4 - Hard", "Z5 - Maximum"],
                                   ["#dddddd", "#b5d6ea", "#7fd47f", "#f0b04a", "#e05b4f"]):
