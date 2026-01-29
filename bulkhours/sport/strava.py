@@ -109,7 +109,6 @@ def read_fit_file(folder_name, activity):
 
 class Activity:
     def __init__(self, folder_name, info, atype=None, *args, **kwargs):
-        #super().__init__(*args, **kwargs)
         self.atype = atype
         self.info = info
         if '.fit' in self.info.filename:
@@ -121,21 +120,22 @@ class Activity:
 
 class Activities:
 
-    def __init__(self, folder_name=None, gid=None, aid=None, athlete_name=None):
-        self.athlete_name = athlete_name
-        self.folder_name = folder_name
+    def __init__(self, folder_name=None, gid=None, aid=None):
+        self.folder_name, self.gid, self.aid = folder_name, gid, aid
 
         if folder_name is not None:
             self.df = pd.read_csv(f"{folder_name}/activities.csv")
         else:
             self.df = pd.read_csv(f"https://drive.google.com/uc?export=download&id={aid}")
-            alist = pd.read_json(f"https://drive.google.com/uc?export=download&id={gid}").T
-            alist['Nom du fichier'] = 'activities/' + alist.index
-
-            self.df = self.df.merge(alist, how='left', on="Nom du fichier")
+            self.df = self.df.merge(self.read_list(), how='left', on="Nom du fichier")
 
         self.df = format_activities(self.df)
         self.format_date()
+
+    def read_list(self):
+        alist = pd.read_json(f"https://drive.google.com/uc?export=download&id={self.gid}").T
+        alist['Nom du fichier'] = 'activities/' + alist.index
+        return alist
 
     def format_date(self):
         months = {"janv.": "Jan", "févr.": "Feb", "mars": "Mar", "avr.": "Apr", "mai": "May", "juin": "Jun", 
@@ -162,8 +162,7 @@ def get_synthetic_biking_data(m=500):
         "z3_pct": np.random.normal(15, 5, m).clip(5, 35),
         "z4_pct": np.random.normal(9, 4, m).clip(2, 25),
         "z5_pct": np.random.normal(2, 1, m).clip(0.1, 8),
-        "weight": np.random.normal(72, 7, m),
-    })
+        "weight": np.random.normal(72, 7, m),})
 
     df_bike["ftp"] = (
         0.8 * df_bike["weekly_tss"]
