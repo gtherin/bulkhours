@@ -126,7 +126,7 @@ class Activities:
         if folder_name is not None:
             self.df = pd.read_csv(f"{folder_name}/activities.csv")
         else:
-            self.df = pd.read_csv(f"https://drive.google.com/uc?export=download&id={aid}")
+            self.df = pd.read_csv(f"https://drive.google.com/uc?export=download&id={self.aid}")
 
         self.df = format_activities(self.df)
         self.format_date()
