@@ -120,21 +120,20 @@ class Activity:
 
 class Activities:
 
-    def __init__(self, folder_name=None, gid=None, aid=None):
-        self.folder_name, self.gid, self.aid = folder_name, gid, aid
+    def __init__(self, folder_name=None, activities_directory=None, activity_file=None):
+        self.folder_name, self.activities_directory, self.activity_file = folder_name, activities_directory, activity_file
 
         if folder_name is not None:
             self.df = pd.read_csv(f"{folder_name}/activities.csv")
         else:
-            self.df = pd.read_csv(f"https://drive.google.com/uc?export=download&id={self.aid}")
+            self.df = pd.read_csv(f"https://drive.google.com/uc?export=download&id={self.activity_file}")
 
         self.df = format_activities(self.df)
         self.format_date()
-        # Add app ids
         self.df = self.df.merge(self.read_list(), how='left', on="filename")
 
     def read_list(self):
-        alist = pd.read_json(f"https://drive.google.com/uc?export=download&id={self.gid}").T
+        alist = pd.read_json(f"https://drive.google.com/uc?export=download&id={self.activities_directory}").T
         alist['filename'] = 'activities/' + alist.index
         return alist
 
