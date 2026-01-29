@@ -135,6 +135,7 @@ class Activities:
     def read_list(self):
         alist = pd.read_json(f"https://drive.google.com/uc?export=download&id={self.gid}").T
         alist['Nom du fichier'] = 'activities/' + alist.index
+        alist = alist.rename(columns={'id': 'gid'})
         return alist
 
     def format_date(self):
