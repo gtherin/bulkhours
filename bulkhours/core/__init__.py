@@ -17,7 +17,6 @@ from .widget_texts import WidgetTextArea  # noqa
 from .keywords import get_wordscloud  # noqa
 from .cell_parser import CellParser  # noqa
 from .line_parser import LineParser  # noqa
-from . import loader  # noqa
 
 
 def git_push(argv=sys.argv[1:]):
