@@ -37,6 +37,9 @@ class Athlete:
     def get_hr_zone_ts(self, hr):
         return pd.cut(hr, bins=self.zones, labels=["Z1", "Z2", "Z3", "Z4", "Z5"], right=False)
 
+    def get_zones_in_bpm(self):
+        return [z * (self.hr_max - self.hr_rest) + self.hr_rest for z in self.zones]
+
     def plot_hr_zone(self, athlete, df):
         import matplotlib.pyplot as plt
 
