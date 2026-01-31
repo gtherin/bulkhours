@@ -22,7 +22,7 @@ def key_from_password(password: str, salt: bytes = b"static_salt") -> bytes:
     return base64.urlsafe_b64encode(kdf.derive(password.encode()))
 
 
-def secure_save(df: pd.DataFrame, path: str, password: str) -> None:
+def secure_save(df: pd.DataFrame, path: str, password: str, **kwargs) -> None:
     """
     Save a DataFrame to an encrypted file.
     Use .csv.enc or .parquet.enc as extension.
@@ -41,7 +41,7 @@ def secure_save(df: pd.DataFrame, path: str, password: str) -> None:
         f.write(cipher.encrypt(raw))
 
 
-def secure_load(path: str, password: str) -> pd.DataFrame:
+def secure_load(path: str, password: str, **kwargs) -> pd.DataFrame:
     """
     Load a DataFrame from an encrypted file.
     """
