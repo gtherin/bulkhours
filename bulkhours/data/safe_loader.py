@@ -57,23 +57,3 @@ def secure_load(path: str, password: str) -> pd.DataFrame:
         return pd.read_csv(io.BytesIO(decrypted))
     else:
         raise ValueError("Unknown file type")
-
-
-# ------------------------------------------------------------
-# Example usage
-# ------------------------------------------------------------
-if __name__ == "__main__":
-    df = pd.DataFrame(
-        {
-            "time": pd.date_range("2026-01-01", periods=3, freq="H"),
-            "power": [150, 155, 148],
-            "hr": [138, 142, 140],
-        }
-    )
-
-    password = "ma_cle_simple"
-
-    secure_save(df, "example.parquet.enc", password)
-    df_loaded = secure_load("example.parquet.enc", password)
-
-    print(df_loaded)

@@ -6,6 +6,8 @@ import pandas as pd
 import IPython
 import inspect
 
+from . import safe_loader
+
 
 def get_rdata(rdata):
     if type(rdata) in [list]:
@@ -107,6 +109,8 @@ def get_data_from_file(raw_data, **kwargs):
         return pd.read_csv(f"https://docs.google.com/spreadsheets/d/{info[0]}/export?gid={info[1]}&format=csv")
     elif ext in ["csv"]:
         return pd.read_csv(filename)
+    elif ext in ["enc"]:
+        return safe_loader.secure_load(filename, **kwargs)
     elif ext in ["json"]:
         return pd.read_json(filename)
     elif ext in ["h5"]:
