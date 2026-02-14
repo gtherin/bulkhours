@@ -94,9 +94,9 @@ class Activities:
         self.df = format_activities(self.df)
         self.format_date()
         if self.activities_folder_info is not None:
-            self.df = self.df.merge(self.read_list(drive=True), how='left', on="filename")
+            self.df = self.df.merge(self.read_list(drive=True)[['lastModifyingUser', 'id', 'modifiedTime', 'filename']], how='left', on="filename")
         elif self.folder_name is not None:
-            self.df = self.df.merge(self.read_list(drive=False), how='left', on="filename")
+            self.df = self.df.merge(self.read_list(drive=False)[['lastModifyingUser', 'id', 'modifiedTime', 'filename']], how='left', on="filename")
 
     def read_list(self, drive=True):
         if drive:
