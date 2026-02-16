@@ -14,9 +14,12 @@ from .athlete import Athlete
 from .. import core
 from .. import data
 
-# Setup google drive
-credentials = service_account.Credentials.from_service_account_file('/home/ubuntu/.safebg.pyc', scopes=['https://www.googleapis.com/auth/drive'])
-service = build("drive", "v3", credentials=credentials)
+try:
+    # Setup google drive
+    credentials = service_account.Credentials.from_service_account_file('/home/ubuntu/.safebg.pyc', scopes=['https://www.googleapis.com/auth/drive'])
+    service = build("drive", "v3", credentials=credentials)
+except:
+    service = None
 
 
 class Performance:
