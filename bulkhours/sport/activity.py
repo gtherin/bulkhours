@@ -10,20 +10,21 @@ class Activity:
     def __init__(self, folder_name, info, atype=None, local=True, *args, **kwargs):
         self.atype = atype
         self.info = info
+        self.filename = f'/home/ubuntu/bulkcats/strava/{self.info.filename}'
 
         try:
             if '.fit' in self.info.filename:
                 if local:
-                    with open(f'/home/ubuntu/bulkcats/strava/{self.info.filename}', 'rb') as f:
+                    with open(self.filename, 'rb') as f:
                         data = f.read()
                 else:
                     response = requests.get(f"https://drive.google.com/uc?export=download&id={self.info.id}")
                     data = response.content
                 df = Activity.read_fit_file(data)
             elif '.gpx' in self.info.filename:
-                df = Activity.read_gpx_file(f'/home/ubuntu/bulkcats/strava/{self.info.filename}')
+                df = Activity.read_gpx_file(self.filename)
             elif '.tcx' in self.info.filename:
-                df = Activity.read_tcx_file(f'/home/ubuntu/bulkcats/strava/{self.info.filename}')
+                df = Activity.read_tcx_file(self.filename)
             else:
                 print(f'Fuck {self.info.filename}')
                 raise Exception(f'Fuck {self.info.filename}')
