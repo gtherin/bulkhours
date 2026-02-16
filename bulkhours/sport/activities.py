@@ -5,6 +5,8 @@ import os
 import sys
 
 from .activity import Activity
+from .. import data
+
 
 def format_activities(df) -> pd.DataFrame:
     """Clean and compact Strava French export column names."""
@@ -75,45 +77,29 @@ def format_activities(df) -> pd.DataFrame:
         if col in df.columns:
             df[col] = (df[col].astype(str).str.replace(",", ".").astype(float, errors="ignore"))
 
+    df = format_date(df)
+
+    return df
+
+def format_date(df):
+    months = {"janv.": "Jan", "févr.": "Feb", "mars": "Mar", "avr.": "Apr", "mai": "May", "juin": "Jun", 
+    "juil.": "Jul", "août": "Aug", "sept.": "Sep", "oct.": "Oct", "nov.": "Nov", "déc.": "Dec"}
+
+    s = df["date"]
+    for fr, en in months.items():
+        s = s.str.replace(fr, en, regex=False)
+    df["date"] = pd.to_datetime(s, format="%d %b %Y, %H:%M:%S")
     return df
 
 
 class Activities:
 
     @staticmethod
-    def get_summary_df(folder_name=None, summary_file=None):
-        if folder_name is not None:
-            return pd.read_csv(f"{folder_name}/activities.csv")
-        else:
-            return pd.read_csv(f"https://drive.google.com/uc?export=download&id={self.summary_file}")
+    def get_formatted_activities(filename):
+        return format_activities(pd.read_csv(filename))
 
-    def __init__(self, folder_name=None, summary_file=None, activities_folder_info=None):
-        self.folder_name, self.summary_file, self.activities_folder_info = folder_name, summary_file, activities_folder_info
-
-        self.df = Activities.get_summary_df(folder_name=folder_name, summary_file=summary_file)
-        self.df = format_activities(self.df)
-        self.format_date()
-        if self.activities_folder_info is not None:
-            self.df = self.df.merge(self.read_list(drive=True)[['lastModifyingUser', 'id', 'modifiedTime', 'filename']], how='left', on="filename")
-        elif self.folder_name is not None:
-            self.df = self.df.merge(self.read_list(drive=False)[['lastModifyingUser', 'id', 'modifiedTime', 'filename']], how='left', on="filename")
-
-    def read_list(self, drive=True):
-        if drive:
-            alist = pd.read_json(f"https://drive.google.com/uc?export=download&id={self.activities_folder_info}").T
-        else:
-            alist = pd.read_json(f"/home/ubuntu/bulkcats/strava/activities_folder_info.json").T
-        alist['filename'] = 'activities/' + alist.index
-        return alist
-
-    def format_date(self):
-        months = {"janv.": "Jan", "févr.": "Feb", "mars": "Mar", "avr.": "Apr", "mai": "May", "juin": "Jun", 
-        "juil.": "Jul", "août": "Aug", "sept.": "Sep", "oct.": "Oct", "nov.": "Nov", "déc.": "Dec"}
-
-        s = self.df["date"]
-        for fr, en in months.items():
-            s = s.str.replace(fr, en, regex=False)
-        self.df["date"] = pd.to_datetime(s, format="%d %b %Y, %H:%M:%S")
+    def __init__(self, password=None):
+        self.df = data.get_data("sport.stravism", credit=False, password=password)
 
     def get_activity(self, index, atype=None):
         # ['course_a_pied', 'natation', 'velo', 'randonnee', 'velo_virtuel', 'kayak', 'entra_nement', 'stand_up_paddle']

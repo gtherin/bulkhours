@@ -15,6 +15,7 @@ from .data_parser import DataParser  # noqa
 from .statsdata import download_data  # noqa
 from .trading import merge_ob_data, get_ob_slice  # noqa
 from .text import get_sentiments, en2fr, en2icons  # noqa
+from .safe_loader import secure_load, secure_save  # noqa
 
 
 def get_data(label, **kwargs):
@@ -42,7 +43,6 @@ def save_model(model_name, model, history, data_directory):
 
     with open(f'{data_directory}/{model_name}.hist.json', 'w') as f:
         json.dump(fit_history, f)
-
 
 
 def get_image(label, ax=None):

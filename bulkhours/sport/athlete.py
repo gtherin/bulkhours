@@ -2,6 +2,15 @@ import pandas as pd
 import numpy as np
 
 
+uzones = pd.DataFrame({
+    "Zone": ["Z0", "Z1", "Z2", "Z3", "Z4", "Z5"],
+    "BPM": [0.50, 0.60, 0.75, 0.85, 0.92, 1.00],
+    "CSS": [0.70, 0.90, 0.95, 1.00, 1.05, 1.30],
+    "FTP": [0.40, 0.55, 0.75, 0.90, 1.05, 1.20],
+    "VMA": [0.45, 0.65, 0.75, 0.85, 0.95, 1.05],
+})
+
+
 class Athlete:
     def __init__(self, *, is_female=True, age=30, css=1.0, hr_max=None, vo2_max=50, weight=70, hr_rest=50, ftp=200, v_max=20):
         # Basic
@@ -17,8 +26,11 @@ class Athlete:
         self.v_max = v_max               # km/h
         self.ASR = self.v_max - self.vma # km/h
         # Zones and efforts
-        self.zones = [0.0, 0.6, 0.7, 0.8, 0.9, 1.05]
         self.trimp_a, self.trimp_b = (0.86, 1.67) if self.is_male else (0.64, 1.92)
+
+        # Athete
+        perf = pd.Series({'BPM': self.hr_max, 'CSS': self.css, 'FTP': self.ftp, 'VMA': self.vma})
+        self.zones2 = uzones.mul(perf, axis=1)
 
     @property
     def is_male(self):
@@ -35,10 +47,22 @@ class Athlete:
         return k * t_min * IFC
 
     def get_hr_zone_ts(self, hr):
-        return pd.cut(hr, bins=self.zones, labels=["Z1", "Z2", "Z3", "Z4", "Z5"], right=False)
+        zones = [0.0, 0.6, 0.7, 0.8, 0.9, 1.05]
+        return pd.cut(hr, bins=zones, labels=["Z1", "Z2", "Z3", "Z4", "Z5"], right=False)
 
-    def get_zones_in_bpm(self):
-        return [z * (self.hr_max - self.hr_rest) + self.hr_rest for z in self.zones]
+    def get_zones(self, atype):
+        if atype in ['bpm']:
+            zones = [0.0, 0.6, 0.7, 0.8, 0.9, 1.05]
+            return [z * (self.hr_max - self.hr_rest) + self.hr_rest for z in zones]
+        elif atype in ['course_a_pied', 'randonnee']:
+            return self.zones2['VMA']
+        elif atype in ['velo_virtuel']:
+            return self.zones2['FTP']
+        elif atype in ['natation', 'velo', 'kayak', 'entrainement', 'stand_up_paddle']:
+            zones = [0.0, 0.6, 0.7, 0.8, 0.9, 1.05]
+            return [z * (self.hr_max - self.hr_rest) + self.hr_rest for z in zones]
+        else:
+            raise Exception(f'Zones not known for {atype}')
 
     def plot_hr_zone(self, athlete, df):
         import matplotlib.pyplot as plt
