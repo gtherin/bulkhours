@@ -51,12 +51,17 @@ stroke = 2
 
 # default webcam
 stream = cv2.VideoCapture(0)
+if not stream.isOpened():
+    raise RuntimeError("Could not open camera /dev/video0")
 
 
 
 while(True):
     # Capture frame-by-frame
     (grabbed, frame) = stream.read()
+    if not grabbed or frame is None:
+        print("Camera frame read failed. Is another app using /dev/video0?")
+        break
 
     # convert the image from NumPy array into a PIL image
     img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)

@@ -1,9 +1,11 @@
-# -*- coding: utf-8 -*-
 import streamlit as st
 from datetime import datetime
 import matplotlib.pyplot as plt
+import time
+from pathlib import Path
 
-from picarx import PiCarX
+from picarx import Picarx as PiCarX
+from movement import advance_cm
 from ezblock import Remote
 from Music import *
 from ezblock import TTS
@@ -16,10 +18,11 @@ threadingA = None
 Ref1 = None
 Ref2 = None
 x = None
-px = PiCarX()
+CONFIG_PATH = Path.home() / ".config" / "picar-x" / "picar-x.conf"
+CONFIG_PATH.parent.mkdir(parents=True, exist_ok=True)
+px = PiCarX(config=str(CONFIG_PATH))
 #tts = TTS()
 #tts.lang('fr-FR')
-
 
 # custom packages (see repo)
 
@@ -34,7 +37,6 @@ elif 8 < month <= 11:
     st.title(title + " 🌲🌲")
 else:
     st.title(title + " 🎄🎄")
-st.write("by [Guillaume Therin](https://www.linkedin.com/in/guillaume-therin-56665217/)")
 st.sidebar.title("Parameters")
 
 if st.button('En avant'):
@@ -45,6 +47,10 @@ if st.button('En avant'):
         time.sleep(1)
         px.stop()
     px.stop()
+
+if st.button('Avancer 10 cm'):
+    st.write('Avance de 10 cm')
+    advance_cm(px, distance_cm=10.0, speed=50, cm_per_sec=20.0)
 
 if st.button('En arriere'):
     st.write('Why hello there')
