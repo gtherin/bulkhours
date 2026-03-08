@@ -2,6 +2,25 @@
 
 bash /home/pi/bulkhours/bulkhours/bots/cars/run.sh
 
+## Dependencies
+
+Web control only (recommended first):
+
+```bash
+cd /home/pi/bulkhours/bulkhours/bots/cars
+python -m pip install -r requirements.txt
+```
+
+Full stack with face recognition (`dlib`):
+
+```bash
+sudo apt update
+sudo apt install -y cmake build-essential libopenblas-dev liblapack-dev
+
+cd /home/pi/bulkhours/bulkhours/bots/cars
+python -m pip install -r requirements-full.txt
+```
+
 git clone https://github.com/gtherin/bulkhours
 
 git clone https://github.com/gtherin/ezb-pi ezb-pi.tmp && rm -rf ezb-pi/.git
@@ -88,8 +107,7 @@ sudo python3 setup.py install
 ## Install vilib
 
 ```bash
-cd /home/pi/
-git clone https://github.com/sunfounder/vilib.git
+cd /home/pi/ && git clone https://github.com/sunfounder/vilib.git
 cd vilib
 sudo python3 install.py
 

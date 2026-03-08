@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PiCar-X Control Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-top: #f9f4df;
+      --bg-bot: #d8ece9;
+      --ink: #122625;
+      --muted: #355b58;
+      --panel: #ffffffcc;
+      --accent: #eb5e28;
+      --accent-2: #2a9d8f;
+      --danger: #c1121f;
+      --ring: #0a9396;
+      --shadow: 0 18px 40px rgba(11, 52, 49, 0.16);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Space Grotesk", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(55vw 45vw at 100% 0%, #f4a26155, transparent 65%),
+        radial-gradient(45vw 40vw at 0% 100%, #0a939633, transparent 70%),
+        linear-gradient(160deg, var(--bg-top), var(--bg-bot));
+      display: grid;
+      place-items: center;
+      padding: 1rem;
+    }
+
+    .deck {
+      width: min(980px, 96vw);
+      background: var(--panel);
+      backdrop-filter: blur(8px);
+      border: 1px solid #ffffffaa;
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 1.2rem;
+      animation: rise 500ms ease-out;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(10px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .title {
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      margin: 0;
+      letter-spacing: 0.02em;
+    }
+
+    .pill {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.8rem;
+      padding: 0.35rem 0.6rem;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid #d0e6e3;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 1rem;
+    }
+
+    .panel {
+      border-radius: var(--radius);
+      background: #ffffffdd;
+      border: 1px solid #d8e6e4;
+      padding: 1rem;
+    }
+
+    .panel h2 {
+      margin: 0 0 0.8rem;
+      font-size: 1rem;
+    }
+
+    .control-row {
+      display: grid;
+      gap: 0.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    label {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent-2);
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      margin-top: 0.4rem;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 0.7rem 0.6rem;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+      box-shadow: 0 6px 12px rgba(20, 50, 48, 0.14);
+      background: #e9f6f4;
+      color: var(--ink);
+    }
+
+    button:hover { transform: translateY(-1px); }
+    button:active { transform: translateY(1px); }
+    button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+    .main-btn { background: #ffecd1; }
+    .danger { background: #ffd8d8; color: var(--danger); }
+    .accent { background: #e0faf7; color: #0f5f58; }
+
+    .telemetry {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.8rem;
+      background: #f4faf9;
+      border: 1px solid #d4ebe7;
+      border-radius: 12px;
+      padding: 0.6rem;
+      min-height: 110px;
+      white-space: pre-wrap;
+    }
+
+    .video-wrap {
+      border: 1px solid #d4ebe7;
+      border-radius: 12px;
+      background: #000;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      display: grid;
+      place-items: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .video-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .video-note {
+      font-size: 0.8rem;
+      color: #315451;
+      margin-bottom: 0.8rem;
+    }
+
+    .hint {
+      margin-top: 0.6rem;
+      color: #315451;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 800px) {
+      .grid { grid-template-columns: 1fr; }
+      .buttons { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <div class="top">
+      <h1 class="title">PiCar-X Control Deck</h1>
+      <div id="status" class="pill">connecting...</div>
+    </div>
+
+    <section class="grid">
+      <article class="panel">
+        <h2>Drive</h2>
+        <div class="control-row">
+          <label for="throttle">Throttle (-100 to 100)</label>
+          <input id="throttle" type="range" min="-100" max="100" value="0" step="1" />
+        </div>
+        <div class="control-row">
+          <label for="steer">Steering (-35 to 35)</label>
+          <input id="steer" type="range" min="-35" max="35" value="0" step="1" />
+        </div>
+        <div class="buttons">
+          <button class="main-btn" id="btnForward">Forward</button>
+          <button id="btnStop">Stop</button>
+          <button class="main-btn" id="btnBackward">Backward</button>
+          <button id="btnLeft">Steer Left</button>
+          <button id="btnCenter">Steer Center</button>
+          <button id="btnRight">Steer Right</button>
+        </div>
+        <p class="hint">Keyboard: W/S throttle, A/D steer, Space stop</p>
+      </article>
+
+      <article class="panel">
+        <h2>Camera</h2>
+        <div class="video-wrap">
+          <img id="cameraFeed" alt="PiCar camera stream" loading="eager" />
+        </div>
+        <div id="cameraInfo" class="video-note">Starting camera stream...</div>
+        <div class="control-row">
+          <label for="pan">Pan (-60 to 60)</label>
+          <input id="pan" type="range" min="-60" max="60" value="-2" step="1" />
+        </div>
+        <div class="control-row">
+          <label for="tilt">Tilt (-35 to 35)</label>
+          <input id="tilt" type="range" min="-35" max="35" value="0" step="1" />
+        </div>
+        <div class="buttons">
+          <button class="accent" id="btnApplyCam">Apply Camera</button>
+          <button class="accent" id="btnRecenterCam">Recenter Camera</button>
+          <button class="danger" id="btnEmergency">Emergency Stop</button>
+        </div>
+        <h2 style="margin-top: 1rem;">Telemetry</h2>
+        <div id="telemetry" class="telemetry">No data yet</div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const statusEl = document.getElementById("status");
+    const telemetryEl = document.getElementById("telemetry");
+
+    const throttleEl = document.getElementById("throttle");
+    const steerEl = document.getElementById("steer");
+    const panEl = document.getElementById("pan");
+    const tiltEl = document.getElementById("tilt");
+    const cameraFeedEl = document.getElementById("cameraFeed");
+    const cameraInfoEl = document.getElementById("cameraInfo");
+
+    let ws;
+    let heartbeatTimer;
+    let camSourceIdx = 0;
+    let camRetryTimer;
+    let camSources = [];
+
+    function connect() {
+      const proto = location.protocol === "https:" ? "wss" : "ws";
+      ws = new WebSocket(`${proto}://${location.host}/ws`);
+
+      ws.onopen = () => {
+        statusEl.textContent = "connected";
+        statusEl.style.background = "#ddfff5";
+        startHeartbeat();
+      };
+
+      ws.onclose = () => {
+        statusEl.textContent = "disconnected";
+        statusEl.style.background = "#ffe9e9";
+        stopHeartbeat();
+        setTimeout(connect, 700);
+      };
+
+      ws.onmessage = (event) => {
+        const msg = JSON.parse(event.data);
+        telemetryEl.textContent = JSON.stringify(msg, null, 2);
+      };
+    }
+
+    function send(payload) {
+      if (!ws || ws.readyState !== WebSocket.OPEN) return;
+      ws.send(JSON.stringify(payload));
+    }
+
+    function drive() {
+      send({
+        type: "drive",
+        throttle: Number(throttleEl.value),
+        steer: Number(steerEl.value),
+      });
+    }
+
+    function setCamera() {
+      send({
+        type: "camera",
+        pan: Number(panEl.value),
+        tilt: Number(tiltEl.value),
+      });
+    }
+
+    function stop() {
+      throttleEl.value = 0;
+      send({ type: "stop" });
+      drive();
+    }
+
+    function startHeartbeat() {
+      heartbeatTimer = setInterval(() => send({ type: "heartbeat" }), 350);
+    }
+
+    function stopHeartbeat() {
+      clearInterval(heartbeatTimer);
+    }
+
+    async function initCameraFeed() {
+      try {
+        const resp = await fetch("/api/camera", { cache: "no-store" });
+        const data = await resp.json();
+        const directUrl = `${location.protocol}//${location.hostname}:${data.stream_port}${data.stream_path}`;
+        const proxyUrl = `${data.proxy_path}`;
+
+        // You confirmed direct :9000 stream works; use it first.
+        camSources = [directUrl, proxyUrl];
+        camSourceIdx = 0;
+
+        cameraFeedEl.onload = () => {
+          clearTimeout(camRetryTimer);
+          cameraInfoEl.textContent = `Live stream: ${camSources[camSourceIdx]}`;
+        };
+
+        cameraFeedEl.onerror = () => {
+          camSourceIdx = (camSourceIdx + 1) % camSources.length;
+          const next = `${camSources[camSourceIdx]}?t=${Date.now()}`;
+          cameraInfoEl.textContent = `Camera source failed, retrying: ${next}`;
+          clearTimeout(camRetryTimer);
+          camRetryTimer = setTimeout(() => {
+            cameraFeedEl.src = next;
+          }, 1200);
+        };
+
+        if (!data.ready && data.error) {
+          cameraInfoEl.textContent = `Camera backend warning: ${data.error}`;
+        }
+
+        cameraFeedEl.src = `${camSources[camSourceIdx]}?t=${Date.now()}`;
+      } catch (err) {
+        cameraInfoEl.textContent = `Camera status check failed: ${err}`;
+      }
+    }
+
+    throttleEl.addEventListener("input", drive);
+    steerEl.addEventListener("input", drive);
+
+    document.getElementById("btnForward").addEventListener("click", () => {
+      throttleEl.value = 60;
+      drive();
+    });
+    document.getElementById("btnBackward").addEventListener("click", () => {
+      throttleEl.value = -50;
+      drive();
+    });
+    document.getElementById("btnStop").addEventListener("click", stop);
+    document.getElementById("btnLeft").addEventListener("click", () => {
+      steerEl.value = -25;
+      drive();
+    });
+    document.getElementById("btnCenter").addEventListener("click", () => {
+      steerEl.value = 0;
+      drive();
+    });
+    document.getElementById("btnRight").addEventListener("click", () => {
+      steerEl.value = 25;
+      drive();
+    });
+
+    document.getElementById("btnApplyCam").addEventListener("click", setCamera);
+    document.getElementById("btnRecenterCam").addEventListener("click", () => {
+      panEl.value = -2;
+      tiltEl.value = 0;
+      send({ type: "recenter_camera" });
+    });
+    document.getElementById("btnEmergency").addEventListener("click", stop);
+
+    document.addEventListener("keydown", (ev) => {
+      if (ev.repeat) return;
+      if (ev.code === "KeyW") {
+        throttleEl.value = Math.min(100, Number(throttleEl.value) + 15);
+        drive();
+      }
+      if (ev.code === "KeyS") {
+        throttleEl.value = Math.max(-100, Number(throttleEl.value) - 15);
+        drive();
+      }
+      if (ev.code === "KeyA") {
+        steerEl.value = Math.max(-35, Number(steerEl.value) - 10);
+        drive();
+      }
+      if (ev.code === "KeyD") {
+        steerEl.value = Math.min(35, Number(steerEl.value) + 10);
+        drive();
+      }
+      if (ev.code === "Space") {
+        ev.preventDefault();
+        stop();
+      }
+      if (ev.code === "ArrowLeft") {
+        panEl.value = Math.max(-60, Number(panEl.value) - 5);
+        setCamera();
+      }
+      if (ev.code === "ArrowRight") {
+        panEl.value = Math.min(60, Number(panEl.value) + 5);
+        setCamera();
+      }
+      if (ev.code === "ArrowUp") {
+        tiltEl.value = Math.min(35, Number(tiltEl.value) + 5);
+        setCamera();
+      }
+      if (ev.code === "ArrowDown") {
+        tiltEl.value = Math.max(-35, Number(tiltEl.value) - 5);
+        setCamera();
+      }
+    });
+
+    connect();
+    initCameraFeed();
+  </script>
+</body>
+</html>
