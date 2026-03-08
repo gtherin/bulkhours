@@ -5,3 +5,5 @@ pandas
 opencv-python
 face_recognition
 scikit-learn
+langgraph
+langchain-openai
