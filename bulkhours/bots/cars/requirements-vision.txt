@@ -1,0 +1,3 @@
+# Optional computer-vision dependencies
+# On Raspberry Pi/ARM this may compile dlib from source.
+face_recognition

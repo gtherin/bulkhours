@@ -1,9 +1,10 @@
-robot-hat @ git+https://github.com/sunfounder/robot-hat.git
-vilib @ git+https://github.com/sunfounder/vilib.git
-picar-x @ git+https://github.com/sunfounder/picar-x.git
 pandas
 opencv-python
-face_recognition
 scikit-learn
 langgraph
 langchain-openai
+fastapi
+uvicorn[standard]
+
+# Optional heavy vision stack (dlib build required on many ARM systems):
+#   pip install -r requirements-vision.txt
