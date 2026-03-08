@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import io
 import json
 import os
 import queue
@@ -7,6 +8,7 @@ import re
 import subprocess
 import time
 import unicodedata
+import wave
 from pathlib import Path
 
 import sounddevice as sd
@@ -174,6 +176,30 @@ def interpret_with_openai(graph, text, fallback_distance_cm):
         except Exception:
             distance = float(fallback_distance_cm)
     return action, distance, parsed
+
+
+def transcribe_pcm16_with_openai(pcm_bytes, sample_rate, model_name="gpt-4o-mini-transcribe", language="fr"):
+    from openai import OpenAI
+
+    if not pcm_bytes:
+        return ""
+
+    wav_buf = io.BytesIO()
+    with wave.open(wav_buf, "wb") as wf:
+        wf.setnchannels(1)
+        wf.setsampwidth(2)  # int16
+        wf.setframerate(sample_rate)
+        wf.writeframes(pcm_bytes)
+    wav_buf.seek(0)
+    wav_buf.name = "command.wav"
+
+    client = OpenAI()
+    transcript = client.audio.transcriptions.create(
+        model=model_name,
+        file=wav_buf,
+        language=language,
+    )
+    return (getattr(transcript, "text", "") or "").strip()
 
 
 def build_openai_tool_llm(model_name, temperature):

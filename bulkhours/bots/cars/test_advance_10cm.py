@@ -23,9 +23,33 @@ def main():
     parser.add_argument("--steer-angle", type=int, default=25, help="Steering angle for right turn (route mode)")
     args = parser.parse_args()
 
-    config_path = Path.home() / ".config" / "picar-x" / "picar-x.conf"
+    config_path = Path(f"{Path.home()}/bulkhours/bulkhours/bots/cars/picar-x.conf")
+    print(config_path)
     config_path.parent.mkdir(parents=True, exist_ok=True)
     px = PiCarX(config=str(config_path))
+
+    # Camera sequence requested by user:
+    # left -> right -> initial(center), then up -> down -> initial(center)
+    pan_left = -35
+    pan_right = 35
+    tilt_up = 20
+    tilt_down = -20
+    pause_sec = 1.0
+
+    px.set_cam_pan_angle(pan_left)
+    time.sleep(pause_sec)
+    px.set_cam_pan_angle(pan_right)
+    time.sleep(pause_sec)
+    px.set_cam_pan_angle(0)
+    time.sleep(pause_sec)
+
+    px.set_cam_tilt_angle(tilt_up)
+    time.sleep(pause_sec)
+    px.set_cam_tilt_angle(tilt_down)
+    time.sleep(pause_sec)
+    px.set_cam_tilt_angle(0)
+    return
+
     time.sleep(0.2)
 
     try:
