@@ -3,6 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import sys
+import requests
+import time
+import datetime
+import json
+from urllib.parse import urlencode
 
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload, MediaFileUpload
@@ -150,7 +155,245 @@ class Performance:
         print(f"/home/ubuntu/bulkhours/data/stravism.csv.enc")
         data.secure_save(gdf, f"/home/ubuntu/bulkhours/data/stravism.csv.enc", os.environ['BULK_SPORT_KEY'])
 
+
+
+def load_env_file(env_file=None):
+    env_path = env_file or os.getenv("BULKHOURS_ENV_FILE", "/home/ubuntu/.env")
+    if not os.path.exists(env_path):
+        return
+
+    with open(env_path, "r") as handle:
+        for raw_line in handle:
+            line = raw_line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            key = key.strip()
+            value = value.strip().strip('"').strip("'")
+            if key and key not in os.environ:
+                os.environ[key] = value
+
+
+load_env_file()
+
+CLIENT_ID = os.getenv("STRAVA_CLIENT_ID", "")
+CLIENT_SECRET = os.getenv("STRAVA_CLIENT_SECRET", "")
+REFRESH_TOKEN = os.getenv("STRAVA_REFRESH_TOKEN", "")
+
+
+def _validate_strava_config():
+    missing = []
+    if not CLIENT_ID:
+        missing.append("STRAVA_CLIENT_ID")
+    if not CLIENT_SECRET:
+        missing.append("STRAVA_CLIENT_SECRET")
+    if not REFRESH_TOKEN:
+        missing.append("STRAVA_REFRESH_TOKEN")
+
+    if missing:
+        raise ValueError(f"Missing Strava credentials: {', '.join(missing)}")
+
+
+def refresh_access_token():
+    _validate_strava_config()
+
+    TOKEN_URL = "https://www.strava.com/oauth/token"
+    response = requests.post(
+        TOKEN_URL,
+        data={"client_id": CLIENT_ID, "client_secret": CLIENT_SECRET,
+            "grant_type": "refresh_token",
+            "refresh_token": REFRESH_TOKEN,
+        },
+        timeout=30,
+    )
+
+    if response.status_code >= 400:
+        details = response.text
+        try:
+            payload = response.json()
+            if isinstance(payload, dict):
+                msg = payload.get("message")
+                errors = payload.get("errors")
+                details = f"message={msg}; errors={errors}"
+        except ValueError:
+            pass
+        raise RuntimeError(
+            f"Strava token refresh failed ({response.status_code}). {details}. "
+            "Check STRAVA_CLIENT_ID/STRAVA_CLIENT_SECRET/STRAVA_REFRESH_TOKEN and regenerate refresh_token if needed."
+        )
+
+    tokens = response.json()
+    access_token = tokens.get("access_token")
+    if not access_token:
+        raise RuntimeError("Strava token response does not contain 'access_token'.")
+    return access_token
+
+
+def get_last_week_timestamp():
+    now = datetime.datetime.utcnow()
+    last_week = now - datetime.timedelta(days=7)
+    return int(last_week.timestamp())
+
+
+def _strava_error_details(response):
+    details = response.text
+    try:
+        payload = response.json()
+        if isinstance(payload, dict):
+            message = payload.get("message")
+            errors = payload.get("errors")
+            details = f"message={message}; errors={errors}"
+    except ValueError:
+        pass
+    return details
+
+
+def build_strava_authorization_url():
+    params = {
+        "client_id": CLIENT_ID,
+        "redirect_uri": os.getenv("STRAVA_REDIRECT_URI", "https://localhost/exchange_token"),
+        "response_type": "code",
+        "approval_prompt": "force",
+        "scope": os.getenv("STRAVA_SCOPE", "activity:read_all"),
+    }
+    return f"https://www.strava.com/oauth/authorize?{urlencode(params)}"
+
+
+def download_last_week_activities(access_token):
+    after_timestamp = get_last_week_timestamp()
+    page = 1
+    per_page = 100
+    all_activities = []
+
+    headers = {"Authorization": f"Bearer {access_token}"}
+
+    while True:
+        params = {"after": after_timestamp, "page": page, "per_page": per_page,}
+
+        ACTIVITIES_URL = "https://www.strava.com/api/v3/athlete/activities"
+        response = requests.get(
+            ACTIVITIES_URL, headers=headers, params=params, timeout=30
+        )
+
+        if response.status_code == 401:
+            details = _strava_error_details(response)
+            raise PermissionError(
+                f"Strava activities request unauthorized (401). {details}. "
+                "This usually means the token is invalid/expired or the app does not have activity read scope."
+            )
+        if response.status_code >= 400:
+            details = _strava_error_details(response)
+            raise RuntimeError(f"Strava activities request failed ({response.status_code}). {details}")
+
+        activities = response.json()
+
+        if not activities:
+            break
+
+        all_activities.extend(activities)
+        page += 1
+
+    return all_activities
+
+
+def _download_activity_details(access_token, activity_id):
+    headers = {"Authorization": f"Bearer {access_token}"}
+
+    ACTIVITY_URL = "https://www.strava.com/api/v3/activities"
+    detail_response = requests.get(
+        f"{ACTIVITY_URL}/{activity_id}",
+        headers=headers,
+        params={"include_all_efforts": "true"},
+        timeout=30,
+    )
+    if detail_response.status_code >= 400:
+        details = _strava_error_details(detail_response)
+        raise RuntimeError(f"Failed to fetch activity {activity_id} details ({detail_response.status_code}). {details}")
+
+    ACTIVITY_STREAMS_URL = "https://www.strava.com/api/v3/activities/{activity_id}/streams"
+    streams_response = requests.get(
+        ACTIVITY_STREAMS_URL.format(activity_id=activity_id),
+        headers=headers,
+        params={
+            "keys": "time,latlng,distance,altitude,velocity_smooth,heartrate,cadence,watts,temp,moving,grade_smooth",
+            "key_by_type": "true",
+        },
+        timeout=30,
+    )
+    if streams_response.status_code >= 400:
+        details = _strava_error_details(streams_response)
+        raise RuntimeError(f"Failed to fetch activity {activity_id} streams ({streams_response.status_code}). {details}")
+
+    return detail_response.json(), streams_response.json()
+
+
+def download_activity_details(access_token, activities, output_dir="last_week_activity_details"):
+    os.makedirs(output_dir, exist_ok=True)
+    exported = 0
+
+    for activity in activities:
+        activity_id = activity.get("id")
+        if not activity_id:
+            continue
+
+        try:
+            detail, streams = _download_activity_details(access_token, activity_id)
+        except Exception as exc:
+            print(f"⚠️ Skip activity {activity_id}: {exc}")
+            continue
+
+        payload = {"summary": activity, "detail": detail, "streams": streams,}
+
+        activity_file = os.path.join(output_dir, f"activity_{activity_id}.json")
+        with open(activity_file, "w") as handle:
+            json.dump(payload, handle, indent=2)
+        exported += 1
+
+    print(f"💾 Saved {exported} detailed activity files in {output_dir}")
+    return exported
+
+
+# Get strava data
+def copy_strava_files(dry_run=False):
+    print("🔄 Refreshing access token...")
+    try:
+        access_token = refresh_access_token()
+    except Exception as exc:
+        print(f"❌ {exc}")
+        return []
+
+    print("📥 Downloading last week activities...")
+    try:
+        activities = download_last_week_activities(access_token)
+    except PermissionError as exc:
+        print(f"⚠️ {exc}")
+        print("🔁 Retrying once with a newly refreshed token...")
+        access_token = refresh_access_token()
+        try:
+            activities = download_last_week_activities(access_token)
+        except PermissionError as exc_retry:
+            print(f"❌ {exc_retry}")
+            print("🔐 Re-authorize the Strava app with activity read scope, then replace STRAVA_REFRESH_TOKEN.")
+            print(f"🌐 Authorization URL: {build_strava_authorization_url()}")
+            print("ℹ️ After approval, exchange the returned code for a new refresh token.")
+            return []
+
+    print(f"✅ Retrieved {len(activities)} activities")
+
+    # Save to file
+    with open("last_week_activities.json", "w") as f:
+        json.dump(activities, f, indent=2)
+
+    print("💾 Saved to last_week_activities.json")
+
+    print("📦 Downloading detailed activities and streams...")
+    download_activity_details(access_token, activities)
+
+    return activities
+
 def preprocess(argv=sys.argv):
+    if 0:
+        copy_strava_files(dry_run=False)
     athlete = Athlete(age=46, weight=79, hr_max=174, vo2_max=52,
                       hr_rest=48, v_max=27, css=0.95, ftp=236)
 
