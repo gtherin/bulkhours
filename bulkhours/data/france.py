@@ -274,3 +274,76 @@ DataParser.register_dataset(
     source="""la France compte 805 914 personnes de 65 ans dont 425 143 femmes et 380 771 hommes""",
     ref_source="https://www.insee.fr/fr/statistiques/2381472#tableau-figure1",
 )
+
+
+@DataParser.register_dataset(
+    label="france.lycees",
+    summary="Resultats des lycess",
+    category="Economics",
+    raw_data="https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-indicateurs-de-resultat-des-lycees-gt_v2/exports/csv?lang=fr&timezone=Europe%2FBerlin&use_labels=true&delimiter=%3B",
+    ref_source="https://data.education.gouv.fr/explore/dataset/fr-en-indicateurs-de-resultat-des-lycees-gt_v2/api/?disjunctive.uai&disjunctive.secteur&disjunctive.libelle_commune&disjunctive.libelle_departement&disjunctive.libelle_academie&disjunctive.libelle_region&sort=num_ligne",
+)
+def get_lycee(self, **data_info):
+    dataset_url = "https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-indicateurs-de-resultat-des-lycees-gt_v2/exports/csv?lang=fr&timezone=Europe%2FBerlin&use_labels=true&delimiter=%3B"
+    lycees = pd.read_csv(dataset_url, sep=';')
+    # 2. Load the UAI-based location dataset from Education.gouv.fr
+    geo_url = "https://data.education.gouv.fr/explore/dataset/fr-en-annuaire-education/download/?format=csv&timezone=Europe/Paris"
+    uai_geo = pd.read_csv(geo_url, delimiter=';')
+    uai_geo = uai_geo.dropna(subset=['latitude', 'longitude'])
+    df = pd.merge(lycees, uai_geo.dropna(subset=['latitude', 'longitude'])[['identifiant_de_l_etablissement', 'latitude', 'longitude']], left_on='UAI', right_on='identifiant_de_l_etablissement', how='left').copy()
+
+    # Keep Only general statistics
+    for c in ["num_ligne", 'Commune', 'Code région', 'Region', 'Présents - L', 'Présents - ES', 'Présents - S', 'Présents - STI2D', 'Présents - STD2A', 'Présents - STMG', 'Présents - STL',
+        'Présents - ST2S', 'Présents - S2TMD', 'Présents - STHR', 'Taux de réussite - L', 'Taux de réussite - ES', 'Taux de réussite - S', 'Taux de réussite - STI2D',
+        'Taux de réussite - STD2A', 'Taux de réussite - STMG', 'Taux de réussite - STL', 'Taux de réussite - ST2S', 'Taux de réussite - S2TMD', 'Taux de réussite - STHR',
+        'Valeur ajoutée du taux de réussite - L', 'Valeur ajoutée du taux de reussite - ES', 'Valeur ajoutée du taux de réussite - S',
+        'Valeur ajoutée du taux de réussite - STI2D', 'Valeur ajoutée du taux de réussite - STD2A', 'Valeur ajoutée du taux de réussite - STMG', 'Valeur ajoutée du taux de réussite - STL',
+        'Valeur ajoutée du taux de réussite - ST2S', 'Valeur ajoutée du taux de réussite - S2TMD', 'Valeur ajoutée du taux de réussite - STHR', 'Taux de mentions - L',
+        'Taux de mentions - ES', 'Taux de mentions - S', 'Taux de mentions - STI2D', 'Taux de mentions - STD2A', 'Taux de mentions - STMG', 'Taux de mentions - STL', 'Taux de mentions - ST2S', 'Taux de mentions - S2TMD', 'Taux de mentions - STHR',
+        'Valeur ajoutée du taux de mentions - L', 'Valeur ajoutée du taux de mentions - ES', 'Valeur ajoutée du taux de mentions - S', 'Valeur ajoutée du taux de mentions - STI2D', 'Valeur ajoutee du taux de mentions - STD2A',
+        'Valeur ajoutée du taux de mentions - STMG', 'Valeur ajoutée du taux de mentions - STL', 'Valeur ajoutée du taux de mentions - ST2S', 'Valeur ajoutée du taux de mentions - S2TMD', 'Valeur ajoutée du taux de mentions - STHR', "Taux de reussite - Toutes series", 'Valeur ajoutée du taux de reussite - Toutes series',
+        'Valeur ajoutée du taux de mentions - Toutes series', 'Taux de mentions - Toutes series', 'Nombre de mentions TB avec félicitations - T', 'Nombre de mentions TB sans félicitations - T',
+        'Nombre de mentions B - T', 'Nombre de mentions AB - T', 'Taux de mentions - Gnle', 'Effectif de seconde',
+        'Effectif de premiere', "Taux d'acces 1ere-bac", "Taux d'acces terminale-bac", 'Effectif de terminale',
+        "Valeur ajoutée du taux d'acces 1ere-bac", "Valeur ajoutée du taux d'acces terminale-bac", "Valeur ajoutée du taux de réussite - ES", "Présents - Toutes séries",
+        "Valeur ajoutée du taux de mentions - STD2A", "Taux de réussite - Toutes séries", "Valeur ajoutée du taux de mentions - Toutes séries",
+        "Taux de mentions - Toutes séries"]:
+        if c in df.columns:
+            del df[c]
+
+    df = df.rename(columns={"Présents - Toutes series": "Bacheliers (ALL)",
+                        "Présents - Gnle": "Bacheliers",
+                        "Taux de réussite - Gnle": "Success",
+                        'Valeur ajoutée du taux de réussite - Gnle': "XAjout",
+                        'Nombre de mentions TB avec félicitations - G': "XTB",
+                        'Nombre de mentions TB sans félicitations - G': "TB",
+                        'Nombre de mentions B - G': "B", 'Nombre de mentions AB - G': "AB",
+                        "Taux d'accès 2nde-bac": "2Passage",
+                        "Taux d'accès 1ere-bac": "1Passage",
+                        "Taux d'accès terminale-bac": "0Passage",
+                        "Valeur ajoutée du taux de réussite - Toutes séries": "TotAjout",
+                        "Valeur ajoutée du taux d'acces 2nde-bac": "2Ajout",
+                        "Valeur ajoutée du taux d'accès 1ere-bac": "1Ajout",
+                        "Valeur ajoutée du taux d'accès terminale-bac": "0Ajout",
+                        'Valeur ajoutée du taux de mentions - Gnle': "MentionAjout"
+                        })
+
+    for c in ["XTB", "TB", "B", "AB"]:
+        df[c] = df[c].astype(float).fillna(0.)
+    df["P"] = (df["Bacheliers"] * df["Success"] / 100 - (df["XTB"]+df["TB"]+df["B"]+df["AB"])).round()
+    df["F"] = df["Bacheliers"] - (df["XTB"]+df["TB"]+df["B"]+df["AB"]+df["P"])
+
+    # More than 100 students
+    df = df[df["Bacheliers"] > 100]
+
+    df["Mention"] = (df["XTB"] + df["TB"] + df["B"] + df["AB"]) / df["Bacheliers"]
+
+    for c in ["XTB", "TB", "B", "AB"]:
+        df[c] = (100*df[c] / df["Bacheliers"]).round()
+
+    df = df[['Année', 'UAI', 'Etablissement', 'XTB', 'TB', 'B', 'AB',
+        'P', 'F', 'Code commune', 'Académie', 'Code departement', 'Département', 'Secteur', 'TotAjout',
+        '2Passage', '2Ajout', 'Bacheliers', 'Success', 'XAjout', '1Passage',
+        '0Passage', '1Ajout', '0Ajout', 'MentionAjout', 'Mention', 'latitude', 'longitude']]
+
+    return df.sort_values("B", ascending=False)
