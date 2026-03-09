@@ -345,13 +345,18 @@ def get_lycee(self, **data_info):
         'P', 'F', 'Code commune', 'Académie', 'Code departement', 'Département', 'Secteur', 'TotAjout',
         '2Passage', '2Ajout', 'Bacheliers', 'Success', 'XAjout', '1Passage',
         '0Passage', '1Ajout', '0Ajout', 'MentionAjout', 'Mention', 'latitude', 'longitude']]
+    df['Code'] = df['Etablissement'].str.replace('LYCEE ', '').str.replace(' (GENERAL ET TECHNO.)', '').str.replace('PIERRE-GILLES ', '')
 
     zones = {'X': ["0750655E", "0750654D", "0750685M"],
-             "1": ["0750711R", "0750712S", "0750653C", "0750715V", "0750714U", "0750670W"],
-             "2": ["0750652B", "0750647W", "0750651A", "0750675B", "0750673Z", "0750648X"],
+             "1": ["0750653C", "0750714U", "0750711R", "0750712S", "0750715V", "0750670W"],
+             "2": ["0750652B", "0750648X", "0750647W", "0750651A", "0750675B", "0750673Z"],
              "3": ["0750657G", "0750660K", "0750656F", "0750689S"],
          }
     df["zone"] = df['UAI'].map({v: k for k, lst in zones.items() for v in lst})
+    choices = ['0750655E', '0750654D', '0750653C', '0750714U', '0750711R', '0750652B', '0750648X']
+    df["choice"] = df['UAI'].map({c: i+1 for i, c in enumerate(choices)})
+
+    df["is_selected"] = ~df["zone"].isnull()
     return df.sort_values("B", ascending=False)
 
 @DataParser.register_dataset(
