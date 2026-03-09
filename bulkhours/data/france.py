@@ -353,3 +353,13 @@ def get_lycee(self, **data_info):
          }
     df["zone"] = df['UAI'].map({v: k for k, lst in zones.items() for v in lst})
     return df.sort_values("B", ascending=False)
+
+@DataParser.register_dataset(
+    label="france.maplycees",
+    summary="World Bank Poverty and Inequality data (with gpx extra info)",
+    reference="france.lycees",
+)
+def get_maplycees(self, **kwargs):
+    import geopandas as gpd
+    df = get_lycee(self, **kwargs)
+    return gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.longitude, df.latitude), crs="EPSG:4326")
