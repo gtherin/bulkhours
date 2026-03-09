@@ -285,10 +285,10 @@ DataParser.register_dataset(
 )
 def get_lycee(self, **data_info):
     dataset_url = "https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-indicateurs-de-resultat-des-lycees-gt_v2/exports/csv?lang=fr&timezone=Europe%2FBerlin&use_labels=true&delimiter=%3B"
-    lycees = pd.read_csv(dataset_url, sep=';')
+    lycees = pd.read_csv(dataset_url, sep=';', low_memory=False)
     # 2. Load the UAI-based location dataset from Education.gouv.fr
     geo_url = "https://data.education.gouv.fr/explore/dataset/fr-en-annuaire-education/download/?format=csv&timezone=Europe/Paris"
-    uai_geo = pd.read_csv(geo_url, delimiter=';')
+    uai_geo = pd.read_csv(geo_url, delimiter=';', low_memory=False)
     uai_geo = uai_geo.dropna(subset=['latitude', 'longitude'])
     df = pd.merge(lycees, uai_geo.dropna(subset=['latitude', 'longitude'])[['identifiant_de_l_etablissement', 'latitude', 'longitude']], left_on='UAI', right_on='identifiant_de_l_etablissement', how='left').copy()
 
@@ -346,4 +346,10 @@ def get_lycee(self, **data_info):
         '2Passage', '2Ajout', 'Bacheliers', 'Success', 'XAjout', '1Passage',
         '0Passage', '1Ajout', '0Ajout', 'MentionAjout', 'Mention', 'latitude', 'longitude']]
 
+    zones = {'X': ["0750655E", "0750654D", "0750685M"],
+             "1": ["0750711R", "0750712S", "0750653C", "0750715V", "0750714U", "0750670W"],
+             "2": ["0750652B", "0750647W", "0750651A", "0750675B", "0750673Z", "0750648X"],
+             "3": ["0750657G", "0750660K", "0750656F", "0750689S"],
+         }
+    df["zone"] = df['UAI'].map({v: k for k, lst in zones.items() for v in lst})
     return df.sort_values("B", ascending=False)
