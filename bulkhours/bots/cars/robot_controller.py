@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 import threading
 import time
+import math
 from pathlib import Path
-from typing import Dict
+from typing import Any, Dict
 
+from robot_hat import Servo
 from picarx import Picarx as PiCarX
 
 
@@ -28,6 +30,16 @@ class RobotController:
         self._tilt = tilt_center
         self._pan_center = pan_center
         self._tilt_center = tilt_center
+        self._aux_servo = None
+        self._aux_servo_center = 0
+        self._aux_motion_thread = None
+
+        # Optional user servo on P4. Keep startup resilient if not connected.
+        try:
+            self._aux_servo = Servo("P4")
+            self._aux_servo.angle(self._aux_servo_center)
+        except Exception:
+            self._aux_servo = None
 
         self._last_heartbeat = time.monotonic()
         self._heartbeat_timeout_s = heartbeat_timeout_s
@@ -94,7 +106,107 @@ class RobotController:
     def recenter_camera(self) -> Dict[str, int]:
         return self.set_camera(pan=self._pan_center, tilt=self._tilt_center)
 
-    def state(self) -> Dict[str, int | float | bool]:
+    def _agitate_aux_servo(self, safe_duration: float) -> None:
+        """Run P4 servo agitation routine in background."""
+        with self._lock:
+            aux_servo = self._aux_servo
+        if aux_servo is None:
+            return
+
+        try:
+            # Smooth sinusoidal sweep around center.
+            amplitude = 45.0
+            frequency_hz = 5.0
+            update_dt = 0.03
+            start = time.monotonic()
+
+            while True:
+                elapsed = time.monotonic() - start
+                if elapsed >= safe_duration:
+                    break
+                angle = int(round(amplitude * math.sin(2.0 * math.pi * frequency_hz * elapsed)))
+                aux_servo.angle(angle)
+                time.sleep(update_dt)
+        finally:
+            try:
+                aux_servo.angle(0)
+            except Exception:
+                pass
+
+    def turn_aux_servo_for(self, duration_s: float = 5.0) -> tuple[bool, str]:
+        """Start smooth P4 left-right agitation for the given duration."""
+        with self._lock:
+            if self._aux_servo is None:
+                return False, "Servo P4 unavailable"
+            if self._aux_motion_thread is not None and self._aux_motion_thread.is_alive():
+                return False, "Servo P4 is already moving"
+
+        safe_duration = max(0.1, min(30.0, float(duration_s)))
+
+        try:
+            self._aux_motion_thread = threading.Thread(
+                target=self._agitate_aux_servo,
+                args=(safe_duration,),
+                daemon=True,
+            )
+            self._aux_motion_thread.start()
+            return True, f"Servo P4 agitation started for {safe_duration:.1f}s"
+        except Exception as exc:
+            return False, str(exc)
+
+    @staticmethod
+    def _read_text(path: Path) -> str:
+        try:
+            return path.read_text(encoding="utf-8").strip()
+        except Exception:
+            return ""
+
+    def _read_battery(self) -> Dict[str, Any]:
+        # Prefer kernel power_supply metrics when available (UPS HAT, battery board, etc.).
+        supplies_root = Path("/sys/class/power_supply")
+        if supplies_root.exists():
+            for dev in sorted(supplies_root.iterdir()):
+                if not dev.is_dir():
+                    continue
+
+                cap_raw = self._read_text(dev / "capacity")
+                volt_raw = self._read_text(dev / "voltage_now")
+                status_raw = self._read_text(dev / "status")
+
+                cap = None
+                volt_v = None
+
+                try:
+                    if cap_raw:
+                        cap = int(float(cap_raw))
+                except Exception:
+                    cap = None
+
+                try:
+                    if volt_raw:
+                        # voltage_now is commonly in microvolts.
+                        volt_v = float(volt_raw) / 1_000_000.0
+                except Exception:
+                    volt_v = None
+
+                if cap is not None or volt_v is not None:
+                    return {
+                        "available": True,
+                        "source": dev.name,
+                        "percent": cap,
+                        "voltage_v": volt_v,
+                        "status": status_raw or None,
+                    }
+
+        return {
+            "available": False,
+            "source": None,
+            "percent": None,
+            "voltage_v": None,
+            "status": None,
+        }
+
+    def state(self) -> Dict[str, Any]:
         return {
             "speed": self._speed,
             "steer": self._steer,
@@ -102,6 +214,7 @@ class RobotController:
             "tilt": self._tilt,
             "heartbeat_timeout_s": self._heartbeat_timeout_s,
             "running": self._running,
+            "battery": self._read_battery(),
         }
 
     def shutdown(self) -> None:
