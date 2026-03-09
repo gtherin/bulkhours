@@ -353,7 +353,7 @@ def get_lycee(self, **data_info):
              "3": ["0750657G", "0750660K", "0750656F", "0750689S"],
          }
     df["zone"] = df['UAI'].map({v: k for k, lst in zones.items() for v in lst})
-    choices = ['0750655E', '0750654D', '0750653C', '0750714U', '0750711R', '0750652B', '0750648X']
+    choices = ['0750655E', '0750654D', '0750653C', '0750714U', '0750711R', '0750652B', '0750648X', "0750651A"]
     df["choice"] = df['UAI'].map({c: i+1 for i, c in enumerate(choices)})
 
     df["is_selected"] = ~df["zone"].isnull()
