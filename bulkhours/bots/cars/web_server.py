@@ -703,6 +703,17 @@ async def ws_control(websocket: WebSocket) -> None:
                 await websocket.send_json({"type": "servo4_ack", "ok": ok, "detail": detail})
                 continue
 
+            if msg_type == "led":
+                if robot is None:
+                    await websocket.send_json(
+                        {"type": "error", "error": f"Robot unavailable: {robot_error or 'unknown error'}"}
+                    )
+                    continue
+                on = bool(msg.get("on", False))
+                ok, detail = robot.set_led(on)
+                await websocket.send_json({"type": "led_ack", "ok": ok, "detail": detail})
+                continue
+
             await websocket.send_json({"type": "error", "error": f"Unknown type: {msg_type}"})
     except WebSocketDisconnect:
         if robot is not None:

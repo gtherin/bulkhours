@@ -5,7 +5,7 @@ import math
 from pathlib import Path
 from typing import Any, Dict
 
-from robot_hat import Servo
+from robot_hat import Pin, Servo, utils as robot_hat_utils
 from picarx import Picarx as PiCarX
 
 
@@ -33,6 +33,8 @@ class RobotController:
         self._aux_servo = None
         self._aux_servo_center = 0
         self._aux_motion_thread = None
+        self._user_led = None
+        self._led_on = False
 
         # Optional user servo on P4. Keep startup resilient if not connected.
         try:
@@ -40,6 +42,15 @@ class RobotController:
             self._aux_servo.angle(self._aux_servo_center)
         except Exception:
             self._aux_servo = None
+
+        # Optional onboard user LED exposed by Robot HAT as Pin("LED").
+        try:
+            self._user_led = Pin("LED")
+            self._user_led.off()
+            self._led_on = False
+        except Exception:
+            self._user_led = None
+            self._led_on = False
 
         self._last_heartbeat = time.monotonic()
         self._heartbeat_timeout_s = heartbeat_timeout_s
@@ -154,6 +165,21 @@ class RobotController:
         except Exception as exc:
             return False, str(exc)
 
+    def set_led(self, on: bool) -> tuple[bool, str]:
+        with self._lock:
+            if self._user_led is None:
+                return False, "Onboard LED unavailable"
+            try:
+                if bool(on):
+                    self._user_led.on()
+                    self._led_on = True
+                    return True, "LED on"
+                self._user_led.off()
+                self._led_on = False
+                return True, "LED off"
+            except Exception as exc:
+                return False, str(exc)
+
     @staticmethod
     def _read_text(path: Path) -> str:
         try:
@@ -198,6 +224,20 @@ class RobotController:
                         "status": status_raw or None,
                     }
 
+        # Fallback for Robot HAT: battery level is wired to ADC A4 (via divider).
+        try:
+            volt_v = float(robot_hat_utils.get_battery_voltage())
+            if volt_v > 0:
+                return {
+                    "available": True,
+                    "source": "robot_hat_a4",
+                    "percent": None,
+                    "voltage_v": volt_v,
+                    "status": None,
+                }
+        except Exception:
+            pass
+
         return {
             "available": False,
             "source": None,
@@ -214,6 +254,7 @@ class RobotController:
             "tilt": self._tilt,
             "heartbeat_timeout_s": self._heartbeat_timeout_s,
             "running": self._running,
+            "led_on": self._led_on,
             "battery": self._read_battery(),
         }
 
@@ -221,6 +262,12 @@ class RobotController:
         with self._lock:
             self._running = False
             self._px.stop()
+            try:
+                if self._user_led is not None:
+                    self._user_led.off()
+                    self._led_on = False
+            except Exception:
+                pass
 
     def _watchdog_loop(self) -> None:
         while self._running:
