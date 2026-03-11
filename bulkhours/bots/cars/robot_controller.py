@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any, Dict
 
 from robot_hat import Pin, Servo, utils as robot_hat_utils
-from picarx import Picarx as PiCarX
+from . import Picarx
 
 
 class RobotController:
@@ -22,7 +22,7 @@ class RobotController:
         if config_path is None:
             config_path = str(Path.home() / ".config" / "picar-x" / "picar-x.conf")
 
-        self._px = PiCarX(config=config_path)
+        self._px = Picarx(config=config_path)
         self._lock = threading.RLock()
         self._speed = 40
         self._steer = 0
