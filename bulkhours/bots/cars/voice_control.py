@@ -13,7 +13,7 @@ from pathlib import Path
 
 import sounddevice as sd
 from vosk import KaldiRecognizer, Model
-from . import Picarx
+from .robot_controller import RobotController
 from movement import advance_cm, route_20_right10_10, turn_right_cm
 
 
@@ -338,7 +338,7 @@ def main():
 
     config_path = Path.home() / ".config" / "picar-x" / "picar-x.conf"
     config_path.parent.mkdir(parents=True, exist_ok=True)
-    px = Picarx(config=str(config_path))
+    px = RobotController(config_path=str(config_path))
 
     input_info = sd.query_devices(args.mic_device, "input")
     detected_sr = int(input_info["default_samplerate"])

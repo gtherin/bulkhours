@@ -6,10 +6,10 @@ from pathlib import Path
 from typing import Any, Dict
 
 from robot_hat import Pin, Servo, utils as robot_hat_utils
-from . import Picarx
+from .picarx2 import Picarx
 
 
-class RobotController:
+class RobotController(Picarx):
     """Single owner for PiCar-X hardware with watchdog safety."""
 
     def __init__(
@@ -22,7 +22,7 @@ class RobotController:
         if config_path is None:
             config_path = str(Path.home() / ".config" / "picar-x" / "picar-x.conf")
 
-        self._px = Picarx(config=config_path)
+        super().__init__(config=config_path)
         self._lock = threading.RLock()
         self._speed = 40
         self._steer = 0
@@ -57,8 +57,8 @@ class RobotController:
         self._running = True
 
         # Move camera to known initial position.
-        self._px.set_cam_pan_angle(self._pan_center)
-        self._px.set_cam_tilt_angle(self._tilt_center)
+        self.set_cam_pan_angle(self._pan_center)
+        self.set_cam_tilt_angle(self._tilt_center)
 
         self._watchdog = threading.Thread(target=self._watchdog_loop, daemon=True)
         self._watchdog.start()
@@ -78,7 +78,7 @@ class RobotController:
     def set_steer(self, angle: int) -> int:
         with self._lock:
             self._steer = self._clamp(angle, -35, 35)
-            self._px.set_dir_servo_angle(self._steer)
+            self.set_dir_servo_angle(self._steer)
             return self._steer
 
     def drive(self, throttle: int) -> Dict[str, int | str]:
@@ -89,29 +89,29 @@ class RobotController:
             self._speed = speed
 
             if t > 0:
-                self._px.forward(speed)
+                self.forward(speed)
                 motion = "forward"
             elif t < 0:
-                self._px.backward(speed)
+                self.backward(speed)
                 motion = "backward"
             else:
-                self._px.stop()
+                self.stop()
                 motion = "stop"
 
             return {"motion": motion, "speed": speed, "steer": self._steer}
 
     def stop(self) -> None:
         with self._lock:
-            self._px.stop()
+            super().stop()
 
     def set_camera(self, pan: int | None = None, tilt: int | None = None) -> Dict[str, int]:
         with self._lock:
             if pan is not None:
                 self._pan = self._clamp(pan, -60, 60)
-                self._px.set_cam_pan_angle(self._pan)
+                self.set_cam_pan_angle(self._pan)
             if tilt is not None:
                 self._tilt = self._clamp(tilt, -35, 35)
-                self._px.set_cam_tilt_angle(self._tilt)
+                self.set_cam_tilt_angle(self._tilt)
             return {"pan": self._pan, "tilt": self._tilt}
 
     def recenter_camera(self) -> Dict[str, int]:
@@ -261,7 +261,7 @@ class RobotController:
     def shutdown(self) -> None:
         with self._lock:
             self._running = False
-            self._px.stop()
+            super().stop()
             try:
                 if self._user_led is not None:
                     self._user_led.off()
@@ -275,5 +275,5 @@ class RobotController:
             if elapsed > self._heartbeat_timeout_s:
                 # Safety stop if client disconnects or stops sending heartbeats.
                 with self._lock:
-                    self._px.stop()
+                    super().stop()
             time.sleep(0.05)
