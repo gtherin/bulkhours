@@ -541,6 +541,7 @@
               <textarea id="speakText" maxlength="240" placeholder="Tape ton texte ici (ex: Bonjour, je suis pret.)"></textarea>
               <div class="speak-row">
                 <button class="accent" id="btnSpeak">Parler</button>
+                <button id="btnMic">Micro</button>
                 <span id="speakStatus" class="speak-status">TTS: en attente</span>
               </div>
               <label for="musicSelect">Musique</label>
@@ -560,6 +561,11 @@
               <div class="speak-row">
                 <button class="accent" id="btnServo4Turn">Servo P4 (5s)</button>
                 <span id="servo4Status" class="speak-status">Servo P4: en attente</span>
+              </div>
+              <div class="speak-row">
+                <button class="accent" id="btnLedOn">LED On</button>
+                <button id="btnLedOff">LED Off</button>
+                <span id="ledStatus" class="speak-status">LED: en attente</span>
               </div>
             </div>
           </div>
@@ -615,11 +621,13 @@
     const cameraJoystickReadoutEl = document.getElementById("cameraJoystickReadout");
     const speakTextEl = document.getElementById("speakText");
     const speakStatusEl = document.getElementById("speakStatus");
+    const btnMicEl = document.getElementById("btnMic");
     const musicSelectEl = document.getElementById("musicSelect");
     const musicStatusEl = document.getElementById("musicStatus");
     const detectStatusEl = document.getElementById("detectStatus");
     const detectResultEl = document.getElementById("detectResult");
     const servo4StatusEl = document.getElementById("servo4Status");
+    const ledStatusEl = document.getElementById("ledStatus");
     const joystickAreaEl = document.getElementById("joystickArea");
     const joystickKnobEl = document.getElementById("joystickKnob");
     const joystickReadoutEl = document.getElementById("joystickReadout");
@@ -633,6 +641,8 @@
     let batteryPollTimer;
     let joystickActive = false;
     let cameraJoystickActive = false;
+    let micRecognition = null;
+    let micListening = false;
 
     function clampInt(value, low, high) {
       return Math.max(low, Math.min(high, Math.round(value)));
@@ -729,6 +739,9 @@
         if (msg.type === "servo4_ack") {
           servo4StatusEl.textContent = msg.ok ? `Servo P4: ${msg.detail}` : `Servo P4 erreur: ${msg.detail}`;
         }
+        if (msg.type === "led_ack") {
+          ledStatusEl.textContent = msg.ok ? `LED: ${msg.detail}` : `LED erreur: ${msg.detail}`;
+        }
       };
     }
 
@@ -765,6 +778,77 @@
       }
       speakStatusEl.textContent = "TTS: lecture en cours...";
       send({ type: "speak", text });
+    }
+
+    function startMicInput() {
+      const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!Recognition) {
+        speakStatusEl.textContent = "Micro: non supporte par ce navigateur";
+        return;
+      }
+
+      if (micListening) {
+        micListening = false;
+        btnMicEl.textContent = "Micro";
+        speakStatusEl.textContent = "Micro: arret";
+        if (micRecognition) {
+          try {
+            micRecognition.stop();
+          } catch (_) {
+            // Ignore stop race conditions from browser speech engine.
+          }
+        }
+        return;
+      }
+
+      if (!micRecognition) {
+        micRecognition = new Recognition();
+        micRecognition.lang = "fr-FR";
+        micRecognition.interimResults = true;
+        micRecognition.maxAlternatives = 1;
+        // Keep listening until user toggles off.
+        micRecognition.continuous = true;
+
+        micRecognition.onresult = (event) => {
+          let interim = "";
+          for (let i = event.resultIndex; i < event.results.length; i += 1) {
+            const chunk = event.results[i][0]?.transcript || "";
+            if (event.results[i].isFinal) {
+              speakTextEl.value = `${speakTextEl.value} ${chunk}`.trim();
+            } else {
+              interim += chunk;
+            }
+          }
+          if (interim.trim()) {
+            speakStatusEl.textContent = `Micro: ${interim.trim()}`;
+          }
+        };
+
+        micRecognition.onerror = () => {
+          if (micListening) {
+            speakStatusEl.textContent = "Micro: erreur de reconnaissance";
+          }
+        };
+
+        micRecognition.onend = () => {
+          if (!micListening) return;
+          // Some browsers stop after pauses even in continuous mode.
+          try {
+            micRecognition.start();
+          } catch (_) {
+            // Ignore transient restart issues.
+          }
+        };
+      }
+
+      micListening = true;
+      btnMicEl.textContent = "Stop Mic";
+      speakStatusEl.textContent = "Micro: ecoute en cours...";
+      try {
+        micRecognition.start();
+      } catch (_) {
+        // start() can throw if called too quickly after previous stop.
+      }
     }
 
     function playMusic() {
@@ -806,6 +890,11 @@
     function turnServo4() {
       servo4StatusEl.textContent = "Servo P4: rotation 5s...";
       send({ type: "servo4_turn" });
+    }
+
+    function setLed(on) {
+      ledStatusEl.textContent = on ? "LED: activation..." : "LED: extinction...";
+      send({ type: "led", on: Boolean(on) });
     }
 
     function stop() {
@@ -1114,10 +1203,13 @@
       syncCameraJoystickFromSliders();
     });
     document.getElementById("btnSpeak").addEventListener("click", speak);
+    document.getElementById("btnMic").addEventListener("click", startMicInput);
     document.getElementById("btnPlayMusic").addEventListener("click", playMusic);
     document.getElementById("btnStopMusic").addEventListener("click", stopMusic);
     document.getElementById("btnDetectObject").addEventListener("click", detectObject);
     document.getElementById("btnServo4Turn").addEventListener("click", turnServo4);
+    document.getElementById("btnLedOn").addEventListener("click", () => setLed(true));
+    document.getElementById("btnLedOff").addEventListener("click", () => setLed(false));
     document.getElementById("btnEmergency").addEventListener("click", stop);
 
     speakTextEl.addEventListener("keydown", (ev) => {
