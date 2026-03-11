@@ -6,7 +6,10 @@ from pathlib import Path
 from typing import Any, Dict
 
 from robot_hat import Pin, Servo, utils as robot_hat_utils
-from .picarx2 import Picarx
+try:
+    from .picarx2 import Picarx
+except ImportError:
+    from picarx2 import Picarx
 
 
 class RobotController(Picarx):

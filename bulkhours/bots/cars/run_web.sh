@@ -2,7 +2,7 @@
 # /home/pi/bulkhours/bulkhours/bots/cars/run_web.sh
 set -euo pipefail
 
-source /home/pi/venvs/picarx/bin/activate
+source /home/pi/.venv/bin/activate
 cd /home/pi/bulkhours/bulkhours/bots/cars
 
 APP_PATTERNS=(
