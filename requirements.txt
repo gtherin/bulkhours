@@ -15,4 +15,5 @@ ipywidgets
 jinja2
 PyJWT
 Pyarrow
+fitparse
 #tensorflow
