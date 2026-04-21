@@ -63,16 +63,17 @@ class Performance:
         # Get previous reference file
         pdf = data.get_data("sport.stravism", credit=False, password=os.environ['BULK_SPORT_KEY'])
 
-        # Merge google info
-        gdf = gdf.merge(pdf[['id', 'modifiedTime', 'filename']], how='left', on="filename")
+        # Merge google info + previous TRIMP
+        gdf = gdf.merge(pdf[['id', 'modifiedTime', 'filename', 'TRIMP']], how='left', on="filename")
 
         # Add new summary columns for activities
         zcols = ['zones_bpm', 'zones_strava', 'zones_minetti', 'zones_bpm']
         for z in zcols:
             gdf[z] = ''
 
-        # Add TRIMP load
-        gdf['TRIMP'] = self.athlete.trimp_from_df(gdf)
+        # Compute TRIMP only for rows where it's missing
+        missing = gdf['TRIMP'].isna()
+        gdf.loc[missing, 'TRIMP'] = self.athlete.trimp_from_df(gdf.loc[missing].copy())
         # Add Strava ref sTRIMP
         strimps = {16731673287: 140, 16779135626: 77, 16802972475: 91, 16854653997: 92, 16915566584: 215, 16935972434: 118, 17012903551: 177, # 2025-01-11
             17049890266: 145, # 2025-01-14
