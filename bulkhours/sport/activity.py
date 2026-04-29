@@ -10,7 +10,7 @@ class Activity:
     def __init__(self, folder_name, info, atype=None, local=True, *args, **kwargs):
         self.atype = atype
         self.info = info
-        self.filename = f'/home/ubuntu/bulkcats/strava/{self.info.filename}'
+        self.filename = f'/home/ubuntu/bulkhours-data/strava/{self.info.filename}'
 
         try:
             if '.fit' in self.info.filename:

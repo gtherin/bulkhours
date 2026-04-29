@@ -45,7 +45,7 @@ class Performance:
 
     def update_file_id(self, ainfo, folder_id):
         # Set media mime type
-        filename = f'/home/ubuntu/bulkcats/strava/{ainfo.filename}'
+        filename = f'/home/ubuntu/bulkhours-data/strava/{ainfo.filename}'
 
         media = MediaFileUpload(filename, mimetype='application/zip')
         file_metadata = {'name': filename.split('/')[-1], 'parents': [folder_id]}
@@ -58,7 +58,7 @@ class Performance:
 
     def preprocess(self):
         # Load formatted new data
-        gdf = Activities.get_formatted_activities('/home/ubuntu/bulkcats/strava/activities.csv')
+        gdf = Activities.get_formatted_activities('/home/ubuntu/bulkhours-data/strava/activities.csv')
 
         # Get previous reference file
         pdf = data.get_data("sport.stravism", credit=False, password=os.environ['BULK_SPORT_KEY'])
