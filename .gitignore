@@ -61,3 +61,9 @@ train_catvnoncat.h5
 vaccinations.csv
 
 data/exercices/*_sol.txt
+
+# Aucun .env ne doit entrer dans git : ils portent des secrets reels
+# (DSN complets, cles de session). Regle ajoutee le 2026-08-17 apres avoir
+# constate que trianer.fr et guydegnol.net avaient commite ET POUSSE les
+# leurs, pris par le `git add -A` du cron de sauvegarde de 3h.
+.env*
