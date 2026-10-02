@@ -92,8 +92,12 @@ def init_from_token(token, ktoken, packages=None, link=None):
     try:
         import jwt
 
-        # Get data
-        data = jwt.decode(jwt=token, key=ktoken, algorithms=["HS256"])
+        # Get data. The "key" is the student's own e-mail, which is also inside
+        # the payload: it cannot tell a genuine token from a forged one, since
+        # anyone holding the token holds the key too. All it does is make recent
+        # PyJWT print an InsecureKeyLengthWarning over the whole notebook (22
+        # bytes < 32). Read the identity here; the server decides what it grants.
+        data = jwt.decode(jwt=token, algorithms=["HS256"], options={"verify_signature": False})
         init_env(packages=packages, link=link, **data)
         return
         #raise Exception(f"Identity {data['email']}is not the expected one")
