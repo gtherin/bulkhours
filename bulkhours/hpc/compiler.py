@@ -89,12 +89,20 @@ class CCPPlugin(Magics):
                     f.write(params["main_execution"])
 
                 # Compile file
+                # -O2 ON THE HOST CODE.
+                #
+                # Without it the host compiler runs unoptimised while ptxas
+                # optimises device code by default: the CPU reference is
+                # artificially slow and the measured GPU speedup is inflated by
+                # a factor that has nothing to do with the hardware. In a course
+                # whose subject IS that comparison, the numbers were wrong.
+                # Raised by Dominique Yolin, 2026-10-01.
                 if self.cinfo.compiler in ["g++", "gcc"]:
                     cmd = (
-                        f"/usr/bin/{self.cinfo.compiler} {file_code} -o {file_path}.out"
+                        f"/usr/bin/{self.cinfo.compiler} -O2 {file_code} -o {file_path}.out"
                     )
                 else:
-                    cmd = f"/usr/local/cuda/bin/nvcc {file_code} -o {file_path}.out -Wno-deprecated-gpu-targets"
+                    cmd = f"/usr/local/cuda/bin/nvcc -O2 {file_code} -o {file_path}.out -Wno-deprecated-gpu-targets"
                 subprocess.check_output(cmd.split(), stderr=subprocess.STDOUT)
 
                 # Run executable file
