@@ -5,6 +5,33 @@ from .grade import Grade
 from . import tools
 
 
+def _render(source, variant):
+    """The ONE renderer of the course standard (packages/bulkhours-course),
+    applied to one cell. Until 2026-10-14 this file carried its own 60-line
+    parser of the BULKHOURS./BKRESET. names while maqi-course rendered the same
+    names a second time - two renderers for one notion. The standard's markers
+    (`# SOLUTION`, `# BEGIN SOLUTION` ... see COURSE.md) now work in a live
+    notebook too, and the hole reads `# ...` / `...` everywhere (the
+    "To be filled" message is gone, decided 2026-10-14). The comment leader is
+    the cell's: `//` for a C++ cell written with `// BULKHOURS.`.
+
+    A block left open raises ValueError, where the old parser went on
+    silently: a marker the renderer cannot read is a solution delivered."""
+    try:
+        from bulkhours_course.render import render
+    except ImportError as e:   # the dependency is declared in setup.cfg; name it rather than fail in render
+        raise ImportError("bulkhours needs bulkhours-course for its markers: "
+                          "pip install 'bulkhours-course @ git+https://github.com/gtherin/bulkhours#subdirectory=packages/bulkhours-course'") from e
+    compact = source.replace(" ", "")
+    leader = "//" if "//BULKHOURS" in compact or "//BKRESET" in compact else "#"
+    lines = source.splitlines(keepends=True)
+    code = "".join(render(lines, variant, leader))
+    for _ in range(3):
+        if len(code) > 0 and code[-1] == "\n":
+            code = code[:-1]
+    return code
+
+
 def cell_reset(source):
     """
     # BULKHOURS.REMOVE:START
@@ -21,87 +48,14 @@ def cell_reset(source):
         # The previous line will be printed in the solution generation
 
     df["noise"] = sp.stats.norm(loc=3, scale=0.3).rvs(n) # BULKHOURS.INIT:0
+
+    The standard's markers work here too:  x = f(3)  # SOLUTION  ->  x = ...
     """
-
-    separator = "//" if "//BULKHOURS" in source.replace(" ", "") else "#"
-    nsource = []
-    keep_line = True
-
-
-    message = "❗A compléter❗" if 2 else "❗To be filled❗"
-    message = "❗To be filled❗"
-    message = "" if "//BULKHOURS" in source.replace(" ", "") in source else message
-
-    for s in source.split("\n"):
-        s = s.replace("BKRESET", "BULKHOURS")
-        if "BULKHOURS." in s:
-            l = s.split("BULKHOURS.")
-            if "INIT:" in l[1]:
-                if "=" in s:
-                    s = (
-                        s.split("=")[0]
-                        + "= "
-                        + l[1].replace("INIT:", "")
-                        + f"  {separator} ...{message}"
-                    )
-                elif "return " in s:
-                    s = (
-                        s.split("return ")[0]
-                        + "return "
-                        + l[1].replace("INIT:", "")
-                        + f"  {separator} ...{message}"
-                    )
-            if "REMOVE" in l[1]:
-                if "START" in l[1]:
-                    keep_line = False
-                elif "END" in l[1]:
-                    keep_line = True
-                    s = s.split(separator)[0] + separator + f" ...{message}"
-                else:
-                    indentation = len(s) - len(s.lstrip())
-                    s = (" " * indentation) + separator + f" ...{message}"
-            if "REPLACE" in l[1]:
-                indentation = len(s) - len(s.lstrip())
-                s = (
-                    (" " * indentation)
-                    + l[1].replace("REPLACE:", "")
-                    + f"  {separator} ..."
-                )
-            if "PRINT" in l[1]:
-                indentation = len(s) - len(s.lstrip())
-                s = (" " * indentation) + l[1].replace("PRINT:", "")
-
-        if keep_line:
-            nsource.append(s)
-
-    code = "\n".join(nsource)
-    for _ in range(3):
-        if len(code) > 0 and code[-1] == "\n":
-            code = code[:-1]
-    # print(code)
-    return code
+    return _render(source, "student")
 
 
 def cell_solution(source):
-    separator = "//" if "// BULKHOURS" not in source else "#"
-    nsource = []
-    for s in source.split("\n"):
-        s = s.replace("BKRESET", "BULKHOURS")
-        if "BULKHOURS." in s:
-            l = s.split("BULKHOURS.")
-            if "REMOVE:START" in l[1] or "REMOVE:END" in l[1] or "PRINT" in l[1]:
-                continue
-            elif "INIT:" in l[1] or "REPLACE:" in l[1] or "REMOVE" in l[1]:
-                s = l[0][: l[0].rfind(separator)]
-
-        nsource.append(s)
-
-    code = "\n".join(nsource)
-    for _ in range(3):
-        if len(code) > 0 and code[-1] == "\n":
-            code = code[:-1]
-    # print(code)
-    return code
+    return _render(source, "teacher")
 
 
 class CellParser:
