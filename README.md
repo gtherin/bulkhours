@@ -5,7 +5,7 @@
 ### 🛠️The aim of the package:
 - 🔗 Create a real-time interactivity between 🧑‍🎓students and 👨‍🏫teachers (through Jupyter notebooks),
 - 📈 Serve as as data provider for practical case studies to support courses (**data science, physics and IT for now**),
-- 📐 Carry its copy of the **course standard** - `course.toml`, the markers (Python and C++), the student and teacher renders - as the dependency-free package [`packages/course_manager`](packages/course_manager/COURSE.md), shared as identical copies between projects,
+- 📐 Follow the **course standard** - `course.toml`, the markers (Python and C++), the student and teacher renders - of the [coursemanager](https://github.com/GatekaC/coursemanager) project, which its own markers (`cell_parser`) delegate to,
 - 🤖 Automatic evaluation of students,
 - 👨‍💻 Tools to develop in C/C++/CUDA within a jupyter notebook environement (with a python kernel),
 - 🧠 Simple Interfaces with new machine learning trends packages🤗.
