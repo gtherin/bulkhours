@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "bulkhours-course"
+name = "course-manager"
 version = "0.3.0"
 description = "The course standard: course.toml, one source per lab, student and teacher versions, waves and their record"
 readme = "README.md"
@@ -11,7 +11,7 @@ requires-python = ">=3.11"
 dependencies = []          # jupytext only for .py notebooks: COURSE_JUPYTEXT or on PATH
 
 [project.scripts]
-bulkhours-course = "bulkhours_course.cli:main"
+course-manager = "course_manager.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

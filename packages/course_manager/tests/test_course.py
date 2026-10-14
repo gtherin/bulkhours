@@ -1,4 +1,4 @@
-"""bulkhours-course on a small example course: the format, and that no answer
+"""course-manager on a small example course: the format, and that no answer
 reaches a student. Standard library only:
     python3 -m unittest discover -s tests"""
 import json
@@ -9,9 +9,9 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from bulkhours_course import spec                      # noqa: E402
-from bulkhours_course.render import do_render          # noqa: E402
-from bulkhours_course.spec import CourseError          # noqa: E402
+from course_manager import spec                      # noqa: E402
+from course_manager.render import do_render          # noqa: E402
+from course_manager.spec import CourseError          # noqa: E402
 
 ANSWER = "activity = trades.resample('5min').size()"
 
@@ -149,7 +149,7 @@ class TestBuild(unittest.TestCase):
 
 class TestPersonalise(unittest.TestCase):
     def test_login_and_course_filled_in_text_only(self):
-        from bulkhours_course.render import personalise
+        from course_manager.render import personalise
         v = {"login": "john.doe", "course": "toy"}
         self.assertEqual(personalise(b"clone .../{{course}}/{{ login }}.git {{other}}", "README.md", v),
                          b"clone .../toy/john.doe.git {{other}}")
@@ -161,9 +161,9 @@ if __name__ == "__main__":
 
 
 class Markers(unittest.TestCase):
-    """Otter Grader's markers, the extensions, and bulkhours' names."""
+    """Otter Grader's markers, the extensions, and the older names."""
     def r(self, src, variant="student"):
-        from bulkhours_course.render import render
+        from course_manager.render import render
         return "".join(render(textwrap.dedent(src).splitlines(True), variant))
 
     def test_otter_one_line(self):
@@ -238,7 +238,7 @@ class Markers(unittest.TestCase):
         for v in ("student", "teacher"):
             self.assertEqual(self.r(src, v), "# %%\nx = 1\n# %%\ny = 2\n")
 
-    def test_bulkhours_names_still_work(self):
+    def test_older_names_still_work(self):
         src = """\
             total = sum(xs)  # BULKHOURS.INIT: 0
             k = window(5)  # BKRESET.REPLACE: k = ...
@@ -248,7 +248,7 @@ class Markers(unittest.TestCase):
         self.assertEqual(self.r(src), "total = 0  # ...\nk = ...  # ...\n# ...\n# Hint\n")
 
     def test_exercises_counted(self):
-        from bulkhours_course.render import problems
+        from course_manager.render import problems
         src = textwrap.dedent("""\
             a = compute_something_long(1)  # SOLUTION
             b = compute_something_long(2)  # SOLUTION: 0
@@ -260,7 +260,7 @@ class Markers(unittest.TestCase):
         self.assertEqual(problems(src), ([], 3))
 
     def test_a_misspelt_marker_stops_the_build(self):
-        from bulkhours_course.render import problems
+        from course_manager.render import problems
         for bad in ("y = secret_answer()  # SOLUTION.INIT: 0\n", "# BEGIN SOLUTIONS\n",
                     "y = secret_answer()  # SOLUTIONS\n", "# END PROMPTS\n"):
             self.assertTrue(problems([bad])[0], bad)
@@ -268,7 +268,7 @@ class Markers(unittest.TestCase):
         self.assertEqual(problems(["# Write `# SOLUTION` at the end of a line\n"])[0], [])   # quoted: prose
 
     def test_an_answer_left_outside_the_markers_is_a_leak(self):
-        from bulkhours_course.render import problems
+        from course_manager.render import problems
         src = ["k = compute_the_window_length(5)  # SOLUTION\n", "k = compute_the_window_length(5)\n"]
         self.assertTrue(any("reaches the student" in e for e in problems(src)[0]))
 
@@ -276,7 +276,7 @@ class Markers(unittest.TestCase):
 class Program(unittest.TestCase):
     """The README's {{program}}: all waves, the summary only once received."""
     def test_no_spoil(self):
-        from bulkhours_course.render import program, personalise
+        from course_manager.render import program, personalise
         waves = {"w0": {"title": "Start", "labs": ["init"], "summary": ""},
                  "w1": {"title": "Intro", "labs": ["microintro"], "summary": "One exercise: the U."},
                  "w2": {"title": "The book.", "labs": ["orderbook"], "summary": "Eight exercises, Kyle's lambda."}}
@@ -312,27 +312,27 @@ class WaveId(unittest.TestCase):
 
 
 class Standalone(unittest.TestCase):
-    """The invariants of living in the public bulkhours repository."""
+    """The invariants of a copy shared between segregated projects."""
     def test_imports_no_notebook_runtime(self):
-        # A deploy engine imports this on a bare host: nothing of `bulkhours`,
-        # no third-party module, must come with it.
+        # A deploy engine imports this on a bare host: no host package and no
+        # third-party module may come with it - the standard library only.
         import subprocess
         src = Path(__file__).resolve().parents[1] / "src"
-        code = ("import sys; before = set(sys.modules); import bulkhours_course, bulkhours_course.render, "
-                "bulkhours_course.cli; new = {m.split('.')[0] for m in set(sys.modules) - before}; "
-                "bad = new & {'bulkhours', 'numpy', 'pandas', 'IPython', 'firebase_admin', 'matplotlib'}; "
+        code = ("import sys; before = set(sys.modules); import course_manager, course_manager.render, "
+                "course_manager.cli; new = {m.split('.')[0] for m in set(sys.modules) - before}; "
+                "bad = new - set(sys.stdlib_module_names) - {'course_manager'}; "
                 "print(sorted(bad))")
         r = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, env={"PYTHONPATH": str(src), "PATH": "/usr/bin:/bin"})
         self.assertEqual(r.stdout.strip(), "[]", r.stderr)
 
     def test_renderer_names_are_one_renderer(self):
-        from bulkhours_course.render import render_with
+        from course_manager.render import render_with
         src = textwrap.dedent("""\
             total = sum(xs)  # BULKHOURS.INIT: 0
             k = f(5)  # SOLUTION
             """).splitlines(True)
         for v in ("student", "teacher"):
-            self.assertEqual(render_with("bulkhours", src, v), render_with("markers", src, v))
+            self.assertEqual(render_with("bulkhours", src, v), render_with("markers", src, v))   # the older value of `renderer`
         with self.assertRaises(ValueError):
             render_with("other", src, "student")
 
@@ -340,7 +340,7 @@ class Standalone(unittest.TestCase):
 class Cpp(unittest.TestCase):
     """The same words with `//`: C, C++ and CUDA sources; the hole is `...`."""
     def r(self, src, variant="student"):
-        from bulkhours_course.render import render
+        from course_manager.render import render
         return "".join(render(textwrap.dedent(src).splitlines(True), variant, leader="//"))
 
     def test_one_line_keeps_type_name_and_semicolon(self):
@@ -409,7 +409,7 @@ class Cpp(unittest.TestCase):
         self.assertEqual(self.r(src), "// ... : compléter la boucle\nint n = 0  // ...\n// ...\n")
 
     def test_hash_is_prose_in_cpp_and_slashes_are_prose_in_python(self):
-        from bulkhours_course.render import problems, render
+        from course_manager.render import problems, render
         cpp = ["#include <vector>\n", "#define N 4  // the grid\n", "int x = secret_value();  // SOLUTION\n", "int y = 2;  # SOLUTION\n"]
         errs, n = problems(cpp, leader="//")
         self.assertEqual((errs, n), ([], 1))
@@ -432,7 +432,7 @@ class Cpp(unittest.TestCase):
             c2.build("intro")
 
     def test_notebook_leader_from_kernel(self):
-        from bulkhours_course.render import notebook_leader
+        from course_manager.render import notebook_leader
         self.assertEqual(notebook_leader({"metadata": {"kernelspec": {"language": "c++"}}}), "//")
         self.assertEqual(notebook_leader({"metadata": {"language_info": {"name": "python"}}}), "#")
         self.assertEqual(notebook_leader({}), "#")

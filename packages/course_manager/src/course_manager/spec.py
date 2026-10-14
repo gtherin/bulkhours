@@ -3,7 +3,7 @@
 A course lives in one organisation of a git forge; its `solution` repository holds a
 `course.toml` (`package.toml`, its earlier name, is still read). The format is
 described key by key in COURSE.md; this module is its only reader, so what
-`bulkhours-course check` accepts and what the engine deploys cannot drift apart.
+`course-manager check` accepts and what the engine deploys cannot drift apart.
 
 Nothing here prints or exits: problems raise CourseError, and the caller
 decides what a problem means (a CLI stops, the engine marks the course).
@@ -15,7 +15,7 @@ from pathlib import Path
 
 NAME = re.compile(r"^[a-z0-9][a-z0-9_-]{1,39}$")   # labs may be numbered: 00-getting-started
 FILES = ("course.toml", "package.toml")          # the first one found wins
-RENDERERS = ("markers", "bulkhours")
+RENDERERS = ("markers", "bulkhours")             # the second is the OLDER NAME of the one renderer, kept so files still load
 STATUSES = ("active", "past")                    # [course] status; absent = active
 DELIVERIES = ("engine", "external")              # [course] delivery; absent = engine
 
@@ -39,7 +39,7 @@ def find_root(start=None):
         if course_file(d):
             return d
     raise CourseError("no course.toml here or above: run this inside a course "
-                      "(or `bulkhours-course init <name>`)")
+                      "(or `course-manager init <name>`)")
 
 
 def parse(text):
@@ -123,7 +123,7 @@ def labs_of(cfg, renderer_env=None):
                       "data": _list(spec.get("data")),
                       "renderer": renderer_env or spec.get("renderer") or course.get("renderer") or "markers"}
         if labs[name]["renderer"] not in RENDERERS:
-            raise CourseError("course.toml: lab %s: renderer must be markers or bulkhours" % name)
+            raise CourseError("course.toml: lab %s: renderer must be markers (or its older name)" % name)
 
     for name, s in (cfg.get("subpackage") or {}).items():
         nb = Path(s.get("notebook") or "%s/%s.py" % (name, name))

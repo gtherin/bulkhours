@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""bulkhours-course - author and deliver a course: one source, two versions.
+"""course-manager - author and deliver a course: one source, two versions.
 
 A COURSE is a git repository with a `course.toml`. On a platform that deploys
 it, it maps to one organisation of the forge: `solution` for the teachers, one
@@ -20,13 +20,13 @@ teacher files left out. The teacher version keeps everything.
 
 Run it from inside the course, in your own account:
 
-    bulkhours-course init <course>       start a course in ./<course>
-    bulkhours-course new <lab>           add a lab (source + a draft wave)
-    bulkhours-course check [lab]         markers, leaks, data declared
-    bulkhours-course render [lab]        write both versions under build/
-    bulkhours-course build [lab]         what is delivered: notebooks, under build/
-    bulkhours-course preview [lab]       render + notebooks in ~/preview/<course>/
-    bulkhours-course status              every wave, its lab, who it is released to
+    course-manager init <course>       start a course in ./<course>
+    course-manager new <lab>           add a lab (source + a draft wave)
+    course-manager check [lab]         markers, leaks, data declared
+    course-manager render [lab]        write both versions under build/
+    course-manager build [lab]         what is delivered: notebooks, under build/
+    course-manager preview [lab]       render + notebooks in ~/preview/<course>/
+    course-manager status              every wave, its lab, who it is released to
 
 THE MARKERS: Otter Grader's format (COURSE.md, "Markers", has the full table)
 
@@ -57,8 +57,8 @@ may be mixed in one file.
     # BULKHOURS.PRINT:hint = ...                    student: hint = ...  (student only)
 
 Only text is rewritten, at render time: a student's notebook imports nothing.
-`renderer = "markers"` (default) or `"bulkhours"` in [course] or in a wave
-name the same, single renderer (COURSE_RENDERER overrides both).
+`renderer = "markers"` (default) in [course] or in a wave; its older value
+names the same, single renderer (COURSE_RENDERER overrides both).
 
 THE LEAK CHECK: every substantial line of the source that only the teacher
 may see (inside a SOLUTION or REMOVE block, or the teacher's side of INIT /
@@ -120,7 +120,7 @@ def chosen(subs, only):
             die("no lab %r - known: %s" % (only, ", ".join(subs) or "none"))
         return {only: subs[only]}
     if not subs:
-        die("the package has no lab yet: bulkhours-course new <name>")
+        die("the package has no lab yet: course-manager new <name>")
     return subs
 
 
@@ -172,7 +172,7 @@ def cmd_init(a):
     root.mkdir(parents=True, exist_ok=True)
     (root / "course.toml").write_text(
         '# A course: one organisation on the forge, its labs released in waves.\n'
-        '# Read by bulkhours-course and the platform\'s deploy engine; keys in COURSE.md.\n\n'
+        '# Read by course-manager and the platform\'s deploy engine; keys in COURSE.md.\n\n'
         '[course]\n'
         'name = "%s"\n'
         'title = "%s"\n'
@@ -183,9 +183,9 @@ def cmd_init(a):
         '# released: the cohorts the wave may go to; [] is a draft.\n'
         % (a.name, a.title or a.name, a.kernel), encoding="utf-8")
     (root / ".gitignore").write_text("build/\n.ipynb_checkpoints/\n__pycache__/\n", encoding="utf-8")
-    (root / "README.md").write_text("# %s\n\nA MaQI course. `bulkhours-course status` lists its waves and labs.\n" % (a.title or a.name), encoding="utf-8")
+    (root / "README.md").write_text("# %s\n\nA MaQI course. `course-manager status` lists its waves and labs.\n" % (a.title or a.name), encoding="utf-8")
     title("Course %s" % a.name)
-    ok("created in ./%s - next: cd %s && bulkhours-course new <lab>" % (a.name, a.name))
+    ok("created in ./%s - next: cd %s && course-manager new <lab>" % (a.name, a.name))
 
 
 def cmd_new(a):
@@ -205,7 +205,7 @@ def cmd_new(a):
                 'released = []                                    # a draft until a cohort is named\n'
                 % (a.name, a.title or a.name, a.name))
     title("Lab %s (wave %s, last in the course)" % (a.name, a.name))
-    ok("source: %s/%s.py - edit it, then: bulkhours-course preview %s" % (a.name, a.name, a.name))
+    ok("source: %s/%s.py - edit it, then: course-manager preview %s" % (a.name, a.name, a.name))
 
 
 def cmd_check(a):
@@ -306,12 +306,28 @@ def cmd_status(a):
         except SystemExit:
             n = "(!)"
         print("  %-6s %-14s %-24s %-10s %s" % (sub["wave"] or "-", name, rel, n, ", ".join(sub["content"])))
-    if not subs: print("  (none yet: bulkhours-course new <name>)")
+    if not subs: print("  (none yet: course-manager new <name>)")
+
+
+def version_line():
+    """`course-manager --version`: the version and a fingerprint of THIS copy's
+    files. The standard lives as identical copies in segregated projects: two
+    copies that print the same line are the same standard; a different
+    fingerprint at the same version is a drift to resolve."""
+    import hashlib
+    from . import __version__
+    here = Path(__file__).resolve().parent
+    h = hashlib.sha256()
+    for f in sorted(list(here.glob("*.py")) + [here.parent.parent / "COURSE.md"]):
+        if f.is_file():
+            h.update(f.name.encode()); h.update(f.read_bytes())
+    return "course-manager %s  fingerprint %s" % (__version__, h.hexdigest()[:12])
 
 
 def main():
-    p = argparse.ArgumentParser(prog="bulkhours-course", description=__doc__,
+    p = argparse.ArgumentParser(prog="course-manager", description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument("--version", action="version", version=version_line())
     sp = p.add_subparsers(dest="cmd", required=True)
     s = sp.add_parser("init"); s.add_argument("name"); s.add_argument("--title", default="")
     s.add_argument("--kernel", default="python3")

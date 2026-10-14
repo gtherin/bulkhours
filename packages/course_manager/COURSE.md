@@ -2,14 +2,15 @@
 
 One format for every platform that teaches with it: `course.toml`, the
 markers, the two renders, the waves and their record, and the rules a
-deployer honours. The code that reads it is `bulkhours_course` (this
-folder), the **only** loader and renderer: what `bulkhours-course check`
+deployer honours. The code that reads it is `course_manager` (this
+folder), the **only** loader and renderer: what `course-manager check`
 accepts is what a platform can deploy. A platform adds its own binding -
 which forge, which teams, which engine - and never a second reader.
 
-Known bindings: **MaQI** (maqi-instance: Forgejo organisations, teams,
-`package-deploy.py`, ADR 0013) and **BulkHours / IN518** (bulkhours.fr
-`etc/hpc`: `delivery = "external"`, GitHub, homes on a GPU machine).
+**A shared standard between segregated projects**: each project holds its
+own, identical copy of this folder (`course-manager --version` shows version
+and fingerprint) and documents its own binding - which forge, which teams,
+which deploy engine - in its own repository. Nothing here names a project.
 
 A **course** is one organisation of the forge. Its `solution` repository
 is the only one edited by hand; everyone who takes the course gets their own
@@ -24,9 +25,9 @@ repository, `<course>/<login>`, written by deployments.
   <lab>/<lab>.ipynb   one folder per lab; answers between the markers
 ```
 
-`bulkhours-course init <course>` writes this skeleton, `bulkhours-course new <lab>` adds
-a lab and a draft wave. `course.toml` is read by `bulkhours-course` and by a
-platform's deploy engine through the same loader (`bulkhours_course.spec`): what
+`course-manager init <course>` writes this skeleton, `course-manager new <lab>` adds
+a lab and a draft wave. `course.toml` is read by `course-manager` and by a
+platform's deploy engine through the same loader (`course_manager.spec`): what
 `check` accepts is what can be deployed. `package.toml` with `[package]`, the earlier
 name, is still read.
 
@@ -42,7 +43,7 @@ name, is still read.
 | `teachers` | | the course's teachers, forge logins: `["ada", "guillaume"]`. Its `teachers` team is exactly this list (kept in step by the engine). Absent: the platform's teachers |
 | `audience` | | the cohorts it is for: `["@m1.students", "@m2.students"]`. Default `who` of every wave. `@teachers` is the course's own `teachers` (to receive the student version as students do), not the platform team |
 | `teacher` | | patterns never delivered to students, from any lab: `["teacher/", "*.teacher.*"]` |
-| `renderer` | | `markers` (default) or `bulkhours`: two names for the one renderer, kept so older files still load |
+| `renderer` | | `markers` (default); the older value of this key names the same, single renderer and is kept so older files still load |
 | `moodle` | | the course's Moodle page: `https://moodle.example.org/course/view.php?id=123`, linked on its card |
 
 No `hub`: which machine a cohort works on belongs to the deployment.
@@ -86,7 +87,7 @@ released = ["@m2.students"]          # written by the engine: M2 has it, M1 not 
   `.bulkignore` keep files back.
 - **The leak check:** a line only a teacher may see, found in the student
   version, stops the build - and so the deployment.
-- **The teacher version** keeps everything; `bulkhours-course preview` writes both
+- **The teacher version** keeps everything; `course-manager preview` writes both
   under `~/preview/<course>/`.
 - **Placeholders, filled for each person:** in a delivered text file
   (Markdown, notebooks, `.py`, config...), `{{login}}` becomes the person's
@@ -130,8 +131,8 @@ notebook, the kernel's language. A file never mixes the two: in a `.cu`,
 suffixes goes through the markers - a helper module or a `.h` hides its
 answers the same way as the notebook.
 
-**The hole is `...`, in every language** - bulkhours' convention since its
-first `cell_reset`: `...` and `# ...` in Python, `/* ... */` and `// ...` in
+**The hole is `...`, in every language** - the convention since the first
+renderer of these markers: `...` and `# ...` in Python, `/* ... */` and `// ...` in
 C++. A consigne goes in a PROMPT: `// PROMPT: // ... : complete the loop` gives
 the student `// ... : complete the loop`. (The CUDA course used
 `// ___TODO___ :` before 2026-10-14; new stages use `// ... :`.)
@@ -151,7 +152,7 @@ the student `// ... : complete the loop`. (The CUDA course used
 | `# BULKHOURS.INIT:0` | `// BULKHOURS.INIT:0` | `int n = 0  // ...` - the older names, read with either leader |
 
 The leak check, the exercise count and the two renders are the same code for
-both leaders (`bulkhours_course.render.MARKERS`).
+both leaders (`course_manager.render.MARKERS`).
 - **Exercises:** each SOLUTION line or block counts one (SEED and PROMPT do not).
 - **The leak check** covers every marker: a teacher line found in the
   student version stops the build. So does anything that looks like a marker

@@ -6,7 +6,7 @@ from . import tools
 
 
 def _render(source, variant):
-    """The ONE renderer of the course standard (packages/bulkhours-course),
+    """The ONE renderer of the course standard (packages/course_manager),
     applied to one cell. Until 2026-10-14 this file carried its own 60-line
     parser of the BULKHOURS./BKRESET. names while maqi-course rendered the same
     names a second time - two renderers for one notion. The standard's markers
@@ -18,10 +18,10 @@ def _render(source, variant):
     A block left open raises ValueError, where the old parser went on
     silently: a marker the renderer cannot read is a solution delivered."""
     try:
-        from bulkhours_course.render import render
+        from course_manager.render import render
     except ImportError as e:   # the dependency is declared in setup.cfg; name it rather than fail in render
-        raise ImportError("bulkhours needs bulkhours-course for its markers: "
-                          "pip install 'bulkhours-course @ git+https://github.com/gtherin/bulkhours#subdirectory=packages/bulkhours-course'") from e
+        raise ImportError("bulkhours needs course-manager for its markers: "
+                          "pip install 'course-manager @ git+https://github.com/gtherin/bulkhours#subdirectory=packages/course_manager'") from e
     compact = source.replace(" ", "")
     leader = "//" if "//BULKHOURS" in compact or "//BKRESET" in compact else "#"
     lines = source.splitlines(keepends=True)

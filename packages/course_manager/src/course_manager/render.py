@@ -31,8 +31,8 @@ from .spec import CourseError
 # kernel's language for a notebook. A file never mixes the two: in a .cu file
 # `# SOLUTION` is prose, as `// SOLUTION` is in a .py.
 #
-# THE HOLE IS `...` IN EVERY LANGUAGE - bulkhours' convention since its first
-# `cell_reset`: `...` / `# ...` in Python, `/* ... */` / `// ...` in C++. A
+# THE HOLE IS `...` IN EVERY LANGUAGE - the convention since the first renderer
+# of these markers: `...` / `# ...` in Python, `/* ... */` / `// ...` in C++. A
 # consigne goes in a PROMPT: `// PROMPT: // ... : complete the loop`.
 LEADERS = {".py": "#", ".ipynb": "#", ".r": "#", ".R": "#", ".sh": "#",
            ".c": "//", ".cc": "//", ".cpp": "//", ".cxx": "//", ".h": "//", ".hpp": "//",
@@ -60,7 +60,7 @@ class Markers:
         # Extensions: `# SOLUTION: <value>`, `# SOLUTION REPLACE: <line>`, `# PROMPT: <line>`.
         self.LINE = re.compile(r"^(?P<code>.*?)%s\s*(?P<op>SOLUTION NO PROMPT|SOLUTION REPLACE|SOLUTION|SEED|PROMPT)\b(?:\s*:(?P<arg>.*))?\s*$" % L)
         self.IGNORE = re.compile(r"^\s*%s\s*ignore\s*$" % L, re.I)        # first line of a cell: in neither version
-        # bulkhours' own names, for labs written for it (cell_reset read `//BULKHOURS` too).
+        # The OLDER NAMES (`BULKHOURS.` / `BKRESET.`), for labs written with them; `//` too.
         self.BK = re.compile(r"^(?P<code>.*?)%s\s*(?:BULKHOURS|BKRESET)\.(?P<op>INIT|REMOVE|REPLACE|PRINT):?(?P<arg>.*)$" % L)
         # What looks like a marker (upper case), not quoted in `backticks` as prose does.
         self.MARKERISH = re.compile(r"(?:^|[^`])%s\s*(?:(?:BEGIN|END)\s+(?:SOL|PRO)|SOLUTION|PROMPT|SEED)" % L)
@@ -133,7 +133,7 @@ def solution_line(code, op, arg, variant, nl, M=MARKERS["#"]):
     return indent + value + semi + nl
 
 
-def bulkhours_line(l, variant, state, M=MARKERS["#"]):
+def legacy_line(l, variant, state, M=MARKERS["#"]):
     """One line carrying a BULKHOURS./BKRESET. marker -> the line for `variant`,
     or None to drop it. `state["removing"]` is the open REMOVE block."""
     body, nl = (l[:-1], "\n") if l.endswith("\n") else (l, "")
@@ -182,7 +182,7 @@ def render(lines, variant, leader="#"):
     the block's indentation. `# BEGIN SOLUTION NO PROMPT` leaves nothing. A
     PROMPT block is the student's: written as comments (uncommented for the
     student) or, as in Otter, inside a `\"\"\" # BEGIN PROMPT` string (shown
-    as written). One-line markers: `solution_line` and `bulkhours_line`. In a
+    as written). One-line markers: `solution_line` and `legacy_line`. In a
     jupytext file, a cell whose first line is `# IGNORE` goes nowhere."""
     out, in_sol, in_pro, pro_raw = [], None, False, False
     pending = None            # the `...` of a solution block, until we know no prompt follows
@@ -220,7 +220,7 @@ def render(lines, variant, leader="#"):
                 continue
             flush()
             try:
-                r = bulkhours_line(l, variant, bk, M)
+                r = legacy_line(l, variant, bk, M)
             except ValueError as e:
                 raise ValueError("line %d: %s" % (n, e))
             if r is not None and not (in_sol is not None and variant == "student"):
@@ -282,14 +282,14 @@ def render(lines, variant, leader="#"):
 
 
 def render_with(renderer, lines, variant, leader="#"):
-    """ONE renderer. `renderer = "bulkhours"` in a course.toml is accepted and
-    means the same thing as `markers`: the BULKHOURS./BKRESET. names are an
-    input dialect of this renderer (bulkhours_line), not a second engine.
-    Until 2026-10-14 it loaded cell_reset/cell_solution from a clone of
-    gtherin/bulkhours - two renderers for one notion, coupled the wrong way
-    round; bulkhours now depends on this package instead."""
-    if renderer not in ("markers", "bulkhours"):
-        raise ValueError("unknown renderer %r (markers or bulkhours)" % renderer)
+    """ONE renderer. The older value of `renderer` in a course.toml is accepted
+    and means the same thing as `markers`: the BULKHOURS./BKRESET. names are an
+    input dialect of this renderer (legacy_line), not a second engine. Until
+    2026-10-14 that value selected a second renderer loaded from another
+    project - two renderers for one notion."""
+    from .spec import RENDERERS
+    if renderer not in RENDERERS:
+        raise ValueError("unknown renderer %r (markers)" % renderer)
     return render(lines, variant, leader)
 
 
@@ -336,7 +336,7 @@ def problems(lines, renderer="markers", leader="#"):
     except ValueError as e:
         return [str(e)], 0
     # Exercises: a SOLUTION block, a one-line SOLUTION (not SEED, not PROMPT),
-    # and each bulkhours INIT / REPLACE / REMOVE:LINE / REMOVE block.
+    # and each older-name INIT / REPLACE / REMOVE:LINE / REMOVE block.
     n = sum(1 for l in lines if BEGIN_SOL.match(l))
     for l in lines:
         m = BK.match(l.rstrip("\n"))
