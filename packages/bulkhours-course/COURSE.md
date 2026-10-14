@@ -118,6 +118,40 @@ cell of a notebook and in every `.py`; they never span cells. Upper case only:
 | `# BEGIN PROMPT` ... `# END PROMPT`, lines as comments | the lines, uncommented | extension |
 
 - **The teacher version** keeps the code, drops the markers and the prompts.
+
+### Languages: one set of words, two comment leaders
+
+The words are the same in every language; only the comment leader changes:
+`#` for Python, R and shell, `//` for C, C++, CUDA, Java, JavaScript, Rust and
+Go. The file's suffix decides (`.py` `.ipynb` `.r` `.sh` / `.c` `.cc` `.cpp`
+`.cxx` `.h` `.hpp` `.cu` `.cuh` `.java` `.js` `.ts` `.rs` `.go`); for a
+notebook, the kernel's language. A file never mixes the two: in a `.cu`,
+`# SOLUTION` is prose, as `// SOLUTION` is in a `.py`. Every file of these
+suffixes goes through the markers - a helper module or a `.h` hides its
+answers the same way as the notebook.
+
+**The hole is `...`, in every language** - bulkhours' convention since its
+first `cell_reset`: `...` and `# ...` in Python, `/* ... */` and `// ...` in
+C++. A consigne goes in a PROMPT: `// PROMPT: // ... : complete the loop` gives
+the student `// ... : complete the loop`. (The CUDA course used
+`// ___TODO___ :` before 2026-10-14; new stages use `// ... :`.)
+
+| Python | C++ / CUDA | The student gets |
+|---|---|---|
+| `x = f(3)  # SOLUTION` | `int x = f(3);  // SOLUTION` | `int x = /* ... */;` - type, name and `;` kept; it does **not** compile, so the compiler points at every hole |
+| `return y  # SOLUTION` | `return y;  // SOLUTION` | `return /* ... */;` |
+| `x = f(3)  # SOLUTION: 0` | `int x = f(3);  // SOLUTION: 0` | `int x = 0;` - this is how a skeleton stays **compilable** |
+| `# SOLUTION REPLACE: k = 5` | `// SOLUTION REPLACE: k = 5;` | the line given |
+| `# SOLUTION NO PROMPT`, `# SEED` | `// SOLUTION NO PROMPT`, `// SEED` | nothing |
+| `# BEGIN SOLUTION` ... `# END SOLUTION` | `// BEGIN SOLUTION` ... `// END SOLUTION` | `// ...` at the block's indentation (an empty body often compiles), or the PROMPT block next to it |
+| `# BEGIN PROMPT`, lines as comments, `# END PROMPT` | `// BEGIN PROMPT`, lines as `//` comments, `// END PROMPT` | the lines, uncommented |
+| `""" # BEGIN PROMPT` ... `"""; # END PROMPT` | `#if 0 // BEGIN PROMPT` ... `#endif // END PROMPT` | the lines as written - and the teacher's source compiles, the preprocessor drops the consigne |
+| `# PROMPT: # a hint` | `// PROMPT: // ... : a hint` | `// ... : a hint` (student only) |
+| `# IGNORE` | `// IGNORE` | the cell is in neither version (notebooks) |
+| `# BULKHOURS.INIT:0` | `// BULKHOURS.INIT:0` | `int n = 0  // ...` - the older names, read with either leader |
+
+The leak check, the exercise count and the two renders are the same code for
+both leaders (`bulkhours_course.render.MARKERS`).
 - **Exercises:** each SOLUTION line or block counts one (SEED and PROMPT do not).
 - **The leak check** covers every marker: a teacher line found in the
   student version stops the build. So does anything that looks like a marker

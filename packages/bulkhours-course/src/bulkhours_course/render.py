@@ -24,31 +24,79 @@ from .spec import CourseError
 # closest thing to a standard: `# BEGIN SOLUTION` / `# END SOLUTION` is also
 # nbgrader's. A lab written for Otter renders here unchanged. COURSE.md has
 # the full table; what Otter does not cover is marked "extension" there.
-BEGIN_SOL = re.compile(r"^\s*#\s*BEGIN SOLUTION(?P<np>\s+NO PROMPT)?\s*$")
-END_SOL = re.compile(r"^\s*#\s*END SOLUTION\s*$")
-BEGIN_PRO = re.compile(r"""^\s*(?P<q>(?:\"\"\"|''')\s*)?#\s*BEGIN PROMPT\s*$""")
-END_PRO = re.compile(r"""^\s*(?:(?:\"\"\"|''');?\s*)?#\s*END PROMPT\s*$""")
-# One line. Otter: `# SOLUTION`, `# SOLUTION NO PROMPT`, `# SEED`.
-# Extensions: `# SOLUTION: <value>`, `# SOLUTION REPLACE: <line>`, `# PROMPT: <line>`.
-LINE = re.compile(r"^(?P<code>.*?)#\s*(?P<op>SOLUTION NO PROMPT|SOLUTION REPLACE|SOLUTION|SEED|PROMPT)\b(?:\s*:(?P<arg>.*))?\s*$")
-IGNORE = re.compile(r"^\s*#\s*ignore\s*$", re.I)                # first line of a cell: in neither version
-ASSIGN = re.compile(r"""^(?P<lhs>\s*[A-Za-z_][\w.\[\]'", ]*?)\s*=(?!=)\s*\S""")
-# bulkhours' own names, for labs written for it.
-BK = re.compile(r"^(?P<code>.*?)#\s*(?:BULKHOURS|BKRESET)\.(?P<op>INIT|REMOVE|REPLACE|PRINT):?(?P<arg>.*)$")
-CELL = re.compile(r"^#\s*%%")
-# What looks like a marker (upper case), not quoted in `backticks` as prose does.
-MARKERISH = re.compile(r"(?:^|[^`])#\s*(?:(?:BEGIN|END)\s+(?:SOL|PRO)|SOLUTION|PROMPT|SEED)")
-TODO = "# ..."
-ELLIPSIS = "..."
+#
+# ONE SET OF WORDS, TWO COMMENT LEADERS. The words are the same in every
+# language; only the comment leader changes - `#` (Python, R, shell) or `//`
+# (C, C++, CUDA, Java, JS, Rust, Go), decided by the file's suffix, or by the
+# kernel's language for a notebook. A file never mixes the two: in a .cu file
+# `# SOLUTION` is prose, as `// SOLUTION` is in a .py.
+#
+# THE HOLE IS `...` IN EVERY LANGUAGE - bulkhours' convention since its first
+# `cell_reset`: `...` / `# ...` in Python, `/* ... */` / `// ...` in C++. A
+# consigne goes in a PROMPT: `// PROMPT: // ... : complete the loop`.
+LEADERS = {".py": "#", ".ipynb": "#", ".r": "#", ".R": "#", ".sh": "#",
+           ".c": "//", ".cc": "//", ".cpp": "//", ".cxx": "//", ".h": "//", ".hpp": "//",
+           ".cu": "//", ".cuh": "//", ".java": "//", ".js": "//", ".ts": "//", ".rs": "//", ".go": "//"}
+C_LANGUAGES = {"c", "c++", "cpp", "cuda", "java", "javascript", "typescript", "rust", "go"}
+
+
+class Markers:
+    """The compiled markers for one comment leader. `MARKERS[leader]`."""
+    def __init__(self, leader):
+        L = re.escape(leader)
+        self.leader = leader
+        self.BEGIN_SOL = re.compile(r"^\s*%s\s*BEGIN SOLUTION(?P<np>\s+NO PROMPT)?\s*$" % L)
+        self.END_SOL = re.compile(r"^\s*%s\s*END SOLUTION\s*$" % L)
+        if leader == "#":
+            # Otter's raw prompt: a string the source never runs.
+            self.BEGIN_PRO = re.compile(r"""^\s*(?P<q>(?:\"\"\"|''')\s*)?#\s*BEGIN PROMPT\s*$""")
+            self.END_PRO = re.compile(r"""^\s*(?:(?:\"\"\"|''');?\s*)?#\s*END PROMPT\s*$""")
+        else:
+            # The C++ analogue: a block the preprocessor drops, so the
+            # teacher's source compiles with the consigne in it.
+            self.BEGIN_PRO = re.compile(r"^\s*(?P<q>#\s*if\s+0\s*)?%s\s*BEGIN PROMPT\s*$" % L)
+            self.END_PRO = re.compile(r"^\s*(?:#\s*endif\s*)?%s\s*END PROMPT\s*$" % L)
+        # One line. Otter: `# SOLUTION`, `# SOLUTION NO PROMPT`, `# SEED`.
+        # Extensions: `# SOLUTION: <value>`, `# SOLUTION REPLACE: <line>`, `# PROMPT: <line>`.
+        self.LINE = re.compile(r"^(?P<code>.*?)%s\s*(?P<op>SOLUTION NO PROMPT|SOLUTION REPLACE|SOLUTION|SEED|PROMPT)\b(?:\s*:(?P<arg>.*))?\s*$" % L)
+        self.IGNORE = re.compile(r"^\s*%s\s*ignore\s*$" % L, re.I)        # first line of a cell: in neither version
+        # bulkhours' own names, for labs written for it (cell_reset read `//BULKHOURS` too).
+        self.BK = re.compile(r"^(?P<code>.*?)%s\s*(?:BULKHOURS|BKRESET)\.(?P<op>INIT|REMOVE|REPLACE|PRINT):?(?P<arg>.*)$" % L)
+        # What looks like a marker (upper case), not quoted in `backticks` as prose does.
+        self.MARKERISH = re.compile(r"(?:^|[^`])%s\s*(?:(?:BEGIN|END)\s+(?:SOL|PRO)|SOLUTION|PROMPT|SEED)" % L)
+        # The left-hand side an assignment keeps: `nine = ...`, `int nine = /* ... */;`.
+        lhs = r"""[\w.\[\]'", ]""" if leader == "#" else r"[\w.\[\]<>:*&, ]"
+        self.ASSIGN = re.compile(r"^(?P<lhs>\s*[A-Za-z_]%s*?)\s*=(?!=)\s*\S" % lhs)
+        self.TODO = leader + " ..."
+        self.ELLIPSIS = "..." if leader == "#" else "/* ... */"   # the hole in a line
+        self.HOLE = "..." if leader == "#" else self.TODO             # the hole left by a block
+
+
+MARKERS = {"#": Markers("#"), "//": Markers("//")}
+CELL = re.compile(r"^#\s*%%")                                     # jupytext percent cells (Python)
+TODO = MARKERS["#"].TODO
+ELLIPSIS = MARKERS["#"].ELLIPSIS
 VARIANTS = ("student", "teacher")
 JUPYTEXT = os.environ.get("COURSE_JUPYTEXT") or shutil.which("jupytext") or "jupytext"
 
 
-def line_marker(l):
+def leader_of(path):
+    """The comment leader of a source file, from its suffix (`#` when unknown)."""
+    return LEADERS.get(Path(path).suffix, "#")
+
+
+def notebook_leader(nb):
+    """The comment leader of a notebook's code cells, from its kernel."""
+    md = nb.get("metadata", {}) if isinstance(nb, dict) else {}
+    lang = (md.get("kernelspec", {}).get("language") or md.get("language_info", {}).get("name") or "").lower()
+    return "//" if lang in C_LANGUAGES else "#"
+
+
+def line_marker(l, M=MARKERS["#"]):
     """(code, op, arg) of a line carrying a one-line marker, or None.
     SOLUTION and SEED need code before them (a lone `# SOLUTION` is a
     comment); PROMPT stands alone and needs its `:`."""
-    m = LINE.match(l.rstrip("\n"))
+    m = M.LINE.match(l.rstrip("\n"))
     if not m:
         return None
     code, op, arg = m.group("code"), m.group("op"), (m.group("arg") or "").strip()
@@ -61,7 +109,7 @@ def line_marker(l):
     return code, op, arg
 
 
-def solution_line(code, op, arg, variant, nl):
+def solution_line(code, op, arg, variant, nl, M=MARKERS["#"]):
     """A one-line marker for `variant` -> the line, or None to drop it."""
     indent = code[:len(code) - len(code.lstrip())]
     if variant == "teacher":
@@ -70,23 +118,29 @@ def solution_line(code, op, arg, variant, nl):
         return None
     if op in ("PROMPT", "SOLUTION REPLACE"):
         return indent + arg + nl
-    value = arg or ELLIPSIS                  # `# SOLUTION` -> ..., `# SOLUTION: 0` -> 0
-    stripped = code.strip()
+    # In C++ the statement keeps its `;`: `int x = f();  // SOLUTION` -> `int x = /* ... */;`
+    body, semi = code.rstrip(), ""
+    if M.leader == "//" and body.endswith(";"):
+        body, semi = body[:-1].rstrip(), ";"
+        arg = arg[:-1].rstrip() if arg.endswith(";") else arg
+    value = arg or M.ELLIPSIS                # `# SOLUTION` -> ..., `# SOLUTION: 0` -> 0
+    stripped = body.strip()
     if stripped == "return" or stripped.startswith("return "):
-        return indent + "return " + value + nl
-    a = ASSIGN.match(code)
+        return indent + "return " + value + semi + nl
+    a = M.ASSIGN.match(body)
     if a:
-        return a.group("lhs").rstrip() + " = " + value + nl
-    return indent + value + nl
+        return a.group("lhs").rstrip() + " = " + value + semi + nl
+    return indent + value + semi + nl
 
 
-def bulkhours_line(l, variant, state):
+def bulkhours_line(l, variant, state, M=MARKERS["#"]):
     """One line carrying a BULKHOURS./BKRESET. marker -> the line for `variant`,
     or None to drop it. `state["removing"]` is the open REMOVE block."""
     body, nl = (l[:-1], "\n") if l.endswith("\n") else (l, "")
-    m = BK.match(body)
+    m = M.BK.match(body)
     code, op, arg = m.group("code"), m.group("op"), m.group("arg").strip()   # "# BULKHOURS.REPLACE: x" -> "x"
     indent = code[:len(code) - len(code.lstrip())]
+    TODO = M.TODO
     if op == "REMOVE" and arg in ("START", "END"):
         if arg == "START":
             if state["removing"]: raise ValueError("REMOVE:START inside an open REMOVE block")
@@ -113,14 +167,15 @@ def bulkhours_line(l, variant, state):
     return indent + arg + "  " + TODO + nl
 
 
-def ignored_cell(lines):
+def ignored_cell(lines, M=MARKERS["#"]):
     """A cell whose first line is `# IGNORE` (Otter): in neither version."""
     first = next((l for l in lines if l.strip()), "")
-    return bool(IGNORE.match(first))
+    return bool(M.IGNORE.match(first))
 
 
-def render(lines, variant):
-    """One source -> the student or the teacher version.
+def render(lines, variant, leader="#"):
+    """One source -> the student or the teacher version. `leader` is the
+    comment leader of the language (`#` or `//`, see LEADERS).
 
     Blocks: `# BEGIN SOLUTION` ... `# END SOLUTION` is the teacher's; the
     student gets the PROMPT block next to it if there is one, else `...` at
@@ -134,6 +189,10 @@ def render(lines, variant):
     after_prompt = False      # a prompt block was just written: the next solution needs no `...`
     bk = {"removing": False}
     skipping = False          # inside an IGNORE cell of a jupytext file
+    M = MARKERS[leader]
+    BEGIN_SOL, END_SOL, BEGIN_PRO, END_PRO, BK, IGNORE, HOLE = (
+        M.BEGIN_SOL, M.END_SOL, M.BEGIN_PRO, M.END_PRO, M.BK, M.IGNORE, M.HOLE)
+    pro_comment = re.compile(r"^(\s*)%s\s?(.*)$" % re.escape(leader))   # a PROMPT line written as a comment
 
     def flush():
         nonlocal pending
@@ -143,7 +202,7 @@ def render(lines, variant):
 
     for n, l in enumerate(lines, 1):
         nl = "\n" if l.endswith("\n") else ""
-        if CELL.match(l) and in_sol is None and not in_pro:
+        if leader == "#" and CELL.match(l) and in_sol is None and not in_pro:
             nxt = [x for x in lines[n:n + 5] if x.strip()]
             skipping = bool(nxt) and bool(IGNORE.match(nxt[0]))
             if skipping:
@@ -161,7 +220,7 @@ def render(lines, variant):
                 continue
             flush()
             try:
-                r = bulkhours_line(l, variant, bk)
+                r = bulkhours_line(l, variant, bk, M)
             except ValueError as e:
                 raise ValueError("line %d: %s" % (n, e))
             if r is not None and not (in_sol is not None and variant == "student"):
@@ -176,7 +235,7 @@ def render(lines, variant):
         if END_SOL.match(l):
             if in_sol is None: raise ValueError("line %d: END SOLUTION without a beginning" % n)
             if in_sol != "np" and not after_prompt:
-                pending = in_sol + ELLIPSIS + "\n"
+                pending = in_sol + HOLE + "\n"
             in_sol, after_prompt = None, False
             continue
         m = BEGIN_PRO.match(l)
@@ -191,7 +250,7 @@ def render(lines, variant):
             continue
         if in_sol is not None:
             if variant == "teacher":
-                lm = line_marker(l)
+                lm = line_marker(l, M)
                 if not lm:
                     out.append(l)
                 elif lm[1] != "PROMPT":
@@ -203,15 +262,15 @@ def render(lines, variant):
                     out.append(l)
                 else:
                     body = l[:-1] if nl else l
-                    mc = re.match(r"^(\s*)#\s?(.*)$", body)
+                    mc = pro_comment.match(body)
                     out.append((mc.group(1) + mc.group(2) + nl) if mc else l)
             continue
         if l.strip():
             flush()
             after_prompt = False
-        lm = line_marker(l)
+        lm = line_marker(l, M)
         if lm:
-            r = solution_line(lm[0], lm[1], lm[2], variant, nl)
+            r = solution_line(lm[0], lm[1], lm[2], variant, nl, M)
             if r is not None:
                 out.append(r)
             continue
@@ -222,7 +281,7 @@ def render(lines, variant):
     return out
 
 
-def render_with(renderer, lines, variant):
+def render_with(renderer, lines, variant, leader="#"):
     """ONE renderer. `renderer = "bulkhours"` in a course.toml is accepted and
     means the same thing as `markers`: the BULKHOURS./BKRESET. names are an
     input dialect of this renderer (bulkhours_line), not a second engine.
@@ -231,13 +290,15 @@ def render_with(renderer, lines, variant):
     round; bulkhours now depends on this package instead."""
     if renderer not in ("markers", "bulkhours"):
         raise ValueError("unknown renderer %r (markers or bulkhours)" % renderer)
-    return render(lines, variant)
+    return render(lines, variant, leader)
 
 
-def secret_lines(lines):
+def secret_lines(lines, leader="#"):
     """Every substantial line of a source that only the teacher may see: inside
     a SOLUTION or REMOVE block, or the teacher's side of a one-line marker.
     None of them may reach a student, whatever rendered it."""
+    M = MARKERS[leader]
+    BEGIN_SOL, END_SOL, BK = M.BEGIN_SOL, M.END_SOL, M.BK
     secret, inside = set(), False
     for l in lines:
         if BEGIN_SOL.match(l): inside = True; continue
@@ -249,7 +310,7 @@ def secret_lines(lines):
             s = m.group("code").strip()              # the teacher's line on INIT / REPLACE / REMOVE:LINE
             if m.group("op") != "PRINT" and len(s) >= 16: secret.add(s)
             continue
-        lm = line_marker(l)
+        lm = line_marker(l, M)
         if lm:
             s = lm[0].strip()                        # the teacher's line of SOLUTION / SEED / REPLACE
             if lm[1] != "PROMPT" and len(s) >= 16: secret.add(s)
@@ -264,11 +325,14 @@ def leaks(student_lines, secret):
     return sorted({l.strip() for l in student_lines if l.strip() in secret})
 
 
-def problems(lines, renderer="markers"):
+def problems(lines, renderer="markers", leader="#"):
     """What must stop a render. Returns (errors, n_exercises)."""
+    M = MARKERS[leader]
+    BEGIN_SOL, END_SOL, BEGIN_PRO, END_PRO, BK, MARKERISH = (
+        M.BEGIN_SOL, M.END_SOL, M.BEGIN_PRO, M.END_PRO, M.BK, M.MARKERISH)
     errs = []
     try:
-        student = render_with(renderer, lines, "student")
+        student = render_with(renderer, lines, "student", leader)
     except ValueError as e:
         return [str(e)], 0
     # Exercises: a SOLUTION block, a one-line SOLUTION (not SEED, not PROMPT),
@@ -280,21 +344,21 @@ def problems(lines, renderer="markers"):
             if m.group("op") != "PRINT" and m.group("arg").strip() != "END":
                 n += 1
             continue
-        lm = line_marker(l)
+        lm = line_marker(l, M)
         if lm and lm[1].startswith("SOLUTION"):
             n += 1
     # A marker misspelt is a solution delivered: anything that looks like one
     # and is not one stops the build.
     for k, l in enumerate(lines, 1):
         if MARKERISH.search(l) and not (BEGIN_SOL.match(l) or END_SOL.match(l) or BEGIN_PRO.match(l)
-                                         or END_PRO.match(l) or BK.match(l.rstrip("\n")) or line_marker(l)):
+                                         or END_PRO.match(l) or BK.match(l.rstrip("\n")) or line_marker(l, M)):
             errs.append("line %d: not a marker this tool knows: %s" % (k, l.strip()[:70]))
     # THE LEAK THAT CAN REALLY HAPPEN: the answer typed into the PROMPT, or
     # copied outside the markers, or a marker the renderer does not know.
     # Comparing the two renders with each other cannot find it (a line only in
     # the teacher's is, by construction, not in the student's): the reference
     # is the SOURCE's solution lines.
-    leaked = leaks(student, secret_lines(lines))
+    leaked = leaks(student, secret_lines(lines, leader))
     for s in leaked[:3]:
         errs.append("solution line also reaches the student: %s" % s[:70])
     return errs, n
@@ -416,16 +480,23 @@ def is_notebook(text):
     return text.startswith("# ---") or re.search(r"^# %%", text, re.M) is not None
 
 
-MARKED = (".py", ".ipynb")       # the files that go through the markers
+MARKED = tuple(LEADERS)          # the files that go through the markers
 
 
 def chunks(f):
-    """The marked text of a source, as lists of lines: one for a .py, one per
-    cell for an .ipynb (markers never span cells)."""
-    if f.suffix == ".py":
+    """The marked text of a source, as lists of lines: one for a text file,
+    one per cell for an .ipynb (markers never span cells)."""
+    if f.suffix != ".ipynb":
         return [f.read_text(encoding="utf-8").splitlines(keepends=True)]
     nb = json.loads(f.read_text(encoding="utf-8"))
     return ["".join(c.get("source", "")).splitlines(keepends=True) for c in nb.get("cells", [])]
+
+
+def file_leader(f):
+    """The comment leader a source's markers use: its suffix, or its kernel."""
+    if f.suffix == ".ipynb":
+        return notebook_leader(json.loads(f.read_text(encoding="utf-8")))
+    return leader_of(f)
 
 
 def render_ipynb(f, renderer, variant):
@@ -433,11 +504,13 @@ def render_ipynb(f, renderer, variant):
     every output and execution count: a saved output can print the answer.
     The teacher version keeps them."""
     nb = json.loads(f.read_text(encoding="utf-8"))
+    leader = notebook_leader(nb)
+    M = MARKERS[leader]
     nb["cells"] = [c for c in nb.get("cells", [])
-                   if not ignored_cell("".join(c.get("source", "")).splitlines(keepends=True))]
+                   if not ignored_cell("".join(c.get("source", "")).splitlines(keepends=True), M)]
     for c in nb.get("cells", []):
         lines = "".join(c.get("source", "")).splitlines(keepends=True)
-        c["source"] = render_with(renderer, lines, variant)
+        c["source"] = render_with(renderer, lines, variant, leader)
         if variant == "student" and c.get("cell_type") == "code":
             c["outputs"], c["execution_count"] = [], None
             c.get("metadata", {}).pop("execution", None)
@@ -461,7 +534,7 @@ def do_render(root, course, name, sub, notebooks):
         if hidden:
             continue                       # never delivered to students: nothing to check
         for ch in texts[f]:
-            errs, n = problems(ch, sub["renderer"])
+            errs, n = problems(ch, sub["renderer"], file_leader(f))
             nsol += n
             bad += ["%s: %s: %s" % (name, rel, e) for e in errs]
     if bad:
@@ -469,7 +542,7 @@ def do_render(root, course, name, sub, notebooks):
     secret = set()
     for f, t in texts.items():
         for ch in t:
-            secret |= secret_lines(ch)
+            secret |= secret_lines(ch, file_leader(f))
     out, kept_back = {v: [] for v in VARIANTS}, 0
     for v in VARIANTS:
         d = root / "build" / v / name
@@ -491,7 +564,7 @@ def do_render(root, course, name, sub, notebooks):
                 target.write_text(json.dumps(nb, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
                 out[v].append(target)
             elif f in texts:
-                rendered = render_with(sub["renderer"], texts[f][0], v)
+                rendered = render_with(sub["renderer"], texts[f][0], v, leader_of(f))
                 if v == "student" and leaks(rendered, secret):
                     raise CourseError("%s: %s: solution line in the student version: %s"
                         % (name, rel, leaks(rendered, secret)[0][:70]))

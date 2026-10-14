@@ -89,7 +89,7 @@ from pathlib import Path
 
 from . import spec
 from .spec import CourseError, NAME
-from .render import (VARIANTS, problems, chunks, is_notebook, sub_files, do_render, MARKED)
+from .render import (VARIANTS, problems, chunks, is_notebook, sub_files, do_render, MARKED, file_leader)
 
 TTY = sys.stdout.isatty() and not os.environ.get("NO_COLOR")
 def _c(code, s): return "\033[%sm%s\033[0m" % (code, s) if TTY else s
@@ -218,9 +218,9 @@ def cmd_check(a):
         errs, nsol, nbs = [], 0, 0
         for f, rel, hidden in files:
             if f.suffix not in MARKED or hidden: continue
-            nbs += f.suffix == ".ipynb" or is_notebook(f.read_text(encoding="utf-8"))
+            nbs += f.suffix == ".ipynb" or (f.suffix == ".py" and is_notebook(f.read_text(encoding="utf-8")))
             for ch in chunks(f):
-                e, n = problems(ch, sub["renderer"])
+                e, n = problems(ch, sub["renderer"], file_leader(f))
                 errs += ["%s: %s" % (rel, x) for x in e]; nsol += n
         for e in errs: fail("%s: %s" % (name, e))
         bad += len(errs)
@@ -302,7 +302,7 @@ def cmd_status(a):
         try:
             for f, r, hidden in sub_files(root, sub):
                 if f.suffix in MARKED and not hidden:
-                    n += sum(problems(ch, sub["renderer"])[1] for ch in chunks(f))
+                    n += sum(problems(ch, sub["renderer"], file_leader(f))[1] for ch in chunks(f))
         except SystemExit:
             n = "(!)"
         print("  %-6s %-14s %-24s %-10s %s" % (sub["wave"] or "-", name, rel, n, ", ".join(sub["content"])))

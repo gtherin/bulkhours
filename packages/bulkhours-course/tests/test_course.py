@@ -335,3 +335,104 @@ class Standalone(unittest.TestCase):
             self.assertEqual(render_with("bulkhours", src, v), render_with("markers", src, v))
         with self.assertRaises(ValueError):
             render_with("other", src, "student")
+
+
+class Cpp(unittest.TestCase):
+    """The same words with `//`: C, C++ and CUDA sources; the hole is `...`."""
+    def r(self, src, variant="student"):
+        from bulkhours_course.render import render
+        return "".join(render(textwrap.dedent(src).splitlines(True), variant, leader="//"))
+
+    def test_one_line_keeps_type_name_and_semicolon(self):
+        src = """\
+            int square(int x) {
+                int y = x * x;  // SOLUTION NO PROMPT
+                return y;  // SOLUTION
+            }
+            int nine = square(3);  // SOLUTION
+            float eps = tolerance(grid);  // SOLUTION: 1e-3f
+            std::vector<int>& v = pick(all);  // SOLUTION
+            srand(42);  // SEED
+            """
+        self.assertEqual(self.r(src),
+            "int square(int x) {\n    return /* ... */;\n}\nint nine = /* ... */;\nfloat eps = 1e-3f;\n"
+            "std::vector<int>& v = /* ... */;\n")
+        self.assertEqual(self.r(src, "teacher"),
+            "int square(int x) {\n    int y = x * x;\n    return y;\n}\nint nine = square(3);\n"
+            "float eps = tolerance(grid);\nstd::vector<int>& v = pick(all);\nsrand(42);\n")
+
+    def test_blocks_prompt_as_comments_and_as_if0(self):
+        src = """\
+            __global__ void step(float2* p, int n) {
+                // BEGIN SOLUTION
+                const int i = blockIdx.x * blockDim.x + threadIdx.x;
+                if (i < n) p[i].x += 1.f;
+                // END SOLUTION
+                // BEGIN PROMPT
+                // // ... : un thread par particule, garde sur n
+                // END PROMPT
+            }
+            void gpuInit(int count) {
+            #if 0 // BEGIN PROMPT
+                // ... : réserver count particules sur la carte
+            #endif // END PROMPT
+                // BEGIN SOLUTION NO PROMPT
+                CUDA_CHECK(cudaMalloc(&d, count * sizeof(Particle)));
+                // END SOLUTION
+            }
+            """
+        self.assertEqual(self.r(src),
+            "__global__ void step(float2* p, int n) {\n    // ... : un thread par particule, garde sur n\n}\n"
+            "void gpuInit(int count) {\n    // ... : réserver count particules sur la carte\n}\n")
+        t = self.r(src, "teacher")
+        self.assertIn("    if (i < n) p[i].x += 1.f;\n", t)
+        self.assertIn("    CUDA_CHECK(cudaMalloc(&d, count * sizeof(Particle)));\n", t)
+        self.assertNotIn("...", t)
+        self.assertNotIn("#if 0", t)
+
+    def test_block_without_prompt_leaves_a_comment_hole(self):
+        src = """\
+            void f() {
+                // BEGIN SOLUTION
+                work();
+                // END SOLUTION
+            }
+            """
+        self.assertEqual(self.r(src), "void f() {\n    // ...\n}\n")
+
+    def test_prompt_line_and_old_names_with_slashes(self):
+        src = """\
+            // PROMPT: // ... : compléter la boucle
+            int n = count();  // BULKHOURS.INIT: 0
+            launch(k);  // BULKHOURS.REMOVE:LINE
+            """
+        self.assertEqual(self.r(src), "// ... : compléter la boucle\nint n = 0  // ...\n// ...\n")
+
+    def test_hash_is_prose_in_cpp_and_slashes_are_prose_in_python(self):
+        from bulkhours_course.render import problems, render
+        cpp = ["#include <vector>\n", "#define N 4  // the grid\n", "int x = secret_value();  // SOLUTION\n", "int y = 2;  # SOLUTION\n"]
+        errs, n = problems(cpp, leader="//")
+        self.assertEqual((errs, n), ([], 1))
+        self.assertIn("int y = 2;  # SOLUTION\n", "".join(render(cpp, "student", "//")))
+        self.assertEqual(problems(["x = compute_the_answer()  // SOLUTION\n"])[1], 0)
+
+    def test_a_cu_file_goes_through_the_markers_and_the_leak_check(self):
+        toml = TOML.replace('content = ["intro/"]', 'content = ["kernel/"]')
+        files = {"kernel/SimGpu.cu": "void gpuStep() {\n    // BEGIN SOLUTION\n    moveParticlesKernel<<<grid, block>>>(d, n, dt);\n"
+                                     "    // END SOLUTION\n    // BEGIN PROMPT\n    // // ... : lancer le noyau\n    // END PROMPT\n}\n",
+                 "kernel/README.md": "# Kernel\n"}
+        c = Course(toml, files)                 # kept: its temporary folder lives as long as it does
+        b = c.build("intro")
+        student = (b / "student" / "intro" / "kernel" / "SimGpu.cu").read_text()
+        self.assertEqual(student, "void gpuStep() {\n    // ... : lancer le noyau\n}\n")
+        self.assertIn("moveParticlesKernel", (b / "teacher" / "intro" / "kernel" / "SimGpu.cu").read_text())
+        leaky = dict(files); leaky["kernel/SimGpu.cu"] = files["kernel/SimGpu.cu"].replace("// // ... : lancer le noyau", "// moveParticlesKernel<<<grid, block>>>(d, n, dt);")
+        c2 = Course(toml, leaky)
+        with self.assertRaises(CourseError):
+            c2.build("intro")
+
+    def test_notebook_leader_from_kernel(self):
+        from bulkhours_course.render import notebook_leader
+        self.assertEqual(notebook_leader({"metadata": {"kernelspec": {"language": "c++"}}}), "//")
+        self.assertEqual(notebook_leader({"metadata": {"language_info": {"name": "python"}}}), "#")
+        self.assertEqual(notebook_leader({}), "#")
