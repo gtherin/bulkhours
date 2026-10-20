@@ -204,7 +204,9 @@ def format_opt(label, raw2norm=True):
     return label
 
 
-def install_if_needed(package):
+def install_if_needed(package, spec=None):
+    """Import `package`, installing it first when it is missing. `spec` is
+    what pip installs when it differs from the import name (a pinned URL)."""
     try:
         import importlib
 
@@ -215,8 +217,9 @@ def install_if_needed(package):
         if package == "mariadb":
             os.system("sudo apt-get install -y libmariadb3 libmariadb-dev > /dev/null 2>&1")
 
-        os.system(f"pip install {package} > /dev/null 2>&1")
-        print(f"\x1b[37mpip install {package}\x1b[0m")
+        spec = package if spec is None else spec
+        os.system(f"pip install {spec} > /dev/null 2>&1")
+        print(f"\x1b[37mpip install {spec}\x1b[0m")
         import importlib
 
         return importlib.import_module(package)

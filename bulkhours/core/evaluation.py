@@ -57,8 +57,9 @@ def evaluate_cell(line, cell):
 
     try:
         return wclass(line, cell).evaluate_cell()
-    except:
+    except Exception as e:
         print("""⚠️\x1b[37mConnection to bulkhours database is not set-up. Service might be limited\x1b[0m⛓️‍💥""")
+        print(f"\x1b[37m({type(e).__name__}: {e})\x1b[0m")
         return
 
 

@@ -4,6 +4,9 @@ from .line_parser import LineParser
 from .grade import Grade
 from . import tools
 
+# Same pin as setup.cfg; `coursemanager==1.0.0` once it is on PyPI.
+COURSEMANAGER_SPEC = "git+https://github.com/GatekaC/coursemanager@v1.0.0"
+
 
 def _render(source, variant):
     """The ONE renderer of the course standard (the coursemanager project),
@@ -19,8 +22,13 @@ def _render(source, variant):
     silently: a marker the renderer cannot read is a solution delivered."""
     try:
         from coursemanager.render import render
-    except ImportError as e:   # the dependency is declared in setup.cfg; name it rather than fail in render
-        raise ImportError("bulkhours needs coursemanager for its markers: pip install coursemanager") from e
+    except ImportError:
+        # Colab notebooks `git clone` this repo and import it in place: setup.cfg
+        # is never read there, so the dependency has to be installed on first
+        # use (measured 2026-10-20: every evaluation cell of a class fell into
+        # the bare `except` of evaluate_cell on this ImportError).
+        tools.install_if_needed("coursemanager", spec=COURSEMANAGER_SPEC)
+        from coursemanager.render import render
     compact = source.replace(" ", "")
     leader = "//" if "//BULKHOURS" in compact or "//BKRESET" in compact else "#"
     lines = source.splitlines(keepends=True)
