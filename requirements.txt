@@ -1,4 +1,6 @@
 pandas
+# the course standard's renderer (same pin as setup.cfg); coursemanager==1.0.0 once on PyPI
+coursemanager @ git+https://github.com/GatekaC/coursemanager@v1.0.0
 ipython
 lxml
 graphviz
