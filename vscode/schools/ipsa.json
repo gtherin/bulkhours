@@ -1,0 +1,8 @@
+{
+  "id": "ipsa",
+  "name": "IPSA",
+  "accent": "#c8102e",
+  "signInUrl": "https://bulkhours.fr/workbench/sign-in?school=ipsa",
+  "keyUrl": "https://bulkhours.fr/api/workbench/key",
+  "language": "fr"
+}

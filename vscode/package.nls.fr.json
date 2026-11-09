@@ -1,0 +1,9 @@
+{
+  "view.assistant": "Assistant",
+  "command.newChat": "Nouvelle conversation",
+  "command.signIn": "Se connecter",
+  "command.signOut": "Se déconnecter",
+  "command.pickAgent": "Choisir l'agent",
+  "setting.agent": "L'agent des nouvelles conversations : vide pour celui de votre école, ou l'identifiant d'un agent de bulkhours.extraAgents.",
+  "setting.extraAgents": "Vos propres agents ACP : { id, label, command, args, env }. Les valeurs peuvent utiliser ${baseUrl}, ${apiKey}, ${model}, ${extensionPath}."
+}

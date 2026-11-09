@@ -1,0 +1,35 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { parseSchool } from "../src/core/school.ts";
+
+const ipsa = {
+  id: "ipsa",
+  name: "IPSA",
+  accent: "#c8102e",
+  signInUrl: "https://bulkhours.fr/workbench/sign-in?school=ipsa",
+  keyUrl: "https://bulkhours.fr/api/workbench/key",
+};
+
+test("a school build file carries identity, addresses and a language", () => {
+  assert.deepEqual(parseSchool(ipsa), { ...ipsa, language: "en" });
+  assert.equal(parseSchool({ ...ipsa, language: "fr" }).language, "fr");
+  assert.throws(() => parseSchool({ ...ipsa, language: "de" }), /school ipsa: "language" must be fr or en/);
+});
+
+test("every school needs its sign-in and key addresses over https", () => {
+  assert.throws(() => parseSchool({ ...ipsa, keyUrl: "http://bulkhours.fr/api/workbench/key" }), /school ipsa: "keyUrl" must be an https address/);
+  assert.throws(() => parseSchool({ ...ipsa, signInUrl: undefined }), /school ipsa: "signInUrl" must be an https address/);
+});
+
+test("the id is a slug, since it names the extension", () => {
+  assert.throws(() => parseSchool({ ...ipsa, id: "IPSA Paris" }), /school id must be lowercase letters, digits or dashes/);
+});
+
+test("the accent is a colour", () => {
+  assert.throws(() => parseSchool({ ...ipsa, accent: "red" }), /school ipsa: "accent" must be a #rrggbb colour/);
+});
+
+test("a school needs a name, and an empty file is refused", () => {
+  assert.throws(() => parseSchool({ ...ipsa, name: "" }), /school ipsa: "name" must be a non-empty string/);
+  assert.throws(() => parseSchool(undefined), /school id must be lowercase/);
+});

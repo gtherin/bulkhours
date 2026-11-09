@@ -1,0 +1,36 @@
+# Publishes the VS Code extensions (one per school) to the Marketplace when a
+# tag vscode-v<version> is pushed. Authentication is trusted publishing: the
+# Marketplace publisher "gateka" trusts this repository and this workflow file,
+# so no token is stored anywhere.
+name: vscode extension
+
+on:
+  push:
+    tags: ["vscode-v*"]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: marketplace
+    defaults:
+      run:
+        working-directory: vscode
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: vscode/package-lock.json
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - name: The tag names the manifest's version
+        run: test "vscode-v$(node -p 'require("./package.json").version')" = "$GITHUB_REF_NAME"
+      - name: One package per school
+        run: for f in schools/*.json; do node scripts/package-school.mjs "$(basename "$f" .json)"; done
+      - run: npx vsce publish --oidc --packagePath dist/*.vsix

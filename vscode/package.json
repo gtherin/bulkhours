@@ -1,0 +1,117 @@
+{
+  "name": "bulkhours",
+  "displayName": "BulkHours",
+  "description": "A coding assistant for students: chat with an agent that reads and edits your workspace, on your school's credits.",
+  "version": "0.1.0",
+  "publisher": "gateka",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gtherin/bulkhours.git",
+    "directory": "vscode"
+  },
+  "bugs": {
+    "url": "https://github.com/gtherin/bulkhours/issues"
+  },
+  "homepage": "https://github.com/gtherin/bulkhours/tree/main/vscode#readme",
+  "type": "module",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "AI",
+    "Education"
+  ],
+  "main": "./dist/extension.cjs",
+  "extensionKind": ["workspace"],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "bulkhours",
+          "title": "BulkHours",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "bulkhours": [
+        {
+          "type": "webview",
+          "id": "bulkhours.chat",
+          "name": "%view.assistant%"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "bulkhours.newChat",
+        "title": "%command.newChat%",
+        "category": "BulkHours",
+        "icon": "$(add)"
+      },
+      {
+        "command": "bulkhours.signIn",
+        "title": "%command.signIn%",
+        "category": "BulkHours"
+      },
+      {
+        "command": "bulkhours.signOut",
+        "title": "%command.signOut%",
+        "category": "BulkHours"
+      },
+      {
+        "command": "bulkhours.pickAgent",
+        "title": "%command.pickAgent%",
+        "category": "BulkHours"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "bulkhours.newChat",
+          "when": "view == bulkhours.chat",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "BulkHours",
+      "properties": {
+        "bulkhours.agent": {
+          "type": "string",
+          "default": "",
+          "description": "%setting.agent%"
+        },
+        "bulkhours.extraAgents": {
+          "type": "array",
+          "default": [],
+          "description": "%setting.extraAgents%",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "tsc --noEmit -p .",
+    "test": "node --test --experimental-strip-types --experimental-test-module-mocks --no-warnings test/*.test.ts",
+    "package": "node scripts/package-school.mjs"
+  },
+  "dependencies": {
+    "@agentclientprotocol/sdk": "2.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "@types/vscode": "1.95.0",
+    "@vscode/vsce": "4.1.0",
+    "esbuild": "0.28.2",
+    "typescript": "5.9.3",
+    "vscode": "file:test/vscode-stub"
+  }
+}

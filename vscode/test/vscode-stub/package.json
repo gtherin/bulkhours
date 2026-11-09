@@ -1,0 +1,1 @@
+{ "name": "vscode", "version": "0.0.0", "private": true, "main": "index.js", "description": "Empty stand-in so tests can replace the vscode module; VS Code provides the real one." }

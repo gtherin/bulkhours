@@ -1,0 +1,67 @@
+# BulkHours overlay on dsh's `acp` profile, launched by the extension as
+#   dsh --profile acp --patch <extension>/media/agents/dsh-bulkhours.yml
+# Adapted from MaQI's dsh-maqi.yml (maqi-instance, jupyterhub/maqi-agent).
+#
+#   1. models are reached ONLY through the school's LiteLLM proxy, with the
+#      student's short-lived, budget-bound key (OPENAI_BASE_URL /
+#      OPENAI_API_KEY, set by the extension at launch);
+#   2. nothing leaves for DeepSeek's own services: no account, no telemetry;
+#   3. the models are the ones the school's key server offers
+#      (BULKHOURS_MODELS, comma-separated), the one in use is chosen in the
+#      chat panel (BULKHOURS_MODEL). Never listed here: one source, the server.
+
+- id: llm-pi-ai
+  config:
+    providers:
+      bulkhours:
+        displayName: BulkHours
+        api: openai-completions
+        baseURL: !!js process.env.OPENAI_BASE_URL
+        apiKeyEnv: OPENAI_API_KEY
+        retryPolicy:
+          mode: normal
+          maxRetries: 2
+        # A cost cap, not the models' limit: an agent re-sends its context at
+        # every step (MaQI measured ~2x the cost per step at 128k vs 64k).
+        defaultMaxTokens: 16384
+        # Aliases of the school's LiteLLM config, as the key server sent them.
+        models: !!js "(process.env.BULKHOURS_MODELS ?? 'fast').split(',').filter(Boolean).map((id) => ({ id, name: id, contextWindow: 65536 }))"
+
+- id: compaction-basic
+  config:
+    thresholdRatio: 0.75
+    headroomTokens: 0
+    retainRatio: 0.25
+
+- id: agent-default-model
+  config:
+    provider: bulkhours
+    model: !!js process.env.BULKHOURS_MODEL ?? 'fast'
+- id: acp
+  config:
+    provider: bulkhours
+    model: !!js process.env.BULKHOURS_MODEL ?? 'fast'
+
+# Rule 2: DeepSeek's own services.
+- id: llm-deepseek
+  disabled: true
+- id: llm-deepseek-account
+  disabled: true
+- id: deepseek-account
+  disabled: true
+- id: plugin-package-inventory-deepseek
+  disabled: true
+- id: otel
+  disabled: true
+- id: session-telemetry-otel
+  disabled: true
+- id: web-search-deepseek
+  disabled: true
+
+- id: system-prompt
+  config:
+    personaPrefix: >-
+      You are the BulkHours coding assistant, powered by the {{model}} model,
+      helping a student of the school in their own project in VS Code. Explain
+      what you change and why, in the student's language, so they learn from
+      it. Never write credentials into a file.
