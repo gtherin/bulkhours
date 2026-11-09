@@ -13,7 +13,7 @@
 ### 📚 **Documentation (with practical examples) is available here [wiki](https://github.com/gtherin/bulkhours/wiki) (📧 [contact](mailto:contact@bulkhours.fr))**.
 [With great feed-backs 🚀🏆🎯 from users](https://github.com/gtherin/bulkhours/wiki/feedbacks), there is an on-going effort to industrialize the package.
 
-[![CC-by-nc-sa license](https://badgen.net/badge/icon/CC%20by-nc-sa?label=Licence)](https://creativecommons.org/licenses/by-nc-sa/4.0)
+[![Code: MIT](https://badgen.net/badge/code/MIT?label=Licence)](LICENSE) [![Courses: CC by-nc-sa](https://badgen.net/badge/courses/CC%20by-nc-sa?label=Licence)](LICENSE-COURSES)
 
 https://github.com/gtherin/bulkhours/assets/82407580/d9f71881-1d0a-4d00-8e3c-bd5c84a9974e
 
