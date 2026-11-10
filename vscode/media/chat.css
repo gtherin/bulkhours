@@ -1,90 +1,137 @@
-body { padding: 0; margin: 0; display: flex; flex-direction: column; height: 100vh;
+/* The chat panel. House rules, after MaQI's lab extension (maqi-lab
+ * style/panel.css): quiet by default; colour marks what is current - a thin
+ * line, a faint tint, one main button - and nothing glows. Soft rounded
+ * surfaces. All motion off under prefers-reduced-motion. Every colour is a
+ * VS Code theme variable, so dark, light and high contrast all hold. */
+:root {
+  --accent: var(--vscode-button-background);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --muted: var(--vscode-descriptionForeground);
+  --line: color-mix(in srgb, var(--vscode-foreground) 12%, transparent);
+  --tint: color-mix(in srgb, var(--accent) 9%, transparent);
+  --surface: color-mix(in srgb, var(--vscode-foreground) 5%, var(--vscode-sideBar-background, transparent));
+}
+* { box-sizing: border-box; }
+body { margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column;
   font-family: var(--vscode-font-family); font-size: var(--vscode-font-size); color: var(--vscode-foreground); }
-#log { flex: 1; overflow-y: auto; padding: 8px 12px; display: flex; flex-direction: column; gap: 8px; }
-.msg { line-height: 1.5; overflow-wrap: anywhere; }
-.msg p { margin: 0 0 6px; }
-.msg.user { align-self: flex-end; max-width: 90%; padding: 6px 10px; border-radius: 8px;
-  background: color-mix(in srgb, var(--accent) 16%, transparent); }
-.msg.agent pre, .tool pre { background: var(--vscode-textCodeBlock-background); padding: 6px 8px; border-radius: 4px;
-  overflow-x: auto; font-family: var(--vscode-editor-font-family); font-size: var(--vscode-editor-font-size); }
-code { font-family: var(--vscode-editor-font-family); }
-.thought { color: var(--vscode-descriptionForeground); font-style: italic; }
-.tool { font-size: 0.92em; padding: 4px 8px; border-left: 3px solid var(--vscode-panel-border); }
-.tool.completed { border-left-color: var(--vscode-gitDecoration-addedResourceForeground, var(--accent)); }
-.tool.failed { border-left-color: var(--vscode-errorForeground); }
-.tool .st { display: inline-block; width: 1.2em; }
+[hidden] { display: none !important; }
+
+/* -- the conversation ------------------------------------------------------- */
+#log { flex: 1; overflow-y: auto; padding: 14px 14px 8px; display: flex; flex-direction: column; gap: 12px; }
+.msg { line-height: 1.55; overflow-wrap: anywhere; }
+.msg p { margin: 0 0 8px; }
+.msg p:last-child { margin-bottom: 0; }
+.msg.user { align-self: flex-end; max-width: 88%; padding: 7px 12px; border-radius: var(--radius) var(--radius) 4px var(--radius);
+  background: var(--surface); border: 1px solid var(--line); }
+.msg.user .imgs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+.msg.user .imgs img { max-width: 180px; max-height: 120px; border-radius: var(--radius-sm); display: block; }
+.msg.agent pre, .tool pre { margin: 8px 0; padding: 8px 10px; border-radius: var(--radius-sm); overflow-x: auto;
+  background: var(--vscode-textCodeBlock-background); border: 1px solid var(--line);
+  font-family: var(--vscode-editor-font-family); font-size: var(--vscode-editor-font-size); line-height: 1.45; }
+code { font-family: var(--vscode-editor-font-family); font-size: .95em; }
+.msg :not(pre) > code { padding: 1px 4px; border-radius: 4px; background: var(--vscode-textCodeBlock-background); }
+a { color: var(--vscode-textLink-foreground); }
+.thought { color: var(--muted); font-size: .92em; }
+.thought summary, .tool summary { cursor: pointer; color: var(--muted); }
+.tool { align-self: flex-start; max-width: 100%; font-size: .9em; color: var(--muted); padding: 3px 10px;
+  border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
+.tool:has(details) { border-radius: var(--radius-sm); }
+.tool .st { display: inline-block; width: 1.1em; }
+.tool.completed .st { color: var(--vscode-gitDecoration-addedResourceForeground, var(--accent)); }
+.tool.failed .st { color: var(--vscode-errorForeground); }
 .diff .add { color: var(--vscode-gitDecoration-addedResourceForeground); }
 .diff .del { color: var(--vscode-gitDecoration-deletedResourceForeground); }
-.plan { margin: 0; padding-left: 20px; color: var(--vscode-descriptionForeground); }
+.plan { margin: 0; padding-left: 20px; color: var(--muted); }
 .plan .completed { text-decoration: line-through; }
-.notice { font-size: 0.9em; color: var(--vscode-descriptionForeground); text-align: center; }
-.ask { padding: 8px; border: 1px solid var(--accent); border-radius: 6px; }
-.ask p { margin: 0 0 6px; }
+.notice { align-self: center; font-size: .88em; color: var(--muted); text-align: center; }
+.ask { padding: 10px 12px; border-radius: var(--radius); border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); background: var(--tint); }
+.ask p { margin: 0 0 8px; }
 .ask button { margin-right: 6px; }
-.welcome { color: var(--vscode-descriptionForeground); padding: 12px 0; }
-button { background: var(--vscode-button-background); color: var(--vscode-button-foreground); border: 0;
-  padding: 4px 12px; border-radius: 3px; cursor: pointer; }
-button.reject, #stop { background: var(--vscode-button-secondaryBackground); color: var(--vscode-button-secondaryForeground); }
-button:disabled { opacity: .5; cursor: default; }
-button:focus-visible, textarea:focus-visible, select:focus-visible { outline: 1px solid var(--vscode-focusBorder); }
-#ask { padding: 8px 12px; border-top: 1px solid var(--vscode-panel-border); }
-#input { width: 100%; box-sizing: border-box; resize: vertical; background: var(--vscode-input-background);
-  color: var(--vscode-input-foreground); border: 1px solid var(--vscode-input-border, transparent); border-radius: 4px; padding: 6px; font: inherit; }
-.bar { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
 
-select { background: var(--vscode-dropdown-background); color: var(--vscode-dropdown-foreground);
-  border: 1px solid var(--vscode-dropdown-border); }
+/* the empty chat: a title and three questions to start from */
+.welcome { margin: auto 0; padding: 24px 6px; text-align: center; color: var(--muted); }
+.welcome h2 { margin: 0 0 6px; font-size: 1.25em; font-weight: 600; color: var(--vscode-foreground); }
+.welcome p { margin: 0 auto 14px; max-width: 30em; line-height: 1.5; }
+.suggest { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+.suggest button { max-width: 100%; color: var(--vscode-foreground); background: var(--surface); border: 1px solid var(--line);
+  border-radius: 999px; padding: 5px 12px; font-size: .92em; cursor: pointer; }
+.suggest button:hover { background: var(--tint); border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
 
-/* -- after MaQI's lab extension: meters, "is thinking", motion ------------- */
-:root { --ease: cubic-bezier(.2, .7, .2, 1); }
-.msg.user .imgs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
-.msg.user .imgs img { max-width: 160px; max-height: 120px; border-radius: 4px; display: block; }
-.enter { animation: rise .28s var(--ease); }
-
-.writing { display: inline-flex; align-items: center; gap: 6px; font-size: .9em;
-  color: var(--vscode-descriptionForeground); animation: fade-in .24s var(--ease); }
+/* "<model> réfléchit": three dots and a shimmering verb */
+.writing { display: inline-flex; align-items: center; gap: 6px; font-size: .9em; color: var(--muted); animation: fade-in .24s var(--ease); }
 .writing .dots { display: inline-flex; gap: 3px; }
 .writing .dots i { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: dot 1.2s ease-in-out infinite; }
 .writing .dots i:nth-child(2) { animation-delay: .15s; }
 .writing .dots i:nth-child(3) { animation-delay: .3s; }
 .writing .name { font-weight: 600; color: var(--vscode-foreground); }
-.writing .verb { background: linear-gradient(90deg, var(--vscode-descriptionForeground) 0%, var(--vscode-descriptionForeground) 35%,
-    var(--accent) 50%, var(--vscode-descriptionForeground) 65%, var(--vscode-descriptionForeground) 100%) 0 0 / 250% 100%;
+.writing .verb { background: linear-gradient(90deg, var(--muted) 0%, var(--muted) 35%, var(--accent) 50%, var(--muted) 65%, var(--muted) 100%) 0 0 / 250% 100%;
   -webkit-background-clip: text; background-clip: text; color: transparent; animation: shimmer 1.8s linear infinite; }
+.enter { animation: rise .28s var(--ease); }
 
-.meters { display: flex; align-items: center; gap: 10px; padding: 4px 12px; border-top: 1px solid var(--vscode-panel-border);
-  font-size: .85em; color: var(--vscode-descriptionForeground); font-variant-numeric: tabular-nums; }
-.meters[hidden], .meter[hidden], .ring[hidden], #thumbs[hidden] { display: none; }
-.meter { position: relative; min-width: 7.5em; padding: 1px 8px; border-radius: 9px; overflow: hidden;
-  background: color-mix(in srgb, var(--vscode-foreground) 8%, transparent); }
-.meter .fill { position: absolute; inset: 0 auto 0 0; width: 0; transition: width .4s var(--ease);
-  background: color-mix(in srgb, var(--vscode-gitDecoration-addedResourceForeground, var(--accent)) 30%, transparent); }
-.meter[data-level="warn"] .fill { background: color-mix(in srgb, var(--vscode-editorWarning-foreground) 40%, transparent); }
-.meter[data-level="over"] .fill { background: color-mix(in srgb, var(--vscode-errorForeground) 45%, transparent); }
-.meter .txt { position: relative; }
-.ctx { display: flex; align-items: center; gap: 5px; margin-left: auto; }
-.ring { width: 14px; height: 14px; transform: rotate(-90deg); }
-.ring circle { fill: none; stroke-width: 2.5; }
-.ring .track { stroke: color-mix(in srgb, var(--vscode-foreground) 15%, transparent); }
-.ring .used { stroke: var(--accent); stroke-linecap: round; transition: stroke-dasharray .4s var(--ease); }
-.ctx[data-level="warn"] .ring .used { stroke: var(--vscode-editorWarning-foreground); }
-button.ghost, button.link { background: none; color: var(--vscode-textLink-foreground); padding: 1px 4px; }
-button.ghost:hover:not(:disabled), button.link:hover { text-decoration: underline; }
-.bar #agent { flex: 1; text-align: left; color: var(--vscode-descriptionForeground); font-size: .9em;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-#thumbs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+/* -- the composer ------------------------------------------------------------ */
+#ask { position: relative; margin: 4px 10px 6px; border-radius: var(--radius); overflow: hidden;
+  background: var(--vscode-input-background); border: 1px solid var(--vscode-input-border, var(--line));
+  transition: border-color .16s ease, box-shadow .2s ease; }
+#ask:focus-within { border-color: color-mix(in srgb, var(--accent) 70%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 16%, transparent); }
+/* the budget, as a thin line on the composer's top edge */
+#budgetline { position: absolute; inset: 0 0 auto 0; height: 2px; }
+#budgetline .fill { display: block; height: 100%; width: 0; background: var(--accent); opacity: .7; transition: width .4s var(--ease); }
+#budgetline[data-level="warn"] .fill { background: var(--vscode-editorWarning-foreground); opacity: 1; }
+#budgetline[data-level="over"] .fill { background: var(--vscode-errorForeground); opacity: 1; }
+#thumbs { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 10px 0; }
 .thumb { position: relative; }
-.thumb img { height: 48px; border-radius: 4px; display: block; border: 1px solid var(--vscode-panel-border); }
-.thumb button { position: absolute; top: -6px; right: -6px; width: 18px; height: 18px; padding: 0; border-radius: 50%; line-height: 18px; }
+.thumb img { height: 52px; border-radius: var(--radius-sm); display: block; border: 1px solid var(--line); }
+.thumb button { position: absolute; top: -6px; right: -6px; width: 18px; height: 18px; padding: 0; border-radius: 50%;
+  line-height: 16px; font-size: 13px; background: var(--vscode-editorWidget-background, var(--vscode-input-background));
+  color: var(--vscode-foreground); border: 1px solid var(--line); cursor: pointer; }
+#input { display: block; width: 100%; min-height: 2.6em; max-height: 14em; padding: 10px 12px 4px; resize: none; overflow-y: auto;
+  border: 0; outline: none; background: transparent; color: var(--vscode-input-foreground); font: inherit; line-height: 1.5; }
+#input::placeholder { color: var(--vscode-input-placeholderForeground, var(--muted)); }
+.tools { display: flex; align-items: center; gap: 4px; padding: 4px 6px 6px 8px; }
+.tools .spacer { flex: 1; }
+.pill { min-width: 0; max-width: 46%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: inherit; font-size: .88em;
+  color: var(--muted); background: transparent; border: 1px solid transparent; border-radius: 999px; padding: 2px 8px; cursor: pointer; }
+.pill:hover { color: var(--vscode-foreground); background: var(--tint); }
+select.pill { -webkit-appearance: none; appearance: none; }
+select.pill option { color: var(--vscode-dropdown-foreground); background: var(--vscode-dropdown-background); }
+#go { flex: none; width: 28px; height: 28px; padding: 0; border-radius: 50%; display: grid; place-items: center;
+  background: var(--accent); color: var(--vscode-button-foreground); border: 0; cursor: pointer; transition: opacity .16s ease, transform .12s ease; }
+#go:hover:not(:disabled) { transform: translateY(-1px); }
+#go:disabled { opacity: .35; cursor: default; }
+#go svg { width: 14px; height: 14px; fill: currentColor; }
+#go.stop svg { width: 11px; height: 11px; }
+
+/* -- the line under the composer: budget, context, compact / clear ---------- */
+.meters { display: flex; align-items: center; gap: 10px; padding: 0 14px 8px; font-size: .82em; color: var(--muted);
+  font-variant-numeric: tabular-nums; user-select: none; -webkit-user-select: none; }
+.meters .m { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+#budget[data-level="warn"] { color: var(--vscode-editorWarning-foreground); }
+#budget[data-level="over"] { color: var(--vscode-errorForeground); }
+.meters .spacer { flex: 1; }
+.ring { width: 12px; height: 12px; transform: rotate(-90deg); }
+.ring circle { fill: none; stroke-width: 2.5; }
+.ring .track { stroke: var(--line); }
+.ring .used { stroke: var(--accent); stroke-linecap: round; transition: stroke-dasharray .4s var(--ease); }
+#context[data-level="warn"] .ring .used { stroke: var(--vscode-editorWarning-foreground); }
+button.link { font: inherit; background: none; border: 0; padding: 0 2px; color: var(--muted); cursor: pointer; }
+button.link:hover:not(:disabled) { color: var(--vscode-textLink-foreground); }
+button.link:disabled { opacity: .4; cursor: default; }
+
+/* -- buttons in the conversation (sign in, permissions) --------------------- */
+button { font: inherit; }
+.welcome > button, .ask button { background: var(--vscode-button-background); color: var(--vscode-button-foreground); border: 0;
+  padding: 5px 14px; border-radius: 999px; cursor: pointer; }
+.ask button.reject { background: var(--vscode-button-secondaryBackground); color: var(--vscode-button-secondaryForeground); }
+button:focus-visible, select:focus-visible { outline: 1px solid var(--vscode-focusBorder); outline-offset: 1px; }
 
 @keyframes rise { from { opacity: 0; transform: translateY(6px); } }
 @keyframes fade-in { from { opacity: 0; } }
 @keyframes dot { 0%, 60%, 100% { transform: translateY(0); opacity: .35; } 30% { transform: translateY(-3px); opacity: 1; } }
 @keyframes shimmer { from { background-position: 100% 0; } to { background-position: -150% 0; } }
 @media (prefers-reduced-motion: reduce) {
-  .enter, .writing, .writing .dots i, .writing .verb, .meter .fill, .ring .used { animation: none; transition: none; }
-  .writing .verb { color: var(--vscode-descriptionForeground); background: none; }
+  .enter, .writing, .writing .dots i, .writing .verb, #budgetline .fill, .ring .used, #go { animation: none; transition: none; }
+  .writing .verb { color: var(--muted); background: none; }
 }
-.bar select { max-width: 55%; min-width: 0; text-overflow: ellipsis; }
-.bar #agent { min-width: 3em; }

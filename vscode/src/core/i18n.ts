@@ -44,6 +44,9 @@ const en = {
   budgetTitle: "Your assistant budget for this course",
   contextTitle: "What the agent keeps in mind: it compacts by itself at 75 %",
   removeImage: "Remove this image",
+  suggestExplain: "Explain the file that is open",
+  suggestBuild: "Why does my code not compile?",
+  suggestFaster: "How can I make this kernel faster?",
 };
 
 const fr: typeof en = {
@@ -86,6 +89,9 @@ const fr: typeof en = {
   budgetTitle: "Votre budget d'assistant pour ce cours",
   contextTitle: "Ce que l'agent garde en tête : il compacte tout seul à 75 %",
   removeImage: "Retirer cette image",
+  suggestExplain: "Explique le fichier ouvert",
+  suggestBuild: "Pourquoi mon code ne compile pas ?",
+  suggestFaster: "Comment accélérer ce kernel ?",
 };
 
 export const MESSAGES: Record<Lang, typeof en> = { en, fr };

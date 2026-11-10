@@ -5,16 +5,17 @@
 (function () {
   const vscode = acquireVsCodeApi();
   const $ = (id) => document.getElementById(id);
-  const log = $("log"), input = $("input"), form = $("ask"), stop = $("stop"), send = $("send");
+  const log = $("log"), input = $("input"), form = $("ask"), go = $("go"), line = $("budgetline");
   const model = $("model"), agent = $("agent"), thumbs = $("thumbs");
   const budget = $("budget"), context = $("context"), compact = $("compact"), clear = $("clear");
   const W = JSON.parse($("words").textContent);
   // The school's colour, set here: the page's CSP forbids style attributes.
   if (/^#[0-9a-f]{6}$/i.test(W.accent || "")) document.body.style.setProperty("--accent", W.accent);
   input.placeholder = W.placeholder;
-  send.textContent = W.send;
-  stop.textContent = W.stop;
   model.title = W.model;
+  const ARROW = '<svg viewBox="0 0 16 16"><path d="M8 2.5 3 7.5l1.1 1.1L7.2 5.5V13.5h1.6V5.5l3.1 3.1L13 7.5z"/></svg>';
+  const SQUARE = '<svg viewBox="0 0 16 16"><rect x="4" y="4" width="8" height="8" rx="1.5"/></svg>';
+  let busy = false;
   compact.textContent = W.compact; compact.title = W.compactHint;
   clear.textContent = W.clear; clear.title = W.clearHint;
   budget.title = W.budgetTitle;
@@ -77,12 +78,12 @@
   const level = (s, b) => (b <= 0 || s >= b) ? "over" : s >= 0.8 * b ? "warn" : "ok";
 
   function meters(s) {
-    budget.hidden = !s.credits;
+    budget.hidden = line.hidden = !s.credits;
     if (s.credits) {
       const pct = s.credits.budget > 0 ? Math.min(100, 100 * s.credits.spent / s.credits.budget) : 100;
-      budget.dataset.level = level(s.credits.spent, s.credits.budget);
-      budget.querySelector(".fill").style.width = `${pct}%`;
-      budget.querySelector(".txt").textContent = `${money(s.credits.spent)} / ${money(s.credits.budget)}`;
+      budget.dataset.level = line.dataset.level = level(s.credits.spent, s.credits.budget);
+      line.querySelector(".fill").style.width = `${pct}%`;
+      budget.textContent = `${money(s.credits.spent)} / ${money(s.credits.budget)}`;
     }
     const u = s.usage;
     context.querySelector(".txt").textContent = u ? `${tokens(u.used)} / ${tokens(u.size)}` : "";
@@ -112,15 +113,21 @@
     if (s.transcript.length < shown) shown = 0;
     log.innerHTML = s.transcript.length
       ? s.transcript.map((e, i) => entry(e).replace(/^<(\w+) class="/, (m) => i >= shown ? `${m}enter ` : m)).join("")
-      : `<div class="welcome"><p>${esc(W.emptyChat)}</p></div>`;
+      : `<div class="welcome"><h2>${esc(W.title)}</h2><p>${esc(W.emptyChat)}</p><div class="suggest">`
+        + ["suggestExplain", "suggestBuild", "suggestFaster"].map((k) => `<button type="button">${esc(W[k])}</button>`).join("")
+        + `</div></div>`;
+    log.querySelectorAll(".suggest button").forEach((b) => b.onclick = () => { input.value = b.textContent; grow(); input.focus(); });
     shown = s.transcript.length;
     const label = s.modelLabels[s.model] || s.model;
     if (s.starting) log.innerHTML += `<div class="notice">${esc(W.startingAgent)}</div>`;
     else if (s.busy) log.innerHTML += `<div class="writing"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>`
       + `<span class="name">${esc(label)}</span> <span class="verb">${esc(W.thinkingVerb)}</span></div>`;
     if (atBottom) log.scrollTop = log.scrollHeight;
-    stop.hidden = !s.busy;
-    send.disabled = s.busy;
+    busy = s.busy;
+    go.classList.toggle("stop", busy);
+    go.innerHTML = busy ? SQUARE : ARROW;
+    go.title = busy ? W.stop : W.send;
+    go.setAttribute("aria-label", go.title);
     model.innerHTML = s.models.map((m) =>
       `<option value="${esc(m)}" ${m === s.model ? "selected" : ""}>${esc(s.modelLabels[m] ? `${m} — ${s.modelLabels[m]}` : m)}</option>`).join("");
     agent.textContent = s.agent;
@@ -172,17 +179,23 @@
     if (ev.data.type === "state") render(ev.data);
     if (ev.data.type === "permission") permission(ev.data);
   });
+  // The text box grows with what is typed, up to its max-height.
+  function grow() { input.style.height = "auto"; input.style.height = `${input.scrollHeight}px`; }
+  input.addEventListener("input", grow);
   form.addEventListener("submit", (ev) => {
     ev.preventDefault();
+    if (busy || !input.value.trim()) return;     // Enter mid-turn keeps the text
     vscode.postMessage({ type: "send", text: input.value, images: pasted });
     input.value = "";
+    grow();
     pasted = [];
     drawThumbs();
   });
   input.addEventListener("keydown", (ev) => {
     if (ev.key === "Enter" && !ev.shiftKey) { ev.preventDefault(); form.requestSubmit(); }
   });
-  stop.onclick = () => vscode.postMessage({ type: "cancel" });
+  // One round button: send, or stop while the agent works.
+  go.addEventListener("click", (ev) => { if (busy) { ev.preventDefault(); vscode.postMessage({ type: "cancel" }); } });
   model.onchange = () => vscode.postMessage({ type: "model", model: model.value });
   agent.onclick = () => vscode.postMessage({ type: "pickAgent" });
   compact.onclick = () => vscode.postMessage({ type: "compact" });

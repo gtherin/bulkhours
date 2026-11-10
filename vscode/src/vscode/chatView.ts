@@ -236,7 +236,8 @@ function reason(lang: Lang, stop: string): string {
 
 // The panel's own words, sent once in the page as data (never as script).
 const PANEL_WORDS: MessageKey[] = ["signIn", "emptyChat", "placeholder", "send", "stop", "model", "thinking", "output", "noChange", "startingAgent",
-  "compact", "compactHint", "clear", "clearHint", "thinkingVerb", "budgetTitle", "contextTitle", "removeImage"];
+  "compact", "compactHint", "clear", "clearHint", "thinkingVerb", "budgetTitle", "contextTitle", "removeImage",
+  "suggestExplain", "suggestBuild", "suggestFaster"];
 
 function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, lang: Lang): string {
   const css = webview.asWebviewUri(vscode.Uri.joinPath(media, "chat.css"));
@@ -245,6 +246,7 @@ function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, l
   const words = Object.fromEntries(PANEL_WORDS.map((k) => [k, t(lang, k)]));
   words.signInPrompt = t(lang, "signInPrompt", { school: school.name });
   words.accent = school.accent;
+  words.title = `BulkHours ${school.name}`;
   const data = JSON.stringify(words).replace(/</g, "\\u003c");
   return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; img-src data:; script-src 'nonce-${nonce}';">
@@ -252,12 +254,12 @@ function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, l
 <body>
 <div id="log" role="log" aria-live="polite"></div>
 <script type="application/json" id="words">${data}</script>
-<div id="meters" class="meters" hidden>
-<div id="budget" class="meter" hidden><span class="fill"></span><span class="txt"></span></div>
-<div id="context" class="ctx"><svg class="ring" viewBox="0 0 16 16" aria-hidden="true" hidden><circle class="track" cx="8" cy="8" r="6"/><circle class="used" cx="8" cy="8" r="6"/></svg><span class="txt"></span>
-<button type="button" id="compact" class="ghost"></button><button type="button" id="clear" class="ghost"></button></div></div>
-<form id="ask"><div id="thumbs" hidden></div><textarea id="input" rows="3"></textarea>
-<div class="bar"><select id="model"></select><button type="button" id="agent" class="link"></button>
-<button type="button" id="stop" hidden></button><button type="submit" id="send"></button></div></form>
+<form id="ask" hidden><div id="budgetline" hidden><span class="fill"></span></div>
+<div id="thumbs" hidden></div><textarea id="input" rows="1"></textarea>
+<div class="tools"><select id="model" class="pill"></select><button type="button" id="agent" class="pill"></button>
+<span class="spacer"></span><button type="submit" id="go"></button></div></form>
+<div id="meters" class="meters" hidden><span id="budget" class="m" hidden></span>
+<span id="context" class="m"><svg class="ring" viewBox="0 0 16 16" aria-hidden="true" hidden><circle class="track" cx="8" cy="8" r="6"/><circle class="used" cx="8" cy="8" r="6"/></svg><span class="txt"></span></span>
+<span class="spacer"></span><button type="button" id="compact" class="link"></button><button type="button" id="clear" class="link"></button></div>
 <script nonce="${nonce}" src="${js}"></script></body></html>`;
 }
