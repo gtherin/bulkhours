@@ -188,7 +188,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   private async onPanel(m: FromPanel): Promise<void> {
     switch (m.type) {
       case "ready": this.restore(); await this.render(); await this.warmKey(); return this.refreshCredits();
-      case "compact": return this.commands.includes("compact") ? this.send("/compact") : undefined;
+      case "compact": return this.commands.includes("compact") ? this.send("/compact") : this.compact();
       case "clear": return this.newChat();
       case "pickAgent": await vscode.commands.executeCommand("bulkhours.pickAgent"); return;
       case "choose": return this.choose(m.agent, m.model);
@@ -313,6 +313,19 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
       this.view.webview.html = panelHtml(this.view.webview, media, this.school, this.lang);
     }
     void this.render();
+  }
+
+  // Compaction for an agent that has no /compact of its own (dsh over ACP):
+  // its session is let go - not resumed - and the next message starts a fresh
+  // one, handed the conversation condensed (recent exchanges whole), as when
+  // switching model. The record and the panel keep everything.
+  private async compact(): Promise<void> {
+    if (this.busy || !this.transcript.length) return;
+    this.forget();
+    this.prime = true;
+    this.usage = null;
+    this.transcript = addNotice(this.transcript, t(this.lang, "compacted"));
+    await this.render();
   }
 
   private pause(): void {

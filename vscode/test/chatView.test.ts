@@ -298,12 +298,17 @@ test("Compact is offered only by an agent that announces it, and then reaches it
   assert.deepEqual([texts(p.last()), p.last().commands], [[], []]);
 });
 
-test("an agent without a compact command is never sent /compact as a question", async () => {
-  const p = panel();
+test("an agent without a compact command is compacted by the extension, never sent /compact as a question", async () => {
+  const p = panel(true, "en", "IPSA", { store: mkdtempSync(join(tmpdir(), "bh-store-")) });
   await p.send({ type: "send", text: "hello" });
   assert.deepEqual(p.last().commands, []);
   await p.send({ type: "compact" });
-  assert.deepEqual(texts(p.last()), ["hello", "you said: hello"]);
+  const after = texts(p.last());
+  assert.deepEqual(after.slice(0, 2), ["hello", "you said: hello"]);
+  assert.equal(after.at(-1), "conversation compacted: the next message starts a fresh agent session with the conversation condensed");
+  await p.send({ type: "send", text: "next" });
+  // a fresh session (not the resumed one), handed the condensed conversation
+  assert.match(texts(p.last()).at(-1), /^you said: The conversation so far .*Student: hello/s);
   p.view.newChat();
 });
 

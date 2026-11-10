@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.14 — 2026-11-10
+
+- Compacter works with every agent: the agent's own /compact when it has one (Claude Code), otherwise the extension lets the session go and the next message starts a fresh one handed the conversation condensed.
+
 ## 0.1.13 — 2026-11-10
 
 - dsh works with a 128K context window (was 64K): an orchestrating turn no longer runs out of room and stops every reply on « length limit ».
