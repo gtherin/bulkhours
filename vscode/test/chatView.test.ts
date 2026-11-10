@@ -50,8 +50,10 @@ const key = {
 const views: { dispose(): void }[] = [];
 after(() => views.forEach((v) => v.dispose()));
 
-function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA", opts: { images?: boolean; fresh?: boolean } = {}) {
-  const k = opts.images ? { ...key, agent: { ...key.agent, env: { ...key.agent.env, FAKE_IMAGES: "1" } } } : key;
+function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA",
+               opts: { images?: boolean; fresh?: boolean; store?: string; idleMs?: number } = {}) {
+  const env = { ...key.agent.env, ...(opts.images ? { FAKE_IMAGES: "1" } : {}), ...(opts.store ? { FAKE_STORE: opts.store } : {}) };
+  const k = { ...key, agent: { ...key.agent, env } };
   const meters: unknown[] = [];
   let fetched = false;
   const state = new Map<string, unknown>();
@@ -73,7 +75,7 @@ function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA", o
     signIn: async () => { posted.push({ type: "signIn-opened" }); },
   };
   const view = new ChatView(ctx, { id: "ipsa", name: schoolName, accent: "#c8102e", signInUrl: "https://a", keyUrl: "https://b", creditsUrl: "https://c", language: "en" as const },
-    creds, { append() {} } as any, lang, (c: unknown) => meters.push(c));
+    creds, { append() {} } as any, lang, (c: unknown) => meters.push(c), opts.idleMs);
   views.push(view);
   changed();   // a sign-in change can arrive before VS Code shows the panel
   const webview: any = {
@@ -339,4 +341,36 @@ test("after a window reload the menu still offers the school's models, not only 
   assert.deepEqual(p.last().models, ["fast", "code"]);
   assert.deepEqual(p.last().agents.map((a: any) => a.id), ["", "claude"]);
   delete settings.extraAgents;
+});
+
+const quiet = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+test("a quiet agent is paused to free memory, and comes back with the conversation", async () => {
+  const p = panel(true, "en", "IPSA", { store: mkdtempSync(join(tmpdir(), "bh-store-")), idleMs: 80 });
+  await p.send({ type: "send", text: "remember apple" });
+  await quiet(250);
+  assert.ok(texts(p.last()).includes("the agent was paused to free memory: it comes back, with the conversation, at your next message"));
+  await p.send({ type: "send", text: "recall" });
+  const t = texts(p.last());
+  assert.match(t.at(-1), /^I remember apple \(pid \d+\)$/);
+  p.view.newChat();
+});
+
+test("an agent that cannot resume is never paused: it would forget", async () => {
+  const p = panel(true, "en", "IPSA", { idleMs: 50 });
+  await p.send({ type: "send", text: "hello" });
+  await quiet(200);
+  assert.deepEqual(texts(p.last()), ["hello", "you said: hello"]);
+  p.view.newChat();
+});
+
+test("a new chat forgets the paused conversation", async () => {
+  const p = panel(true, "en", "IPSA", { store: mkdtempSync(join(tmpdir(), "bh-store-")), idleMs: 60 });
+  await p.send({ type: "send", text: "remember pear" });
+  await quiet(200);
+  p.view.newChat();
+  await p.send({ type: "send", text: "recall" });
+  assert.equal(texts(p.last())[0], "recall");
+  assert.match(texts(p.last()).at(-1), /^I remember nothing/);
+  p.view.newChat();
 });

@@ -1,7 +1,15 @@
 // A tiny ACP agent for tests: it echoes, reads a file, or asks before writing
 // one, so the client's whole round trip runs without a model or an API key.
 import { Readable, Writable } from "node:stream";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 import { agent, methods, ndJsonStream, PROTOCOL_VERSION } from "@agentclientprotocol/sdk";
+
+// FAKE_STORE: a folder where sessions are saved, like dsh's ~/.dsh/sessions,
+// so a NEW process can resume one (session/resume) with what it remembered.
+const store = process.env.FAKE_STORE;
+const memory = (id: string) => join(store!, `${id.replace(/\W/g, "_")}.txt`);
+let nextId = 0;
 
 const stream = ndJsonStream(
   Writable.toWeb(process.stdout) as WritableStream<Uint8Array>,
@@ -22,9 +30,16 @@ agent({ name: "fake-agent" })
   .onRequest(methods.agent.initialize, ({ params }) => {
     caps = params.clientCapabilities;
     return { protocolVersion: PROTOCOL_VERSION,
-      agentCapabilities: process.env.FAKE_IMAGES ? { promptCapabilities: { image: true } } : {} };
+      agentCapabilities: {
+        ...(process.env.FAKE_IMAGES ? { promptCapabilities: { image: true } } : {}),
+        ...(store ? { sessionCapabilities: { resume: {} } } : {}),
+      } };
   })
-  .onRequest(methods.agent.session.new, ({ params }) => ({ sessionId: `s-${params.cwd}` }))
+  .onRequest(methods.agent.session.new, ({ params }) => ({ sessionId: store ? `s-${process.pid}-${nextId++}` : `s-${params.cwd}` }))
+  .onRequest(methods.agent.session.resume, ({ params }) => {
+    if (!store || !existsSync(memory(params.sessionId))) throw new Error(`no saved session ${params.sessionId}`);
+    return {};
+  })
   .onRequest(methods.agent.session.prompt, async ({ params, client }) => {
     const first = params.prompt[0];
     const text = first && first.type === "text" ? first.text : "";
@@ -40,6 +55,12 @@ agent({ name: "fake-agent" })
       const stopped = cancelled.delete(params.sessionId);
       await say(client, params.sessionId, stopped ? "stopping" : "waited the whole second");
       return { stopReason: stopped ? "cancelled" : "end_turn" };
+    } else if (verb === "remember") {
+      writeFileSync(memory(params.sessionId), path);
+      await say(client, params.sessionId, `noted ${path}`);
+    } else if (verb === "recall") {
+      const m = store && existsSync(memory(params.sessionId)) ? readFileSync(memory(params.sessionId), "utf8") : "nothing";
+      await say(client, params.sessionId, `I remember ${m} (pid ${process.pid})`);
     } else if (verb === "images") {
       const imgs = params.prompt.filter((b) => b.type === "image").map((b: any) => `${b.mimeType}:${b.data}`);
       await say(client, params.sessionId, `images=${imgs.join(",") || "none"}`);

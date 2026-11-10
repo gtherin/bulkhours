@@ -1,6 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { AgentSession, type Host } from "../src/core/acpSession.ts";
 import { applyUpdate, type Transcript } from "../src/core/transcript.ts";
@@ -118,4 +120,36 @@ test("an agent that does not read images says so, and is never sent one", async 
     await s.prompt("images", [], [{ mimeType: "image/png", data: "AAA" }]);
     assert.equal(r.text(), "images=none");
   } finally { s.dispose(); }
+});
+
+test("an agent that saves its sessions is resumed by a new process, memory included", async () => {
+  const store = mkdtempSync(join(tmpdir(), "bh-store-"));
+  const withStore = { ...launch, env: { ...launch.env, FAKE_STORE: store } };
+  const r = recordingHost();
+  const first = await AgentSession.start(withStore, CWD, r.host);
+  assert.equal(first.canResume, true);
+  await first.prompt("remember apple");
+  const id = first.sessionId;
+  first.dispose();
+
+  const again = recordingHost();
+  const second = await AgentSession.start(withStore, CWD, again.host, "0.1.0", id);
+  try {
+    assert.equal(second.sessionId, id);
+    assert.equal(second.resumed, true);
+    await second.prompt("recall");
+    assert.match(again.text(), /^I remember apple \(pid \d+\)$/);
+  } finally { second.dispose(); }
+});
+
+test("a session that cannot be resumed starts fresh instead of failing", async () => {
+  const store = mkdtempSync(join(tmpdir(), "bh-store-"));
+  const r = recordingHost();
+  const s = await AgentSession.start({ ...launch, env: { ...launch.env, FAKE_STORE: store } }, CWD, r.host, "0.1.0", "s-gone");
+  try {
+    assert.equal(s.resumed, false);
+    assert.notEqual(s.sessionId, "s-gone");
+  } finally { s.dispose(); }
+  const plain = await AgentSession.start(launch, CWD, recordingHost().host, "0.1.0", "s-x");
+  try { assert.deepEqual([plain.canResume, plain.resumed], [false, false]); } finally { plain.dispose(); }
 });

@@ -26,6 +26,10 @@ const IMAGE_TYPES = new Set(["image/png", "image/jpeg", "image/gif", "image/webp
 // LiteLLM writes spend in batches (about a minute, measured 2026-11-10): the
 // meter is read after a turn, then once more when the batch has landed.
 const SPEND_LANDS_MS = 75_000;
+// An agent idle this long is stopped to free its memory (265 MB for dsh, about
+// 500 MB for Claude Code, measured 2026-11-10; a shared GPU machine holds one
+// per student) - only when it saves its sessions and can resume them.
+const IDLE_MS = 15 * 60_000;
 
 export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   private view: vscode.WebviewView | undefined;
@@ -46,16 +50,22 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   private credits: Credits | undefined;
   private usage: { used: number; size: number } | null = null;
   private spendTimer: ReturnType<typeof setTimeout> | undefined;
+  private idleTimer: ReturnType<typeof setTimeout> | undefined;
+  private readonly idleMs: number;
+  // A conversation whose agent was paused: resumed at the next message if the
+  // same agent and model are still chosen.
+  private paused: { sessionId: string; launchKey: string } | undefined;
 
   constructor(ctx: vscode.ExtensionContext, school: School, creds: Credentials, log: vscode.OutputChannel,
-              lang: Lang = "en", meter: (c: Credits | undefined) => void = () => {}) {
+              lang: Lang = "en", meter: (c: Credits | undefined) => void = () => {}, idleMs = IDLE_MS) {
     this.ctx = ctx;
     this.school = school;
     this.creds = creds;
     this.log = log;
     this.lang = lang;
     this.meter = meter;
-    creds.onDidChange(() => { this.endSession(); void this.render(); });
+    this.idleMs = idleMs;
+    creds.onDidChange(() => { this.forget(); void this.render(); });
   }
 
   resolveWebviewView(view: vscode.WebviewView): void {
@@ -69,11 +79,12 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   // VS Code closing: the agent process must not outlive the editor.
   dispose(): void {
     clearTimeout(this.spendTimer);
+    clearTimeout(this.idleTimer);
     this.endSession();
   }
 
   newChat(): void {
-    this.endSession();
+    this.forget();
     this.transcript = [];
     this.usage = null;
     void this.render();
@@ -107,7 +118,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
       case "cancel": return this.stop();
       case "model":
         await this.ctx.globalState.update("bulkhours.model", m.model);
-        this.endSession();
+        this.forget();
         return this.render();
       case "permission": return this.answer(m.id, m.optionId);
       case "send": return this.send(m.text, m.images ?? []);
@@ -120,7 +131,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   private async choose(agent: string, model?: string): Promise<void> {
     await vscode.workspace.getConfiguration("bulkhours").update("agent", agent, true);
     if (model) await this.ctx.globalState.update("bulkhours.model", model);
-    this.endSession();
+    this.forget();
     await this.render();
   }
 
@@ -169,13 +180,41 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
       clearTimeout(this.spendTimer);
       this.spendTimer = setTimeout(() => void this.refreshCredits(), SPEND_LANDS_MS);
       this.spendTimer.unref?.();
+      this.armIdle();
     }
   }
+
+  private armIdle(): void {
+    clearTimeout(this.idleTimer);
+    if (!this.session?.canResume) return;
+    this.idleTimer = setTimeout(() => this.pause(), this.idleMs);
+    this.idleTimer.unref?.();
+  }
+
+  private pause(): void {
+    if (this.busy || !this.session) return;
+    this.paused = { sessionId: this.session.sessionId, launchKey: this.launchKey };
+    this.endSession();
+    this.transcript = addNotice(this.transcript, t(this.lang, "agentPaused"));
+    void this.render();
+  }
+
+  // A new chat, another agent or model, a sign-out: nothing to resume.
+  private forget(): void {
+    clearTimeout(this.idleTimer);
+    this.paused = undefined;
+    this.endSession();
+  }
+
+  private launchKey = "";
 
   private async ensureSession(): Promise<AgentSession> {
     const { key, renewed } = await this.creds.currentKey();
     if (this.session && !renewed) return this.session;
     if (this.session) this.transcript = addNotice(this.transcript, t(this.lang, "keyRenewed"));
+    // A renewed key restarts the agent (it reads its key once): it resumes
+    // the conversation when it can, as after a pause.
+    if (this.session?.canResume) this.paused = { sessionId: this.session.sessionId, launchKey: this.launchKey };
     this.endSession();
     const folder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
     if (!folder) throw new Said("openFolder");
@@ -185,6 +224,9 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
     });
     launch.env.BULKHOURS_MODEL = model;
     launch.env.BULKHOURS_MODELS = key.models.join(",");
+    const launchKey = `${this.agent(key).id}|${model}`;
+    const resume = this.paused?.launchKey === launchKey ? this.paused.sessionId : undefined;
+    this.paused = undefined;
     // The first start on a machine can download the agent (minutes, measured
     // 2026-11-10): the panel says so instead of staying silent.
     this.starting = true;
@@ -199,7 +241,8 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
           void this.render();
         },
         log: (line) => this.log.append(line),
-      }, this.ctx.extension.packageJSON.version);
+      }, this.ctx.extension.packageJSON.version, resume);
+      this.launchKey = launchKey;
     } finally {
       this.starting = false;
     }

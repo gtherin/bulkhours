@@ -33,18 +33,29 @@ export class AgentSession {
   // Whether the agent said, at initialize, that it reads images. Never sent
   // one otherwise: an agent that does not expect them may fail the turn.
   readonly acceptsImages: boolean;
+  // Whether the agent saves its sessions and can resume one in a new process
+  // (ACP sessionCapabilities.resume; dsh keeps them in ~/.dsh/sessions), and
+  // whether this one was resumed rather than started fresh.
+  readonly canResume: boolean;
+  readonly resumed: boolean;
 
-  private constructor(child: ChildProcess, conn: Connection, active: Active, host: Host, acceptsImages: boolean) {
+  private constructor(child: ChildProcess, conn: Connection, opened: Opened, host: Host) {
     this.child = child;
     this.conn = conn;
-    this.active = active;
+    this.active = opened.active;
     this.host = host;
-    this.acceptsImages = acceptsImages;
+    this.acceptsImages = opened.images;
+    this.canResume = opened.canResume;
+    this.resumed = opened.resumed;
   }
 
   get sessionId(): string { return this.active.sessionId; }
 
-  static async start(launch: Launch, cwd: string, host: Host, clientVersion = "0.1.0"): Promise<AgentSession> {
+  // `resume`: the id of a session this agent saved earlier; when it can
+  // resume it, the conversation continues with its memory, otherwise a fresh
+  // session starts (a resume that fails is never an error for the student).
+  static async start(launch: Launch, cwd: string, host: Host, clientVersion = "0.1.0",
+                     resume?: string): Promise<AgentSession> {
     if (!existsSync(cwd)) throw new Error(`workspace folder "${cwd}" does not exist`);
     const child = spawn(launch.command, launch.args, {
       cwd, env: { ...process.env, ...launch.env }, stdio: ["pipe", "pipe", "pipe"],
@@ -60,8 +71,8 @@ export class AgentSession {
       Readable.toWeb(child.stdout!) as ReadableStream<Uint8Array>,
     ));
     try {
-      const { active, images } = await Promise.race([failed, open(conn, cwd, clientVersion)]);
-      return new AgentSession(child, conn, active, host, images);
+      const opened = await Promise.race([failed, open(conn, cwd, clientVersion, resume)]);
+      return new AgentSession(child, conn, opened, host);
     } catch (e) {
       conn.close(e);
       child.kill();
@@ -96,14 +107,31 @@ export class AgentSession {
   }
 }
 
-async function open(conn: Connection, cwd: string, version: string): Promise<{ active: Active; images: boolean }> {
+type Opened = { active: Active; images: boolean; canResume: boolean; resumed: boolean };
+
+async function open(conn: Connection, cwd: string, version: string, resume?: string): Promise<Opened> {
   const init = await conn.agent.request(methods.agent.initialize, {
     protocolVersion: PROTOCOL_VERSION,
     clientCapabilities: { fs: { readTextFile: true, writeTextFile: true }, terminal: false },
     clientInfo: { name: "bulkhours", version },
   });
+  const images = init.agentCapabilities?.promptCapabilities?.image === true;
+  const canResume = Boolean(init.agentCapabilities?.sessionCapabilities?.resume);
+  if (resume && canResume) {
+    try {
+      const reply = await conn.agent.request(methods.agent.session.resume, { sessionId: resume, cwd, mcpServers: [] });
+      // The SDK builds its ordered update queue only around a session/new
+      // reply (attachSession, private in @agentclientprotocol/sdk 2.4.0,
+      // pinned); a resumed session gets the same queue the same way.
+      const active = (conn.agent as unknown as { attachSession(r: object): Active })
+        .attachSession({ ...reply, sessionId: resume });
+      return { active, images, canResume, resumed: true };
+    } catch {
+      // gone, or refused: a fresh session below
+    }
+  }
   const active = await conn.agent.buildSession({ cwd, mcpServers: [] }).start();
-  return { active, images: init.agentCapabilities?.promptCapabilities?.image === true };
+  return { active, images, canResume, resumed: false };
 }
 
 function editorSide(host: Host) {

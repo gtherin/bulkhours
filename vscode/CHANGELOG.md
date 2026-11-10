@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.4 — 2026-11-10
+
+- An agent idle for 15 minutes is paused to free its memory, then resumed with the whole conversation at the next message (ACP session/resume). Only agents that save their sessions are paused (dsh does).
+- A key renewal (every 12 h) no longer makes the agent forget the conversation.
+
 ## 0.1.3 — 2026-11-10
 
 - The activity bar shows the BulkHours logo (the B with the code chevrons).
