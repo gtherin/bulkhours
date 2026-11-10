@@ -9,6 +9,8 @@ import { MESSAGES, Said, sayError, t, type Lang, type MessageKey } from "../core
 import type { Key } from "../core/keys.ts";
 import type { School } from "../core/school.ts";
 import { addNotice, addUserPrompt, applyUpdate, type Transcript } from "../core/transcript.ts";
+import { condensed, ConversationStore, stateRoot, type Conversation } from "../core/conversationStore.ts";
+import { homedir } from "node:os";
 import type { Credentials } from "./credentials.ts";
 import { readTextFile, writeTextFile } from "./editorHost.ts";
 
@@ -30,6 +32,10 @@ const SPEND_LANDS_MS = 75_000;
 // 500 MB for Claude Code, measured 2026-11-10; a shared GPU machine holds one
 // per student) - only when it saves its sessions and can resume them.
 const IDLE_MS = 15 * 60_000;
+// Conversations kept this long after their last turn (ADR-0223).
+const KEEP_DAYS = 90;
+// How much of an earlier conversation a new agent is handed.
+const PRIME_CHARS = 12_000;
 
 export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   private view: vscode.WebviewView | undefined;
@@ -59,6 +65,12 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   // A conversation whose agent was paused: resumed at the next message if the
   // same agent and model are still chosen.
   private paused: { sessionId: string; launchKey: string } | undefined;
+  // The record of this conversation (ADR-0223), and whether the next prompt
+  // must hand the conversation so far to an agent that was not part of it.
+  private readonly store = new ConversationStore(stateRoot(process.env, homedir()));
+  private conversation: Conversation | undefined;
+  private prime = false;
+  private restored = false;
 
   constructor(ctx: vscode.ExtensionContext, school: School, creds: Credentials, log: vscode.OutputChannel,
               lang: Lang = "en", meter: (c: Credits | undefined) => void = () => {}, idleMs = IDLE_MS) {
@@ -89,9 +101,31 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
 
   newChat(): void {
     this.forget();
+    this.conversation = undefined;
+    this.prime = false;
     this.transcript = [];
     this.usage = null;
     void this.render();
+  }
+
+  // At the panel's first opening: the project's last conversation comes back
+  // as it was shown, and its agent session is resumed at the next message
+  // (or, failing that, a new agent is handed the conversation so far).
+  private restore(): void {
+    if (this.restored) return;
+    this.restored = true;
+    try {
+      this.store.prune(KEEP_DAYS);
+      const folder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+      const last = folder && !this.transcript.length ? this.store.latest(folder) : undefined;
+      if (!last) return;
+      this.transcript = last.transcript;
+      this.conversation = last.conversation;
+      this.paused = { sessionId: last.header.session, launchKey: `${last.header.agent}|${last.header.model}` };
+      this.prime = true;
+    } catch (e) {
+      this.log.append(`conversation record unreadable: ${(e as Error).message}\n`);
+    }
   }
 
   // The key lives in memory only, so after a window reload the menu would
@@ -112,7 +146,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
 
   private async onPanel(m: FromPanel): Promise<void> {
     switch (m.type) {
-      case "ready": await this.render(); await this.warmKey(); return this.refreshCredits();
+      case "ready": this.restore(); await this.render(); await this.warmKey(); return this.refreshCredits();
       case "compact": return this.commands.includes("compact") ? this.send("/compact") : undefined;
       case "clear": return this.newChat();
       case "pickAgent": await vscode.commands.executeCommand("bulkhours.pickAgent"); return;
@@ -123,6 +157,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
       case "model":
         await this.ctx.globalState.update("bulkhours.model", m.model);
         this.forget();
+        this.prime = this.transcript.length > 0;
         return this.render();
       case "permission": return this.answer(m.id, m.optionId);
       case "send": return this.send(m.text, m.images ?? []);
@@ -136,6 +171,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
     await vscode.workspace.getConfiguration("bulkhours").update("agent", agent, true);
     if (model) await this.ctx.globalState.update("bulkhours.model", model);
     this.forget();
+    this.prime = this.transcript.length > 0;
     await this.render();
   }
 
@@ -175,7 +211,17 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
         return;
       }
       if (images.length && !session.acceptsImages) this.transcript = addNotice(this.transcript, t(this.lang, "noImages"));
-      const stop = await session.prompt(text, activeFileContext(), images);
+      // An agent that was not part of the conversation is handed it first.
+      const earlier = this.prime && !session.resumed ? condensed(this.transcript.slice(0, -1), PRIME_CHARS) : "";
+      const preface = earlier ? `The conversation so far (the student may have asked another assistant):\n\n${earlier}` : "";
+      this.prime = false;
+      this.conversation?.prompt([{ type: "text", text }, ...images.map((i) => ({ type: "image" as const, mimeType: i.mimeType, data: i.data }))]);
+      let stop = "error";
+      try {
+        stop = await session.prompt(text, activeFileContext(), images, preface);
+      } finally {
+        this.conversation?.end(stop);
+      }
       if (stop !== "end_turn") this.transcript = addNotice(this.transcript, t(this.lang, "stopped", { reason: reason(this.lang, stop) }));
     } finally {
       this.busy = false;
@@ -212,6 +258,17 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
 
   private launchKey = "";
 
+  private record(key: Key, model: string, folder: string): void {
+    const s = this.session!;
+    const who = { agent: this.agent(key).id, session: s.sessionId, model };
+    try {
+      if (!this.conversation) this.conversation = this.store.start({ ...who, school: this.school.id, cwd: folder });
+      else if (!s.resumed) this.conversation.switched(who);
+    } catch (e) {
+      this.log.append(`conversation record not written: ${(e as Error).message}\n`);
+    }
+  }
+
   private async ensureSession(): Promise<AgentSession> {
     const { key, renewed } = await this.creds.currentKey();
     if (this.session && !renewed) return this.session;
@@ -225,6 +282,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
     const model = this.model(key);
     const launch = launchFor(this.agent(key), {
       baseUrl: key.baseUrl, apiKey: key.apiKey, model, extensionPath: this.ctx.extensionPath,
+      state: stateRoot(process.env, homedir()),
     });
     launch.env.BULKHOURS_MODEL = model;
     launch.env.BULKHOURS_MODELS = key.models.join(",");
@@ -242,12 +300,14 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
         onUpdate: (u) => {
           if (u.sessionUpdate === "usage_update") this.usage = { used: u.used, size: u.size };
           if (u.sessionUpdate === "available_commands_update") this.commands = u.availableCommands.map((c) => c.name);
+          this.conversation?.update(u);
           this.transcript = applyUpdate(this.transcript, u);
           void this.render();
         },
         log: (line) => this.log.append(line),
       }, this.ctx.extension.packageJSON.version, resume);
       this.launchKey = launchKey;
+      this.record(key, model, folder);
     } finally {
       this.starting = false;
     }

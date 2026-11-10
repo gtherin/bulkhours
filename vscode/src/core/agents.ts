@@ -10,7 +10,9 @@ export type AgentSpec = {
 };
 
 // What an agent's command, arguments and environment may refer to as ${name}.
-export type LaunchVars = { baseUrl: string; apiKey: string; model: string; extensionPath: string };
+// `state` is Gateka's state folder ($XDG_STATE_HOME/gateka): a school's own
+// agent keeps its files under it (dsh: DSH_HOME=${state}/agents/dsh).
+export type LaunchVars = { baseUrl: string; apiKey: string; model: string; extensionPath: string; state: string };
 export type Launch = { command: string; args: string[]; env: Record<string, string> };
 
 const PLACEHOLDER = /\$\{([a-zA-Z]+)\}/g;

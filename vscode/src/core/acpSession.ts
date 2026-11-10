@@ -80,9 +80,12 @@ export class AgentSession {
     }
   }
 
+  // `preface`: text the agent reads before the question (the conversation so
+  // far, when this agent was not part of it).
   async prompt(text: string, context: { uri: string; name: string }[] = [],
-               images: { mimeType: string; data: string }[] = []): Promise<StopReason> {
+               images: { mimeType: string; data: string }[] = [], preface = ""): Promise<StopReason> {
     const reply = this.active.prompt([
+      ...(preface ? [{ type: "text" as const, text: preface }] : []),
       { type: "text", text },
       ...context.map((c) => ({ type: "resource_link" as const, uri: c.uri, name: c.name })),
       ...(this.acceptsImages ? images.map((i) => ({ type: "image" as const, mimeType: i.mimeType, data: i.data })) : []),

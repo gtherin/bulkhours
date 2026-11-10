@@ -52,7 +52,10 @@ const views: { dispose(): void }[] = [];
 after(() => views.forEach((v) => v.dispose()));
 
 function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA",
-               opts: { images?: boolean; fresh?: boolean; store?: string; idleMs?: number; commands?: boolean } = {}) {
+               opts: { images?: boolean; fresh?: boolean; store?: string; idleMs?: number; commands?: boolean; state?: string } = {}) {
+  // Each panel keeps its conversations in its own state folder (never the
+  // real ~/.local/state/gateka), unless a test shares one on purpose.
+  process.env.GATEKA_STATE_HOME = opts.state ?? mkdtempSync(join(tmpdir(), "bh-gstate-"));
   const env = { ...key.agent.env, ...(opts.images ? { FAKE_IMAGES: "1" } : {}), ...(opts.store ? { FAKE_STORE: opts.store } : {}),
     ...(opts.commands ? { FAKE_COMMANDS: "1" } : {}) };
   const k = { ...key, agent: { ...key.agent, env } };
@@ -385,5 +388,31 @@ test("a new chat forgets the paused conversation", async () => {
   await p.send({ type: "send", text: "recall" });
   assert.equal(texts(p.last())[0], "recall");
   assert.match(texts(p.last()).at(-1), /^I remember nothing/);
+  p.view.newChat();
+});
+
+test("a conversation survives a window reload, and the agent is handed it", async () => {
+  const state = mkdtempSync(join(tmpdir(), "bh-gstate-"));
+  const before = panel(true, "en", "IPSA", { state });
+  await before.send({ type: "send", text: "hello" });
+  before.view.dispose();                                  // the window reloads
+  const after = panel(true, "en", "IPSA", { state });
+  await after.send({ type: "ready" });
+  assert.deepEqual(texts(after.last()), ["hello", "you said: hello"]);
+  await after.send({ type: "send", text: "next" });
+  // the fake agent cannot resume: a new session gets the conversation first
+  assert.match(texts(after.last()).at(-1), /^you said: The conversation so far .*\n\nStudent: hello\n\nAssistant: you said: hello$/s);
+  after.view.newChat();
+});
+
+test("another model takes the conversation over; a new chat starts clean", async () => {
+  const p = panel();
+  await p.send({ type: "send", text: "hello" });
+  await p.send({ type: "choose", agent: "", model: "code" });
+  await p.send({ type: "send", text: "go on" });
+  assert.match(texts(p.last()).at(-1), /^you said: The conversation so far/);
+  p.view.newChat();
+  await p.send({ type: "send", text: "fresh" });
+  assert.deepEqual(texts(p.last()), ["fresh", "you said: fresh"]);
   p.view.newChat();
 });

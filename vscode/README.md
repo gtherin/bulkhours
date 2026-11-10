@@ -58,19 +58,32 @@ and expects:
 The reply may also carry `"model_labels": {"fast": "DeepSeek V4.1 Flash"}`,
 the underlying model of each alias, shown in the model list.
 
+The agent's command, arguments and environment may use `${baseUrl}`,
+`${apiKey}`, `${model}`, `${extensionPath}` and `${state}` (Gateka's state
+folder, `$XDG_STATE_HOME/gateka`: a school's own agent keeps its files there,
+e.g. `DSH_HOME: "${state}/agents/dsh"`). The extension fills them in; any
+other placeholder is refused.
+
 `401` means the sign-in expired (the extension signs out), `402` means no
 credits left.
 
 The panel's budget meter reads `GET <creditsUrl>?school=<id>` with the same
 bearer, which answers `{"spent": 0.25, "budget": 10, "unit": "USD"}`; a meter
-that cannot be read is simply not shown. `${baseUrl}`, `${apiKey}`, `${model}` and `${extensionPath}`
-are filled in by the extension; any other placeholder is refused. The
-extension renews the key ten minutes before `expires_at` and restarts the
-agent, which reads its key only once.
+that cannot be read is simply not shown. The extension renews the key ten
+minutes before `expires_at` and restarts the agent, which reads its key only once.
 
 Sign-in opens `signInUrl` with `redirect` (a `vscode://` link back to the
 extension) and `state`; the page sends the student back to
 `<redirect>?token=…&state=…`. The token is kept in VS Code's secret storage.
+
+## Conversations
+
+Each conversation is recorded by the extension, whatever agent answered, in
+ACP's shape under `$XDG_STATE_HOME/gateka/conversations/` (files readable by
+their owner only, never in the project, pruned after 90 days; ADR-0223). The
+panel shows the project's last conversation again after a reload; the same
+agent resumes its own session when it can, another agent is handed the
+conversation so far.
 
 ## Layout
 

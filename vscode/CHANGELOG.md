@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.8 — 2026-11-10
+
+- Conversations are recorded by the extension, whatever agent answered (ACP shape, under `$XDG_STATE_HOME/gateka`, owner-only, pruned after 90 days; ADR-0223): the panel shows the last one again after a window reload.
+- The same agent resumes its own session; another agent or model is handed the conversation so far.
+- New `${state}` placeholder for agent launches (dsh keeps its files under it).
+
 ## 0.1.7 — 2026-11-10
 
 - Money is shown in the school's currency, written the way the student's language writes it: IPSA shows euros (at par with the dollars Nebius bills), others dollars.

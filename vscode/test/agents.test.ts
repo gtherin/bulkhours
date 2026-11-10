@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { launchFor, parseAgents, pickAgent, type AgentSpec } from "../src/core/agents.ts";
 
-const creds = { baseUrl: "https://llm.bulkhours.fr/v1", apiKey: "sk-student", model: "fast", extensionPath: "/ext" };
+const creds = { baseUrl: "https://llm.bulkhours.fr/v1", apiKey: "sk-student", model: "fast", extensionPath: "/ext", state: "/st" };
 const dsh: AgentSpec = {
   id: "gateka", label: "Gateka (DeepSeek)", command: "dsh", args: ["--profile", "acp"],
   env: { OPENAI_BASE_URL: "${baseUrl}", OPENAI_API_KEY: "${apiKey}", DSH_MODEL: "${model}" },
