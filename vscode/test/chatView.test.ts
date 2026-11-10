@@ -256,7 +256,7 @@ test("a French panel speaks French, words and messages alike", async () => {
 
 test("a school name cannot break out of the panel's data", () => {
   const p = panel(true, "en", "</script><script>alert(1)</script>");
-  assert.equal(p.webview.html.match(/<\/script>/g)!.length, 2, "only the data block and the panel script close");
+  assert.equal(p.webview.html.match(/<\/script>/g)!.length, 3, "only the data block and the two panel scripts close");
 });
 
 

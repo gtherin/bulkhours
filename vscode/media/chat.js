@@ -23,22 +23,9 @@
 
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
-  function inline(s) {
-    return esc(s)
-      .replace(/`([^`]+)`/g, "<code>$1</code>")
-      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-      .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, t, u) => /^(https?|file):/.test(u) ? `<a href="${u}">${t}</a>` : t);
-  }
-
-  function markdown(s) {
-    return s.split(/```/).map((part, i) => {
-      if (i % 2 === 1) {
-        const body = part.replace(/^[\w+-]*\n/, "");
-        return `<pre><code>${esc(body)}</code></pre>`;
-      }
-      return part.split(/\n{2,}/).filter((p) => p.trim()).map((p) => `<p>${inline(p).replace(/\n/g, "<br>")}</p>`).join("");
-    }).join("");
-  }
+  // The agent's Markdown: media/markdown.js (headings, lists, tables, quotes,
+  // code), escaped first, tested on its own (test/markdown.test.ts).
+  const { markdown, inline } = globalThis.bhMarkdown;
 
   const STATUS = { pending: "…", in_progress: "⟳", completed: "✓", failed: "✗" };
 

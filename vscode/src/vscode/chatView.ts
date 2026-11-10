@@ -323,6 +323,7 @@ const PANEL_WORDS: MessageKey[] = ["signIn", "emptyChat", "placeholder", "send",
 function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, lang: Lang): string {
   const css = webview.asWebviewUri(vscode.Uri.joinPath(media, "chat.css"));
   const js = webview.asWebviewUri(vscode.Uri.joinPath(media, "chat.js"));
+  const md = webview.asWebviewUri(vscode.Uri.joinPath(media, "markdown.js"));
   const nonce = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
   const words = Object.fromEntries(PANEL_WORDS.map((k) => [k, t(lang, k)]));
   words.signInPrompt = t(lang, "signInPrompt", { school: school.name });
@@ -342,5 +343,5 @@ function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, l
 <div id="meters" class="meters" hidden><span id="budget" class="m" hidden></span>
 <span id="context" class="m"><svg class="ring" viewBox="0 0 16 16" aria-hidden="true" hidden><circle class="track" cx="8" cy="8" r="6"/><circle class="used" cx="8" cy="8" r="6"/></svg><span class="txt"></span></span>
 <span class="spacer"></span><button type="button" id="compact" class="link"></button><button type="button" id="clear" class="link"></button></div>
-<script nonce="${nonce}" src="${js}"></script></body></html>`;
+<script nonce="${nonce}" src="${md}"></script><script nonce="${nonce}" src="${js}"></script></body></html>`;
 }

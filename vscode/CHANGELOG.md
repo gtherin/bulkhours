@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.6 — 2026-11-10
+
+- The agent's Markdown is rendered: headings, bullet and numbered lists (nested), tables, quotes, rules, italics, strikethrough; still escaped first.
+
 ## 0.1.5 — 2026-11-10
 
 - dsh compacts its context earlier, leaving room for the answer: a long turn no longer ends every following reply on « length limit ».
