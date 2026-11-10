@@ -50,9 +50,10 @@ const key = {
 const views: { dispose(): void }[] = [];
 after(() => views.forEach((v) => v.dispose()));
 
-function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA", opts: { images?: boolean } = {}) {
+function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA", opts: { images?: boolean; fresh?: boolean } = {}) {
   const k = opts.images ? { ...key, agent: { ...key.agent, env: { ...key.agent.env, FAKE_IMAGES: "1" } } } : key;
   const meters: unknown[] = [];
+  let fetched = false;
   const state = new Map<string, unknown>();
   const posted: any[] = [];
   let send: (m: unknown) => Promise<void> = async () => {};
@@ -65,8 +66,9 @@ function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA", o
   const creds: any = {
     onDidChange: (f: () => void) => { changed = f; return { dispose() {} }; },
     signedIn: async () => signedIn,
-    known: () => (signedIn ? k : undefined),
-    currentKey: async () => ({ key: k, renewed: false }),
+    // fresh: a window just reloaded, the key is not fetched yet
+    known: () => (signedIn && (!opts.fresh || fetched) ? k : undefined),
+    currentKey: async () => { fetched = true; return { key: k, renewed: false }; },
     credits: async () => (signedIn ? { spent: 0.25, budget: 10 } : undefined),
     signIn: async () => { posted.push({ type: "signIn-opened" }); },
   };
@@ -328,4 +330,13 @@ test("one menu offers the school's models with their prices and the student's ow
   await p.send({ type: "choose", agent: "", model: "code" });
   assert.deepEqual([settings.agent, p.last().agentId, p.last().model], ["", "", "code"]);
   delete settings.extraAgents; delete settings.agent;
+});
+
+test("after a window reload the menu still offers the school's models, not only the student's agents", async () => {
+  settings.extraAgents = [{ id: "claude", label: "Claude Code (Max)", command: "npx" }];
+  const p = panel(true, "en", "IPSA", { fresh: true });
+  await p.send({ type: "ready" });
+  assert.deepEqual(p.last().models, ["fast", "code"]);
+  assert.deepEqual(p.last().agents.map((a: any) => a.id), ["", "claude"]);
+  delete settings.extraAgents;
 });

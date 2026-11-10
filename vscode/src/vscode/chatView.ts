@@ -79,6 +79,15 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
     void this.render();
   }
 
+  // The key lives in memory only, so after a window reload the menu would
+  // know no school model until the first message. Fetch it as the panel
+  // opens; a failure here is shown at the first message, not now.
+  private async warmKey(): Promise<void> {
+    if (this.creds.known() || !(await this.creds.signedIn())) return;
+    try { await this.creds.currentKey(); } catch { return; }
+    await this.render();
+  }
+
   // The budget meter, read from the key server. Never fails the panel.
   async refreshCredits(): Promise<void> {
     this.credits = await this.creds.credits();
@@ -88,7 +97,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
 
   private async onPanel(m: FromPanel): Promise<void> {
     switch (m.type) {
-      case "ready": await this.render(); return this.refreshCredits();
+      case "ready": await this.render(); await this.warmKey(); return this.refreshCredits();
       case "compact": return this.send("/compact");
       case "clear": return this.newChat();
       case "pickAgent": await vscode.commands.executeCommand("bulkhours.pickAgent"); return;

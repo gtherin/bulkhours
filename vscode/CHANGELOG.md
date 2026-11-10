@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1 — 2026-11-10
+
+- MaQI-style panel: budget and context meters, Compact / Clear, « réfléchit », pasted images, one menu for models (with prices) and your own agents, a dictation button.
+- The menu shows the school models right after a window reload.
+
 ## 0.1.0 — 2026-11-09
 
 First release, for IPSA and Polytechnique.
