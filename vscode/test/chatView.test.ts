@@ -13,6 +13,7 @@ let folder: string | undefined = mkdtempSync(join(tmpdir(), "bh-"));
 const settings: Record<string, unknown> = {};
 let editor: unknown = undefined;
 const executed: string[] = [];
+let confirmAnswer: "yes" | "no" = "yes";
 
 mock.module("vscode", {
   namedExports: {
@@ -30,6 +31,7 @@ mock.module("vscode", {
     },
     window: {
       get activeTextEditor() { return editor; },
+      showWarningMessage: async (_m: string, _o: unknown, ...choices: string[]) => (confirmAnswer === "yes" ? choices[0] : undefined),
     },
     commands: { executeCommand: async (id: string) => { executed.push(id); } },
   },
@@ -483,5 +485,26 @@ test("while the agent works the panel knows since when, its last sign of life, a
   assert.ok(during.activity.since >= t0 && during.activity.last >= during.activity.since);
   assert.equal(during.activity.spentAtStart, 0.25);
   assert.equal(p.last().activity, null, "a finished turn has no activity line");
+  p.view.newChat();
+});
+
+test("Compact during a turn asks first, then stops the turn and compacts; a refusal changes nothing", async () => {
+  const p = panel(true, "en", "IPSA", { store: mkdtempSync(join(tmpdir(), "bh-store-")) });
+  await p.send({ type: "send", text: "hello" });
+  confirmAnswer = "no";
+  const busy = p.send({ type: "send", text: "wait" });           // a long turn
+  await new Promise((r) => setTimeout(r, 120));
+  await p.send({ type: "compact" });
+  assert.equal(p.last().busy, true, "refused: the turn goes on");
+  await busy;
+  confirmAnswer = "yes";
+  const busy2 = p.send({ type: "send", text: "wait" });
+  await new Promise((r) => setTimeout(r, 120));
+  await p.send({ type: "compact" });
+  await busy2;
+  await new Promise((r) => setTimeout(r, 100));
+  const t = texts(p.last());
+  assert.equal(p.last().busy, false);
+  assert.equal(t.at(-1), "conversation compacted: the next message starts a fresh agent session with the conversation condensed");
   p.view.newChat();
 });

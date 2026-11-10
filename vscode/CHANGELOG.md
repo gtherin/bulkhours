@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.15 — 2026-11-10
+
+- Compacter and Effacer stay clickable during a turn: VS Code asks first, then the turn is stopped cleanly before compacting or clearing.
+
 ## 0.1.14 — 2026-11-10
 
 - Compacter works with every agent: the agent's own /compact when it has one (Claude Code), otherwise the extension lets the session go and the next message starts a fresh one handed the conversation condensed.

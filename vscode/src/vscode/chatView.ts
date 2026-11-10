@@ -188,8 +188,12 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   private async onPanel(m: FromPanel): Promise<void> {
     switch (m.type) {
       case "ready": this.restore(); await this.render(); await this.warmKey(); return this.refreshCredits();
-      case "compact": return this.commands.includes("compact") ? this.send("/compact") : this.compact();
-      case "clear": return this.newChat();
+      case "compact":
+        if (!(await this.stopFirst("compactStops", "stopAndCompact"))) return;
+        return this.commands.includes("compact") ? this.send("/compact") : this.compact();
+      case "clear":
+        if (!(await this.stopFirst("clearStops", "stopAndClear"))) return;
+        return this.newChat();
       case "pickAgent": await vscode.commands.executeCommand("bulkhours.pickAgent"); return;
       case "choose": return this.choose(m.agent, m.model);
       case "signIn": return this.creds.signIn();
@@ -238,6 +242,17 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   private agent(key: Key | undefined): AgentSpec {
     const cfg = vscode.workspace.getConfiguration("bulkhours");
     return chooseAgent(key, parseAgents(cfg.get<unknown[]>("extraAgents") ?? []), cfg.get<string>("agent") ?? "");
+  }
+
+  // During a turn, Compact and Clear would end it: the student says so first,
+  // then the turn is stopped and has ended before they act.
+  private async stopFirst(question: MessageKey, yes: MessageKey): Promise<boolean> {
+    if (!this.busy) return true;
+    const answer = await vscode.window.showWarningMessage(t(this.lang, question), { modal: true }, t(this.lang, yes));
+    if (answer !== t(this.lang, yes)) return false;
+    await this.stop();
+    for (let i = 0; i < 300 && this.busy; i++) await new Promise((r) => setTimeout(r, 100));
+    return !this.busy;
   }
 
   private async stop(): Promise<void> {

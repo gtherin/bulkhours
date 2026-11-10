@@ -83,7 +83,8 @@
     ring.setAttribute("stroke-dasharray", `${(frac * 37.7).toFixed(1)} 37.7`);
     context.dataset.level = frac >= 0.75 ? "warn" : "ok";
     context.querySelector(".ring").toggleAttribute("hidden", !u);   // SVG has no .hidden property
-    compact.disabled = clear.disabled = s.busy;
+    // Always clickable: during a turn the extension asks before stopping it.
+    compact.disabled = clear.disabled = false;
     // Compact: the agent's own /compact when it has one, else the extension's
     // (a fresh session handed the condensed conversation).
     compact.hidden = !s.transcript.length;
