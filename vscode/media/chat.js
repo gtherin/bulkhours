@@ -6,7 +6,7 @@
   const vscode = acquireVsCodeApi();
   const $ = (id) => document.getElementById(id);
   const log = $("log"), input = $("input"), form = $("ask"), go = $("go"), line = $("budgetline");
-  const model = $("model"), agent = $("agent"), thumbs = $("thumbs");
+  const model = $("model"), thumbs = $("thumbs"), mic = $("mic");
   const budget = $("budget"), context = $("context"), compact = $("compact"), clear = $("clear");
   const W = JSON.parse($("words").textContent);
   // The school's colour, set here: the page's CSP forbids style attributes.
@@ -95,6 +95,36 @@
     compact.disabled = clear.disabled = s.busy;
   }
 
+  // -- one menu: the school's models (with prices), then the student's agents --
+  const price = (v) => `$${v.toFixed(2)}`;
+  function menu(s) {
+    const school = s.models.map((m) => {
+      const name = s.modelLabels[m] ? `${m} — ${s.modelLabels[m]}` : m;
+      const p = s.modelPrices[m];
+      const selected = !s.agentId && m === s.model ? "selected" : "";
+      return `<option value="m:${esc(m)}" ${selected}>${esc(p ? `${name} · ${price(p.in)} / ${price(p.out)}` : name)}</option>`;
+    }).join("");
+    const own = s.agents.filter((a) => a.id).map((a) =>
+      `<option value="a:${esc(a.id)}" ${a.id === s.agentId ? "selected" : ""}>${esc(a.label)}</option>`).join("");
+    return (school ? `<optgroup label="${esc(W.schoolModels)}">${school}</optgroup>` : "")
+      + (own ? `<optgroup label="${esc(W.yourAgents)}">${own}</optgroup>` : "");
+  }
+
+  // -- dictation: the panel may not use the microphone (VS Code's webview
+  // frame does not allow it); the system's dictation types into the box -----
+  const os = /Windows/.test(navigator.userAgent) ? "micWindows" : /Macintosh/.test(navigator.userAgent) ? "micMac" : "";
+  mic.hidden = !os;
+  mic.title = W.mic;
+  mic.innerHTML = '<svg viewBox="0 0 16 16"><path d="M8 10a2.5 2.5 0 0 0 2.5-2.5v-4a2.5 2.5 0 0 0-5 0v4A2.5 2.5 0 0 0 8 10zm4-2.5a.75.75 0 0 0-1.5 0 2.5 2.5 0 0 1-5 0 .75.75 0 0 0-1.5 0 4 4 0 0 0 3.25 3.93V13H5.5v1.5h5V13H8.75v-1.57A4 4 0 0 0 12 7.5z"/></svg>';
+  let hintTimer = 0;
+  // The hint goes where the student looks: in the box, at its full width.
+  mic.onclick = () => {
+    input.focus();
+    input.placeholder = W[os];
+    clearTimeout(hintTimer);
+    hintTimer = setTimeout(() => { input.placeholder = W.placeholder; }, 8000);
+  };
+
   // -- the conversation --------------------------------------------------------
   let shown = 0;          // entries already drawn: only new ones fade in
 
@@ -128,10 +158,8 @@
     go.innerHTML = busy ? SQUARE : ARROW;
     go.title = busy ? W.stop : W.send;
     go.setAttribute("aria-label", go.title);
-    model.innerHTML = s.models.map((m) =>
-      `<option value="${esc(m)}" ${m === s.model ? "selected" : ""}>${esc(s.modelLabels[m] ? `${m} — ${s.modelLabels[m]}` : m)}</option>`).join("");
-    agent.textContent = s.agent;
-    agent.title = s.agent;
+    model.innerHTML = menu(s);
+    model.title = s.agentId ? s.agent : W.model;
     meters(s);
   }
 
@@ -196,8 +224,10 @@
   });
   // One round button: send, or stop while the agent works.
   go.addEventListener("click", (ev) => { if (busy) { ev.preventDefault(); vscode.postMessage({ type: "cancel" }); } });
-  model.onchange = () => vscode.postMessage({ type: "model", model: model.value });
-  agent.onclick = () => vscode.postMessage({ type: "pickAgent" });
+  model.onchange = () => {
+    const [kind, id] = [model.value.slice(0, 1), model.value.slice(2)];
+    vscode.postMessage(kind === "a" ? { type: "choose", agent: id } : { type: "choose", agent: "", model: id });
+  };
   compact.onclick = () => vscode.postMessage({ type: "compact" });
   clear.onclick = () => vscode.postMessage({ type: "clear" });
   vscode.postMessage({ type: "ready" });

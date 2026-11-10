@@ -135,3 +135,10 @@ button:focus-visible, select:focus-visible { outline: 1px solid var(--vscode-foc
   .enter, .writing, .writing .dots i, .writing .verb, #budgetline .fill, .ring .used, #go { animation: none; transition: none; }
   .writing .verb { color: var(--muted); background: none; }
 }
+
+/* the dictation button and its hint (the system's dictation, see chat.js) */
+button.icon { flex: none; width: 26px; height: 26px; padding: 0; border-radius: 50%; display: grid; place-items: center;
+  background: transparent; color: var(--muted); border: 0; cursor: pointer; }
+button.icon:hover { color: var(--vscode-foreground); background: var(--tint); }
+button.icon svg { width: 15px; height: 15px; fill: currentColor; }
+select.pill { max-width: 70%; }

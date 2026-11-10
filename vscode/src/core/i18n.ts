@@ -47,6 +47,11 @@ const en = {
   suggestExplain: "Explain the file that is open",
   suggestBuild: "Why does my code not compile?",
   suggestFaster: "How can I make this kernel faster?",
+  schoolModels: "School credits · $ per million tokens, in / out",
+  yourAgents: "Your agents",
+  mic: "Dictate",
+  micWindows: "Dictation: press Win + H, then speak",
+  micMac: "Dictation: press Fn twice, then speak",
 };
 
 const fr: typeof en = {
@@ -92,6 +97,11 @@ const fr: typeof en = {
   suggestExplain: "Explique le fichier ouvert",
   suggestBuild: "Pourquoi mon code ne compile pas ?",
   suggestFaster: "Comment accélérer ce kernel ?",
+  schoolModels: "Crédits de l'école · $ par million de tokens, entrée / sortie",
+  yourAgents: "Vos agents",
+  mic: "Dicter",
+  micWindows: "Dictée : appuyez sur Win + H, puis parlez",
+  micMac: "Dictée : appuyez deux fois sur Fn, puis parlez",
 };
 
 export const MESSAGES: Record<Lang, typeof en> = { en, fr };

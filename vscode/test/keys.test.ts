@@ -19,7 +19,7 @@ test("a key reply is read once, where it enters, agent and models included", () 
   assert.deepEqual(parseKeyReply(reply), {
     apiKey: "sk-1", baseUrl: "https://llm.bulkhours.fr/v1", expiresAt: Date.parse("2026-11-09T22:00:00Z"),
     models: ["fast", "code"], defaultModel: "fast",
-    agent: { ...reply.agent }, modelLabels: {},
+    agent: { ...reply.agent }, modelLabels: {}, modelPrices: {},
   });
 });
 
@@ -67,4 +67,9 @@ test("renewal starts exactly ten minutes before expiry", () => {
   const exp = Date.parse("2026-11-09T22:00:00Z");
   assert.equal(needsRenewal(exp, exp - 10 * 60 * 1000), true);
   assert.equal(needsRenewal(exp, exp - 10 * 60 * 1000 - 1), false);
+});
+
+test("model prices are kept for offered models only, as two numbers", () => {
+  const k = parseKeyReply({ ...reply, model_prices: { fast: { in: 0.3, out: 1.2 }, code: { in: "x" }, other: { in: 1, out: 2 } } });
+  assert.deepEqual(k.modelPrices, { fast: { in: 0.3, out: 1.2 } });
 });

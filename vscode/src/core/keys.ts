@@ -16,6 +16,8 @@ export type Key = {
   // The underlying LLM of each alias ("fast" -> "DeepSeek V4.1 Flash"):
   // students should know which model answers them. Optional.
   modelLabels: Record<string, string>;
+  // Dollars per million tokens, in / out, as the school's LiteLLM charges.
+  modelPrices: Record<string, { in: number; out: number }>;
 };
 
 const RENEW_BEFORE_MS = 10 * 60 * 1000;
@@ -33,7 +35,14 @@ export function parseKeyReply(raw: unknown): Key {
     defaultModel: offered(o.default_model, models, fail),
     agent: theAgent(o.agent, fail),
     modelLabels: labels(o.model_labels, models),
+    modelPrices: prices(o.model_prices, models),
   };
+}
+
+function prices(raw: unknown, models: string[]): Record<string, { in: number; out: number }> {
+  const o = (raw && typeof raw === "object" ? raw : {}) as Record<string, { in?: unknown; out?: unknown } | undefined>;
+  return Object.fromEntries(models.filter((m) => typeof o[m]?.in === "number" && typeof o[m]?.out === "number")
+    .map((m) => [m, { in: o[m]!.in as number, out: o[m]!.out as number }]));
 }
 
 function labels(raw: unknown, models: string[]): Record<string, string> {

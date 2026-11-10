@@ -22,7 +22,7 @@ mock.module("vscode", {
     },
     workspace: {
       get workspaceFolders() { return folder ? [{ uri: { fsPath: folder } }] : undefined; },
-      getConfiguration: () => ({ get: (k: string) => settings[k] }),
+      getConfiguration: () => ({ get: (k: string) => settings[k], update: async (k: string, v: unknown) => { settings[k] = v; } }),
       textDocuments: [],
       openTextDocument: async (u: { fsPath: string }) => ({ getText: () => `contents of ${u.fsPath}` }),
       fs: { writeFile: async (u: { fsPath: string }, b: Uint8Array) => { written.set(u.fsPath, new TextDecoder().decode(b)); } },
@@ -43,6 +43,7 @@ const key = {
   agent: { id: "fake", label: "Fake agent", command: process.execPath, args: ["--experimental-strip-types", "--no-warnings", FAKE],
     env: { FAKE_MODEL: "${model}" } },
   modelLabels: { fast: "DeepSeek V4.1 Flash" },
+  modelPrices: { fast: { in: 0.3, out: 1.2 } },
 };
 
 // Every panel's agent is stopped at the end, even after a failed test.
@@ -311,4 +312,20 @@ test("the agent's name in the panel opens the agent picker", async () => {
   const p = panel();
   await p.send({ type: "pickAgent" });
   assert.deepEqual(executed, ["bulkhours.pickAgent"]);
+});
+
+test("one menu offers the school's models with their prices and the student's own agents", async () => {
+  settings.extraAgents = [{ id: "claude", label: "Claude Code (Max)", command: "npx" }];
+  const p = panel();
+  await p.send({ type: "ready" });
+  const s = p.last();
+  assert.deepEqual(s.modelPrices, { fast: { in: 0.3, out: 1.2 } });
+  assert.deepEqual(s.agents, [{ id: "", label: "Fake agent" }, { id: "claude", label: "Claude Code (Max)" }]);
+  assert.equal(s.agentId, "");
+  await p.send({ type: "choose", agent: "claude" });
+  assert.equal(settings.agent, "claude");
+  assert.equal(p.last().agentId, "claude");
+  await p.send({ type: "choose", agent: "", model: "code" });
+  assert.deepEqual([settings.agent, p.last().agentId, p.last().model], ["", "", "code"]);
+  delete settings.extraAgents; delete settings.agent;
 });

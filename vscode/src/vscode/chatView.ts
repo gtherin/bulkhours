@@ -16,6 +16,7 @@ type FromPanel =
   | { type: "ready" } | { type: "signIn" } | { type: "cancel" } | { type: "newChat" }
   | { type: "send"; text: string; images?: Pasted[] } | { type: "model"; model: string }
   | { type: "compact" } | { type: "clear" } | { type: "pickAgent" }
+  | { type: "choose"; agent: string; model?: string }
   | { type: "permission"; id: number; optionId: string | null };
 
 type Pasted = { mimeType: string; data: string };
@@ -91,6 +92,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
       case "compact": return this.send("/compact");
       case "clear": return this.newChat();
       case "pickAgent": await vscode.commands.executeCommand("bulkhours.pickAgent"); return;
+      case "choose": return this.choose(m.agent, m.model);
       case "signIn": return this.creds.signIn();
       case "newChat": return this.newChat();
       case "cancel": return this.stop();
@@ -101,6 +103,21 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
       case "permission": return this.answer(m.id, m.optionId);
       case "send": return this.send(m.text, m.images ?? []);
     }
+  }
+
+  // One menu: a school model (the school's agent on the school's credits)
+  // or one of the student's own agents, such as Claude Code on their own
+  // subscription. Either way the next message starts a fresh agent.
+  private async choose(agent: string, model?: string): Promise<void> {
+    await vscode.workspace.getConfiguration("bulkhours").update("agent", agent, true);
+    if (model) await this.ctx.globalState.update("bulkhours.model", model);
+    this.endSession();
+    await this.render();
+  }
+
+  private agentChoices(key: Key | undefined): { id: string; label: string }[] {
+    const extra = parseAgents(vscode.workspace.getConfiguration("bulkhours").get<unknown[]>("extraAgents") ?? []);
+    return [...(key ? [{ id: "", label: key.agent.label }] : []), ...extra.map((a) => ({ id: a.id, label: a.label }))];
   }
 
   private model(key: Key | undefined): string {
@@ -214,9 +231,15 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
       type: "state", transcript: this.transcript, busy: this.busy, starting: this.starting,
       signedIn: await this.creds.signedIn(), model: this.model(key), models: key?.models ?? [],
       agent: key ? safeLabel(() => this.agent(key).label) : "",
-      modelLabels: key?.modelLabels ?? {}, credits: this.credits ?? null, usage: this.usage,
+      modelLabels: key?.modelLabels ?? {}, modelPrices: key?.modelPrices ?? {},
+      agents: safeList(() => this.agentChoices(key)), agentId: key ? safeLabel(() => (this.agent(key) === key.agent ? "" : this.agent(key).id)) : "",
+      credits: this.credits ?? null, usage: this.usage,
     });
   }
+}
+
+function safeList<T>(f: () => T[]): T[] {
+  try { return f(); } catch { return []; }
 }
 
 function safeLabel(f: () => string): string {
@@ -237,7 +260,7 @@ function reason(lang: Lang, stop: string): string {
 // The panel's own words, sent once in the page as data (never as script).
 const PANEL_WORDS: MessageKey[] = ["signIn", "emptyChat", "placeholder", "send", "stop", "model", "thinking", "output", "noChange", "startingAgent",
   "compact", "compactHint", "clear", "clearHint", "thinkingVerb", "budgetTitle", "contextTitle", "removeImage",
-  "suggestExplain", "suggestBuild", "suggestFaster"];
+  "suggestExplain", "suggestBuild", "suggestFaster", "schoolModels", "yourAgents", "mic", "micWindows", "micMac"];
 
 function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, lang: Lang): string {
   const css = webview.asWebviewUri(vscode.Uri.joinPath(media, "chat.css"));
@@ -256,8 +279,8 @@ function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, l
 <script type="application/json" id="words">${data}</script>
 <form id="ask" hidden><div id="budgetline" hidden><span class="fill"></span></div>
 <div id="thumbs" hidden></div><textarea id="input" rows="1"></textarea>
-<div class="tools"><select id="model" class="pill"></select><button type="button" id="agent" class="pill"></button>
-<span class="spacer"></span><button type="submit" id="go"></button></div></form>
+<div class="tools"><select id="model" class="pill"></select>
+<span class="spacer"></span><button type="button" id="mic" class="icon" hidden></button><button type="submit" id="go"></button></div></form>
 <div id="meters" class="meters" hidden><span id="budget" class="m" hidden></span>
 <span id="context" class="m"><svg class="ring" viewBox="0 0 16 16" aria-hidden="true" hidden><circle class="track" cx="8" cy="8" r="6"/><circle class="used" cx="8" cy="8" r="6"/></svg><span class="txt"></span></span>
 <span class="spacer"></span><button type="button" id="compact" class="link"></button><button type="button" id="clear" class="link"></button></div>
