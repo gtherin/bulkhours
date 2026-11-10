@@ -25,9 +25,13 @@
         # every step (MaQI measured ~2x the cost per step at 128k vs 64k).
         defaultMaxTokens: 16384
         # Aliases of the school's LiteLLM config, as the key server sent them.
+        # contextWindow 128K (the models take 1M): at 64K an orchestrating turn
+        # sat at 53K and, with 16K reserved for compaction, had no room left to
+        # answer - every reply ended on "length limit" (owner, 2026-11-10).
+        # Re-read context is billed at the cache price, so the cost stays low.
         # A model the key server lists in BULKHOURS_VISION_MODELS reads images
         # (LiteLLM supports_vision); dsh then accepts pasted images for it.
-        models: !!js "(process.env.BULKHOURS_MODELS ?? 'fast').split(',').filter(Boolean).map((id) => ({ id, name: id, contextWindow: 65536, input: (process.env.BULKHOURS_VISION_MODELS ?? '').split(',').includes(id) ? ['text', 'image'] : ['text'] }))"
+        models: !!js "(process.env.BULKHOURS_MODELS ?? 'fast').split(',').filter(Boolean).map((id) => ({ id, name: id, contextWindow: 131072, input: (process.env.BULKHOURS_VISION_MODELS ?? '').split(',').includes(id) ? ['text', 'image'] : ['text'] }))"
 
 - id: compaction-basic
   config:

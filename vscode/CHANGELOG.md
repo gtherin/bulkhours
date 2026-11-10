@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.13 — 2026-11-10
+
+- dsh works with a 128K context window (was 64K): an orchestrating turn no longer runs out of room and stops every reply on « length limit ».
+
 ## 0.1.12 — 2026-11-10
 
 - While the agent works, the panel says for how long, its last sign of life, the tool it runs and what the turn has cost so far; the budget is read again every minute during a long turn.
