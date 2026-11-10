@@ -75,6 +75,7 @@
     const atBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 40;
     log.innerHTML = s.transcript.length ? s.transcript.map(entry).join("")
       : `<div class="welcome"><p>${esc(W.emptyChat)}</p></div>`;
+    if (s.starting) log.innerHTML += `<div class="notice">${esc(W.startingAgent)}</div>`;
     if (atBottom) log.scrollTop = log.scrollHeight;
     stop.hidden = !s.busy;
     send.disabled = s.busy;

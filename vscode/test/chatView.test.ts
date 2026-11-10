@@ -100,6 +100,15 @@ test("a question gets the agent's answer, with the school's models shown", async
   p.view.newChat();
 });
 
+test("while the agent starts the panel says so, and stops saying it once the agent is up", async () => {
+  const p = panel();
+  await p.send({ type: "send", text: "hello" });
+  const states = p.posted.filter((m) => m.type === "state");
+  assert.ok(states.some((m) => m.starting === true), "a state says the agent is starting");
+  assert.equal(p.last().starting, false);
+  p.view.newChat();
+});
+
 test("the chosen model reaches the agent, and a new choice restarts it", async () => {
   const p = panel();
   await p.send({ type: "model", model: "code" });

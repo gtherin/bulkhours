@@ -34,6 +34,7 @@ const en = {
   pickAgentNone: "Sign in first, or add agents in bulkhours.extraAgents.",
   pickAgentPlaceholder: "Agent for new chats",
   schoolAgent: "your school's agent",
+  startingAgent: "Starting the agent… the first time on a machine can take a few minutes.",
 };
 
 const fr: typeof en = {
@@ -66,6 +67,7 @@ const fr: typeof en = {
   pickAgentNone: "Connectez-vous d'abord, ou ajoutez des agents dans bulkhours.extraAgents.",
   pickAgentPlaceholder: "Agent des nouvelles conversations",
   schoolAgent: "l'agent de votre école",
+  startingAgent: "Démarrage de l'agent… la première fois sur une machine peut prendre quelques minutes.",
 };
 
 export const MESSAGES: Record<Lang, typeof en> = { en, fr };

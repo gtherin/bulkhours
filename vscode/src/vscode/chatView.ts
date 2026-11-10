@@ -22,6 +22,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   private session: AgentSession | undefined;
   private transcript: Transcript = [];
   private busy = false;
+  private starting = false;
   // Stop pressed while the agent was still starting: honoured once it is up.
   private stopAsked = false;
   private nextAsk = 1;
@@ -126,12 +127,20 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
     });
     launch.env.BULKHOURS_MODEL = model;
     launch.env.BULKHOURS_MODELS = key.models.join(",");
-    this.session = await AgentSession.start(launch, folder, {
-      readTextFile, writeTextFile,
-      askPermission: (req) => this.ask(req),
-      onUpdate: (u) => { this.transcript = applyUpdate(this.transcript, u); void this.render(); },
-      log: (line) => this.log.append(line),
-    }, this.ctx.extension.packageJSON.version);
+    // The first start on a machine can download the agent (minutes, measured
+    // 2026-11-10): the panel says so instead of staying silent.
+    this.starting = true;
+    await this.render();
+    try {
+      this.session = await AgentSession.start(launch, folder, {
+        readTextFile, writeTextFile,
+        askPermission: (req) => this.ask(req),
+        onUpdate: (u) => { this.transcript = applyUpdate(this.transcript, u); void this.render(); },
+        log: (line) => this.log.append(line),
+      }, this.ctx.extension.packageJSON.version);
+    } finally {
+      this.starting = false;
+    }
     return this.session;
   }
 
@@ -166,7 +175,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   private async render(): Promise<void> {
     const key = this.creds.known();
     await this.view?.webview.postMessage({
-      type: "state", transcript: this.transcript, busy: this.busy,
+      type: "state", transcript: this.transcript, busy: this.busy, starting: this.starting,
       signedIn: await this.creds.signedIn(), model: this.model(key), models: key?.models ?? [],
       agent: key ? safeLabel(() => this.agent(key).label) : "",
     });
@@ -189,7 +198,7 @@ function reason(lang: Lang, stop: string): string {
 }
 
 // The panel's own words, sent once in the page as data (never as script).
-const PANEL_WORDS: MessageKey[] = ["signIn", "emptyChat", "placeholder", "send", "stop", "model", "thinking", "output", "noChange"];
+const PANEL_WORDS: MessageKey[] = ["signIn", "emptyChat", "placeholder", "send", "stop", "model", "thinking", "output", "noChange", "startingAgent"];
 
 function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, lang: Lang): string {
   const css = webview.asWebviewUri(vscode.Uri.joinPath(media, "chat.css"));
