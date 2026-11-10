@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.12 — 2026-11-10
+
+- While the agent works, the panel says for how long, its last sign of life, the tool it runs and what the turn has cost so far; the budget is read again every minute during a long turn.
+
 ## 0.1.11 — 2026-11-10
 
 - « Redémarrer l'assistant » restarts only BulkHours (its agent and its panel); it used to restart every extension of the window. The conversation goes on at the next message.

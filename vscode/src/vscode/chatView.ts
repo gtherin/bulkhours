@@ -42,6 +42,11 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   private session: AgentSession | undefined;
   private transcript: Transcript = [];
   private busy = false;
+  // The turn in progress: when it began, the agent's last sign of life, the
+  // tool it is running, and the spend when it began (owner, 2026-11-10: an
+  // hour of sub-agents showed only "is thinking", and cost $26).
+  private activity: { since: number; last: number; tool: string; spentAtStart: number | null } | null = null;
+  private activityTimer: ReturnType<typeof setInterval> | undefined;
   private starting = false;
   // Stop pressed while the agent was still starting: honoured once it is up.
   private stopAsked = false;
@@ -95,6 +100,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   // VS Code closing: the agent process must not outlive the editor.
   dispose(): void {
     clearTimeout(this.spendTimer);
+    clearInterval(this.activityTimer);
     clearTimeout(this.idleTimer);
     this.endSession();
   }
@@ -244,6 +250,12 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
     if (this.busy || !text.trim()) return;
     this.busy = true;
     this.stopAsked = false;
+    this.activity = { since: Date.now(), last: Date.now(), tool: "", spentAtStart: this.credits?.spent ?? null };
+    // During a long turn the budget is read again every minute (LiteLLM
+    // writes spend in batches of about a minute).
+    clearInterval(this.activityTimer);
+    this.activityTimer = setInterval(() => void this.refreshCredits(), 60_000);
+    this.activityTimer.unref?.();
     const images = pasted.filter((i) => IMAGE_TYPES.has(i.mimeType) && /^[A-Za-z0-9+/=]+$/.test(i.data));
     this.transcript = addUserPrompt(this.transcript, text, images.map((i) => `data:${i.mimeType};base64,${i.data}`));
     await this.render();
@@ -269,6 +281,8 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
       if (stop !== "end_turn") this.transcript = addNotice(this.transcript, t(this.lang, "stopped", { reason: reason(this.lang, stop) }));
     } finally {
       this.busy = false;
+      this.activity = null;
+      clearInterval(this.activityTimer);
       await this.render();
       void this.refreshCredits();
       clearTimeout(this.spendTimer);
@@ -359,6 +373,14 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
         readTextFile, writeTextFile,
         askPermission: (req) => this.ask(req),
         onUpdate: (u) => {
+          if (this.activity) {
+            this.activity.last = Date.now();
+            if (u.sessionUpdate === "tool_call" || u.sessionUpdate === "tool_call_update") {
+              const running = u.status === "in_progress" || u.status === "pending" || (u.sessionUpdate === "tool_call" && !u.status);
+              if (running && u.title) this.activity.tool = u.title;
+              else if (u.status === "completed" || u.status === "failed") this.activity.tool = "";
+            }
+          }
           if (u.sessionUpdate === "usage_update") this.usage = { used: u.used, size: u.size };
           if (u.sessionUpdate === "available_commands_update") this.commands = u.availableCommands.map((c) => c.name);
           this.conversation?.update(u);
@@ -414,6 +436,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
       currency: key?.currency ?? "USD",
       agents: safeList(() => this.agentChoices(key)), agentId: key ? safeLabel(() => (this.agent(key) === key.agent ? "" : this.agent(key).id)) : "",
       credits: this.credits ?? null, usage: this.usage, commands: this.commands,
+      activity: this.busy ? this.activity : null,
     });
   }
 }
@@ -440,14 +463,15 @@ function reason(lang: Lang, stop: string): string {
 // The panel's own words, sent once in the page as data (never as script).
 const PANEL_WORDS: MessageKey[] = ["signIn", "emptyChat", "placeholder", "send", "stop", "model", "thinking", "output", "noChange", "startingAgent",
   "compact", "compactHint", "clear", "clearHint", "thinkingVerb", "budgetTitle", "contextTitle", "removeImage",
-  "suggestExplain", "suggestBuild", "suggestFaster", "schoolModels", "yourAgents", "mic", "micWindows", "micMac", "seesImages"];
+  "suggestExplain", "suggestBuild", "suggestFaster", "schoolModels", "yourAgents", "mic", "micWindows", "micMac", "seesImages", "lastActivity", "thisTurn"];
 
 function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, lang: Lang): string {
   const css = webview.asWebviewUri(vscode.Uri.joinPath(media, "chat.css"));
   const js = webview.asWebviewUri(vscode.Uri.joinPath(media, "chat.js"));
   const md = webview.asWebviewUri(vscode.Uri.joinPath(media, "markdown.js"));
   const nonce = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
-  const words = Object.fromEntries(PANEL_WORDS.map((k) => [k, t(lang, k)]));
+  // Raw: the panel fills in its own placeholders ({ago}, {cost}).
+  const words: Record<string, string> = Object.fromEntries(PANEL_WORDS.map((k) => [k, MESSAGES[lang][k]]));
   words.signInPrompt = t(lang, "signInPrompt", { school: school.name });
   words.accent = school.accent;
   words.title = `BulkHours ${school.name}`;

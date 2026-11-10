@@ -121,6 +121,25 @@
     hintTimer = setTimeout(() => { input.placeholder = W.placeholder; }, 8000);
   };
 
+  // -- what the agent is doing: since when, its last sign of life, the tool
+  // it runs, what the turn has cost so far. Redrawn every second while busy.
+  let lastState = null;
+  const ago = (ms) => { const s = Math.max(0, Math.round(ms / 1000)); return s < 60 ? `${s} s` : s < 3600 ? `${Math.floor(s / 60)} min` : `${Math.floor(s / 3600)} h ${String(Math.floor(s / 60) % 60).padStart(2, "0")}`; };
+  function drawActivity() {
+    const el = log.querySelector(".writing .activity");
+    const a = lastState && lastState.activity;
+    if (!el || !a) return;
+    const now = Date.now();
+    const parts = [ago(now - a.since)];
+    if (now - a.last > 15_000) parts.push(W.lastActivity.replace("{ago}", ago(now - a.last)));
+    if (a.tool) parts.push(a.tool.length > 60 ? `${a.tool.slice(0, 60)}…` : a.tool);
+    const c = lastState.credits;
+    if (c && a.spentAtStart !== null && c.spent - a.spentAtStart >= 0.01)
+      parts.push(W.thisTurn.replace("{cost}", money(c.spent - a.spentAtStart, c.currency)));
+    el.textContent = " · " + parts.join(" · ");
+  }
+  setInterval(drawActivity, 1000);
+
   // -- the conversation --------------------------------------------------------
   let shown = 0;          // entries already drawn: only new ones fade in
 
@@ -147,7 +166,9 @@
     const label = s.agentId ? s.agent : (s.modelLabels[s.model] || s.model);
     if (s.starting) log.innerHTML += `<div class="notice">${esc(W.startingAgent)}</div>`;
     else if (s.busy) log.innerHTML += `<div class="writing"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>`
-      + `<span class="name">${esc(label)}</span> <span class="verb">${esc(W.thinkingVerb)}</span></div>`;
+      + `<span class="name">${esc(label)}</span> <span class="verb">${esc(W.thinkingVerb)}</span><span class="activity"></span></div>`;
+    lastState = s;
+    drawActivity();
     if (!s.busy) asks.clear();            // a finished turn leaves no question open
     drawAsks();
     if (atBottom || asks.size) log.scrollTop = log.scrollHeight;

@@ -467,3 +467,16 @@ test("restarting the assistant stops its agent only, and the conversation goes o
   assert.match(texts(p.last()).at(-1), /^I remember plum \(pid \d+\)$/);
   p.view.newChat();
 });
+
+test("while the agent works the panel knows since when, its last sign of life, and the spend so far", async () => {
+  const p = panel();
+  await p.send({ type: "ready" });                         // the budget is known before the turn
+  const t0 = Date.now();
+  await p.send({ type: "send", text: "wait" });
+  const during = p.posted.filter((m) => m.type === "state" && m.busy && m.activity).at(-1);
+  assert.ok(during, "a busy state carries the activity");
+  assert.ok(during.activity.since >= t0 && during.activity.last >= during.activity.since);
+  assert.equal(during.activity.spentAtStart, 0.25);
+  assert.equal(p.last().activity, null, "a finished turn has no activity line");
+  p.view.newChat();
+});
