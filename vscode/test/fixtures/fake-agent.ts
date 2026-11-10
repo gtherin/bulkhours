@@ -41,6 +41,12 @@ agent({ name: "fake-agent" })
     return {};
   })
   .onRequest(methods.agent.session.prompt, async ({ params, client }) => {
+    // FAKE_COMMANDS: announce slash commands, as Claude Code does; here at the
+    // start of every turn, so a test never races the announcement.
+    if (process.env.FAKE_COMMANDS) await client.notify(methods.client.session.update, {
+      sessionId: params.sessionId, update: { sessionUpdate: "available_commands_update",
+        availableCommands: [{ name: "compact", description: "Summarise and continue" }] },
+    });
     const first = params.prompt[0];
     const text = first && first.type === "text" ? first.text : "";
     const [verb, path] = text.split(" ");

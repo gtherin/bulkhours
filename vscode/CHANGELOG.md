@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.5 — 2026-11-10
+
+- dsh compacts its context earlier, leaving room for the answer: a long turn no longer ends every following reply on « length limit ».
+- Compacter appears only for an agent that announces a compact command; dsh does not, and received « /compact » as a plain question.
+
 ## 0.1.4 — 2026-11-10
 
 - An agent idle for 15 minutes is paused to free its memory, then resumed with the whole conversation at the next message (ACP session/resume). Only agents that save their sessions are paused (dsh does).

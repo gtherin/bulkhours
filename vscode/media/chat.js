@@ -93,6 +93,7 @@
     context.dataset.level = frac >= 0.75 ? "warn" : "ok";
     context.querySelector(".ring").toggleAttribute("hidden", !u);   // SVG has no .hidden property
     compact.disabled = clear.disabled = s.busy;
+    compact.hidden = !(s.commands || []).includes("compact");   // only an agent that offers it
   }
 
   // -- one menu: the school's models (with prices), then the student's agents --

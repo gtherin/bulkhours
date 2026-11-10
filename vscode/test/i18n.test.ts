@@ -30,5 +30,5 @@ test("placeholders are filled, and a missing value is refused", () => {
 
 test("how a turn ended reads in the student's language", () => {
   assert.equal(t("fr", "stopped", { reason: t("fr", "reason_cancelled") }), "arrêté : annulé");
-  assert.equal(t("en", "stopped", { reason: t("en", "reason_max_tokens") }), "stopped: the answer reached its length limit");
+  assert.equal(t("en", "stopped", { reason: t("en", "reason_max_tokens") }), "stopped: the answer reached its length limit: if the conversation is long, Clear starts a fresh one");
 });

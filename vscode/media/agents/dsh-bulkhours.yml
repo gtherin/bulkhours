@@ -30,7 +30,11 @@
 - id: compaction-basic
   config:
     thresholdRatio: 0.75
-    headroomTokens: 0
+    # Room for the answer and for the compaction summary itself: with 0 (as
+    # copied from MaQI), a turn whose tool results filled the window left the
+    # model ~4K tokens, which a reasoning model spent thinking - every reply
+    # then stopped on "length limit" (owner, 2026-11-10, GLM 5.2 at 61K/65.5K).
+    headroomTokens: 16384
     retainRatio: 0.25
 
 - id: agent-default-model

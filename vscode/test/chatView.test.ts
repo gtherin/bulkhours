@@ -51,8 +51,9 @@ const views: { dispose(): void }[] = [];
 after(() => views.forEach((v) => v.dispose()));
 
 function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA",
-               opts: { images?: boolean; fresh?: boolean; store?: string; idleMs?: number } = {}) {
-  const env = { ...key.agent.env, ...(opts.images ? { FAKE_IMAGES: "1" } : {}), ...(opts.store ? { FAKE_STORE: opts.store } : {}) };
+               opts: { images?: boolean; fresh?: boolean; store?: string; idleMs?: number; commands?: boolean } = {}) {
+  const env = { ...key.agent.env, ...(opts.images ? { FAKE_IMAGES: "1" } : {}), ...(opts.store ? { FAKE_STORE: opts.store } : {}),
+    ...(opts.commands ? { FAKE_COMMANDS: "1" } : {}) };
   const k = { ...key, agent: { ...key.agent, env } };
   const meters: unknown[] = [];
   let fetched = false;
@@ -281,12 +282,23 @@ test("the context the agent reports is shown, and forgotten with a new chat", as
   assert.equal(p.last().usage, null);
 });
 
-test("Compact asks the agent to compact, Clear starts the chat again", async () => {
-  const p = panel();
+test("Compact is offered only by an agent that announces it, and then reaches it", async () => {
+  const p = panel(true, "en", "IPSA", { commands: true });
+  await p.send({ type: "send", text: "hello" });
+  assert.deepEqual(p.last().commands, ["compact"]);
   await p.send({ type: "compact" });
-  assert.deepEqual(texts(p.last()), ["/compact", "you said: /compact"]);
+  assert.deepEqual(texts(p.last()).slice(-2), ["/compact", "you said: /compact"]);
   await p.send({ type: "clear" });
-  assert.deepEqual(texts(p.last()), []);
+  assert.deepEqual([texts(p.last()), p.last().commands], [[], []]);
+});
+
+test("an agent without a compact command is never sent /compact as a question", async () => {
+  const p = panel();
+  await p.send({ type: "send", text: "hello" });
+  assert.deepEqual(p.last().commands, []);
+  await p.send({ type: "compact" });
+  assert.deepEqual(texts(p.last()), ["hello", "you said: hello"]);
+  p.view.newChat();
 });
 
 test("pasted images reach an agent that reads them, and are shown in the question", async () => {

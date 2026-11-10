@@ -49,6 +49,10 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   private readonly meter: (c: Credits | undefined) => void;
   private credits: Credits | undefined;
   private usage: { used: number; size: number } | null = null;
+  // Slash commands the agent announced (ACP available_commands_update).
+  // "/compact" is sent only to an agent that offers it: dsh does not, and
+  // took it for a question (owner, 2026-11-10).
+  private commands: string[] = [];
   private spendTimer: ReturnType<typeof setTimeout> | undefined;
   private idleTimer: ReturnType<typeof setTimeout> | undefined;
   private readonly idleMs: number;
@@ -109,7 +113,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   private async onPanel(m: FromPanel): Promise<void> {
     switch (m.type) {
       case "ready": await this.render(); await this.warmKey(); return this.refreshCredits();
-      case "compact": return this.send("/compact");
+      case "compact": return this.commands.includes("compact") ? this.send("/compact") : undefined;
       case "clear": return this.newChat();
       case "pickAgent": await vscode.commands.executeCommand("bulkhours.pickAgent"); return;
       case "choose": return this.choose(m.agent, m.model);
@@ -237,6 +241,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
         askPermission: (req) => this.ask(req),
         onUpdate: (u) => {
           if (u.sessionUpdate === "usage_update") this.usage = { used: u.used, size: u.size };
+          if (u.sessionUpdate === "available_commands_update") this.commands = u.availableCommands.map((c) => c.name);
           this.transcript = applyUpdate(this.transcript, u);
           void this.render();
         },
@@ -265,6 +270,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   }
 
   private endSession(): void {
+    this.commands = [];
     for (const resolve of this.asks.values()) resolve({ outcome: "cancelled" });
     this.asks.clear();
     this.session?.dispose();
@@ -285,7 +291,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
       agent: key ? safeLabel(() => this.agent(key).label) : "",
       modelLabels: key?.modelLabels ?? {}, modelPrices: key?.modelPrices ?? {},
       agents: safeList(() => this.agentChoices(key)), agentId: key ? safeLabel(() => (this.agent(key) === key.agent ? "" : this.agent(key).id)) : "",
-      credits: this.credits ?? null, usage: this.usage,
+      credits: this.credits ?? null, usage: this.usage, commands: this.commands,
     });
   }
 }
