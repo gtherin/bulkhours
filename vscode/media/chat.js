@@ -148,11 +148,13 @@
         + `</div></div>`;
     log.querySelectorAll(".suggest button").forEach((b) => b.onclick = () => { input.value = b.textContent; grow(); input.focus(); });
     shown = s.transcript.length;
-    const label = s.modelLabels[s.model] || s.model;
+    const label = s.agentId ? s.agent : (s.modelLabels[s.model] || s.model);
     if (s.starting) log.innerHTML += `<div class="notice">${esc(W.startingAgent)}</div>`;
     else if (s.busy) log.innerHTML += `<div class="writing"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>`
       + `<span class="name">${esc(label)}</span> <span class="verb">${esc(W.thinkingVerb)}</span></div>`;
-    if (atBottom) log.scrollTop = log.scrollHeight;
+    if (!s.busy) asks.clear();            // a finished turn leaves no question open
+    drawAsks();
+    if (atBottom || asks.size) log.scrollTop = log.scrollHeight;
     busy = s.busy;
     go.classList.toggle("stop", busy);
     go.innerHTML = busy ? SQUARE : ARROW;
@@ -163,16 +165,31 @@
     meters(s);
   }
 
+  // Permission prompts waiting for the student. Kept HERE and drawn again
+  // after every render: the log is rebuilt at each update, and a prompt that
+  // vanished left the agent waiting forever (owner, 2026-11-10: "why is
+  // that freeze?" - Claude Code asking to run `ls`).
+  const asks = new Map();
+
+  function drawAsks() {
+    for (const p of asks.values()) {
+      const box = document.createElement("div");
+      box.className = "ask";
+      box.innerHTML = `<p>${esc(p.title)}</p>` + p.options.map((o) =>
+        `<button data-id="${esc(o.id)}" class="${o.kind.startsWith("allow") ? "allow" : "reject"}">${esc(o.name)}</button>`).join("");
+      box.querySelectorAll("button").forEach((b) => b.onclick = () => {
+        asks.delete(p.id);
+        vscode.postMessage({ type: "permission", id: p.id, optionId: b.dataset.id });
+        box.remove();
+      });
+      log.appendChild(box);
+    }
+  }
+
   function permission(p) {
-    const box = document.createElement("div");
-    box.className = "ask enter";
-    box.innerHTML = `<p>${esc(p.title)}</p>` + p.options.map((o) =>
-      `<button data-id="${esc(o.id)}" class="${o.kind.startsWith("allow") ? "allow" : "reject"}">${esc(o.name)}</button>`).join("");
-    box.querySelectorAll("button").forEach((b) => b.onclick = () => {
-      vscode.postMessage({ type: "permission", id: p.id, optionId: b.dataset.id });
-      box.remove();
-    });
-    log.appendChild(box);
+    asks.set(p.id, p);
+    log.querySelectorAll(".ask").forEach((b) => b.remove());
+    drawAsks();
     log.scrollTop = log.scrollHeight;
   }
 

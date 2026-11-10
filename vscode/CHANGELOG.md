@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2 — 2026-11-10
+
+- A permission request (an agent asking to run a command or edit a file) no longer vanishes when the conversation redraws: the agent waited forever.
+- « réfléchit » names the agent in use (Claude Code), not the school model.
+
 ## 0.1.1 — 2026-11-10
 
 - MaQI-style panel: budget and context meters, Compact / Clear, « réfléchit », pasted images, one menu for models (with prices) and your own agents, a dictation button.
