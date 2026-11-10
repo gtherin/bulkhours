@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.10 — 2026-11-10
+
+- Pasted images reach the models that read them: the key server says which (LiteLLM supports_vision; today `fast`, DeepSeek V4.1 Flash), dsh is told, and the menu says « lit les images ».
+- Setting `bulkhours.imageModels` replaces the school's list.
+
 ## 0.1.9 — 2026-11-10
 
 - Conversation history (🕘 in the panel title): every conversation of the project, titled by its first question, reopens with its memory; « Renommer » names it, and the title shows beside the panel's name.

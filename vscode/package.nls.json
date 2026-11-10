@@ -9,5 +9,6 @@
   "command.history": "Conversation history",
   "command.rename": "Rename this conversation",
   "command.restart": "Restart the extension",
-  "command.update": "Update the extension"
+  "command.update": "Update the extension",
+  "setting.imageModels": "Models that receive pasted images, e.g. [\"fast\"]. Empty: your school's list (the models its server marks as reading images)."
 }

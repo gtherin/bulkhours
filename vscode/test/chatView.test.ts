@@ -44,6 +44,7 @@ const key = {
     env: { FAKE_MODEL: "${model}" } },
   modelLabels: { fast: "DeepSeek V4.1 Flash" },
   modelPrices: { fast: { in: 0.3, out: 1.2 } },
+  modelVision: ["fast"],
   currency: "USD",
 };
 
@@ -433,5 +434,23 @@ test("an older conversation reopens from the history, and its title shows beside
   await p.view.rename("Le premier sujet");
   assert.equal(p.description(), "Le premier sujet");
   assert.ok(p.view.conversations().some((c: any) => c.title === "Le premier sujet"));
+  p.view.newChat();
+});
+
+test("the agent is told which models read images, and the menu says so", async () => {
+  const p = panel();
+  await p.send({ type: "send", text: "vision" });
+  assert.equal(texts(p.last()).at(-1), "vision=fast");
+  assert.deepEqual(p.last().modelVision, ["fast"]);
+  p.view.newChat();
+});
+
+test("the student's own image-models setting replaces the school's list", async () => {
+  settings.imageModels = ["code"];
+  const p = panel();
+  await p.send({ type: "send", text: "vision" });
+  assert.equal(texts(p.last()).at(-1), "vision=code");
+  assert.deepEqual(p.last().modelVision, ["code"]);
+  delete settings.imageModels;
   p.view.newChat();
 });

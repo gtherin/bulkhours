@@ -18,6 +18,9 @@ export type Key = {
   modelLabels: Record<string, string>;
   // Dollars per million tokens, in / out, as the school's LiteLLM charges.
   modelPrices: Record<string, { in: number; out: number }>;
+  // The offered models that read images (the agent accepts pasted images
+  // only where its model sees them).
+  modelVision: string[];
   // How the school shows money (amounts stay LiteLLM's): dollars or euros.
   currency: "USD" | "EUR";
 };
@@ -38,6 +41,7 @@ export function parseKeyReply(raw: unknown): Key {
     agent: theAgent(o.agent, fail),
     modelLabels: labels(o.model_labels, models),
     modelPrices: prices(o.model_prices, models),
+    modelVision: Array.isArray(o.model_vision) ? models.filter((m) => (o.model_vision as unknown[]).includes(m)) : [],
     currency: o.currency === "EUR" ? "EUR" : "USD",
   };
 }

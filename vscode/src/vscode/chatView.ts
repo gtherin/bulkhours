@@ -215,6 +215,14 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
     return [...(key ? [{ id: "", label: key.agent.label }] : []), ...extra.map((a) => ({ id: a.id, label: a.label }))];
   }
 
+  // The models that read images: the school's list, unless the student set
+  // their own (bulkhours.imageModels), restricted to the models offered.
+  private vision(key: Key): string[] {
+    const own = vscode.workspace.getConfiguration("bulkhours").get<unknown>("imageModels");
+    const list = Array.isArray(own) && own.length ? own.filter((m): m is string => typeof m === "string") : key.modelVision;
+    return key.models.filter((m) => list.includes(m));
+  }
+
   private model(key: Key | undefined): string {
     return chooseModel(this.ctx.globalState.get<string>("bulkhours.model"), key);
   }
@@ -322,6 +330,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
     });
     launch.env.BULKHOURS_MODEL = model;
     launch.env.BULKHOURS_MODELS = key.models.join(",");
+    launch.env.BULKHOURS_VISION_MODELS = this.vision(key).join(",");
     const launchKey = `${this.agent(key).id}|${model}`;
     const resume = this.paused?.launchKey === launchKey ? this.paused.sessionId : undefined;
     this.paused = undefined;
@@ -385,7 +394,8 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
       type: "state", transcript: this.transcript, busy: this.busy, starting: this.starting,
       signedIn: await this.creds.signedIn(), model: this.model(key), models: key?.models ?? [],
       agent: key ? safeLabel(() => this.agent(key).label) : "",
-      modelLabels: key?.modelLabels ?? {}, modelPrices: key?.modelPrices ?? {}, currency: key?.currency ?? "USD",
+      modelLabels: key?.modelLabels ?? {}, modelPrices: key?.modelPrices ?? {}, modelVision: key ? this.vision(key) : [],
+      currency: key?.currency ?? "USD",
       agents: safeList(() => this.agentChoices(key)), agentId: key ? safeLabel(() => (this.agent(key) === key.agent ? "" : this.agent(key).id)) : "",
       credits: this.credits ?? null, usage: this.usage, commands: this.commands,
     });
@@ -414,7 +424,7 @@ function reason(lang: Lang, stop: string): string {
 // The panel's own words, sent once in the page as data (never as script).
 const PANEL_WORDS: MessageKey[] = ["signIn", "emptyChat", "placeholder", "send", "stop", "model", "thinking", "output", "noChange", "startingAgent",
   "compact", "compactHint", "clear", "clearHint", "thinkingVerb", "budgetTitle", "contextTitle", "removeImage",
-  "suggestExplain", "suggestBuild", "suggestFaster", "schoolModels", "yourAgents", "mic", "micWindows", "micMac"];
+  "suggestExplain", "suggestBuild", "suggestFaster", "schoolModels", "yourAgents", "mic", "micWindows", "micMac", "seesImages"];
 
 function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, lang: Lang): string {
   const css = webview.asWebviewUri(vscode.Uri.joinPath(media, "chat.css"));

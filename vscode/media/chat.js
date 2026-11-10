@@ -96,7 +96,8 @@
       const name = s.modelLabels[m] ? `${m} — ${s.modelLabels[m]}` : m;
       const p = s.modelPrices[m];
       const selected = !s.agentId && m === s.model ? "selected" : "";
-      return `<option value="m:${esc(m)}" ${selected}>${esc(p ? `${name} · ${price(p.in)} / ${price(p.out)}` : name)}</option>`;
+      const eyes = (s.modelVision || []).includes(m) ? ` · ${W.seesImages}` : "";
+      return `<option value="m:${esc(m)}" ${selected}>${esc((p ? `${name} · ${price(p.in)} / ${price(p.out)}` : name) + eyes)}</option>`;
     }).join("");
     const own = s.agents.filter((a) => a.id).map((a) =>
       `<option value="a:${esc(a.id)}" ${a.id === s.agentId ? "selected" : ""}>${esc(a.label)}</option>`).join("");

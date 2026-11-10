@@ -9,5 +9,6 @@
   "command.history": "Historique des conversations",
   "command.rename": "Renommer cette conversation",
   "command.restart": "Redémarrer l'extension",
-  "command.update": "Mettre à jour l'extension"
+  "command.update": "Mettre à jour l'extension",
+  "setting.imageModels": "Modèles qui reçoivent les images collées, par ex. [\"fast\"]. Vide : la liste de votre école (les modèles que son serveur déclare lire les images)."
 }

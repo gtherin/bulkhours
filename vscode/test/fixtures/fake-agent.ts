@@ -75,6 +75,8 @@ agent({ name: "fake-agent" })
         sessionId: params.sessionId, update: { sessionUpdate: "usage_update", used: 40_600, size: 64_000 },
       });
       await say(client, params.sessionId, "counted");
+    } else if (verb === "vision") {
+      await say(client, params.sessionId, `vision=${process.env.BULKHOURS_VISION_MODELS ?? "unset"}`);
     } else if (verb === "model") {
       await say(client, params.sessionId, `model=${process.env.FAKE_MODEL}`);
     } else if (verb === "read") {

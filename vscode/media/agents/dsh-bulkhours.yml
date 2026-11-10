@@ -25,7 +25,9 @@
         # every step (MaQI measured ~2x the cost per step at 128k vs 64k).
         defaultMaxTokens: 16384
         # Aliases of the school's LiteLLM config, as the key server sent them.
-        models: !!js "(process.env.BULKHOURS_MODELS ?? 'fast').split(',').filter(Boolean).map((id) => ({ id, name: id, contextWindow: 65536 }))"
+        # A model the key server lists in BULKHOURS_VISION_MODELS reads images
+        # (LiteLLM supports_vision); dsh then accepts pasted images for it.
+        models: !!js "(process.env.BULKHOURS_MODELS ?? 'fast').split(',').filter(Boolean).map((id) => ({ id, name: id, contextWindow: 65536, input: (process.env.BULKHOURS_VISION_MODELS ?? '').split(',').includes(id) ? ['text', 'image'] : ['text'] }))"
 
 - id: compaction-basic
   config:

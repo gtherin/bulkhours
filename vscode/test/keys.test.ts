@@ -19,7 +19,7 @@ test("a key reply is read once, where it enters, agent and models included", () 
   assert.deepEqual(parseKeyReply(reply), {
     apiKey: "sk-1", baseUrl: "https://llm.bulkhours.fr/v1", expiresAt: Date.parse("2026-11-09T22:00:00Z"),
     models: ["fast", "code"], defaultModel: "fast",
-    agent: { ...reply.agent }, modelLabels: {}, modelPrices: {}, currency: "USD",
+    agent: { ...reply.agent }, modelLabels: {}, modelPrices: {}, modelVision: [], currency: "USD",
   });
 });
 
@@ -77,4 +77,8 @@ test("model prices are kept for offered models only, as two numbers", () => {
 test("the school's currency comes with the key, dollars unless it says euros", () => {
   assert.equal(parseKeyReply({ ...reply, currency: "EUR" }).currency, "EUR");
   assert.equal(parseKeyReply({ ...reply, currency: "GBP" }).currency, "USD");
+});
+
+test("the models that read images are kept, offered ones only", () => {
+  assert.deepEqual(parseKeyReply({ ...reply, model_vision: ["fast", "other", 3] }).modelVision, ["fast"]);
 });
