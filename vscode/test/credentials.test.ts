@@ -19,7 +19,7 @@ mock.module("vscode", {
 });
 const { Credentials } = await import("../src/vscode/credentials.ts");
 
-const school = { id: "ipsa", name: "IPSA", accent: "#c8102e", signInUrl: "https://bh.fr/sign-in?school=ipsa", keyUrl: "https://bh.fr/api/workbench/key", language: "en" as const };
+const school = { id: "ipsa", name: "IPSA", accent: "#c8102e", signInUrl: "https://bh.fr/sign-in?school=ipsa", keyUrl: "https://bh.fr/api/workbench/key", creditsUrl: "https://bh.fr/api/workbench/credits", language: "en" as const };
 const reply = (minutes: number) => ({
   key: `sk-${minutes}`, base_url: "https://llm.bh.fr/v1", expires_at: new Date(Date.now() + minutes * 60e3).toISOString(),
   models: ["fast"], agent: { id: "gateka", label: "Gateka", command: "dsh" },
@@ -105,4 +105,26 @@ test("signing out forgets the token and the key", async () => {
   await s.c.signOut();
   assert.equal(await s.c.signedIn(), false);
   assert.equal(s.c.known(), undefined);
+});
+
+test("the panel's budget is read with the sign-in, for this school", async () => {
+  const s = setup({ status: 200, body: reply(720) });
+  await signIn(s.c);
+  const seen: string[] = [];
+  globalThis.fetch = (async (url: string, init: any) => {
+    seen.push(`${url} ${init.headers.authorization}`);
+    return { status: 200, json: async () => ({ spent: 0.25, budget: 10, unit: "USD" }) };
+  }) as any;
+  assert.deepEqual(await s.c.credits(), { spent: 0.25, budget: 10 });
+  assert.deepEqual(seen, ["https://bh.fr/api/workbench/credits?school=ipsa Bearer tok"]);
+});
+
+test("a budget that cannot be read is simply not shown, never an error", async () => {
+  const s = setup({ status: 200, body: reply(720) });
+  assert.equal(await s.c.credits(), undefined);                      // not signed in
+  await signIn(s.c);
+  globalThis.fetch = (async () => ({ status: 502, json: async () => ({}) })) as any;
+  assert.equal(await s.c.credits(), undefined);
+  globalThis.fetch = (async () => { throw new Error("offline"); }) as any;
+  assert.equal(await s.c.credits(), undefined);
 });

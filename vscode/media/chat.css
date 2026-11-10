@@ -31,6 +31,60 @@ button:focus-visible, textarea:focus-visible, select:focus-visible { outline: 1p
 #input { width: 100%; box-sizing: border-box; resize: vertical; background: var(--vscode-input-background);
   color: var(--vscode-input-foreground); border: 1px solid var(--vscode-input-border, transparent); border-radius: 4px; padding: 6px; font: inherit; }
 .bar { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
-.bar #agent { flex: 1; color: var(--vscode-descriptionForeground); font-size: 0.9em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
 select { background: var(--vscode-dropdown-background); color: var(--vscode-dropdown-foreground);
   border: 1px solid var(--vscode-dropdown-border); }
+
+/* -- after MaQI's lab extension: meters, "is thinking", motion ------------- */
+:root { --ease: cubic-bezier(.2, .7, .2, 1); }
+.msg.user .imgs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
+.msg.user .imgs img { max-width: 160px; max-height: 120px; border-radius: 4px; display: block; }
+.enter { animation: rise .28s var(--ease); }
+
+.writing { display: inline-flex; align-items: center; gap: 6px; font-size: .9em;
+  color: var(--vscode-descriptionForeground); animation: fade-in .24s var(--ease); }
+.writing .dots { display: inline-flex; gap: 3px; }
+.writing .dots i { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: dot 1.2s ease-in-out infinite; }
+.writing .dots i:nth-child(2) { animation-delay: .15s; }
+.writing .dots i:nth-child(3) { animation-delay: .3s; }
+.writing .name { font-weight: 600; color: var(--vscode-foreground); }
+.writing .verb { background: linear-gradient(90deg, var(--vscode-descriptionForeground) 0%, var(--vscode-descriptionForeground) 35%,
+    var(--accent) 50%, var(--vscode-descriptionForeground) 65%, var(--vscode-descriptionForeground) 100%) 0 0 / 250% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent; animation: shimmer 1.8s linear infinite; }
+
+.meters { display: flex; align-items: center; gap: 10px; padding: 4px 12px; border-top: 1px solid var(--vscode-panel-border);
+  font-size: .85em; color: var(--vscode-descriptionForeground); font-variant-numeric: tabular-nums; }
+.meters[hidden], .meter[hidden], .ring[hidden], #thumbs[hidden] { display: none; }
+.meter { position: relative; min-width: 7.5em; padding: 1px 8px; border-radius: 9px; overflow: hidden;
+  background: color-mix(in srgb, var(--vscode-foreground) 8%, transparent); }
+.meter .fill { position: absolute; inset: 0 auto 0 0; width: 0; transition: width .4s var(--ease);
+  background: color-mix(in srgb, var(--vscode-gitDecoration-addedResourceForeground, var(--accent)) 30%, transparent); }
+.meter[data-level="warn"] .fill { background: color-mix(in srgb, var(--vscode-editorWarning-foreground) 40%, transparent); }
+.meter[data-level="over"] .fill { background: color-mix(in srgb, var(--vscode-errorForeground) 45%, transparent); }
+.meter .txt { position: relative; }
+.ctx { display: flex; align-items: center; gap: 5px; margin-left: auto; }
+.ring { width: 14px; height: 14px; transform: rotate(-90deg); }
+.ring circle { fill: none; stroke-width: 2.5; }
+.ring .track { stroke: color-mix(in srgb, var(--vscode-foreground) 15%, transparent); }
+.ring .used { stroke: var(--accent); stroke-linecap: round; transition: stroke-dasharray .4s var(--ease); }
+.ctx[data-level="warn"] .ring .used { stroke: var(--vscode-editorWarning-foreground); }
+button.ghost, button.link { background: none; color: var(--vscode-textLink-foreground); padding: 1px 4px; }
+button.ghost:hover:not(:disabled), button.link:hover { text-decoration: underline; }
+.bar #agent { flex: 1; text-align: left; color: var(--vscode-descriptionForeground); font-size: .9em;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+#thumbs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+.thumb { position: relative; }
+.thumb img { height: 48px; border-radius: 4px; display: block; border: 1px solid var(--vscode-panel-border); }
+.thumb button { position: absolute; top: -6px; right: -6px; width: 18px; height: 18px; padding: 0; border-radius: 50%; line-height: 18px; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(6px); } }
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes dot { 0%, 60%, 100% { transform: translateY(0); opacity: .35; } 30% { transform: translateY(-3px); opacity: 1; } }
+@keyframes shimmer { from { background-position: 100% 0; } to { background-position: -150% 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .enter, .writing, .writing .dots i, .writing .verb, .meter .fill, .ring .used { animation: none; transition: none; }
+  .writing .verb { color: var(--vscode-descriptionForeground); background: none; }
+}
+.bar select { max-width: 55%; min-width: 0; text-overflow: ellipsis; }
+.bar #agent { min-width: 3em; }

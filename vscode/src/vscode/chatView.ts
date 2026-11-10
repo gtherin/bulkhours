@@ -14,8 +14,17 @@ import { readTextFile, writeTextFile } from "./editorHost.ts";
 
 type FromPanel =
   | { type: "ready" } | { type: "signIn" } | { type: "cancel" } | { type: "newChat" }
-  | { type: "send"; text: string } | { type: "model"; model: string }
+  | { type: "send"; text: string; images?: Pasted[] } | { type: "model"; model: string }
+  | { type: "compact" } | { type: "clear" } | { type: "pickAgent" }
   | { type: "permission"; id: number; optionId: string | null };
+
+type Pasted = { mimeType: string; data: string };
+type Credits = { spent: number; budget: number };
+// What a paste may carry into a prompt: pictures, nothing else.
+const IMAGE_TYPES = new Set(["image/png", "image/jpeg", "image/gif", "image/webp"]);
+// LiteLLM writes spend in batches (about a minute, measured 2026-11-10): the
+// meter is read after a turn, then once more when the batch has landed.
+const SPEND_LANDS_MS = 75_000;
 
 export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   private view: vscode.WebviewView | undefined;
@@ -32,14 +41,19 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   private readonly creds: Credentials;
   private readonly log: vscode.OutputChannel;
   private readonly lang: Lang;
+  private readonly meter: (c: Credits | undefined) => void;
+  private credits: Credits | undefined;
+  private usage: { used: number; size: number } | null = null;
+  private spendTimer: ReturnType<typeof setTimeout> | undefined;
 
   constructor(ctx: vscode.ExtensionContext, school: School, creds: Credentials, log: vscode.OutputChannel,
-              lang: Lang = "en") {
+              lang: Lang = "en", meter: (c: Credits | undefined) => void = () => {}) {
     this.ctx = ctx;
     this.school = school;
     this.creds = creds;
     this.log = log;
     this.lang = lang;
+    this.meter = meter;
     creds.onDidChange(() => { this.endSession(); void this.render(); });
   }
 
@@ -53,18 +67,30 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
 
   // VS Code closing: the agent process must not outlive the editor.
   dispose(): void {
+    clearTimeout(this.spendTimer);
     this.endSession();
   }
 
   newChat(): void {
     this.endSession();
     this.transcript = [];
+    this.usage = null;
     void this.render();
+  }
+
+  // The budget meter, read from the key server. Never fails the panel.
+  async refreshCredits(): Promise<void> {
+    this.credits = await this.creds.credits();
+    this.meter(this.credits);
+    await this.render();
   }
 
   private async onPanel(m: FromPanel): Promise<void> {
     switch (m.type) {
-      case "ready": return this.render();
+      case "ready": await this.render(); return this.refreshCredits();
+      case "compact": return this.send("/compact");
+      case "clear": return this.newChat();
+      case "pickAgent": await vscode.commands.executeCommand("bulkhours.pickAgent"); return;
       case "signIn": return this.creds.signIn();
       case "newChat": return this.newChat();
       case "cancel": return this.stop();
@@ -73,7 +99,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
         this.endSession();
         return this.render();
       case "permission": return this.answer(m.id, m.optionId);
-      case "send": return this.send(m.text);
+      case "send": return this.send(m.text, m.images ?? []);
     }
   }
 
@@ -94,11 +120,12 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
     await this.session?.cancel();
   }
 
-  private async send(text: string): Promise<void> {
+  private async send(text: string, pasted: Pasted[] = []): Promise<void> {
     if (this.busy || !text.trim()) return;
     this.busy = true;
     this.stopAsked = false;
-    this.transcript = addUserPrompt(this.transcript, text);
+    const images = pasted.filter((i) => IMAGE_TYPES.has(i.mimeType) && /^[A-Za-z0-9+/=]+$/.test(i.data));
+    this.transcript = addUserPrompt(this.transcript, text, images.map((i) => `data:${i.mimeType};base64,${i.data}`));
     await this.render();
     try {
       const session = await this.ensureSession();
@@ -106,11 +133,16 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
         this.transcript = addNotice(this.transcript, t(this.lang, "stoppedBeforeStart"));
         return;
       }
-      const stop = await session.prompt(text, activeFileContext());
+      if (images.length && !session.acceptsImages) this.transcript = addNotice(this.transcript, t(this.lang, "noImages"));
+      const stop = await session.prompt(text, activeFileContext(), images);
       if (stop !== "end_turn") this.transcript = addNotice(this.transcript, t(this.lang, "stopped", { reason: reason(this.lang, stop) }));
     } finally {
       this.busy = false;
       await this.render();
+      void this.refreshCredits();
+      clearTimeout(this.spendTimer);
+      this.spendTimer = setTimeout(() => void this.refreshCredits(), SPEND_LANDS_MS);
+      this.spendTimer.unref?.();
     }
   }
 
@@ -135,7 +167,11 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
       this.session = await AgentSession.start(launch, folder, {
         readTextFile, writeTextFile,
         askPermission: (req) => this.ask(req),
-        onUpdate: (u) => { this.transcript = applyUpdate(this.transcript, u); void this.render(); },
+        onUpdate: (u) => {
+          if (u.sessionUpdate === "usage_update") this.usage = { used: u.used, size: u.size };
+          this.transcript = applyUpdate(this.transcript, u);
+          void this.render();
+        },
         log: (line) => this.log.append(line),
       }, this.ctx.extension.packageJSON.version);
     } finally {
@@ -178,6 +214,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
       type: "state", transcript: this.transcript, busy: this.busy, starting: this.starting,
       signedIn: await this.creds.signedIn(), model: this.model(key), models: key?.models ?? [],
       agent: key ? safeLabel(() => this.agent(key).label) : "",
+      modelLabels: key?.modelLabels ?? {}, credits: this.credits ?? null, usage: this.usage,
     });
   }
 }
@@ -198,7 +235,8 @@ function reason(lang: Lang, stop: string): string {
 }
 
 // The panel's own words, sent once in the page as data (never as script).
-const PANEL_WORDS: MessageKey[] = ["signIn", "emptyChat", "placeholder", "send", "stop", "model", "thinking", "output", "noChange", "startingAgent"];
+const PANEL_WORDS: MessageKey[] = ["signIn", "emptyChat", "placeholder", "send", "stop", "model", "thinking", "output", "noChange", "startingAgent",
+  "compact", "compactHint", "clear", "clearHint", "thinkingVerb", "budgetTitle", "contextTitle", "removeImage"];
 
 function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, lang: Lang): string {
   const css = webview.asWebviewUri(vscode.Uri.joinPath(media, "chat.css"));
@@ -206,15 +244,20 @@ function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, l
   const nonce = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
   const words = Object.fromEntries(PANEL_WORDS.map((k) => [k, t(lang, k)]));
   words.signInPrompt = t(lang, "signInPrompt", { school: school.name });
+  words.accent = school.accent;
   const data = JSON.stringify(words).replace(/</g, "\\u003c");
   return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; img-src data:; script-src 'nonce-${nonce}';">
 <link rel="stylesheet" href="${css}"></head>
-<body style="--accent:${school.accent}">
+<body>
 <div id="log" role="log" aria-live="polite"></div>
 <script type="application/json" id="words">${data}</script>
-<form id="ask"><textarea id="input" rows="3"></textarea>
-<div class="bar"><select id="model"></select><span id="agent"></span>
+<div id="meters" class="meters" hidden>
+<div id="budget" class="meter" hidden><span class="fill"></span><span class="txt"></span></div>
+<div id="context" class="ctx"><svg class="ring" viewBox="0 0 16 16" aria-hidden="true" hidden><circle class="track" cx="8" cy="8" r="6"/><circle class="used" cx="8" cy="8" r="6"/></svg><span class="txt"></span>
+<button type="button" id="compact" class="ghost"></button><button type="button" id="clear" class="ghost"></button></div></div>
+<form id="ask"><div id="thumbs" hidden></div><textarea id="input" rows="3"></textarea>
+<div class="bar"><select id="model"></select><button type="button" id="agent" class="link"></button>
 <button type="button" id="stop" hidden></button><button type="submit" id="send"></button></div></form>
 <script nonce="${nonce}" src="${js}"></script></body></html>`;
 }

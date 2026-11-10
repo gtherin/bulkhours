@@ -30,12 +30,16 @@ export class AgentSession {
   private readonly conn: Connection;
   private readonly active: Active;
   private readonly host: Host;
+  // Whether the agent said, at initialize, that it reads images. Never sent
+  // one otherwise: an agent that does not expect them may fail the turn.
+  readonly acceptsImages: boolean;
 
-  private constructor(child: ChildProcess, conn: Connection, active: Active, host: Host) {
+  private constructor(child: ChildProcess, conn: Connection, active: Active, host: Host, acceptsImages: boolean) {
     this.child = child;
     this.conn = conn;
     this.active = active;
     this.host = host;
+    this.acceptsImages = acceptsImages;
   }
 
   get sessionId(): string { return this.active.sessionId; }
@@ -56,8 +60,8 @@ export class AgentSession {
       Readable.toWeb(child.stdout!) as ReadableStream<Uint8Array>,
     ));
     try {
-      const active = await Promise.race([failed, open(conn, cwd, clientVersion)]);
-      return new AgentSession(child, conn, active, host);
+      const { active, images } = await Promise.race([failed, open(conn, cwd, clientVersion)]);
+      return new AgentSession(child, conn, active, host, images);
     } catch (e) {
       conn.close(e);
       child.kill();
@@ -65,10 +69,12 @@ export class AgentSession {
     }
   }
 
-  async prompt(text: string, context: { uri: string; name: string }[] = []): Promise<StopReason> {
+  async prompt(text: string, context: { uri: string; name: string }[] = [],
+               images: { mimeType: string; data: string }[] = []): Promise<StopReason> {
     const reply = this.active.prompt([
       { type: "text", text },
       ...context.map((c) => ({ type: "resource_link" as const, uri: c.uri, name: c.name })),
+      ...(this.acceptsImages ? images.map((i) => ({ type: "image" as const, mimeType: i.mimeType, data: i.data })) : []),
     ]);
     // A rejected prompt never queues a stop: surface it instead of waiting forever.
     const failed = reply.then(() => new Promise<never>(() => {}));
@@ -90,13 +96,14 @@ export class AgentSession {
   }
 }
 
-async function open(conn: Connection, cwd: string, version: string): Promise<Active> {
-  await conn.agent.request(methods.agent.initialize, {
+async function open(conn: Connection, cwd: string, version: string): Promise<{ active: Active; images: boolean }> {
+  const init = await conn.agent.request(methods.agent.initialize, {
     protocolVersion: PROTOCOL_VERSION,
     clientCapabilities: { fs: { readTextFile: true, writeTextFile: true }, terminal: false },
     clientInfo: { name: "bulkhours", version },
   });
-  return conn.agent.buildSession({ cwd, mcpServers: [] }).start();
+  const active = await conn.agent.buildSession({ cwd, mcpServers: [] }).start();
+  return { active, images: init.agentCapabilities?.promptCapabilities?.image === true };
 }
 
 function editorSide(host: Host) {

@@ -140,3 +140,8 @@ test("an emptied file and a new file read differently in a diff", () => {
   assert.equal(diff(""), "");
   assert.equal(diff(null), null);
 });
+
+test("a question with pasted images keeps them, a plain one stays plain", () => {
+  const t = addUserPrompt(addUserPrompt([], "plain"), "look", ["data:image/png;base64,AAA"]);
+  assert.deepEqual(t, [{ kind: "user", text: "plain" }, { kind: "user", text: "look", images: ["data:image/png;base64,AAA"] }]);
+});

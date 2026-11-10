@@ -99,3 +99,23 @@ test("the agent is told it may read and write through the editor, and has no ter
     assert.deepEqual({ fs: caps.fs, terminal: caps.terminal }, { fs: { readTextFile: true, writeTextFile: true }, terminal: false });
   } finally { s.dispose(); }
 });
+
+test("pasted images reach an agent that reads them, and it says it does", async () => {
+  const r = recordingHost();
+  const s = await AgentSession.start({ ...launch, env: { ...launch.env, FAKE_IMAGES: "1" } }, CWD, r.host);
+  try {
+    assert.equal(s.acceptsImages, true);
+    await s.prompt("images", [], [{ mimeType: "image/png", data: "AAA" }]);
+    assert.equal(r.text(), "images=image/png:AAA");
+  } finally { s.dispose(); }
+});
+
+test("an agent that does not read images says so, and is never sent one", async () => {
+  const r = recordingHost();
+  const s = await AgentSession.start(launch, CWD, r.host);
+  try {
+    assert.equal(s.acceptsImages, false);
+    await s.prompt("images", [], [{ mimeType: "image/png", data: "AAA" }]);
+    assert.equal(r.text(), "images=none");
+  } finally { s.dispose(); }
+});

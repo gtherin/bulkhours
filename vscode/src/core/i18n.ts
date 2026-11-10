@@ -35,6 +35,15 @@ const en = {
   pickAgentPlaceholder: "Agent for new chats",
   schoolAgent: "your school's agent",
   startingAgent: "Starting the agent… the first time on a machine can take a few minutes.",
+  noImages: "this agent does not read images: they were not sent",
+  compact: "Compact",
+  compactHint: "Summarise this conversation and continue from the summary",
+  clear: "Clear",
+  clearHint: "Start a new conversation",
+  thinkingVerb: "is thinking",
+  budgetTitle: "Your assistant budget for this course",
+  contextTitle: "What the agent keeps in mind: it compacts by itself at 75 %",
+  removeImage: "Remove this image",
 };
 
 const fr: typeof en = {
@@ -68,6 +77,15 @@ const fr: typeof en = {
   pickAgentPlaceholder: "Agent des nouvelles conversations",
   schoolAgent: "l'agent de votre école",
   startingAgent: "Démarrage de l'agent… la première fois sur une machine peut prendre quelques minutes.",
+  noImages: "cet agent ne lit pas les images : elles n'ont pas été envoyées",
+  compact: "Compacter",
+  compactHint: "Résumer la conversation et repartir du résumé",
+  clear: "Effacer",
+  clearHint: "Commencer une nouvelle conversation",
+  thinkingVerb: "réfléchit",
+  budgetTitle: "Votre budget d'assistant pour ce cours",
+  contextTitle: "Ce que l'agent garde en tête : il compacte tout seul à 75 %",
+  removeImage: "Retirer cette image",
 };
 
 export const MESSAGES: Record<Lang, typeof en> = { en, fr };

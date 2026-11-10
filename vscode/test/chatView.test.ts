@@ -12,6 +12,7 @@ const written = new Map<string, string>();
 let folder: string | undefined = mkdtempSync(join(tmpdir(), "bh-"));
 const settings: Record<string, unknown> = {};
 let editor: unknown = undefined;
+const executed: string[] = [];
 
 mock.module("vscode", {
   namedExports: {
@@ -30,6 +31,7 @@ mock.module("vscode", {
     window: {
       get activeTextEditor() { return editor; },
     },
+    commands: { executeCommand: async (id: string) => { executed.push(id); } },
   },
 });
 
@@ -40,13 +42,16 @@ const key = {
   apiKey: "sk", baseUrl: "https://x/v1", expiresAt: Date.now() + 3600e3, models: ["fast", "code"], defaultModel: "fast",
   agent: { id: "fake", label: "Fake agent", command: process.execPath, args: ["--experimental-strip-types", "--no-warnings", FAKE],
     env: { FAKE_MODEL: "${model}" } },
+  modelLabels: { fast: "DeepSeek V4.1 Flash" },
 };
 
 // Every panel's agent is stopped at the end, even after a failed test.
 const views: { dispose(): void }[] = [];
 after(() => views.forEach((v) => v.dispose()));
 
-function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA") {
+function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA", opts: { images?: boolean } = {}) {
+  const k = opts.images ? { ...key, agent: { ...key.agent, env: { ...key.agent.env, FAKE_IMAGES: "1" } } } : key;
+  const meters: unknown[] = [];
   const state = new Map<string, unknown>();
   const posted: any[] = [];
   let send: (m: unknown) => Promise<void> = async () => {};
@@ -59,12 +64,13 @@ function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA") {
   const creds: any = {
     onDidChange: (f: () => void) => { changed = f; return { dispose() {} }; },
     signedIn: async () => signedIn,
-    known: () => (signedIn ? key : undefined),
-    currentKey: async () => ({ key, renewed: false }),
+    known: () => (signedIn ? k : undefined),
+    currentKey: async () => ({ key: k, renewed: false }),
+    credits: async () => (signedIn ? { spent: 0.25, budget: 10 } : undefined),
     signIn: async () => { posted.push({ type: "signIn-opened" }); },
   };
-  const view = new ChatView(ctx, { id: "ipsa", name: schoolName, accent: "#c8102e", signInUrl: "https://a", keyUrl: "https://b", language: "en" as const },
-    creds, { append() {} } as any, lang);
+  const view = new ChatView(ctx, { id: "ipsa", name: schoolName, accent: "#c8102e", signInUrl: "https://a", keyUrl: "https://b", creditsUrl: "https://c", language: "en" as const },
+    creds, { append() {} } as any, lang, (c: unknown) => meters.push(c));
   views.push(view);
   changed();   // a sign-in change can arrive before VS Code shows the panel
   const webview: any = {
@@ -76,7 +82,7 @@ function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA") {
   view.resolveWebviewView({ webview } as any);
   const settle = () => new Promise((r) => setTimeout(r, 30));
   const last = () => [...posted].reverse().find((m) => m.type === "state");
-  return { view, posted, state, webview, send: async (m: unknown) => { await send(m); await settle(); }, last };
+  return { view, posted, state, webview, meters, send: async (m: unknown) => { await send(m); await settle(); }, last };
 }
 
 const texts = (s: any) => s.transcript.map((e: any) => e.text ?? e.kind);
@@ -245,4 +251,64 @@ test("a French panel speaks French, words and messages alike", async () => {
 test("a school name cannot break out of the panel's data", () => {
   const p = panel(true, "en", "</script><script>alert(1)</script>");
   assert.equal(p.webview.html.match(/<\/script>/g)!.length, 2, "only the data block and the panel script close");
+});
+
+
+test("the budget is shown as MaQI's meter, in the panel and the status bar", async () => {
+  const p = panel();
+  await p.send({ type: "ready" });
+  assert.deepEqual(p.last().credits, { spent: 0.25, budget: 10 });
+  assert.deepEqual(p.meters.at(-1), { spent: 0.25, budget: 10 });
+});
+
+test("the model list says which LLM answers", async () => {
+  const p = panel();
+  await p.send({ type: "ready" });
+  assert.deepEqual(p.last().modelLabels, { fast: "DeepSeek V4.1 Flash" });
+});
+
+test("the context the agent reports is shown, and forgotten with a new chat", async () => {
+  const p = panel();
+  await p.send({ type: "send", text: "usage" });
+  assert.deepEqual(p.last().usage, { used: 40_600, size: 64_000 });
+  p.view.newChat();
+  await new Promise((r) => setTimeout(r, 30));
+  assert.equal(p.last().usage, null);
+});
+
+test("Compact asks the agent to compact, Clear starts the chat again", async () => {
+  const p = panel();
+  await p.send({ type: "compact" });
+  assert.deepEqual(texts(p.last()), ["/compact", "you said: /compact"]);
+  await p.send({ type: "clear" });
+  assert.deepEqual(texts(p.last()), []);
+});
+
+test("pasted images reach an agent that reads them, and are shown in the question", async () => {
+  const p = panel(true, "en", "IPSA", { images: true });
+  await p.send({ type: "send", text: "images", images: [{ mimeType: "image/png", data: "AAA" }] });
+  const s = p.last();
+  assert.deepEqual(texts(s), ["images", "images=image/png:AAA"]);
+  assert.deepEqual(s.transcript[0].images, ["data:image/png;base64,AAA"]);
+  p.view.newChat();
+});
+
+test("an agent that does not read images: the student is told, the text still goes", async () => {
+  const p = panel();
+  await p.send({ type: "send", text: "images", images: [{ mimeType: "image/png", data: "AAA" }] });
+  assert.deepEqual(texts(p.last()), ["images", "this agent does not read images: they were not sent", "images=none"]);
+  p.view.newChat();
+});
+
+test("only images are accepted from a paste, nothing else", async () => {
+  const p = panel(true, "en", "IPSA", { images: true });
+  await p.send({ type: "send", text: "images", images: [{ mimeType: "text/html", data: "PHNjcmlwdD4=" }] });
+  assert.deepEqual(texts(p.last()), ["images", "images=none"]);
+  p.view.newChat();
+});
+
+test("the agent's name in the panel opens the agent picker", async () => {
+  const p = panel();
+  await p.send({ type: "pickAgent" });
+  assert.deepEqual(executed, ["bulkhours.pickAgent"]);
 });

@@ -19,8 +19,13 @@ test("a key reply is read once, where it enters, agent and models included", () 
   assert.deepEqual(parseKeyReply(reply), {
     apiKey: "sk-1", baseUrl: "https://llm.bulkhours.fr/v1", expiresAt: Date.parse("2026-11-09T22:00:00Z"),
     models: ["fast", "code"], defaultModel: "fast",
-    agent: { ...reply.agent },
+    agent: { ...reply.agent }, modelLabels: {},
   });
+});
+
+test("model names are kept for offered models only, and are optional", () => {
+  const k = parseKeyReply({ ...reply, model_labels: { fast: "DeepSeek V4.1 Flash", other: "x", code: 3 } });
+  assert.deepEqual(k.modelLabels, { fast: "DeepSeek V4.1 Flash" });
 });
 
 test("a reply without a key or with a bad date is refused", () => {

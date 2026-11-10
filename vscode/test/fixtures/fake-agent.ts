@@ -21,7 +21,8 @@ agent({ name: "fake-agent" })
   .onNotification(methods.agent.session.cancel, ({ params }) => { cancelled.add(params.sessionId); })
   .onRequest(methods.agent.initialize, ({ params }) => {
     caps = params.clientCapabilities;
-    return { protocolVersion: PROTOCOL_VERSION, agentCapabilities: {} };
+    return { protocolVersion: PROTOCOL_VERSION,
+      agentCapabilities: process.env.FAKE_IMAGES ? { promptCapabilities: { image: true } } : {} };
   })
   .onRequest(methods.agent.session.new, ({ params }) => ({ sessionId: `s-${params.cwd}` }))
   .onRequest(methods.agent.session.prompt, async ({ params, client }) => {
@@ -39,6 +40,14 @@ agent({ name: "fake-agent" })
       const stopped = cancelled.delete(params.sessionId);
       await say(client, params.sessionId, stopped ? "stopping" : "waited the whole second");
       return { stopReason: stopped ? "cancelled" : "end_turn" };
+    } else if (verb === "images") {
+      const imgs = params.prompt.filter((b) => b.type === "image").map((b: any) => `${b.mimeType}:${b.data}`);
+      await say(client, params.sessionId, `images=${imgs.join(",") || "none"}`);
+    } else if (verb === "usage") {
+      await client.notify(methods.client.session.update, {
+        sessionId: params.sessionId, update: { sessionUpdate: "usage_update", used: 40_600, size: 64_000 },
+      });
+      await say(client, params.sessionId, "counted");
     } else if (verb === "model") {
       await say(client, params.sessionId, `model=${process.env.FAKE_MODEL}`);
     } else if (verb === "read") {

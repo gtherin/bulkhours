@@ -9,13 +9,16 @@ const updates: [string, unknown, boolean][] = [];
 let quickPick: (items: any[]) => any = () => undefined;
 const offered: any[][] = [];
 class EventEmitter { event = () => ({ dispose() {} }); fire() {} }
+class ThemeColor { id: string; constructor(id: string) { this.id = id; } }
+const bars: any[] = [];
 const disposable = { dispose() {} };
 let viewOptions: any;
 mock.module("vscode", {
   namedExports: {
-    EventEmitter,
+    EventEmitter, ThemeColor, StatusBarAlignment: { Right: 2 },
     window: {
       createOutputChannel: () => ({ append() {}, dispose() {} }),
+      createStatusBarItem: () => { const b: any = { shown: false, show() { b.shown = true; }, hide() { b.shown = false; }, dispose() {} }; bars.push(b); return b; },
       registerUriHandler: () => { registered.uri++; return disposable; },
       registerWebviewViewProvider: (id: string, _p: unknown, o: any) => { registered.views.push(id); viewOptions = o; return disposable; },
       showInformationMessage: async (m: string) => { info.push(m); },
@@ -28,8 +31,8 @@ mock.module("vscode", {
     },
   },
 });
-(globalThis as any).__SCHOOL__ = { id: "ipsa", name: "IPSA", accent: "#c8102e", signInUrl: "https://a", keyUrl: "https://b" };
-const { activate, pickAgent, deactivate } = await import("../src/vscode/extension.ts");
+(globalThis as any).__SCHOOL__ = { id: "ipsa", name: "IPSA", accent: "#c8102e", signInUrl: "https://a", keyUrl: "https://b", creditsUrl: "https://c" };
+const { activate, pickAgent, deactivate, showMeter } = await import("../src/vscode/extension.ts");
 
 test("activation registers the panel, the sign-in link and four commands", () => {
   const ctx: any = { subscriptions: [], secrets: {}, extension: { id: "bulkhours.bulkhours-ipsa" } };
@@ -39,7 +42,8 @@ test("activation registers the panel, the sign-in link and four commands", () =>
     commands: ["bulkhours.newChat", "bulkhours.signIn", "bulkhours.signOut", "bulkhours.pickAgent"],
     views: ["bulkhours.chat"], uri: 1,
   });
-  assert.equal(ctx.subscriptions.length, 8);
+  assert.equal(ctx.subscriptions.length, 9);
+  assert.equal(bars[0].command, "bulkhours.chat.focus", "the budget opens the panel");
   assert.equal(viewOptions.webviewOptions.retainContextWhenHidden, true, "a hidden panel keeps its conversation");
 });
 
@@ -68,4 +72,17 @@ test("with nothing to offer, the student is told how to get an agent", async () 
   settings.extraAgents = [];
   await pickAgent({ known: () => undefined }, chat);
   assert.deepEqual(info, ["Sign in first, or add agents in bulkhours.extraAgents."]);
+});
+
+
+test("the status bar shows the budget, amber from 80 %, red when spent, hidden when unknown", () => {
+  const b: any = { show() { b.shown = true; }, hide() { b.shown = false; } };
+  showMeter(b, { spent: 0.25, budget: 10 }, "en");
+  assert.deepEqual([b.text, b.shown, b.backgroundColor], ["$(credit-card) $0.25 / $10", true, undefined]);
+  showMeter(b, { spent: 8, budget: 10 }, "en");
+  assert.equal(b.backgroundColor.id, "statusBarItem.warningBackground");
+  showMeter(b, { spent: 10, budget: 10 }, "en");
+  assert.equal(b.backgroundColor.id, "statusBarItem.errorBackground");
+  showMeter(b, undefined, "en");
+  assert.equal(b.shown, false);
 });

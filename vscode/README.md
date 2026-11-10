@@ -55,8 +55,15 @@ and expects:
 }
 ```
 
+The reply may also carry `"model_labels": {"fast": "DeepSeek V4.1 Flash"}`,
+the underlying model of each alias, shown in the model list.
+
 `401` means the sign-in expired (the extension signs out), `402` means no
-credits left. `${baseUrl}`, `${apiKey}`, `${model}` and `${extensionPath}`
+credits left.
+
+The panel's budget meter reads `GET <creditsUrl>?school=<id>` with the same
+bearer, which answers `{"spent": 0.25, "budget": 10, "unit": "USD"}`; a meter
+that cannot be read is simply not shown. `${baseUrl}`, `${apiKey}`, `${model}` and `${extensionPath}`
 are filled in by the extension; any other placeholder is refused. The
 extension renews the key ten minutes before `expires_at` and restarts the
 agent, which reads its key only once.

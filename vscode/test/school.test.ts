@@ -8,6 +8,7 @@ const ipsa = {
   accent: "#c8102e",
   signInUrl: "https://bulkhours.fr/workbench/sign-in?school=ipsa",
   keyUrl: "https://bulkhours.fr/api/workbench/key",
+  creditsUrl: "https://bulkhours.fr/api/workbench/credits",
 };
 
 test("a school build file carries identity, addresses and a language", () => {

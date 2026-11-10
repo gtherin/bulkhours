@@ -13,6 +13,9 @@ export type Key = {
   models: string[];
   defaultModel: string;
   agent: AgentSpec;
+  // The underlying LLM of each alias ("fast" -> "DeepSeek V4.1 Flash"):
+  // students should know which model answers them. Optional.
+  modelLabels: Record<string, string>;
 };
 
 const RENEW_BEFORE_MS = 10 * 60 * 1000;
@@ -29,7 +32,13 @@ export function parseKeyReply(raw: unknown): Key {
     apiKey, baseUrl, expiresAt, models,
     defaultModel: offered(o.default_model, models, fail),
     agent: theAgent(o.agent, fail),
+    modelLabels: labels(o.model_labels, models),
   };
+}
+
+function labels(raw: unknown, models: string[]): Record<string, string> {
+  const o = (raw && typeof raw === "object" ? raw : {}) as Record<string, unknown>;
+  return Object.fromEntries(models.filter((m) => typeof o[m] === "string").map((m) => [m, o[m] as string]));
 }
 
 function offered(wanted: unknown, models: string[], fail: Fail): string {

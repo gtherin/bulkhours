@@ -7,7 +7,7 @@ export type Diff = { path: string; oldText: string | null; newText: string };
 export type PlanItem = { content: string; status: string };
 
 export type Entry =
-  | { kind: "user"; text: string }
+  | { kind: "user"; text: string; images?: string[] }
   | { kind: "agent"; text: string }
   | { kind: "thought"; text: string }
   | { kind: "plan"; entries: PlanItem[] }
@@ -20,8 +20,8 @@ export type Entry =
 export type Transcript = readonly Entry[];
 type Tool = Extract<Entry, { kind: "tool" }>;
 
-export function addUserPrompt(t: Transcript, text: string): Transcript {
-  return [...t, { kind: "user", text }];
+export function addUserPrompt(t: Transcript, text: string, images: string[] = []): Transcript {
+  return [...t, images.length ? { kind: "user", text, images } : { kind: "user", text }];
 }
 
 export function addNotice(t: Transcript, text: string): Transcript {

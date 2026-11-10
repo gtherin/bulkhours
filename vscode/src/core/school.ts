@@ -10,6 +10,8 @@ export type School = {
   accent: string;
   signInUrl: string;
   keyUrl: string;
+  // What this student spent of their budget, for the panel's meter.
+  creditsUrl: string;
   // The interface language when VS Code's own is one we do not speak.
   language: Lang;
 };
@@ -26,6 +28,7 @@ export function parseSchool(raw: unknown): School {
     accent: colour(o, "accent", fail),
     signInUrl: https(o, "signInUrl", fail),
     keyUrl: https(o, "keyUrl", fail),
+    creditsUrl: https(o, "creditsUrl", fail),
     language: language(o.language, fail),
   };
 }

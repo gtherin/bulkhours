@@ -72,6 +72,24 @@ export class Credentials implements vscode.UriHandler {
     return { key: this.key, renewed: true };
   }
 
+  // This student's spend against their budget, as the key server reads it
+  // from LiteLLM. Optional: a meter that cannot be read is not shown.
+  async credits(): Promise<{ spent: number; budget: number } | undefined> {
+    const token = await this.secrets.get(TOKEN);
+    if (!token) return undefined;
+    try {
+      const url = new URL(this.school.creditsUrl);
+      url.searchParams.set("school", this.school.id);
+      const r = await fetch(url.toString(), { headers: { authorization: `Bearer ${token}` } });
+      if (r.status !== 200) return undefined;
+      const o = await r.json() as { spent?: unknown; budget?: unknown };
+      return typeof o.spent === "number" && typeof o.budget === "number"
+        ? { spent: o.spent, budget: o.budget } : undefined;
+    } catch {
+      return undefined;
+    }
+  }
+
   private async fetchKey(): Promise<Key> {
     const token = await this.secrets.get(TOKEN);
     if (!token) throw new Said("notSignedIn");
