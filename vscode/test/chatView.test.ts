@@ -454,3 +454,16 @@ test("the student's own image-models setting replaces the school's list", async 
   delete settings.imageModels;
   p.view.newChat();
 });
+
+test("restarting the assistant stops its agent only, and the conversation goes on", async () => {
+  const p = panel(true, "en", "IPSA", { store: mkdtempSync(join(tmpdir(), "bh-store-")) });
+  await p.send({ type: "send", text: "remember plum" });
+  const first = texts(p.last());
+  p.view.restart();
+  await new Promise((r) => setTimeout(r, 50));
+  assert.deepEqual(texts(p.last()).slice(0, first.length), first, "the conversation stays on screen");
+  assert.ok(p.webview.html.includes("<html"), "the panel reloaded its page");
+  await p.send({ type: "send", text: "recall" });
+  assert.match(texts(p.last()).at(-1), /^I remember plum \(pid \d+\)$/);
+  p.view.newChat();
+});

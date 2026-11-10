@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.11 — 2026-11-10
+
+- « Redémarrer l'assistant » restarts only BulkHours (its agent and its panel); it used to restart every extension of the window. The conversation goes on at the next message.
+
 ## 0.1.10 — 2026-11-10
 
 - Pasted images reach the models that read them: the key server says which (LiteLLM supports_vision; today `fast`, DeepSeek V4.1 Flash), dsh is told, and the menu says « lit les images ».

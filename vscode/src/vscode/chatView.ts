@@ -285,6 +285,22 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
     this.idleTimer.unref?.();
   }
 
+  // « Redémarrer l'assistant »: a new agent process (the conversation is
+  // resumed, or handed over, at the next message) and a fresh panel page.
+  // Only BulkHours restarts: VS Code's restartExtensionHost would restart
+  // every extension of the window (owner, 2026-11-10).
+  restart(): void {
+    if (this.session?.canResume) this.paused = { sessionId: this.session.sessionId, launchKey: this.launchKey };
+    else if (this.session) this.prime = this.transcript.length > 0;
+    this.busy = false;
+    this.endSession();
+    if (this.view) {
+      const media = vscode.Uri.joinPath(this.ctx.extensionUri, "media");
+      this.view.webview.html = panelHtml(this.view.webview, media, this.school, this.lang);
+    }
+    void this.render();
+  }
+
   private pause(): void {
     if (this.busy || !this.session) return;
     this.paused = { sessionId: this.session.sessionId, launchKey: this.launchKey };

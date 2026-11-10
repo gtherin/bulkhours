@@ -35,8 +35,8 @@ export function activate(ctx: vscode.ExtensionContext): void {
     vscode.commands.registerCommand("bulkhours.pickAgent", () => pickAgent(creds, chat, lang)),
     vscode.commands.registerCommand("bulkhours.history", () => history(chat, lang)),
     vscode.commands.registerCommand("bulkhours.rename", () => rename(chat, lang)),
-    // Restarts the extensions without reloading the window.
-    vscode.commands.registerCommand("bulkhours.restart", () => vscode.commands.executeCommand("workbench.action.restartExtensionHost")),
+    // Restarts BulkHours' own agent and panel, nothing else in the window.
+    vscode.commands.registerCommand("bulkhours.restart", () => chat.restart()),
     vscode.commands.registerCommand("bulkhours.update", () => update(ctx, school, lang, true)),
   );
   // Once a day at most, a quiet look for a newer build in the download area.
