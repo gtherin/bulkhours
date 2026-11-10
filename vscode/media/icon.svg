@@ -1,1 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M9 9.5l-2 1.5 2 1.5M15 9.5l2 1.5-2 1.5M12.8 8.5l-1.6 5"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <!-- The BulkHours logo (bulkhours/data/BulkHours.png) as a one-colour
+       silhouette for VS Code's activity bar: the slab-serif B with the code
+       chevrons < > cut out of it. -->
+  <mask id="chevrons">
+    <rect width="24" height="24" fill="#fff"/>
+    <path d="M14.8 5.7 10.9 8.3 14.8 11.1M10.9 12.6 14.8 15.1 10.9 17.7" fill="none" stroke="#000"
+          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+  </mask>
+  <path mask="url(#chevrons)" fill="currentColor"
+        d="M3.5 2H14C17.4 2 19.8 4.3 19.8 7.2 19.8 9.2 18.9 10.6 17.9 11.6 19.5 12.6 20.4 14.4 20.4 16.6 20.4 19.6 18 22 14.9 22H3.5V17.5H5.5V6.5H3.5Z"/>
+</svg>

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3 — 2026-11-10
+
+- The activity bar shows the BulkHours logo (the B with the code chevrons).
+
 ## 0.1.2 — 2026-11-10
 
 - A permission request (an agent asking to run a command or edit a file) no longer vanishes when the conversation redraws: the agent waited forever.
