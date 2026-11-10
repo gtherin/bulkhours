@@ -20,7 +20,7 @@ type FromPanel =
   | { type: "permission"; id: number; optionId: string | null };
 
 type Pasted = { mimeType: string; data: string };
-type Credits = { spent: number; budget: number };
+type Credits = { spent: number; budget: number; currency: "USD" | "EUR" };
 // What a paste may carry into a prompt: pictures, nothing else.
 const IMAGE_TYPES = new Set(["image/png", "image/jpeg", "image/gif", "image/webp"]);
 // LiteLLM writes spend in batches (about a minute, measured 2026-11-10): the
@@ -289,7 +289,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
       type: "state", transcript: this.transcript, busy: this.busy, starting: this.starting,
       signedIn: await this.creds.signedIn(), model: this.model(key), models: key?.models ?? [],
       agent: key ? safeLabel(() => this.agent(key).label) : "",
-      modelLabels: key?.modelLabels ?? {}, modelPrices: key?.modelPrices ?? {},
+      modelLabels: key?.modelLabels ?? {}, modelPrices: key?.modelPrices ?? {}, currency: key?.currency ?? "USD",
       agents: safeList(() => this.agentChoices(key)), agentId: key ? safeLabel(() => (this.agent(key) === key.agent ? "" : this.agent(key).id)) : "",
       credits: this.credits ?? null, usage: this.usage, commands: this.commands,
     });

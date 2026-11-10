@@ -7,7 +7,7 @@ import type { Key } from "../src/core/keys.ts";
 const school = { id: "gateka", label: "Gateka", command: "dsh", args: [], env: {} };
 const mine = { id: "opencode", label: "OpenCode", command: "opencode", args: ["acp"], env: {} };
 const key: Key = {
-  apiKey: "sk", baseUrl: "https://x/v1", expiresAt: 0, models: ["fast", "code"], defaultModel: "fast", agent: school, modelLabels: {}, modelPrices: {},
+  apiKey: "sk", baseUrl: "https://x/v1", expiresAt: 0, models: ["fast", "code"], defaultModel: "fast", agent: school, modelLabels: {}, modelPrices: {}, currency: "USD",
 };
 
 test("the student's model choice holds while the school still offers it", () => {

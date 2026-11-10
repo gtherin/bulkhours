@@ -54,10 +54,10 @@ export async function pickAgent(creds: Pick<Credentials, "known">, chat: Pick<Ch
 
 type Bar = Pick<vscode.StatusBarItem, "show" | "hide"> & { text?: string; tooltip?: unknown; backgroundColor?: unknown };
 
-export function showMeter(bar: Bar, c: { spent: number; budget: number } | undefined, lang: Lang): void {
+export function showMeter(bar: Bar, c: { spent: number; budget: number; currency?: "USD" | "EUR" } | undefined, lang: Lang): void {
   if (!c) { bar.hide(); return; }
   const l = level(c.spent, c.budget);
-  bar.text = `$(credit-card) ${budgetText(c)}`;
+  bar.text = `$(credit-card) ${budgetText(c, lang)}`;
   bar.tooltip = t(lang, "budgetTitle");
   bar.backgroundColor = l === "ok" ? undefined
     : new vscode.ThemeColor(l === "warn" ? "statusBarItem.warningBackground" : "statusBarItem.errorBackground");

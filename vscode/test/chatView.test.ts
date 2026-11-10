@@ -44,6 +44,7 @@ const key = {
     env: { FAKE_MODEL: "${model}" } },
   modelLabels: { fast: "DeepSeek V4.1 Flash" },
   modelPrices: { fast: { in: 0.3, out: 1.2 } },
+  currency: "USD",
 };
 
 // Every panel's agent is stopped at the end, even after a failed test.
@@ -72,7 +73,7 @@ function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA",
     // fresh: a window just reloaded, the key is not fetched yet
     known: () => (signedIn && (!opts.fresh || fetched) ? k : undefined),
     currentKey: async () => { fetched = true; return { key: k, renewed: false }; },
-    credits: async () => (signedIn ? { spent: 0.25, budget: 10 } : undefined),
+    credits: async () => (signedIn ? { spent: 0.25, budget: 10, currency: "USD" } : undefined),
     signIn: async () => { posted.push({ type: "signIn-opened" }); },
   };
   const view = new ChatView(ctx, { id: "ipsa", name: schoolName, accent: "#c8102e", signInUrl: "https://a", keyUrl: "https://b", creditsUrl: "https://c", language: "en" as const },
@@ -263,8 +264,8 @@ test("a school name cannot break out of the panel's data", () => {
 test("the budget is shown as MaQI's meter, in the panel and the status bar", async () => {
   const p = panel();
   await p.send({ type: "ready" });
-  assert.deepEqual(p.last().credits, { spent: 0.25, budget: 10 });
-  assert.deepEqual(p.meters.at(-1), { spent: 0.25, budget: 10 });
+  assert.deepEqual(p.last().credits, { spent: 0.25, budget: 10, currency: "USD" });
+  assert.deepEqual(p.meters.at(-1), { spent: 0.25, budget: 10, currency: "USD" });
 });
 
 test("the model list says which LLM answers", async () => {

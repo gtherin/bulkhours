@@ -18,6 +18,8 @@ export type Key = {
   modelLabels: Record<string, string>;
   // Dollars per million tokens, in / out, as the school's LiteLLM charges.
   modelPrices: Record<string, { in: number; out: number }>;
+  // How the school shows money (amounts stay LiteLLM's): dollars or euros.
+  currency: "USD" | "EUR";
 };
 
 const RENEW_BEFORE_MS = 10 * 60 * 1000;
@@ -36,6 +38,7 @@ export function parseKeyReply(raw: unknown): Key {
     agent: theAgent(o.agent, fail),
     modelLabels: labels(o.model_labels, models),
     modelPrices: prices(o.model_prices, models),
+    currency: o.currency === "EUR" ? "EUR" : "USD",
   };
 }
 

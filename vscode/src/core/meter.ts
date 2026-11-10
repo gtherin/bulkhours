@@ -10,10 +10,16 @@ export function tokens(n: number): string {
   return `${Number(v.toFixed(1))}${unit}`;
 }
 
-export function money(usd: number): string {
-  if (usd === 0) return "$0";
-  if (usd < 0.01) return "<$0.01";
-  return Number.isInteger(usd) ? `$${usd}` : `$${usd.toFixed(2)}`;
+export type Currency = "USD" | "EUR";
+
+// Amounts are LiteLLM's (Nebius dollars); a school may show them as euros at
+// par (its tenant file says `currency: EUR`): the symbol changes, not the value.
+export function money(v: number, currency: Currency = "USD", lang = "en"): string {
+  const fmt = (x: number) => new Intl.NumberFormat(lang === "fr" ? "fr-FR" : "en-US", {
+    style: "currency", currency, minimumFractionDigits: Number.isInteger(x) ? 0 : 2, maximumFractionDigits: 2,
+  }).format(x);
+  if (v > 0 && v < 0.01) return `<${fmt(0.01)}`;
+  return fmt(v);
 }
 
 export function level(spent: number, budget: number): Level {
@@ -21,6 +27,6 @@ export function level(spent: number, budget: number): Level {
   return spent >= 0.8 * budget ? "warn" : "ok";
 }
 
-export function budgetText(c: { spent: number; budget: number }): string {
-  return `${money(c.spent)} / ${money(c.budget)}`;
+export function budgetText(c: { spent: number; budget: number; currency?: Currency }, lang = "en"): string {
+  return `${money(c.spent, c.currency, lang)} / ${money(c.budget, c.currency, lang)}`;
 }

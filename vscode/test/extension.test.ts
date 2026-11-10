@@ -77,11 +77,11 @@ test("with nothing to offer, the student is told how to get an agent", async () 
 
 test("the status bar shows the budget, amber from 80 %, red when spent, hidden when unknown", () => {
   const b: any = { show() { b.shown = true; }, hide() { b.shown = false; } };
-  showMeter(b, { spent: 0.25, budget: 10 }, "en");
+  showMeter(b, { spent: 0.25, budget: 10, currency: "USD" }, "en");
   assert.deepEqual([b.text, b.shown, b.backgroundColor], ["$(credit-card) $0.25 / $10", true, undefined]);
-  showMeter(b, { spent: 8, budget: 10 }, "en");
+  showMeter(b, { spent: 8, budget: 10, currency: "USD" }, "en");
   assert.equal(b.backgroundColor.id, "statusBarItem.warningBackground");
-  showMeter(b, { spent: 10, budget: 10 }, "en");
+  showMeter(b, { spent: 10, budget: 10, currency: "USD" }, "en");
   assert.equal(b.backgroundColor.id, "statusBarItem.errorBackground");
   showMeter(b, undefined, "en");
   assert.equal(b.shown, false);

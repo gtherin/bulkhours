@@ -113,9 +113,9 @@ test("the panel's budget is read with the sign-in, for this school", async () =>
   const seen: string[] = [];
   globalThis.fetch = (async (url: string, init: any) => {
     seen.push(`${url} ${init.headers.authorization}`);
-    return { status: 200, json: async () => ({ spent: 0.25, budget: 10, unit: "USD" }) };
+    return { status: 200, json: async () => ({ spent: 0.25, budget: 10, unit: "EUR" }) };
   }) as any;
-  assert.deepEqual(await s.c.credits(), { spent: 0.25, budget: 10 });
+  assert.deepEqual(await s.c.credits(), { spent: 0.25, budget: 10, currency: "EUR" });
   assert.deepEqual(seen, ["https://bh.fr/api/workbench/credits?school=ipsa Bearer tok"]);
 });
 

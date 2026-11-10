@@ -60,7 +60,11 @@
   }
 
   // -- the meters ------------------------------------------------------------
-  const money = (v) => v === 0 ? "$0" : v < 0.01 ? "<$0.01" : Number.isInteger(v) ? `$${v}` : `$${v.toFixed(2)}`;
+  // As src/core/meter.ts money(): the school's currency, the panel's language.
+  const lang = document.documentElement.lang === "fr" ? "fr-FR" : "en-US";
+  const fmt = (v, cur, digits) => new Intl.NumberFormat(lang, { style: "currency", currency: cur || "USD",
+    minimumFractionDigits: digits ?? (Number.isInteger(v) ? 0 : 2), maximumFractionDigits: 2 }).format(v);
+  const money = (v, cur) => v > 0 && v < 0.01 ? `<${fmt(0.01, cur)}` : fmt(v, cur);
   const tokens = (n) => n < 1000 ? String(n) : `${Number((n < 1e6 ? n / 1000 : n / 1048576).toFixed(1))}${n < 1e6 ? "K" : "M"}`;
   const level = (s, b) => (b <= 0 || s >= b) ? "over" : s >= 0.8 * b ? "warn" : "ok";
 
@@ -70,7 +74,7 @@
       const pct = s.credits.budget > 0 ? Math.min(100, 100 * s.credits.spent / s.credits.budget) : 100;
       budget.dataset.level = line.dataset.level = level(s.credits.spent, s.credits.budget);
       line.querySelector(".fill").style.width = `${pct}%`;
-      budget.textContent = `${money(s.credits.spent)} / ${money(s.credits.budget)}`;
+      budget.textContent = `${money(s.credits.spent, s.credits.currency)} / ${money(s.credits.budget, s.credits.currency)}`;
     }
     const u = s.usage;
     context.querySelector(".txt").textContent = u ? `${tokens(u.used)} / ${tokens(u.size)}` : "";
@@ -84,8 +88,10 @@
   }
 
   // -- one menu: the school's models (with prices), then the student's agents --
-  const price = (v) => `$${v.toFixed(2)}`;
+  let priceCurrency = "USD";
+  const price = (v) => fmt(v, priceCurrency, 2);
   function menu(s) {
+    priceCurrency = s.currency || "USD";
     const school = s.models.map((m) => {
       const name = s.modelLabels[m] ? `${m} — ${s.modelLabels[m]}` : m;
       const p = s.modelPrices[m];
@@ -94,7 +100,8 @@
     }).join("");
     const own = s.agents.filter((a) => a.id).map((a) =>
       `<option value="a:${esc(a.id)}" ${a.id === s.agentId ? "selected" : ""}>${esc(a.label)}</option>`).join("");
-    return (school ? `<optgroup label="${esc(W.schoolModels)}">${school}</optgroup>` : "")
+    const unit = priceCurrency === "EUR" ? "€" : "$";
+    return (school ? `<optgroup label="${esc(W.schoolModels.replace("$", unit))}">${school}</optgroup>` : "")
       + (own ? `<optgroup label="${esc(W.yourAgents)}">${own}</optgroup>` : "");
   }
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.7 — 2026-11-10
+
+- Money is shown in the school's currency, written the way the student's language writes it: IPSA shows euros (at par with the dollars Nebius bills), others dollars.
+
 ## 0.1.6 — 2026-11-10
 
 - The agent's Markdown is rendered: headings, bullet and numbered lists (nested), tables, quotes, rules, italics, strikethrough; still escaped first.

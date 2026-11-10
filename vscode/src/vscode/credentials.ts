@@ -74,7 +74,7 @@ export class Credentials implements vscode.UriHandler {
 
   // This student's spend against their budget, as the key server reads it
   // from LiteLLM. Optional: a meter that cannot be read is not shown.
-  async credits(): Promise<{ spent: number; budget: number } | undefined> {
+  async credits(): Promise<{ spent: number; budget: number; currency: "USD" | "EUR" } | undefined> {
     const token = await this.secrets.get(TOKEN);
     if (!token) return undefined;
     try {
@@ -82,9 +82,9 @@ export class Credentials implements vscode.UriHandler {
       url.searchParams.set("school", this.school.id);
       const r = await fetch(url.toString(), { headers: { authorization: `Bearer ${token}` } });
       if (r.status !== 200) return undefined;
-      const o = await r.json() as { spent?: unknown; budget?: unknown };
+      const o = await r.json() as { spent?: unknown; budget?: unknown; unit?: unknown };
       return typeof o.spent === "number" && typeof o.budget === "number"
-        ? { spent: o.spent, budget: o.budget } : undefined;
+        ? { spent: o.spent, budget: o.budget, currency: o.unit === "EUR" ? "EUR" : "USD" } : undefined;
     } catch {
       return undefined;
     }
