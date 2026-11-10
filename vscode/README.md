@@ -96,6 +96,11 @@ conversation so far.
 
 ## Releasing
 
+Until the Marketplace listing is live, builds are published in the school's
+`downloadUrl` (bulkhours.fr/bkfpage/vscode/) beside a `latest.json`
+(`{"ipsa": "0.1.9", ...}`); the extension offers a newer build once a day, and
+« Mettre à jour l'extension » installs it in place.
+
 Bump `version` in `package.json`, add its entry to `CHANGELOG.md`, then push
 a tag `vscode-v<version>`. The workflow `.github/workflows/vscode.yml` tests,
 packages every school in `schools/` and publishes them to the Marketplace

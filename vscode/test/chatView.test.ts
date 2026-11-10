@@ -89,10 +89,11 @@ function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA",
       onDidReceiveMessage: (f: any) => { send = (m) => f(m); },
       postMessage: async (m: unknown) => { posted.push(m); return true; },
   };
-  view.resolveWebviewView({ webview } as any);
+  const viewObj: any = { webview };
+  view.resolveWebviewView(viewObj);
   const settle = () => new Promise((r) => setTimeout(r, 30));
   const last = () => [...posted].reverse().find((m) => m.type === "state");
-  return { view, posted, state, webview, meters, send: async (m: unknown) => { await send(m); await settle(); }, last };
+  return { view, posted, state, webview, meters, description: () => viewObj.description, send: async (m: unknown) => { await send(m); await settle(); }, last };
 }
 
 const texts = (s: any) => s.transcript.map((e: any) => e.text ?? e.kind);
@@ -414,5 +415,23 @@ test("another model takes the conversation over; a new chat starts clean", async
   p.view.newChat();
   await p.send({ type: "send", text: "fresh" });
   assert.deepEqual(texts(p.last()), ["fresh", "you said: fresh"]);
+  p.view.newChat();
+});
+
+test("an older conversation reopens from the history, and its title shows beside the panel's name", async () => {
+  const state = mkdtempSync(join(tmpdir(), "bh-gstate-"));
+  const p = panel(true, "en", "IPSA", { state });
+  await p.send({ type: "send", text: "first topic" });
+  p.view.newChat();
+  await p.send({ type: "send", text: "second topic" });
+  const list = p.view.conversations();
+  assert.deepEqual(list.map((c: any) => c.title), ["second topic", "first topic"]);
+  await p.view.open(list[1].file);
+  await new Promise((r) => setTimeout(r, 30));
+  assert.deepEqual(texts(p.last()), ["first topic", "you said: first topic"]);
+  assert.equal(p.description(), "first topic");
+  await p.view.rename("Le premier sujet");
+  assert.equal(p.description(), "Le premier sujet");
+  assert.ok(p.view.conversations().some((c: any) => c.title === "Le premier sujet"));
   p.view.newChat();
 });

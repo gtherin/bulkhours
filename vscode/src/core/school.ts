@@ -12,6 +12,9 @@ export type School = {
   keyUrl: string;
   // What this student spent of their budget, for the panel's meter.
   creditsUrl: string;
+  // Where this school's builds and latest.json are published (updates until
+  // the extension is on the Marketplace). Optional.
+  downloadUrl?: string;
   // The interface language when VS Code's own is one we do not speak.
   language: Lang;
 };
@@ -29,6 +32,7 @@ export function parseSchool(raw: unknown): School {
     signInUrl: https(o, "signInUrl", fail),
     keyUrl: https(o, "keyUrl", fail),
     creditsUrl: https(o, "creditsUrl", fail),
+    ...(o.downloadUrl !== undefined ? { downloadUrl: https(o, "downloadUrl", fail) } : {}),
     language: language(o.language, fail),
   };
 }

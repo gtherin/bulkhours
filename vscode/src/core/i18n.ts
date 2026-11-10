@@ -53,6 +53,17 @@ const en = {
   mic: "Dictate",
   micWindows: "Dictation: press Win + H, then speak",
   micMac: "Dictation: press Fn twice, then speak",
+  historyEmpty: "No earlier conversation in this project yet.",
+  historyPlaceholder: "Reopen a conversation",
+  historyDetail: "{date} · {n} question(s)",
+  renamePrompt: "Name of this conversation",
+  updateAvailable: "BulkHours {version} is available.",
+  updateNow: "Update",
+  updated: "BulkHours {version} is installed: reload the window to use it.",
+  reloadNow: "Reload",
+  upToDate: "BulkHours is up to date ({version}).",
+  updateFailed: "The update failed: {message}",
+  updateUnavailable: "This build has no download area to update from.",
 };
 
 const fr: typeof en = {
@@ -104,6 +115,17 @@ const fr: typeof en = {
   mic: "Dicter",
   micWindows: "Dictée : appuyez sur Win + H, puis parlez",
   micMac: "Dictée : appuyez deux fois sur Fn, puis parlez",
+  historyEmpty: "Pas encore d'autre conversation dans ce projet.",
+  historyPlaceholder: "Rouvrir une conversation",
+  historyDetail: "{date} · {n} question(s) posée(s)",
+  renamePrompt: "Nom de cette conversation",
+  updateAvailable: "BulkHours {version} est disponible.",
+  updateNow: "Mettre à jour",
+  updated: "BulkHours {version} est installé : rechargez la fenêtre pour l'utiliser.",
+  reloadNow: "Recharger",
+  upToDate: "BulkHours est à jour ({version}).",
+  updateFailed: "La mise à jour a échoué : {message}",
+  updateUnavailable: "Cette version n'a pas d'espace de téléchargement pour se mettre à jour.",
 };
 
 export const MESSAGES: Record<Lang, typeof en> = { en, fr };

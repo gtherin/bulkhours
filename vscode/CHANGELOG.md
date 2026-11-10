@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.9 — 2026-11-10
+
+- Conversation history (🕘 in the panel title): every conversation of the project, titled by its first question, reopens with its memory; « Renommer » names it, and the title shows beside the panel's name.
+- « Redémarrer l'extension » and « Mettre à jour l'extension » in the panel's menu; a newer build in the download area is offered once a day.
+
 ## 0.1.8 — 2026-11-10
 
 - Conversations are recorded by the extension, whatever agent answered (ACP shape, under `$XDG_STATE_HOME/gateka`, owner-only, pruned after 90 days; ADR-0223): the panel shows the last one again after a window reload.

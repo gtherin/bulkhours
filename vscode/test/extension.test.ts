@@ -35,14 +35,16 @@ mock.module("vscode", {
 const { activate, pickAgent, deactivate, showMeter } = await import("../src/vscode/extension.ts");
 
 test("activation registers the panel, the sign-in link and four commands", () => {
-  const ctx: any = { subscriptions: [], secrets: {}, extension: { id: "bulkhours.bulkhours-ipsa" } };
+  const ctx: any = { subscriptions: [], secrets: {}, extension: { id: "bulkhours.bulkhours-ipsa", packageJSON: { version: "0.1.9" } },
+    globalState: { get: () => Date.now(), update: async () => {} } };      // checked today: no update look
   activate(ctx);
   deactivate();
   assert.deepEqual(registered, {
-    commands: ["bulkhours.newChat", "bulkhours.signIn", "bulkhours.signOut", "bulkhours.pickAgent"],
+    commands: ["bulkhours.newChat", "bulkhours.signIn", "bulkhours.signOut", "bulkhours.pickAgent",
+      "bulkhours.history", "bulkhours.rename", "bulkhours.restart", "bulkhours.update"],
     views: ["bulkhours.chat"], uri: 1,
   });
-  assert.equal(ctx.subscriptions.length, 9);
+  assert.equal(ctx.subscriptions.length, 13);
   assert.equal(bars[0].command, "bulkhours.chat.focus", "the budget opens the panel");
   assert.equal(viewOptions.webviewOptions.retainContextWhenHidden, true, "a hidden panel keeps its conversation");
 });

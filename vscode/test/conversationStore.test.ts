@@ -90,3 +90,27 @@ test("another agent gets the conversation so far, condensed, recent turns first 
   assert.equal(condensed(t, 40), "[…]\n\nStudent: q2\n\nAssistant: a2");
   assert.equal(condensed([], 100), "");
 });
+
+test("a conversation is titled by its first question until it is renamed", () => {
+  const store = new ConversationStore(root());
+  const c = store.start(header);
+  c.prompt([{ type: "text", text: "Pourquoi mon kernel CUDA est lent quand n dépasse un million ?\nvoici le code" }]);
+  c.end("end_turn");
+  assert.equal(store.read(c.file)!.title, "Pourquoi mon kernel CUDA est lent quand n dépasse…");
+  c.rename("Kernel lent");
+  assert.equal(store.read(c.file)!.title, "Kernel lent");
+});
+
+test("a project's conversations are listed newest first, with what the history shows", () => {
+  const store = new ConversationStore(root());
+  const a = store.start({ ...header, session: "s-a" });
+  a.prompt([{ type: "text", text: "first one" }]); a.end("end_turn");
+  const b = store.start({ ...header, session: "s-b", agent: "claude" });
+  b.prompt([{ type: "text", text: "second" }]); b.update(chunk("agent_message_chunk", "ok")); b.end("end_turn");
+  b.prompt([{ type: "text", text: "again" }]); b.end("end_turn");
+  const empty = store.start({ ...header, session: "s-empty" });
+  const list = store.list("/work/cuda");
+  assert.deepEqual(list.map((c) => [c.title, c.agent, c.questions]), [["second", "claude", 2], ["first one", "gateka", 1]]);
+  assert.ok(list[0].updated >= list[1].updated);
+  assert.ok(!list.some((c) => c.file === empty.file), "a conversation with no question is not listed");
+});

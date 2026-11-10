@@ -13,6 +13,7 @@
 //     {"t":"update","update":{...}}         one per message, tool or plan
 //     {"t":"stop","reason":"end_turn"}      one per turn
 //     {"t":"session",...}                   when another agent session takes over
+//     {"t":"title","title":"..."}           when the student names it
 //
 // Compact: streamed chunks are joined into one message, a tool is written in
 // its final state. Private: folder 0700, files 0600 (a shared GPU machine
@@ -35,7 +36,12 @@ type Line =
   | { t: "prompt"; content: ContentBlock[] }
   | { t: "update"; update: SessionUpdate }
   | { t: "stop"; reason: string }
-  | ({ t: "session" } & Pick<Header, "agent" | "session" | "model">);
+  | ({ t: "session" } & Pick<Header, "agent" | "session" | "model">)
+  | { t: "title"; title: string };
+
+// What the history shows of one conversation.
+export type Summary = { file: string; title: string; updated: number; agent: string; model: string; questions: number };
+const TITLE_CHARS = 52;
 
 const STREAMED = new Set(["agent_message_chunk", "agent_thought_chunk", "user_message_chunk"]);
 const KEPT = new Set([...STREAMED, "tool_call", "tool_call_update", "plan"]);
@@ -78,6 +84,8 @@ export class Conversation {
 
   switched(h: Pick<Header, "agent" | "session" | "model">): void { this.write({ t: "session", ...h }); }
 
+  rename(title: string): void { this.write({ t: "title", title: title.trim() }); }
+
   private write(line: Line): void { appendFileSync(this.file, JSON.stringify(line) + "\n", { mode: 0o600 }); }
 }
 
@@ -107,26 +115,48 @@ export class ConversationStore {
     return new Conversation(file);
   }
 
-  // The project's last conversation, as the panel showed it, and the agent
-  // session that held it (the last one, if another took over).
-  latest(cwd: string): { header: Header; transcript: Transcript; conversation: Conversation } | undefined {
+  private files(cwd: string): string[] {
     const dir = this.dir(cwd);
-    if (!existsSync(dir)) return undefined;
-    const name = readdirSync(dir).filter((f) => f.endsWith(".jsonl")).sort().pop();
-    if (!name) return undefined;
-    const file = join(dir, name);
+    if (!existsSync(dir)) return [];
+    return readdirSync(dir).filter((f) => f.endsWith(".jsonl")).sort().map((f) => join(dir, f));
+  }
+
+  // The project's last conversation, as the panel showed it.
+  latest(cwd: string): Opened | undefined {
+    const file = this.files(cwd).pop();
+    return file ? this.read(file) : undefined;
+  }
+
+  // One conversation, as the panel showed it, with the agent session that
+  // held it last (another may have taken over) and its title.
+  read(file: string): Opened | undefined {
     let header: Header | undefined;
     let transcript: Transcript = [];
+    let title = "";
+    let questions = 0;
     for (const raw of readFileSync(file, "utf8").split("\n")) {
       if (!raw.trim()) continue;
       let l: Line;
       try { l = JSON.parse(raw); } catch { continue; }           // a torn last line is skipped
       if (l.t === "header") header = { agent: l.agent, session: l.session, model: l.model, school: l.school, cwd: l.cwd };
       else if (l.t === "session" && header) header = { ...header, agent: l.agent, session: l.session, model: l.model };
-      else if (l.t === "prompt") transcript = addUserPrompt(transcript, promptText(l.content), promptImages(l.content));
-      else if (l.t === "update") transcript = applyUpdate(transcript, l.update);
+      else if (l.t === "title") title = l.title;
+      else if (l.t === "prompt") {
+        const text = promptText(l.content);
+        if (!questions++ && !title) title = firstLine(text);
+        transcript = addUserPrompt(transcript, text, promptImages(l.content));
+      } else if (l.t === "update") transcript = applyUpdate(transcript, l.update);
     }
-    return header ? { header, transcript, conversation: new Conversation(file) } : undefined;
+    return header ? { header, transcript, title, questions, conversation: new Conversation(file) } : undefined;
+  }
+
+  // The project's conversations that hold at least one question, newest first.
+  list(cwd: string): Summary[] {
+    return this.files(cwd).map((file) => {
+      const o = this.read(file);
+      return o && o.questions ? { file, title: o.title, updated: statSync(file).mtimeMs, agent: o.header.agent,
+        model: o.header.model, questions: o.questions } : undefined;
+    }).filter((x): x is Summary => Boolean(x)).sort((a, b) => b.updated - a.updated || (a.file < b.file ? 1 : -1));
   }
 
   // Conversations not touched for `days` are deleted. Returns how many.
@@ -142,6 +172,14 @@ export class ConversationStore {
     }
     return gone;
   }
+}
+
+export type Opened = { header: Header; transcript: Transcript; title: string; questions: number; conversation: Conversation };
+
+function firstLine(text: string): string {
+  const line = text.trim().split("\n")[0].trim();
+  if (line.length <= TITLE_CHARS) return line;
+  return line.slice(0, TITLE_CHARS).replace(/\s+\S*$/, "") + "…";
 }
 
 function promptText(content: ContentBlock[]): string {

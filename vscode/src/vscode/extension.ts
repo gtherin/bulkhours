@@ -4,7 +4,11 @@ import * as vscode from "vscode";
 import { parseAgents } from "../core/agents.ts";
 import { pickLang, t, type Lang } from "../core/i18n.ts";
 import { budgetText, level } from "../core/meter.ts";
-import { parseSchool } from "../core/school.ts";
+import { parseSchool, type School } from "../core/school.ts";
+import { offeredUpdate } from "../core/update.ts";
+import { writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { ChatView } from "./chatView.ts";
 import { Credentials } from "./credentials.ts";
 
@@ -29,7 +33,59 @@ export function activate(ctx: vscode.ExtensionContext): void {
     vscode.commands.registerCommand("bulkhours.signIn", () => creds.signIn()),
     vscode.commands.registerCommand("bulkhours.signOut", () => creds.signOut()),
     vscode.commands.registerCommand("bulkhours.pickAgent", () => pickAgent(creds, chat, lang)),
+    vscode.commands.registerCommand("bulkhours.history", () => history(chat, lang)),
+    vscode.commands.registerCommand("bulkhours.rename", () => rename(chat, lang)),
+    // Restarts the extensions without reloading the window.
+    vscode.commands.registerCommand("bulkhours.restart", () => vscode.commands.executeCommand("workbench.action.restartExtensionHost")),
+    vscode.commands.registerCommand("bulkhours.update", () => update(ctx, school, lang, true)),
   );
+  // Once a day at most, a quiet look for a newer build in the download area.
+  const DAY = 86_400_000;
+  if (Date.now() - (ctx.globalState.get<number>("bulkhours.updateChecked") ?? 0) > DAY) {
+    void ctx.globalState.update("bulkhours.updateChecked", Date.now());
+    void update(ctx, school, lang, false);
+  }
+}
+
+// The project's conversations, newest first; picking one reopens it.
+export async function history(chat: Pick<ChatView, "conversations" | "open">, lang: Lang = "en"): Promise<void> {
+  const list = chat.conversations();
+  if (!list.length) { void vscode.window.showInformationMessage(t(lang, "historyEmpty")); return; }
+  const when = new Intl.DateTimeFormat(lang === "fr" ? "fr-FR" : "en-GB", { dateStyle: "medium", timeStyle: "short" });
+  const pick = await vscode.window.showQuickPick(list.map((c) => ({
+    label: c.title, description: `${c.agent} · ${c.model}`,
+    detail: t(lang, "historyDetail", { date: when.format(c.updated), n: c.questions }), file: c.file,
+  })), { placeHolder: t(lang, "historyPlaceholder"), matchOnDescription: true });
+  if (pick) await chat.open(pick.file);
+}
+
+export async function rename(chat: Pick<ChatView, "rename" | "title">, lang: Lang = "en"): Promise<void> {
+  const title = await vscode.window.showInputBox({ prompt: t(lang, "renamePrompt"), value: chat.title });
+  if (title) await chat.rename(title);
+}
+
+// A newer build from the school's download area, installed in place.
+async function update(ctx: vscode.ExtensionContext, school: School, lang: Lang, asked: boolean): Promise<void> {
+  const current = String(ctx.extension.packageJSON.version);
+  if (!school.downloadUrl) { if (asked) void vscode.window.showInformationMessage(t(lang, "updateUnavailable")); return; }
+  try {
+    const r = await fetch(new URL("latest.json", school.downloadUrl).toString(), { cache: "no-store" });
+    const offer = r.ok ? offeredUpdate(await r.json() as Record<string, unknown>, school.id, current, school.downloadUrl) : undefined;
+    if (!offer) { if (asked) void vscode.window.showInformationMessage(t(lang, "upToDate", { version: current })); return; }
+    if (!asked) {
+      const go = await vscode.window.showInformationMessage(t(lang, "updateAvailable", { version: offer.version }), t(lang, "updateNow"));
+      if (!go) return;
+    }
+    const vsix = await fetch(offer.url);
+    if (!vsix.ok) throw new Error(`${offer.url} answered ${vsix.status}`);
+    const file = join(tmpdir(), `bulkhours-${school.id}-${offer.version}.vsix`);
+    writeFileSync(file, Buffer.from(await vsix.arrayBuffer()));
+    await vscode.commands.executeCommand("workbench.extensions.installExtension", vscode.Uri.file(file));
+    const reload = await vscode.window.showInformationMessage(t(lang, "updated", { version: offer.version }), t(lang, "reloadNow"));
+    if (reload) await vscode.commands.executeCommand("workbench.action.reloadWindow");
+  } catch (e) {
+    if (asked) void vscode.window.showWarningMessage(t(lang, "updateFailed", { message: (e as Error).message }));
+  }
 }
 
 // The school's agent, or one of the student's own `bulkhours.extraAgents`.

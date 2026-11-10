@@ -2,7 +2,7 @@
   "name": "bulkhours",
   "displayName": "BulkHours",
   "description": "A coding assistant for students: chat with an agent that reads and edits your workspace, on your school's credits.",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "publisher": "gateka",
   "license": "MIT",
   "repository": {
@@ -67,14 +67,58 @@
         "command": "bulkhours.pickAgent",
         "title": "%command.pickAgent%",
         "category": "BulkHours"
+      },
+      {
+        "command": "bulkhours.history",
+        "title": "%command.history%",
+        "category": "BulkHours",
+        "icon": "$(history)"
+      },
+      {
+        "command": "bulkhours.rename",
+        "title": "%command.rename%",
+        "category": "BulkHours",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "bulkhours.restart",
+        "title": "%command.restart%",
+        "category": "BulkHours",
+        "icon": "$(debug-restart)"
+      },
+      {
+        "command": "bulkhours.update",
+        "title": "%command.update%",
+        "category": "BulkHours",
+        "icon": "$(cloud-download)"
       }
     ],
     "menus": {
       "view/title": [
         {
+          "command": "bulkhours.history",
+          "when": "view == bulkhours.chat",
+          "group": "navigation@1"
+        },
+        {
           "command": "bulkhours.newChat",
           "when": "view == bulkhours.chat",
-          "group": "navigation"
+          "group": "navigation@2"
+        },
+        {
+          "command": "bulkhours.rename",
+          "when": "view == bulkhours.chat",
+          "group": "1_conversation@1"
+        },
+        {
+          "command": "bulkhours.restart",
+          "when": "view == bulkhours.chat",
+          "group": "2_extension@1"
+        },
+        {
+          "command": "bulkhours.update",
+          "when": "view == bulkhours.chat",
+          "group": "2_extension@2"
         }
       ]
     },

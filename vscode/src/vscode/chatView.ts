@@ -9,7 +9,7 @@ import { MESSAGES, Said, sayError, t, type Lang, type MessageKey } from "../core
 import type { Key } from "../core/keys.ts";
 import type { School } from "../core/school.ts";
 import { addNotice, addUserPrompt, applyUpdate, type Transcript } from "../core/transcript.ts";
-import { condensed, ConversationStore, stateRoot, type Conversation } from "../core/conversationStore.ts";
+import { condensed, ConversationStore, stateRoot, type Conversation, type Opened, type Summary } from "../core/conversationStore.ts";
 import { homedir } from "node:os";
 import type { Credentials } from "./credentials.ts";
 import { readTextFile, writeTextFile } from "./editorHost.ts";
@@ -103,6 +103,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
     this.forget();
     this.conversation = undefined;
     this.prime = false;
+    this.showTitle("");
     this.transcript = [];
     this.usage = null;
     void this.render();
@@ -118,14 +119,48 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
       this.store.prune(KEEP_DAYS);
       const folder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
       const last = folder && !this.transcript.length ? this.store.latest(folder) : undefined;
-      if (!last) return;
-      this.transcript = last.transcript;
-      this.conversation = last.conversation;
-      this.paused = { sessionId: last.header.session, launchKey: `${last.header.agent}|${last.header.model}` };
-      this.prime = true;
+      if (last) this.take(last);
     } catch (e) {
       this.log.append(`conversation record unreadable: ${(e as Error).message}\n`);
     }
+  }
+
+  // Becomes the conversation the panel shows: its messages, its record, and
+  // its agent session resumed at the next message (or handed over).
+  private take(o: Opened): void {
+    this.forget();
+    this.transcript = o.transcript;
+    this.conversation = o.conversation;
+    this.paused = { sessionId: o.header.session, launchKey: `${o.header.agent}|${o.header.model}` };
+    this.prime = o.transcript.length > 0;
+    this.showTitle(o.title);
+  }
+
+  // The project's conversations, newest first (the history).
+  conversations(): Summary[] {
+    const folder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+    try { return folder ? this.store.list(folder) : []; } catch { return []; }
+  }
+
+  async open(file: string): Promise<void> {
+    if (this.busy) return;
+    const o = this.store.read(file);
+    if (!o) return;
+    this.take(o);
+    await this.render();
+  }
+
+  async rename(title: string): Promise<void> {
+    if (!this.conversation || !title.trim()) return;
+    this.conversation.rename(title);
+    this.showTitle(title.trim());
+  }
+
+  get title(): string { return this.view?.description ?? ""; }
+
+  // The conversation's name, beside the panel's own (as Claude Code shows it).
+  private showTitle(title: string): void {
+    if (this.view) this.view.description = title;
   }
 
   // The key lives in memory only, so after a window reload the menu would
@@ -216,6 +251,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
       const preface = earlier ? `The conversation so far (the student may have asked another assistant):\n\n${earlier}` : "";
       this.prime = false;
       this.conversation?.prompt([{ type: "text", text }, ...images.map((i) => ({ type: "image" as const, mimeType: i.mimeType, data: i.data }))]);
+      if (this.conversation && !this.title) this.showTitle(this.store.read(this.conversation.file)?.title ?? "");
       let stop = "error";
       try {
         stop = await session.prompt(text, activeFileContext(), images, preface);
