@@ -2,7 +2,7 @@
   "id": "polytechnique",
   "name": "Polytechnique",
   "accent": "#00205b",
-  "signInUrl": "https://bulkhours.fr/workbench/sign-in?school=polytechnique",
+  "signInUrl": "https://bulkhours.fr/local/hpc/workbench.php?school=polytechnique",
   "keyUrl": "https://bulkhours.fr/api/workbench/key",
   "language": "fr"
 }
