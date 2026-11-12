@@ -46,3 +46,18 @@ test("whatever the agent writes, no tag of its own gets through", () => {
   assert.ok(!/<(img|script|b|i)[\s>]/.test(html), html);
   assert.match(html, /&lt;script&gt;/);
 });
+
+// A tool's output (owner, 2026-11-12: "reduce only if more than 2 lines"):
+// short, it shows as is and wraps; long, it folds behind its first line and
+// its line count.
+test("a short tool output shows as is, a long one folds behind its first line", () => {
+  const { toolOutput } = (globalThis as any).bhMarkdown as { toolOutput(s: string, label: string): string };
+  assert.equal(toolOutput('Error: cannot read "/workspace/dashboards/hormuz/app.py"', "output"),
+    '<pre class="out">Error: cannot read &quot;/workspace/dashboards/hormuz/app.py&quot;</pre>');
+  assert.equal(toolOutput("a\nb\n", "output"), '<pre class="out">a\nb</pre>', "two lines, a trailing newline: still short");
+  assert.equal(toolOutput("one\ntwo\nthree", "output"),
+    '<details><summary>output · one … (3 lines)</summary><pre class="out">one\ntwo\nthree</pre></details>');
+  assert.match(toolOutput("x".repeat(400), "output"), /^<details>/, "one line, but very long: folded");
+  assert.equal(toolOutput("  ", "output"), "", "nothing to show");
+  assert.match(toolOutput("<b>\n2\n3", "output"), /summary>output · &lt;b&gt; …/, "escaped, even in the preview");
+});

@@ -106,5 +106,20 @@
     }).join("");
   }
 
-  globalThis.bhMarkdown = { markdown, inline, esc };
+  // A tool's output: two short lines or fewer show as is (and wrap); more
+  // fold behind the first line and the line count (owner, 2026-11-12).
+  const SHORT_LINES = 2, SHORT_CHARS = 240, PREVIEW = 60, MAX = 4000;
+  function toolOutput(text, label) {
+    const s = String(text).replace(/\s+$/, "");
+    if (!s.trim()) return "";
+    const lines = s.split("\n");
+    const body = `<pre class="out">${esc(s.slice(0, MAX))}</pre>`;
+    if (lines.length <= SHORT_LINES && s.length <= SHORT_CHARS) return body;
+    const first = lines[0].trim();
+    const preview = first.length > PREVIEW ? `${first.slice(0, PREVIEW)}…` : first;
+    const count = lines.length > 1 ? ` (${lines.length} lines)` : "";
+    return `<details><summary>${esc(label)} · ${esc(preview)} …${count}</summary>${body}</details>`;
+  }
+
+  globalThis.bhMarkdown = { markdown, inline, esc, toolOutput };
 })();

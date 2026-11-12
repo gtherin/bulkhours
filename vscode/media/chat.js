@@ -25,14 +25,14 @@
 
   // The agent's Markdown: media/markdown.js (headings, lists, tables, quotes,
   // code), escaped first, tested on its own (test/markdown.test.ts).
-  const { markdown, inline } = globalThis.bhMarkdown;
+  const { markdown, inline, toolOutput } = globalThis.bhMarkdown;
 
   const STATUS = { pending: "…", in_progress: "⟳", completed: "✓", failed: "✗" };
 
   function tool(e) {
     const diffs = e.diffs.map((d) =>
       `<details><summary>${esc(d.path)}</summary><pre class="diff">${diffLines(d.oldText, d.newText)}</pre></details>`).join("");
-    const out = e.output ? `<details><summary>${esc(W.output)}</summary><pre>${esc(e.output.slice(0, 4000))}</pre></details>` : "";
+    const out = e.output ? toolOutput(e.output, W.output) : "";
     return `<div class="tool ${e.status}"><span class="st">${STATUS[e.status] || ""}</span> ${esc(e.title)}${diffs}${out}</div>`;
   }
 

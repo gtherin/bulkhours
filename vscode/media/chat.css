@@ -71,8 +71,12 @@ a { color: var(--vscode-textLink-foreground); }
 .thought summary, .tool summary { cursor: pointer; color: var(--muted); }
 .tool { align-self: flex-start; max-width: 100%; font-size: .9em; color: var(--muted); padding: 3px 10px;
   border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
-.tool:has(details) { border-radius: var(--radius-sm); }
+.tool:has(details), .tool:has(pre) { border-radius: var(--radius-sm); }
 .tool .st { display: inline-block; width: 1.1em; }
+/* A tool's output wraps instead of scrolling sideways: an error is read whole. */
+.tool pre.out { white-space: pre-wrap; overflow-wrap: anywhere; overflow-x: visible; margin: 6px 0 2px; }
+.tool.failed pre.out { color: var(--vscode-errorForeground); }
+.tool details summary { overflow-wrap: anywhere; }
 .tool.completed .st { color: var(--vscode-gitDecoration-addedResourceForeground, var(--accent)); }
 .tool.failed .st { color: var(--vscode-errorForeground); }
 .diff .add { color: var(--vscode-gitDecoration-addedResourceForeground); }

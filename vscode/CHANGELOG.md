@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.29 — 2026-11-12
+
+- A tool's output is folded only when it is long: two short lines or fewer show as they are (an error is read at once), wrapped instead of scrolling sideways; longer ones fold behind their first line and their line count.
+
 ## 0.1.28 — 2026-11-12
 
 - You, always in view: your name in the status bar (far left) and your avatar at the end of the panel's tab strip (MaQI: the picture Git and the portal show) both open the platform's links. Variants without links show neither.
