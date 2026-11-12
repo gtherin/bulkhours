@@ -262,7 +262,8 @@ export class Tab {
     const dir = this.host.store.sessionDir(this.name);
     return `[session "${this.name}"] Run directory, outside the project: ${dir}. `
       + `What serves this session only goes there, never in the project: code that only displays or renders results in ${dir}/tools/, `
-      + `pages to show the person as .html files in ${dir}/renders/ (the panel links each one). Product code stays in the project.`;
+      + `pages to show the person in ${dir}/renders/ - an .html file, or for a page you SERVE (a dashboard, a monitor) a file <name>.url `
+      + `holding its address, e.g. http://localhost:8501/ (the panel links each one). Product code stays in the project.`;
   }
 
   private armIdle(): void {

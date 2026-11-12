@@ -253,3 +253,16 @@ test("a record says whether its last request was answered, and whether an agent 
   c.prompt([{ type: "text", text: "second" }]);
   assert.deepEqual([store.read(c.file)!.pending, store.read(c.file)!.started], [true, true], "interrupted: pending, but not a fresh one");
 });
+
+// A page that is SERVED (a Streamlit or marimo app, a monitoring page) is a
+// link file: renders/<name>.url holding its address (owner, 2026-11-12:
+// "adapt the hormuz conversation and the monitoring with it").
+test("a served page is a .url file in the renders folder: its address, http(s) only", () => {
+  const r = root(); const store = new ConversationStore(r);
+  const name = store.reserve("hormuz"); const dir = store.rendersDir(name); mkdir(dir, { recursive: true });
+  write(join(dir, "dashboard.url"), "http://localhost:8501/\n# the Hormuz dashboard (streamlit)\n");
+  write(join(dir, "bad.url"), "file:///etc/passwd\n"); write(join(dir, "empty.url"), "\n");
+  write(join(dir, "report.html"), "<p>x</p>");
+  const pages = store.renders(name);
+  assert.deepEqual(pages.map((p) => [p.name, p.url ?? null]).sort(), [["dashboard", "http://localhost:8501/"], ["report.html", null]]);
+});

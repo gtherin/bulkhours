@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.42 — 2026-11-12
+
+- A session's served pages: a file renders/<name>.url holding an address (a Streamlit or marimo dashboard, a monitoring page) is a link in the panel too. An address on the machine opens in a tab beside the code, through VS Code's way to a local port; another address opens in the browser.
+
 ## 0.1.41 — 2026-11-12
 
 - A conversation another tool prepared for the folder (a record with its first request written and never run) opens as its own tab when the panel loads, with a Start button that runs that request as it is. Before, it was one more line in the list, and nothing ran it.

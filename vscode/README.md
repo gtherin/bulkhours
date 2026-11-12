@@ -87,6 +87,7 @@ dot-folder of the home:
         session.json                 its status, for monitoring pages
         tools/                       code that only displays or renders results
         renders/*.html               its pages: each one is a link in the panel
+        renders/*.url                a SERVED page (dashboard, monitor): its address
       agents/<agent id>/             an agent's own files: ${agentHome}
 
 `GATEKA_STATE_HOME`, then the person's setting `<prefix>.stateDirectory`, move

@@ -6,12 +6,12 @@ import { chooseAgent, chooseModel } from "../core/choices.ts";
 import { MESSAGES, sayError, t, type Lang, type MessageKey } from "../core/i18n.ts";
 import type { Key } from "../core/keys.ts";
 import type { School } from "../core/school.ts";
-import { ConversationStore, stateRoot, type Opened, type Summary } from "../core/conversationStore.ts";
+import { ConversationStore, stateRoot, type Opened, type Page, type Summary } from "../core/conversationStore.ts";
 import { homedir } from "node:os";
 import type { KeySource } from "./credentials.ts";
 import { Tab, type Pasted, type TabHost } from "./tab.ts";
 import { avatarData, type FileRef } from "../core/fileLinks.ts";
-import { showPage } from "./renderEditor.ts";
+import { showLink, showPage } from "./renderEditor.ts";
 import { userInfo } from "node:os";
 import { existsSync } from "node:fs";
 import { isAbsolute, join } from "node:path";
@@ -265,7 +265,11 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
         return tab.runPending();
       case "openRender":
         // Only a page the list offered: the panel never names a file of its own.
-        if (this.rendersOf(this.active, true).some((r) => r.file === m.file)) showPage(m.file, this.lang);
+        {
+          const page = this.rendersOf(this.active, true).find((r) => r.file === m.file);
+          if (page?.url) await showLink(page.url);
+          else if (page) showPage(page.file, this.lang);
+        }
         return;
       case "openConversation":
         // Only one the list offered: the page never names a file of its own.
@@ -443,8 +447,8 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
 
   // The shown session's pages (its renders folder), read at most every two
   // seconds: the panel is redrawn at every chunk of an answer.
-  private rendersCache: { tab: number; at: number; list: { name: string; file: string; updated: number }[] } | undefined;
-  private rendersOf(tab: Tab, fresh = false): { name: string; file: string; updated: number }[] {
+  private rendersCache: { tab: number; at: number; list: Page[] } | undefined;
+  private rendersOf(tab: Tab, fresh = false): Page[] {
     if (!tab.name) return [];
     const c = this.rendersCache;
     if (!fresh && c && c.tab === tab.id && Date.now() - c.at < 2000) return c.list;
@@ -469,7 +473,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
       tabs: JSON.parse(this.strip), tab: tab.id,
       avatar: this.avatar ?? null, hasLinks: this.school.links.length > 0,
       recent: tab.empty ? this.recent() : [],
-      renders: this.rendersOf(tab).map(({ name, file }) => ({ name, file })),
+      renders: this.rendersOf(tab).map(({ name, file, url }) => ({ name, file, ...(url ? { url } : {}) })),
       pending: Boolean(tab.pending) && !tab.busy,
     });
   }

@@ -39,7 +39,9 @@ mock.module("vscode", {
 
 // The page viewer is VS Code's (a webview panel): here, what it was asked to show.
 const pages: string[] = [];
-mock.module("../src/vscode/renderEditor.ts", { namedExports: { showPage: (file: string) => { pages.push(file); } } });
+const links: string[] = [];
+mock.module("../src/vscode/renderEditor.ts", { namedExports: { showPage: (file: string) => { pages.push(file); },
+  showLink: async (url: string) => { links.push(url); } } });
 
 const { ChatView } = await import("../src/vscode/chatView.ts");
 
@@ -675,6 +677,14 @@ test("a session is named at its first question; its agent is told its name and r
   await p.send({ type: "openRender", file: "/etc/passwd" });
   await p.send({ type: "openRender", file: p.last().renders[0].file });
   assert.deepEqual(pages, [join(state, "sessions", "whoami-now", "renders", "explorer.html")], "only a listed page opens");
+  // a served page: a .url file, opened as an address
+  writeFileSync(join(state, "sessions", "whoami-now", "renders", "dashboard.url"), "http://localhost:8501/\n");
+  await new Promise((r) => setTimeout(r, 2100));
+  await p.send({ type: "model", model: "fast" });
+  const served = p.last().renders.find((x: any) => x.name === "dashboard");
+  assert.equal(served.url, "http://localhost:8501/");
+  await p.send({ type: "openRender", file: served.file });
+  assert.deepEqual(links, ["http://localhost:8501/"]);
   const read = () => JSON.parse(readFileSync(join(state, "sessions", "whoami-now", "session.json"), "utf8"));
   assert.deepEqual([read().state, read().questions, read().title, read().name], ["idle", 1, "whoami now", "whoami-now"]);
   const turn = p.send({ type: "send", text: "wait" });

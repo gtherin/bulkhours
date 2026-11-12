@@ -215,7 +215,7 @@
     const list = s.signedIn ? (s.renders || []) : [];
     pagesRow.hidden = !list.length;
     pagesRow.innerHTML = list.length ? `<span class="lbl">${esc(W.rendersTitle)}</span>` + list.map((r, i) =>
-      `<button type="button" data-i="${i}" title="${esc(r.file)}">${esc(r.name)}</button>`).join("") : "";
+      `<button type="button" data-i="${i}" title="${esc(r.url || r.file)}">${esc(r.url ? `${r.name} ↗` : r.name)}</button>`).join("") : "";
     pagesRow.querySelectorAll("button").forEach((b) => b.onclick = () => vscode.postMessage({ type: "openRender", file: list[Number(b.dataset.i)].file }));
   }
 

@@ -28,7 +28,7 @@
 // holds many students), never in the project (it may be shared or in git),
 // never synced. Pruned after a retention.
 import { createHash, randomUUID } from "node:crypto";
-import { appendFileSync, chmodSync, closeSync, existsSync, mkdirSync, openSync, readdirSync, readSync, realpathSync, renameSync, statSync, unlinkSync, writeFileSync } from "node:fs";
+import { appendFileSync, chmodSync, closeSync, existsSync, mkdirSync, openSync, readdirSync, readFileSync, readSync, realpathSync, renameSync, statSync, unlinkSync, writeFileSync } from "node:fs";
 import { basename, join } from "node:path";
 import type { ContentBlock, SessionUpdate } from "@agentclientprotocol/sdk";
 import { addUserPrompt, applyUpdate, type Entry, type Transcript } from "./transcript.ts";
@@ -66,6 +66,9 @@ export type Summary = { file: string; title: string; name: string; fresh: boolea
 export type Status = { name: string; title: string; cwd: string; agent: string; model: string;
   state: "working" | "waiting" | "idle"; since: number | null; last: number | null; tool: string;
   questions: number; updated: number; record: string };
+
+// A session's page: a file to show, or (url) the address of a served page.
+export type Page = { name: string; file: string; updated: number; url?: string };
 
 // Pages a session's tab links at most.
 const RENDERS_SHOWN = 12;
@@ -238,15 +241,24 @@ export class ConversationStore {
   // code (owner, 2026-11-12).
   rendersDir(name: string): string { return join(this.sessionDir(name), "renders"); }
 
-  // The session's pages: the html files of its renders folder, newest first.
-  renders(name: string): { name: string; file: string; updated: number }[] {
+  // The session's pages, newest first: the html files of its renders folder,
+  // and its SERVED pages - <name>.url, a file whose first line is the address
+  // of a page something serves (a Streamlit or marimo app, a monitor).
+  renders(name: string): Page[] {
     const dir = this.rendersDir(name);
     let names: string[];
     try { names = readdirSync(dir); } catch { return []; }
-    return names.filter((f) => /\.html?$/i.test(f)).map((f) => {
+    return names.map((f): Page | undefined => {
       const file = join(dir, f);
-      try { const st = statSync(file); return st.isFile() ? { name: f, file, updated: st.mtimeMs } : undefined; } catch { return undefined; }
-    }).filter((x): x is { name: string; file: string; updated: number } => Boolean(x))
+      try {
+        const st = statSync(file);
+        if (!st.isFile()) return undefined;
+        if (/\.html?$/i.test(f)) return { name: f, file, updated: st.mtimeMs };
+        if (!/\.url$/i.test(f) || st.size > 4096) return undefined;
+        const url = readFileSync(file, "utf8").split("\n")[0].trim();
+        return /^https?:\/\/[^\s"<>]+$/.test(url) ? { name: f.replace(/\.url$/i, ""), file, updated: st.mtimeMs, url } : undefined;
+      } catch { return undefined; }
+    }).filter((x): x is Page => Boolean(x))
       .sort((a, b) => b.updated - a.updated || (a.name < b.name ? -1 : 1)).slice(0, RENDERS_SHOWN);
   }
 

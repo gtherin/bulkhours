@@ -45,6 +45,19 @@ export function showPage(file: string, lang: Lang): void {
   draw();
 }
 
+// A session's SERVED page (renders/<name>.url): an address on this machine
+// opens in a tab beside the code, through VS Code's own way to a local port
+// (code-server: its /proxy/<port>/, behind the same sign-in); any other
+// address opens in the person's browser.
+export async function showLink(url: string): Promise<void> {
+  if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/|$)/.test(url)) {
+    const reachable = await vscode.env.asExternalUri(vscode.Uri.parse(url));
+    await vscode.commands.executeCommand("simpleBrowser.show", reachable.toString(true));
+  } else {
+    await vscode.env.openExternal(url as unknown as vscode.Uri);
+  }
+}
+
 export class RenderEditor implements vscode.CustomReadonlyEditorProvider {
   private readonly prefix: string;
   private readonly lang: Lang;
