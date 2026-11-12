@@ -76,6 +76,33 @@ Sign-in opens `signInUrl` with `redirect` (a `vscode://` link back to the
 extension) and `state`; the page sends the student back to
 `<redirect>?token=…&state=…`. The token is kept in VS Code's secret storage.
 
+## Where state lives: one rule
+
+Everything the extension and its agents keep is under XDG, never in a
+dot-folder of the home:
+
+    $XDG_STATE_HOME/<name>/          ~/.local/state/<name>/   (<name>: the variant's
+      conversations/                 `stateName`, gateka by default)
+      sessions/<session name>/       a session's run directory
+        session.json                 its status, for monitoring pages
+        tools/                       code that only displays or renders results
+        renders/*.html               its pages: each one is a link in the panel
+      agents/<agent id>/             an agent's own files: ${agentHome}
+
+`GATEKA_STATE_HOME`, then the person's setting `<prefix>.stateDirectory`, move
+the whole folder. **Any agent that speaks ACP fits** (dsh, OpenCode, Gemini
+CLI, Claude Code...): its spec - from the key server, or the person's
+`<prefix>.extraAgents` - gives the command, and points the agent's own
+storage variable at `${agentHome}`:
+
+    { "id": "dsh", "label": "dsh", "command": "dsh", "args": ["--profile", "acp"],
+      "env": { "DSH_HOME": "${agentHome}" } }
+
+Every agent also receives `GATEKA_STATE_HOME`, `GATEKA_AGENT_HOME`,
+`GATEKA_SESSION_NAME` and `GATEKA_SESSION_DIR`. An agent that holds the
+person's own login (Claude Code, Codex) is left where it is: moving it would
+sign them out (ADR-0223).
+
 ## Conversations
 
 Each conversation is recorded by the extension, whatever agent answered, in

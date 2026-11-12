@@ -209,8 +209,19 @@
   let shown = 0;          // entries already drawn: only new ones fade in
   let shownTab = 0;       // another tab shown: its entries do not fade in
 
+  // The session's pages (its renders folder): one link each, under the tabs.
+  const pagesRow = $("renders");
+  function pages(s) {
+    const list = s.signedIn ? (s.renders || []) : [];
+    pagesRow.hidden = !list.length;
+    pagesRow.innerHTML = list.length ? `<span class="lbl">${esc(W.rendersTitle)}</span>` + list.map((r, i) =>
+      `<button type="button" data-i="${i}" title="${esc(r.file)}">${esc(r.name)}</button>`).join("") : "";
+    pagesRow.querySelectorAll("button").forEach((b) => b.onclick = () => vscode.postMessage({ type: "openRender", file: list[Number(b.dataset.i)].file }));
+  }
+
   function render(s) {
     tabs(s);
+    pages(s);
     if (!s.signedIn) {
       // Signed in by the machine (MaQI's key file): nothing to click here.
       log.innerHTML = s.interactive === false ? `<div class="welcome"><p>${esc(W.platformOnly)}</p></div>`

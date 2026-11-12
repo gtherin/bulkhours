@@ -4,7 +4,8 @@
 import * as vscode from "vscode";
 import type { RequestPermissionOutcome, RequestPermissionRequest, SessionUpdate } from "@agentclientprotocol/sdk";
 import { AgentSession } from "../core/acpSession.ts";
-import { launchFor, type AgentSpec } from "../core/agents.ts";
+import { agentHome, launchFor, type AgentSpec } from "../core/agents.ts";
+import { mkdirSync } from "node:fs";
 import { MESSAGES, Said, t, type Lang, type MessageKey } from "../core/i18n.ts";
 import type { Key } from "../core/keys.ts";
 import { addNotice, addUserPrompt, applyUpdate, runningTool, type Transcript } from "../core/transcript.ts";
@@ -178,7 +179,7 @@ export class Tab {
       if (this.conversation && !this.title) this.title = this.host.store.read(this.conversation.file)?.title ?? "";
       let stop = "error";
       try {
-        stop = await session.prompt(text, activeFileContext(), images, preface);
+        stop = await session.prompt(text, activeFileContext(), images, preface, this.sessionNote(session));
       } finally {
         this.conversation?.end(stop);
       }
@@ -240,6 +241,18 @@ export class Tab {
     return true;
   }
 
+  // The session's rules, told once to each agent that joins it (not shown in
+  // the conversation): where its run directory is and what goes there.
+  private told: AgentSession | undefined;
+  private sessionNote(session: AgentSession): string {
+    if (this.told === session || session.resumed || !this.name) return "";
+    this.told = session;
+    const dir = this.host.store.sessionDir(this.name);
+    return `[session "${this.name}"] Run directory, outside the project: ${dir}. `
+      + `What serves this session only goes there, never in the project: code that only displays or renders results in ${dir}/tools/, `
+      + `pages to show the person as .html files in ${dir}/renders/ (the panel links each one). Product code stays in the project.`;
+  }
+
   private armIdle(): void {
     clearTimeout(this.idleTimer);
     if (!this.session?.canResume) return;
@@ -282,11 +295,20 @@ export class Tab {
       baseUrl: key.baseUrl, apiKey: key.apiKey, model, extensionPath: this.host.ctx.extensionPath,
       state: this.host.stateDir,
     });
+    // Every agent is told where the state folder and its own home are; the
+    // home is made when its spec uses it (${agentHome}).
+    const home = agentHome(this.host.stateDir, spec.id);
+    if ([...launch.args, ...Object.values(launch.env)].some((v) => v.includes(home))) mkdirSync(home, { recursive: true, mode: 0o700 });
+    launch.env.GATEKA_STATE_HOME = this.host.stateDir;
+    launch.env.GATEKA_AGENT_HOME = home;
     launch.env.BULKHOURS_MODEL = model;
     launch.env.BULKHOURS_BRAND = this.host.brand;
     // The session's own place for what it produces (tools, runs, notes).
     launch.env.GATEKA_SESSION_NAME = this.name;
     launch.env.GATEKA_SESSION_DIR = this.host.store.sessionDir(this.name);
+    // Where its pages go: the panel links every .html found there.
+    launch.env.GATEKA_SESSION_RENDERS = this.host.store.rendersDir(this.name);
+    mkdirSync(launch.env.GATEKA_SESSION_RENDERS, { recursive: true, mode: 0o700 });
     launch.env.BULKHOURS_MODELS = key.models.join(",");
     launch.env.BULKHOURS_VISION_MODELS = this.host.vision(key).join(",");
     const resume = this.paused?.launchKey === launchKey ? this.paused.sessionId : undefined;

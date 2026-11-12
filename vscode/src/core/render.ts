@@ -27,6 +27,19 @@ export const RENDER_CSP = "default-src 'none'; script-src https://cdn.jsdelivr.n
   + "style-src https://cdn.jsdelivr.net 'unsafe-inline'; font-src https://cdn.jsdelivr.net data:; "
   + "img-src data: blob: https://cdn.jsdelivr.net; worker-src blob:; connect-src 'none';";
 
+// A session's own page (<run directory>/renders/*.html), shown in a tab: its
+// files beside it resolve (base), scripts may come from the page and from the
+// usual chart CDNs, pictures and data only from the page itself, and nothing
+// can be sent anywhere - a picture address is a way out too.
+const CDNS = "https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn.plot.ly https://unpkg.com";
+export function pageHtml(html: string, baseHref: string, source: string): string {
+  const csp = `default-src 'none'; script-src ${source} 'unsafe-inline' 'unsafe-eval' ${CDNS}; `
+    + `style-src ${source} 'unsafe-inline' ${CDNS}; font-src ${source} data: ${CDNS}; `
+    + `img-src ${source} data: blob:; media-src ${source} data: blob:; worker-src blob:; connect-src 'none';`;
+  const head = `<meta http-equiv="Content-Security-Policy" content="${csp}"><base href="${baseHref}">`;
+  return /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, (h) => `${h}${head}`) : `${head}${html}`;
+}
+
 export function showable(html: string): string {
   const meta = `<meta http-equiv="Content-Security-Policy" content="${RENDER_CSP}">`;
   return /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, (h) => `${h}${meta}`) : `${meta}${html}`;

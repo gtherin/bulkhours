@@ -33,18 +33,19 @@ import { basename, join } from "node:path";
 import type { ContentBlock, SessionUpdate } from "@agentclientprotocol/sdk";
 import { addUserPrompt, applyUpdate, type Entry, type Transcript } from "./transcript.ts";
 
-// Where conversations and the agents' own files live: GATEKA_STATE_HOME, then
-// the student's setting (<prefix>.stateDirectory), then the variant's config
-// file (stateDir, e.g. ~/.maqi), then XDG. Only an absolute or ~ path counts.
+// Where conversations, sessions and the agents' own files live. One rule,
+// XDG (owner, 2026-11-12: "use the .local as behaviour"):
+//   $XDG_STATE_HOME/<name>, i.e. ~/.local/state/<name>
+// where <name> is the variant's (stateName; gateka by default). No dot-folder
+// in the home. GATEKA_STATE_HOME, then the person's own setting
+// (<prefix>.stateDirectory, an absolute or ~ path), come first.
 export function stateRoot(env: Record<string, string | undefined>, home: string,
-                          chosen: { setting?: string; variant?: string } = {}): string {
+                          chosen: { setting?: string; name?: string } = {}): string {
   if (env.GATEKA_STATE_HOME) return env.GATEKA_STATE_HOME;
-  for (const dir of [chosen.setting, chosen.variant]) {
-    const d = dir?.trim() ?? "";
-    if (d.startsWith("/")) return d;
-    if (d === "~" || d.startsWith("~/")) return join(home, d.slice(1));
-  }
-  return join(env.XDG_STATE_HOME || join(home, ".local", "state"), "gateka");
+  const d = chosen.setting?.trim() ?? "";
+  if (d.startsWith("/")) return d;
+  if (d === "~" || d.startsWith("~/")) return join(home, d.slice(1));
+  return join(env.XDG_STATE_HOME || join(home, ".local", "state"), chosen.name || "gateka");
 }
 
 export type Header = { agent: string; session: string; model: string; school: string; cwd: string; name?: string };
@@ -64,6 +65,9 @@ export type Summary = { file: string; title: string; name: string; updated: numb
 export type Status = { name: string; title: string; cwd: string; agent: string; model: string;
   state: "working" | "waiting" | "idle"; since: number | null; last: number | null; tool: string;
   questions: number; updated: number; record: string };
+
+// Pages a session's tab links at most.
+const RENDERS_SHOWN = 12;
 
 // A name fit for a directory: lowercase letters, digits, dots and dashes.
 const NAME_CHARS = 40;
@@ -227,6 +231,23 @@ export class ConversationStore {
 
   // Where a session's own files live: tools, launchers, notes, session.json.
   sessionDir(name: string): string { return join(this.root, "sessions", slug(name)); }
+
+  // What the session shows: pages its agent or its tools write. The code that
+  // makes them is the session's too (<run directory>/tools/), never product
+  // code (owner, 2026-11-12).
+  rendersDir(name: string): string { return join(this.sessionDir(name), "renders"); }
+
+  // The session's pages: the html files of its renders folder, newest first.
+  renders(name: string): { name: string; file: string; updated: number }[] {
+    const dir = this.rendersDir(name);
+    let names: string[];
+    try { names = readdirSync(dir); } catch { return []; }
+    return names.filter((f) => /\.html?$/i.test(f)).map((f) => {
+      const file = join(dir, f);
+      try { const st = statSync(file); return st.isFile() ? { name: f, file, updated: st.mtimeMs } : undefined; } catch { return undefined; }
+    }).filter((x): x is { name: string; file: string; updated: number } => Boolean(x))
+      .sort((a, b) => b.updated - a.updated || (a.name < b.name ? -1 : 1)).slice(0, RENDERS_SHOWN);
+  }
 
   // The session's status, for monitoring pages: whole or not at all.
   writeStatus(name: string, status: Status): void {

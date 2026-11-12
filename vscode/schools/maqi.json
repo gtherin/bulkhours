@@ -4,7 +4,7 @@
   "title": "MaQI",
   "prefix": "maqi",
   "accent": "#61b45c",
-  "stateDir": "~/.maqi",
+  "stateName": "maqi",
   "downloadUrl": "https://bulkhours.fr/bkfpage/vscode/",
   "language": "fr",
   "avatar": "https://git.maqi.ai.msct.fr/user/avatar/${user}/64",

@@ -10,15 +10,25 @@ export type AgentSpec = {
 };
 
 // What an agent's command, arguments and environment may refer to as ${name}.
-// `state` is Gateka's state folder ($XDG_STATE_HOME/gateka): a school's own
-// agent keeps its files under it (dsh: DSH_HOME=${state}/agents/dsh).
+// `state` is the variant's state folder ($XDG_STATE_HOME/<name>); an agent
+// keeps its files under it, in ${agentHome} (= ${state}/agents/<agent id>).
 export type LaunchVars = { baseUrl: string; apiKey: string; model: string; extensionPath: string; state: string };
 export type Launch = { command: string; args: string[]; env: Record<string, string> };
 
 const PLACEHOLDER = /\$\{([a-zA-Z]+)\}/g;
 
+// An agent's own files (sessions, caches, config) live in ONE place whatever
+// the agent: <state>/agents/<agent id>/. A spec points the agent's own
+// variable at it with ${agentHome} - dsh: DSH_HOME, OpenCode: its XDG_*
+// folders, another agent: whatever it reads (owner, 2026-11-12).
+export function agentHome(state: string, id: string): string {
+  const safe = id.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "agent";
+  return `${state}/agents/${safe}`;
+}
+
 export function launchFor(spec: AgentSpec, vars: LaunchVars): Launch {
   const fill = (s: string) => s.replace(PLACEHOLDER, (_, name: string) => {
+    if (name === "agentHome") return agentHome(vars.state, spec.id);
     if (name in vars) return vars[name as keyof LaunchVars];
     throw new Error(`unknown placeholder \${${name}} in agent ${spec.id}`);
   });

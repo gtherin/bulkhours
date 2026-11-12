@@ -54,3 +54,16 @@ test("an agent's environment must map names to strings", () => {
   assert.deepEqual(parseAgents([{ id: "a", label: "A", command: "x", env: { A: "1" } }])[0].env, { A: "1" });
   assert.deepEqual(parseAgents([{ id: "a", label: "A", command: "x", env: null }])[0].env, {}, "null reads as no environment");
 });
+
+// One rule for every agent's own files (owner, 2026-11-12: "a generic way...
+// dsh, opencode, gemini or others"): <state>/agents/<agent id>/, which a spec
+// points its agent's own variable at with ${agentHome}.
+test("every agent has a home under the state folder, which its spec can name", async () => {
+  const { agentHome } = await import("../src/core/agents.ts");
+  assert.equal(agentHome("/st", "dsh"), "/st/agents/dsh");
+  assert.equal(agentHome("/st", "Open Code/../x"), "/st/agents/open-code-x", "an id is never a path");
+  const opencode: AgentSpec = { id: "opencode", label: "OpenCode", command: "opencode", args: ["acp"],
+    env: { XDG_DATA_HOME: "${agentHome}/data", OPENCODE_CONFIG: "${agentHome}/opencode.json" } };
+  assert.deepEqual(launchFor(opencode, creds).env, { XDG_DATA_HOME: "/st/agents/opencode/data", OPENCODE_CONFIG: "/st/agents/opencode/opencode.json" });
+  assert.deepEqual(launchFor({ ...dsh, id: "dsh", env: { DSH_HOME: "${agentHome}" } }, creds).env, { DSH_HOME: "/st/agents/dsh" });
+});

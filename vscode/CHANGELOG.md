@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.38 — 2026-11-12
+
+- One rule for where state lives: XDG, ~/.local/state/<name> (the variant's `stateName`, gateka by default) - no dot-folder in the home. MaQI moves from ~/.maqi to ~/.local/state/maqi; a variant file still naming `stateDir` is refused at build.
+- One rule for every agent's own files: <state>/agents/<agent id>/, which a spec names with ${agentHome} (dsh: DSH_HOME, OpenCode: its XDG folders, another agent: its own variable). Every agent is told GATEKA_STATE_HOME and GATEKA_AGENT_HOME.
+- A session's pages: each session has a renders folder (<run directory>/renders/); every .html file there is a link under the panel's tabs, opened in a tab beside the code and shown again when the file changes. The page may use its own files and the usual chart CDNs, and can send nothing anywhere.
+- The agent is told the session's rules once: code that only displays or renders results goes in <run directory>/tools/, pages in <run directory>/renders/, product code stays in the project (GATEKA_SESSION_RENDERS names the folder).
+
 ## 0.1.37 — 2026-11-12
 
 - Each conversation is a named session. Its name (a slug of its first question, or the one a tool wrote in the record's header) is claimed once with its run directory, <state>/sessions/<name>/, and never changes; renaming a tab changes its title only. The agent is told GATEKA_SESSION_NAME and GATEKA_SESSION_DIR.

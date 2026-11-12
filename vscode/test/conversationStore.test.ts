@@ -18,13 +18,15 @@ test("the state folder follows XDG, and GATEKA_STATE_HOME wins", () => {
   assert.equal(stateRoot({}, "/home/a"), "/home/a/.local/state/gateka");
 });
 
-// Owner 2026-11-12: "the directory for maqi should be .maqi" - a variant's
-// config file names its folder, the student's setting can move it.
-test("the state folder: the environment, then the setting, then the variant's file, then XDG", () => {
-  assert.equal(stateRoot({}, "/home/a", { variant: "~/.maqi" }), "/home/a/.maqi");
-  assert.equal(stateRoot({}, "/home/a", { variant: "~/.maqi", setting: "/data/a/maqi" }), "/data/a/maqi");
-  assert.equal(stateRoot({ GATEKA_STATE_HOME: "/s" }, "/home/a", { variant: "~/.maqi", setting: "~/x" }), "/s");
-  assert.equal(stateRoot({}, "/home/a", { variant: "~/.maqi", setting: "  " }), "/home/a/.maqi", "an empty setting is no setting");
+// Owner 2026-11-12, after a day of ~/.maqi and ~/.gateka: "use the .local as
+// behaviour" - one rule, XDG: $XDG_STATE_HOME/<the variant's name>, gateka by
+// default. No dot-folder in the home; the person's setting can still move it.
+test("the state folder: the environment, then the setting, then XDG under the variant's name", () => {
+  assert.equal(stateRoot({}, "/home/a", { name: "maqi" }), "/home/a/.local/state/maqi");
+  assert.equal(stateRoot({ XDG_STATE_HOME: "/x" }, "/home/a", { name: "maqi" }), "/x/maqi");
+  assert.equal(stateRoot({}, "/home/a", { name: "maqi", setting: "/data/a/maqi" }), "/data/a/maqi");
+  assert.equal(stateRoot({ GATEKA_STATE_HOME: "/s" }, "/home/a", { name: "maqi", setting: "~/x" }), "/s");
+  assert.equal(stateRoot({}, "/home/a", { name: "maqi", setting: "  " }), "/home/a/.local/state/maqi", "an empty setting is no setting");
   assert.equal(stateRoot({}, "/home/a", { setting: "relative/dir" }), "/home/a/.local/state/gateka", "only an absolute or ~ path is taken");
 });
 
@@ -227,4 +229,16 @@ test("a session's status is written in its run directory, whole or not at all; p
   utimesSync(c.file, new Date(0), new Date(0));
   assert.equal(store.prune(90), 1);
   assert.equal(existsSync(join(dir, "session.json")), true);
+});
+
+test("a session's pages are the html files of its renders folder, newest first", () => {
+  const r = root(); const store = new ConversationStore(r);
+  const name = store.reserve("stealth explorer");
+  assert.deepEqual(store.renders(name), [], "no folder yet: no page");
+  const dir = store.rendersDir(name); mkdir(join(dir, "sub"), { recursive: true });
+  assert.equal(dir, join(r, "sessions", "stealth-explorer", "renders"));
+  write(join(dir, "old.html"), "<p>1</p>"); utimesSync(join(dir, "old.html"), new Date(1e9), new Date(1e9));
+  write(join(dir, "explorer.html"), "<p>2</p>"); write(join(dir, "notes.md"), "x"); write(join(dir, "sub", "deep.html"), "x");
+  assert.deepEqual(store.renders(name).map((p) => p.name), ["explorer.html", "old.html"]);
+  assert.equal(store.renders(name)[0].file, join(dir, "explorer.html"));
 });

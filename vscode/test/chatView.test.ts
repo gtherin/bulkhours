@@ -3,7 +3,7 @@
 // agent is the real fake ACP agent from fixtures/, so the round trip is real.
 import { after, mock, test } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, mkdtempSync, readFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -36,6 +36,10 @@ mock.module("vscode", {
     commands: { executeCommand: async (id: string) => { executed.push(id); } },
   },
 });
+
+// The page viewer is VS Code's (a webview panel): here, what it was asked to show.
+const pages: string[] = [];
+mock.module("../src/vscode/renderEditor.ts", { namedExports: { showPage: (file: string) => { pages.push(file); } } });
 
 const { ChatView } = await import("../src/vscode/chatView.ts");
 
@@ -662,6 +666,15 @@ test("a session is named at its first question; its agent is told its name and r
   const s = p.last();
   assert.equal(s.tabs[0].name, "whoami-now");
   assert.deepEqual(texts(s).at(-1), `whoami-now|${join(state, "sessions", "whoami-now")}`);
+  // its pages: the html files of its renders folder, as links in the panel
+  assert.deepEqual(s.renders, []);
+  writeFileSync(join(state, "sessions", "whoami-now", "renders", "explorer.html"), "<p>hi</p>");
+  await new Promise((r) => setTimeout(r, 2100));
+  await p.send({ type: "model", model: "fast" });
+  assert.deepEqual(p.last().renders.map((x: any) => x.name), ["explorer.html"]);
+  await p.send({ type: "openRender", file: "/etc/passwd" });
+  await p.send({ type: "openRender", file: p.last().renders[0].file });
+  assert.deepEqual(pages, [join(state, "sessions", "whoami-now", "renders", "explorer.html")], "only a listed page opens");
   const read = () => JSON.parse(readFileSync(join(state, "sessions", "whoami-now", "session.json"), "utf8"));
   assert.deepEqual([read().state, read().questions, read().title, read().name], ["idle", 1, "whoami now", "whoami-now"]);
   const turn = p.send({ type: "send", text: "wait" });

@@ -45,10 +45,11 @@ test("a variant carries its own title, prefix and icon colours", () => {
   assert.throws(() => parseSchool({ ...ipsa, tile: "dark" }), /school ipsa: "tile" must be a #rrggbb colour/);
 });
 
-test("a variant may name its own state folder, absolute or under ~", () => {
-  assert.equal(parseSchool({ ...ipsa, stateDir: "~/.maqi" }).stateDir, "~/.maqi");
-  assert.equal(parseSchool(ipsa).stateDir, undefined);
-  assert.throws(() => parseSchool({ ...ipsa, stateDir: ".maqi" }), /school ipsa: "stateDir" must start with ~\/ or \//);
+test("a variant may name its state folder under XDG: a name, never a path", () => {
+  assert.equal(parseSchool({ ...ipsa, stateName: "maqi" }).stateName, "maqi");
+  assert.equal(parseSchool(ipsa).stateName, undefined);
+  assert.throws(() => parseSchool({ ...ipsa, stateName: "~/.maqi" }), /school ipsa: "stateName" must be lowercase letters, digits or dashes/);
+  assert.throws(() => parseSchool({ ...ipsa, stateDir: "~/.maqi" }), /school ipsa: "stateDir" is gone: use "stateName"/);
 });
 
 test("a variant on its platform's own connection needs no sign-in addresses", () => {

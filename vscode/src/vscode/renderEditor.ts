@@ -8,7 +8,7 @@ import { tmpdir } from "node:os";
 import { basename, dirname, join } from "node:path";
 import * as vscode from "vscode";
 import { t, type Lang } from "../core/i18n.ts";
-import { isMarimo, marimoCandidates, showable } from "../core/render.ts";
+import { isMarimo, marimoCandidates, pageHtml, showable } from "../core/render.ts";
 
 const EXPORT_TIMEOUT_MS = 15 * 60_000;
 
@@ -20,6 +20,29 @@ function run(cmd: string, args: string[], cwd: string): Promise<Result & { missi
     const missing = (err as NodeJS.ErrnoException).code === "ENOENT";
     resolve({ ok: false, missing, why: (String(errOut).trim().split("\n").slice(-12).join("\n") || err.message).slice(0, 3000) });
   }));
+}
+
+// A session's page (<run directory>/renders/x.html) in a tab beside the code,
+// shown again when the file changes. One tab per page.
+const open = new Map<string, vscode.WebviewPanel>();
+export function showPage(file: string, lang: Lang): void {
+  const existing = open.get(file);
+  if (existing) { existing.reveal(undefined, true); return; }
+  const dir = vscode.Uri.file(dirname(file));
+  const panel = vscode.window.createWebviewPanel("gateka.page", basename(file), { viewColumn: vscode.ViewColumn.Beside, preserveFocus: true },
+    { enableScripts: true, localResourceRoots: [dir], retainContextWhenHidden: true });
+  const draw = (): void => {
+    try {
+      panel.webview.html = pageHtml(readFileSync(file, "utf8"), `${panel.webview.asWebviewUri(dir).toString()}/`, panel.webview.cspSource);
+    } catch (e) {
+      panel.webview.html = `<body><pre>${t(lang, "renderUnreadable", { message: (e as Error).message }).replace(/[&<]/g, (c) => (c === "&" ? "&amp;" : "&lt;"))}</pre>`;
+    }
+  };
+  const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(dir, basename(file)));
+  watcher.onDidChange(draw);
+  open.set(file, panel);
+  panel.onDidDispose(() => { watcher.dispose(); open.delete(file); });
+  draw();
 }
 
 export class RenderEditor implements vscode.CustomReadonlyEditorProvider {

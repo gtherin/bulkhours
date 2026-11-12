@@ -48,6 +48,12 @@ body { margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: colu
   background: var(--vscode-sideBar-background, var(--vscode-editor-background)); cursor: pointer; display: grid; place-items: center; }
 #tabs .me img { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--line); display: block; }
 #tabs .me:hover img { border-color: var(--accent); }
+#renders { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; padding: 5px 10px; border-bottom: 1px solid var(--line);
+  font-size: .88em; flex: none; }
+#renders .lbl { color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-size: .85em; margin-right: 2px; }
+#renders button { font: inherit; cursor: pointer; color: var(--vscode-textLink-foreground); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 999px; padding: 1px 9px; max-width: 16em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#renders button:hover { background: var(--tint); border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
 @keyframes breathe { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
 
 /* -- the conversation ------------------------------------------------------- */

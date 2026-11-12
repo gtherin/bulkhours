@@ -37,9 +37,10 @@ export type School = {
   // The extension tile's background, its mark drawn in the accent; without
   // it the mark is white on the accent. Optional.
   tile?: string;
-  // The variant's own folder for conversations and agent files, e.g. ~/.maqi
-  // (owner, 2026-11-12). Optional: XDG's ~/.local/state/gateka otherwise.
-  stateDir?: string;
+  // The variant's state folder under XDG: ~/.local/state/<stateName>
+  // (conversations, sessions, agents' files). A name, never a path; gateka
+  // when absent (owner, 2026-11-12: "use the .local as behaviour").
+  stateName?: string;
   // The platform's own pages (portal, docs, forge, chat...), one button away
   // in the panel header, as JupyterLab's MaQI menu (owner, 2026-11-12).
   links: Link[];
@@ -71,7 +72,8 @@ export function parseSchool(raw: unknown): School {
     title: o.title === undefined ? `BulkHours ${text(o, "name", fail)}` : text(o, "title", fail),
     prefix: prefix(o.prefix, fail),
     ...(o.tile !== undefined ? { tile: colour(o, "tile", fail) } : {}),
-    ...(o.stateDir !== undefined ? { stateDir: stateDir(o.stateDir, fail) } : {}),
+    ...(o.stateDir !== undefined ? fail(`"stateDir" is gone: use "stateName" (a name under ~/.local/state)`) : {}),
+    ...(o.stateName !== undefined ? { stateName: stateName(o.stateName, fail) } : {}),
     links: links(o.links, fail),
     ...(o.avatar !== undefined ? { avatar: https(o, "avatar", fail) } : {}),
   };
@@ -106,8 +108,8 @@ function links(v: unknown, fail: (m: string) => never): Link[] {
   return (v as Link[]).map((l) => ({ label: l.label, url: l.url, ...(l.icon ? { icon: l.icon } : {}) }));
 }
 
-function stateDir(v: unknown, fail: (m: string) => never): string {
-  return typeof v === "string" && /^(~\/|\/)\S*$/.test(v) ? v : fail(`"stateDir" must start with ~/ or /`);
+function stateName(v: unknown, fail: (m: string) => never): string {
+  return typeof v === "string" && /^[a-z0-9][a-z0-9-]{0,30}$/.test(v) ? v : fail(`"stateName" must be lowercase letters, digits or dashes`);
 }
 
 function prefix(v: unknown, fail: (m: string) => never): string {

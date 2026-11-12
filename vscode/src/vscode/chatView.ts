@@ -11,6 +11,7 @@ import { homedir } from "node:os";
 import type { KeySource } from "./credentials.ts";
 import { Tab, type Pasted, type TabHost } from "./tab.ts";
 import { avatarData, type FileRef } from "../core/fileLinks.ts";
+import { showPage } from "./renderEditor.ts";
 import { userInfo } from "node:os";
 import { existsSync } from "node:fs";
 import { isAbsolute, join } from "node:path";
@@ -23,7 +24,7 @@ type FromPanel =
   | { type: "permission"; id: number; optionId: string | null }
   | { type: "tab"; id: number } | { type: "closeTab"; id: number } | { type: "rename"; id: number; title: string }
   | { type: "openFile"; path: string; line?: number; endLine?: number } | { type: "links" }
-  | { type: "openConversation"; file: string };
+  | { type: "openConversation"; file: string } | { type: "openRender"; file: string };
 
 type Credits = { spent: number; budget: number; currency: "USD" | "EUR" };
 // LiteLLM writes spend in batches (about a minute, measured 2026-11-10): the
@@ -77,7 +78,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
     this.meter = meter;
     this.idleMs = idleMs;
     this.stateDir = stateRoot(process.env, homedir(), {
-      setting: vscode.workspace.getConfiguration(school.prefix).get<string>("stateDirectory"), variant: school.stateDir });
+      setting: vscode.workspace.getConfiguration(school.prefix).get<string>("stateDirectory"), name: school.stateName });
     this.store = new ConversationStore(this.stateDir);
     this.active = this.addTab();
     creds.onDidChange(() => { this.tabs.forEach((t) => t.forget()); void this.render(); });
@@ -246,6 +247,10 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
       case "tab": case "closeTab": case "rename": return this.onStrip(m);
       case "openFile": return openFile(m);
       case "links": await vscode.commands.executeCommand(`${this.school.prefix}.links`); return;
+      case "openRender":
+        // Only a page the list offered: the panel never names a file of its own.
+        if (this.rendersOf(this.active, true).some((r) => r.file === m.file)) showPage(m.file, this.lang);
+        return;
       case "openConversation":
         // Only one the list offered: the page never names a file of its own.
         if (this.conversations().some((c) => c.file === m.file)) await this.open(m.file);
@@ -420,6 +425,18 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
     return this.recentCache.list.slice(0, RECENT).map(({ file, title, updated, questions }) => ({ file, title, updated, questions }));
   }
 
+  // The shown session's pages (its renders folder), read at most every two
+  // seconds: the panel is redrawn at every chunk of an answer.
+  private rendersCache: { tab: number; at: number; list: { name: string; file: string; updated: number }[] } | undefined;
+  private rendersOf(tab: Tab, fresh = false): { name: string; file: string; updated: number }[] {
+    if (!tab.name) return [];
+    const c = this.rendersCache;
+    if (!fresh && c && c.tab === tab.id && Date.now() - c.at < 2000) return c.list;
+    const list = this.store.renders(tab.name);
+    this.rendersCache = { tab: tab.id, at: Date.now(), list };
+    return list;
+  }
+
   private async render(): Promise<void> {
     const key = this.creds.known();
     const tab = this.active;
@@ -436,6 +453,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
       tabs: JSON.parse(this.strip), tab: tab.id,
       avatar: this.avatar ?? null, hasLinks: this.school.links.length > 0,
       recent: tab.empty ? this.recent() : [],
+      renders: this.rendersOf(tab).map(({ name, file }) => ({ name, file })),
     });
   }
 }
@@ -471,7 +489,7 @@ function safeLabel(f: () => string): string {
 const PANEL_WORDS: MessageKey[] = ["signIn", "emptyChat", "placeholder", "send", "stop", "model", "thinking", "output", "noChange", "startingAgent",
   "compact", "compactHint", "clear", "clearHint", "thinkingVerb", "budgetTitle", "contextTitle", "removeImage",
   "suggestExplain", "suggestBuild", "suggestFaster", "schoolModels", "yourAgents", "mic", "micWindows", "micMac", "seesImages", "lastActivity", "thisTurn",
-  "newTab", "closeTab", "renameHint", "renameTab", "openInEditor", "linksTitle", "recentTitle", "questionsCount", "pasteCode"];
+  "newTab", "closeTab", "renameHint", "renameTab", "openInEditor", "linksTitle", "recentTitle", "questionsCount", "pasteCode", "rendersTitle"];
 
 function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, lang: Lang): string {
   const css = webview.asWebviewUri(vscode.Uri.joinPath(media, "chat.css"));
@@ -490,6 +508,7 @@ function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, l
 <link rel="stylesheet" href="${css}"></head>
 <body>
 <nav id="tabs" role="tablist" hidden></nav>
+<div id="renders" hidden></div>
 <div id="log" role="log" aria-live="polite"></div>
 <script type="application/json" id="words">${data}</script>
 <form id="ask" hidden><div id="budgetline" hidden><span class="fill"></span></div>
