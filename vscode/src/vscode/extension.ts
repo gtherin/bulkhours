@@ -5,6 +5,8 @@ import { parseAgents } from "../core/agents.ts";
 import { pickLang, setBrand, t, type Lang } from "../core/i18n.ts";
 import { budgetText, level } from "../core/meter.ts";
 import { packageName, parseSchool, type School } from "../core/school.ts";
+import { DEFAULT_PORT, parsePort } from "../core/dashboard.ts";
+import { referenceText } from "../core/fileLinks.ts";
 import { offeredUpdate } from "../core/update.ts";
 import { writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -49,6 +51,8 @@ export function activate(ctx: vscode.ExtensionContext): void {
     // Restarts the variant's own agent and panel, nothing else in the window.
     vscode.commands.registerCommand(id("restart"), () => chat.restart()),
     vscode.commands.registerCommand(id("update"), () => update(ctx, school, lang, true)),
+    vscode.commands.registerCommand(id("dashboard"), () => openDashboard(ctx, lang)),
+    vscode.commands.registerCommand(id("askAbout"), (uri?: vscode.Uri) => askAbout(chat, id("chat.focus"), uri)),
   );
   // Once a day at most, a quiet look for a newer build in the download area.
   const DAY = 86_400_000;
@@ -73,6 +77,32 @@ export async function history(chat: Pick<ChatView, "conversations" | "open">, la
 export async function rename(chat: Pick<ChatView, "rename" | "title">, lang: Lang = "en"): Promise<void> {
   const title = await vscode.window.showInputBox({ prompt: t(lang, "renamePrompt"), value: chat.title });
   if (title) await chat.rename(title);
+}
+
+// From the editor to the chat: the file (explorer) or the selection (editor),
+// as a reference in the chat box, the panel shown.
+export async function askAbout(chat: Pick<ChatView, "addReference">, focus: string, uri?: vscode.Uri): Promise<void> {
+  const editor = vscode.window.activeTextEditor;
+  const target = uri ?? editor?.document.uri;
+  if (!target) return;
+  const path = vscode.workspace.asRelativePath(target);
+  const sel = !uri || editor?.document.uri.toString() === target.toString() ? editor?.selection : undefined;
+  const text = sel && !sel.isEmpty && editor ? referenceText(path, { start: sel.start.line + 1, end: sel.end.line + 1,
+    text: editor.document.getText(sel), language: editor.document.languageId }) : referenceText(path);
+  await vscode.commands.executeCommand(focus);
+  chat.addReference(text);
+}
+
+// A dashboard running on this machine, in an editor tab beside the code.
+export async function openDashboard(ctx: Pick<vscode.ExtensionContext, "globalState">, lang: Lang = "en"): Promise<void> {
+  const last = ctx.globalState.get<number>("dashboardPort") ?? DEFAULT_PORT;
+  const typed = await vscode.window.showInputBox({ prompt: t(lang, "dashboardPort"), value: String(last),
+    validateInput: (v) => (parsePort(v) ? undefined : t(lang, "dashboardPortInvalid")) });
+  const port = parsePort(typed);
+  if (!port) return;
+  await ctx.globalState.update("dashboardPort", port);
+  const url = await vscode.env.asExternalUri(vscode.Uri.parse(`http://localhost:${port}/`));
+  await vscode.commands.executeCommand("simpleBrowser.show", url.toString());
 }
 
 // A newer build from the school's download area, installed in place.

@@ -34,17 +34,18 @@ mock.module("vscode", {
 (globalThis as any).__SCHOOL__ = { id: "ipsa", name: "IPSA", accent: "#c8102e", signInUrl: "https://a", keyUrl: "https://b", creditsUrl: "https://c" };
 const { activate, pickAgent, deactivate, showMeter } = await import("../src/vscode/extension.ts");
 
-test("activation registers the panel, the sign-in link and four commands", () => {
+test("activation registers the panel, the sign-in link and its commands", () => {
   const ctx: any = { subscriptions: [], secrets: {}, extension: { id: "bulkhours.bulkhours-ipsa", packageJSON: { version: "0.1.9" } },
     globalState: { get: () => Date.now(), update: async () => {} } };      // checked today: no update look
   activate(ctx);
   deactivate();
   assert.deepEqual(registered, {
     commands: ["bulkhours.newChat", "bulkhours.signIn", "bulkhours.signOut", "bulkhours.pickAgent",
-      "bulkhours.history", "bulkhours.rename", "bulkhours.restart", "bulkhours.update"],
+      "bulkhours.history", "bulkhours.rename", "bulkhours.restart", "bulkhours.update", "bulkhours.dashboard",
+      "bulkhours.askAbout"],
     views: ["bulkhours.chat"], uri: 1,
   });
-  assert.equal(ctx.subscriptions.length, 13);
+  assert.equal(ctx.subscriptions.length, 15);
   assert.equal(bars[0].command, "bulkhours.chat.focus", "the budget opens the panel");
   assert.equal(viewOptions.webviewOptions.retainContextWhenHidden, true, "a hidden panel keeps its conversation");
 });

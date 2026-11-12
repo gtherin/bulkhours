@@ -233,9 +233,23 @@
     go.innerHTML = busy ? SQUARE : ARROW;
     go.title = busy ? W.stop : W.send;
     go.setAttribute("aria-label", go.title);
+    linkFiles();
     model.innerHTML = menu(s);
     model.title = s.agentId ? s.agent : W.model;
     meters(s);
+  }
+
+  // A path the agent writes as code opens in the editor (src/core/fileLinks.ts
+  // parseFileRef holds the same pattern, tested there).
+  const REF = /^(\/?[\w.@+-]+(?:\/[\w.@+-]+)*\.[A-Za-z0-9]{1,8})(?::(\d{1,7})(?:-(\d{1,7}))?)?$/;
+  function linkFiles() {
+    log.querySelectorAll(".msg.agent :not(pre) > code").forEach((c) => {
+      const m = REF.exec(c.textContent.trim());
+      if (!m || m[1].includes("..")) return;
+      c.classList.add("ref");
+      c.title = W.openInEditor;
+      c.onclick = () => vscode.postMessage({ type: "openFile", path: m[1], ...(m[2] ? { line: +m[2] } : {}), ...(m[3] ? { endLine: +m[3] } : {}) });
+    });
   }
 
   // Permission prompts waiting for the student: part of the shown tab's
@@ -285,6 +299,12 @@
 
   window.addEventListener("message", (ev) => {
     if (ev.data.type === "state") render(ev.data);
+    // From the editor (Ask MaQI): a file or selection, added to what is typed.
+    if (ev.data.type === "insert") {
+      input.value = (input.value && !/\s$/.test(input.value) ? input.value + "\n" : input.value) + ev.data.text;
+      grow();
+      input.focus();
+    }
   });
   // The text box grows with what is typed, up to its max-height.
   function grow() { input.style.height = "auto"; input.style.height = `${input.scrollHeight}px`; }

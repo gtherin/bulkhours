@@ -12,5 +12,7 @@
   "command.update": "Update the extension",
   "setting.imageModels": "Models that receive pasted images, e.g. [\"fast\"]. Empty: your school's list (the models its server marks as reading images).",
   "setting.stateDirectory": "Folder for your conversations and the agents' own files, e.g. ~/.maqi (absolute or under ~). Empty: the folder this extension comes with. Applies after a window reload.",
-  "capability.untrusted": "The assistant runs an agent that reads, changes and runs files in this folder: it works in a folder you trust."
+  "capability.untrusted": "The assistant runs an agent that reads, changes and runs files in this folder: it works in a folder you trust.",
+  "command.dashboard": "Open a dashboard",
+  "command.askAbout": "Ask the assistant about this"
 }

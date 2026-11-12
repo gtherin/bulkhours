@@ -10,6 +10,9 @@ import { ConversationStore, stateRoot, type Opened, type Summary } from "../core
 import { homedir } from "node:os";
 import type { KeySource } from "./credentials.ts";
 import { Tab, type Pasted, type TabHost } from "./tab.ts";
+import type { FileRef } from "../core/fileLinks.ts";
+import { existsSync } from "node:fs";
+import { isAbsolute, join } from "node:path";
 
 type FromPanel =
   | { type: "ready" } | { type: "signIn" } | { type: "cancel" } | { type: "newChat" }
@@ -17,7 +20,8 @@ type FromPanel =
   | { type: "compact" } | { type: "clear" } | { type: "pickAgent" }
   | { type: "choose"; agent: string; model?: string }
   | { type: "permission"; id: number; optionId: string | null }
-  | { type: "tab"; id: number } | { type: "closeTab"; id: number } | { type: "rename"; id: number; title: string };
+  | { type: "tab"; id: number } | { type: "closeTab"; id: number } | { type: "rename"; id: number; title: string }
+  | { type: "openFile"; path: string; line?: number; endLine?: number };
 
 type Credits = { spent: number; budget: number; currency: "USD" | "EUR" };
 // LiteLLM writes spend in batches (about a minute, measured 2026-11-10): the
@@ -190,6 +194,12 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
 
   get title(): string { return this.active.title; }
 
+  // From the editor: a file or a selection, into the chat box (not sent).
+  addReference(text: string): void {
+    void this.view?.webview.postMessage({ type: "insert", text });
+    this.view?.show?.(true);
+  }
+
   // The conversation's name, beside the panel's own (as Claude Code shows it).
   private showTitle(title: string): void {
     if (this.view) this.view.description = title;
@@ -216,6 +226,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
     switch (m.type) {
       case "send": return this.send(tab, m.text, m.images ?? []);
       case "tab": case "closeTab": case "rename": return this.onStrip(m);
+      case "openFile": return openFile(m);
       case "ready": this.restore(); await this.render(); await this.warmKey(); return this.refreshCredits();
       case "compact": return this.compact(tab);
       case "clear": return this.clear(tab);
@@ -371,6 +382,25 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
   }
 }
 
+// From the chat: a path the agent wrote, opened in the editor at its lines.
+// Relative paths are the workspace's; a file that does not exist opens nothing.
+async function openFile(ref: FileRef): Promise<void> {
+  const folder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath ?? homedir();
+  const full = isAbsolute(ref.path) ? ref.path : join(folder, ref.path);
+  if (!existsSync(full)) {
+    void vscode.window.showInformationMessage(`${ref.path}: not found in ${folder}`);
+    return;
+  }
+  const uri = vscode.Uri.file(full);
+  if (!ref.line || full.endsWith(".ipynb")) {
+    await vscode.commands.executeCommand("vscode.open", uri);
+    return;
+  }
+  const start = new vscode.Position(ref.line - 1, 0);
+  const end = new vscode.Position((ref.endLine ?? ref.line) - 1, 0);
+  await vscode.window.showTextDocument(uri, { selection: new vscode.Range(start, end), preview: false });
+}
+
 function safeList<T>(f: () => T[]): T[] {
   try { return f(); } catch { return []; }
 }
@@ -383,7 +413,7 @@ function safeLabel(f: () => string): string {
 const PANEL_WORDS: MessageKey[] = ["signIn", "emptyChat", "placeholder", "send", "stop", "model", "thinking", "output", "noChange", "startingAgent",
   "compact", "compactHint", "clear", "clearHint", "thinkingVerb", "budgetTitle", "contextTitle", "removeImage",
   "suggestExplain", "suggestBuild", "suggestFaster", "schoolModels", "yourAgents", "mic", "micWindows", "micMac", "seesImages", "lastActivity", "thisTurn",
-  "newTab", "closeTab", "renameHint", "renameTab"];
+  "newTab", "closeTab", "renameHint", "renameTab", "openInEditor"];
 
 function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, lang: Lang): string {
   const css = webview.asWebviewUri(vscode.Uri.joinPath(media, "chat.css"));

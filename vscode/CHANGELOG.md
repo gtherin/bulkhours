@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.26 — 2026-11-12
+
+- A dashboard in a tab: « Open a dashboard » (panel menu or command palette) asks the port of the app running on the machine (Streamlit 8501, marimo 2718) and opens it in an editor tab beside the code, behind the same sign-in.
+- The chat and the editor are linked: right-click a file in the explorer, or a selection in the editor, « Ask the assistant about this » puts it in the chat box with its lines; a file path the agent writes (`topic_hormuz.py:42`) opens in the editor at that line.
+
 ## 0.1.25 — 2026-11-12
 
 - MaQI's status bar in VS Code, as JupyterLab's MaQI bar: your session's RAM and CPU, your Wasabi data rights (buckets readable, datasets, credentials renewal), whether the machine stays on, and the data sent out. Computed by MaQI's own code on the machine (media/platform/maqi-status.py), refreshed every minute; hover an item for the detail. (MaQI only.)
