@@ -40,7 +40,12 @@ export type School = {
   // The variant's own folder for conversations and agent files, e.g. ~/.maqi
   // (owner, 2026-11-12). Optional: XDG's ~/.local/state/gateka otherwise.
   stateDir?: string;
+  // The platform's own pages (portal, docs, forge, chat...), one button away
+  // in the panel header, as JupyterLab's MaQI menu (owner, 2026-11-12).
+  links: Link[];
 };
+
+export type Link = { label: string; url: string; icon?: string };
 
 export function parseSchool(raw: unknown): School {
   const o = (raw ?? {}) as Record<string, unknown>;
@@ -64,6 +69,7 @@ export function parseSchool(raw: unknown): School {
     prefix: prefix(o.prefix, fail),
     ...(o.tile !== undefined ? { tile: colour(o, "tile", fail) } : {}),
     ...(o.stateDir !== undefined ? { stateDir: stateDir(o.stateDir, fail) } : {}),
+    links: links(o.links, fail),
   };
 }
 
@@ -86,6 +92,14 @@ function statusCommand(v: unknown, fail: (m: string) => never): { command: strin
   const args = o.args ?? [];
   return Array.isArray(args) && args.every((a) => typeof a === "string") ? { command, args: args as string[] }
     : fail(`"status.args" must be a list of strings`);
+}
+
+function links(v: unknown, fail: (m: string) => never): Link[] {
+  if (v === undefined) return [];
+  const ok = (l: Record<string, unknown>) => typeof l?.label === "string" && l.label.trim() !== ""
+    && typeof l.url === "string" && l.url.startsWith("https://") && (l.icon === undefined || (typeof l.icon === "string" && /^[a-z-]+$/.test(l.icon)));
+  if (!Array.isArray(v) || !v.every(ok)) fail(`"links" must be {label, https url, icon?} items`);
+  return (v as Link[]).map((l) => ({ label: l.label, url: l.url, ...(l.icon ? { icon: l.icon } : {}) }));
 }
 
 function stateDir(v: unknown, fail: (m: string) => never): string {

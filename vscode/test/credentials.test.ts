@@ -19,7 +19,7 @@ mock.module("vscode", {
 });
 const { Credentials } = await import("../src/vscode/credentials.ts");
 
-const school = { id: "ipsa", name: "IPSA", accent: "#c8102e", signInUrl: "https://bh.fr/sign-in?school=ipsa", keyUrl: "https://bh.fr/api/workbench/key", creditsUrl: "https://bh.fr/api/workbench/credits", language: "en" as const, title: "BulkHours IPSA", prefix: "bulkhours" };
+const school = { id: "ipsa", name: "IPSA", accent: "#c8102e", signInUrl: "https://bh.fr/sign-in?school=ipsa", keyUrl: "https://bh.fr/api/workbench/key", creditsUrl: "https://bh.fr/api/workbench/credits", language: "en" as const, title: "BulkHours IPSA", prefix: "bulkhours", links: [] };
 const reply = (minutes: number) => ({
   key: `sk-${minutes}`, base_url: "https://llm.bh.fr/v1", expires_at: new Date(Date.now() + minutes * 60e3).toISOString(),
   models: ["fast"], agent: { id: "gateka", label: "Gateka", command: "dsh" },

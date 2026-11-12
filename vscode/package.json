@@ -2,7 +2,7 @@
   "name": "bulkhours",
   "displayName": "BulkHours",
   "description": "A coding assistant for students: chat with an agent that reads and edits your workspace, on your school's credits.",
-  "version": "0.1.26",
+  "version": "0.1.27",
   "publisher": "gateka",
   "license": "MIT",
   "repository": {
@@ -105,6 +105,12 @@
         "title": "%command.askAbout%",
         "category": "BulkHours",
         "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "bulkhours.links",
+        "title": "%command.links%",
+        "category": "BulkHours",
+        "icon": "$(link-external)"
       }
     ],
     "menus": {
@@ -123,6 +129,11 @@
           "command": "bulkhours.dashboard",
           "when": "view == bulkhours.chat",
           "group": "navigation@3"
+        },
+        {
+          "command": "bulkhours.links",
+          "when": "view == bulkhours.chat && bulkhours.hasLinks",
+          "group": "navigation@4"
         },
         {
           "command": "bulkhours.rename",

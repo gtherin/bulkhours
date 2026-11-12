@@ -7,6 +7,38 @@
   "stateDir": "~/.maqi",
   "downloadUrl": "https://bulkhours.fr/bkfpage/vscode/",
   "language": "fr",
+  "links": [
+    {
+      "label": "MaQI",
+      "url": "https://maqi.ai.msct.fr/",
+      "icon": "home"
+    },
+    {
+      "label": "Docs",
+      "url": "https://maqi.ai.msct.fr/handbook/getting-started/",
+      "icon": "book"
+    },
+    {
+      "label": "Directory",
+      "url": "https://git.maqi.ai.msct.fr/org/maqi/members",
+      "icon": "organization"
+    },
+    {
+      "label": "Slack",
+      "url": "https://app.slack.com/client/T0B6LP4SJTE/C0B7BDV9WPJ",
+      "icon": "comment-discussion"
+    },
+    {
+      "label": "Git",
+      "url": "https://git.maqi.ai.msct.fr",
+      "icon": "git-branch"
+    },
+    {
+      "label": "Moodle",
+      "url": "https://moodle.ip-paris.fr/my/courses.php",
+      "icon": "mortar-board"
+    }
+  ],
   "connection": {
     "keyFile": "/run/maqi/keys/${user}/llm.env",
     "offer": {

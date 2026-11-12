@@ -12,7 +12,7 @@ const ipsa = {
 };
 
 test("a school build file carries identity, addresses and a language", () => {
-  assert.deepEqual(parseSchool(ipsa), { ...ipsa, language: "en", title: "BulkHours IPSA", prefix: "bulkhours" });
+  assert.deepEqual(parseSchool(ipsa), { ...ipsa, language: "en", title: "BulkHours IPSA", prefix: "bulkhours", links: [] });
   assert.equal(parseSchool({ ...ipsa, language: "fr" }).language, "fr");
   assert.throws(() => parseSchool({ ...ipsa, language: "de" }), /school ipsa: "language" must be fr or en/);
 });
@@ -69,4 +69,13 @@ test("a platform may name its status command, absolute, with its arguments", () 
     status: { command: "/opt/tljh/user/bin/python", args: ["${extensionPath}/media/platform/maqi-status.py", "${lang}"] } };
   assert.deepEqual(parseSchool({ ...rest, connection }).connection?.status?.args, ["${extensionPath}/media/platform/maqi-status.py", "${lang}"]);
   assert.throws(() => parseSchool({ ...rest, connection: { ...connection, status: { command: "python" } } }), /"status.command" must be an absolute path/);
+});
+
+test("a variant may list its platform's links, https only, for the panel's links button", () => {
+  const links = [{ label: "Docs", url: "https://maqi.ai.msct.fr/handbook/getting-started/", icon: "book" },
+    { label: "Git", url: "https://git.maqi.ai.msct.fr" }];
+  assert.deepEqual(parseSchool({ ...ipsa, links }).links, links);
+  assert.deepEqual(parseSchool(ipsa).links, []);
+  assert.throws(() => parseSchool({ ...ipsa, links: [{ label: "x", url: "http://a.fr" }] }), /school ipsa: "links" must be \{label, https url, icon\?\} items/);
+  assert.throws(() => parseSchool({ ...ipsa, links: [{ label: "", url: "https://a.fr" }] }), /"links"/);
 });

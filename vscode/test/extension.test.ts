@@ -3,6 +3,7 @@ import { mock, test } from "node:test";
 import assert from "node:assert/strict";
 
 const registered = { commands: [] as string[], views: [] as string[], uri: 0 };
+const contexts: unknown[][] = [];
 const info: string[] = [];
 const settings: Record<string, unknown> = {};
 const updates: [string, unknown, boolean][] = [];
@@ -25,7 +26,8 @@ mock.module("vscode", {
       showQuickPick: async (items: any[]) => { offered.push(items); return quickPick(items); },
     },
     env: { language: "en" },
-    commands: { registerCommand: (id: string) => { registered.commands.push(id); return disposable; } },
+    commands: { registerCommand: (id: string) => { registered.commands.push(id); return disposable; },
+      executeCommand: async (...args: unknown[]) => { contexts.push(args); } },
     workspace: {
       getConfiguration: () => ({ get: (k: string) => settings[k], update: async (k: string, v: unknown, global: boolean) => { updates.push([k, v, global]); } }),
     },
@@ -42,10 +44,11 @@ test("activation registers the panel, the sign-in link and its commands", () => 
   assert.deepEqual(registered, {
     commands: ["bulkhours.newChat", "bulkhours.signIn", "bulkhours.signOut", "bulkhours.pickAgent",
       "bulkhours.history", "bulkhours.rename", "bulkhours.restart", "bulkhours.update", "bulkhours.dashboard",
-      "bulkhours.askAbout"],
+      "bulkhours.links", "bulkhours.askAbout"],
     views: ["bulkhours.chat"], uri: 1,
   });
-  assert.equal(ctx.subscriptions.length, 15);
+  assert.equal(ctx.subscriptions.length, 16);
+  assert.deepEqual(contexts[0], ["setContext", "bulkhours.hasLinks", false], "no links listed: no links button");
   assert.equal(bars[0].command, "bulkhours.chat.focus", "the budget opens the panel");
   assert.equal(viewOptions.webviewOptions.retainContextWhenHidden, true, "a hidden panel keeps its conversation");
 });

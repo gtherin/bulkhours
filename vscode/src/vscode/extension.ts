@@ -4,7 +4,7 @@ import * as vscode from "vscode";
 import { parseAgents } from "../core/agents.ts";
 import { pickLang, setBrand, t, type Lang } from "../core/i18n.ts";
 import { budgetText, level } from "../core/meter.ts";
-import { packageName, parseSchool, type School } from "../core/school.ts";
+import { packageName, parseSchool, type Link, type School } from "../core/school.ts";
 import { DEFAULT_PORT, parsePort } from "../core/dashboard.ts";
 import { referenceText } from "../core/fileLinks.ts";
 import { offeredUpdate } from "../core/update.ts";
@@ -22,6 +22,8 @@ export function activate(ctx: vscode.ExtensionContext): void {
   const school = parseSchool(__SCHOOL__);
   const lang = pickLang(vscode.env.language, school.language);
   setBrand(school.title);
+  // The links button shows only for a variant that lists links.
+  void vscode.commands.executeCommand("setContext", `${school.prefix}.hasLinks`, school.links.length > 0);
   // Commands, view and settings under the variant's own prefix.
   const id = (name: string) => `${school.prefix}.${name}`;
   const log = vscode.window.createOutputChannel(school.title);
@@ -52,6 +54,7 @@ export function activate(ctx: vscode.ExtensionContext): void {
     vscode.commands.registerCommand(id("restart"), () => chat.restart()),
     vscode.commands.registerCommand(id("update"), () => update(ctx, school, lang, true)),
     vscode.commands.registerCommand(id("dashboard"), () => openDashboard(ctx, lang)),
+    vscode.commands.registerCommand(id("links"), () => openLink(school.links, lang)),
     vscode.commands.registerCommand(id("askAbout"), (uri?: vscode.Uri) => askAbout(chat, id("chat.focus"), uri)),
   );
   // Once a day at most, a quiet look for a newer build in the download area.
@@ -91,6 +94,14 @@ export async function askAbout(chat: Pick<ChatView, "addReference">, focus: stri
     text: editor.document.getText(sel), language: editor.document.languageId }) : referenceText(path);
   await vscode.commands.executeCommand(focus);
   chat.addReference(text);
+}
+
+// The platform's pages, from the panel header: pick one, it opens in the browser.
+export async function openLink(links: Link[], lang: Lang = "en"): Promise<void> {
+  const pick = await vscode.window.showQuickPick(links.map((l) => ({
+    label: `${l.icon ? `$(${l.icon}) ` : ""}${l.label}`, description: l.url.replace(/^https:\/\//, ""), url: l.url,
+  })), { placeHolder: t(lang, "linksPlaceholder") });
+  if (pick) await vscode.env.openExternal(vscode.Uri.parse(pick.url));
 }
 
 // A dashboard running on this machine, in an editor tab beside the code.

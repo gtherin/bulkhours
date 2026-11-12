@@ -14,5 +14,6 @@
   "setting.stateDirectory": "Dossier de vos conversations et des fichiers des agents, par ex. ~/.maqi (absolu ou sous ~). Vide : celui prévu par cette extension. Pris en compte après un rechargement de la fenêtre.",
   "capability.untrusted": "L'assistant lance un agent qui lit, modifie et exécute les fichiers de ce dossier : il fonctionne dans un dossier auquel vous faites confiance.",
   "command.dashboard": "Ouvrir un tableau de bord",
-  "command.askAbout": "Demander à l'assistant"
+  "command.askAbout": "Demander à l'assistant",
+  "command.links": "Liens de la plateforme"
 }

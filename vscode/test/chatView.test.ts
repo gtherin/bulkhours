@@ -86,7 +86,7 @@ function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA",
     credits: async () => (signedIn ? { spent: 0.25, budget: 10, currency: "USD" } : undefined),
     signIn: async () => { posted.push({ type: "signIn-opened" }); },
   };
-  const view = new ChatView(ctx, { id: "ipsa", name: schoolName, accent: "#c8102e", signInUrl: "https://a", keyUrl: "https://b", creditsUrl: "https://c", language: "en" as const, title: `BulkHours ${schoolName}`, prefix: "bulkhours" },
+  const view = new ChatView(ctx, { id: "ipsa", name: schoolName, accent: "#c8102e", signInUrl: "https://a", keyUrl: "https://b", creditsUrl: "https://c", language: "en" as const, title: `BulkHours ${schoolName}`, prefix: "bulkhours", links: [] },
     creds, { append() {} } as any, lang, (c: unknown) => meters.push(c), opts.idleMs);
   views.push(view);
   changed();   // a sign-in change can arrive before VS Code shows the panel
