@@ -1,30 +1,25 @@
-// The chat panel: one agent session per conversation, the transcript folded
-// by the pure reducer, permission requests turned into buttons in the panel.
+// The chat panel: conversations as tabs (src/vscode/tab.ts), each with its
+// own agent session; the shown one is drawn, permission requests included.
 import * as vscode from "vscode";
-import type { RequestPermissionOutcome, RequestPermissionRequest } from "@agentclientprotocol/sdk";
-import { AgentSession } from "../core/acpSession.ts";
-import { launchFor, parseAgents, type AgentSpec } from "../core/agents.ts";
+import { parseAgents, type AgentSpec } from "../core/agents.ts";
 import { chooseAgent, chooseModel } from "../core/choices.ts";
-import { MESSAGES, Said, sayError, t, type Lang, type MessageKey } from "../core/i18n.ts";
+import { MESSAGES, sayError, t, type Lang, type MessageKey } from "../core/i18n.ts";
 import type { Key } from "../core/keys.ts";
 import type { School } from "../core/school.ts";
-import { addNotice, addUserPrompt, applyUpdate, type Transcript } from "../core/transcript.ts";
-import { condensed, ConversationStore, stateRoot, type Conversation, type Opened, type Summary } from "../core/conversationStore.ts";
+import { ConversationStore, stateRoot, type Opened, type Summary } from "../core/conversationStore.ts";
 import { homedir } from "node:os";
 import type { Credentials } from "./credentials.ts";
-import { readTextFile, writeTextFile } from "./editorHost.ts";
+import { Tab, type Pasted, type TabHost } from "./tab.ts";
 
 type FromPanel =
   | { type: "ready" } | { type: "signIn" } | { type: "cancel" } | { type: "newChat" }
   | { type: "send"; text: string; images?: Pasted[] } | { type: "model"; model: string }
   | { type: "compact" } | { type: "clear" } | { type: "pickAgent" }
   | { type: "choose"; agent: string; model?: string }
-  | { type: "permission"; id: number; optionId: string | null };
+  | { type: "permission"; id: number; optionId: string | null }
+  | { type: "tab"; id: number } | { type: "closeTab"; id: number } | { type: "rename"; id: number; title: string };
 
-type Pasted = { mimeType: string; data: string };
 type Credits = { spent: number; budget: number; currency: "USD" | "EUR" };
-// What a paste may carry into a prompt: pictures, nothing else.
-const IMAGE_TYPES = new Set(["image/png", "image/jpeg", "image/gif", "image/webp"]);
 // LiteLLM writes spend in batches (about a minute, measured 2026-11-10): the
 // meter is read after a turn, then once more when the batch has landed.
 const SPEND_LANDS_MS = 75_000;
@@ -34,48 +29,33 @@ const SPEND_LANDS_MS = 75_000;
 const IDLE_MS = 15 * 60_000;
 // Conversations kept this long after their last turn (ADR-0223).
 const KEEP_DAYS = 90;
-// How much of an earlier conversation a new agent is handed.
-const PRIME_CHARS = 12_000;
+// The open tabs of a project, as conversation records, back after a reload:
+// pointers only, the record stays the one source (ADR-0223).
+const OPEN_TABS = "bulkhours.tabs";
+// Agents working at once: each is a process (265 MB for dsh, measured
+// 2026-11-10) on a machine many students share (architect bfd92a).
+const MAX_RUNNING = 3;
 
-export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
+export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, TabHost {
   private view: vscode.WebviewView | undefined;
-  private session: AgentSession | undefined;
-  private transcript: Transcript = [];
-  private busy = false;
-  // The turn in progress: when it began, the agent's last sign of life, the
-  // tool it is running, and the spend when it began (owner, 2026-11-10: an
-  // hour of sub-agents showed only "is thinking", and cost $26).
-  private activity: { since: number; last: number; tool: string; spentAtStart: number | null } | null = null;
-  private activityTimer: ReturnType<typeof setInterval> | undefined;
-  private starting = false;
-  // Stop pressed while the agent was still starting: honoured once it is up.
-  private stopAsked = false;
+  // The conversations open as tabs; one is shown, all of them run.
+  private tabs: Tab[] = [];
+  private active: Tab;
   private nextAsk = 1;
-  private readonly asks = new Map<number, (o: RequestPermissionOutcome) => void>();
-  private readonly ctx: vscode.ExtensionContext;
+  readonly ctx: vscode.ExtensionContext;
   private readonly school: School;
-  private readonly creds: Credentials;
-  private readonly log: vscode.OutputChannel;
-  private readonly lang: Lang;
+  readonly creds: Credentials;
+  readonly log: vscode.OutputChannel;
+  readonly lang: Lang;
   private readonly meter: (c: Credits | undefined) => void;
   private credits: Credits | undefined;
-  private usage: { used: number; size: number } | null = null;
-  // Slash commands the agent announced (ACP available_commands_update).
-  // "/compact" is sent only to an agent that offers it: dsh does not, and
-  // took it for a question (owner, 2026-11-10).
-  private commands: string[] = [];
   private spendTimer: ReturnType<typeof setTimeout> | undefined;
-  private idleTimer: ReturnType<typeof setTimeout> | undefined;
-  private readonly idleMs: number;
-  // A conversation whose agent was paused: resumed at the next message if the
-  // same agent and model are still chosen.
-  private paused: { sessionId: string; launchKey: string } | undefined;
-  // The record of this conversation (ADR-0223), and whether the next prompt
-  // must hand the conversation so far to an agent that was not part of it.
-  private readonly store = new ConversationStore(stateRoot(process.env, homedir()));
-  private conversation: Conversation | undefined;
-  private prime = false;
+  readonly idleMs: number;
+  readonly store = new ConversationStore(stateRoot(process.env, homedir()));
   private restored = false;
+  // What the tab strip showed last: a busy tab behind the shown one redraws
+  // the strip only when this changes, never the whole conversation.
+  private strip = "";
 
   constructor(ctx: vscode.ExtensionContext, school: School, creds: Credentials, log: vscode.OutputChannel,
               lang: Lang = "en", meter: (c: Credits | undefined) => void = () => {}, idleMs = IDLE_MS) {
@@ -86,8 +66,11 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
     this.lang = lang;
     this.meter = meter;
     this.idleMs = idleMs;
-    creds.onDidChange(() => { this.forget(); void this.render(); });
+    this.active = this.addTab();
+    creds.onDidChange(() => { this.tabs.forEach((t) => t.forget()); void this.render(); });
   }
+
+  get schoolId(): string { return this.school.id; }
 
   resolveWebviewView(view: vscode.WebviewView): void {
     this.view = view;
@@ -97,49 +80,82 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
     view.webview.onDidReceiveMessage((m: FromPanel) => this.onPanel(m).catch((e) => this.fail(e)));
   }
 
-  // VS Code closing: the agent process must not outlive the editor.
+  // VS Code closing: no agent process outlives the editor.
   dispose(): void {
     clearTimeout(this.spendTimer);
-    clearInterval(this.activityTimer);
-    clearTimeout(this.idleTimer);
-    this.endSession();
+    this.tabs.forEach((t) => t.dispose());
   }
 
+  // + : a new conversation in a new tab (an empty tab is reused).
   newChat(): void {
-    this.forget();
-    this.conversation = undefined;
-    this.prime = false;
-    this.showTitle("");
-    this.transcript = [];
-    this.usage = null;
+    const empty = this.tabs.find((t) => t.empty && !t.busy);
+    this.show(empty ?? this.addTab());
+  }
+
+  private addTab(): Tab {
+    const tab = new Tab(this);
+    this.tabs.push(tab);
+    return tab;
+  }
+
+  private show(tab: Tab): void {
+    this.active = tab;
+    this.showTitle(tab.title);
+    this.saveTabs();
     void this.render();
   }
 
-  // At the panel's first opening: the project's last conversation comes back
-  // as it was shown, and its agent session is resumed at the next message
-  // (or, failing that, a new agent is handed the conversation so far).
+  // A closed tab's agent stops; its conversation stays in the history.
+  private async closeTab(tab: Tab): Promise<void> {
+    if (!(await this.stopFirst(tab, "closeStops", "stopAndClose"))) return;
+    const at = this.tabs.indexOf(tab);
+    tab.dispose();
+    this.tabs.splice(at, 1);
+    if (!this.tabs.length) this.addTab();
+    this.show(this.active === tab ? this.tabs[Math.min(at, this.tabs.length - 1)] : this.active);
+  }
+
+  private saveTabs(): void {
+    const files = this.tabs.filter((t) => t.conversation).map((t) => t.conversation!.file);
+    void this.ctx.workspaceState?.update(OPEN_TABS, { files, active: this.active.conversation?.file ?? "" });
+  }
+
+  // At the panel's first opening: the tabs open before the reload come back
+  // (or the project's last conversation), each resumed at its next message.
   private restore(): void {
     if (this.restored) return;
     this.restored = true;
     try {
       this.store.prune(KEEP_DAYS);
       const folder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
-      const last = folder && !this.transcript.length ? this.store.latest(folder) : undefined;
-      if (last) this.take(last);
+      if (!folder || !this.active.empty) return;
+      const saved = this.ctx.workspaceState?.get<{ files: string[]; active: string }>(OPEN_TABS);
+      const opened = saved?.files.length
+        ? saved.files.map((f) => this.reopen(f))
+        : [this.store.latest(folder)];
+      for (const o of opened) {
+        if (!o) continue;
+        const tab = this.active.empty ? this.active : this.addTab();
+        tab.take(o);
+        if (!saved || o.conversation.file === saved.active) this.active = tab;
+      }
+      this.showTitle(this.active.title);
     } catch (e) {
       this.log.append(`conversation record unreadable: ${(e as Error).message}\n`);
     }
   }
 
-  // Becomes the conversation the panel shows: its messages, its record, and
-  // its agent session resumed at the next message (or handed over).
-  private take(o: Opened): void {
-    this.forget();
-    this.transcript = o.transcript;
-    this.conversation = o.conversation;
-    this.paused = { sessionId: o.header.session, launchKey: `${o.header.agent}|${o.header.model}` };
-    this.prime = o.transcript.length > 0;
-    this.showTitle(o.title);
+  // A tab saved before the reload whose record is gone is dropped, and said.
+  private reopen(file: string): Opened | undefined {
+    try {
+      const o = this.store.read(file);
+      if (o) return o;
+    } catch (e) {
+      this.log.append(`tab not reopened, ${file}: ${(e as Error).message}\n`);
+      return undefined;
+    }
+    this.log.append(`tab not reopened, its record is gone: ${file}\n`);
+    return undefined;
   }
 
   // The project's conversations, newest first (the history).
@@ -148,21 +164,24 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
     try { return folder ? this.store.list(folder) : []; } catch { return []; }
   }
 
+  // From the history: its tab if it is open, else a tab of its own.
   async open(file: string): Promise<void> {
-    if (this.busy) return;
+    const open = this.tabs.find((t) => t.conversation?.file === file);
+    if (open) return this.show(open);
     const o = this.store.read(file);
     if (!o) return;
-    this.take(o);
+    const tab = this.active.empty && !this.active.busy ? this.active : this.addTab();
+    tab.take(o);
+    this.show(tab);
+  }
+
+  async rename(title: string, tab = this.active): Promise<void> {
+    tab.rename(title);
+    if (tab === this.active) this.showTitle(tab.title);
     await this.render();
   }
 
-  async rename(title: string): Promise<void> {
-    if (!this.conversation || !title.trim()) return;
-    this.conversation.rename(title);
-    this.showTitle(title.trim());
-  }
-
-  get title(): string { return this.view?.description ?? ""; }
+  get title(): string { return this.active.title; }
 
   // The conversation's name, beside the panel's own (as Claude Code shows it).
   private showTitle(title: string): void {
@@ -186,37 +205,67 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
   }
 
   private async onPanel(m: FromPanel): Promise<void> {
+    const tab = this.active;
     switch (m.type) {
+      case "send": return this.send(tab, m.text, m.images ?? []);
+      case "tab": case "closeTab": case "rename": return this.onStrip(m);
       case "ready": this.restore(); await this.render(); await this.warmKey(); return this.refreshCredits();
-      case "compact":
-        if (!(await this.stopFirst("compactStops", "stopAndCompact"))) return;
-        return this.commands.includes("compact") ? this.send("/compact") : this.compact();
-      case "clear":
-        if (!(await this.stopFirst("clearStops", "stopAndClear"))) return;
-        return this.newChat();
+      case "compact": return this.compact(tab);
+      case "clear": return this.clear(tab);
       case "pickAgent": await vscode.commands.executeCommand("bulkhours.pickAgent"); return;
       case "choose": return this.choose(m.agent, m.model);
       case "signIn": return this.creds.signIn();
       case "newChat": return this.newChat();
-      case "cancel": return this.stop();
-      case "model":
-        await this.ctx.globalState.update("bulkhours.model", m.model);
-        this.forget();
-        this.prime = this.transcript.length > 0;
+      case "cancel": return tab.stop();
+      case "model": return this.choose("", m.model);
+      case "permission":
+        this.tabs.some((t) => t.answer(m.id, m.optionId));
         return this.render();
-      case "permission": return this.answer(m.id, m.optionId);
-      case "send": return this.send(m.text, m.images ?? []);
     }
+  }
+
+  // Compact: the agent's own /compact when it has one, else the tab's.
+  private async compact(tab: Tab): Promise<void> {
+    if (!(await this.stopFirst(tab, "compactStops", "stopAndCompact"))) return;
+    if (tab.commands.includes("compact")) return tab.send("/compact");
+    tab.compact();
+    return this.render();
+  }
+
+  // Clear: a new conversation in the same tab.
+  private async clear(tab: Tab): Promise<void> {
+    if (!(await this.stopFirst(tab, "clearStops", "stopAndClear"))) return;
+    tab.clear();
+    this.show(tab);
+  }
+
+  private async send(tab: Tab, text: string, images: Pasted[]): Promise<void> {
+    if (!tab.busy && this.tabs.filter((x) => x.busy).length >= MAX_RUNNING) {
+      tab.failed(t(this.lang, "tooManyRunning", { n: MAX_RUNNING }));
+      return this.render();
+    }
+    const fresh = !tab.conversation;
+    await tab.send(text, images);
+    if (fresh && tab.conversation) this.saveTabs();
+  }
+
+  // The tab strip: show a tab, close it, rename it.
+  private async onStrip(m: Extract<FromPanel, { type: "tab" | "closeTab" | "rename" }>): Promise<void> {
+    const tab = this.tabs.find((x) => x.id === m.id);
+    if (!tab) return;
+    if (m.type === "tab") return this.show(tab);
+    if (m.type === "closeTab") return this.closeTab(tab);
+    return this.rename(m.title, tab);
   }
 
   // One menu: a school model (the school's agent on the school's credits)
   // or one of the student's own agents, such as Claude Code on their own
-  // subscription. Either way the next message starts a fresh agent.
+  // subscription. It changes the shown tab, whose next message starts the
+  // agent chosen, handed the conversation so far; new tabs start with it.
   private async choose(agent: string, model?: string): Promise<void> {
     await vscode.workspace.getConfiguration("bulkhours").update("agent", agent, true);
     if (model) await this.ctx.globalState.update("bulkhours.model", model);
-    this.forget();
-    this.prime = this.transcript.length > 0;
+    this.active.choice = { agent, model: model ?? this.active.choice?.model };
     await this.render();
   }
 
@@ -227,102 +276,59 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
 
   // The models that read images: the school's list, unless the student set
   // their own (bulkhours.imageModels), restricted to the models offered.
-  private vision(key: Key): string[] {
+  vision(key: Key): string[] {
     const own = vscode.workspace.getConfiguration("bulkhours").get<unknown>("imageModels");
     const list = Array.isArray(own) && own.length ? own.filter((m): m is string => typeof m === "string") : key.modelVision;
     return key.models.filter((m) => list.includes(m));
   }
 
-  private model(key: Key | undefined): string {
-    return chooseModel(this.ctx.globalState.get<string>("bulkhours.model"), key);
+  model(key: Key | undefined, wanted = this.ctx.globalState.get<string>("bulkhours.model")): string {
+    return chooseModel(wanted, key);
   }
 
   // The school's agent comes with the key; a student may pick one of their
   // own `bulkhours.extraAgents` instead.
-  private agent(key: Key | undefined): AgentSpec {
+  agent(key: Key | undefined, wanted?: string): AgentSpec {
     const cfg = vscode.workspace.getConfiguration("bulkhours");
-    return chooseAgent(key, parseAgents(cfg.get<unknown[]>("extraAgents") ?? []), cfg.get<string>("agent") ?? "");
+    return chooseAgent(key, parseAgents(cfg.get<unknown[]>("extraAgents") ?? []), wanted ?? cfg.get<string>("agent") ?? "");
   }
 
-  // During a turn, Compact and Clear would end it: the student says so first,
-  // then the turn is stopped and has ended before they act.
-  private async stopFirst(question: MessageKey, yes: MessageKey): Promise<boolean> {
-    if (!this.busy) return true;
+  spent(): number | null { return this.credits?.spent ?? null; }
+
+  askId(): number { return this.nextAsk++; }
+
+  changed(tab: Tab): void {
+    if (tab === this.active) { if (tab.title !== this.title || this.view?.description !== tab.title) this.showTitle(tab.title); void this.render(); }
+    else if (this.stripOf() !== this.strip) void this.render();
+  }
+
+  turnTick(): void { void this.refreshCredits(); }
+
+  turnEnded(): void {
+    void this.refreshCredits();
+    clearTimeout(this.spendTimer);
+    this.spendTimer = setTimeout(() => void this.refreshCredits(), SPEND_LANDS_MS);
+    this.spendTimer.unref?.();
+  }
+
+  // During a turn, Compact, Clear and closing the tab would end it: the
+  // student says so first, then the turn is stopped and has ended before
+  // they act.
+  private async stopFirst(tab: Tab, question: MessageKey, yes: MessageKey): Promise<boolean> {
+    if (!tab.busy) return true;
     const answer = await vscode.window.showWarningMessage(t(this.lang, question), { modal: true }, t(this.lang, yes));
     if (answer !== t(this.lang, yes)) return false;
-    await this.stop();
-    for (let i = 0; i < 300 && this.busy; i++) await new Promise((r) => setTimeout(r, 100));
-    return !this.busy;
+    await tab.stop();
+    for (let i = 0; i < 300 && tab.busy; i++) await new Promise((r) => setTimeout(r, 100));
+    return !tab.busy;
   }
 
-  private async stop(): Promise<void> {
-    if (!this.busy) return;
-    this.stopAsked = true;
-    await this.session?.cancel();
-  }
-
-  private async send(text: string, pasted: Pasted[] = []): Promise<void> {
-    if (this.busy || !text.trim()) return;
-    this.busy = true;
-    this.stopAsked = false;
-    this.activity = { since: Date.now(), last: Date.now(), tool: "", spentAtStart: this.credits?.spent ?? null };
-    // During a long turn the budget is read again every minute (LiteLLM
-    // writes spend in batches of about a minute).
-    clearInterval(this.activityTimer);
-    this.activityTimer = setInterval(() => void this.refreshCredits(), 60_000);
-    this.activityTimer.unref?.();
-    const images = pasted.filter((i) => IMAGE_TYPES.has(i.mimeType) && /^[A-Za-z0-9+/=]+$/.test(i.data));
-    this.transcript = addUserPrompt(this.transcript, text, images.map((i) => `data:${i.mimeType};base64,${i.data}`));
-    await this.render();
-    try {
-      const session = await this.ensureSession();
-      if (this.stopAsked) {
-        this.transcript = addNotice(this.transcript, t(this.lang, "stoppedBeforeStart"));
-        return;
-      }
-      if (images.length && !session.acceptsImages) this.transcript = addNotice(this.transcript, t(this.lang, "noImages"));
-      // An agent that was not part of the conversation is handed it first.
-      const earlier = this.prime && !session.resumed ? condensed(this.transcript.slice(0, -1), PRIME_CHARS) : "";
-      const preface = earlier ? `The conversation so far (the student may have asked another assistant):\n\n${earlier}` : "";
-      this.prime = false;
-      this.conversation?.prompt([{ type: "text", text }, ...images.map((i) => ({ type: "image" as const, mimeType: i.mimeType, data: i.data }))]);
-      if (this.conversation && !this.title) this.showTitle(this.store.read(this.conversation.file)?.title ?? "");
-      let stop = "error";
-      try {
-        stop = await session.prompt(text, activeFileContext(), images, preface);
-      } finally {
-        this.conversation?.end(stop);
-      }
-      if (stop !== "end_turn") this.transcript = addNotice(this.transcript, t(this.lang, "stopped", { reason: reason(this.lang, stop) }));
-    } finally {
-      this.busy = false;
-      this.activity = null;
-      clearInterval(this.activityTimer);
-      await this.render();
-      void this.refreshCredits();
-      clearTimeout(this.spendTimer);
-      this.spendTimer = setTimeout(() => void this.refreshCredits(), SPEND_LANDS_MS);
-      this.spendTimer.unref?.();
-      this.armIdle();
-    }
-  }
-
-  private armIdle(): void {
-    clearTimeout(this.idleTimer);
-    if (!this.session?.canResume) return;
-    this.idleTimer = setTimeout(() => this.pause(), this.idleMs);
-    this.idleTimer.unref?.();
-  }
-
-  // « Redémarrer l'assistant »: a new agent process (the conversation is
-  // resumed, or handed over, at the next message) and a fresh panel page.
+  // « Redémarrer l'assistant »: new agent processes (each conversation is
+  // resumed, or handed over, at its next message) and a fresh panel page.
   // Only BulkHours restarts: VS Code's restartExtensionHost would restart
   // every extension of the window (owner, 2026-11-10).
   restart(): void {
-    if (this.session?.canResume) this.paused = { sessionId: this.session.sessionId, launchKey: this.launchKey };
-    else if (this.session) this.prime = this.transcript.length > 0;
-    this.busy = false;
-    this.endSession();
+    this.tabs.forEach((t) => t.restart());
     if (this.view) {
       const media = vscode.Uri.joinPath(this.ctx.extensionUri, "media");
       this.view.webview.html = panelHtml(this.view.webview, media, this.school, this.lang);
@@ -330,141 +336,29 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable {
     void this.render();
   }
 
-  // Compaction for an agent that has no /compact of its own (dsh over ACP):
-  // its session is let go - not resumed - and the next message starts a fresh
-  // one, handed the conversation condensed (recent exchanges whole), as when
-  // switching model. The record and the panel keep everything.
-  private async compact(): Promise<void> {
-    if (this.busy || !this.transcript.length) return;
-    this.forget();
-    this.prime = true;
-    this.usage = null;
-    this.transcript = addNotice(this.transcript, t(this.lang, "compacted"));
-    await this.render();
-  }
-
-  private pause(): void {
-    if (this.busy || !this.session) return;
-    this.paused = { sessionId: this.session.sessionId, launchKey: this.launchKey };
-    this.endSession();
-    this.transcript = addNotice(this.transcript, t(this.lang, "agentPaused"));
-    void this.render();
-  }
-
-  // A new chat, another agent or model, a sign-out: nothing to resume.
-  private forget(): void {
-    clearTimeout(this.idleTimer);
-    this.paused = undefined;
-    this.endSession();
-  }
-
-  private launchKey = "";
-
-  private record(key: Key, model: string, folder: string): void {
-    const s = this.session!;
-    const who = { agent: this.agent(key).id, session: s.sessionId, model };
-    try {
-      if (!this.conversation) this.conversation = this.store.start({ ...who, school: this.school.id, cwd: folder });
-      else if (!s.resumed) this.conversation.switched(who);
-    } catch (e) {
-      this.log.append(`conversation record not written: ${(e as Error).message}\n`);
-    }
-  }
-
-  private async ensureSession(): Promise<AgentSession> {
-    const { key, renewed } = await this.creds.currentKey();
-    if (this.session && !renewed) return this.session;
-    if (this.session) this.transcript = addNotice(this.transcript, t(this.lang, "keyRenewed"));
-    // A renewed key restarts the agent (it reads its key once): it resumes
-    // the conversation when it can, as after a pause.
-    if (this.session?.canResume) this.paused = { sessionId: this.session.sessionId, launchKey: this.launchKey };
-    this.endSession();
-    const folder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
-    if (!folder) throw new Said("openFolder");
-    const model = this.model(key);
-    const launch = launchFor(this.agent(key), {
-      baseUrl: key.baseUrl, apiKey: key.apiKey, model, extensionPath: this.ctx.extensionPath,
-      state: stateRoot(process.env, homedir()),
-    });
-    launch.env.BULKHOURS_MODEL = model;
-    launch.env.BULKHOURS_MODELS = key.models.join(",");
-    launch.env.BULKHOURS_VISION_MODELS = this.vision(key).join(",");
-    const launchKey = `${this.agent(key).id}|${model}`;
-    const resume = this.paused?.launchKey === launchKey ? this.paused.sessionId : undefined;
-    this.paused = undefined;
-    // The first start on a machine can download the agent (minutes, measured
-    // 2026-11-10): the panel says so instead of staying silent.
-    this.starting = true;
-    await this.render();
-    try {
-      this.session = await AgentSession.start(launch, folder, {
-        readTextFile, writeTextFile,
-        askPermission: (req) => this.ask(req),
-        onUpdate: (u) => {
-          if (this.activity) {
-            this.activity.last = Date.now();
-            if (u.sessionUpdate === "tool_call" || u.sessionUpdate === "tool_call_update") {
-              const running = u.status === "in_progress" || u.status === "pending" || (u.sessionUpdate === "tool_call" && !u.status);
-              if (running && u.title) this.activity.tool = u.title;
-              else if (u.status === "completed" || u.status === "failed") this.activity.tool = "";
-            }
-          }
-          if (u.sessionUpdate === "usage_update") this.usage = { used: u.used, size: u.size };
-          if (u.sessionUpdate === "available_commands_update") this.commands = u.availableCommands.map((c) => c.name);
-          this.conversation?.update(u);
-          this.transcript = applyUpdate(this.transcript, u);
-          void this.render();
-        },
-        log: (line) => this.log.append(line),
-      }, this.ctx.extension.packageJSON.version, resume);
-      this.launchKey = launchKey;
-      this.record(key, model, folder);
-    } finally {
-      this.starting = false;
-    }
-    return this.session;
-  }
-
-  private ask(req: RequestPermissionRequest): Promise<RequestPermissionOutcome> {
-    const id = this.nextAsk++;
-    void this.view?.webview.postMessage({
-      type: "permission", id, title: req.toolCall.title ?? t(this.lang, "agentWantsToAct"),
-      options: req.options.map((o) => ({ id: o.optionId, name: o.name, kind: o.kind })),
-    });
-    return new Promise((resolve) => this.asks.set(id, resolve));
-  }
-
-  private answer(id: number, optionId: string | null): void {
-    const resolve = this.asks.get(id);
-    this.asks.delete(id);
-    resolve?.(optionId ? { outcome: "selected", optionId } : { outcome: "cancelled" });
-  }
-
-  private endSession(): void {
-    this.commands = [];
-    for (const resolve of this.asks.values()) resolve({ outcome: "cancelled" });
-    this.asks.clear();
-    this.session?.dispose();
-    this.session = undefined;
-  }
-
   private fail(e: unknown): void {
-    this.transcript = addNotice(this.transcript, t(this.lang, "error", { message: sayError(this.lang, e) }));
-    this.busy = false;
+    this.active.failed(sayError(this.lang, e));
     void this.render();
+  }
+
+  private stripOf(): string {
+    return JSON.stringify(this.tabs.map((x) => ({ id: x.id, title: x.title, busy: x.busy, asking: x.asking.length > 0 })));
   }
 
   private async render(): Promise<void> {
     const key = this.creds.known();
+    const tab = this.active;
+    this.strip = this.stripOf();
     await this.view?.webview.postMessage({
-      type: "state", transcript: this.transcript, busy: this.busy, starting: this.starting,
-      signedIn: await this.creds.signedIn(), model: this.model(key), models: key?.models ?? [],
-      agent: key ? safeLabel(() => this.agent(key).label) : "",
+      type: "state", transcript: tab.transcript, busy: tab.busy, starting: tab.starting,
+      signedIn: await this.creds.signedIn(), model: tab.model(key), models: key?.models ?? [],
+      agent: key ? safeLabel(() => tab.agentSpec(key).label) : "",
       modelLabels: key?.modelLabels ?? {}, modelPrices: key?.modelPrices ?? {}, modelVision: key ? this.vision(key) : [],
       currency: key?.currency ?? "USD",
-      agents: safeList(() => this.agentChoices(key)), agentId: key ? safeLabel(() => (this.agent(key) === key.agent ? "" : this.agent(key).id)) : "",
-      credits: this.credits ?? null, usage: this.usage, commands: this.commands,
-      activity: this.busy ? this.activity : null,
+      agents: safeList(() => this.agentChoices(key)), agentId: key ? safeLabel(() => (tab.agentSpec(key) === key.agent ? "" : tab.agentSpec(key).id)) : "",
+      credits: this.credits ?? null, usage: tab.usage, commands: tab.commands,
+      activity: tab.busy ? tab.activity : null, asks: tab.asking,
+      tabs: JSON.parse(this.strip), tab: tab.id,
     });
   }
 }
@@ -477,21 +371,11 @@ function safeLabel(f: () => string): string {
   try { return f(); } catch (e) { return `(${(e as Error).message})`; }
 }
 
-function activeFileContext(): { uri: string; name: string }[] {
-  const doc = vscode.window.activeTextEditor?.document;
-  if (!doc || doc.uri.scheme !== "file") return [];
-  return [{ uri: doc.uri.toString(), name: vscode.workspace.asRelativePath(doc.uri) }];
-}
-
-function reason(lang: Lang, stop: string): string {
-  const key = `reason_${stop}`;
-  return key in MESSAGES[lang] ? t(lang, key as MessageKey) : stop.replace(/_/g, " ");
-}
-
 // The panel's own words, sent once in the page as data (never as script).
 const PANEL_WORDS: MessageKey[] = ["signIn", "emptyChat", "placeholder", "send", "stop", "model", "thinking", "output", "noChange", "startingAgent",
   "compact", "compactHint", "clear", "clearHint", "thinkingVerb", "budgetTitle", "contextTitle", "removeImage",
-  "suggestExplain", "suggestBuild", "suggestFaster", "schoolModels", "yourAgents", "mic", "micWindows", "micMac", "seesImages", "lastActivity", "thisTurn"];
+  "suggestExplain", "suggestBuild", "suggestFaster", "schoolModels", "yourAgents", "mic", "micWindows", "micMac", "seesImages", "lastActivity", "thisTurn",
+  "newTab", "newTabHint", "closeTab", "renameHint"];
 
 function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, lang: Lang): string {
   const css = webview.asWebviewUri(vscode.Uri.joinPath(media, "chat.css"));
@@ -508,6 +392,7 @@ function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, l
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; img-src data:; script-src 'nonce-${nonce}';">
 <link rel="stylesheet" href="${css}"></head>
 <body>
+<nav id="tabs" role="tablist" hidden></nav>
 <div id="log" role="log" aria-live="polite"></div>
 <script type="application/json" id="words">${data}</script>
 <form id="ask" hidden><div id="budgetline" hidden><span class="fill"></span></div>

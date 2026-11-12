@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.17 — 2026-11-12
+
+- Conversations open as tabs at the top of the panel, each with its own agent: a long job keeps working in one tab while you ask something in another. A dot marks a tab that works, a yellow dot one waiting for your answer. Double-click a tab to rename it, × closes it (asking first if it works), + opens a new one. The open tabs come back after a window reload; their agents start only at their next message.
+- The model menu changes the tab shown; the other tabs keep the agent and model they run. At most three conversations work at once.
+
 ## 0.1.16 — 2026-11-12
 
 - A long conversation reads back again: pictures a tool showed the agent (screenshots it read) are no longer stored in the record — the panel shows them as [image] anyway — and a record is read a piece at a time, so even a very large one opens. A job that read hundreds of screenshots had made a 584 MB record that left the panel empty.

@@ -28,6 +28,15 @@ export function addNotice(t: Transcript, text: string): Transcript {
   return [...t, { kind: "notice", text }];
 }
 
+// The tool the agent is running, for the panel's activity line: set when a
+// tool starts, cleared when it ends, kept otherwise.
+export function runningTool(u: SessionUpdate, current: string): string {
+  if (u.sessionUpdate !== "tool_call" && u.sessionUpdate !== "tool_call_update") return current;
+  const running = u.status === "in_progress" || u.status === "pending" || (u.sessionUpdate === "tool_call" && !u.status);
+  if (running && u.title) return u.title;
+  return u.status === "completed" || u.status === "failed" ? "" : current;
+}
+
 export function applyUpdate(t: Transcript, u: SessionUpdate): Transcript {
   switch (u.sessionUpdate) {
     case "agent_message_chunk": return appendText(t, "agent", blockText(u.content));

@@ -7,7 +7,7 @@
   const $ = (id) => document.getElementById(id);
   const log = $("log"), input = $("input"), form = $("ask"), go = $("go"), line = $("budgetline");
   const model = $("model"), thumbs = $("thumbs"), mic = $("mic");
-  const budget = $("budget"), context = $("context"), compact = $("compact"), clear = $("clear");
+  const budget = $("budget"), context = $("context"), compact = $("compact"), clear = $("clear"), strip = $("tabs");
   const W = JSON.parse($("words").textContent);
   // The school's colour, set here: the page's CSP forbids style attributes.
   if (/^#[0-9a-f]{6}$/i.test(W.accent || "")) document.body.style.setProperty("--accent", W.accent);
@@ -143,10 +143,56 @@
   }
   setInterval(drawActivity, 1000);
 
+  // -- the tabs: one per conversation, each running on its own. A dot marks a
+  // tab whose agent works, a ! one that waits for the student's answer.
+  let editing = 0;        // the tab being renamed: the strip is not redrawn under it
+
+  function tabs(s) {
+    strip.hidden = !s.signedIn;
+    if (editing) return;
+    strip.innerHTML = s.tabs.map((x) =>
+      `<span class="tab${x.id === s.tab ? " on" : ""}${x.busy ? " busy" : ""}${x.asking ? " asking" : ""}" role="tab" aria-selected="${x.id === s.tab}" data-id="${x.id}">`
+      + `<span class="name" title="${esc(x.title ? `${x.title} — ${W.renameHint}` : W.renameHint)}">${esc(x.title || W.newTab)}</span>`
+      + `<button type="button" class="x" title="${esc(W.closeTab)}" aria-label="${esc(W.closeTab)}">×</button></span>`).join("")
+      + `<button type="button" class="new" title="${esc(W.newTabHint)}" aria-label="${esc(W.newTabHint)}">+</button>`;
+    strip.querySelectorAll(".tab").forEach((el) => {
+      const id = Number(el.dataset.id);
+      el.onclick = (ev) => { if (!ev.target.closest(".x") && id !== s.tab) vscode.postMessage({ type: "tab", id }); };
+      el.querySelector(".x").onclick = () => vscode.postMessage({ type: "closeTab", id });
+      el.querySelector(".name").ondblclick = () => renameTab(el, id);
+    });
+    strip.querySelector(".new").onclick = () => vscode.postMessage({ type: "newChat" });
+    strip.querySelector(".on")?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }
+
+  // Renamed in place: Enter keeps the name, Escape or an empty name drops it.
+  function renameTab(el, id) {
+    const name = el.querySelector(".name");
+    const box = document.createElement("input");
+    box.className = "rename";
+    box.value = name.textContent === W.newTab ? "" : name.textContent;
+    editing = id;
+    name.replaceWith(box);
+    box.focus();
+    box.select();
+    let done = false;
+    const finish = (keep) => {
+      if (done) return;
+      done = true;
+      editing = 0;
+      if (keep && box.value.trim()) vscode.postMessage({ type: "rename", id, title: box.value.trim() });
+      if (lastState) tabs(lastState);
+    };
+    box.onkeydown = (ev) => { if (ev.key === "Enter") finish(true); if (ev.key === "Escape") finish(false); };
+    box.onblur = () => finish(true);
+  }
+
   // -- the conversation --------------------------------------------------------
   let shown = 0;          // entries already drawn: only new ones fade in
+  let shownTab = 0;       // another tab shown: its entries do not fade in
 
   function render(s) {
+    tabs(s);
     if (!s.signedIn) {
       log.innerHTML = `<div class="welcome"><p>${esc(W.signInPrompt)}</p>
         <button id="signin">${esc(W.signIn)}</button></div>`;
@@ -158,6 +204,8 @@
     form.hidden = false;
     $("meters").hidden = false;
     const atBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 40;
+    const switched = s.tab !== shownTab;
+    if (switched) { shownTab = s.tab; shown = s.transcript.length; }
     if (s.transcript.length < shown) shown = 0;
     log.innerHTML = s.transcript.length
       ? s.transcript.map((e, i) => entry(e).replace(/^<(\w+) class="/, (m) => i >= shown ? `${m}enter ` : m)).join("")
@@ -172,9 +220,8 @@
       + `<span class="name">${esc(label)}</span> <span class="verb">${esc(W.thinkingVerb)}</span><span class="activity"></span></div>`;
     lastState = s;
     drawActivity();
-    if (!s.busy) asks.clear();            // a finished turn leaves no question open
-    drawAsks();
-    if (atBottom || asks.size) log.scrollTop = log.scrollHeight;
+    drawAsks(s.asks || []);
+    if (atBottom || (s.asks || []).length || switched) log.scrollTop = log.scrollHeight;
     busy = s.busy;
     go.classList.toggle("stop", busy);
     go.innerHTML = busy ? SQUARE : ARROW;
@@ -185,32 +232,22 @@
     meters(s);
   }
 
-  // Permission prompts waiting for the student. Kept HERE and drawn again
-  // after every render: the log is rebuilt at each update, and a prompt that
-  // vanished left the agent waiting forever (owner, 2026-11-10: "why is
-  // that freeze?" - Claude Code asking to run `ls`).
-  const asks = new Map();
-
-  function drawAsks() {
-    for (const p of asks.values()) {
+  // Permission prompts waiting for the student: part of the shown tab's
+  // state, drawn again after every render - a prompt that vanished left the
+  // agent waiting forever (owner, 2026-11-10: "why is that freeze?" -
+  // Claude Code asking to run `ls`).
+  function drawAsks(asks) {
+    for (const p of asks) {
       const box = document.createElement("div");
       box.className = "ask";
       box.innerHTML = `<p>${esc(p.title)}</p>` + p.options.map((o) =>
         `<button data-id="${esc(o.id)}" class="${o.kind.startsWith("allow") ? "allow" : "reject"}">${esc(o.name)}</button>`).join("");
       box.querySelectorAll("button").forEach((b) => b.onclick = () => {
-        asks.delete(p.id);
         vscode.postMessage({ type: "permission", id: p.id, optionId: b.dataset.id });
         box.remove();
       });
       log.appendChild(box);
     }
-  }
-
-  function permission(p) {
-    asks.set(p.id, p);
-    log.querySelectorAll(".ask").forEach((b) => b.remove());
-    drawAsks();
-    log.scrollTop = log.scrollHeight;
   }
 
   // -- pasted pictures ---------------------------------------------------------
@@ -242,7 +279,6 @@
 
   window.addEventListener("message", (ev) => {
     if (ev.data.type === "state") render(ev.data);
-    if (ev.data.type === "permission") permission(ev.data);
   });
   // The text box grows with what is typed, up to its max-height.
   function grow() { input.style.height = "auto"; input.style.height = `${input.scrollHeight}px`; }

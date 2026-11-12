@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { addUserPrompt, applyUpdate, type Transcript } from "../src/core/transcript.ts";
+import { addUserPrompt, applyUpdate, runningTool, type Transcript } from "../src/core/transcript.ts";
 
 const text = (t: string) => ({ type: "text" as const, text: t });
 
@@ -144,4 +144,14 @@ test("an emptied file and a new file read differently in a diff", () => {
 test("a question with pasted images keeps them, a plain one stays plain", () => {
   const t = addUserPrompt(addUserPrompt([], "plain"), "look", ["data:image/png;base64,AAA"]);
   assert.deepEqual(t, [{ kind: "user", text: "plain" }, { kind: "user", text: "look", images: ["data:image/png;base64,AAA"] }]);
+});
+
+test("the activity line names the tool running, and forgets it once the tool ends", () => {
+  const tool = (sessionUpdate: string, status?: string, title?: string) => ({ sessionUpdate, toolCallId: "t", status, title }) as any;
+  assert.equal(runningTool(tool("tool_call", undefined, "Read k.cu"), ""), "Read k.cu");
+  assert.equal(runningTool(tool("tool_call_update", "in_progress", "nvcc k.cu"), "Read k.cu"), "nvcc k.cu");
+  assert.equal(runningTool(tool("tool_call_update", "in_progress"), "nvcc k.cu"), "nvcc k.cu", "no title: the name stays");
+  assert.equal(runningTool(tool("tool_call_update", "completed"), "nvcc k.cu"), "");
+  assert.equal(runningTool(tool("tool_call_update", "failed"), "nvcc k.cu"), "");
+  assert.equal(runningTool({ sessionUpdate: "agent_message_chunk", content: { type: "text", text: "hi" } } as any, "nvcc"), "nvcc");
 });

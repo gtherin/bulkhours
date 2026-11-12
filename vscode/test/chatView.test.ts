@@ -55,7 +55,8 @@ const views: { dispose(): void }[] = [];
 after(() => views.forEach((v) => v.dispose()));
 
 function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA",
-               opts: { images?: boolean; fresh?: boolean; store?: string; idleMs?: number; commands?: boolean; state?: string } = {}) {
+               opts: { images?: boolean; fresh?: boolean; store?: string; idleMs?: number; commands?: boolean; state?: string;
+                      workspace?: Map<string, unknown> } = {}) {
   // Each panel keeps its conversations in its own state folder (never the
   // real ~/.local/state/gateka), unless a test shares one on purpose.
   process.env.GATEKA_STATE_HOME = opts.state ?? mkdtempSync(join(tmpdir(), "bh-gstate-"));
@@ -65,6 +66,7 @@ function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA",
   const meters: unknown[] = [];
   let fetched = false;
   const state = new Map<string, unknown>();
+  const workspace = opts.workspace ?? new Map<string, unknown>();
   const posted: any[] = [];
   let send: (m: unknown) => Promise<void> = async () => {};
   let changed: () => void = () => {};
@@ -72,6 +74,7 @@ function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA",
     extensionUri: { fsPath: "/ext" }, extensionPath: "/ext",
     extension: { packageJSON: { version: "0.1.0" } },
     globalState: { get: (k: string) => state.get(k), update: async (k: string, v: unknown) => { state.set(k, v); } },
+    workspaceState: { get: (k: string) => workspace.get(k), update: async (k: string, v: unknown) => { workspace.set(k, v); } },
   };
   const creds: any = {
     onDidChange: (f: () => void) => { changed = f; return { dispose() {} }; },
@@ -143,7 +146,7 @@ test("a write waits for the student's answer in the panel", async () => {
   const p = panel();
   const turn = p.send({ type: "send", text: `write ${folder}/out.txt` });
   let ask: any;
-  for (let i = 0; i < 100 && !ask; i++) { await new Promise((r) => setTimeout(r, 20)); ask = p.posted.find((m) => m.type === "permission"); }
+  for (let i = 0; i < 100 && !ask; i++) { await new Promise((r) => setTimeout(r, 20)); ask = p.posted.find((m) => m.type === "state" && m.asks?.length)?.asks[0]; }
   assert.equal(ask.title, `Write ${folder}/out.txt`);
   assert.deepEqual(ask.options.map((o: any) => o.kind), ["allow_once", "reject_once"]);
   assert.equal(written.has(`${folder}/out.txt`), false, "nothing is written before the answer");
@@ -209,7 +212,7 @@ test("closing a permission prompt without choosing refuses the action", async ()
   const p = panel();
   const turn = p.send({ type: "send", text: `write ${folder}/never.txt` });
   let ask: any;
-  for (let i = 0; i < 100 && !ask; i++) { await new Promise((r) => setTimeout(r, 20)); ask = p.posted.find((m) => m.type === "permission"); }
+  for (let i = 0; i < 100 && !ask; i++) { await new Promise((r) => setTimeout(r, 20)); ask = p.posted.find((m) => m.type === "state" && m.asks?.length)?.asks[0]; }
   await p.send({ type: "permission", id: ask.id, optionId: null });
   await turn;
   assert.equal(written.has(`${folder}/never.txt`), false);
@@ -220,7 +223,7 @@ test("closing a permission prompt without choosing refuses the action", async ()
 test("closing VS Code stops the agent process", async () => {
   const p = panel();
   await p.send({ type: "send", text: "hello" });
-  const child = (p.view as any).session.child;
+  const child = (p.view as any).active.session.child;
   assert.equal(child.exitCode, null);
   p.view.dispose();
   await new Promise((r) => child.once("exit", r));
@@ -240,7 +243,7 @@ test("an answer to a prompt that no longer exists is ignored", async () => {
   const p = panel();
   await p.send({ type: "ready" });
   await p.send({ type: "permission", id: 999, optionId: "yes" });
-  assert.equal(p.posted.filter((m) => m.type === "permission").length, 0);
+  assert.deepEqual(p.last().asks, []);
   assert.deepEqual(texts(p.last()), [], "no error shows up in the chat");
 });
 
@@ -507,4 +510,121 @@ test("Compact during a turn asks first, then stops the turn and compacts; a refu
   assert.equal(p.last().busy, false);
   assert.equal(t.at(-1), "conversation compacted: the next message starts a fresh agent session with the conversation condensed");
   p.view.newChat();
+});
+
+// -- tabs: one per conversation, each running on its own (owner, 2026-11-12;
+// architect bfd92a) ----------------------------------------------------------
+
+const until = async (f: () => boolean) => { for (let i = 0; i < 200 && !f(); i++) await new Promise((r) => setTimeout(r, 20)); };
+
+test("a conversation keeps working in its tab while the student asks something in another", async () => {
+  const p = panel();
+  const first = p.send({ type: "send", text: "wait" });           // a long turn
+  await until(() => p.last()?.busy);
+  const a = p.last().tab;
+  p.view.newChat();                                               // + : a new tab
+  await p.send({ type: "send", text: "hello" });
+  const s = p.last();
+  assert.notEqual(s.tab, a);
+  assert.deepEqual(texts(s), ["hello", "you said: hello"]);
+  assert.equal(s.tabs.find((x: any) => x.id === a).busy, true, "the first tab still works");
+  await first;
+  await p.send({ type: "tab", id: a });
+  assert.deepEqual(texts(p.last()), ["wait", "waited the whole second"]);
+  assert.equal(p.last().tabs.length, 2);
+  p.view.dispose();
+});
+
+test("a tab is named by its first question, renamed in place, and the record keeps the name", async () => {
+  const p = panel();
+  await p.send({ type: "send", text: "why is my kernel slow?" });
+  assert.equal(p.last().tabs[0].title, "why is my kernel slow?");
+  await p.send({ type: "rename", id: p.last().tab, title: "Kernel speed" });
+  assert.equal(p.last().tabs[0].title, "Kernel speed");
+  assert.equal(p.description(), "Kernel speed");
+  assert.ok(p.view.conversations().some((c: any) => c.title === "Kernel speed"));
+  p.view.dispose();
+});
+
+test("closing a working tab asks first; a refusal keeps it, the last tab closed leaves an empty one", async () => {
+  const p = panel();
+  confirmAnswer = "no";
+  const turn = p.send({ type: "send", text: "wait" });
+  await until(() => p.last()?.busy);
+  await p.send({ type: "closeTab", id: p.last().tab });
+  assert.equal(p.last().tabs.length, 1);
+  assert.equal(p.last().busy, true, "refused: the turn goes on");
+  await turn;
+  confirmAnswer = "yes";
+  const id = p.last().tab;
+  await p.send({ type: "closeTab", id });
+  const s = p.last();
+  assert.equal(s.tabs.length, 1);
+  assert.notEqual(s.tab, id);
+  assert.deepEqual(s.transcript, []);
+  assert.equal(p.view.conversations().length, 1, "the closed conversation stays in the history");
+  p.view.dispose();
+});
+
+test("the open tabs come back after a window reload, each agent started only at its next message", async () => {
+  const state = mkdtempSync(join(tmpdir(), "bh-gstate-"));
+  const workspace = new Map<string, unknown>();
+  const before = panel(true, "en", "IPSA", { state, workspace });
+  await before.send({ type: "send", text: "first topic" });
+  before.view.newChat();
+  await before.send({ type: "send", text: "second topic" });
+  before.view.newChat();                                          // an empty tab is not kept
+  await before.send({ type: "tab", id: before.last().tabs[0].id });
+  before.view.dispose();
+  const after = panel(true, "en", "IPSA", { state, workspace });
+  await after.send({ type: "ready" });
+  const s = after.last();
+  assert.deepEqual(s.tabs.map((x: any) => x.title), ["first topic", "second topic"]);
+  assert.deepEqual(texts(s), ["first topic", "you said: first topic"], "the tab shown before is shown again");
+  assert.equal((after.view as any).tabs.some((t: any) => t.session), false, "no agent started by the reload");
+  after.view.dispose();
+});
+
+test("choosing another model changes the shown tab only", async () => {
+  const p = panel();
+  await p.send({ type: "send", text: "hello" });
+  const a = p.last().tab;
+  p.view.newChat();
+  await p.send({ type: "choose", agent: "", model: "code" });
+  assert.equal(p.last().model, "code");
+  await p.send({ type: "tab", id: a });
+  assert.equal(p.last().model, "fast", "the first tab keeps the model it runs");
+  p.view.dispose();
+});
+
+test("no more than three conversations work at once", async () => {
+  const p = panel();
+  const turns = [];
+  for (let i = 0; i < 3; i++) {
+    if (i) p.view.newChat();
+    turns.push(p.send({ type: "send", text: "wait" }));
+    await until(() => p.last()?.busy);
+  }
+  p.view.newChat();
+  await p.send({ type: "send", text: "hello" });
+  assert.match(texts(p.last()).at(-1), /3 conversations are already working/);
+  await Promise.all(turns);
+  p.view.dispose();
+});
+
+test("a conversation picked in the history shows its tab when it is open, else opens one", async () => {
+  const p = panel();
+  await p.send({ type: "send", text: "first topic" });
+  const a = p.last().tab;
+  p.view.newChat();
+  await p.send({ type: "send", text: "second topic" });
+  const [second, first] = p.view.conversations();
+  await p.view.open(first.file);
+  assert.equal(p.last().tab, a, "already open: its tab is shown");
+  assert.equal(p.last().tabs.length, 2);
+  await p.send({ type: "closeTab", id: p.last().tabs[1].id });
+  await p.view.open(second.file);
+  assert.equal(p.last().tabs.length, 2, "closed: it opens in a tab of its own");
+  assert.deepEqual(texts(p.last()), ["second topic", "you said: second topic"]);
+  p.view.dispose();
 });
