@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.22 — 2026-11-12
+
+- MaQI uses MaQI's own connection, not BulkHours': on a MaQI server the key the platform writes for each person (/run/maqi/keys/<account>/llm.env, renewed every 12 h) is the sign-in; its models (fast, code, reasoning, frontier) and prices are in schools/maqi.json. A renewed key restarts the agent at the next turn, which resumes the conversation. Elsewhere, MaQI says where it works instead of offering a sign-in.
+- The agent introduces itself with the variant's name.
+
 ## 0.1.21 — 2026-11-12
 
 - Where conversations and the agents' files live is a choice: the variant's config file names its folder (MaQI: ~/.maqi), and the setting "State directory" moves it (absolute or under ~; after a window reload). Without either: ~/.local/state/gateka, as before.

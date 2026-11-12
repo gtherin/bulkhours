@@ -199,9 +199,10 @@
   function render(s) {
     tabs(s);
     if (!s.signedIn) {
-      log.innerHTML = `<div class="welcome"><p>${esc(W.signInPrompt)}</p>
-        <button id="signin">${esc(W.signIn)}</button></div>`;
-      $("signin").onclick = () => vscode.postMessage({ type: "signIn" });
+      // Signed in by the machine (MaQI's key file): nothing to click here.
+      log.innerHTML = s.interactive === false ? `<div class="welcome"><p>${esc(W.platformOnly)}</p></div>`
+        : `<div class="welcome"><p>${esc(W.signInPrompt)}</p><button id="signin">${esc(W.signIn)}</button></div>`;
+      if (s.interactive !== false) $("signin").onclick = () => vscode.postMessage({ type: "signIn" });
       form.hidden = true;
       $("meters").hidden = true;
       return;

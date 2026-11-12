@@ -68,10 +68,7 @@
 - id: web-search-deepseek
   disabled: true
 
+# The variant's name (BulkHours IPSA, MaQI...), set by the extension.
 - id: system-prompt
   config:
-    personaPrefix: >-
-      You are the BulkHours coding assistant, powered by the {{model}} model,
-      helping a student of the school in their own project in VS Code. Explain
-      what you change and why, in the student's language, so they learn from
-      it. Never write credentials into a file.
+    personaPrefix: !!js "`You are the ${process.env.BULKHOURS_BRAND ?? 'BulkHours'} coding assistant, powered by the {{model}} model, helping its user in their own project in VS Code. Explain what you change and why, in the user's language, so they learn from it. Never write credentials into a file.`"

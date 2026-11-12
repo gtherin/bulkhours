@@ -2,16 +2,25 @@
 // known before sign-in (identity and addresses); models and the agent come
 // from the school's key server after it. Checked once, at build time.
 import { colour, failer, https, text } from "./fields.ts";
+import { parseOffer } from "./keys.ts";
+
+export type Connection = { keyFile: string; offer: Record<string, unknown> };
 import type { Lang } from "./i18n.ts";
 
 export type School = {
   id: string;
   name: string;
   accent: string;
-  signInUrl: string;
-  keyUrl: string;
+  // The school's sign-in page and key server (BulkHours' Moodle): absent
+  // for a variant on its platform's own connection.
+  signInUrl?: string;
+  keyUrl?: string;
   // What this student spent of their budget, for the panel's meter.
-  creditsUrl: string;
+  creditsUrl?: string;
+  // The platform's own connection (MaQI, owner 2026-11-12): the person's key
+  // in a file the platform writes and renews (${user} = the account), and
+  // what goes with it (models, agent), as a key server would send them.
+  connection?: Connection;
   // Where this school's builds and latest.json are published (updates until
   // the extension is on the Marketplace). Optional.
   downloadUrl?: string;
@@ -41,9 +50,12 @@ export function parseSchool(raw: unknown): School {
     id: o.id,
     name: text(o, "name", fail),
     accent: colour(o, "accent", fail),
-    signInUrl: https(o, "signInUrl", fail),
-    keyUrl: https(o, "keyUrl", fail),
-    creditsUrl: https(o, "creditsUrl", fail),
+    // On its platform's own connection a variant has no sign-in addresses.
+    ...(o.connection !== undefined ? { connection: connection(o.connection, fail) } : {
+      signInUrl: https(o, "signInUrl", fail),
+      keyUrl: https(o, "keyUrl", fail),
+      creditsUrl: https(o, "creditsUrl", fail),
+    }),
     ...(o.downloadUrl !== undefined ? { downloadUrl: https(o, "downloadUrl", fail) } : {}),
     language: language(o.language, fail),
     title: o.title === undefined ? `BulkHours ${text(o, "name", fail)}` : text(o, "title", fail),
@@ -56,6 +68,14 @@ export function parseSchool(raw: unknown): School {
 // The extension's name, and its builds' file names: bulkhours-ipsa, maqi.
 export function packageName(s: Pick<School, "id" | "prefix">): string {
   return s.prefix === s.id ? s.id : `${s.prefix}-${s.id}`;
+}
+
+function connection(v: unknown, fail: (m: string) => never): Connection {
+  const o = (v ?? {}) as Record<string, unknown>;
+  const keyFile = typeof o.keyFile === "string" && o.keyFile.startsWith("/") ? o.keyFile : fail(`"keyFile" must be an absolute path`);
+  const offer = (o.offer ?? {}) as Record<string, unknown>;
+  try { parseOffer(offer, fail); } catch (e) { fail((e as Error).message.replace(/^school \S+: /, "")); }
+  return { keyFile, offer };
 }
 
 function stateDir(v: unknown, fail: (m: string) => never): string {

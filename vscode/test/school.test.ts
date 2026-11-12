@@ -50,3 +50,15 @@ test("a variant may name its own state folder, absolute or under ~", () => {
   assert.equal(parseSchool(ipsa).stateDir, undefined);
   assert.throws(() => parseSchool({ ...ipsa, stateDir: ".maqi" }), /school ipsa: "stateDir" must start with ~\/ or \//);
 });
+
+test("a variant on its platform's own connection needs no sign-in addresses", () => {
+  const { signInUrl, keyUrl, creditsUrl, ...rest } = ipsa;
+  const connection = { keyFile: "/run/maqi/keys/${user}/llm.env",
+    offer: { models: ["fast"], agent: { id: "maqi", label: "MaQI", command: "dsh" } } };
+  const maqi = parseSchool({ ...rest, id: "maqi", connection });
+  assert.equal(maqi.connection?.keyFile, "/run/maqi/keys/${user}/llm.env");
+  assert.equal(maqi.signInUrl, undefined);
+  assert.throws(() => parseSchool({ ...rest, connection: { ...connection, keyFile: "llm.env" } }), /school ipsa: "keyFile" must be an absolute path/);
+  assert.throws(() => parseSchool({ ...rest, connection: { ...connection, offer: { models: [] } } }), /school ipsa: /);
+  assert.throws(() => parseSchool(rest), /school ipsa: "signInUrl" must be an https address/, "without a connection, the sign-in stays required");
+});

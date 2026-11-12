@@ -82,3 +82,19 @@ test("the school's currency comes with the key, dollars unless it says euros", (
 test("the models that read images are kept, offered ones only", () => {
   assert.deepEqual(parseKeyReply({ ...reply, model_vision: ["fast", "other", 3] }).modelVision, ["fast"]);
 });
+
+// MaQI's own connection (owner, 2026-11-12: "use the maqi connection, not
+// bulkhours"): on a MaQI machine the platform writes each person's key to
+// /run/maqi/keys/<account>/llm.env and renews it; the variant's file says
+// which models and agent go with it.
+test("a key file is read as the platform writes it, with the variant's offer", async () => {
+  const { keyFromFile } = await import("../src/core/keys.ts");
+  const offer = { models: ["fast", "code"], default_model: "fast", currency: "EUR",
+    agent: { id: "maqi", label: "MaQI", command: "dsh" }, model_labels: { fast: "DeepSeek V4 Flash" } };
+  const k = keyFromFile("# renewed 2026-11-12\nOPENAI_API_KEY=sk-maqi-1\nexport OPENAI_BASE_URL=\"http://10.4.0.44:4000\"\n", offer);
+  assert.deepEqual([k.apiKey, k.baseUrl, k.models, k.defaultModel, k.agent.id, k.currency, k.modelLabels.fast],
+    ["sk-maqi-1", "http://10.4.0.44:4000", ["fast", "code"], "fast", "maqi", "EUR", "DeepSeek V4 Flash"]);
+  assert.ok(k.expiresAt > Date.now() + 3600e3, "the platform renews it: never renewed here");
+  assert.throws(() => keyFromFile("OPENAI_BASE_URL=http://x:4000\n", offer), /key file: OPENAI_API_KEY missing/);
+  assert.throws(() => keyFromFile("OPENAI_API_KEY=sk\nOPENAI_BASE_URL=ftp://x\n", offer), /key file: OPENAI_BASE_URL must be an http\(s\) address/);
+});

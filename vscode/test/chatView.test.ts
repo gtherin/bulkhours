@@ -56,7 +56,7 @@ after(() => views.forEach((v) => v.dispose()));
 
 function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA",
                opts: { images?: boolean; fresh?: boolean; store?: string; idleMs?: number; commands?: boolean; state?: string;
-                      workspace?: Map<string, unknown> } = {}) {
+                      workspace?: Map<string, unknown>; platform?: boolean } = {}) {
   // Each panel keeps its conversations in its own state folder (never the
   // real ~/.local/state/gateka), unless a test shares one on purpose.
   process.env.GATEKA_STATE_HOME = opts.state ?? mkdtempSync(join(tmpdir(), "bh-gstate-"));
@@ -78,6 +78,7 @@ function panel(signedIn = true, lang: "fr" | "en" = "en", schoolName = "IPSA",
   };
   const creds: any = {
     onDidChange: (f: () => void) => { changed = f; return { dispose() {} }; },
+    interactive: opts.platform ? false : true,
     signedIn: async () => signedIn,
     // fresh: a window just reloaded, the key is not fetched yet
     known: () => (signedIn && (!opts.fresh || fetched) ? k : undefined),
@@ -627,4 +628,11 @@ test("a conversation picked in the history shows its tab when it is open, else o
   assert.equal(p.last().tabs.length, 2, "closed: it opens in a tab of its own");
   assert.deepEqual(texts(p.last()), ["second topic", "you said: second topic"]);
   p.view.dispose();
+});
+
+test("a variant signed in by its machine shows where it works, never a sign-in button", async () => {
+  const p = panel(false, "en", "MaQI", { platform: true });
+  await p.send({ type: "ready" });
+  assert.deepEqual([p.last().signedIn, p.last().interactive], [false, false]);
+  assert.match(p.webview.html, /works on its own servers/);
 });

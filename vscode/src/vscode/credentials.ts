@@ -10,7 +10,26 @@ import type { School } from "../core/school.ts";
 
 const TOKEN = "bulkhours.token";
 
-export class Credentials implements vscode.UriHandler {
+type Credits = { spent: number; budget: number; currency: "USD" | "EUR" };
+
+// Where a variant's key comes from (architect a39340): the school's Moodle
+// sign-in and key server (Credentials), or the platform's own key file
+// (PlatformKeys, MaQI). The panel uses this, never the variant's name.
+export interface KeySource extends vscode.UriHandler {
+  // Whether the person signs in here (a page to open) or is signed in by
+  // the machine itself.
+  readonly interactive: boolean;
+  readonly onDidChange: vscode.Event<void>;
+  known(): Key | undefined;
+  signedIn(): Promise<boolean>;
+  signIn(): Promise<void>;
+  signOut(): Promise<void>;
+  currentKey(): Promise<{ key: Key; renewed: boolean }>;
+  credits(): Promise<Credits | undefined>;
+}
+
+export class Credentials implements KeySource {
+  readonly interactive = true;
   private key: Key | undefined;
   private pendingState: string | undefined;
   private readonly changed = new vscode.EventEmitter<void>();
@@ -39,7 +58,7 @@ export class Credentials implements vscode.UriHandler {
     this.pendingState = randomUUID();
     const back = await vscode.env.asExternalUri(
       vscode.Uri.parse(`${vscode.env.uriScheme}://${this.extensionId}/signed-in`));
-    const url = new URL(this.school.signInUrl);
+    const url = new URL(this.school.signInUrl!);
     url.searchParams.set("redirect", back.toString());
     url.searchParams.set("state", this.pendingState);
     await vscode.env.openExternal(vscode.Uri.parse(url.toString()));
@@ -74,11 +93,11 @@ export class Credentials implements vscode.UriHandler {
 
   // This student's spend against their budget, as the key server reads it
   // from LiteLLM. Optional: a meter that cannot be read is not shown.
-  async credits(): Promise<{ spent: number; budget: number; currency: "USD" | "EUR" } | undefined> {
+  async credits(): Promise<Credits | undefined> {
     const token = await this.secrets.get(TOKEN);
     if (!token) return undefined;
     try {
-      const url = new URL(this.school.creditsUrl);
+      const url = new URL(this.school.creditsUrl!);
       url.searchParams.set("school", this.school.id);
       const r = await fetch(url.toString(), { headers: { authorization: `Bearer ${token}` } });
       if (r.status !== 200) return undefined;
@@ -93,7 +112,7 @@ export class Credentials implements vscode.UriHandler {
   private async fetchKey(): Promise<Key> {
     const token = await this.secrets.get(TOKEN);
     if (!token) throw new Said("notSignedIn");
-    const r = await fetch(this.school.keyUrl, {
+    const r = await fetch(this.school.keyUrl!, {
       method: "POST",
       headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
       body: JSON.stringify({ school: this.school.id }),

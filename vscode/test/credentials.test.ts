@@ -128,3 +128,4 @@ test("a budget that cannot be read is simply not shown, never an error", async (
   globalThis.fetch = (async () => { throw new Error("offline"); }) as any;
   assert.equal(await s.c.credits(), undefined);
 });
+

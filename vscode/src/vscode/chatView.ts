@@ -8,7 +8,7 @@ import type { Key } from "../core/keys.ts";
 import type { School } from "../core/school.ts";
 import { ConversationStore, stateRoot, type Opened, type Summary } from "../core/conversationStore.ts";
 import { homedir } from "node:os";
-import type { Credentials } from "./credentials.ts";
+import type { KeySource } from "./credentials.ts";
 import { Tab, type Pasted, type TabHost } from "./tab.ts";
 
 type FromPanel =
@@ -44,7 +44,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
   private nextAsk = 1;
   readonly ctx: vscode.ExtensionContext;
   private readonly school: School;
-  readonly creds: Credentials;
+  readonly creds: KeySource;
   readonly log: vscode.OutputChannel;
   readonly lang: Lang;
   private readonly meter: (c: Credits | undefined) => void;
@@ -59,7 +59,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
   // the strip only when this changes, never the whole conversation.
   private strip = "";
 
-  constructor(ctx: vscode.ExtensionContext, school: School, creds: Credentials, log: vscode.OutputChannel,
+  constructor(ctx: vscode.ExtensionContext, school: School, creds: KeySource, log: vscode.OutputChannel,
               lang: Lang = "en", meter: (c: Credits | undefined) => void = () => {}, idleMs = IDLE_MS) {
     this.ctx = ctx;
     this.school = school;
@@ -76,6 +76,8 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
   }
 
   get schoolId(): string { return this.school.id; }
+
+  get brand(): string { return this.school.title; }
 
   resolveWebviewView(view: vscode.WebviewView): void {
     this.view = view;
@@ -357,7 +359,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
     this.strip = this.stripOf();
     await this.view?.webview.postMessage({
       type: "state", transcript: tab.transcript, busy: tab.busy, starting: tab.starting,
-      signedIn: await this.creds.signedIn(), model: tab.model(key), models: key?.models ?? [],
+      signedIn: await this.creds.signedIn(), interactive: this.creds.interactive, model: tab.model(key), models: key?.models ?? [],
       agent: key ? safeLabel(() => tab.agentSpec(key).label) : "",
       modelLabels: key?.modelLabels ?? {}, modelPrices: key?.modelPrices ?? {}, modelVision: key ? this.vision(key) : [],
       currency: key?.currency ?? "USD",
@@ -391,6 +393,7 @@ function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, l
   // Raw: the panel fills in its own placeholders ({ago}, {cost}).
   const words: Record<string, string> = Object.fromEntries(PANEL_WORDS.map((k) => [k, MESSAGES[lang][k]]));
   words.signInPrompt = t(lang, "signInPrompt", { school: school.name });
+  words.platformOnly = t(lang, "platformOnly");
   words.accent = school.accent;
   words.title = school.title;
   const data = JSON.stringify(words).replace(/</g, "\\u003c");

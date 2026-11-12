@@ -34,9 +34,17 @@ export function parseKeyReply(raw: unknown): Key {
   const apiKey = typeof o.key === "string" && o.key ? o.key : fail(`"key" missing`);
   const baseUrl = https(o, "base_url", fail, "https");
   const expiresAt = date(o, "expires_at", fail);
+  return { apiKey, baseUrl, expiresAt, ...parseOffer(o, fail) };
+}
+
+// What goes with a key: the models, the agent, how money shows. From the key
+// server's reply, or from a variant's config file (connection.offer).
+export type Offer = Omit<Key, "apiKey" | "baseUrl" | "expiresAt">;
+
+export function parseOffer(o: Record<string, unknown>, fail: Fail): Offer {
   const models = names(o, "models", fail);
   return {
-    apiKey, baseUrl, expiresAt, models,
+    models,
     defaultModel: offered(o.default_model, models, fail),
     agent: theAgent(o.agent, fail),
     modelLabels: labels(o.model_labels, models),
@@ -64,6 +72,24 @@ function offered(wanted: unknown, models: string[], fail: Fail): string {
 
 function theAgent(raw: unknown, fail: Fail): AgentSpec {
   try { return parseAgents([raw])[0]; } catch (e) { return fail((e as Error).message); }
+}
+
+// A key the platform writes and renews itself (MaQI: /run/maqi/keys/<account>/
+// llm.env, every 12 h), as KEY=VALUE lines. Never renewed here: the file is
+// read again at each turn, and a new key restarts the agent.
+const NEVER_MS = 365 * 86_400_000;
+
+export function keyFromFile(text: string, offer: Record<string, unknown>): Key {
+  const fail = failer("key file");
+  const vars: Record<string, string> = {};
+  for (const line of text.split("\n")) {
+    const m = /^\s*(?:export\s+)?([A-Z_][A-Z0-9_]*)=(.*)$/.exec(line);
+    if (m) vars[m[1]] = m[2].trim().replace(/^(["'])(.*)\1$/, "$2");
+  }
+  const apiKey = vars.OPENAI_API_KEY || fail("OPENAI_API_KEY missing");
+  const baseUrl = /^https?:\/\/\S+$/.test(vars.OPENAI_BASE_URL ?? "") ? vars.OPENAI_BASE_URL
+    : fail("OPENAI_BASE_URL must be an http(s) address");
+  return { apiKey, baseUrl, expiresAt: Date.now() + NEVER_MS, ...parseOffer(offer, failer("connection offer")) };
 }
 
 export function needsRenewal(expiresAt: number, now: number): boolean {

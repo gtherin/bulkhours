@@ -10,7 +10,8 @@ import { writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { ChatView } from "./chatView.ts";
-import { Credentials } from "./credentials.ts";
+import { Credentials, type KeySource } from "./credentials.ts";
+import { PlatformKeys } from "./platformKeys.ts";
 
 declare const __SCHOOL__: unknown;
 
@@ -21,7 +22,9 @@ export function activate(ctx: vscode.ExtensionContext): void {
   // Commands, view and settings under the variant's own prefix.
   const id = (name: string) => `${school.prefix}.${name}`;
   const log = vscode.window.createOutputChannel(school.title);
-  const creds = new Credentials(ctx.secrets, school, ctx.extension.id, lang);
+  // The school's Moodle sign-in, or the platform's own key file (MaQI).
+  const creds: KeySource = school.connection ? new PlatformKeys(school.connection, lang)
+    : new Credentials(ctx.secrets, school, ctx.extension.id, lang);
   // The budget in the status bar, as MaQI's; a click opens the panel.
   const bar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
   bar.command = id("chat.focus");
@@ -92,7 +95,7 @@ async function update(ctx: vscode.ExtensionContext, school: School, lang: Lang, 
 }
 
 // The school's agent, or one of the student's own `<prefix>.extraAgents`.
-export async function pickAgent(creds: Pick<Credentials, "known">, chat: Pick<ChatView, "newChat">,
+export async function pickAgent(creds: Pick<KeySource, "known">, chat: Pick<ChatView, "newChat">,
                                 lang: Lang = "en", prefix = "bulkhours"): Promise<void> {
   const cfg = vscode.workspace.getConfiguration(prefix);
   const school = creds.known()?.agent;

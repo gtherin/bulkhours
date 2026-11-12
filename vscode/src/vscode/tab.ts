@@ -9,7 +9,7 @@ import { MESSAGES, Said, t, type Lang, type MessageKey } from "../core/i18n.ts";
 import type { Key } from "../core/keys.ts";
 import { addNotice, addUserPrompt, applyUpdate, runningTool, type Transcript } from "../core/transcript.ts";
 import { condensed, type Conversation, type ConversationStore, type Opened } from "../core/conversationStore.ts";
-import type { Credentials } from "./credentials.ts";
+import type { KeySource } from "./credentials.ts";
 import { readTextFile, writeTextFile } from "./editorHost.ts";
 
 export type Pasted = { mimeType: string; data: string };
@@ -19,12 +19,14 @@ export type Ask = { id: number; title: string; options: { id: string; name: stri
 // credentials are the panel's, shared by every tab.
 export interface TabHost {
   readonly ctx: vscode.ExtensionContext;
-  readonly creds: Credentials;
+  readonly creds: KeySource;
   readonly log: vscode.OutputChannel;
   readonly lang: Lang;
   readonly store: ConversationStore;
   readonly schoolId: string;
   readonly stateDir: string;
+  // The variant's title (BulkHours IPSA, MaQI), for the agent's persona.
+  readonly brand: string;
   readonly idleMs: number;
   // The agent and model a tab asks for, or the panel's choice for a tab
   // that has asked for none yet.
@@ -261,6 +263,7 @@ export class Tab {
       state: this.host.stateDir,
     });
     launch.env.BULKHOURS_MODEL = model;
+    launch.env.BULKHOURS_BRAND = this.host.brand;
     launch.env.BULKHOURS_MODELS = key.models.join(",");
     launch.env.BULKHOURS_VISION_MODELS = this.host.vision(key).join(",");
     const resume = this.paused?.launchKey === launchKey ? this.paused.sessionId : undefined;
