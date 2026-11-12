@@ -4,7 +4,9 @@
 import { colour, failer, https, text } from "./fields.ts";
 import { parseOffer } from "./keys.ts";
 
-export type Connection = { keyFile: string; offer: Record<string, unknown> };
+// status: the platform's own status bar, a command printing its items
+// (src/core/platformStatus.ts). Optional.
+export type Connection = { keyFile: string; offer: Record<string, unknown>; status?: { command: string; args: string[] } };
 import type { Lang } from "./i18n.ts";
 
 export type School = {
@@ -75,7 +77,15 @@ function connection(v: unknown, fail: (m: string) => never): Connection {
   const keyFile = typeof o.keyFile === "string" && o.keyFile.startsWith("/") ? o.keyFile : fail(`"keyFile" must be an absolute path`);
   const offer = (o.offer ?? {}) as Record<string, unknown>;
   try { parseOffer(offer, fail); } catch (e) { fail((e as Error).message.replace(/^school \S+: /, "")); }
-  return { keyFile, offer };
+  return { keyFile, offer, ...(o.status !== undefined ? { status: statusCommand(o.status, fail) } : {}) };
+}
+
+function statusCommand(v: unknown, fail: (m: string) => never): { command: string; args: string[] } {
+  const o = (v ?? {}) as Record<string, unknown>;
+  const command = typeof o.command === "string" && o.command.startsWith("/") ? o.command : fail(`"status.command" must be an absolute path`);
+  const args = o.args ?? [];
+  return Array.isArray(args) && args.every((a) => typeof a === "string") ? { command, args: args as string[] }
+    : fail(`"status.args" must be a list of strings`);
 }
 
 function stateDir(v: unknown, fail: (m: string) => never): string {

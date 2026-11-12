@@ -12,6 +12,7 @@ import { join } from "node:path";
 import { ChatView } from "./chatView.ts";
 import { Credentials, type KeySource } from "./credentials.ts";
 import { PlatformKeys } from "./platformKeys.ts";
+import { PlatformStatus } from "./platformStatus.ts";
 
 declare const __SCHOOL__: unknown;
 
@@ -29,6 +30,10 @@ export function activate(ctx: vscode.ExtensionContext): void {
   const bar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
   bar.command = id("chat.focus");
   const chat = new ChatView(ctx, school, creds, log, lang, (c) => showMeter(bar, c, lang));
+  // The platform's own status bar (MaQI: RAM, CPU, data rights...).
+  if (school.connection?.status) {
+    ctx.subscriptions.push(new PlatformStatus(school.connection.status, { extensionPath: ctx.extensionPath, lang }));
+  }
   ctx.subscriptions.push(
     log,
     bar,

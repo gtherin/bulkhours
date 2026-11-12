@@ -51,6 +51,13 @@
           "${extensionPath}/media/agents/dsh-maqi-model.yml"
         ]
       }
+    },
+    "status": {
+      "command": "/opt/tljh/user/bin/python",
+      "args": [
+        "${extensionPath}/media/platform/maqi-status.py",
+        "${lang}"
+      ]
     }
   }
 }

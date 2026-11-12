@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.25 — 2026-11-12
+
+- MaQI's status bar in VS Code, as JupyterLab's MaQI bar: your session's RAM and CPU, your Wasabi data rights (buckets readable, datasets, credentials renewal), whether the machine stays on, and the data sent out. Computed by MaQI's own code on the machine (media/platform/maqi-status.py), refreshed every minute; hover an item for the detail. (MaQI only.)
+
 ## 0.1.24 — 2026-11-12
 
 - MaQI shows its budget as JupyterHub does: the spend and cap of the project your key belongs to (e.g. res-enterprise, €0 / €200), as MaQI's LiteLLM enforces them, read with your own key.

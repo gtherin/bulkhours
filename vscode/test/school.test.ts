@@ -62,3 +62,11 @@ test("a variant on its platform's own connection needs no sign-in addresses", ()
   assert.throws(() => parseSchool({ ...rest, connection: { ...connection, offer: { models: [] } } }), /school ipsa: /);
   assert.throws(() => parseSchool(rest), /school ipsa: "signInUrl" must be an https address/, "without a connection, the sign-in stays required");
 });
+
+test("a platform may name its status command, absolute, with its arguments", () => {
+  const { signInUrl, keyUrl, creditsUrl, ...rest } = ipsa;
+  const connection = { keyFile: "/run/maqi/keys/${user}/llm.env", offer: { models: ["fast"], agent: { id: "maqi", label: "MaQI", command: "dsh" } },
+    status: { command: "/opt/tljh/user/bin/python", args: ["${extensionPath}/media/platform/maqi-status.py", "${lang}"] } };
+  assert.deepEqual(parseSchool({ ...rest, connection }).connection?.status?.args, ["${extensionPath}/media/platform/maqi-status.py", "${lang}"]);
+  assert.throws(() => parseSchool({ ...rest, connection: { ...connection, status: { command: "python" } } }), /"status.command" must be an absolute path/);
+});
