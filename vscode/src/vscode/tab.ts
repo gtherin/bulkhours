@@ -8,7 +8,7 @@ import { launchFor, type AgentSpec } from "../core/agents.ts";
 import { MESSAGES, Said, t, type Lang, type MessageKey } from "../core/i18n.ts";
 import type { Key } from "../core/keys.ts";
 import { addNotice, addUserPrompt, applyUpdate, runningTool, type Transcript } from "../core/transcript.ts";
-import { condensed, type Conversation, type ConversationStore, type Opened } from "../core/conversationStore.ts";
+import { condensed, type Conversation, type ConversationStore, type Opened, type Status } from "../core/conversationStore.ts";
 import type { KeySource } from "./credentials.ts";
 import { readTextFile, writeTextFile } from "./editorHost.ts";
 
@@ -52,6 +52,9 @@ let tabs = 0;
 export class Tab {
   readonly id = ++tabs;
   title = "";
+  // The session's name (conversationStore): the key of its run directory
+  // and of its status for monitoring pages. Empty until its first question.
+  name = "";
   transcript: Transcript = [];
   busy = false;
   starting = false;
@@ -100,6 +103,7 @@ export class Tab {
     this.paused = { sessionId: o.header.session, launchKey: `${o.header.agent}|${o.header.model}` };
     this.prime = o.transcript.length > 0;
     this.title = o.title;
+    this.name = o.name || this.host.store.name(o.conversation.file);
     this.choice = { agent: o.header.agent, model: o.header.model };
   }
 
@@ -113,6 +117,7 @@ export class Tab {
     this.conversation = undefined;
     this.prime = false;
     this.title = "";
+    this.name = "";
     this.transcript = [];
     this.usage = null;
     this.choice = undefined;
@@ -120,8 +125,20 @@ export class Tab {
 
   rename(title: string): void {
     if (!this.conversation || !title.trim()) return;
-    this.conversation.rename(title);
+    this.name = this.host.store.rename(this.conversation.file, title);
     this.title = title.trim();
+  }
+
+  // What a monitoring page reads of this session (its run directory's
+  // session.json), or nothing before its first question.
+  status(key: Key | undefined): Status | undefined {
+    if (!this.name || !this.conversation) return undefined;
+    const a = this.activity;
+    return { name: this.name, title: this.title, cwd: vscode.workspace.workspaceFolders?.[0]?.uri.fsPath ?? "",
+      agent: this.choice?.agent ?? "", model: this.choice?.model ?? this.model(key),
+      state: this.asks.size ? "waiting" : this.busy ? "working" : "idle",
+      since: a?.since ?? null, last: a?.last ?? null, tool: a?.tool ?? "",
+      questions: this.transcript.filter((e) => e.kind === "user").length, updated: Date.now(), record: this.conversation.file };
   }
 
   async stop(): Promise<void> {
@@ -144,6 +161,9 @@ export class Tab {
     this.transcript = addUserPrompt(this.transcript, text, images.map((i) => `data:${i.mimeType};base64,${i.data}`));
     this.host.changed(this);
     try {
+      // A new conversation is named from its first question, before its
+      // agent starts: the agent is told its name and its run directory.
+      if (!this.name) this.name = this.host.store.reserve(text);
       const session = await this.ensureSession();
       if (this.stopAsked) {
         this.transcript = addNotice(this.transcript, t(this.host.lang, "stoppedBeforeStart"));
@@ -241,7 +261,7 @@ export class Tab {
     const s = this.session!;
     const who = { agent: this.agentSpec(key).id, session: s.sessionId, model };
     try {
-      if (!this.conversation) this.conversation = this.host.store.start({ ...who, school: this.host.schoolId, cwd: folder });
+      if (!this.conversation) this.conversation = this.host.store.start({ ...who, school: this.host.schoolId, cwd: folder, name: this.name });
       else if (!s.resumed) this.conversation.switched(who);
     } catch (e) {
       this.host.log.append(`conversation record not written: ${(e as Error).message}\n`);
@@ -264,6 +284,9 @@ export class Tab {
     });
     launch.env.BULKHOURS_MODEL = model;
     launch.env.BULKHOURS_BRAND = this.host.brand;
+    // The session's own place for what it produces (tools, runs, notes).
+    launch.env.GATEKA_SESSION_NAME = this.name;
+    launch.env.GATEKA_SESSION_DIR = this.host.store.sessionDir(this.name);
     launch.env.BULKHOURS_MODELS = key.models.join(",");
     launch.env.BULKHOURS_VISION_MODELS = this.host.vision(key).join(",");
     const resume = this.paused?.launchKey === launchKey ? this.paused.sessionId : undefined;

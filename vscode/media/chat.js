@@ -155,7 +155,7 @@
     if (editing) return;
     strip.innerHTML = s.tabs.map((x) =>
       `<span class="tab${x.id === s.tab ? " on" : ""}${x.busy ? " busy" : ""}${x.asking ? " asking" : ""}" role="tab" aria-selected="${x.id === s.tab}" data-id="${x.id}">`
-      + `<span class="name" title="${esc(x.title ? `${x.title} — ${W.renameHint}` : W.renameHint)}">${esc(x.title || W.newTab)}</span>`
+      + `<span class="name" title="${esc([x.title, x.name, W.renameHint].filter(Boolean).join(" — "))}">${esc(x.title || W.newTab)}</span>`
       + (x.id === s.tab && x.named ? `<button type="button" class="ren" title="${esc(W.renameTab)}" aria-label="${esc(W.renameTab)}">${PENCIL}</button>` : "")
       + `<button type="button" class="x" title="${esc(W.closeTab)}" aria-label="${esc(W.closeTab)}">×</button></span>`).join("")
       // The person, at the end of the strip: their picture opens the platform's links.

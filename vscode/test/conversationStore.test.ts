@@ -153,3 +153,78 @@ test("a long conversation reads back whole, lines across read chunks included", 
   assert.equal(o.title, "question 0");
   assert.match((o.transcript.at(-1) as any).text, /^answer 39 x+$/);
 });
+
+// -- session names, run directories, status for monitoring (owner 2026-11-12:
+// "do you keep track of the name of the sessions? we will soon allocate a run
+// directory per session and monitoring pages... prepare that") ----------------
+import { mkdirSync as mkdir, writeFileSync as write, readdirSync as ls } from "node:fs";
+import { slug } from "../src/core/conversationStore.ts";
+
+test("a name is a slug: lowercase, plain letters, digits, dots and dashes", () => {
+  assert.equal(slug("Why is my kernel slow?"), "why-is-my-kernel-slow");
+  assert.equal(slug("  Stealth 2026-11 — étape n°2  "), "stealth-2026-11-etape-n-2");
+  assert.equal(slug("second.brain"), "second.brain");
+  assert.equal(slug("???"), "session");
+  assert.ok(slug("x".repeat(100)).length <= 40);
+  assert.equal(slug("../../etc/passwd"), "etc-passwd");
+});
+
+test("a conversation's name is claimed once with its run directory, and kept through a reload and a rename", () => {
+  const r = root(); const store = new ConversationStore(r);
+  const a = store.start({ ...header, name: store.reserve("Why is my kernel slow?\nsecond line") });
+  a.prompt([{ type: "text", text: "Why is my kernel slow?" }]); a.end("end_turn");
+  assert.equal(store.read(a.file)!.name, "why-is-my-kernel-slow");
+  assert.equal(statSync(store.sessionDir("why-is-my-kernel-slow")).mode & 0o777, 0o700);
+  assert.equal(store.rename(a.file, "Stealth 2026-11"), "why-is-my-kernel-slow", "a rename is the title's: the name is the directory's key");
+  assert.equal(new ConversationStore(r).read(a.file)!.title, "Stealth 2026-11");
+  assert.equal(store.list(header.cwd)[0].name, "why-is-my-kernel-slow");
+});
+
+test("two windows asking for the same name get two run directories", () => {
+  const r = root();
+  const one = new ConversationStore(r), two = new ConversationStore(r);
+  assert.deepEqual([one.reserve("hello"), two.reserve("hello"), one.reserve("hello")], ["hello", "hello-2", "hello-3"]);
+  assert.deepEqual(ls(join(r, "sessions")).sort(), ["hello", "hello-2", "hello-3"]);
+});
+
+test("an older record with no name gets one when it is opened, not when it is listed", () => {
+  const r = root(); const store = new ConversationStore(r);
+  const c = store.start(header); c.prompt([{ type: "text", text: "hello" }]); c.end("end_turn");
+  assert.equal(store.list(header.cwd)[0].name, "");
+  assert.equal(existsSync(join(r, "sessions")), false, "listing allocates nothing");
+  assert.equal(store.name(c.file), "hello");
+  assert.equal(store.name(c.file), "hello", "asked again: the same, written once");
+  assert.equal(readFileSync(c.file, "utf8").split("\n").filter((l) => l.includes('"t":"name"')).length, 1);
+});
+
+test("a record another tool seeded with a name, in any folder, is one of the project's sessions and joins its run directory", () => {
+  const r = root(); const store = new ConversationStore(r);
+  const dir = join(r, "conversations", "849f5076722b7e18"); mkdir(dir, { recursive: true });
+  const seeded = join(dir, "1794504546332-0000-821a929e.jsonl");
+  write(seeded,
+    JSON.stringify({ t: "header", v: 1, agent: "claude", name: "alpha", session: "s-9", model: "fast", school: "ipsa", cwd: header.cwd, created: "2026-11-12T17:29:06.358Z" }) + "\n"
+    + JSON.stringify({ t: "prompt", content: [{ type: "text", text: "alpha — read HANDOFF.md and take over." }] }) + "\n");
+  write(join(dir, "1794504546999-0000-aaaaaaaa.jsonl"),
+    JSON.stringify({ t: "header", v: 1, agent: "claude", name: "elsewhere", session: "s-8", model: "fast", school: "ipsa", cwd: "/other/project", created: "2026-11-12T17:30:00.000Z" }) + "\n"
+    + JSON.stringify({ t: "prompt", content: [{ type: "text", text: "not this project" }] }) + "\n");
+  assert.deepEqual(store.list(header.cwd).map((c) => [c.name, c.questions]), [["alpha", 1]], "listed by its header's folder, not by where it sits");
+  mkdir(store.sessionDir("alpha"), { recursive: true }); write(join(store.sessionDir("alpha"), "HANDOFF.md"), "notes");
+  assert.equal(store.name(seeded), "alpha", "it joins the run directory that is there");
+  assert.deepEqual(ls(store.sessionDir("alpha")), ["HANDOFF.md"]);
+  assert.equal(store.reserve("alpha"), "alpha-2", "a new conversation never takes a session's directory");
+});
+
+test("a session's status is written in its run directory, whole or not at all; pruning never touches run directories", () => {
+  const r = root(); const store = new ConversationStore(r);
+  const c = store.start(header); c.prompt([{ type: "text", text: "long job" }]); c.end("end_turn");
+  const name = store.name(c.file);
+  store.writeStatus(name, { name, title: "long job", cwd: header.cwd, agent: "gateka", model: "fast", state: "working",
+    since: 1, last: 2, tool: "nvcc k.cu", questions: 1, updated: 3, record: c.file });
+  const dir = store.sessionDir(name);
+  assert.deepEqual(ls(dir), ["session.json"]);
+  assert.equal(JSON.parse(readFileSync(join(dir, "session.json"), "utf8")).state, "working");
+  assert.equal(statSync(dir).mode & 0o777, 0o700);
+  utimesSync(c.file, new Date(0), new Date(0));
+  assert.equal(store.prune(90), 1);
+  assert.equal(existsSync(join(dir, "session.json")), true);
+});

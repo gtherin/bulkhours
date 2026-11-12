@@ -14,14 +14,22 @@
 //     {"t":"stop","reason":"end_turn"}      one per turn
 //     {"t":"session",...}                   when another agent session takes over
 //     {"t":"title","title":"..."}           when the student names it
+//     {"t":"name","name":"..."}             the session's name (see below)
+//
+// A SESSION NAME (owner, 2026-11-12; architect 6e5893) is the conversation's
+// key for what lives outside the record: its run directory
+// <state>/sessions/<name>/ and, there, session.json for monitoring pages.
+// A slug, claimed by creating that directory, written once (the header of a
+// new record, a {"t":"name"} line for an older one), never rewritten. Several
+// records may carry one name: they are one session.
 //
 // Compact: streamed chunks are joined into one message, a tool is written in
 // its final state. Private: folder 0700, files 0600 (a shared GPU machine
 // holds many students), never in the project (it may be shared or in git),
 // never synced. Pruned after a retention.
 import { createHash, randomUUID } from "node:crypto";
-import { appendFileSync, chmodSync, closeSync, existsSync, mkdirSync, openSync, readdirSync, readSync, statSync, unlinkSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { appendFileSync, chmodSync, closeSync, existsSync, mkdirSync, openSync, readdirSync, readSync, realpathSync, renameSync, statSync, unlinkSync, writeFileSync } from "node:fs";
+import { basename, join } from "node:path";
 import type { ContentBlock, SessionUpdate } from "@agentclientprotocol/sdk";
 import { addUserPrompt, applyUpdate, type Entry, type Transcript } from "./transcript.ts";
 
@@ -39,17 +47,31 @@ export function stateRoot(env: Record<string, string | undefined>, home: string,
   return join(env.XDG_STATE_HOME || join(home, ".local", "state"), "gateka");
 }
 
-export type Header = { agent: string; session: string; model: string; school: string; cwd: string };
+export type Header = { agent: string; session: string; model: string; school: string; cwd: string; name?: string };
 type Line =
   | ({ t: "header"; v: 1; created: string } & Header)
   | { t: "prompt"; content: ContentBlock[] }
   | { t: "update"; update: SessionUpdate }
   | { t: "stop"; reason: string }
   | ({ t: "session" } & Pick<Header, "agent" | "session" | "model">)
-  | { t: "title"; title: string };
+  | { t: "title"; title: string }
+  | { t: "name"; name: string };
 
 // What the history shows of one conversation.
-export type Summary = { file: string; title: string; updated: number; agent: string; model: string; questions: number };
+export type Summary = { file: string; title: string; name: string; updated: number; agent: string; model: string; questions: number };
+
+// What a monitoring page reads of a session (its run directory's session.json).
+export type Status = { name: string; title: string; cwd: string; agent: string; model: string;
+  state: "working" | "waiting" | "idle"; since: number | null; last: number | null; tool: string;
+  questions: number; updated: number; record: string };
+
+// A name fit for a directory: lowercase letters, digits, dots and dashes.
+const NAME_CHARS = 40;
+export function slug(text: string): string {
+  const s = text.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+    .replace(/[^a-z0-9.]+/g, "-").replace(/\.{2,}/g, ".").replace(/^[-.]+|[-.]+$/g, "").slice(0, NAME_CHARS).replace(/[-.]+$/, "");
+  return s || "session";
+}
 const TITLE_CHARS = 52;
 
 const STREAMED = new Set(["agent_message_chunk", "agent_thought_chunk", "user_message_chunk"]);
@@ -96,6 +118,8 @@ export class Conversation {
 
   rename(title: string): void { this.write({ t: "title", title: title.trim() }); }
 
+  named(name: string): void { this.write({ t: "name", name }); }
+
   private write(line: Line): void { appendFileSync(this.file, JSON.stringify(line) + "\n", { mode: 0o600 }); }
 }
 
@@ -132,10 +156,85 @@ export class ConversationStore {
     return new Conversation(file);
   }
 
+  // Every record of the state folder, oldest first (file names begin with
+  // their time), whatever folder holds it.
+  private all(): string[] {
+    const base = join(this.root, "conversations");
+    if (!existsSync(base)) return [];
+    const out: string[] = [];
+    for (const d of readdirSync(base)) {
+      let names: string[];
+      try { names = readdirSync(join(base, d)); } catch { continue; }
+      for (const f of names) if (f.endsWith(".jsonl")) out.push(join(base, d, f));
+    }
+    return out.sort((a, b) => (basename(a) < basename(b) ? -1 : basename(a) > basename(b) ? 1 : 0));
+  }
+
+  // A project's records: those whose header names its folder, wherever they
+  // are - a record another tool seeded sits in a folder of its own naming.
+  private readonly heads = new Map<string, { mtime: number; cwd: string }>();
   private files(cwd: string): string[] {
-    const dir = this.dir(cwd);
-    if (!existsSync(dir)) return [];
-    return readdirSync(dir).filter((f) => f.endsWith(".jsonl")).sort().map((f) => join(dir, f));
+    const here = real(cwd);
+    return this.all().filter((f) => {
+      let mtime = 0;
+      try { mtime = statSync(f).mtimeMs; } catch { return false; }
+      let h = this.heads.get(f);
+      if (!h || h.mtime !== mtime) { h = { mtime, cwd: real(headerOf(f)?.cwd ?? "") }; this.heads.set(f, h); }
+      return h.cwd === here;
+    });
+  }
+
+  // The session's name: its header's, else the one written in the record,
+  // else claimed now from its title and written once. A name is never
+  // rewritten (architect 6e5893): it is the key of the run directory.
+  name(file: string): string {
+    const o = this.read(file);
+    if (!o) return "";
+    if (o.name) { this.join(o.name); return o.name; }
+    const name = this.reserve(o.title);
+    o.conversation.named(name);
+    return name;
+  }
+
+  // Renamed by the person: the title. The name stays.
+  rename(file: string, title: string): string {
+    const o = this.read(file);
+    if (!o) return "";
+    if (title.trim()) o.conversation.rename(title);
+    return o.name || this.name(file);
+  }
+
+  // A name for a conversation about to start, from its first question,
+  // CLAIMED by creating its run directory: creating a directory succeeds for
+  // one caller only, so two windows asking for the same name get two (a scan
+  // of the records would race, and forget names whose records were pruned).
+  reserve(title: string): string {
+    const base = join(this.root, "sessions");
+    mkdirSync(base, { recursive: true, mode: 0o700 });
+    const wanted = slug(firstLine(title));
+    for (let n = 1; ; n++) {
+      const name = n === 1 ? wanted : `${wanted.slice(0, NAME_CHARS - String(n).length - 1)}-${n}`;
+      try { mkdirSync(join(base, name), { mode: 0o700 }); return name; }
+      catch (e) { if ((e as NodeJS.ErrnoException).code !== "EEXIST") throw e; }
+    }
+  }
+
+  // A record that carries a name belongs to that session: its run directory
+  // is made if it is not there, never claimed again under another name.
+  private join(name: string): void {
+    mkdirSync(this.sessionDir(name), { recursive: true, mode: 0o700 });
+  }
+
+  // Where a session's own files live: tools, launchers, notes, session.json.
+  sessionDir(name: string): string { return join(this.root, "sessions", slug(name)); }
+
+  // The session's status, for monitoring pages: whole or not at all.
+  writeStatus(name: string, status: Status): void {
+    const dir = this.sessionDir(name);
+    this.join(name);
+    const tmp = join(dir, `.session.json.${process.pid}`);
+    writeFileSync(tmp, JSON.stringify(status, null, 1) + "\n", { mode: 0o600 });
+    renameSync(tmp, join(dir, "session.json"));
   }
 
   // The project's last conversation, as the panel showed it.
@@ -150,12 +249,17 @@ export class ConversationStore {
     let header: Header | undefined;
     let transcript: Transcript = [];
     let title = "";
+    let name = "";
     let questions = 0;
     for (const raw of lines(file)) {
       if (!raw.trim()) continue;
       let l: Line;
       try { l = JSON.parse(raw); } catch { continue; }           // a torn last line is skipped
-      if (l.t === "header") header = { agent: l.agent, session: l.session, model: l.model, school: l.school, cwd: l.cwd };
+      if (l.t === "header") {
+        header = { agent: l.agent, session: l.session, model: l.model, school: l.school, cwd: l.cwd,
+          ...(typeof l.name === "string" && l.name ? { name: slug(l.name) } : {}) };
+        name = header.name ?? "";
+      } else if (l.t === "name") name = slug(l.name);
       else if (l.t === "session" && header) header = { ...header, agent: l.agent, session: l.session, model: l.model };
       else if (l.t === "title") title = l.title;
       else if (l.t === "prompt") {
@@ -164,14 +268,14 @@ export class ConversationStore {
         transcript = addUserPrompt(transcript, text, promptImages(l.content));
       } else if (l.t === "update") transcript = applyUpdate(transcript, l.update);
     }
-    return header ? { header, transcript, title, questions, conversation: new Conversation(file) } : undefined;
+    return header ? { header, transcript, title, name, questions, conversation: new Conversation(file) } : undefined;
   }
 
   // The project's conversations that hold at least one question, newest first.
   list(cwd: string): Summary[] {
     return this.files(cwd).map((file) => {
       const o = this.read(file);
-      return o && o.questions ? { file, title: o.title, updated: statSync(file).mtimeMs, agent: o.header.agent,
+      return o && o.questions ? { file, title: o.title, name: o.name, updated: statSync(file).mtimeMs, agent: o.header.agent,
         model: o.header.model, questions: o.questions } : undefined;
     }).filter((x): x is Summary => Boolean(x)).sort((a, b) => b.updated - a.updated || (a.file < b.file ? 1 : -1));
   }
@@ -207,7 +311,24 @@ function* lines(file: string): Generator<string> {
   } finally { closeSync(fd); }
 }
 
-export type Opened = { header: Header; transcript: Transcript; title: string; questions: number; conversation: Conversation };
+export type Opened = { header: Header; transcript: Transcript; title: string; name: string; questions: number; conversation: Conversation };
+
+// A folder as the disk knows it (a link and its target are one project).
+function real(path: string): string {
+  if (!path) return "";
+  try { return realpathSync(path); } catch { return path; }
+}
+
+// A record's first line, read alone: which project it belongs to.
+function headerOf(file: string): { cwd?: string } | undefined {
+  try {
+    for (const raw of lines(file)) {
+      const l = JSON.parse(raw);
+      return l?.t === "header" ? l : undefined;
+    }
+  } catch { /* unreadable: not ours */ }
+  return undefined;
+}
 
 function firstLine(text: string): string {
   const line = text.trim().split("\n")[0].trim();

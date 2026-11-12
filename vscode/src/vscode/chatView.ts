@@ -192,6 +192,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
 
   async rename(title: string, tab = this.active): Promise<void> {
     tab.rename(title);
+    this.note(tab);
     if (tab === this.active) this.showTitle(tab.title);
     await this.render();
   }
@@ -339,12 +340,34 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
 
   askId(): number { return this.nextAsk++; }
 
+  // Each session's status for monitoring pages, in its run directory: written
+  // when a turn starts or ends (state, title, questions change) and each
+  // minute while it works - not at every tool. Never fails the panel, never
+  // holds a key (ADR-0223 point 8).
+  private readonly said = new Map<number, string>();
+  private note(tab: Tab, force = false): void {
+    try {
+      const st = tab.status(this.creds.known());
+      if (!st) return;
+      const sig = JSON.stringify([st.name, st.title, st.state, st.questions, st.agent, st.model]);
+      if (!force && this.said.get(tab.id) === sig) return;
+      this.said.set(tab.id, sig);
+      this.store.writeStatus(st.name, st);
+    } catch (e) {
+      this.log.append(`session status not written: ${(e as Error).message}\n`);
+    }
+  }
+
   changed(tab: Tab): void {
+    this.note(tab);
     if (tab === this.active) { if (tab.title !== this.title || this.view?.description !== tab.title) this.showTitle(tab.title); void this.render(); }
     else if (this.stripOf() !== this.strip) void this.render();
   }
 
-  turnTick(): void { void this.refreshCredits(); }
+  turnTick(): void {
+    this.tabs.filter((x) => x.busy).forEach((x) => this.note(x, true));
+    void this.refreshCredits();
+  }
 
   turnEnded(): void {
     void this.refreshCredits();
@@ -384,7 +407,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
   }
 
   private stripOf(): string {
-    return JSON.stringify(this.tabs.map((x) => ({ id: x.id, title: x.title, busy: x.busy, asking: x.asking.length > 0,
+    return JSON.stringify(this.tabs.map((x) => ({ id: x.id, title: x.title, name: x.name, busy: x.busy, asking: x.asking.length > 0,
       named: Boolean(x.conversation) })));
   }
 

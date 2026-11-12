@@ -50,7 +50,10 @@ agent({ name: "fake-agent" })
     const first = params.prompt[0];
     const text = first && first.type === "text" ? first.text : "";
     const [verb, path] = text.split(" ");
-    if (verb === "caps") {
+    if (verb === "whoami") {
+      // The session name and run directory the client handed over.
+      await say(client, params.sessionId, `${process.env.GATEKA_SESSION_NAME}|${process.env.GATEKA_SESSION_DIR}`);
+    } else if (verb === "caps") {
       await say(client, params.sessionId, JSON.stringify(caps));
     } else if (verb === "context") {
       const links = params.prompt.filter((b) => b.type === "resource_link").map((b: any) => b.name);

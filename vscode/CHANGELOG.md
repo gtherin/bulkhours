@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.37 — 2026-11-12
+
+- Each conversation is a named session. Its name (a slug of its first question, or the one a tool wrote in the record's header) is claimed once with its run directory, <state>/sessions/<name>/, and never changes; renaming a tab changes its title only. The agent is told GATEKA_SESSION_NAME and GATEKA_SESSION_DIR.
+- For monitoring pages, each session keeps <state>/sessions/<name>/session.json (name, title, folder, agent, model, state working / waiting / idle, since, last sign of life, tool, questions, updated, record), written whole at turn start, turn end and each minute while it works. No key in it.
+- The history lists a project's records by the folder named in their header, wherever they sit: sessions seeded by another tool appear.
+
 ## 0.1.36 — 2026-11-12
 
 - Sign-in, the real cause: the link is handed to the browser as written. VS Code's own Uri round trip re-encoded the link inside the link (…signed-in%253FwindowId=5) and the sign-in page refused it; 0.1.34 and 0.1.35 looked in the wrong place. The page now also reads such a link back.

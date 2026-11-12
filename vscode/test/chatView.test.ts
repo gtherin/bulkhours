@@ -3,7 +3,7 @@
 // agent is the real fake ACP agent from fixtures/, so the round trip is real.
 import { after, mock, test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -651,5 +651,35 @@ test("an empty tab presents the recent conversations, and one click reopens one"
   assert.deepEqual(texts(p.last()), ["first topic", "you said: first topic"]);
   await p.send({ type: "openConversation", file: "/etc/passwd" });
   assert.deepEqual(texts(p.last()), ["first topic", "you said: first topic"], "only a listed conversation opens");
+  p.view.dispose();
+});
+
+// Session names, run directories, status for monitoring (owner, 2026-11-12).
+test("a session is named at its first question; its agent is told its name and run directory; its status is kept for monitoring", async () => {
+  const state = mkdtempSync(join(tmpdir(), "bh-gstate-"));
+  const p = panel(true, "en", "IPSA", { state });
+  await p.send({ type: "send", text: "whoami now" });
+  const s = p.last();
+  assert.equal(s.tabs[0].name, "whoami-now");
+  assert.deepEqual(texts(s).at(-1), `whoami-now|${join(state, "sessions", "whoami-now")}`);
+  const read = () => JSON.parse(readFileSync(join(state, "sessions", "whoami-now", "session.json"), "utf8"));
+  assert.deepEqual([read().state, read().questions, read().title, read().name], ["idle", 1, "whoami now", "whoami-now"]);
+  const turn = p.send({ type: "send", text: "wait" });
+  await until(() => p.last()?.busy);
+  assert.equal(read().state, "working");
+  await turn;
+  assert.equal(read().state, "idle");
+  await p.send({ type: "rename", id: p.last().tab, title: "Kernel study" });
+  assert.deepEqual([p.last().tabs[0].title, p.last().tabs[0].name, read().title], ["Kernel study", "whoami-now", "Kernel study"],
+    "a rename is the title's; the name stays the run directory's key");
+  p.view.dispose();
+});
+
+test("a tab with no question yet has no name, no run directory, no status", async () => {
+  const state = mkdtempSync(join(tmpdir(), "bh-gstate-"));
+  const p = panel(true, "en", "IPSA", { state });
+  await p.send({ type: "ready" });
+  assert.equal(p.last().tabs[0].name, "");
+  assert.equal(existsSync(join(state, "sessions")), false);
   p.view.dispose();
 });
