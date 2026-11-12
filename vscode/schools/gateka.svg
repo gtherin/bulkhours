@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <!-- Gateka's mark: the G of its dot-matrix wordmark (gateka-core
+       gateka/static/img/gateka-wordmark.png), its 42 dots on their 10 x 10
+       grid, in one colour for VS Code's activity bar. -->
+  <g fill="currentColor">
+    <rect x="1.30" y="5.70" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="1.30" y="7.90" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="1.30" y="10.10" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="1.30" y="12.30" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="1.30" y="14.50" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="1.30" y="16.70" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="3.50" y="3.50" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="3.50" y="5.70" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="3.50" y="7.90" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="3.50" y="10.10" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="3.50" y="12.30" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="3.50" y="14.50" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="3.50" y="16.70" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="3.50" y="18.90" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="5.70" y="3.50" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="5.70" y="5.70" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="5.70" y="16.70" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="5.70" y="18.90" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="5.70" y="21.10" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="7.90" y="1.30" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="7.90" y="21.10" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="10.10" y="1.30" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="10.10" y="21.10" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="12.30" y="1.30" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="12.30" y="21.10" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="14.50" y="1.30" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="14.50" y="21.10" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="16.70" y="1.30" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="16.70" y="14.50" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="16.70" y="16.70" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="16.70" y="18.90" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="16.70" y="21.10" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="18.90" y="1.30" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="18.90" y="3.50" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="18.90" y="14.50" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="18.90" y="16.70" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="18.90" y="18.90" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="18.90" y="21.10" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="21.10" y="14.50" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="21.10" y="16.70" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="21.10" y="18.90" width="1.60" height="1.60" rx="0.30"/>
+    <rect x="21.10" y="21.10" width="1.60" height="1.60" rx="0.30"/>
+  </g>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Gateka">
+  <!-- Gateka's mark (see gateka.svg) in the wordmark's own gradient, coral
+       (#e18163) to amber (#f1ca8d), on a dark tile. -->
+  <title>Gateka</title>
+  <linearGradient id="gk" gradientUnits="userSpaceOnUse" x1="23" y1="23" x2="105" y2="105">
+    <stop offset="0" stop-color="#e18163"/><stop offset="1" stop-color="#f1ca8d"/>
+  </linearGradient>
+  <rect width="128" height="128" rx="28" fill="#211d1b"/>
+  <g fill="url(#gk)">
+    <rect x="23.30" y="40.10" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="23.30" y="48.50" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="23.30" y="56.90" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="23.30" y="65.30" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="23.30" y="73.70" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="23.30" y="82.10" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="31.70" y="31.70" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="31.70" y="40.10" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="31.70" y="48.50" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="31.70" y="56.90" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="31.70" y="65.30" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="31.70" y="73.70" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="31.70" y="82.10" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="31.70" y="90.50" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="40.10" y="31.70" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="40.10" y="40.10" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="40.10" y="82.10" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="40.10" y="90.50" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="40.10" y="98.90" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="48.50" y="23.30" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="48.50" y="98.90" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="56.90" y="23.30" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="56.90" y="98.90" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="65.30" y="23.30" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="65.30" y="98.90" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="73.70" y="23.30" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="73.70" y="98.90" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="82.10" y="23.30" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="82.10" y="73.70" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="82.10" y="82.10" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="82.10" y="90.50" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="82.10" y="98.90" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="90.50" y="23.30" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="90.50" y="31.70" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="90.50" y="73.70" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="90.50" y="82.10" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="90.50" y="90.50" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="90.50" y="98.90" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="98.90" y="73.70" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="98.90" y="82.10" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="98.90" y="90.50" width="5.80" height="5.80" rx="1.10"/>
+    <rect x="98.90" y="98.90" width="5.80" height="5.80" rx="1.10"/>
+  </g>
+</svg>

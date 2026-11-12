@@ -3,6 +3,7 @@
 ## 0.1.32 — 2026-11-12
 
 - The IPSA build carries IPSA's logo as its icon in the extension list (schools/ipsa-tile.svg, redrawn as vectors from the school's image). The activity bar keeps the BulkHours mark. (IPSA only.)
+- New variant Gateka (gateka.gateka), the reference one: built as the BulkHours variants (same sign-in and key server), with the G of Gateka's dot-matrix wordmark as its mark.
 
 ## 0.1.31 — 2026-11-12
 

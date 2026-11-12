@@ -1,0 +1,12 @@
+{
+  "id": "gateka",
+  "name": "Gateka",
+  "title": "Gateka",
+  "prefix": "gateka",
+  "accent": "#e18163",
+  "signInUrl": "https://bulkhours.fr/local/hpc/workbench.php?school=gateka",
+  "keyUrl": "https://bulkhours.fr/api/workbench/key",
+  "creditsUrl": "https://bulkhours.fr/api/workbench/credits",
+  "downloadUrl": "https://bulkhours.fr/bkfpage/vscode/",
+  "language": "en"
+}
