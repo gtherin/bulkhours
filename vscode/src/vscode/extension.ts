@@ -2,9 +2,9 @@
 // defines __SCHOOL__), so one codebase yields one extension per school.
 import * as vscode from "vscode";
 import { parseAgents } from "../core/agents.ts";
-import { pickLang, t, type Lang } from "../core/i18n.ts";
+import { pickLang, setBrand, t, type Lang } from "../core/i18n.ts";
 import { budgetText, level } from "../core/meter.ts";
-import { parseSchool, type School } from "../core/school.ts";
+import { packageName, parseSchool, type School } from "../core/school.ts";
 import { offeredUpdate } from "../core/update.ts";
 import { writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -17,27 +17,30 @@ declare const __SCHOOL__: unknown;
 export function activate(ctx: vscode.ExtensionContext): void {
   const school = parseSchool(__SCHOOL__);
   const lang = pickLang(vscode.env.language, school.language);
-  const log = vscode.window.createOutputChannel(`BulkHours ${school.name}`);
+  setBrand(school.title);
+  // Commands, view and settings under the variant's own prefix.
+  const id = (name: string) => `${school.prefix}.${name}`;
+  const log = vscode.window.createOutputChannel(school.title);
   const creds = new Credentials(ctx.secrets, school, ctx.extension.id, lang);
   // The budget in the status bar, as MaQI's; a click opens the panel.
   const bar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
-  bar.command = "bulkhours.chat.focus";
+  bar.command = id("chat.focus");
   const chat = new ChatView(ctx, school, creds, log, lang, (c) => showMeter(bar, c, lang));
   ctx.subscriptions.push(
     log,
     bar,
     chat,
     vscode.window.registerUriHandler(creds),
-    vscode.window.registerWebviewViewProvider("bulkhours.chat", chat, { webviewOptions: { retainContextWhenHidden: true } }),
-    vscode.commands.registerCommand("bulkhours.newChat", () => chat.newChat()),
-    vscode.commands.registerCommand("bulkhours.signIn", () => creds.signIn()),
-    vscode.commands.registerCommand("bulkhours.signOut", () => creds.signOut()),
-    vscode.commands.registerCommand("bulkhours.pickAgent", () => pickAgent(creds, chat, lang)),
-    vscode.commands.registerCommand("bulkhours.history", () => history(chat, lang)),
-    vscode.commands.registerCommand("bulkhours.rename", () => rename(chat, lang)),
-    // Restarts BulkHours' own agent and panel, nothing else in the window.
-    vscode.commands.registerCommand("bulkhours.restart", () => chat.restart()),
-    vscode.commands.registerCommand("bulkhours.update", () => update(ctx, school, lang, true)),
+    vscode.window.registerWebviewViewProvider(id("chat"), chat, { webviewOptions: { retainContextWhenHidden: true } }),
+    vscode.commands.registerCommand(id("newChat"), () => chat.newChat()),
+    vscode.commands.registerCommand(id("signIn"), () => creds.signIn()),
+    vscode.commands.registerCommand(id("signOut"), () => creds.signOut()),
+    vscode.commands.registerCommand(id("pickAgent"), () => pickAgent(creds, chat, lang, school.prefix)),
+    vscode.commands.registerCommand(id("history"), () => history(chat, lang)),
+    vscode.commands.registerCommand(id("rename"), () => rename(chat, lang)),
+    // Restarts the variant's own agent and panel, nothing else in the window.
+    vscode.commands.registerCommand(id("restart"), () => chat.restart()),
+    vscode.commands.registerCommand(id("update"), () => update(ctx, school, lang, true)),
   );
   // Once a day at most, a quiet look for a newer build in the download area.
   const DAY = 86_400_000;
@@ -70,7 +73,7 @@ async function update(ctx: vscode.ExtensionContext, school: School, lang: Lang, 
   if (!school.downloadUrl) { if (asked) void vscode.window.showInformationMessage(t(lang, "updateUnavailable")); return; }
   try {
     const r = await fetch(new URL("latest.json", school.downloadUrl).toString(), { cache: "no-store" });
-    const offer = r.ok ? offeredUpdate(await r.json() as Record<string, unknown>, school.id, current, school.downloadUrl) : undefined;
+    const offer = r.ok ? offeredUpdate(await r.json() as Record<string, unknown>, school.id, current, school.downloadUrl, packageName(school)) : undefined;
     if (!offer) { if (asked) void vscode.window.showInformationMessage(t(lang, "upToDate", { version: current })); return; }
     if (!asked) {
       const go = await vscode.window.showInformationMessage(t(lang, "updateAvailable", { version: offer.version }), t(lang, "updateNow"));
@@ -78,7 +81,7 @@ async function update(ctx: vscode.ExtensionContext, school: School, lang: Lang, 
     }
     const vsix = await fetch(offer.url);
     if (!vsix.ok) throw new Error(`${offer.url} answered ${vsix.status}`);
-    const file = join(tmpdir(), `bulkhours-${school.id}-${offer.version}.vsix`);
+    const file = join(tmpdir(), `${packageName(school)}-${offer.version}.vsix`);
     writeFileSync(file, Buffer.from(await vsix.arrayBuffer()));
     await vscode.commands.executeCommand("workbench.extensions.installExtension", vscode.Uri.file(file));
     const reload = await vscode.window.showInformationMessage(t(lang, "updated", { version: offer.version }), t(lang, "reloadNow"));
@@ -88,10 +91,10 @@ async function update(ctx: vscode.ExtensionContext, school: School, lang: Lang, 
   }
 }
 
-// The school's agent, or one of the student's own `bulkhours.extraAgents`.
+// The school's agent, or one of the student's own `<prefix>.extraAgents`.
 export async function pickAgent(creds: Pick<Credentials, "known">, chat: Pick<ChatView, "newChat">,
-                                lang: Lang = "en"): Promise<void> {
-  const cfg = vscode.workspace.getConfiguration("bulkhours");
+                                lang: Lang = "en", prefix = "bulkhours"): Promise<void> {
+  const cfg = vscode.workspace.getConfiguration(prefix);
   const school = creds.known()?.agent;
   const extra = parseAgents(cfg.get<unknown[]>("extraAgents") ?? []);
   const items = [

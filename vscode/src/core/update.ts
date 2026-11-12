@@ -14,8 +14,8 @@ export function newer(candidate: string, current: string): boolean {
 }
 
 export function offeredUpdate(latest: Record<string, unknown>, school: string, current: string,
-                              area: string): { version: string; url: string } | undefined {
+                              area: string, name = `bulkhours-${school}`): { version: string; url: string } | undefined {
   const v = latest[school];
   if (typeof v !== "string" || !newer(v, current) || !/^https:\/\//.test(area)) return undefined;
-  return { version: v, url: new URL(`bulkhours-${school}-${v}.vsix`, area.endsWith("/") ? area : `${area}/`).toString() };
+  return { version: v, url: new URL(`${name}-${v}.vsix`, area.endsWith("/") ? area : `${area}/`).toString() };
 }

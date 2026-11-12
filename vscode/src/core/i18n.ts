@@ -17,11 +17,11 @@ const en = {
   noChange: "(no change)",
   agentWantsToAct: "The agent wants to act",
   notSignedIn: "not signed in",
-  sessionExpired: "your BulkHours session expired: sign in again",
+  sessionExpired: "your {brand} session expired: sign in again",
   noCredits: "no credits left for this period",
   keyServerAnswered: "the key server answered {status}",
   noToken: "the sign-in page sent no token",
-  ignoredLink: "BulkHours: ignored a sign-in link this window did not ask for.",
+  ignoredLink: "{brand}: ignored a sign-in link this window did not ask for.",
   openFolder: "open a folder first: the assistant works inside your project",
   keyRenewed: "your key was renewed: the agent restarted",
   agentPaused: "the agent was paused to free memory: it comes back, with the conversation, at your next message",
@@ -72,11 +72,11 @@ const en = {
   historyPlaceholder: "Reopen a conversation",
   historyDetail: "{date} · {n} question(s)",
   renamePrompt: "Name of this conversation",
-  updateAvailable: "BulkHours {version} is available.",
+  updateAvailable: "{brand} {version} is available.",
   updateNow: "Update",
-  updated: "BulkHours {version} is installed: reload the window to use it.",
+  updated: "{brand} {version} is installed: reload the window to use it.",
   reloadNow: "Reload",
-  upToDate: "BulkHours is up to date ({version}).",
+  upToDate: "{brand} is up to date ({version}).",
   updateFailed: "The update failed: {message}",
   updateUnavailable: "This build has no download area to update from.",
 };
@@ -94,11 +94,11 @@ const fr: typeof en = {
   noChange: "(aucun changement)",
   agentWantsToAct: "L'agent veut agir",
   notSignedIn: "non connecté",
-  sessionExpired: "votre session BulkHours a expiré : reconnectez-vous",
+  sessionExpired: "votre session {brand} a expiré : reconnectez-vous",
   noCredits: "plus de crédits pour cette période",
   keyServerAnswered: "le serveur de clés a répondu {status}",
   noToken: "la page de connexion n'a pas envoyé de jeton",
-  ignoredLink: "BulkHours : lien de connexion ignoré, cette fenêtre ne l'avait pas demandé.",
+  ignoredLink: "{brand} : lien de connexion ignoré, cette fenêtre ne l'avait pas demandé.",
   openFolder: "ouvrez d'abord un dossier : l'assistant travaille dans votre projet",
   keyRenewed: "votre clé a été renouvelée : l'agent a redémarré",
   agentPaused: "l'agent a été mis en pause pour libérer la mémoire : il revient, avec la conversation, à votre prochain message",
@@ -149,11 +149,11 @@ const fr: typeof en = {
   historyPlaceholder: "Rouvrir une conversation",
   historyDetail: "{date} · {n} question(s) posée(s)",
   renamePrompt: "Nom de cette conversation",
-  updateAvailable: "BulkHours {version} est disponible.",
+  updateAvailable: "{brand} {version} est disponible.",
   updateNow: "Mettre à jour",
-  updated: "BulkHours {version} est installé : rechargez la fenêtre pour l'utiliser.",
+  updated: "{brand} {version} est installé : rechargez la fenêtre pour l'utiliser.",
   reloadNow: "Recharger",
-  upToDate: "BulkHours est à jour ({version}).",
+  upToDate: "{brand} est à jour ({version}).",
   updateFailed: "La mise à jour a échoué : {message}",
   updateUnavailable: "Cette version n'a pas d'espace de téléchargement pour se mettre à jour.",
 };
@@ -166,8 +166,13 @@ export function pickLang(display: string, fallback: Lang): Lang {
   return base === "fr" || base === "en" ? base : fallback;
 }
 
+// The variant's name in its messages (school.title), set once at activation.
+let brand = "BulkHours";
+export function setBrand(title: string): void { brand = title; }
+
 export function t(lang: Lang, key: MessageKey, vars: Record<string, string | number> = {}): string {
   return MESSAGES[lang][key].replace(/\{(\w+)\}/g, (_, name: string) => {
+    if (name === "brand" && !(name in vars)) return brand;
     if (!(name in vars)) throw new Error(`missing value "${name}" for message ${key}`);
     return String(vars[name]);
   });

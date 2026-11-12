@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.19 — 2026-11-12
+
+- One code, a config file per variant (schools/<id>.json): its title, its command and settings prefix, its mark (schools/<id>.svg) and tile colours. Two variants install side by side without colliding. First new variant: MaQI (gateka.maqi), on trial.
+
 ## 0.1.18 — 2026-11-12
 
 - One + only, the panel's own: the tab strip no longer repeats it.

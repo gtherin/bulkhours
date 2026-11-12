@@ -17,6 +17,15 @@ export type School = {
   downloadUrl?: string;
   // The interface language when VS Code's own is one we do not speak.
   language: Lang;
+  // gateka, maqi, ipsa, bulkhours: one code, a config file each (owner,
+  // 2026-11-12). The title names the variant everywhere (panel, menus,
+  // messages); the prefix names its commands, view and settings, so two
+  // variants installed side by side never collide.
+  title: string;
+  prefix: string;
+  // The extension tile's background, its mark drawn in the accent; without
+  // it the mark is white on the accent. Optional.
+  tile?: string;
 };
 
 export function parseSchool(raw: unknown): School {
@@ -34,7 +43,20 @@ export function parseSchool(raw: unknown): School {
     creditsUrl: https(o, "creditsUrl", fail),
     ...(o.downloadUrl !== undefined ? { downloadUrl: https(o, "downloadUrl", fail) } : {}),
     language: language(o.language, fail),
+    title: o.title === undefined ? `BulkHours ${text(o, "name", fail)}` : text(o, "title", fail),
+    prefix: prefix(o.prefix, fail),
+    ...(o.tile !== undefined ? { tile: colour(o, "tile", fail) } : {}),
   };
+}
+
+// The extension's name, and its builds' file names: bulkhours-ipsa, maqi.
+export function packageName(s: Pick<School, "id" | "prefix">): string {
+  return s.prefix === s.id ? s.id : `${s.prefix}-${s.id}`;
+}
+
+function prefix(v: unknown, fail: (m: string) => never): string {
+  if (v === undefined) return "bulkhours";
+  return typeof v === "string" && /^[a-z][a-z0-9]{1,30}$/.test(v) ? v : fail(`"prefix" must be lowercase letters and digits`);
 }
 
 function language(v: unknown, fail: (m: string) => never): Lang {

@@ -212,7 +212,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
       case "ready": this.restore(); await this.render(); await this.warmKey(); return this.refreshCredits();
       case "compact": return this.compact(tab);
       case "clear": return this.clear(tab);
-      case "pickAgent": await vscode.commands.executeCommand("bulkhours.pickAgent"); return;
+      case "pickAgent": await vscode.commands.executeCommand(`${this.school.prefix}.pickAgent`); return;
       case "choose": return this.choose(m.agent, m.model);
       case "signIn": return this.creds.signIn();
       case "newChat": return this.newChat();
@@ -263,21 +263,21 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
   // subscription. It changes the shown tab, whose next message starts the
   // agent chosen, handed the conversation so far; new tabs start with it.
   private async choose(agent: string, model?: string): Promise<void> {
-    await vscode.workspace.getConfiguration("bulkhours").update("agent", agent, true);
+    await vscode.workspace.getConfiguration(this.school.prefix).update("agent", agent, true);
     if (model) await this.ctx.globalState.update("bulkhours.model", model);
     this.active.choice = { agent, model: model ?? this.active.choice?.model };
     await this.render();
   }
 
   private agentChoices(key: Key | undefined): { id: string; label: string }[] {
-    const extra = parseAgents(vscode.workspace.getConfiguration("bulkhours").get<unknown[]>("extraAgents") ?? []);
+    const extra = parseAgents(vscode.workspace.getConfiguration(this.school.prefix).get<unknown[]>("extraAgents") ?? []);
     return [...(key ? [{ id: "", label: key.agent.label }] : []), ...extra.map((a) => ({ id: a.id, label: a.label }))];
   }
 
   // The models that read images: the school's list, unless the student set
   // their own (bulkhours.imageModels), restricted to the models offered.
   vision(key: Key): string[] {
-    const own = vscode.workspace.getConfiguration("bulkhours").get<unknown>("imageModels");
+    const own = vscode.workspace.getConfiguration(this.school.prefix).get<unknown>("imageModels");
     const list = Array.isArray(own) && own.length ? own.filter((m): m is string => typeof m === "string") : key.modelVision;
     return key.models.filter((m) => list.includes(m));
   }
@@ -289,7 +289,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
   // The school's agent comes with the key; a student may pick one of their
   // own `bulkhours.extraAgents` instead.
   agent(key: Key | undefined, wanted?: string): AgentSpec {
-    const cfg = vscode.workspace.getConfiguration("bulkhours");
+    const cfg = vscode.workspace.getConfiguration(this.school.prefix);
     return chooseAgent(key, parseAgents(cfg.get<unknown[]>("extraAgents") ?? []), wanted ?? cfg.get<string>("agent") ?? "");
   }
 
@@ -325,7 +325,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
 
   // « Redémarrer l'assistant »: new agent processes (each conversation is
   // resumed, or handed over, at its next message) and a fresh panel page.
-  // Only BulkHours restarts: VS Code's restartExtensionHost would restart
+  // Only this extension restarts: VS Code's restartExtensionHost would restart
   // every extension of the window (owner, 2026-11-10).
   restart(): void {
     this.tabs.forEach((t) => t.restart());
@@ -387,7 +387,7 @@ function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, l
   const words: Record<string, string> = Object.fromEntries(PANEL_WORDS.map((k) => [k, MESSAGES[lang][k]]));
   words.signInPrompt = t(lang, "signInPrompt", { school: school.name });
   words.accent = school.accent;
-  words.title = `BulkHours ${school.name}`;
+  words.title = school.title;
   const data = JSON.stringify(words).replace(/</g, "\\u003c");
   return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; img-src data:; script-src 'nonce-${nonce}';">

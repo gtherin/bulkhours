@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- MaQI's M (maqi-instance jupyterhub/branding-favicon.svg), one colour
+       for VS Code's activity bar; the tile colours come from maqi.json. -->
+  <path fill="currentColor" d="M10 50 V14 h9 l13 17 13-17 h9 v36 h-9 V29 l-13 17 -13-17 v21 z"/>
+</svg>

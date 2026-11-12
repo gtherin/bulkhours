@@ -32,3 +32,11 @@ test("how a turn ended reads in the student's language", () => {
   assert.equal(t("fr", "stopped", { reason: t("fr", "reason_cancelled") }), "arrêté : annulé");
   assert.equal(t("en", "stopped", { reason: t("en", "reason_max_tokens") }), "stopped: the answer reached its length limit: if the conversation is long, Clear starts a fresh one");
 });
+
+test("messages name the variant installed, BulkHours by default", async () => {
+  const { setBrand } = await import("../src/core/i18n.ts");
+  assert.equal(t("en", "upToDate", { version: "1.0" }), "BulkHours is up to date (1.0).");
+  setBrand("MaQI");
+  try { assert.equal(t("fr", "upToDate", { version: "1.0" }), "MaQI est à jour (1.0)."); }
+  finally { setBrand("BulkHours"); }
+});
