@@ -25,8 +25,17 @@ import { join } from "node:path";
 import type { ContentBlock, SessionUpdate } from "@agentclientprotocol/sdk";
 import { addUserPrompt, applyUpdate, type Entry, type Transcript } from "./transcript.ts";
 
-export function stateRoot(env: Record<string, string | undefined>, home: string): string {
+// Where conversations and the agents' own files live: GATEKA_STATE_HOME, then
+// the student's setting (<prefix>.stateDirectory), then the variant's config
+// file (stateDir, e.g. ~/.maqi), then XDG. Only an absolute or ~ path counts.
+export function stateRoot(env: Record<string, string | undefined>, home: string,
+                          chosen: { setting?: string; variant?: string } = {}): string {
   if (env.GATEKA_STATE_HOME) return env.GATEKA_STATE_HOME;
+  for (const dir of [chosen.setting, chosen.variant]) {
+    const d = dir?.trim() ?? "";
+    if (d.startsWith("/")) return d;
+    if (d === "~" || d.startsWith("~/")) return join(home, d.slice(1));
+  }
   return join(env.XDG_STATE_HOME || join(home, ".local", "state"), "gateka");
 }
 

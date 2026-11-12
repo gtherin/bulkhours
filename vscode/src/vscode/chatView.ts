@@ -51,7 +51,9 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
   private credits: Credits | undefined;
   private spendTimer: ReturnType<typeof setTimeout> | undefined;
   readonly idleMs: number;
-  readonly store = new ConversationStore(stateRoot(process.env, homedir()));
+  // The variant's state folder (stateRoot): conversations and agent files.
+  readonly stateDir: string;
+  readonly store: ConversationStore;
   private restored = false;
   // What the tab strip showed last: a busy tab behind the shown one redraws
   // the strip only when this changes, never the whole conversation.
@@ -66,6 +68,9 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
     this.lang = lang;
     this.meter = meter;
     this.idleMs = idleMs;
+    this.stateDir = stateRoot(process.env, homedir(), {
+      setting: vscode.workspace.getConfiguration(school.prefix).get<string>("stateDirectory"), variant: school.stateDir });
+    this.store = new ConversationStore(this.stateDir);
     this.active = this.addTab();
     creds.onDidChange(() => { this.tabs.forEach((t) => t.forget()); void this.render(); });
   }

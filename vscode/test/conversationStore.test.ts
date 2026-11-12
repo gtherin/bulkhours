@@ -18,6 +18,16 @@ test("the state folder follows XDG, and GATEKA_STATE_HOME wins", () => {
   assert.equal(stateRoot({}, "/home/a"), "/home/a/.local/state/gateka");
 });
 
+// Owner 2026-11-12: "the directory for maqi should be .maqi" - a variant's
+// config file names its folder, the student's setting can move it.
+test("the state folder: the environment, then the setting, then the variant's file, then XDG", () => {
+  assert.equal(stateRoot({}, "/home/a", { variant: "~/.maqi" }), "/home/a/.maqi");
+  assert.equal(stateRoot({}, "/home/a", { variant: "~/.maqi", setting: "/data/a/maqi" }), "/data/a/maqi");
+  assert.equal(stateRoot({ GATEKA_STATE_HOME: "/s" }, "/home/a", { variant: "~/.maqi", setting: "~/x" }), "/s");
+  assert.equal(stateRoot({}, "/home/a", { variant: "~/.maqi", setting: "  " }), "/home/a/.maqi", "an empty setting is no setting");
+  assert.equal(stateRoot({}, "/home/a", { setting: "relative/dir" }), "/home/a/.local/state/gateka", "only an absolute or ~ path is taken");
+});
+
 test("a turn is written as one prompt, one message per kind, and each tool in its final state", () => {
   const r = root();
   const store = new ConversationStore(r);

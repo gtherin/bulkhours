@@ -8,8 +8,7 @@ import { launchFor, type AgentSpec } from "../core/agents.ts";
 import { MESSAGES, Said, t, type Lang, type MessageKey } from "../core/i18n.ts";
 import type { Key } from "../core/keys.ts";
 import { addNotice, addUserPrompt, applyUpdate, runningTool, type Transcript } from "../core/transcript.ts";
-import { condensed, stateRoot, type Conversation, type ConversationStore, type Opened } from "../core/conversationStore.ts";
-import { homedir } from "node:os";
+import { condensed, type Conversation, type ConversationStore, type Opened } from "../core/conversationStore.ts";
 import type { Credentials } from "./credentials.ts";
 import { readTextFile, writeTextFile } from "./editorHost.ts";
 
@@ -25,6 +24,7 @@ export interface TabHost {
   readonly lang: Lang;
   readonly store: ConversationStore;
   readonly schoolId: string;
+  readonly stateDir: string;
   readonly idleMs: number;
   // The agent and model a tab asks for, or the panel's choice for a tab
   // that has asked for none yet.
@@ -258,7 +258,7 @@ export class Tab {
     if (!folder) throw new Said("openFolder");
     const launch = launchFor(spec, {
       baseUrl: key.baseUrl, apiKey: key.apiKey, model, extensionPath: this.host.ctx.extensionPath,
-      state: stateRoot(process.env, homedir()),
+      state: this.host.stateDir,
     });
     launch.env.BULKHOURS_MODEL = model;
     launch.env.BULKHOURS_MODELS = key.models.join(",");

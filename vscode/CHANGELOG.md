@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.21 — 2026-11-12
+
+- Where conversations and the agents' files live is a choice: the variant's config file names its folder (MaQI: ~/.maqi), and the setting "State directory" moves it (absolute or under ~; after a window reload). Without either: ~/.local/state/gateka, as before.
+
 ## 0.1.20 — 2026-11-12
 
 - MaQI carries MaQI's own mark, the candlesticks of its portal (maqi.ai.msct.fr): as is on its tile, in one colour in the activity bar. A variant's full-colour logo goes in schools/<id>-tile.svg. (MaQI only; the other variants are unchanged.)

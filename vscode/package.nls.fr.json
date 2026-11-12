@@ -10,5 +10,6 @@
   "command.rename": "Renommer cette conversation",
   "command.restart": "Redémarrer l'assistant",
   "command.update": "Mettre à jour l'extension",
-  "setting.imageModels": "Modèles qui reçoivent les images collées, par ex. [\"fast\"]. Vide : la liste de votre école (les modèles que son serveur déclare lire les images)."
+  "setting.imageModels": "Modèles qui reçoivent les images collées, par ex. [\"fast\"]. Vide : la liste de votre école (les modèles que son serveur déclare lire les images).",
+  "setting.stateDirectory": "Dossier de vos conversations et des fichiers des agents, par ex. ~/.maqi (absolu ou sous ~). Vide : celui prévu par cette extension. Pris en compte après un rechargement de la fenêtre."
 }

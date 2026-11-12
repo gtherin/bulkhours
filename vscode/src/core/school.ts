@@ -26,6 +26,9 @@ export type School = {
   // The extension tile's background, its mark drawn in the accent; without
   // it the mark is white on the accent. Optional.
   tile?: string;
+  // The variant's own folder for conversations and agent files, e.g. ~/.maqi
+  // (owner, 2026-11-12). Optional: XDG's ~/.local/state/gateka otherwise.
+  stateDir?: string;
 };
 
 export function parseSchool(raw: unknown): School {
@@ -46,12 +49,17 @@ export function parseSchool(raw: unknown): School {
     title: o.title === undefined ? `BulkHours ${text(o, "name", fail)}` : text(o, "title", fail),
     prefix: prefix(o.prefix, fail),
     ...(o.tile !== undefined ? { tile: colour(o, "tile", fail) } : {}),
+    ...(o.stateDir !== undefined ? { stateDir: stateDir(o.stateDir, fail) } : {}),
   };
 }
 
 // The extension's name, and its builds' file names: bulkhours-ipsa, maqi.
 export function packageName(s: Pick<School, "id" | "prefix">): string {
   return s.prefix === s.id ? s.id : `${s.prefix}-${s.id}`;
+}
+
+function stateDir(v: unknown, fail: (m: string) => never): string {
+  return typeof v === "string" && /^(~\/|\/)\S*$/.test(v) ? v : fail(`"stateDir" must start with ~/ or /`);
 }
 
 function prefix(v: unknown, fail: (m: string) => never): string {

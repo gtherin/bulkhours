@@ -10,5 +10,6 @@
   "command.rename": "Rename this conversation",
   "command.restart": "Restart the assistant",
   "command.update": "Update the extension",
-  "setting.imageModels": "Models that receive pasted images, e.g. [\"fast\"]. Empty: your school's list (the models its server marks as reading images)."
+  "setting.imageModels": "Models that receive pasted images, e.g. [\"fast\"]. Empty: your school's list (the models its server marks as reading images).",
+  "setting.stateDirectory": "Folder for your conversations and the agents' own files, e.g. ~/.maqi (absolute or under ~). Empty: the folder this extension comes with. Applies after a window reload."
 }

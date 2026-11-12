@@ -44,3 +44,9 @@ test("a variant carries its own title, prefix and icon colours", () => {
   assert.throws(() => parseSchool({ ...ipsa, prefix: "Ma QI" }), /school ipsa: "prefix" must be lowercase letters and digits/);
   assert.throws(() => parseSchool({ ...ipsa, tile: "dark" }), /school ipsa: "tile" must be a #rrggbb colour/);
 });
+
+test("a variant may name its own state folder, absolute or under ~", () => {
+  assert.equal(parseSchool({ ...ipsa, stateDir: "~/.maqi" }).stateDir, "~/.maqi");
+  assert.equal(parseSchool(ipsa).stateDir, undefined);
+  assert.throws(() => parseSchool({ ...ipsa, stateDir: ".maqi" }), /school ipsa: "stateDir" must start with ~\/ or \//);
+});
