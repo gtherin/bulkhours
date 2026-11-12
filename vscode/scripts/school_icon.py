@@ -24,6 +24,11 @@ svg = (mark if mark.exists() else root / "media" / "icon.svg").read_text()
 svg = svg.replace("currentColor", ink).replace("<svg", '<svg width="88" height="88"')
 html = (f'<body style="margin:0;background:transparent"><div style="width:128px;height:128px;border-radius:28px;'
         f'background:{ground};display:grid;place-items:center">{svg}</div></body>')
+# A variant with its own full-colour logo (schools/<id>-tile.svg) shows it as is.
+logo = root / "schools" / f"{school_id}-tile.svg"
+if logo.exists():
+    svg = logo.read_text().replace("<svg", '<svg width="128" height="128"')
+    html = f'<body style="margin:0;background:transparent">{svg}</body>'
 with sync_playwright() as p:
     browser = p.chromium.launch()
     page = browser.new_page(viewport={"width": 128, "height": 128})

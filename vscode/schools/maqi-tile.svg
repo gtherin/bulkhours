@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- MaQI's mark, as its sign-in page draws it
+       (maqi-instance admin/deploy/portal-proxy/templates/sign_in.html). -->
+  <circle cx="32" cy="32" r="30" fill="#2b2a2b"/>
+  <circle cx="32" cy="32" r="25" fill="#f5f6f1"/>
+  <rect x="16.25" y="32" width="8.5" height="14" rx="1.2" fill="#61b45c"/>
+  <rect x="27.75" y="25" width="8.5" height="15" rx="1.2" fill="#ea4541"/>
+  <rect x="39.25" y="18" width="8.5" height="16" rx="1.2" fill="#61b45c"/>
+</svg>

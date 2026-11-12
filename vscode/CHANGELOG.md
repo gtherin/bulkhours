@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.20 — 2026-11-12
+
+- MaQI carries MaQI's own mark, the candlesticks of its portal (maqi.ai.msct.fr): as is on its tile, in one colour in the activity bar. A variant's full-colour logo goes in schools/<id>-tile.svg. (MaQI only; the other variants are unchanged.)
+
 ## 0.1.19 — 2026-11-12
 
 - One code, a config file per variant (schools/<id>.json): its title, its command and settings prefix, its mark (schools/<id>.svg) and tile colours. Two variants install side by side without colliding. First new variant: MaQI (gateka.maqi), on trial.
