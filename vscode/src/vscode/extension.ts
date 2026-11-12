@@ -16,6 +16,7 @@ import { ChatView } from "./chatView.ts";
 import { Credentials, type KeySource } from "./credentials.ts";
 import { PlatformKeys } from "./platformKeys.ts";
 import { PlatformStatus } from "./platformStatus.ts";
+import { RenderEditor } from "./renderEditor.ts";
 
 declare const __SCHOOL__: unknown;
 
@@ -66,6 +67,9 @@ export function activate(ctx: vscode.ExtensionContext): void {
     vscode.commands.registerCommand(id("update"), () => update(ctx, school, lang, true)),
     vscode.commands.registerCommand(id("dashboard"), () => openDashboard(ctx, lang)),
     vscode.commands.registerCommand(id("links"), () => openLink(school.links, lang)),
+    // A marimo notebook's page, in Reopen Editor With (owner, 2026-11-12).
+    vscode.window.registerCustomEditorProvider(id("render"), new RenderEditor(school.prefix, lang),
+      { webviewOptions: { retainContextWhenHidden: true } }),
     vscode.commands.registerCommand(id("askAbout"), (uri?: vscode.Uri) => askAbout(chat, id("chat.focus"), uri)),
   );
   // Once a day at most, a quiet look for a newer build in the download area.

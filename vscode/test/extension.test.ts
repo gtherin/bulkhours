@@ -2,7 +2,7 @@
 import { mock, test } from "node:test";
 import assert from "node:assert/strict";
 
-const registered = { commands: [] as string[], views: [] as string[], uri: 0 };
+const registered = { commands: [] as string[], views: [] as string[], editors: [] as string[], uri: 0 };
 const contexts: unknown[][] = [];
 const info: string[] = [];
 const settings: Record<string, unknown> = {};
@@ -22,6 +22,7 @@ mock.module("vscode", {
       createStatusBarItem: () => { const b: any = { shown: false, show() { b.shown = true; }, hide() { b.shown = false; }, dispose() {} }; bars.push(b); return b; },
       registerUriHandler: () => { registered.uri++; return disposable; },
       registerWebviewViewProvider: (id: string, _p: unknown, o: any) => { registered.views.push(id); viewOptions = o; return disposable; },
+      registerCustomEditorProvider: (id: string) => { registered.editors.push(id); return disposable; },
       showInformationMessage: async (m: string) => { info.push(m); },
       showQuickPick: async (items: any[]) => { offered.push(items); return quickPick(items); },
     },
@@ -45,9 +46,9 @@ test("activation registers the panel, the sign-in link and its commands", () => 
     commands: ["bulkhours.newChat", "bulkhours.signIn", "bulkhours.signOut", "bulkhours.pickAgent",
       "bulkhours.history", "bulkhours.rename", "bulkhours.restart", "bulkhours.update", "bulkhours.dashboard",
       "bulkhours.links", "bulkhours.askAbout"],
-    views: ["bulkhours.chat"], uri: 1,
+    views: ["bulkhours.chat"], editors: ["bulkhours.render"], uri: 1,
   });
-  assert.equal(ctx.subscriptions.length, 16);
+  assert.equal(ctx.subscriptions.length, 17);
   assert.deepEqual(contexts[0], ["setContext", "bulkhours.hasLinks", false], "no links listed: no links button");
   assert.equal(bars[0].command, "bulkhours.chat.focus", "the budget opens the panel");
   assert.equal(viewOptions.webviewOptions.retainContextWhenHidden, true, "a hidden panel keeps its conversation");

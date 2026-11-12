@@ -15,5 +15,7 @@
   "capability.untrusted": "The assistant runs an agent that reads, changes and runs files in this folder: it works in a folder you trust.",
   "command.dashboard": "Open a dashboard",
   "command.askAbout": "Ask the assistant about this",
-  "command.links": "Platform links"
+  "command.links": "Platform links",
+  "render.name": "Rendered page (HTML)",
+  "setting.marimo": "marimo to render notebooks with (a path). Empty: the one beside your default Python interpreter, else the PATH's."
 }

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.30 — 2026-11-12
+
+- A marimo notebook's rendered page in VS Code: on a .py, « Reopen Editor With… › Rendered page (HTML) » shows its page (marimo export html, results only), rendered again at each save - yours or the agent's. The marimo used is the setting « marimo », else the one beside your default Python, else the PATH's. The page may load marimo's own code (jsdelivr) and send nothing anywhere.
+
 ## 0.1.29 — 2026-11-12
 
 - A tool's output is folded only when it is long: two short lines or fewer show as they are (an error is read at once), wrapped instead of scrolling sideways; longer ones fold behind their first line and their line count.

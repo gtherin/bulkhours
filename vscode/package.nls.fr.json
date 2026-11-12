@@ -15,5 +15,7 @@
   "capability.untrusted": "L'assistant lance un agent qui lit, modifie et exécute les fichiers de ce dossier : il fonctionne dans un dossier auquel vous faites confiance.",
   "command.dashboard": "Ouvrir un tableau de bord",
   "command.askAbout": "Demander à l'assistant",
-  "command.links": "Liens de la plateforme"
+  "command.links": "Liens de la plateforme",
+  "render.name": "Page rendue (HTML)",
+  "setting.marimo": "marimo à utiliser pour rendre les notebooks (un chemin). Vide : celui à côté de votre interpréteur Python par défaut, sinon celui du PATH."
 }
