@@ -58,6 +58,7 @@ export function activate(ctx: vscode.ExtensionContext): void {
     vscode.window.registerWebviewViewProvider(id("chat"), chat, { webviewOptions: { retainContextWhenHidden: true } }),
     vscode.commands.registerCommand(id("newChat"), () => chat.newChat()),
     vscode.commands.registerCommand(id("signIn"), () => creds.signIn()),
+    vscode.commands.registerCommand(id("signInWithCode"), () => creds.signInWithCode?.()),
     vscode.commands.registerCommand(id("signOut"), () => creds.signOut()),
     vscode.commands.registerCommand(id("pickAgent"), () => pickAgent(creds, chat, lang, school.prefix)),
     vscode.commands.registerCommand(id("history"), () => history(chat, lang)),

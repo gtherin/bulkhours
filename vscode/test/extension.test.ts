@@ -43,12 +43,12 @@ test("activation registers the panel, the sign-in link and its commands", () => 
   activate(ctx);
   deactivate();
   assert.deepEqual(registered, {
-    commands: ["bulkhours.newChat", "bulkhours.signIn", "bulkhours.signOut", "bulkhours.pickAgent",
+    commands: ["bulkhours.newChat", "bulkhours.signIn", "bulkhours.signInWithCode", "bulkhours.signOut", "bulkhours.pickAgent",
       "bulkhours.history", "bulkhours.rename", "bulkhours.restart", "bulkhours.update", "bulkhours.dashboard",
       "bulkhours.links", "bulkhours.askAbout"],
     views: ["bulkhours.chat"], editors: ["bulkhours.render"], uri: 1,
   });
-  assert.equal(ctx.subscriptions.length, 17);
+  assert.equal(ctx.subscriptions.length, 18);
   assert.deepEqual(contexts[0], ["setContext", "bulkhours.hasLinks", false], "no links listed: no links button");
   assert.equal(bars[0].command, "bulkhours.chat.focus", "the budget opens the panel");
   assert.equal(viewOptions.webviewOptions.retainContextWhenHidden, true, "a hidden panel keeps its conversation");

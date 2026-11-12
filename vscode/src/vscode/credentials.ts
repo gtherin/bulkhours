@@ -3,7 +3,7 @@
 // the LiteLLM key lives in memory only and is renewed before it expires.
 import { randomUUID } from "node:crypto";
 import * as vscode from "vscode";
-import { keyFailure, signInToken, wayBack } from "../core/choices.ts";
+import { keyFailure, pastedPass, signInToken, wayBack } from "../core/choices.ts";
 import { Said, t, type Lang } from "../core/i18n.ts";
 import { needsRenewal, parseKeyReply, type Key } from "../core/keys.ts";
 import type { School } from "../core/school.ts";
@@ -23,9 +23,19 @@ export interface KeySource extends vscode.UriHandler {
   known(): Key | undefined;
   signedIn(): Promise<boolean>;
   signIn(): Promise<void>;
+  // Where the platform shows a code to paste (optional).
+  signInWithCode?(): Promise<void>;
   signOut(): Promise<void>;
   currentKey(): Promise<{ key: Key; renewed: boolean }>;
   credits(): Promise<Credits | undefined>;
+}
+
+// The link as written. A vscode.Uri would decode and re-encode it on the way
+// to the browser (toString(true) + encodeURI): the "?windowId=5" inside the
+// redirect arrived as "%253FwindowId=5" and the sign-in page refused it
+// (owner, 2026-11-12, three times). VS Code opens a string as it is.
+async function openAsWritten(link: string): Promise<void> {
+  await vscode.env.openExternal(link as unknown as vscode.Uri);
 }
 
 export class Credentials implements KeySource {
@@ -61,7 +71,22 @@ export class Credentials implements KeySource {
     const url = new URL(this.school.signInUrl!);
     url.searchParams.set("redirect", wayBack(back));
     url.searchParams.set("state", this.pendingState);
-    await vscode.env.openExternal(vscode.Uri.parse(url.toString()));
+    await openAsWritten(url.toString());
+  }
+
+  // "A code to paste": the page shows the pass, the person pastes it here.
+  // No way back to the editor is needed (another editor, a browser elsewhere).
+  async signInWithCode(): Promise<void> {
+    const url = new URL(this.school.signInUrl!);
+    url.searchParams.set("mode", "code");
+    await openAsWritten(url.toString());
+    const typed = await vscode.window.showInputBox({ prompt: t(this.lang, "codePrompt"), password: true, ignoreFocusOut: true });
+    if (typed === undefined) return;
+    const pass = pastedPass(typed, this.school.id);
+    if (!pass) { void vscode.window.showWarningMessage(t(this.lang, "codeInvalid")); return; }
+    await this.secrets.store(TOKEN, pass);
+    this.key = undefined;
+    try { await this.currentKey(); } finally { this.changed.fire(); }
   }
 
   async handleUri(uri: vscode.Uri): Promise<void> {

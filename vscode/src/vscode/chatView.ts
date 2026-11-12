@@ -16,7 +16,7 @@ import { existsSync } from "node:fs";
 import { isAbsolute, join } from "node:path";
 
 type FromPanel =
-  | { type: "ready" } | { type: "signIn" } | { type: "cancel" } | { type: "newChat" }
+  | { type: "ready" } | { type: "signIn" } | { type: "signInCode" } | { type: "cancel" } | { type: "newChat" }
   | { type: "send"; text: string; images?: Pasted[] } | { type: "model"; model: string }
   | { type: "compact" } | { type: "clear" } | { type: "pickAgent" }
   | { type: "choose"; agent: string; model?: string }
@@ -255,6 +255,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
       case "pickAgent": await vscode.commands.executeCommand(`${this.school.prefix}.pickAgent`); return;
       case "choose": return this.choose(m.agent, m.model);
       case "signIn": return this.creds.signIn();
+      case "signInCode": return this.creds.signInWithCode?.();
       case "newChat": return this.newChat();
       case "cancel": return tab.stop();
       case "model": return this.choose("", m.model);
@@ -402,7 +403,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
     this.strip = this.stripOf();
     await this.view?.webview.postMessage({
       type: "state", transcript: tab.transcript, busy: tab.busy, starting: tab.starting,
-      signedIn: await this.creds.signedIn(), interactive: this.creds.interactive, model: tab.model(key), models: key?.models ?? [],
+      signedIn: await this.creds.signedIn(), interactive: this.creds.interactive, canPasteCode: Boolean(this.creds.signInWithCode), model: tab.model(key), models: key?.models ?? [],
       agent: key ? safeLabel(() => tab.agentSpec(key).label) : "",
       modelLabels: key?.modelLabels ?? {}, modelPrices: key?.modelPrices ?? {}, modelVision: key ? this.vision(key) : [],
       currency: key?.currency ?? "USD",
@@ -447,7 +448,7 @@ function safeLabel(f: () => string): string {
 const PANEL_WORDS: MessageKey[] = ["signIn", "emptyChat", "placeholder", "send", "stop", "model", "thinking", "output", "noChange", "startingAgent",
   "compact", "compactHint", "clear", "clearHint", "thinkingVerb", "budgetTitle", "contextTitle", "removeImage",
   "suggestExplain", "suggestBuild", "suggestFaster", "schoolModels", "yourAgents", "mic", "micWindows", "micMac", "seesImages", "lastActivity", "thisTurn",
-  "newTab", "closeTab", "renameHint", "renameTab", "openInEditor", "linksTitle", "recentTitle", "questionsCount"];
+  "newTab", "closeTab", "renameHint", "renameTab", "openInEditor", "linksTitle", "recentTitle", "questionsCount", "pasteCode"];
 
 function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, lang: Lang): string {
   const css = webview.asWebviewUri(vscode.Uri.joinPath(media, "chat.css"));

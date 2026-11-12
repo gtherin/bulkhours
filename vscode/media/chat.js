@@ -214,8 +214,10 @@
     if (!s.signedIn) {
       // Signed in by the machine (MaQI's key file): nothing to click here.
       log.innerHTML = s.interactive === false ? `<div class="welcome"><p>${esc(W.platformOnly)}</p></div>`
-        : `<div class="welcome"><p>${esc(W.signInPrompt)}</p><button id="signin">${esc(W.signIn)}</button></div>`;
+        : `<div class="welcome"><p>${esc(W.signInPrompt)}</p><button id="signin">${esc(W.signIn)}</button>`
+          + (s.canPasteCode ? `<p class="or"><button type="button" id="signincode" class="link">${esc(W.pasteCode)}</button></p>` : "") + `</div>`;
       if (s.interactive !== false) $("signin").onclick = () => vscode.postMessage({ type: "signIn" });
+      if ($("signincode")) $("signincode").onclick = () => vscode.postMessage({ type: "signInCode" });
       form.hidden = true;
       $("meters").hidden = true;
       return;

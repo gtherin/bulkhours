@@ -92,6 +92,7 @@ a { color: var(--vscode-textLink-foreground); }
 .welcome { margin: auto 0; padding: 24px 6px; text-align: center; color: var(--muted); }
 .welcome h2 { margin: 0 0 6px; font-size: 1.25em; font-weight: 600; color: var(--vscode-foreground); }
 .welcome p { margin: 0 auto 14px; max-width: 30em; line-height: 1.5; }
+.welcome .or { margin: 12px 0 0; font-size: .92em; }
 .suggest { display: flex; flex-direction: column; gap: 6px; align-items: center; }
 .suggest button { max-width: 100%; color: var(--vscode-foreground); background: var(--surface); border: 1px solid var(--line);
   border-radius: 999px; padding: 5px 12px; font-size: .92em; cursor: pointer; }

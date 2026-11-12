@@ -3,6 +3,8 @@ import { mock, test } from "node:test";
 import assert from "node:assert/strict";
 
 const opened: string[] = [];
+const openedAs: string[] = [];
+let typed: string | undefined;
 // What VS Code hands back for the way home: itself, or with ?windowId=N.
 let external = async (u: unknown) => u;
 const warnings: string[] = [];
@@ -15,9 +17,9 @@ mock.module("vscode", {
     env: {
       uriScheme: "vscode",
       asExternalUri: (u: unknown) => external(u),
-      openExternal: async (u: { toString(): string }) => { opened.push(u.toString()); return true; },
+      openExternal: async (u: { toString(): string }) => { opened.push(u.toString()); openedAs.push(typeof u); return true; },
     },
-    window: { showWarningMessage: async (m: string) => { warnings.push(m); } },
+    window: { showWarningMessage: async (m: string) => { warnings.push(m); }, showInputBox: async () => typed },
   },
 });
 const { Credentials } = await import("../src/vscode/credentials.ts");
@@ -147,4 +149,32 @@ test("with several windows open the way back keeps its ?windowId, wherever VS Co
       assert.equal(new URL(opened[0]).searchParams.get("redirect"), "vscode://gateka.gateka/signed-in?windowId=5");
     }
   } finally { external = async (u: unknown) => u; }
+});
+
+test("the sign-in link is handed to VS Code as written: its own Uri round trip mangles a link inside a link", async () => {
+  const s = setup({ status: 200, body: reply(720) });
+  openedAs.length = 0;
+  await s.c.signIn();
+  assert.deepEqual(openedAs, ["string"]);
+});
+
+// "A code to paste", as Claude Code does (owner, 2026-11-12): no way back to
+// the editor needed - another editor, a browser on another machine.
+test("a code pasted from the sign-in page signs in; anything else is refused", async () => {
+  const s = setup({ status: 200, body: reply(720) });
+  opened.length = 0;
+  typed = "  w1.ipsa.51.1797000000.0123456789abcdef0123456789abcdef \n";
+  await s.c.signInWithCode();
+  const url = new URL(opened[0]);
+  assert.deepEqual([url.searchParams.get("school"), url.searchParams.get("mode"), url.searchParams.get("redirect")], ["ipsa", "code", null]);
+  assert.equal(await s.c.signedIn(), true);
+  assert.deepEqual(s.calls, [{ auth: "Bearer w1.ipsa.51.1797000000.0123456789abcdef0123456789abcdef", body: JSON.stringify({ school: "ipsa" }) }]);
+  assert.equal(s.changes(), 1);
+  const t = setup({ status: 200, body: reply(720) });
+  for (const bad of [undefined, "", "hello", "w1.polytechnique.51.1797000000.0123456789abcdef0123456789abcdef"]) {
+    typed = bad;
+    await t.c.signInWithCode();
+    assert.equal(await t.c.signedIn(), false, String(bad));
+  }
+  assert.match(warnings.at(-1)!, /not a sign-in code/);
 });

@@ -31,6 +31,13 @@ export function wayBack(u: { scheme: string; authority: string; path: string; qu
   return `${u.scheme}://${u.authority}${path}${query ? `?${query}` : ""}`;
 }
 
+// A code pasted from the sign-in page: the pass itself, for this variant.
+export function pastedPass(text: string | undefined, school: string): string | undefined {
+  const code = (text ?? "").trim();
+  const m = /^w1\.([a-z0-9_-]{1,32})\.\d+\.\d+\.[0-9a-f]{32}$/.exec(code);
+  return m && m[1] === school ? code : undefined;
+}
+
 const FAILURES: Record<number, MessageKey> = { 401: "sessionExpired", 402: "noCredits" };
 
 export function keyFailure(status: number): Said | null {

@@ -17,5 +17,6 @@
   "command.askAbout": "Demander à l'assistant",
   "command.links": "Liens de la plateforme",
   "render.name": "Page rendue (HTML)",
-  "setting.marimo": "marimo à utiliser pour rendre les notebooks (un chemin). Vide : celui à côté de votre interpréteur Python par défaut, sinon celui du PATH."
+  "setting.marimo": "marimo à utiliser pour rendre les notebooks (un chemin). Vide : celui à côté de votre interpréteur Python par défaut, sinon celui du PATH.",
+  "command.signInWithCode": "Se connecter avec un code"
 }

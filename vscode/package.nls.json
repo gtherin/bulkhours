@@ -17,5 +17,6 @@
   "command.askAbout": "Ask the assistant about this",
   "command.links": "Platform links",
   "render.name": "Rendered page (HTML)",
-  "setting.marimo": "marimo to render notebooks with (a path). Empty: the one beside your default Python interpreter, else the PATH's."
+  "setting.marimo": "marimo to render notebooks with (a path). Empty: the one beside your default Python interpreter, else the PATH's.",
+  "command.signInWithCode": "Sign in with a code"
 }

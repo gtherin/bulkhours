@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.36 — 2026-11-12
+
+- Sign-in, the real cause: the link is handed to the browser as written. VS Code's own Uri round trip re-encoded the link inside the link (…signed-in%253FwindowId=5) and the sign-in page refused it; 0.1.34 and 0.1.35 looked in the wrong place. The page now also reads such a link back.
+- « Paste a code instead » (and the command « Sign in with a code »): the sign-in page shows a code, you paste it into VS Code - as Claude Code does. No way back to the editor is needed, so it works from any editor or browser.
+
 ## 0.1.35 — 2026-11-12
 
 - Sign-in with several VS Code windows open, for good: VS Code hands the way back with ?windowId=N inside its path, which every way of writing it out encoded as %3F; the link is now rebuilt from its parts. (0.1.34 only fixed the "=".)
