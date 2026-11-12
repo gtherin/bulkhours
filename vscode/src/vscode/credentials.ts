@@ -3,7 +3,7 @@
 // the LiteLLM key lives in memory only and is renewed before it expires.
 import { randomUUID } from "node:crypto";
 import * as vscode from "vscode";
-import { keyFailure, signInToken } from "../core/choices.ts";
+import { keyFailure, signInToken, wayBack } from "../core/choices.ts";
 import { Said, t, type Lang } from "../core/i18n.ts";
 import { needsRenewal, parseKeyReply, type Key } from "../core/keys.ts";
 import type { School } from "../core/school.ts";
@@ -59,10 +59,7 @@ export class Credentials implements KeySource {
     const back = await vscode.env.asExternalUri(
       vscode.Uri.parse(`${vscode.env.uriScheme}://${this.extensionId}/signed-in`));
     const url = new URL(this.school.signInUrl!);
-    // toString(true): VS Code adds ?windowId=N when several windows are open,
-    // and its default toString() percent-encodes that "?" and "=" - the
-    // sign-in page then refused the link (owner, 2026-11-12, gateka sign-in).
-    url.searchParams.set("redirect", back.toString(true));
+    url.searchParams.set("redirect", wayBack(back));
     url.searchParams.set("state", this.pendingState);
     await vscode.env.openExternal(vscode.Uri.parse(url.toString()));
   }

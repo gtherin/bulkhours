@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.35 — 2026-11-12
+
+- Sign-in with several VS Code windows open, for good: VS Code hands the way back with ?windowId=N inside its path, which every way of writing it out encoded as %3F; the link is now rebuilt from its parts. (0.1.34 only fixed the "=".)
+
 ## 0.1.34 — 2026-11-12
 
 - Sign-in works with several VS Code windows open: the way back to the window (…?windowId=N) is sent as written; percent-encoded, the sign-in page refused it (« Lien de connexion invalide »).

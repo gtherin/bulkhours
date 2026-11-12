@@ -21,6 +21,16 @@ export function sliceLines(text: string, line?: number | null, limit?: number | 
   return text.split("\n").slice(start, limit ? start + limit : undefined).join("\n");
 }
 
+// The way back to the editor, written out for the sign-in page. VS Code adds
+// ?windowId=N when several windows are open - and hands it back INSIDE the
+// path, where every toString() encodes the "?" as %3F: the page then refused
+// the link (owner, 2026-11-12, twice). Rebuilt from the parts instead.
+export function wayBack(u: { scheme: string; authority: string; path: string; query?: string }): string {
+  const [path, inPath] = u.path.split(/\?|%3F/i);
+  const query = [inPath, u.query].filter(Boolean).join("&");
+  return `${u.scheme}://${u.authority}${path}${query ? `?${query}` : ""}`;
+}
+
 const FAILURES: Record<number, MessageKey> = { 401: "sessionExpired", 402: "noCredits" };
 
 export function keyFailure(status: number): Said | null {

@@ -52,3 +52,10 @@ test("a sign-in link counts only if this window asked for it", () => {
   assert.deepEqual(signInToken("/elsewhere", "state=s1&token=t1", "s1"), { ignored: true });
   assert.throws(() => signInToken("/signed-in", "state=s1", "s1"), /the sign-in page sent no token/);
 });
+
+test("the way back is rebuilt from its parts, the ?windowId kept as a query", async () => {
+  const { wayBack } = await import("../src/core/choices.ts");
+  assert.equal(wayBack({ scheme: "vscode", authority: "gateka.gateka", path: "/signed-in", query: "" }), "vscode://gateka.gateka/signed-in");
+  assert.equal(wayBack({ scheme: "vscode", authority: "gateka.gateka", path: "/signed-in?windowId=5" }), "vscode://gateka.gateka/signed-in?windowId=5");
+  assert.equal(wayBack({ scheme: "cursor", authority: "gateka.ipsa", path: "/signed-in%3FwindowId=2", query: "a=1" }), "cursor://gateka.ipsa/signed-in?windowId=2&a=1");
+});

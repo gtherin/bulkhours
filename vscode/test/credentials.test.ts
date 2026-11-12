@@ -10,7 +10,8 @@ class EventEmitter { private l: (() => void)[] = []; event = (f: () => void) => 
 mock.module("vscode", {
   namedExports: {
     EventEmitter,
-    Uri: { parse: (s: string) => ({ toString: () => s }) },
+    Uri: { parse: (s: string) => { const m = /^([a-z-]+):\/\/([^/]*)([^?]*)(?:\?(.*))?$/.exec(s)!;
+      return { scheme: m[1], authority: m[2], path: m[3], query: m[4] ?? "", toString: () => s }; } },
     env: {
       uriScheme: "vscode",
       asExternalUri: (u: unknown) => external(u),
@@ -132,13 +133,18 @@ test("a budget that cannot be read is simply not shown, never an error", async (
 });
 
 
-test("with several windows open the way back keeps its ?windowId as written, never percent-encoded", async () => {
+test("with several windows open the way back keeps its ?windowId, wherever VS Code puts it", async () => {
   const s = setup({ status: 200, body: reply(720) });
-  external = async () => ({ toString: (skip?: boolean) => (skip ? "vscode://bulkhours.bulkhours-ipsa/signed-in?windowId=5"
-    : "vscode://bulkhours.bulkhours-ipsa/signed-in%3FwindowId%3D5") });
+  const shapes = [
+    { scheme: "vscode", authority: "gateka.gateka", path: "/signed-in?windowId=5", query: "" },     // as measured: in the path
+    { scheme: "vscode", authority: "gateka.gateka", path: "/signed-in", query: "windowId=5" },      // as documented: the query
+  ];
   try {
-    opened.length = 0;
-    await s.c.signIn();
-    assert.equal(new URL(opened[0]).searchParams.get("redirect"), "vscode://bulkhours.bulkhours-ipsa/signed-in?windowId=5");
+    for (const shape of shapes) {
+      external = async () => shape;
+      opened.length = 0;
+      await s.c.signIn();
+      assert.equal(new URL(opened[0]).searchParams.get("redirect"), "vscode://gateka.gateka/signed-in?windowId=5");
+    }
   } finally { external = async (u: unknown) => u; }
 });
