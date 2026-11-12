@@ -79,3 +79,9 @@ test("a variant may list its platform's links, https only, for the panel's links
   assert.throws(() => parseSchool({ ...ipsa, links: [{ label: "x", url: "http://a.fr" }] }), /school ipsa: "links" must be \{label, https url, icon\?\} items/);
   assert.throws(() => parseSchool({ ...ipsa, links: [{ label: "", url: "https://a.fr" }] }), /"links"/);
 });
+
+test("a variant may name the person's avatar, https, with ${user}", () => {
+  const avatar = "https://git.maqi.ai.msct.fr/user/avatar/${user}/64";
+  assert.equal(parseSchool({ ...ipsa, avatar }).avatar, avatar);
+  assert.throws(() => parseSchool({ ...ipsa, avatar: "http://x/${user}" }), /"avatar" must be an https address/);
+});

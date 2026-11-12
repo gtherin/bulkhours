@@ -21,3 +21,12 @@ export function referenceText(path: string, sel?: { start: number; end: number; 
   const fence = sel.text.includes("```") ? "````" : "```";
   return `\`${path}:${lines}\`\n${fence}${sel.language}\n${sel.text.replace(/\n$/, "")}\n${fence}\n`;
 }
+
+// The person's avatar for the panel: the page may only draw data: pictures
+// (its CSP), so the extension fetches it and hands it over as one - if it is
+// an image, and small.
+const AVATAR_TYPES = new Set(["image/png", "image/jpeg", "image/gif", "image/webp"]);
+export function avatarData(type: string, bytes: Buffer): string | undefined {
+  const t = type.split(";")[0].trim();
+  return AVATAR_TYPES.has(t) && bytes.length <= 200_000 ? `data:${t};base64,${bytes.toString("base64")}` : undefined;
+}

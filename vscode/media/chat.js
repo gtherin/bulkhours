@@ -157,7 +157,9 @@
       `<span class="tab${x.id === s.tab ? " on" : ""}${x.busy ? " busy" : ""}${x.asking ? " asking" : ""}" role="tab" aria-selected="${x.id === s.tab}" data-id="${x.id}">`
       + `<span class="name" title="${esc(x.title ? `${x.title} — ${W.renameHint}` : W.renameHint)}">${esc(x.title || W.newTab)}</span>`
       + (x.id === s.tab && x.named ? `<button type="button" class="ren" title="${esc(W.renameTab)}" aria-label="${esc(W.renameTab)}">${PENCIL}</button>` : "")
-      + `<button type="button" class="x" title="${esc(W.closeTab)}" aria-label="${esc(W.closeTab)}">×</button></span>`).join("");
+      + `<button type="button" class="x" title="${esc(W.closeTab)}" aria-label="${esc(W.closeTab)}">×</button></span>`).join("")
+      // The person, at the end of the strip: their picture opens the platform's links.
+      + (s.avatar ? `<button type="button" class="me" title="${esc(W.linksTitle)}" aria-label="${esc(W.linksTitle)}">${picture(s.avatar)}</button>` : "");
     strip.querySelectorAll(".tab").forEach((el) => {
       const id = Number(el.dataset.id);
       el.onclick = (ev) => { if (!ev.target.closest(".x") && id !== s.tab) vscode.postMessage({ type: "tab", id }); };
@@ -167,6 +169,8 @@
       const ren = el.querySelector(".ren");
       if (ren) ren.onclick = () => renameTab(el, id);
     });
+    const me = strip.querySelector(".me");
+    if (me) me.onclick = () => vscode.postMessage({ type: "links" });
     strip.querySelector(".on")?.scrollIntoView({ block: "nearest", inline: "nearest" });
   }
 

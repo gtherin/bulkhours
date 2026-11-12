@@ -44,6 +44,10 @@ body { margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: colu
 .tab:has(.rename) { max-width: none; }
 .tab .rename { width: 11em; font: inherit; color: var(--vscode-input-foreground); background: var(--vscode-input-background);
   border: 1px solid var(--vscode-focusBorder); border-radius: 4px; padding: 1px 4px; }
+#tabs .me { flex: none; position: sticky; right: 0; margin-left: auto; align-self: center; padding: 0 0 0 8px; border: 0;
+  background: var(--vscode-sideBar-background, var(--vscode-editor-background)); cursor: pointer; display: grid; place-items: center; }
+#tabs .me img { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--line); display: block; }
+#tabs .me:hover img { border-color: var(--accent); }
 @keyframes breathe { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
 
 /* -- the conversation ------------------------------------------------------- */

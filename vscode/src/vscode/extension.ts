@@ -7,6 +7,7 @@ import { budgetText, level } from "../core/meter.ts";
 import { packageName, parseSchool, type Link, type School } from "../core/school.ts";
 import { DEFAULT_PORT, parsePort } from "../core/dashboard.ts";
 import { referenceText } from "../core/fileLinks.ts";
+import { userInfo } from "node:os";
 import { offeredUpdate } from "../core/update.ts";
 import { writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -22,10 +23,20 @@ export function activate(ctx: vscode.ExtensionContext): void {
   const school = parseSchool(__SCHOOL__);
   const lang = pickLang(vscode.env.language, school.language);
   setBrand(school.title);
-  // The links button shows only for a variant that lists links.
-  void vscode.commands.executeCommand("setContext", `${school.prefix}.hasLinks`, school.links.length > 0);
   // Commands, view and settings under the variant's own prefix.
   const id = (name: string) => `${school.prefix}.${name}`;
+  // The person in the status bar, far left, always visible: the platform's
+  // links (owner, 2026-11-12: "where are the personalized links and avatar").
+  if (school.links.length) {
+    const me = vscode.window.createStatusBarItem("platform.me", vscode.StatusBarAlignment.Left, 1000);
+    me.text = `$(account) ${userInfo().username}`;
+    me.tooltip = t(lang, "linksTitle");
+    me.command = id("links");
+    me.show();
+    ctx.subscriptions.push(me);
+  }
+  // The links button shows only for a variant that lists links.
+  void vscode.commands.executeCommand("setContext", `${school.prefix}.hasLinks`, school.links.length > 0);
   const log = vscode.window.createOutputChannel(school.title);
   // The school's Moodle sign-in, or the platform's own key file (MaQI).
   const creds: KeySource = school.connection ? new PlatformKeys(school.connection, lang)

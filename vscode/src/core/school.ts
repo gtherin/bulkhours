@@ -43,6 +43,9 @@ export type School = {
   // The platform's own pages (portal, docs, forge, chat...), one button away
   // in the panel header, as JupyterLab's MaQI menu (owner, 2026-11-12).
   links: Link[];
+  // The person's picture, as the platform shows it (${user} = the account):
+  // drawn in the panel, beside the links. Optional.
+  avatar?: string;
 };
 
 export type Link = { label: string; url: string; icon?: string };
@@ -70,6 +73,7 @@ export function parseSchool(raw: unknown): School {
     ...(o.tile !== undefined ? { tile: colour(o, "tile", fail) } : {}),
     ...(o.stateDir !== undefined ? { stateDir: stateDir(o.stateDir, fail) } : {}),
     links: links(o.links, fail),
+    ...(o.avatar !== undefined ? { avatar: https(o, "avatar", fail) } : {}),
   };
 }
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.28 — 2026-11-12
+
+- You, always in view: your name in the status bar (far left) and your avatar at the end of the panel's tab strip (MaQI: the picture Git and the portal show) both open the platform's links. Variants without links show neither.
+
 ## 0.1.27 — 2026-11-12
 
 - The platform's pages one button away: a links icon in the panel header opens the variant's list (MaQI: MaQI, Docs, Directory, Slack, Git, Moodle - the portal menu's entries open to every member). Variants without links show no button.

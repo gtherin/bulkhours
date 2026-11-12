@@ -22,3 +22,10 @@ test("a selection arrives in the chat as its file, its lines and its code", () =
   assert.equal(referenceText("a.md", { start: 7, end: 7, text: "```x```", language: "markdown" }),
     "`a.md:7`\n````markdown\n```x```\n````\n");
 });
+
+test("an avatar becomes a data: picture the panel may draw, never anything else", async () => {
+  const { avatarData } = await import("../src/core/fileLinks.ts");
+  assert.equal(avatarData("image/png", Buffer.from([1, 2, 3])), "data:image/png;base64,AQID");
+  assert.equal(avatarData("text/html", Buffer.from("<script>")), undefined);
+  assert.equal(avatarData("image/png", Buffer.alloc(300_000)), undefined, "too big for a 24 px picture");
+});

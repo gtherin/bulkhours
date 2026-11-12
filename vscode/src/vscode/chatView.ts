@@ -10,7 +10,8 @@ import { ConversationStore, stateRoot, type Opened, type Summary } from "../core
 import { homedir } from "node:os";
 import type { KeySource } from "./credentials.ts";
 import { Tab, type Pasted, type TabHost } from "./tab.ts";
-import type { FileRef } from "../core/fileLinks.ts";
+import { avatarData, type FileRef } from "../core/fileLinks.ts";
+import { userInfo } from "node:os";
 import { existsSync } from "node:fs";
 import { isAbsolute, join } from "node:path";
 
@@ -21,7 +22,7 @@ type FromPanel =
   | { type: "choose"; agent: string; model?: string }
   | { type: "permission"; id: number; optionId: string | null }
   | { type: "tab"; id: number } | { type: "closeTab"; id: number } | { type: "rename"; id: number; title: string }
-  | { type: "openFile"; path: string; line?: number; endLine?: number };
+  | { type: "openFile"; path: string; line?: number; endLine?: number } | { type: "links" };
 
 type Credits = { spent: number; budget: number; currency: "USD" | "EUR" };
 // LiteLLM writes spend in batches (about a minute, measured 2026-11-10): the
@@ -214,6 +215,19 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
     await this.render();
   }
 
+  // The person's avatar (the variant's address), once per window. Never
+  // fails the panel: no picture, no avatar.
+  private avatar: string | undefined;
+  private async loadAvatar(): Promise<void> {
+    if (this.avatar || !this.school.avatar) return;
+    try {
+      const r = await fetch(this.school.avatar.replace(/\$\{user\}/g, encodeURIComponent(userInfo().username)));
+      if (r.status !== 200) return;
+      this.avatar = avatarData(r.headers.get("content-type") ?? "", Buffer.from(await r.arrayBuffer()));
+      await this.render();
+    } catch { /* offline: no avatar */ }
+  }
+
   // The budget meter, read from the key server. Never fails the panel.
   async refreshCredits(): Promise<void> {
     this.credits = await this.creds.credits();
@@ -227,7 +241,8 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
       case "send": return this.send(tab, m.text, m.images ?? []);
       case "tab": case "closeTab": case "rename": return this.onStrip(m);
       case "openFile": return openFile(m);
-      case "ready": this.restore(); await this.render(); await this.warmKey(); return this.refreshCredits();
+      case "links": await vscode.commands.executeCommand(`${this.school.prefix}.links`); return;
+      case "ready": this.restore(); await this.render(); void this.loadAvatar(); await this.warmKey(); return this.refreshCredits();
       case "compact": return this.compact(tab);
       case "clear": return this.clear(tab);
       case "pickAgent": await vscode.commands.executeCommand(`${this.school.prefix}.pickAgent`); return;
@@ -378,6 +393,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
       credits: this.credits ?? null, usage: tab.usage, commands: tab.commands,
       activity: tab.busy ? tab.activity : null, asks: tab.asking,
       tabs: JSON.parse(this.strip), tab: tab.id,
+      avatar: this.avatar ?? null, hasLinks: this.school.links.length > 0,
     });
   }
 }
@@ -413,7 +429,7 @@ function safeLabel(f: () => string): string {
 const PANEL_WORDS: MessageKey[] = ["signIn", "emptyChat", "placeholder", "send", "stop", "model", "thinking", "output", "noChange", "startingAgent",
   "compact", "compactHint", "clear", "clearHint", "thinkingVerb", "budgetTitle", "contextTitle", "removeImage",
   "suggestExplain", "suggestBuild", "suggestFaster", "schoolModels", "yourAgents", "mic", "micWindows", "micMac", "seesImages", "lastActivity", "thisTurn",
-  "newTab", "closeTab", "renameHint", "renameTab", "openInEditor"];
+  "newTab", "closeTab", "renameHint", "renameTab", "openInEditor", "linksTitle"];
 
 function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, lang: Lang): string {
   const css = webview.asWebviewUri(vscode.Uri.joinPath(media, "chat.css"));
