@@ -92,6 +92,21 @@ export function keyFromFile(text: string, offer: Record<string, unknown>): Key {
   return { apiKey, baseUrl, expiresAt: Date.now() + NEVER_MS, ...parseOffer(offer, failer("connection offer")) };
 }
 
+// A platform's budget (MaQI): LiteLLM keeps it on the person's membership of
+// the project the key belongs to (max_budget_in_team), and the person's own
+// key may read it - /key/info names the project, /user/info the memberships.
+type Obj = Record<string, unknown>;
+export function platformBudget(keyInfo: unknown, userInfo: unknown): { spent: number; budget: number } | undefined {
+  const info = ((keyInfo as Obj)?.info ?? keyInfo) as Obj | undefined;
+  const team = info?.team_id, user = info?.user_id;
+  if (typeof team !== "string" || typeof user !== "string") return undefined;
+  const teams = Array.isArray((userInfo as Obj)?.teams) ? (userInfo as Obj).teams as Obj[] : [];
+  const members = teams.find((t) => t.team_id === team)?.team_memberships;
+  const me = (Array.isArray(members) ? members as Obj[] : []).find((m) => m.user_id === user);
+  const cap = (me?.litellm_budget_table as Obj | undefined)?.max_budget;
+  return typeof me?.spend === "number" && typeof cap === "number" ? { spent: me.spend, budget: cap } : undefined;
+}
+
 export function needsRenewal(expiresAt: number, now: number): boolean {
   return now >= expiresAt - RENEW_BEFORE_MS;
 }

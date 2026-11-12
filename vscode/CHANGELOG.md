@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.24 — 2026-11-12
+
+- MaQI shows its budget as JupyterHub does: the spend and cap of the project your key belongs to (e.g. res-enterprise, €0 / €200), as MaQI's LiteLLM enforces them, read with your own key.
+- In a folder VS Code does not trust yet (Restricted Mode), the extension says it needs a trusted folder instead of disappearing silently.
+
 ## 0.1.23 — 2026-11-12
 
 - MaQI runs MaQI's own agent launcher on its servers (/opt/maqi-agent/bin/dsh-acp: its Node, its pinned dsh, its profile and platform rules), with the model chosen in the menu on top. 0.1.22 tried npx, which MaQI hubs do not have. (MaQI only.)

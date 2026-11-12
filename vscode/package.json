@@ -2,7 +2,7 @@
   "name": "bulkhours",
   "displayName": "BulkHours",
   "description": "A coding assistant for students: chat with an agent that reads and edits your workspace, on your school's credits.",
-  "version": "0.1.23",
+  "version": "0.1.24",
   "publisher": "gateka",
   "license": "MIT",
   "repository": {
@@ -172,5 +172,11 @@
     "esbuild": "0.28.2",
     "typescript": "5.9.3",
     "vscode": "file:test/vscode-stub"
+  },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": false,
+      "description": "%capability.untrusted%"
+    }
   }
 }

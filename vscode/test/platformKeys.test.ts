@@ -33,3 +33,24 @@ test("on its platform a variant reads the key file: no sign-in, a rotated key re
   assert.equal(c.interactive, false);
   rmSync(dir, { recursive: true });
 });
+
+test("the meter reads the person's spend and cap from the platform's LiteLLM, with their key", async () => {
+  const { mkdtempSync, writeFileSync } = await import("node:fs");
+  const { join } = await import("node:path");
+  const { tmpdir, userInfo } = await import("node:os");
+  const dir = mkdtempSync(join(tmpdir(), "bh-keys-"));
+  writeFileSync(join(dir, `${userInfo().username}.env`), "OPENAI_API_KEY=sk-9\nOPENAI_BASE_URL=http://10.4.0.44:4000\n");
+  const calls: { url: string; auth: string }[] = [];
+  globalThis.fetch = (async (url: string, init: any) => {
+    calls.push({ url, auth: init.headers.authorization });
+    const body = url.endsWith("/key/info") ? { info: { user_id: "u", team_id: "research" } }
+      : { teams: [{ team_id: "research", team_memberships: [{ user_id: "u", spend: 3.2, litellm_budget_table: { max_budget: 200 } }] }] };
+    return { status: 200, json: async () => body };
+  }) as any;
+  const c = new PlatformKeys({ keyFile: join(dir, "${user}.env"), offer: { models: ["fast"], currency: "EUR", agent: { id: "maqi", label: "MaQI", command: "dsh" } } });
+  assert.deepEqual(await c.credits(), { spent: 3.2, budget: 200, currency: "EUR" });
+  assert.equal((await c.currentKey()).renewed, true, "the meter never takes the turn's notice of a new key");
+  assert.deepEqual(calls.map((x) => [x.url, x.auth]), [["http://10.4.0.44:4000/key/info", "Bearer sk-9"], ["http://10.4.0.44:4000/user/info", "Bearer sk-9"]]);
+  globalThis.fetch = (async () => { throw new Error("down"); }) as any;
+  assert.equal(await c.credits(), undefined, "a platform that cannot be read shows no meter, never an error");
+});

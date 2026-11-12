@@ -98,3 +98,22 @@ test("a key file is read as the platform writes it, with the variant's offer", a
   assert.throws(() => keyFromFile("OPENAI_BASE_URL=http://x:4000\n", offer), /key file: OPENAI_API_KEY missing/);
   assert.throws(() => keyFromFile("OPENAI_API_KEY=sk\nOPENAI_BASE_URL=ftp://x\n", offer), /key file: OPENAI_BASE_URL must be an http\(s\) address/);
 });
+
+// MaQI's budget lives on the (person, project) membership in LiteLLM; the
+// person's own key reads it (owner 2026-11-12: "the same quota info as
+// JupyterHub"). Measured on maqi-research: key -> team res-enterprise,
+// membership spend 0.0 of max_budget 200.
+test("the platform budget is the key's project membership, read with the person's own key", async () => {
+  const { platformBudget } = await import("../src/core/keys.ts");
+  const keyInfo = { key: "hashed", info: { user_id: "guillaume", team_id: "res-enterprise", spend: 0.5 } };
+  const userInfo = { user_id: "guillaume", teams: [
+    { team_id: "hackathon-1", team_memberships: [{ user_id: "guillaume", spend: 0.0003, litellm_budget_table: { max_budget: 50 } }] },
+    { team_id: "res-enterprise", team_memberships: [
+      { user_id: "alice", spend: 9, litellm_budget_table: { max_budget: 200 } },
+      { user_id: "guillaume", spend: 12.5, litellm_budget_table: { max_budget: 200 } }] },
+  ] };
+  assert.deepEqual(platformBudget(keyInfo, userInfo), { spent: 12.5, budget: 200 });
+  assert.equal(platformBudget({ info: { user_id: "guillaume" } }, userInfo), undefined, "a key without a project: no meter");
+  assert.equal(platformBudget(keyInfo, { teams: [] }), undefined);
+  assert.equal(platformBudget(keyInfo, { teams: [{ team_id: "res-enterprise", team_memberships: [{ user_id: "guillaume", spend: 1 }] }] }), undefined, "no cap: no meter");
+});
