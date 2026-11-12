@@ -114,3 +114,32 @@ test("a project's conversations are listed newest first, with what the history s
   assert.ok(list[0].updated >= list[1].updated);
   assert.ok(!list.some((c) => c.file === empty.file), "a conversation with no question is not listed");
 });
+
+test("a picture a tool showed the agent is not kept: the record stays small, the panel still says [image]", () => {
+  const store = new ConversationStore(root());
+  const c = store.start(header);
+  c.prompt([{ type: "text", text: "read the screenshot" }]);
+  const picture = "A".repeat(2_000_000);
+  c.update({ sessionUpdate: "tool_call", toolCallId: "t1", title: "read_image", status: "pending" } as any);
+  c.update({ sessionUpdate: "tool_call_update", toolCallId: "t1", status: "completed",
+    content: [{ type: "content", content: { type: "text", text: "1920x1080" } },
+      { type: "content", content: { type: "image", mimeType: "image/jpeg", data: picture } }] } as any);
+  c.end("end_turn");
+  assert.ok(statSync(c.file).size < 10_000);
+  const tool = store.latest(header.cwd)!.transcript.find((e) => e.kind === "tool") as any;
+  assert.match(JSON.stringify(tool), /\[image\]/);
+});
+
+test("a long conversation reads back whole, lines across read chunks included", () => {
+  const store = new ConversationStore(root());
+  const c = store.start(header);
+  for (let i = 0; i < 40; i++) {
+    c.prompt([{ type: "text", text: `question ${i}` }]);
+    c.update(chunk("agent_message_chunk", `answer ${i} ` + "x".repeat(100_000)));
+    c.end("end_turn");
+  }
+  const o = store.latest(header.cwd)!;
+  assert.equal(o.questions, 40);
+  assert.equal(o.title, "question 0");
+  assert.match((o.transcript.at(-1) as any).text, /^answer 39 x+$/);
+});

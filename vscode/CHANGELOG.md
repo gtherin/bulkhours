@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.16 — 2026-11-12
+
+- A long conversation reads back again: pictures a tool showed the agent (screenshots it read) are no longer stored in the record — the panel shows them as [image] anyway — and a record is read a piece at a time, so even a very large one opens. A job that read hundreds of screenshots had made a 584 MB record that left the panel empty.
+
 ## 0.1.15 — 2026-11-10
 
 - Compacter and Effacer stay clickable during a turn: VS Code asks first, then the turn is stopped cleanly before compacting or clearing.

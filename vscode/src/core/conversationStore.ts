@@ -20,7 +20,7 @@
 // holds many students), never in the project (it may be shared or in git),
 // never synced. Pruned after a retention.
 import { createHash, randomUUID } from "node:crypto";
-import { appendFileSync, chmodSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync, unlinkSync, writeFileSync } from "node:fs";
+import { appendFileSync, chmodSync, closeSync, existsSync, mkdirSync, openSync, readdirSync, readSync, statSync, unlinkSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { ContentBlock, SessionUpdate } from "@agentclientprotocol/sdk";
 import { addUserPrompt, applyUpdate, type Entry, type Transcript } from "./transcript.ts";
@@ -72,6 +72,7 @@ export class Conversation {
     const id = (u as { toolCallId: string }).toolCallId;
     const at = this.turn.find((e) => e.key === `tool:${id}`);
     const defined = Object.fromEntries(Object.entries(u).filter(([, v]) => v !== undefined && v !== null));
+    if (Array.isArray(defined.content)) defined.content = defined.content.map(withoutPicture);
     if (at) at.update = { ...at.update, ...defined, sessionUpdate: "tool_call" };
     else this.turn.push({ key: `tool:${id}`, update: { ...defined, sessionUpdate: "tool_call" } });
   }
@@ -87,6 +88,13 @@ export class Conversation {
   rename(title: string): void { this.write({ t: "title", title: title.trim() }); }
 
   private write(line: Line): void { appendFileSync(this.file, JSON.stringify(line) + "\n", { mode: 0o600 }); }
+}
+
+// A picture a tool showed the agent (a screenshot it read) is not kept: the
+// panel shows it as [image], and a job reading hundreds of screenshots made a
+// 584 MB record that no longer loaded (2026-11-11).
+function withoutPicture(c: { type: string; content?: { type: string } }): unknown {
+  return c.type === "content" && c.content?.type === "image" ? { ...c, content: { ...c.content, data: "" } } : c;
 }
 
 function textOf(u: SessionUpdate): string {
@@ -134,7 +142,7 @@ export class ConversationStore {
     let transcript: Transcript = [];
     let title = "";
     let questions = 0;
-    for (const raw of readFileSync(file, "utf8").split("\n")) {
+    for (const raw of lines(file)) {
       if (!raw.trim()) continue;
       let l: Line;
       try { l = JSON.parse(raw); } catch { continue; }           // a torn last line is skipped
@@ -172,6 +180,22 @@ export class ConversationStore {
     }
     return gone;
   }
+}
+
+// A file's lines, read a chunk at a time: a record past Node's longest string
+// (512 MB) still reads back.
+function* lines(file: string): Generator<string> {
+  const fd = openSync(file, "r");
+  const buf = Buffer.alloc(1 << 20);
+  let rest = Buffer.alloc(0);
+  try {
+    for (let n; (n = readSync(fd, buf, 0, buf.length, null)) > 0;) {
+      let data = Buffer.concat([rest, buf.subarray(0, n)]);
+      for (let i; (i = data.indexOf(10)) >= 0; data = data.subarray(i + 1)) yield data.subarray(0, i).toString("utf8");
+      rest = Buffer.from(data);
+    }
+    if (rest.length) yield rest.toString("utf8");
+  } finally { closeSync(fd); }
 }
 
 export type Opened = { header: Header; transcript: Transcript; title: string; questions: number; conversation: Conversation };
