@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.32 — 2026-11-12
+
+- The IPSA build carries IPSA's logo as its icon in the extension list (schools/ipsa-tile.svg, redrawn as vectors from the school's image). The activity bar keeps the BulkHours mark. (IPSA only.)
+
 ## 0.1.31 — 2026-11-12
 
 - An empty tab presents your recent conversations (the last six: title, when, how many questions); one click reopens one in its tab.
