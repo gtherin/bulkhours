@@ -59,7 +59,8 @@ type Line =
   | { t: "name"; name: string };
 
 // What the history shows of one conversation.
-export type Summary = { file: string; title: string; name: string; updated: number; agent: string; model: string; questions: number };
+// fresh: prepared with its first request, which no agent has run yet.
+export type Summary = { file: string; title: string; name: string; fresh: boolean; updated: number; agent: string; model: string; questions: number };
 
 // What a monitoring page reads of a session (its run directory's session.json).
 export type Status = { name: string; title: string; cwd: string; agent: string; model: string;
@@ -272,6 +273,8 @@ export class ConversationStore {
     let title = "";
     let name = "";
     let questions = 0;
+    let pending = false;      // its last request has no answer and no end
+    let started = false;      // an agent has answered something in it
     for (const raw of lines(file)) {
       if (!raw.trim()) continue;
       let l: Line;
@@ -287,16 +290,18 @@ export class ConversationStore {
         const text = promptText(l.content);
         if (!questions++ && !title) title = firstLine(text);
         transcript = addUserPrompt(transcript, text, promptImages(l.content));
-      } else if (l.t === "update") transcript = applyUpdate(transcript, l.update);
+        pending = true;
+      } else if (l.t === "update") { transcript = applyUpdate(transcript, l.update); pending = false; started = true; }
+      else if (l.t === "stop") { pending = false; started = true; }
     }
-    return header ? { header, transcript, title, name, questions, conversation: new Conversation(file) } : undefined;
+    return header ? { header, transcript, title, name, questions, pending, started, conversation: new Conversation(file) } : undefined;
   }
 
   // The project's conversations that hold at least one question, newest first.
   list(cwd: string): Summary[] {
     return this.files(cwd).map((file) => {
       const o = this.read(file);
-      return o && o.questions ? { file, title: o.title, name: o.name, updated: statSync(file).mtimeMs, agent: o.header.agent,
+      return o && o.questions ? { file, title: o.title, name: o.name, fresh: o.pending && !o.started, updated: statSync(file).mtimeMs, agent: o.header.agent,
         model: o.header.model, questions: o.questions } : undefined;
     }).filter((x): x is Summary => Boolean(x)).sort((a, b) => b.updated - a.updated || (a.file < b.file ? 1 : -1));
   }
@@ -332,7 +337,8 @@ function* lines(file: string): Generator<string> {
   } finally { closeSync(fd); }
 }
 
-export type Opened = { header: Header; transcript: Transcript; title: string; name: string; questions: number; conversation: Conversation };
+export type Opened = { header: Header; transcript: Transcript; title: string; name: string; questions: number;
+  pending: boolean; started: boolean; conversation: Conversation };
 
 // A folder as the disk knows it (a link and its target are one project).
 function real(path: string): string {

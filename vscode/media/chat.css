@@ -98,6 +98,10 @@ a { color: var(--vscode-textLink-foreground); }
 .welcome { margin: auto 0; padding: 24px 6px; text-align: center; color: var(--muted); }
 .welcome h2 { margin: 0 0 6px; font-size: 1.25em; font-weight: 600; color: var(--vscode-foreground); }
 .welcome p { margin: 0 auto 14px; max-width: 30em; line-height: 1.5; }
+.pending { align-self: stretch; text-align: center; padding: 12px; border-radius: var(--radius); border: 1px dashed var(--line); color: var(--muted); }
+.pending p { margin: 0 0 10px; }
+.pending button { font: inherit; cursor: pointer; color: var(--vscode-button-foreground); background: var(--accent); border: 0;
+  border-radius: 999px; padding: 5px 16px; }
 .welcome .or { margin: 12px 0 0; font-size: .92em; }
 .suggest { display: flex; flex-direction: column; gap: 6px; align-items: center; }
 .suggest button { max-width: 100%; color: var(--vscode-foreground); background: var(--surface); border: 1px solid var(--line);

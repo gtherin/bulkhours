@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.41 — 2026-11-12
+
+- A conversation another tool prepared for the folder (a record with its first request written and never run) opens as its own tab when the panel loads, with a Start button that runs that request as it is. Before, it was one more line in the list, and nothing ran it.
+
 ## 0.1.40 — 2026-11-12
 
 - An empty tab lists every conversation recorded for the folder, not only the six most recent.

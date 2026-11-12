@@ -24,7 +24,7 @@ type FromPanel =
   | { type: "permission"; id: number; optionId: string | null }
   | { type: "tab"; id: number } | { type: "closeTab"; id: number } | { type: "rename"; id: number; title: string }
   | { type: "openFile"; path: string; line?: number; endLine?: number } | { type: "links" }
-  | { type: "openConversation"; file: string } | { type: "openRender"; file: string };
+  | { type: "openConversation"; file: string } | { type: "openRender"; file: string } | { type: "runPending" };
 
 type Credits = { spent: number; budget: number; currency: "USD" | "EUR" };
 // LiteLLM writes spend in batches (about a minute, measured 2026-11-10): the
@@ -156,7 +156,16 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
         tab.take(o);
         if (!saved || o.conversation.file === saved.active) this.active = tab;
       }
+      // A conversation prepared for this folder and never started gets its
+      // own tab: whoever prepared it meant it to be used.
+      const openFiles = new Set(this.tabs.map((x) => x.conversation?.file));
+      for (const c of this.store.list(folder)) {
+        if (!c.fresh || openFiles.has(c.file)) continue;
+        const o = this.store.read(c.file);
+        if (o) (this.active.empty ? this.active : this.addTab()).take(o);
+      }
       this.showTitle(this.active.title);
+      this.saveTabs();
     } catch (e) {
       this.log.append(`conversation record unreadable: ${(e as Error).message}\n`);
     }
@@ -248,6 +257,12 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
       case "tab": case "closeTab": case "rename": return this.onStrip(m);
       case "openFile": return openFile(m);
       case "links": await vscode.commands.executeCommand(`${this.school.prefix}.links`); return;
+      case "runPending":
+        if (!tab.busy && this.tabs.filter((x) => x.busy).length >= MAX_RUNNING) {
+          tab.failed(t(this.lang, "tooManyRunning", { n: MAX_RUNNING }));
+          return this.render();
+        }
+        return tab.runPending();
       case "openRender":
         // Only a page the list offered: the panel never names a file of its own.
         if (this.rendersOf(this.active, true).some((r) => r.file === m.file)) showPage(m.file, this.lang);
@@ -455,6 +470,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
       avatar: this.avatar ?? null, hasLinks: this.school.links.length > 0,
       recent: tab.empty ? this.recent() : [],
       renders: this.rendersOf(tab).map(({ name, file }) => ({ name, file })),
+      pending: Boolean(tab.pending) && !tab.busy,
     });
   }
 }
@@ -490,7 +506,7 @@ function safeLabel(f: () => string): string {
 const PANEL_WORDS: MessageKey[] = ["signIn", "emptyChat", "placeholder", "send", "stop", "model", "thinking", "output", "noChange", "startingAgent",
   "compact", "compactHint", "clear", "clearHint", "thinkingVerb", "budgetTitle", "contextTitle", "removeImage",
   "suggestExplain", "suggestBuild", "suggestFaster", "schoolModels", "yourAgents", "mic", "micWindows", "micMac", "seesImages", "lastActivity", "thisTurn",
-  "newTab", "closeTab", "renameHint", "renameTab", "openInEditor", "linksTitle", "recentTitle", "questionsCount", "pasteCode", "rendersTitle"];
+  "newTab", "closeTab", "renameHint", "renameTab", "openInEditor", "linksTitle", "recentTitle", "questionsCount", "pasteCode", "rendersTitle", "runPending", "pendingHint"];
 
 function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, lang: Lang): string {
   const css = webview.asWebviewUri(vscode.Uri.joinPath(media, "chat.css"));

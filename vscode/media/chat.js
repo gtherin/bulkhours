@@ -249,8 +249,10 @@
     shown = s.transcript.length;
     const label = s.agentId ? s.agent : (s.modelLabels[s.model] || s.model);
     if (s.starting) log.innerHTML += `<div class="notice">${esc(W.startingAgent)}</div>`;
+    else if (s.pending) log.innerHTML += `<div class="pending"><p>${esc(W.pendingHint)}</p><button type="button" id="runpending">▶ ${esc(W.runPending)}</button></div>`;
     else if (s.busy) log.innerHTML += `<div class="writing"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>`
       + `<span class="name">${esc(label)}</span> <span class="verb">${esc(W.thinkingVerb)}</span><span class="activity"></span></div>`;
+    if ($("runpending")) $("runpending").onclick = () => vscode.postMessage({ type: "runPending" });
     lastState = s;
     drawActivity();
     drawAsks(s.asks || []);

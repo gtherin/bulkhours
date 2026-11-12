@@ -242,3 +242,14 @@ test("a session's pages are the html files of its renders folder, newest first",
   assert.deepEqual(store.renders(name).map((p) => p.name), ["explorer.html", "old.html"]);
   assert.equal(store.renders(name)[0].file, join(dir, "explorer.html"));
 });
+
+test("a record says whether its last request was answered, and whether an agent ever ran in it", () => {
+  const r = root(); const store = new ConversationStore(r);
+  const c = store.start(header);
+  c.prompt([{ type: "text", text: "first" }]);
+  assert.deepEqual([store.read(c.file)!.pending, store.read(c.file)!.started], [true, false]);
+  c.update(chunk("agent_message_chunk", "answer")); c.end("end_turn");
+  assert.deepEqual([store.read(c.file)!.pending, store.read(c.file)!.started], [false, true]);
+  c.prompt([{ type: "text", text: "second" }]);
+  assert.deepEqual([store.read(c.file)!.pending, store.read(c.file)!.started], [true, true], "interrupted: pending, but not a fresh one");
+});

@@ -53,6 +53,9 @@ let tabs = 0;
 export class Tab {
   readonly id = ++tabs;
   title = "";
+  // A request written in the record and never run (a conversation another
+  // tool prepared): Start runs it as it is.
+  pending = "";
   // The session's name (conversationStore): the key of its run directory
   // and of its status for monitoring pages. Empty until its first question.
   name = "";
@@ -105,6 +108,8 @@ export class Tab {
     this.prime = o.transcript.length > 0;
     this.title = o.title;
     this.name = o.name || this.host.store.name(o.conversation.file);
+    const last = o.transcript[o.transcript.length - 1];
+    this.pending = o.pending && !o.started && last?.kind === "user" ? last.text : "";
     this.choice = { agent: o.header.agent, model: o.header.model };
   }
 
@@ -119,6 +124,7 @@ export class Tab {
     this.prime = false;
     this.title = "";
     this.name = "";
+    this.pending = "";
     this.transcript = [];
     this.usage = null;
     this.choice = undefined;
@@ -148,8 +154,14 @@ export class Tab {
     await this.session?.cancel();
   }
 
-  async send(text: string, pasted: Pasted[] = []): Promise<void> {
+  // Start: the request the record already holds is run, not asked again.
+  async runPending(): Promise<void> {
+    if (this.pending) await this.send(this.pending, [], true);
+  }
+
+  async send(text: string, pasted: Pasted[] = [], written = false): Promise<void> {
     if (this.busy || !text.trim()) return;
+    this.pending = "";
     this.busy = true;
     this.stopAsked = false;
     this.activity = { since: Date.now(), last: Date.now(), tool: "", spentAtStart: this.host.spent() };
@@ -159,7 +171,7 @@ export class Tab {
     this.activityTimer = setInterval(() => this.host.turnTick(), 60_000);
     this.activityTimer.unref?.();
     const images = pasted.filter((i) => IMAGE_TYPES.has(i.mimeType) && /^[A-Za-z0-9+/=]+$/.test(i.data));
-    this.transcript = addUserPrompt(this.transcript, text, images.map((i) => `data:${i.mimeType};base64,${i.data}`));
+    if (!written) this.transcript = addUserPrompt(this.transcript, text, images.map((i) => `data:${i.mimeType};base64,${i.data}`));
     this.host.changed(this);
     try {
       // A new conversation is named from its first question, before its
@@ -175,7 +187,7 @@ export class Tab {
       const earlier = this.prime && !session.resumed ? condensed(this.transcript.slice(0, -1), PRIME_CHARS) : "";
       const preface = earlier ? `The conversation so far (the student may have asked another assistant):\n\n${earlier}` : "";
       this.prime = false;
-      this.conversation?.prompt([{ type: "text", text }, ...images.map((i) => ({ type: "image" as const, mimeType: i.mimeType, data: i.data }))]);
+      if (!written) this.conversation?.prompt([{ type: "text", text }, ...images.map((i) => ({ type: "image" as const, mimeType: i.mimeType, data: i.data }))]);
       if (this.conversation && !this.title) this.title = this.host.store.read(this.conversation.file)?.title ?? "";
       let stop = "error";
       try {

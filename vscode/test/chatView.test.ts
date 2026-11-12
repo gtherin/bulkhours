@@ -3,7 +3,7 @@
 // agent is the real fake ACP agent from fixtures/, so the round trip is real.
 import { after, mock, test } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -694,5 +694,31 @@ test("a tab with no question yet has no name, no run directory, no status", asyn
   await p.send({ type: "ready" });
   assert.equal(p.last().tabs[0].name, "");
   assert.equal(existsSync(join(state, "sessions")), false);
+  p.view.dispose();
+});
+
+// A conversation another tool prepared (owner, 2026-11-12: "i told you to
+// create a new alpha conversation"): a record with its first request written
+// and never run. It opens as its own tab when the panel loads, with a Start
+// button; the request is run as it is, not asked twice.
+test("a conversation prepared with its first request opens as its own tab, and Start runs that request once", async () => {
+  const state = mkdtempSync(join(tmpdir(), "bh-gstate-"));
+  const dir = join(state, "conversations", "seeded"); mkdirSync(dir, { recursive: true });
+  const file = join(dir, "1794504546332-0000-821a929e.jsonl");
+  writeFileSync(file, JSON.stringify({ t: "header", v: 1, agent: "fake", session: "never-run", model: "fast", school: "ipsa", cwd: folder, created: "2026-11-12T17:29:06.358Z" }) + "\n"
+    + JSON.stringify({ t: "title", title: "alpha" }) + "\n"
+    + JSON.stringify({ t: "prompt", content: [{ type: "text", text: "hello alpha" }] }) + "\n");
+  const p = panel(true, "en", "IPSA", { state });
+  await p.send({ type: "ready" });
+  const s = p.last();
+  assert.deepEqual(s.tabs.map((x: any) => [x.title, x.name]), [["alpha", "alpha"]], "its own tab, named");
+  assert.deepEqual([texts(s), s.pending, s.busy], [["hello alpha"], true, false], "its request is shown, waiting for Start");
+  await p.send({ type: "runPending" });
+  const done = p.last();
+  assert.deepEqual(texts(done), ["hello alpha", "you said: hello alpha"], "run as written, not asked twice");
+  assert.equal(done.pending, false);
+  assert.equal(readFileSync(file, "utf8").split("\n").filter((l) => l.startsWith('{"t":"prompt"')).length, 1, "the record holds the request once");
+  await p.send({ type: "runPending" });
+  assert.deepEqual(texts(p.last()), ["hello alpha", "you said: hello alpha"], "nothing left to start");
   p.view.dispose();
 });
