@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.40 — 2026-11-12
+
+- An empty tab lists every conversation recorded for the folder, not only the six most recent.
+
 ## 0.1.39 — 2026-11-12
 
 - MaQI's status bar keeps its Wasabi check cache under ~/.local/state/maqi too; nothing of the extension is left in ~/.maqi, which is the platform's. (MaQI only.)

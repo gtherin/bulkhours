@@ -42,8 +42,9 @@ const OPEN_TABS = "bulkhours.tabs";
 // Agents working at once: each is a process (265 MB for dsh, measured
 // 2026-11-10) on a machine many students share (architect bfd92a).
 const MAX_RUNNING = 3;
-// Conversations an empty tab presents.
-const RECENT = 6;
+// Conversations an empty tab presents: all of the project's, newest first
+// (owner, 2026-11-12: six of seven shown read as "where are the others?").
+const RECENT = 200;
 
 export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, TabHost {
   private view: vscode.WebviewView | undefined;
