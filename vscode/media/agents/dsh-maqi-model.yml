@@ -1,0 +1,8 @@
+# On top of MaQI's own profile, which /opt/maqi-agent/bin/dsh-acp loads on a
+# MaQI hub (maqi-instance jupyterhub/maqi-agent: key file, dsh-maqi.yml,
+# platform rules, read-only sandbox): only the model chosen in the panel's
+# menu (BULKHOURS_MODEL). Everything else stays MaQI's.
+- id: agent-default-model
+  config:
+    provider: maqi
+    model: !!js process.env.BULKHOURS_MODEL ?? 'fast'

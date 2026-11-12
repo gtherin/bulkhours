@@ -44,21 +44,12 @@
       "currency": "EUR",
       "agent": {
         "id": "maqi",
-        "label": "MaQI (DeepSeek harness)",
-        "command": "npx",
+        "label": "MaQI Agent (dsh)",
+        "command": "/opt/maqi-agent/bin/dsh-acp",
         "args": [
-          "-y",
-          "@deepseek-ai/dsh@0.2.2-rc.1",
-          "--profile",
-          "acp",
           "--patch",
-          "${extensionPath}/media/agents/dsh-bulkhours.yml"
-        ],
-        "env": {
-          "OPENAI_BASE_URL": "${baseUrl}",
-          "OPENAI_API_KEY": "${apiKey}",
-          "DSH_HOME": "${state}/agents/dsh"
-        }
+          "${extensionPath}/media/agents/dsh-maqi-model.yml"
+        ]
       }
     }
   }
