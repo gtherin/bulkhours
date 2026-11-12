@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.39 — 2026-11-12
+
+- MaQI's status bar keeps its Wasabi check cache under ~/.local/state/maqi too; nothing of the extension is left in ~/.maqi, which is the platform's. (MaQI only.)
+
 ## 0.1.38 — 2026-11-12
 
 - One rule for where state lives: XDG, ~/.local/state/<name> (the variant's `stateName`, gateka by default) - no dot-folder in the home. MaQI moves from ~/.maqi to ~/.local/state/maqi; a variant file still naming `stateDir` is refused at build.

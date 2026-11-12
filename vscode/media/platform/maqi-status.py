@@ -17,7 +17,8 @@ import time
 FR = (sys.argv[1:] or ["en"])[0] == "fr"
 USER = pwd.getpwuid(os.getuid()).pw_name
 KEYS = "/run/maqi/keys/%s" % USER
-CACHE = os.path.expanduser("~/.maqi/vscode-status-cache.json")
+# Under the extension's XDG state folder, never in ~/.maqi (the platform's).
+CACHE = os.path.join(os.environ.get("XDG_STATE_HOME") or os.path.expanduser("~/.local/state"), "maqi", "status-cache.json")
 WASABI_TTL = 300          # the probe lists every bucket (~4 s); rights change rarely
 
 
