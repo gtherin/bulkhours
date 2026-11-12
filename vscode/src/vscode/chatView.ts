@@ -22,7 +22,8 @@ type FromPanel =
   | { type: "choose"; agent: string; model?: string }
   | { type: "permission"; id: number; optionId: string | null }
   | { type: "tab"; id: number } | { type: "closeTab"; id: number } | { type: "rename"; id: number; title: string }
-  | { type: "openFile"; path: string; line?: number; endLine?: number } | { type: "links" };
+  | { type: "openFile"; path: string; line?: number; endLine?: number } | { type: "links" }
+  | { type: "openConversation"; file: string };
 
 type Credits = { spent: number; budget: number; currency: "USD" | "EUR" };
 // LiteLLM writes spend in batches (about a minute, measured 2026-11-10): the
@@ -40,6 +41,8 @@ const OPEN_TABS = "bulkhours.tabs";
 // Agents working at once: each is a process (265 MB for dsh, measured
 // 2026-11-10) on a machine many students share (architect bfd92a).
 const MAX_RUNNING = 3;
+// Conversations an empty tab presents.
+const RECENT = 6;
 
 export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, TabHost {
   private view: vscode.WebviewView | undefined;
@@ -242,6 +245,10 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
       case "tab": case "closeTab": case "rename": return this.onStrip(m);
       case "openFile": return openFile(m);
       case "links": await vscode.commands.executeCommand(`${this.school.prefix}.links`); return;
+      case "openConversation":
+        // Only one the list offered: the page never names a file of its own.
+        if (this.conversations().some((c) => c.file === m.file)) await this.open(m.file);
+        return;
       case "ready": this.restore(); await this.render(); void this.loadAvatar(); await this.warmKey(); return this.refreshCredits();
       case "compact": return this.compact(tab);
       case "clear": return this.clear(tab);
@@ -273,6 +280,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
   }
 
   private async send(tab: Tab, text: string, images: Pasted[]): Promise<void> {
+    this.recentCache = undefined;
     if (!tab.busy && this.tabs.filter((x) => x.busy).length >= MAX_RUNNING) {
       tab.failed(t(this.lang, "tooManyRunning", { n: MAX_RUNNING }));
       return this.render();
@@ -379,6 +387,15 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
       named: Boolean(x.conversation) })));
   }
 
+  // An empty tab presents the recent conversations (owner, 2026-11-12: "how
+  // come you dont present my chats?"), as Claude Code's panel does. Reading
+  // every record is not free: done for an empty tab only, at most every 30 s.
+  private recentCache: { at: number; list: Summary[] } | undefined;
+  private recent(): { file: string; title: string; updated: number; questions: number }[] {
+    if (!this.recentCache || Date.now() - this.recentCache.at > 30_000) this.recentCache = { at: Date.now(), list: this.conversations() };
+    return this.recentCache.list.slice(0, RECENT).map(({ file, title, updated, questions }) => ({ file, title, updated, questions }));
+  }
+
   private async render(): Promise<void> {
     const key = this.creds.known();
     const tab = this.active;
@@ -394,6 +411,7 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
       activity: tab.busy ? tab.activity : null, asks: tab.asking,
       tabs: JSON.parse(this.strip), tab: tab.id,
       avatar: this.avatar ?? null, hasLinks: this.school.links.length > 0,
+      recent: tab.empty ? this.recent() : [],
     });
   }
 }
@@ -429,7 +447,7 @@ function safeLabel(f: () => string): string {
 const PANEL_WORDS: MessageKey[] = ["signIn", "emptyChat", "placeholder", "send", "stop", "model", "thinking", "output", "noChange", "startingAgent",
   "compact", "compactHint", "clear", "clearHint", "thinkingVerb", "budgetTitle", "contextTitle", "removeImage",
   "suggestExplain", "suggestBuild", "suggestFaster", "schoolModels", "yourAgents", "mic", "micWindows", "micMac", "seesImages", "lastActivity", "thisTurn",
-  "newTab", "closeTab", "renameHint", "renameTab", "openInEditor", "linksTitle"];
+  "newTab", "closeTab", "renameHint", "renameTab", "openInEditor", "linksTitle", "recentTitle", "questionsCount"];
 
 function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, lang: Lang): string {
   const css = webview.asWebviewUri(vscode.Uri.joinPath(media, "chat.css"));

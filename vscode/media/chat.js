@@ -196,6 +196,15 @@
     box.onblur = () => finish(true);
   }
 
+  // The recent conversations an empty tab presents: title, when, how many questions.
+  const when = new Intl.DateTimeFormat(lang, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  function recentList(list) {
+    if (!list.length) return "";
+    return `<div class="recent"><h3>${esc(W.recentTitle)}</h3>` + list.map((r) =>
+      `<button type="button" data-file="${esc(r.file)}"><span class="t">${esc(r.title || "…")}</span>`
+      + `<span class="m">${esc(when.format(new Date(r.updated)))} · ${esc(W.questionsCount.replace("{n}", r.questions))}</span></button>`).join("") + `</div>`;
+  }
+
   // -- the conversation --------------------------------------------------------
   let shown = 0;          // entries already drawn: only new ones fade in
   let shownTab = 0;       // another tab shown: its entries do not fade in
@@ -221,8 +230,9 @@
       ? s.transcript.map((e, i) => entry(e).replace(/^<(\w+) class="/, (m) => i >= shown ? `${m}enter ` : m)).join("")
       : `<div class="welcome"><h2>${esc(W.title)}</h2><p>${esc(W.emptyChat)}</p><div class="suggest">`
         + ["suggestExplain", "suggestBuild", "suggestFaster"].map((k) => `<button type="button">${esc(W[k])}</button>`).join("")
-        + `</div></div>`;
+        + `</div>${recentList(s.recent || [])}</div>`;
     log.querySelectorAll(".suggest button").forEach((b) => b.onclick = () => { input.value = b.textContent; grow(); input.focus(); });
+    log.querySelectorAll(".recent button").forEach((b) => b.onclick = () => vscode.postMessage({ type: "openConversation", file: b.dataset.file }));
     shown = s.transcript.length;
     const label = s.agentId ? s.agent : (s.modelLabels[s.model] || s.model);
     if (s.starting) log.innerHTML += `<div class="notice">${esc(W.startingAgent)}</div>`;

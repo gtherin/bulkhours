@@ -1,6 +1,7 @@
 {
   "id": "ipsa",
   "name": "IPSA",
+  "title": "BulkHours",
   "accent": "#c8102e",
   "signInUrl": "https://bulkhours.fr/local/hpc/workbench.php?school=ipsa",
   "keyUrl": "https://bulkhours.fr/api/workbench/key",

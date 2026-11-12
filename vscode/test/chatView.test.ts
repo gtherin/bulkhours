@@ -636,3 +636,20 @@ test("a variant signed in by its machine shows where it works, never a sign-in b
   assert.deepEqual([p.last().signedIn, p.last().interactive], [false, false]);
   assert.match(p.webview.html, /works on its own servers/);
 });
+
+test("an empty tab presents the recent conversations, and one click reopens one", async () => {
+  const p = panel();
+  await p.send({ type: "ready" });                    // the panel is open
+  await p.send({ type: "send", text: "first topic" });
+  p.view.newChat();
+  await p.send({ type: "send", text: "second topic" });
+  p.view.newChat();                                   // an empty tab
+  await p.send({ type: "model", model: "fast" });     // any redraw
+  const recent = p.last().recent;
+  assert.deepEqual(recent.map((r: any) => [r.title, r.questions]), [["second topic", 1], ["first topic", 1]]);
+  await p.send({ type: "openConversation", file: recent[1].file });
+  assert.deepEqual(texts(p.last()), ["first topic", "you said: first topic"]);
+  await p.send({ type: "openConversation", file: "/etc/passwd" });
+  assert.deepEqual(texts(p.last()), ["first topic", "you said: first topic"], "only a listed conversation opens");
+  p.view.dispose();
+});

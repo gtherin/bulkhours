@@ -95,6 +95,13 @@ a { color: var(--vscode-textLink-foreground); }
 .suggest { display: flex; flex-direction: column; gap: 6px; align-items: center; }
 .suggest button { max-width: 100%; color: var(--vscode-foreground); background: var(--surface); border: 1px solid var(--line);
   border-radius: 999px; padding: 5px 12px; font-size: .92em; cursor: pointer; }
+.recent { margin: 22px auto 0; max-width: 30em; text-align: left; }
+.recent h3 { margin: 0 0 6px; font-size: .78em; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.recent button { display: flex; justify-content: space-between; gap: 10px; width: 100%; text-align: left; cursor: pointer;
+  background: transparent; color: var(--vscode-foreground); border: 0; border-radius: var(--radius-sm); padding: 6px 8px; font: inherit; }
+.recent button:hover { background: var(--tint); }
+.recent .t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.recent .m { flex: none; color: var(--muted); font-size: .85em; font-variant-numeric: tabular-nums; }
 .suggest button:hover { background: var(--tint); border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
 
 /* "<model> réfléchit": three dots and a shimmering verb */
