@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.18 — 2026-11-12
+
+- One + only, the panel's own: the tab strip no longer repeats it.
+- The tab shown has a pencil to rename its conversation (double-click on the name still works).
+
 ## 0.1.17 — 2026-11-12
 
 - Conversations open as tabs at the top of the panel, each with its own agent: a long job keeps working in one tab while you ask something in another. A dot marks a tab that works, a yellow dot one waiting for your answer. Double-click a tab to rename it, × closes it (asking first if it works), + opens a new one. The open tabs come back after a window reload; their agents start only at their next message.

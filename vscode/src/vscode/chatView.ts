@@ -342,7 +342,8 @@ export class ChatView implements vscode.WebviewViewProvider, vscode.Disposable, 
   }
 
   private stripOf(): string {
-    return JSON.stringify(this.tabs.map((x) => ({ id: x.id, title: x.title, busy: x.busy, asking: x.asking.length > 0 })));
+    return JSON.stringify(this.tabs.map((x) => ({ id: x.id, title: x.title, busy: x.busy, asking: x.asking.length > 0,
+      named: Boolean(x.conversation) })));
   }
 
   private async render(): Promise<void> {
@@ -375,7 +376,7 @@ function safeLabel(f: () => string): string {
 const PANEL_WORDS: MessageKey[] = ["signIn", "emptyChat", "placeholder", "send", "stop", "model", "thinking", "output", "noChange", "startingAgent",
   "compact", "compactHint", "clear", "clearHint", "thinkingVerb", "budgetTitle", "contextTitle", "removeImage",
   "suggestExplain", "suggestBuild", "suggestFaster", "schoolModels", "yourAgents", "mic", "micWindows", "micMac", "seesImages", "lastActivity", "thisTurn",
-  "newTab", "newTabHint", "closeTab", "renameHint"];
+  "newTab", "closeTab", "renameHint", "renameTab"];
 
 function panelHtml(webview: vscode.Webview, media: vscode.Uri, school: School, lang: Lang): string {
   const css = webview.asWebviewUri(vscode.Uri.joinPath(media, "chat.css"));

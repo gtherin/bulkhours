@@ -143,6 +143,9 @@
   }
   setInterval(drawActivity, 1000);
 
+  // A new tab is the view's own + (the panel's title bar), not a second one here.
+  const PENCIL = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.1 1.9a1.5 1.5 0 0 1 2.1 0l.9.9a1.5 1.5 0 0 1 0 2.1L6.3 12.7l-3.6.9.9-3.6zM10 4.1 4.9 9.2l-.4 1.5 1.5-.4L11.1 5.2z"/></svg>';
+
   // -- the tabs: one per conversation, each running on its own. A dot marks a
   // tab whose agent works, a ! one that waits for the student's answer.
   let editing = 0;        // the tab being renamed: the strip is not redrawn under it
@@ -153,15 +156,17 @@
     strip.innerHTML = s.tabs.map((x) =>
       `<span class="tab${x.id === s.tab ? " on" : ""}${x.busy ? " busy" : ""}${x.asking ? " asking" : ""}" role="tab" aria-selected="${x.id === s.tab}" data-id="${x.id}">`
       + `<span class="name" title="${esc(x.title ? `${x.title} — ${W.renameHint}` : W.renameHint)}">${esc(x.title || W.newTab)}</span>`
-      + `<button type="button" class="x" title="${esc(W.closeTab)}" aria-label="${esc(W.closeTab)}">×</button></span>`).join("")
-      + `<button type="button" class="new" title="${esc(W.newTabHint)}" aria-label="${esc(W.newTabHint)}">+</button>`;
+      + (x.id === s.tab && x.named ? `<button type="button" class="ren" title="${esc(W.renameTab)}" aria-label="${esc(W.renameTab)}">${PENCIL}</button>` : "")
+      + `<button type="button" class="x" title="${esc(W.closeTab)}" aria-label="${esc(W.closeTab)}">×</button></span>`).join("");
     strip.querySelectorAll(".tab").forEach((el) => {
       const id = Number(el.dataset.id);
       el.onclick = (ev) => { if (!ev.target.closest(".x") && id !== s.tab) vscode.postMessage({ type: "tab", id }); };
       el.querySelector(".x").onclick = () => vscode.postMessage({ type: "closeTab", id });
-      el.querySelector(".name").ondblclick = () => renameTab(el, id);
+      // A conversation is named once it has a question (its record).
+      if (s.tabs.find((x) => x.id === id).named) el.querySelector(".name").ondblclick = () => renameTab(el, id);
+      const ren = el.querySelector(".ren");
+      if (ren) ren.onclick = () => renameTab(el, id);
     });
-    strip.querySelector(".new").onclick = () => vscode.postMessage({ type: "newChat" });
     strip.querySelector(".on")?.scrollIntoView({ block: "nearest", inline: "nearest" });
   }
 
