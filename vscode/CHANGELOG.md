@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.34 — 2026-11-12
+
+- Sign-in works with several VS Code windows open: the way back to the window (…?windowId=N) is sent as written; percent-encoded, the sign-in page refused it (« Lien de connexion invalide »).
+
+## 0.1.33 — 2026-11-12
+
+- BulkHours and IPSA are two extensions. IPSA (gateka.ipsa): named IPSA, its logo in the extension list and in the activity bar, its blue in the panel, its own commands and settings (ipsa.*). BulkHours (gateka.bulkhours): the B on the logo's teal, commands and settings bulkhours.*. Polytechnique has its own prefix too. The earlier build « bulkhours-ipsa » is replaced by « ipsa ».
+- Gateka carries the BulkHours favicon: the white B on its square teal ground, in the extension list and the activity bar (in place of the dotted G).
+
 ## 0.1.32 — 2026-11-12
 
 - The IPSA build carries IPSA's logo as its icon in the extension list (schools/ipsa-tile.svg, redrawn as vectors from the school's image). The activity bar keeps the BulkHours mark. (IPSA only.)

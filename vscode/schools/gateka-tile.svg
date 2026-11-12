@@ -1,53 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Gateka">
-  <!-- Gateka's mark (see gateka.svg) in the wordmark's own gradient, coral
-       (#e18163) to amber (#f1ca8d), on a dark tile. -->
+  <!-- Gateka carries the BulkHours favicon (owner, 2026-11-12: "for gateka,
+       use the bulkhours favicon"): the white B of media/icon.svg on the
+       favicon's square teal ground (bulkhours.fr favicon, #00a099). -->
   <title>Gateka</title>
-  <linearGradient id="gk" gradientUnits="userSpaceOnUse" x1="23" y1="23" x2="105" y2="105">
-    <stop offset="0" stop-color="#e18163"/><stop offset="1" stop-color="#f1ca8d"/>
-  </linearGradient>
-  <rect width="128" height="128" rx="28" fill="#211d1b"/>
-  <g fill="url(#gk)">
-    <rect x="23.30" y="40.10" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="23.30" y="48.50" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="23.30" y="56.90" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="23.30" y="65.30" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="23.30" y="73.70" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="23.30" y="82.10" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="31.70" y="31.70" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="31.70" y="40.10" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="31.70" y="48.50" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="31.70" y="56.90" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="31.70" y="65.30" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="31.70" y="73.70" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="31.70" y="82.10" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="31.70" y="90.50" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="40.10" y="31.70" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="40.10" y="40.10" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="40.10" y="82.10" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="40.10" y="90.50" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="40.10" y="98.90" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="48.50" y="23.30" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="48.50" y="98.90" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="56.90" y="23.30" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="56.90" y="98.90" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="65.30" y="23.30" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="65.30" y="98.90" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="73.70" y="23.30" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="73.70" y="98.90" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="82.10" y="23.30" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="82.10" y="73.70" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="82.10" y="82.10" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="82.10" y="90.50" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="82.10" y="98.90" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="90.50" y="23.30" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="90.50" y="31.70" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="90.50" y="73.70" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="90.50" y="82.10" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="90.50" y="90.50" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="90.50" y="98.90" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="98.90" y="73.70" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="98.90" y="82.10" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="98.90" y="90.50" width="5.80" height="5.80" rx="1.10"/>
-    <rect x="98.90" y="98.90" width="5.80" height="5.80" rx="1.10"/>
+  <rect width="128" height="128" fill="#00a099"/>
+  <g transform="translate(20 20) scale(3.6667)">
+    <mask id="chevrons">
+    <rect width="24" height="24" fill="#fff"/>
+    <path d="M14.8 5.7 10.9 8.3 14.8 11.1M10.9 12.6 14.8 15.1 10.9 17.7" fill="none" stroke="#000"
+          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+  </mask>
+  <path mask="url(#chevrons)" fill="#ffffff"
+        d="M3.5 2H14C17.4 2 19.8 4.3 19.8 7.2 19.8 9.2 18.9 10.6 17.9 11.6 19.5 12.6 20.4 14.4 20.4 16.6 20.4 19.6 18 22 14.9 22H3.5V17.5H5.5V6.5H3.5Z"/>
   </g>
 </svg>

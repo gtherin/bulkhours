@@ -1,6 +1,8 @@
 {
   "id": "polytechnique",
   "name": "Polytechnique",
+  "title": "Polytechnique",
+  "prefix": "polytechnique",
   "accent": "#00205b",
   "signInUrl": "https://bulkhours.fr/local/hpc/workbench.php?school=polytechnique",
   "keyUrl": "https://bulkhours.fr/api/workbench/key",

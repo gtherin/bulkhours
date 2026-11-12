@@ -3,6 +3,8 @@ import { mock, test } from "node:test";
 import assert from "node:assert/strict";
 
 const opened: string[] = [];
+// What VS Code hands back for the way home: itself, or with ?windowId=N.
+let external = async (u: unknown) => u;
 const warnings: string[] = [];
 class EventEmitter { private l: (() => void)[] = []; event = (f: () => void) => { this.l.push(f); return { dispose() {} }; }; fire() { this.l.forEach((f) => f()); } }
 mock.module("vscode", {
@@ -11,7 +13,7 @@ mock.module("vscode", {
     Uri: { parse: (s: string) => ({ toString: () => s }) },
     env: {
       uriScheme: "vscode",
-      asExternalUri: async (u: unknown) => u,
+      asExternalUri: (u: unknown) => external(u),
       openExternal: async (u: { toString(): string }) => { opened.push(u.toString()); return true; },
     },
     window: { showWarningMessage: async (m: string) => { warnings.push(m); } },
@@ -129,3 +131,14 @@ test("a budget that cannot be read is simply not shown, never an error", async (
   assert.equal(await s.c.credits(), undefined);
 });
 
+
+test("with several windows open the way back keeps its ?windowId as written, never percent-encoded", async () => {
+  const s = setup({ status: 200, body: reply(720) });
+  external = async () => ({ toString: (skip?: boolean) => (skip ? "vscode://bulkhours.bulkhours-ipsa/signed-in?windowId=5"
+    : "vscode://bulkhours.bulkhours-ipsa/signed-in%3FwindowId%3D5") });
+  try {
+    opened.length = 0;
+    await s.c.signIn();
+    assert.equal(new URL(opened[0]).searchParams.get("redirect"), "vscode://bulkhours.bulkhours-ipsa/signed-in?windowId=5");
+  } finally { external = async (u: unknown) => u; }
+});

@@ -3,7 +3,7 @@
   "name": "Gateka",
   "title": "Gateka",
   "prefix": "gateka",
-  "accent": "#e18163",
+  "accent": "#00a099",
   "signInUrl": "https://bulkhours.fr/local/hpc/workbench.php?school=gateka",
   "keyUrl": "https://bulkhours.fr/api/workbench/key",
   "creditsUrl": "https://bulkhours.fr/api/workbench/credits",
