@@ -28,7 +28,7 @@
 // holds many students), never in the project (it may be shared or in git),
 // never synced. Pruned after a retention.
 import { createHash, randomUUID } from "node:crypto";
-import { appendFileSync, chmodSync, closeSync, existsSync, mkdirSync, openSync, readdirSync, readFileSync, readSync, realpathSync, renameSync, statSync, unlinkSync, writeFileSync } from "node:fs";
+import { appendFileSync, chmodSync, closeSync, existsSync, mkdirSync, openSync, readdirSync, readFileSync, readSync, realpathSync, renameSync, statSync, unlinkSync, utimesSync, writeFileSync } from "node:fs";
 import { basename, join } from "node:path";
 import type { ContentBlock, SessionUpdate } from "@agentclientprotocol/sdk";
 import { addUserPrompt, applyUpdate, type Entry, type Transcript } from "./transcript.ts";
@@ -49,7 +49,7 @@ export function stateRoot(env: Record<string, string | undefined>, home: string,
 }
 
 export type Header = { agent: string; session: string; model: string; school: string; cwd: string; name?: string };
-type Line =
+export type Line =
   | ({ t: "header"; v: 1; created: string } & Header)
   | { t: "prompt"; content: ContentBlock[] }
   | { t: "update"; update: SessionUpdate }
@@ -162,6 +162,24 @@ export class ConversationStore {
     const file = join(dir, `${Date.now()}-${String(seq++).padStart(4, "0")}-${randomUUID().slice(0, 8)}.jsonl`);
     writeFileSync(file, JSON.stringify({ t: "header", v: 1, ...h, created: new Date().toISOString() }) + "\n", { mode: 0o600 });
     return new Conversation(file);
+  }
+
+  // A conversation another tool held (a Claude Code session), written whole.
+  // Its file is named after that session: importing it again replaces the one
+  // record - unless an agent here has since taken the conversation over, whose
+  // turns exist nowhere else. Dated when it last spoke, not when it came in.
+  adopt(h: Header, r: { title: string; created: string; updated: string; body: Line[] }): string {
+    const dir = this.dir(h.cwd);
+    mkdirSync(dir, { recursive: true, mode: 0o700 });
+    const file = join(dir, `${Date.parse(r.created)}-0000-${slug(h.session).slice(0, 8)}.jsonl`);
+    if (existsSync(file) && [...lines(file)].some((l) => l.startsWith('{"t":"session"')))
+      throw new Error(`${file} was continued here: it is not replaced`);
+    const head: Line[] = [{ t: "header", v: 1, ...h, created: r.created }, ...(r.title ? [{ t: "title", title: r.title } as Line] : [])];
+    writeFileSync(file, [...head, ...r.body].map((l) => JSON.stringify(l)).join("\n") + "\n", { mode: 0o600 });
+    const spoke = new Date(r.updated);
+    utimesSync(file, spoke, spoke);
+    if (h.name) mkdirSync(this.rendersDir(h.name), { recursive: true, mode: 0o700 });
+    return file;
   }
 
   // Every record of the state folder, oldest first (file names begin with

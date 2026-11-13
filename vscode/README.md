@@ -113,6 +113,19 @@ panel shows the project's last conversation again after a reload; the same
 agent resumes its own session when it can, another agent is handed the
 conversation so far.
 
+A Claude Code session becomes a conversation of the panel with
+`scripts/import-claude.ts` (run where the session lives; nothing leaves the
+machine):
+
+    node --experimental-strip-types scripts/import-claude.ts \
+      ~/.claude/projects/<folder>/<session id>.jsonl \
+      --state ~/.local/state/<variant> --cwd <folder opened in VS Code> --school <variant>
+
+What was typed, what was answered and each tool (its result cut short) are
+kept; the session is named after the Claude Code title and gets its run
+directory. Run again after the session went on in Claude Code: its one record
+is replaced, unless an agent of the panel has since taken it over.
+
 ## Layout
 
 | Path | What |
