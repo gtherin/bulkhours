@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.45 — 2026-11-13
+
+- MaQI: reasoning is Kimi K3.1 Pro (2.00 / 10.00 per million tokens), the best-scored model Nebius publishes; it was GLM 5.2. The other variants read their menu from their key server, changed the same day.
+
 ## 0.1.44 — 2026-11-13
 
 - MaQI: code is GLM 5.3 (1.40 / 4.40 per million tokens), as the MaQI proxy has mapped it since 13 November; 0.1.43 named DeepSeek V4 Pro, which the proxy does not run.
