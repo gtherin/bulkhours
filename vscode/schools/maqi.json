@@ -53,7 +53,7 @@
       "model_labels": {
         "fast": "DeepSeek V4.1 Flash",
         "code": "GLM 5.3",
-        "reasoning": "GLM-5.2",
+        "reasoning": "GLM 5.2",
         "frontier": "Kimi K3"
       },
       "model_prices": {
