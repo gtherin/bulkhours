@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.46 — 2026-11-13
+
+- MaQI: the frontier tier (Kimi K3) is gone from the menu, as from MaQI's proxy; reasoning (Kimi K3.1 Pro) scores far higher for less.
+
 ## 0.1.45 — 2026-11-13
 
 - MaQI: reasoning is Kimi K3.1 Pro (2.00 / 10.00 per million tokens), the best-scored model Nebius publishes; it was GLM 5.2. The other variants read their menu from their key server, changed the same day.

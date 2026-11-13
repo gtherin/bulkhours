@@ -46,15 +46,13 @@
       "models": [
         "fast",
         "code",
-        "reasoning",
-        "frontier"
+        "reasoning"
       ],
       "default_model": "fast",
       "model_labels": {
         "fast": "DeepSeek V4.1 Flash",
         "code": "GLM 5.3",
-        "reasoning": "Kimi K3.1 Pro",
-        "frontier": "Kimi K3"
+        "reasoning": "Kimi K3.1 Pro"
       },
       "model_prices": {
         "fast": {
@@ -68,10 +66,6 @@
         "reasoning": {
           "in": 2.0,
           "out": 10.0
-        },
-        "frontier": {
-          "in": 3.0,
-          "out": 15.0
         }
       },
       "currency": "EUR",
