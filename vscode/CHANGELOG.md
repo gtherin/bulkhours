@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.44 — 2026-11-13
+
+- MaQI: code is GLM 5.3 (1.40 / 4.40 per million tokens), as the MaQI proxy has mapped it since 13 November; 0.1.43 named DeepSeek V4 Pro, which the proxy does not run.
+
 ## 0.1.43 — 2026-11-13
 
 - MaQI: the model menu names what the tiers run since Nebius withdrew two models on 13 November: fast is DeepSeek V4.1 Flash (0.30 / 1.20 per million tokens), code is DeepSeek V4 Pro (1.32 / 3.96). The other variants read their menu from their key server and needed no new build.

@@ -52,7 +52,7 @@
       "default_model": "fast",
       "model_labels": {
         "fast": "DeepSeek V4.1 Flash",
-        "code": "DeepSeek V4 Pro",
+        "code": "GLM 5.3",
         "reasoning": "GLM-5.2",
         "frontier": "Kimi K3"
       },
@@ -62,8 +62,8 @@
           "out": 1.2
         },
         "code": {
-          "in": 1.32,
-          "out": 3.96
+          "in": 1.4,
+          "out": 4.4
         },
         "reasoning": {
           "in": 1.4,
