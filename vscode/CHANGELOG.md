@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.43 — 2026-11-13
+
+- MaQI: the model menu names what the tiers run since Nebius withdrew two models on 13 November: fast is DeepSeek V4.1 Flash (0.30 / 1.20 per million tokens), code is DeepSeek V4 Pro (1.32 / 3.96). The other variants read their menu from their key server and needed no new build.
+- A Claude Code session becomes a conversation of the panel with `scripts/import-claude.ts` (see the README).
+
 ## 0.1.42 — 2026-11-12
 
 - A session's served pages: a file renders/<name>.url holding an address (a Streamlit or marimo dashboard, a monitoring page) is a link in the panel too. An address on the machine opens in a tab beside the code, through VS Code's way to a local port; another address opens in the browser.

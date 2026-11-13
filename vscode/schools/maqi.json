@@ -51,19 +51,19 @@
       ],
       "default_model": "fast",
       "model_labels": {
-        "fast": "DeepSeek V4 Flash",
-        "code": "Kimi K2.7 Code",
+        "fast": "DeepSeek V4.1 Flash",
+        "code": "DeepSeek V4 Pro",
         "reasoning": "GLM-5.2",
         "frontier": "Kimi K3"
       },
       "model_prices": {
         "fast": {
-          "in": 0.14,
-          "out": 0.28
+          "in": 0.3,
+          "out": 1.2
         },
         "code": {
-          "in": 0.95,
-          "out": 4.0
+          "in": 1.32,
+          "out": 3.96
         },
         "reasoning": {
           "in": 1.4,
